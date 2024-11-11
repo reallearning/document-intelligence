@@ -28,17 +28,17 @@ export interface Step {
   data: Data[];
 }
 
-// Data structure contains the fields like header, title, contractName, and matches
+// Data structure contains fields like header, title, contractName, matches, and comments
 export interface Data {
   id: string;
   header?: string;
   title?: string;
   contractName?: string;
-  matches?: MatchInfo;
+  matches?: MatchInfo | null; // Optional match information
   comments?: Comment[]; // Optional array of comments
 }
 
-// MatchInfo structure that contains details about matches (from your example JSON)
+// MatchInfo structure containing details about matches
 export interface MatchInfo {
   numberOfMatches: number;
   sourceImageUrl: string;
@@ -47,15 +47,15 @@ export interface MatchInfo {
   tag: string;
 }
 
-// MatchInfoSections for the data related to each match
+// MatchInfoSections structure for individual match details
 export interface MatchInfoSections {
   label: string;
   value: string;
 }
 
-// Comment structure now includes id, senderMail, profileUrl, message, date, and time
+// Comment structure containing comment metadata and message details
 export interface Comment {
-  id: string; // Changed to string to match your comment id in JSON
+  id: string; // Unique identifier for each comment
   senderMail: string;
   profileUrl: string;
   message: string;
@@ -63,5 +63,5 @@ export interface Comment {
   time: string;
 }
 
-// EpochTimeStamp type, assuming you have this type defined somewhere
-export type EpochTimeStamp = number; // or whatever type you are using for timestamps
+// Type alias for representing timestamp as a number
+export type EpochTimeStamp = number;
