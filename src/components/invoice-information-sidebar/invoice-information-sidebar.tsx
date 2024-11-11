@@ -33,6 +33,11 @@ export const InvoiceInformationSidebar = ({
     }
   };
 
+  const handleCommentClick = (section: DataItem) => {
+    localStorage.setItem("invoiceSidebarCollapsed", "true");
+    setSelectedSection(section);
+  };
+
   return (
     <div className="flex h-screen">
       <div className="w-[370px] bg-[#F6F6F6] overflow-y-auto">
@@ -72,7 +77,7 @@ export const InvoiceInformationSidebar = ({
                     </p>
                     <div
                       className="flex items-center cursor-pointer"
-                      onClick={() => setSelectedSection(dataItem)}
+                      onClick={() => handleCommentClick(dataItem)}
                     >
                       <Image
                         src="/comments.svg"

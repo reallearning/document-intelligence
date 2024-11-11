@@ -34,11 +34,16 @@ const DealsTabs = ({ reviewData }: DealsTabsProps) => {
   };
 
   const [pageWidth, setPageWidth] = useState(0);
-  const sidebarWidth = 388;
+
+  const sidebarWidth = 458;
 
   useEffect(() => {
     const updatePageWidth = () => {
-      setPageWidth(window.innerWidth - sidebarWidth);
+      if (localStorage.getItem("sidebarCollapsed") === "true") {
+        setPageWidth(window.innerWidth - sidebarWidth - 300);
+      } else {
+        setPageWidth(window.innerWidth - sidebarWidth);
+      }
     };
 
     updatePageWidth(); // Set initial width

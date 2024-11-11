@@ -31,6 +31,7 @@ export const AnnotationsSidebar = ({
   };
 
   const handleCommentClick = (section: Data) => {
+    localStorage.setItem("sidebarCollapsed", "true");
     setSelectedSection(section);
   };
 
@@ -70,7 +71,7 @@ export const AnnotationsSidebar = ({
   return (
     <div className="flex h-screen">
       {/* Left Sidebar */}
-      <div className="w-[370px] bg-[#F6F6F6] overflow-y-auto">
+      <div className="w-[370px] bg-[#F6F6F6] overflow-y-auto no-scrollbar">
         <div className="px-5 pt-7">
           <p className="font-poly font-normal text-xl leading-5 text-black mb-2">
             {documentInformation.clientName}
