@@ -213,9 +213,9 @@ export const AnnotationsSidebar = ({
       </div>
 
       {/* Right Sidebar (Comments Section) */}
-      {selectedSection && (
+      {selectedSection?.comments && (
         <CommentsSection
-          selectedSection={selectedSection}
+          comments={selectedSection.comments}
           newComment={newComment}
           setNewComment={setNewComment}
           handleAddComment={handleAddComment}
