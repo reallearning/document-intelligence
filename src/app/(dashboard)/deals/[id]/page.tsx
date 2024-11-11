@@ -1,4 +1,5 @@
 "use client";
+import { AnnotationsSidebar } from "@/components/annotations-sidebar";
 import React, { useEffect, useState } from "react";
 import DealsTabs from "./deals-tabs";
 import { Button } from "@/components/button";
@@ -1330,15 +1331,13 @@ const reviewData = [
 const DealsDetails = () => {
   const pathname = usePathname();
 
-  // Extracting the id from the path (e.g., "deals-01" from "/deals/deals-01")
-  const id = pathname?.split("/").pop(); // Get the last part of the URL
+  const id = pathname?.split("/").pop();
 
   const [selectedDeal, setSelectedDeal] = useState<
     (typeof reviewData)[0] | null
   >(null);
 
   useEffect(() => {
-    // When `id` is available, filter the reviewData to get the corresponding deal
     if (id) {
       const deal = reviewData.find((deal) => deal.id === id);
       if (deal) {
@@ -1356,14 +1355,12 @@ const DealsDetails = () => {
   };
 
   if (!selectedDeal) {
-    return <div>Loading...</div>; // Handle case when deal is not found or loading
+    return <div>Loading...</div>;
   }
 
   return (
     <div className="w-full flex flex-row">
-      <section className="bg-[#F1EFE9] p-4 text-[#000] relative w-[300px]">
-        Sidebar
-      </section>
+      {/* <AnnotationsSidebar documentInformation={selectedDeal} /> */}
       <div className="flex flex-col px-6 w-full">
         <div className="flex justify-end p-4 w-full">
           {isReviewMarked === 0 ? (
