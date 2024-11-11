@@ -2,7 +2,6 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import {
-  DocumentInformation,
   Comment,
   Data,
   Review,
@@ -10,6 +9,8 @@ import {
 import { CommentsSection } from "../comments-section";
 import { IAnnotationsSidebarProps } from "./types";
 import { useStorage } from "@/context/StorageContext";
+import { Button } from "../button";
+import { ExportDocuments } from "../export-document";
 
 export const AnnotationsSidebar = ({
   documentInformation,
@@ -25,8 +26,17 @@ export const AnnotationsSidebar = ({
   const [expandedMatchInfo, setExpandedMatchInfo] = useState<{
     [key: string]: boolean;
   }>({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const sidebarRef = useRef<HTMLDivElement>(null);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   const handleClickOutside = (event: MouseEvent) => {
     updateSidebarCollapsed(false);
@@ -247,6 +257,16 @@ export const AnnotationsSidebar = ({
             </div>
           ))}
         </div>
+        <div className="px-4 py-3 mt-auto">
+          <Button
+            color="primary-default"
+            size="md"
+            className="px-4 border-[#D9D9D9] font-nunito text-white w-full"
+            onClick={openModal}
+          >
+            Export
+          </Button>
+        </div>
       </div>
 
       {/* Right Sidebar (Comments Section) */}
@@ -258,6 +278,8 @@ export const AnnotationsSidebar = ({
           handleAddComment={handleAddComment}
         />
       )}
+
+      {isModalOpen && <ExportDocuments closeModal={closeModal} />}
     </div>
   );
 };
