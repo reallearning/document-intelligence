@@ -4,6 +4,8 @@ import { DataItem, Comment } from "@/types/invoice-information";
 import Image from "next/image";
 import { useState } from "react";
 import { CommentsSection } from "../comments-section";
+import { Button } from "../button";
+import { ExportDocuments } from "../export-document";
 import { IInvoiceInformationProps } from "./types";
 
 export const InvoiceInformationSidebar = ({
@@ -11,6 +13,15 @@ export const InvoiceInformationSidebar = ({
 }: IInvoiceInformationProps) => {
   const [selectedSection, setSelectedSection] = useState<DataItem | null>(null);
   const [newComment, setNewComment] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   const handleAddComment = () => {
     if (selectedSection && newComment.trim()) {
@@ -35,7 +46,7 @@ export const InvoiceInformationSidebar = ({
 
   return (
     <div className="flex h-screen">
-      <div className="w-[370px] bg-[#F6F6F6] overflow-y-auto">
+      <div className="w-[370px] bg-[#F6F6F6] flex flex-col">
         <div className="px-5 pt-7">
           <p className="font-poly font-normal text-xl leading-5 text-black mb-2">
             {invoice.invoiceName}
@@ -51,7 +62,7 @@ export const InvoiceInformationSidebar = ({
         </div>
 
         {/* Steps and Data Section */}
-        <div className="px-4 py-5">
+        <div className="px-4 py-5 flex-1 overflow-y-auto">
           {invoice.steps.map((step) => (
             <div
               key={step.id}
@@ -91,7 +102,20 @@ export const InvoiceInformationSidebar = ({
             </div>
           ))}
         </div>
+
+        {/* Fixed Export CTA at the bottom of the sidebar */}
+        <div className="px-4 py-3 bg-[#D9D9D966] rounded-t-lg mt-auto">
+          <Button
+            color="primary-default"
+            size="md"
+            className="px-4 border-[#D9D9D9] font-nunito text-white w-full"
+            onClick={openModal}
+          >
+            Export
+          </Button>
+        </div>
       </div>
+
       {selectedSection?.comments && (
         <CommentsSection
           comments={selectedSection.comments}
@@ -100,6 +124,8 @@ export const InvoiceInformationSidebar = ({
           handleAddComment={handleAddComment}
         />
       )}
+
+      {isModalOpen && <ExportDocuments closeModal={closeModal} />}
     </div>
   );
 };
