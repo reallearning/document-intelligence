@@ -110,13 +110,13 @@ const invoiceDetails = [
         stepName: "Vendor Details",
         data: [
           {
-            id: "1",
+            id: "data-201",
             header: "Legal Name",
             data: "Rise Education Group",
             comments: [],
           },
           {
-            id: "2",
+            id: "data-202",
             header: "Address",
             data: "Room C209, Building 1, No.8 Huanhe West Road, Airport Economic Zone, Tianjin, China",
             comments: [],
@@ -128,19 +128,19 @@ const invoiceDetails = [
         stepName: "Items",
         data: [
           {
-            id: "1",
+            id: "data-301",
             header: "Description",
             data: "Academic support services, Qty: 1, Price: £2500.00",
             comments: [],
           },
           {
-            id: "2",
+            id: "data-302",
             header: "Description",
             data: "Enrollment support services, Qty: 1, Price: £1500.00",
             comments: [],
           },
           {
-            id: "3",
+            id: "data-303",
             header: "Description",
             data: "Customer support services, Qty: 1, Price: £1000.00",
             comments: [],

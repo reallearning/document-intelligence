@@ -17,7 +17,7 @@ const reviewData: DocumentInformation[] = [
       contracts: [
         {
           id: "contract_001",
-          name: "Contract Name 1",
+          name: "Master Service Agreement",
           pdfUrl: "/documents/contracts/paxmedica.pdf",
           steps: [
             {

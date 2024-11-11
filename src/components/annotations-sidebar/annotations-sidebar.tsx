@@ -1,15 +1,12 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import {
-  DocumentInformation,
-  Comment,
-  Data,
-  Review,
-} from "@/types/annotations";
+import { Comment, Data, Review } from "@/types/annotations";
 import { CommentsSection } from "../comments-section";
 import { IAnnotationsSidebarProps } from "./types";
 import { useStorage } from "@/context/StorageContext";
+import { Button } from "../button";
+import { ExportDocuments } from "../export-document";
 
 export const AnnotationsSidebar = ({
   documentInformation,
@@ -25,8 +22,17 @@ export const AnnotationsSidebar = ({
   const [expandedMatchInfo, setExpandedMatchInfo] = useState<{
     [key: string]: boolean;
   }>({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const sidebarRef = useRef<HTMLDivElement>(null);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   const handleClickOutside = (event: MouseEvent) => {
     updateSidebarCollapsed(false);
@@ -152,7 +158,7 @@ export const AnnotationsSidebar = ({
                     {info.data?.map((item, secIndex) => (
                       <div
                         key={secIndex}
-                        className="bg-white rounded-xl pt-3 pb-5 px-5 flex flex-col gap-y-2 hover:border hover:border-[#3C7167]"
+                        className="bg-white rounded-xl pt-3 pb-5 px-5 flex flex-col gap-y-2"
                       >
                         <div key={secIndex} className="flex flex-col gap-2">
                           <div className="flex justify-between items-center">
@@ -247,6 +253,16 @@ export const AnnotationsSidebar = ({
             </div>
           ))}
         </div>
+        <div className="px-4 py-3 mt-auto">
+          <Button
+            color="primary-default"
+            size="md"
+            className="px-4 border-[#D9D9D9] font-nunito text-white w-full"
+            onClick={openModal}
+          >
+            Export
+          </Button>
+        </div>
       </div>
 
       {/* Right Sidebar (Comments Section) */}
@@ -258,6 +274,8 @@ export const AnnotationsSidebar = ({
           handleAddComment={handleAddComment}
         />
       )}
+
+      {isModalOpen && <ExportDocuments closeModal={closeModal} />}
     </div>
   );
 };

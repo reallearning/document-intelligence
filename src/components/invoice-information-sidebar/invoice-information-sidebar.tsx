@@ -6,6 +6,8 @@ import { useEffect, useRef, useState } from "react";
 import { CommentsSection } from "../comments-section";
 import { IInvoiceInformationProps } from "./types";
 import { useStorage } from "@/context/StorageContext";
+import { Button } from "../button";
+import { ExportDocuments } from "../export-document";
 
 export const InvoiceInformationSidebar = ({
   invoice,
@@ -13,8 +15,17 @@ export const InvoiceInformationSidebar = ({
   const [selectedSection, setSelectedSection] = useState<DataItem | null>(null);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [newComment, setNewComment] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const sidebarRef = useRef<HTMLDivElement>(null);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   const handleClickOutside = (event: MouseEvent) => {
     updateInvoiceSidebarCollapsed(false);
@@ -71,7 +82,7 @@ export const InvoiceInformationSidebar = ({
 
   return (
     <div className="flex h-screen" ref={sidebarRef}>
-      <div className="w-[370px] bg-[#F6F6F6] overflow-y-auto no-scrollbar">
+      <div className="w-[370px] bg-[#F6F6F6] flex flex-col no-scrollbar">
         <div className="px-5 pt-7">
           <p className="font-poly font-normal text-xl leading-5 text-black mb-2">
             {invoice.invoiceName}
@@ -87,7 +98,7 @@ export const InvoiceInformationSidebar = ({
         </div>
 
         {/* Steps and Data Section */}
-        <div className="px-4 py-5">
+        <div className="px-4 py-5 flex-1 overflow-y-auto no-scrollbar">
           {invoice.steps?.map((step) => (
             <div
               key={step.id}
@@ -100,7 +111,7 @@ export const InvoiceInformationSidebar = ({
               {step.data.map((dataItem) => (
                 <div
                   key={dataItem.id}
-                  className="bg-white px-4 py-3 rounded-xl mb-3 hover:border hover:border-[#3C7167]"
+                  className="bg-white px-4 py-3 rounded-xl mb-3"
                 >
                   <div className="flex justify-between items-center">
                     <p className="text-xs text-[#A8A8A8] mb-2">
@@ -127,6 +138,17 @@ export const InvoiceInformationSidebar = ({
             </div>
           ))}
         </div>
+        {/* Fixed Export CTA at the bottom of the sidebar */}
+        <div className="px-4 py-3 bg-[#D9D9D966] rounded-t-lg mt-auto">
+          <Button
+            color="primary-default"
+            size="md"
+            className="px-4 border-[#D9D9D9] font-nunito text-white w-full"
+            onClick={openModal}
+          >
+            Export
+          </Button>
+        </div>
       </div>
       {selectedSection?.comments && (
         <CommentsSection
@@ -136,6 +158,8 @@ export const InvoiceInformationSidebar = ({
           handleAddComment={handleAddComment}
         />
       )}
+
+      {isModalOpen && <ExportDocuments closeModal={closeModal} />}
     </div>
   );
 };
