@@ -2,7 +2,7 @@
 
 import { DataItem, Comment } from "@/types/invoice-information";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CommentsSection } from "../comments-section";
 import { IInvoiceInformationProps } from "./types";
 
@@ -11,6 +11,17 @@ export const InvoiceInformationSidebar = ({
 }: IInvoiceInformationProps) => {
   const [selectedSection, setSelectedSection] = useState<DataItem | null>(null);
   const [newComment, setNewComment] = useState("");
+
+  const sidebarRef = useRef<HTMLDivElement>(null);
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      sidebarRef.current &&
+      !sidebarRef.current.contains(event.target as Node)
+    ) {
+      setSelectedSection(null);
+    }
+  };
 
   const handleAddComment = () => {
     if (selectedSection && newComment.trim()) {
@@ -33,8 +44,15 @@ export const InvoiceInformationSidebar = ({
     }
   };
 
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen" ref={sidebarRef}>
       <div className="w-[370px] bg-[#F6F6F6] overflow-y-auto">
         <div className="px-5 pt-7">
           <p className="font-poly font-normal text-xl leading-5 text-black mb-2">
@@ -66,14 +84,14 @@ export const InvoiceInformationSidebar = ({
                   key={dataItem.id}
                   className="bg-white px-4 py-3 rounded-xl mb-3"
                 >
-                  <div className="flex justify-between items-center">
+                  <div
+                    className="flex justify-between items-center cursor-pointer"
+                    onClick={() => setSelectedSection(dataItem)}
+                  >
                     <p className="text-xs text-[#A8A8A8] mb-2">
                       {dataItem.header}
                     </p>
-                    <div
-                      className="flex items-center cursor-pointer"
-                      onClick={() => setSelectedSection(dataItem)}
-                    >
+                    <div className="flex items-center">
                       <Image
                         src="/comments.svg"
                         width={25}

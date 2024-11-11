@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import {
   DocumentInformation,
@@ -22,6 +22,17 @@ export const AnnotationsSidebar = ({
   const [expandedMatchInfo, setExpandedMatchInfo] = useState<{
     [key: string]: boolean;
   }>({});
+
+  const sidebarRef = useRef<HTMLDivElement>(null);
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      sidebarRef.current &&
+      !sidebarRef.current.contains(event.target as Node)
+    ) {
+      setSelectedSection(null);
+    }
+  };
 
   const toggleStep = (index: number) => {
     setExpandedSteps((prev) => ({
@@ -67,8 +78,15 @@ export const AnnotationsSidebar = ({
     setActiveReview(documentInformation["l1Review"]);
   }, []);
 
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen" ref={sidebarRef}>
       {/* Left Sidebar */}
       <div className="w-[370px] bg-[#F6F6F6] overflow-y-auto">
         <div className="px-5 pt-7">
@@ -89,7 +107,10 @@ export const AnnotationsSidebar = ({
           {activeReview?.contracts?.[0]?.steps?.map((info, index) => (
             <div key={index} className="mb-3 px-2">
               <div className="bg-[#BAAE921A] p-4 rounded-xl cursor-pointer">
-                <div className="flex justify-between items-center">
+                <div
+                  className="flex justify-between items-center"
+                  onClick={() => toggleStep(index)}
+                >
                   <span className="font-semibold font-nunito text-base leading-[18px] text-[#7F7F7F]">
                     {info.stepName}
                   </span>
@@ -101,7 +122,6 @@ export const AnnotationsSidebar = ({
                     stroke="#7F7F7F"
                     viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg"
-                    onClick={() => toggleStep(index)}
                   >
                     <path
                       strokeLinecap="round"
@@ -120,14 +140,14 @@ export const AnnotationsSidebar = ({
                         className="bg-white rounded-xl pt-3 pb-5 px-5 flex flex-col gap-y-2"
                       >
                         <div key={secIndex} className="flex flex-col gap-2">
-                          <div className="flex justify-between">
+                          <div
+                            className="flex justify-between"
+                            onClick={() => handleCommentClick(item)}
+                          >
                             <p className="text-xs text-[#A8A8A8]">
                               {item.header}
                             </p>
-                            <div
-                              className="flex items-center cursor-pointer"
-                              onClick={() => handleCommentClick(item)}
-                            >
+                            <div className="flex items-center cursor-pointer">
                               <Image
                                 src="/comments.svg"
                                 width={25}
