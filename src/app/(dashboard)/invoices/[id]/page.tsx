@@ -346,9 +346,7 @@ const invoiceDetails = [
 const InvoiceDetails = () => {
   const sidebarWidth = 500;
   const [pageWidth, setPageWidth] = useState(0);
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(
-    localStorage.getItem("invoiceSidebarCollapsed") === "true"
-  );
+
   const pathname = usePathname();
 
   const id = pathname?.split("/").pop();
@@ -370,9 +368,11 @@ const InvoiceDetails = () => {
 
   useEffect(() => {
     const updatePageWidth = () => {
-      setPageWidth(
-        window.innerWidth - sidebarWidth - (isSidebarCollapsed ? 300 : 0)
-      );
+      if (localStorage.getItem("invoiceSidebarCollapsed") === "true") {
+        setPageWidth(window.innerWidth - sidebarWidth - 300);
+      } else {
+        setPageWidth(window.innerWidth - sidebarWidth);
+      }
     };
 
     updatePageWidth(); // Set initial width
@@ -380,19 +380,6 @@ const InvoiceDetails = () => {
 
     return () => {
       window.removeEventListener("resize", updatePageWidth);
-    };
-  }, [isSidebarCollapsed]);
-
-  useEffect(() => {
-    const handleStorageChange = () => {
-      const collapsed =
-        localStorage.getItem("invoiceSidebarCollapsed") === "true";
-      setIsSidebarCollapsed(collapsed);
-    };
-
-    window.addEventListener("storage", handleStorageChange); // Listen for changes in other tabs
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
     };
   }, []);
 
