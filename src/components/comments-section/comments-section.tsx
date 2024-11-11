@@ -1,13 +1,7 @@
 import { Data, Comment } from "@/types/annotations";
 import { Button } from "../button";
 import { formatTimestamp } from "@/lib/utils";
-
-interface ICommentsSectionProps {
-  selectedSection: Data;
-  newComment: string;
-  setNewComment: React.Dispatch<React.SetStateAction<string>>;
-  handleAddComment: () => void;
-}
+import { ICommentsSectionProps } from "./types";
 
 export const CommentsSection = ({
   selectedSection,

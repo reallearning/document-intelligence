@@ -8,11 +8,11 @@ import {
   Review,
 } from "@/types/annotations";
 import { CommentsSection } from "../comments-section";
+import { IAnnotationsSidebarProps } from "./types";
 
-export const AnnotationsSidebar = () => {
-  const [documentInfo, setDocumentInfo] = useState<DocumentInformation | null>(
-    null
-  );
+export const AnnotationsSidebar = ({
+  documentInformation,
+}: IAnnotationsSidebarProps) => {
   const [expandedSteps, setExpandedSteps] = useState<{
     [key: number]: boolean;
   }>({});
@@ -64,28 +64,8 @@ export const AnnotationsSidebar = () => {
   };
 
   useEffect(() => {
-    fetch("/data.json")
-      .then((response) => response.json())
-      .then((data) => {
-        setDocumentInfo(data);
-        console.log(data);
-      })
-      .catch((error) => console.error("Error loading document info:", error));
+    setActiveReview(documentInformation["l1Review"]);
   }, []);
-
-  useEffect(() => {
-    if (documentInfo) {
-      setActiveReview(documentInfo["l1Review"]);
-    }
-  }, [documentInfo]);
-
-  useEffect(() => {
-    console.log(activeReview?.reviewName);
-  }, [activeReview]);
-
-  if (!documentInfo) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <div className="flex h-screen">
@@ -93,10 +73,10 @@ export const AnnotationsSidebar = () => {
       <div className="w-[370px] bg-[#F6F6F6] overflow-y-auto">
         <div className="px-5 pt-7">
           <p className="font-poly font-normal text-xl leading-5 text-black mb-2">
-            {documentInfo.clientName}
+            {documentInformation.clientName}
           </p>
           <p className="font-nunito font-normal text-sm leading-5 text-morrie-text mb-4">
-            Assigned to: {documentInfo.assignedTo}
+            Assigned to: {documentInformation.assignedTo}
           </p>
           <div className="px-4 py-1 bg-[#EFB18045] rounded-2xl max-w-[40%] flex justify-center items-center mb-6">
             <p className="font-nunito font-normal text-xs text-[#EFB180]">

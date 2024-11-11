@@ -4,7 +4,8 @@ import React from "react";
 const DealsDetails = () => {
   return (
     <div className="flex flex-1">
-      <AnnotationsSidebar />
+      {/* TODO: Uncomment and pass the selected documentInformation object to see the annotations sidebar */}
+      {/* <AnnotationsSidebar /> */}
     </div>
   );
 };
