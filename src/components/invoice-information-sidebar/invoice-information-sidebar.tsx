@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { CommentsSection } from "../comments-section";
 import { IInvoiceInformationProps } from "./types";
+import { useStorage } from "@/context/StorageContext";
 
 export const InvoiceInformationSidebar = ({
   invoice,
@@ -15,7 +16,7 @@ export const InvoiceInformationSidebar = ({
   const sidebarRef = useRef<HTMLDivElement>(null);
 
   const handleClickOutside = (event: MouseEvent) => {
-    localStorage.setItem("invoiceSidebarCollapsed", "false");
+    updateInvoiceSidebarCollapsed(false);
 
     if (
       sidebarRef.current &&
@@ -45,9 +46,10 @@ export const InvoiceInformationSidebar = ({
       setNewComment("");
     }
   };
+  const { updateInvoiceSidebarCollapsed } = useStorage();
 
   const handleCommentClick = (section: DataItem) => {
-    localStorage.setItem("invoiceSidebarCollapsed", "true");
+    updateInvoiceSidebarCollapsed(true);
     setSelectedSection(section);
   };
 

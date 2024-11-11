@@ -9,6 +9,7 @@ import {
 } from "@/types/annotations";
 import { CommentsSection } from "../comments-section";
 import { IAnnotationsSidebarProps } from "./types";
+import { useStorage } from "@/context/StorageContext";
 
 export const AnnotationsSidebar = ({
   documentInformation,
@@ -26,7 +27,7 @@ export const AnnotationsSidebar = ({
   const sidebarRef = useRef<HTMLDivElement>(null);
 
   const handleClickOutside = (event: MouseEvent) => {
-    localStorage.setItem("sidebarCollapsed", "false");
+    updateSidebarCollapsed(false);
     if (
       sidebarRef.current &&
       !sidebarRef.current.contains(event.target as Node)
@@ -41,9 +42,10 @@ export const AnnotationsSidebar = ({
       [index]: !prev[index],
     }));
   };
+  const { updateSidebarCollapsed } = useStorage();
 
   const handleCommentClick = (section: Data) => {
-    localStorage.setItem("sidebarCollapsed", "true");
+    updateSidebarCollapsed(true);
     setSelectedSection(section);
   };
 

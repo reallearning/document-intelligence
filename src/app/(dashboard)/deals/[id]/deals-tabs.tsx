@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import PDFViewer from "../../components/pdf-viewer";
+import { useStorage } from "@/context/StorageContext";
 
 type StepData = {
   id: string;
@@ -37,9 +38,11 @@ const DealsTabs = ({ reviewData }: DealsTabsProps) => {
 
   const sidebarWidth = 458;
 
+  const { sidebarCollapsed } = useStorage();
+
   useEffect(() => {
     const updatePageWidth = () => {
-      if (localStorage.getItem("sidebarCollapsed") === "true") {
+      if (sidebarCollapsed) {
         setPageWidth(window.innerWidth - sidebarWidth - 300);
       } else {
         setPageWidth(window.innerWidth - sidebarWidth);
@@ -52,7 +55,7 @@ const DealsTabs = ({ reviewData }: DealsTabsProps) => {
     return () => {
       window.removeEventListener("resize", updatePageWidth);
     };
-  }, []);
+  }, [sidebarCollapsed]);
 
   return (
     <div className="flex flex-row gap-[24px] w-full">

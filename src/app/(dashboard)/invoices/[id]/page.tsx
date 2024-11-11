@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import PDFViewer from "../../components/pdf-viewer";
 import { usePathname } from "next/navigation";
 import { Invoice } from "@/types/invoice-information";
+import { useStorage } from "@/context/StorageContext";
 
 const invoiceDetails = [
   {
@@ -366,9 +367,11 @@ const InvoiceDetails = () => {
     }
   }, [id]);
 
+  const { invoiceSidebarCollapsed } = useStorage();
+
   useEffect(() => {
     const updatePageWidth = () => {
-      if (localStorage.getItem("invoiceSidebarCollapsed") === "true") {
+      if (invoiceSidebarCollapsed) {
         setPageWidth(window.innerWidth - sidebarWidth - 300);
       } else {
         setPageWidth(window.innerWidth - sidebarWidth);
@@ -381,7 +384,7 @@ const InvoiceDetails = () => {
     return () => {
       window.removeEventListener("resize", updatePageWidth);
     };
-  }, []);
+  }, [invoiceSidebarCollapsed]);
 
   return (
     <div className="flex w-full flex-row gap-[24px]">
