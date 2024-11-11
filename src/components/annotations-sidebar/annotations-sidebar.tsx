@@ -152,7 +152,7 @@ export const AnnotationsSidebar = ({
                     {info.data?.map((item, secIndex) => (
                       <div
                         key={secIndex}
-                        className="bg-white rounded-xl pt-3 pb-5 px-5 flex flex-col gap-y-2"
+                        className="bg-white rounded-xl pt-3 pb-5 px-5 flex flex-col gap-y-2 hover:border hover:border-[#3C7167]"
                       >
                         <div key={secIndex} className="flex flex-col gap-2">
                           <div className="flex justify-between items-center">

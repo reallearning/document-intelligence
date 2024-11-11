@@ -100,7 +100,7 @@ export const InvoiceInformationSidebar = ({
               {step.data.map((dataItem) => (
                 <div
                   key={dataItem.id}
-                  className="bg-white px-4 py-3 rounded-xl mb-3"
+                  className="bg-white px-4 py-3 rounded-xl mb-3 hover:border hover:border-[#3C7167]"
                 >
                   <div className="flex justify-between items-center">
                     <p className="text-xs text-[#A8A8A8] mb-2">
