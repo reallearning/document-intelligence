@@ -6,7 +6,7 @@ import {
 } from "react";
 import { tv } from "tailwind-variants";
 import { ButtonProps } from ".";
-import { center } from "@/app/lib/utils";
+import { center } from "@/lib/utils";
 
 const classes = {
   icons: "align-bottom inline-flex",
