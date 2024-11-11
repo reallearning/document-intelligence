@@ -9,120 +9,8 @@ import { useStorage } from "@/context/StorageContext";
 const invoiceDetails = [
   {
     id: "invoice-01",
-    invoiceName: "Achme Technologies",
-    assignedTo: "nidhi@adhe.com",
-    pdfUrl: "/documents/invoices/paxmedica.pdf",
-    steps: [
-      {
-        id: "1",
-        stepName: null,
-        data: [
-          {
-            id: "1",
-            header: "Invoice Number",
-            data: "INV-2024-0105",
-            comments: [
-              {
-                id: "comment1",
-                senderMail: "example1@mail.com",
-                profileUrl: "https://profile1.url",
-                message: "This is a comment message.",
-                date: "2024-11-11",
-                time: "10:00 AM",
-              },
-              {
-                id: "comment2",
-                senderMail: "example2@mail.com",
-                profileUrl: "https://profile2.url",
-                message: "Another comment message.",
-                date: "2024-11-11",
-                time: "11:00 AM",
-              },
-            ],
-          },
-          {
-            id: "2",
-            header: "Invoice Date",
-            data: "January 15, 2024",
-            comments: [
-              {
-                id: "comment3",
-                senderMail: "example1@mail.com",
-                profileUrl: "https://profile1.url",
-                message: "This is a comment message.",
-                date: "2024-11-11",
-                time: "10:00 AM",
-              },
-              {
-                id: "comment4",
-                senderMail: "example2@mail.com",
-                profileUrl: "https://profile2.url",
-                message: "Another comment message.",
-                date: "2024-11-11",
-                time: "11:00 AM",
-              },
-            ],
-          },
-        ],
-      },
-      {
-        id: "2",
-        stepName: "Vendor Details",
-        data: [
-          {
-            id: "1",
-            header: "Legal Name",
-            data: "ADHE Corporation",
-            comments: [
-              {
-                id: "comment5",
-                senderMail: "example1@mail.com",
-                profileUrl: "https://profile1.url",
-                message: "This is a comment message.",
-                date: "2024-11-11",
-                time: "10:00 AM",
-              },
-              {
-                id: "comment6",
-                senderMail: "example2@mail.com",
-                profileUrl: "https://profile2.url",
-                message: "Another comment message.",
-                date: "2024-11-11",
-                time: "11:00 AM",
-              },
-            ],
-          },
-          {
-            id: "2",
-            header: "Tax ID",
-            data: "47-1234567",
-            comments: [
-              {
-                id: "comment7",
-                senderMail: "example1@mail.com",
-                profileUrl: "https://profile1.url",
-                message: "This is a comment message.",
-                date: "2024-11-11",
-                time: "10:00 AM",
-              },
-              {
-                id: "comment8",
-                senderMail: "example2@mail.com",
-                profileUrl: "https://profile2.url",
-                message: "Another comment message.",
-                date: "2024-11-11",
-                time: "11:00 AM",
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: "invoice-02",
-    invoiceName: "Achme Technologies",
-    assignedTo: "nidhi@adhe.com",
+    invoiceName: "Oaktree Capital Management Services Invoice",
+    assignedTo: "finance@oaktree.com",
     pdfUrl: "/documents/invoices/oaktree-capital.pdf",
     steps: [
       {
@@ -132,48 +20,20 @@ const invoiceDetails = [
           {
             id: "1",
             header: "Invoice Number",
-            data: "INV-2024-0105",
-            comments: [
-              {
-                id: "comment1",
-                senderMail: "example1@mail.com",
-                profileUrl: "https://profile1.url",
-                message: "This is a comment message.",
-                date: "2024-11-11",
-                time: "10:00 AM",
-              },
-              {
-                id: "comment2",
-                senderMail: "example2@mail.com",
-                profileUrl: "https://profile2.url",
-                message: "Another comment message.",
-                date: "2024-11-11",
-                time: "11:00 AM",
-              },
-            ],
+            data: "INV-OAK-0001",
+            comments: [],
           },
           {
             id: "2",
             header: "Invoice Date",
-            data: "January 15, 2024",
-            comments: [
-              {
-                id: "comment3",
-                senderMail: "example1@mail.com",
-                profileUrl: "https://profile1.url",
-                message: "This is a comment message.",
-                date: "2024-11-11",
-                time: "10:00 AM",
-              },
-              {
-                id: "comment4",
-                senderMail: "example2@mail.com",
-                profileUrl: "https://profile2.url",
-                message: "Another comment message.",
-                date: "2024-11-11",
-                time: "11:00 AM",
-              },
-            ],
+            data: "01-Dec-2023",
+            comments: [],
+          },
+          {
+            id: "3",
+            header: "Total Amount",
+            data: "£5000.00",
+            comments: [],
           },
         ],
       },
@@ -184,57 +44,41 @@ const invoiceDetails = [
           {
             id: "1",
             header: "Legal Name",
-            data: "ADHE Corporation",
-            comments: [
-              {
-                id: "comment5",
-                senderMail: "example1@mail.com",
-                profileUrl: "https://profile1.url",
-                message: "This is a comment message.",
-                date: "2024-11-11",
-                time: "10:00 AM",
-              },
-              {
-                id: "comment6",
-                senderMail: "example2@mail.com",
-                profileUrl: "https://profile2.url",
-                message: "Another comment message.",
-                date: "2024-11-11",
-                time: "11:00 AM",
-              },
-            ],
+            data: "Oaktree Capital Management, L.P.",
+            comments: [],
           },
           {
             id: "2",
-            header: "Tax ID",
-            data: "47-1234567",
-            comments: [
-              {
-                id: "comment7",
-                senderMail: "example1@mail.com",
-                profileUrl: "https://profile1.url",
-                message: "This is a comment message.",
-                date: "2024-11-11",
-                time: "10:00 AM",
-              },
-              {
-                id: "comment8",
-                senderMail: "example2@mail.com",
-                profileUrl: "https://profile2.url",
-                message: "Another comment message.",
-                date: "2024-11-11",
-                time: "11:00 AM",
-              },
-            ],
+            header: "Address",
+            data: "333 South Grand Avenue, 28th Floor, Los Angeles, CA 90071",
+            comments: [],
+          },
+        ],
+      },
+      {
+        id: "3",
+        stepName: "Items",
+        data: [
+          {
+            id: "1",
+            header: "Description",
+            data: "Sub-advisory and investment management services, Qty: 1, Price: £3000.00",
+            comments: [],
+          },
+          {
+            id: "2",
+            header: "Description",
+            data: "Marketing and promotion services, Qty: 1, Price: £2000.00",
+            comments: [],
           },
         ],
       },
     ],
   },
   {
-    id: "invoice-03",
-    invoiceName: "Achme Technologies",
-    assignedTo: "nidhi@adhe.com",
+    id: "invoice-02",
+    invoiceName: "Rise Education Group Services Invoice",
+    assignedTo: "accounts@rise.com",
     pdfUrl: "/documents/invoices/risee-education.pdf",
     steps: [
       {
@@ -244,48 +88,94 @@ const invoiceDetails = [
           {
             id: "1",
             header: "Invoice Number",
-            data: "INV-2024-0105",
-            comments: [
-              {
-                id: "comment1",
-                senderMail: "example1@mail.com",
-                profileUrl: "https://profile1.url",
-                message: "This is a comment message.",
-                date: "2024-11-11",
-                time: "10:00 AM",
-              },
-              {
-                id: "comment2",
-                senderMail: "example2@mail.com",
-                profileUrl: "https://profile2.url",
-                message: "Another comment message.",
-                date: "2024-11-11",
-                time: "11:00 AM",
-              },
-            ],
+            data: "INV-RISE-0002",
+            comments: [],
           },
           {
             id: "2",
             header: "Invoice Date",
-            data: "January 15, 2024",
-            comments: [
-              {
-                id: "comment3",
-                senderMail: "example1@mail.com",
-                profileUrl: "https://profile1.url",
-                message: "This is a comment message.",
-                date: "2024-11-11",
-                time: "10:00 AM",
-              },
-              {
-                id: "comment4",
-                senderMail: "example2@mail.com",
-                profileUrl: "https://profile2.url",
-                message: "Another comment message.",
-                date: "2024-11-11",
-                time: "11:00 AM",
-              },
-            ],
+            data: "01-Dec-2023",
+            comments: [],
+          },
+          {
+            id: "3",
+            header: "Total Amount",
+            data: "£5000.00",
+            comments: [],
+          },
+        ],
+      },
+      {
+        id: "2",
+        stepName: "Vendor Details",
+        data: [
+          {
+            id: "data-201",
+            header: "Legal Name",
+            data: "Rise Education Group",
+            comments: [],
+          },
+          {
+            id: "data-202",
+            header: "Address",
+            data: "Room C209, Building 1, No.8 Huanhe West Road, Airport Economic Zone, Tianjin, China",
+            comments: [],
+          },
+        ],
+      },
+      {
+        id: "3",
+        stepName: "Items",
+        data: [
+          {
+            id: "data-301",
+            header: "Description",
+            data: "Academic support services, Qty: 1, Price: £2500.00",
+            comments: [],
+          },
+          {
+            id: "data-302",
+            header: "Description",
+            data: "Enrollment support services, Qty: 1, Price: £1500.00",
+            comments: [],
+          },
+          {
+            id: "data-303",
+            header: "Description",
+            data: "Customer support services, Qty: 1, Price: £1000.00",
+            comments: [],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "invoice-03",
+    invoiceName: "Paxmedica Inc. Clinical Research Invoice",
+    assignedTo: "billing@paxmedica.com",
+    pdfUrl: "/documents/invoices/paxmedica.pdf",
+    steps: [
+      {
+        id: "1",
+        stepName: null,
+        data: [
+          {
+            id: "1",
+            header: "Invoice Number",
+            data: "INV-PAX-0003",
+            comments: [],
+          },
+          {
+            id: "2",
+            header: "Invoice Date",
+            data: "01-Dec-2023",
+            comments: [],
+          },
+          {
+            id: "3",
+            header: "Total Amount",
+            data: "£5800.00",
+            comments: [],
           },
         ],
       },
@@ -296,54 +186,39 @@ const invoiceDetails = [
           {
             id: "1",
             header: "Legal Name",
-            data: "ADHE Corporation",
-            comments: [
-              {
-                id: "comment5",
-                senderMail: "example1@mail.com",
-                profileUrl: "https://profile1.url",
-                message: "This is a comment message.",
-                date: "2024-11-11",
-                time: "10:00 AM",
-              },
-              {
-                id: "comment6",
-                senderMail: "example2@mail.com",
-                profileUrl: "https://profile2.url",
-                message: "Another comment message.",
-                date: "2024-11-11",
-                time: "11:00 AM",
-              },
-            ],
+            data: "Paxmedica Inc.",
+            comments: [],
           },
           {
             id: "2",
-            header: "Tax ID",
-            data: "47-1234567",
-            comments: [
-              {
-                id: "comment7",
-                senderMail: "example1@mail.com",
-                profileUrl: "https://profile1.url",
-                message: "This is a comment message.",
-                date: "2024-11-11",
-                time: "10:00 AM",
-              },
-              {
-                id: "comment8",
-                senderMail: "example2@mail.com",
-                profileUrl: "https://profile2.url",
-                message: "Another comment message.",
-                date: "2024-11-11",
-                time: "11:00 AM",
-              },
-            ],
+            header: "Address",
+            data: "1266 East Main Street, Suite 700R, Stamford, CT 06902, USA",
+            comments: [],
+          },
+        ],
+      },
+      {
+        id: "3",
+        stepName: "Items",
+        data: [
+          {
+            id: "1",
+            header: "Description",
+            data: "Clinical research services, Qty: 1, Price: £5000.00",
+            comments: [],
+          },
+          {
+            id: "2",
+            header: "Description",
+            data: "Weekly reporting services, Qty: 1, Price: £800.00",
+            comments: [],
           },
         ],
       },
     ],
   },
 ];
+
 const InvoiceDetails = () => {
   const sidebarWidth = 500;
   const [pageWidth, setPageWidth] = useState(0);

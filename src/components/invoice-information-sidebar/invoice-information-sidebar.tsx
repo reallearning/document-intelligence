@@ -82,7 +82,7 @@ export const InvoiceInformationSidebar = ({
 
   return (
     <div className="flex h-screen" ref={sidebarRef}>
-      <div className="w-[370px] bg-[#F6F6F6] flex flex-col">
+      <div className="w-[370px] bg-[#F6F6F6] flex flex-col no-scrollbar">
         <div className="px-5 pt-7">
           <p className="font-poly font-normal text-xl leading-5 text-black mb-2">
             {invoice.invoiceName}
@@ -98,7 +98,7 @@ export const InvoiceInformationSidebar = ({
         </div>
 
         {/* Steps and Data Section */}
-        <div className="px-4 py-5 flex-1 overflow-y-auto">
+        <div className="px-4 py-5 flex-1 overflow-y-auto no-scrollbar">
           {invoice.steps?.map((step) => (
             <div
               key={step.id}
