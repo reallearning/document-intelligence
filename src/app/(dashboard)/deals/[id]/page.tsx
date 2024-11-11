@@ -4,9 +4,10 @@ import React, { useEffect, useState } from "react";
 import DealsTabs from "./deals-tabs";
 import { Button } from "@/components/button";
 import { usePathname, useSearchParams } from "next/navigation";
+import { DocumentInformation } from "@/types/annotations";
 
 // Example data structure based on your JSON format
-const reviewData = [
+const reviewData: DocumentInformation[] = [
   {
     id: "deal_003",
     clientName: "PaxMedica Inc.",
@@ -464,16 +465,7 @@ const reviewData = [
                 {
                   id: "data_entry_40",
                   header: "Project Milestones",
-                  title: [
-                    "Contract Signature: 20% payment upon signing.",
-                    "SAHPRA Approval: 15% payment upon regulatory approval.",
-                    "First Patient In (FPI): 5% upon enrolling first patient.",
-                    "50% Recruitment: 20% payment upon reaching 50% patient recruitment.",
-                    "100% Recruitment: 20% upon full recruitment.",
-                    "Database Lock (DB Lock): 10% upon completion and locking of data collection.",
-                    "Draft Clinical Study Report (CSR): 10% upon submission of draft report.",
-                    "Acceptance of Final CSR: Final payment upon client’s acceptance of completed report.",
-                  ],
+                  title: "Contract Signature: 20% payment upon signing.",
                   contractName: "Master Service Agreement",
                   matches: null,
                   comments: [],
@@ -495,8 +487,6 @@ const reviewData = [
         },
       ],
     },
-    pdfUrl: "/document/contract/PAXMEDICA_INC_07_02_2020-EX-10.12.pdf",
-    companyName: "",
   },
 
   {
@@ -894,9 +884,6 @@ const reviewData = [
         },
       ],
     },
-    pdfUrl:
-      "/document/contract/RISEEDUCATIONCAYMANLTD_04_17_2020-EX-4.23-SERVICE_AGREEMENT.pdf",
-    companyName: "",
   },
 
   {
@@ -1322,9 +1309,6 @@ const reviewData = [
         },
       ],
     },
-    pdfUrl:
-      "/document/contract/OAKTREECAPITALGROUP,LLC_03_02_2020-EX-10.8-Services_Agreement.pdf",
-    companyName: "Oaktree Capital Management",
   },
 ];
 
@@ -1333,9 +1317,9 @@ const DealsDetails = () => {
 
   const id = pathname?.split("/").pop();
 
-  const [selectedDeal, setSelectedDeal] = useState<
-    (typeof reviewData)[0] | null
-  >(null);
+  const [selectedDeal, setSelectedDeal] = useState<DocumentInformation | null>(
+    null
+  );
 
   useEffect(() => {
     if (id) {
@@ -1360,7 +1344,7 @@ const DealsDetails = () => {
 
   return (
     <div className="w-full flex flex-row">
-      {/* <AnnotationsSidebar documentInformation={selectedDeal} /> */}
+      <AnnotationsSidebar documentInformation={selectedDeal} />
       <div className="flex flex-col px-6 w-full">
         <div className="flex justify-end p-4 w-full">
           {isReviewMarked === 0 ? (
