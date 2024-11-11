@@ -48,7 +48,14 @@ export const InvoiceInformationSidebar = ({
 
   const handleCommentClick = (section: DataItem) => {
     localStorage.setItem("invoiceSidebarCollapsed", "true");
-    setSelectedSection(section);
+    console.log(selectedSection?.id, section.id)
+
+    // Toggle the selected section based on whether the clicked section is the same as the selected one
+    setSelectedSection((prevSelectedSection) =>
+      prevSelectedSection && prevSelectedSection.id === section.id
+        ? null
+        : section
+    );
   };
 
   useEffect(() => {
@@ -91,10 +98,7 @@ export const InvoiceInformationSidebar = ({
                   key={dataItem.id}
                   className="bg-white px-4 py-3 rounded-xl mb-3"
                 >
-                  <div
-                    className="flex justify-between items-center cursor-pointer"
-                    onClick={() => setSelectedSection(dataItem)}
-                  >
+                  <div className="flex justify-between items-center">
                     <p className="text-xs text-[#A8A8A8] mb-2">
                       {dataItem.header}
                     </p>

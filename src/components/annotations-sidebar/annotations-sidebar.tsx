@@ -43,8 +43,15 @@ export const AnnotationsSidebar = ({
   };
 
   const handleCommentClick = (section: Data) => {
-    localStorage.setItem("sidebarCollapsed", "true");
-    setSelectedSection(section);
+    localStorage.setItem("invoiceSidebarCollapsed", "true");
+    console.log(selectedSection?.id, section.id);
+
+    // Toggle the selected section based on whether the clicked section is the same as the selected one
+    setSelectedSection((prevSelectedSection) =>
+      prevSelectedSection && prevSelectedSection.id === section.id
+        ? null
+        : section
+    );
   };
 
   const handleAddComment = () => {
@@ -108,9 +115,9 @@ export const AnnotationsSidebar = ({
         <div>
           {activeReview?.contracts?.[0]?.steps?.map((info, index) => (
             <div key={index} className="mb-3 px-2">
-              <div className="bg-[#BAAE921A] p-4 rounded-xl cursor-pointer">
+              <div className="bg-[#BAAE921A] p-4 rounded-xl">
                 <div
-                  className="flex justify-between items-center"
+                  className="flex justify-between items-center cursor-pointer"
                   onClick={() => toggleStep(index)}
                 >
                   <span className="font-semibold font-nunito text-base leading-[18px] text-[#7F7F7F]">
@@ -142,7 +149,7 @@ export const AnnotationsSidebar = ({
                         className="bg-white rounded-xl pt-3 pb-5 px-5 flex flex-col gap-y-2"
                       >
                         <div key={secIndex} className="flex flex-col gap-2">
-                          <div className="flex justify-between">
+                          <div className="flex justify-between items-center">
                             <p className="text-xs text-[#A8A8A8]">
                               {item.header}
                             </p>
@@ -176,7 +183,12 @@ export const AnnotationsSidebar = ({
                           {item.matches &&
                             Object.keys(item.matches || {}).length != 0 && (
                               <div className="mt-4 border-t border-gray-200 pt-4">
-                                <div className="mb-1 text-[#00A1E0] cursor-pointer flex justify-between">
+                                <div
+                                  className="mb-1 text-[#00A1E0] cursor-pointer flex justify-between"
+                                  onClick={() =>
+                                    toggleMatchInfo(index, secIndex)
+                                  }
+                                >
                                   <div className="flex gap-x-1">
                                     <p className="font-normal text-[10px] text-[#00A1E0]">
                                       Matches with{" "}
@@ -199,9 +211,6 @@ export const AnnotationsSidebar = ({
                                     stroke="#7F7F7F"
                                     viewBox="0 0 24 24"
                                     xmlns="http://www.w3.org/2000/svg"
-                                    onClick={() =>
-                                      toggleMatchInfo(index, secIndex)
-                                    }
                                   >
                                     <path
                                       strokeLinecap="round"
