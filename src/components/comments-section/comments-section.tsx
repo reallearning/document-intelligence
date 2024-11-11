@@ -1,10 +1,10 @@
-import { Data, Comment } from "@/types/annotations";
+import { Comment } from "@/types/annotations";
 import { Button } from "../button";
 import { formatTimestamp } from "@/lib/utils";
 import { ICommentsSectionProps } from "./types";
 
 export const CommentsSection = ({
-  selectedSection,
+  comments,
   newComment,
   setNewComment,
   handleAddComment,
@@ -16,7 +16,7 @@ export const CommentsSection = ({
         Comments
       </p>
       <div className="ml-2 mr-3">
-        {selectedSection.comments?.map((comment: Comment) => (
+        {comments.map((comment: Comment) => (
           <div key={comment.id} className="bg-white rounded-xl p-3 mb-2">
             <div className="flex items-center gap-x-2">
               <div className="h-5 w-5 bg-[#D9D9D9] rounded-full text-black flex items-center justify-center text-xs font-nunito">
@@ -25,7 +25,7 @@ export const CommentsSection = ({
               <p className="text-sm text-[#8C8C8C]">{comment.senderMail}</p>
             </div>
             <p className="text-xs text-black mt-3">{comment.message}</p>
-            <div className="flex justify-end items-center">
+            <div className="flex justify-end items-center mt-2">
               <p className="text-[10px] text-[#9C9C9C]">
                 {formatTimestamp(
                   new Date(`${comment.date} ${comment.time}`).getTime()
