@@ -34,7 +34,7 @@ const styles = tv({
     },
     size: {
       xxs: "py-1 px-2  space-x-2",
-      xs: "py-2 px-4 space-x-2",
+      xs: "py-1 px-2 space-x-1",
       md: "py-2 px-4  space-x-2",
       lg: "py-4 px-6 space-x-2",
     },
