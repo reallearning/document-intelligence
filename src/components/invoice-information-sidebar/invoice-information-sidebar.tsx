@@ -71,7 +71,7 @@ export const InvoiceInformationSidebar = ({
 
   return (
     <div className="flex h-screen" ref={sidebarRef}>
-      <div className="w-[370px] bg-[#F6F6F6] overflow-y-auto">
+      <div className="w-[370px] bg-[#F6F6F6] overflow-y-auto no-scrollbar">
         <div className="px-5 pt-7">
           <p className="font-poly font-normal text-xl leading-5 text-black mb-2">
             {invoice.invoiceName}
