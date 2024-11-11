@@ -116,8 +116,18 @@ const DealsTable: React.FC<DealsTableProps> = ({ deals }) => {
               <td className="px-6 py-4 text-sm text-gray-700">
                 {deal.payment_terms}
               </td>
-              <td className="px-6 py-4 text-sm text-gray-700">
-                {deal.review_status}
+              <td>
+                {
+                  <span
+                    className={`px-4 py-1 text-xs font-nunito font-normal ${
+                      deal.review_status === "PENDING"
+                        ? "bg-[#EFB180] text-[#EFB180] bg-opacity-[30%] rounded-full"
+                        : "bg-[#3c7167] text-[#3c7167] bg-opacity-[30%] rounded-full "
+                    }`}
+                  >
+                    {deal.review_status}
+                  </span>
+                }
               </td>
             </tr>
           ))}
