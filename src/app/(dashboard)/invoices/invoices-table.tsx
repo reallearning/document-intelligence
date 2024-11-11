@@ -43,7 +43,7 @@ const InvoicesTable: React.FC<InvoicesTableProps> = ({ invoices }) => {
       <table className="min-w-full rounded-lg shadow-md">
         <thead className="bg-[#F1EFE94D]">
           <tr>
-            <th className="px-4 py-3 border-b border-gray-300 text-center w-12">
+            <th className="px-4 py-3 text-center w-12">
               <input
                 type="checkbox"
                 checked={allSelected}
@@ -51,22 +51,22 @@ const InvoicesTable: React.FC<InvoicesTableProps> = ({ invoices }) => {
                 className="cursor-pointer"
               />
             </th>
-            <th className="px-6 py-3 border-b border-gray-300 text-left text-sm font-medium text-gray-700">
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">
               Name
             </th>
-            <th className="px-6 py-3 border-b border-gray-300 text-left text-sm font-medium text-gray-700">
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">
               Source
             </th>
-            <th className="px-6 py-3 border-b border-gray-300 text-left text-sm font-medium text-gray-700">
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">
               Document Type
             </th>
-            <th className="px-6 py-3 border-b border-gray-300 text-left text-sm font-medium text-gray-700">
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">
               Added On
             </th>
-            <th className="px-6 py-3 border-b border-gray-300 text-left text-sm font-medium text-gray-700">
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">
               Assignee
             </th>
-            <th className="px-6 py-3 border-b border-gray-300 text-left text-sm font-medium text-gray-700">
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">
               Last Modified On
             </th>
           </tr>
@@ -83,24 +83,24 @@ const InvoicesTable: React.FC<InvoicesTableProps> = ({ invoices }) => {
                 />
               </td>
               <td
-                className="px-6 py-4 text-sm text-gray-700 underline cursor-pointer"
+                className="px-6 py-4 text-md font-bold font-nunito text-gray-700 underline cursor-pointer"
                 onClick={() => router.push(`/invoices/${invoice.id}`)}
               >
                 {invoice.name}
               </td>
-              <td className="px-6 py-4 text-sm text-gray-700">
+              <td className="px-6 py-4 text-sm font-normal font-nunito text-gray-700">
                 {invoice.source}
               </td>
-              <td className="px-6 py-4 text-sm text-gray-700">
+              <td className="px-6 py-4 text-sm font-normal font-nunito text-gray-700">
                 {invoice.type_of_document}
               </td>
-              <td className="px-6 py-4 text-sm text-gray-700">
+              <td className="px-6 py-4 text-sm font-normal font-nunito text-gray-700">
                 {invoice.added_on}
               </td>
-              <td className="px-6 py-4 text-sm text-gray-700">
+              <td className="px-6 py-4 text-sm font-nunito font-normal text-gray-700">
                 {invoice.assignee}
               </td>
-              <td className="px-6 py-4 text-sm text-gray-700">
+              <td className="px-6 py-4 text-sm font-normal font-nunito text-gray-700">
                 {invoice.last_modified_on}
               </td>
             </tr>

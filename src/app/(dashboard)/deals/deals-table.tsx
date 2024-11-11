@@ -45,7 +45,7 @@ const DealsTable: React.FC<DealsTableProps> = ({ deals }) => {
       <table className="min-w-full rounded-lg shadow-md">
         <thead className="bg-[#F1EFE94D]">
           <tr>
-            <th className="px-4 py-3 border-b border-gray-300">
+            <th className="px-4 py-3">
               <input
                 type="checkbox"
                 checked={allSelected}
@@ -54,28 +54,28 @@ const DealsTable: React.FC<DealsTableProps> = ({ deals }) => {
               />
             </th>
 
-            <th className="px-6 py-3 border-b border-gray-300 text-left text-sm font-medium text-gray-700">
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">
               Name
             </th>
-            <th className="px-6 py-3 border-b border-gray-300 text-left text-sm font-medium text-gray-700">
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">
               Assignee
             </th>
-            <th className="px-6 py-3 border-b border-gray-300 text-left text-sm font-medium text-gray-700">
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">
               Company
             </th>
-            <th className="px-6 py-3 border-b border-gray-300 text-left text-sm font-medium text-gray-700">
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">
               Type
             </th>
-            <th className="px-6 py-3 border-b border-gray-300 text-left text-sm font-medium text-gray-700">
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">
               Contract Date
             </th>
-            <th className="px-6 py-3 border-b border-gray-300 text-left text-sm font-medium text-gray-700">
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">
               Start Date
             </th>
-            <th className="px-6 py-3 border-b border-gray-300 text-left text-sm font-medium text-gray-700">
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">
               Payment Terms
             </th>
-            <th className="px-6 py-3 border-b border-gray-300 text-left text-sm font-medium text-gray-700">
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">
               Review Status
             </th>
           </tr>
@@ -93,27 +93,27 @@ const DealsTable: React.FC<DealsTableProps> = ({ deals }) => {
               </td>
 
               <td
-                className="px-6 py-4 text-sm text-gray-700 underline cursor-pointer"
+                className="px-6 py-4 text-md font-bold font-nunito text-gray-700 underline cursor-pointer"
                 onClick={() => router.push(`/deals/${deal.id}`)}
               >
                 {deal.name}
               </td>
-              <td className="px-6 py-4 text-sm text-gray-700">
+              <td className="px-6 py-4 text-sm font-normal font-nunito text-gray-700">
                 {deal.assignee}
               </td>
-              <td className="px-6 py-4 text-sm text-gray-700">
+              <td className="px-6 py-4 text-sm font-normal font-nunito text-gray-700">
                 {deal.company_name}
               </td>
-              <td className="px-6 py-4 text-sm text-gray-700">
+              <td className="px-6 py-4 text-sm font-normal font-nunito text-gray-700">
                 {deal.deal_type}
               </td>
-              <td className="px-6 py-4 text-sm text-gray-700">
+              <td className="px-6 py-4 text-sm font-normal font-nunito text-gray-700">
                 {deal.contract_date}
               </td>
-              <td className="px-6 py-4 text-sm text-gray-700">
+              <td className="px-6 py-4 text-sm font-normal font-nunito text-gray-700">
                 {deal.start_date}
               </td>
-              <td className="px-6 py-4 text-sm text-gray-700">
+              <td className="px-6 py-4 text-sm font-normal font-nunito text-gray-700">
                 {deal.payment_terms}
               </td>
               <td>

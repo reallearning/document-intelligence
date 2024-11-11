@@ -1,11 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import {
-  Comment,
-  Data,
-  Review,
-} from "@/types/annotations";
+import { Comment, Data, Review } from "@/types/annotations";
 import { CommentsSection } from "../comments-section";
 import { IAnnotationsSidebarProps } from "./types";
 import { useStorage } from "@/context/StorageContext";
