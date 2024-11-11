@@ -52,7 +52,7 @@ export const InvoiceInformationSidebar = ({
 
         {/* Steps and Data Section */}
         <div className="px-4 py-5">
-          {invoice.steps.map((step) => (
+          {invoice.steps?.map((step) => (
             <div
               key={step.id}
               className="mb-4 font-nunito font-normal leading-[18px]"

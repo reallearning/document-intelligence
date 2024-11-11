@@ -65,7 +65,7 @@ const DealsTabs = ({ reviewData }: DealsTabsProps) => {
                     : "text-gray-600"
                 }`}
               >
-                {contract.name} ({review.reviewName})
+                {contract.name}
               </button>
             ))
           )}

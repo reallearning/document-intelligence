@@ -25,5 +25,5 @@ export interface Invoice {
   invoiceName: string;
   assignedTo: string;
   pdfUrl: string;
-  steps: Step[];
+  steps: Step[] | null;
 }
