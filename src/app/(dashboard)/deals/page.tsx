@@ -1,15 +1,23 @@
 "use client";
-import { Button } from "@/components/button";
 import DealsTable from "./deals-table";
-import { FunnelIcon } from "@heroicons/react/24/outline";
-import { ViewColumnsIcon } from "@heroicons/react/24/outline";
 
 const DealsPage = () => {
   const deals = [
     {
+      id: "deal_001",
+      name: "Acme Technologies, Inc.",
+      assignee: "nidhi@adhe.com",
+      company_name: "Acme Technologies, Inc.",
+      deal_type: "Service Agreement",
+      contract_date: "15-Jan-2024",
+      start_date: "01-Feb-2024",
+      payment_terms: "NET45",
+      review_status: "PENDING",
+    },
+    {
       id: "deal_003",
       name: "PaxMedica Inc.",
-      assignee: "support@paxmedica.com",
+      assignee: "medhaj@adhe.com",
       company_name: "PaxMedica Inc.",
       deal_type: "Direct Deal",
       contract_date: "07-Feb-2020",
@@ -20,7 +28,7 @@ const DealsPage = () => {
     {
       id: "deal_004",
       name: "Rise Education Group",
-      assignee: "support@riseeducation.com",
+      assignee: "dheeraj@adhe.com",
       company_name: "Rise Education Group",
       deal_type: "Direct Deal",
       contract_date: "17-Apr-2020",
@@ -31,7 +39,7 @@ const DealsPage = () => {
     {
       id: "deal_005",
       name: "Oaktree Capital Management",
-      assignee: "support@oaktreecapital.com",
+      assignee: "ateek@adhe.com",
       company_name: "Oaktree Capital Management",
       deal_type: "Sub-Advisory Agreement",
       contract_date: "02-Mar-2020",
