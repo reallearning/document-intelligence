@@ -63,13 +63,13 @@ const DealsTabs = ({ reviewData, setActiveContract }: DealsTabsProps) => {
     <div className="flex flex-row gap-[24px] w-full">
       <div className="flex flex-col items-center w-full">
         {/* Render Tabs */}
-        <div className="flex space-x-4 border-b-2 border-gray-300 mb-4 w-full">
+        <div className="flex space-x-4 border-b-2 border-gray-300 mb-4 w-full overflow-auto">
           {reviewData.map((review) =>
             review.contracts.map((contract) => (
               <button
                 key={contract.id}
                 onClick={() => handleTabClick(contract.id)}
-                className={`px-4 py-2 text-lg ${
+                className={`px-4 py-2 text-md font-normal font-nunito ${
                   activeTabId === contract.id
                     ? "text-black font-nunito font-normal text-md border-b-2 border-[#3C7167]"
                     : "text-gray-600"
