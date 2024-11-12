@@ -4,6 +4,7 @@ import { useStorage } from "@/context/StorageContext";
 import PDFViewer from "../../components/pdf-viewer";
 import { ActionSidebar } from "../components/action-sidebar";
 import { useDocumentData } from "@/context/document-data-context";
+import { PDFLoadingSkeleton } from "@/components/pdf-loading-skeleton";
 
 // Assuming this data structure is fetched from an API or passed as props.
 // const data = {
@@ -193,15 +194,21 @@ const ShowData = () => {
   }, [invoiceSidebarCollapsed]);
 
   return (
-    <div className="flex w-full flex-row gap-[24px]">
-      {/* Sidebar displaying invoice details */}
-      <ActionSidebar data={data!} />
+    <>
+      {data ? (
+        <div className="flex w-full flex-row gap-[24px]">
+          {/* Sidebar displaying invoice details */}
+          <ActionSidebar data={data} />
 
-      {/* PDF Viewer */}
-      <div className="w-full h-[100vh]">
-        <PDFViewer fileUrl={data!.file_url} pageWidth={pageWidth} />
-      </div>
-    </div>
+          {/* PDF Viewer */}
+          <div className="w-full h-[100vh]">
+            <PDFViewer fileUrl={data.file_url} pageWidth={pageWidth} />
+          </div>
+        </div>
+      ) : (
+        <PDFLoadingSkeleton />
+      )}
+    </>
   );
 };
 
