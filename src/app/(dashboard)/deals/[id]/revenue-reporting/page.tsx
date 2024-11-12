@@ -95,7 +95,6 @@ const payments: Item[] = [
     amount: "$35,000",
     reference: "INV-001",
     paidOnDate: "2024-02-10",
-    dueInDays: "+4 days",
   },
   {
     type: "Due",
