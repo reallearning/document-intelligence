@@ -14,7 +14,7 @@ export const AnnotationsSidebar = ({
   const [expandedSteps, setExpandedSteps] = useState<{
     [key: number]: boolean;
   }>({});
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [showComments, setShowComments] = useState(false);
 
   const [selectedSection, setSelectedSection] = useState<Data | null>(null);
   const [newComment, setNewComment] = useState("");
@@ -51,22 +51,16 @@ export const AnnotationsSidebar = ({
       [index]: !prev[index],
     }));
   };
-  const { updateSidebarCollapsed } = useStorage();
+  const { sidebarCollapsed, updateSidebarCollapsed } = useStorage();
 
   const handleCommentClick = (section: Data) => {
-    setIsSidebarCollapsed((prevState) => !prevState);
     if (selectedSection?.id === section.id) {
-      updateSidebarCollapsed(false);
+      updateSidebarCollapsed(!sidebarCollapsed);
+      setShowComments(!showComments);
     } else {
       updateSidebarCollapsed(true);
+      setShowComments(true);
     }
-
-    // Toggle the selected section based on whether the clicked section is the same as the selected one
-    setSelectedSection((prevSelectedSection) =>
-      prevSelectedSection && prevSelectedSection.id === section.id
-        ? null
-        : section
-    );
   };
 
   const handleAddComment = () => {
@@ -96,6 +90,15 @@ export const AnnotationsSidebar = ({
       ...prev,
       [key]: !prev[key],
     }));
+  };
+
+  const selectSection = (section: Data) => {
+    setSelectedSection(section);
+  };
+
+  const closeComments = () => {
+    setShowComments(false);
+    updateSidebarCollapsed(false);
   };
 
   useEffect(() => {
@@ -161,7 +164,12 @@ export const AnnotationsSidebar = ({
                     {info.data?.map((item, secIndex) => (
                       <div
                         key={secIndex}
-                        className="bg-white rounded-xl pt-3 pb-5 px-5 flex flex-col gap-y-2"
+                        className={`bg-white rounded-xl pt-3 pb-5 px-5 flex flex-col gap-y-2 hover:border hover:border-morrie-primary ${
+                          selectedSection?.id === item.id
+                            ? "border border-morrie-primary"
+                            : ""
+                        }`}
+                        onClick={() => selectSection(item)}
                       >
                         <div key={secIndex} className="flex flex-col gap-2">
                           <div className="flex justify-between items-center">
@@ -269,12 +277,15 @@ export const AnnotationsSidebar = ({
       </div>
 
       {/* Right Sidebar (Comments Section) */}
-      {selectedSection?.comments && (
+      {selectedSection?.comments && showComments && (
         <CommentsSection
+          label={selectedSection.header ?? ""}
+          value={selectedSection.title ?? ""}
           comments={selectedSection.comments}
           newComment={newComment}
           setNewComment={setNewComment}
           handleAddComment={handleAddComment}
+          closeComments={closeComments}
         />
       )}
 
