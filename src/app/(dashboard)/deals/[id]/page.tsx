@@ -18,7 +18,7 @@ const reviewData: DocumentInformation[] = [
         {
           id: "contract_005",
           name: "Services Agreement",
-          pdfUrl: "/document/contracts/oaktree-capital.pdf",
+          pdfUrl: "/documents/contracts/oaktree-capital.pdf",
           steps: [
             {
               stepName: "Step1: General Contract Metadata",
@@ -356,7 +356,7 @@ const reviewData: DocumentInformation[] = [
         {
           id: "contract_006",
           name: "Service Agreement",
-          pdfUrl: "/document/contracts/risee-education.pdf",
+          pdfUrl: "/documents/contracts/risee-education.pdf",
           steps: [
             {
               stepName: "Step1: General Contract Metadata",
