@@ -2703,7 +2703,11 @@ const DealsDetails = () => {
   const [isReviewMarked, setIsReviewMarked] = useState(0);
 
   const handleMarkReview = () => {
-    router.push(`${id}/review-contract`);
+    if (id === "deal_001") {
+      router.push(`${id}/review-contract`);
+    } else {
+      setIsReviewMarked(1);
+    }
   };
 
   if (!selectedDeal) {
