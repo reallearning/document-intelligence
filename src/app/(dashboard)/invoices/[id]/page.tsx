@@ -3,7 +3,6 @@ import { InvoiceInformationSidebar } from "@/components/invoice-information-side
 import React, { useEffect, useState } from "react";
 import PDFViewer from "../../components/pdf-viewer";
 import { usePathname } from "next/navigation";
-import { Invoice } from "@/types/invoice-information";
 import { useStorage } from "@/context/StorageContext";
 
 const invoiceDetails = [
