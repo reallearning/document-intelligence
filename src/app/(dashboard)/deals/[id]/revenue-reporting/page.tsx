@@ -257,16 +257,16 @@ export const Invoices: React.FC = () => {
             <thead className="bg-[#D9D9D959]">
               <tr className="text-gray-600 border-b">
                 <th className="px-2 py-2">Description</th>
-                <th>Type</th>
-                <th>Amount</th>
+                <th className="px-2 py-2">Type</th>
+                <th className="px-2 py-2">Amount</th>
               </tr>
             </thead>
             <tbody>
               {invoice.items.map((item, idx) => (
                 <tr key={idx} className="border-t text-black">
                   <td className="px-2 py-2">{item.description}</td>
-                  <td>{item.type}</td>
-                  <td>{item.amount}</td>
+                  <td className="px-2 py-2">{item.type}</td>
+                  <td className="px-2 py-2">{item.amount}</td>
                 </tr>
               ))}
             </tbody>
