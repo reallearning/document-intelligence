@@ -203,9 +203,35 @@ export const AnnotationsSidebar = ({
                             {item.contractName}
                           </p>
 
+                          {item.compliance &&
+                            Object.keys(item.compliance || {}).length != 0 && (
+                              <div className="mt-4 border-t-[0.5px] border-gray-200 pt-2 font-nunito font-normal leading-[18px]">
+                                <div className="flex justify-between items-center">
+                                  <p className="text-xs text-[#9C9C9C] mb-1">
+                                    {item.compliance.header}
+                                  </p>
+                                  <div
+                                    className={`px-3 py-[2px] rounded-full text-[10px] bg-opacity-[30%] ${
+                                      item.compliance.status === "Compliant"
+                                        ? "bg-[#3C7167] text-[#3C7167]"
+                                        : item.compliance.status ===
+                                          "Partially compliant"
+                                        ? "bg-[#E58F3C] text-[#E58F3C]"
+                                        : "bg-[#D63735] text-[#D63735]"
+                                    }`}
+                                  >
+                                    <p>{item.compliance.status}</p>
+                                  </div>
+                                </div>
+                                <p className="text-xs text-[#5D6977]">
+                                  {item.compliance.data}
+                                </p>
+                              </div>
+                            )}
+
                           {item.matches &&
                             Object.keys(item.matches || {}).length != 0 && (
-                              <div className="mt-4 border-t border-gray-200 pt-4">
+                              <div className="mt-2 border-t border-gray-200 pt-4">
                                 <div
                                   className="mb-1 text-[#00A1E0] cursor-pointer flex justify-between"
                                   onClick={() =>
