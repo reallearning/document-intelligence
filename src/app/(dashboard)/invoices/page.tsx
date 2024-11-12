@@ -40,7 +40,7 @@ const InvoicePage = () => {
       <h2 className="font-poly font-normal text-xl leading-[18px] text-black">
         Documents
       </h2>
-      <div className="flex flex-col w-full gap-5">
+      {/* <div className="flex flex-col w-full gap-5">
         <div className="flex justify-start items-center flex-1">
           <div className="relative w-1/2">
             <input
@@ -84,7 +84,7 @@ const InvoicePage = () => {
             Columns
           </Button>
         </div>
-      </div>
+      </div> */}
       <InvoicesTable invoices={invoices} />
     </div>
   );
