@@ -21,7 +21,7 @@ const reviewData: DocumentInformation[] = [
           pdfUrl: "/documents/contracts/oaktree-capital.pdf",
           steps: [
             {
-              stepName: "Step1: General Contract Data",
+              stepName: "Step 1: General Contract Data",
               id: "step_1",
               data: [
                 {
@@ -87,7 +87,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step2: Parties & Authority",
+              stepName: "Step 2: Parties & Authority",
               id: "step_2",
               data: [
                 {
@@ -132,7 +132,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step3: Financial Terms",
+              stepName: "Step 3: Financial Terms",
               id: "step_3",
               data: [
                 {
@@ -176,7 +176,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step4: Performance Obligations",
+              stepName: "Step 4: Performance Obligations",
               id: "step_4",
               data: [
                 {
@@ -211,7 +211,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step5: Term & Termination",
+              stepName: "Step 5: Term & Termination",
               id: "step_5",
               data: [
                 {
@@ -231,7 +231,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step6: Intellectual Property",
+              stepName: "Step 6: Intellectual Property",
               id: "step_6",
               data: [
                 {
@@ -251,7 +251,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step7: Revenue Recognition Specifics",
+              stepName: "Step 7: Revenue Recognition Specifics",
               id: "step_7",
               data: [
                 {
@@ -271,7 +271,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step8: Compliance Requirements",
+              stepName: "Step 8: Compliance Requirements",
               id: "step_8",
               data: [
                 {
@@ -291,7 +291,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step9: Allocation Methodology",
+              stepName: "Step 9: Allocation Methodology",
               id: "step_9",
               data: [
                 {
@@ -311,7 +311,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step10: Compliance Check",
+              stepName: "Step 10: Compliance Check",
               id: "step_10",
               data: [
                 {
@@ -349,7 +349,7 @@ const reviewData: DocumentInformation[] = [
           pdfUrl: "/documents/contracts/risee-education.pdf",
           steps: [
             {
-              stepName: "Step1: General Contract Data",
+              stepName: "Step 1: General Contract Data",
               id: "step_1",
               data: [
                 {
@@ -397,7 +397,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step2: Parties & Authority",
+              stepName: "Step 2: Parties & Authority",
               id: "step_2",
               data: [
                 {
@@ -436,7 +436,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step3: Financial Terms",
+              stepName: "Step 3: Financial Terms",
               id: "step_3",
               data: [
                 {
@@ -481,7 +481,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step4: Performance Obligations",
+              stepName: "Step 4: Performance Obligations",
               id: "step_4",
               data: [
                 {
@@ -522,7 +522,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step5: Term & Termination",
+              stepName: "Step 5: Term & Termination",
               id: "step_5",
               data: [
                 {
@@ -553,7 +553,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step6: Intellectual Property",
+              stepName: "Step 6: Intellectual Property",
               id: "step_6",
               data: [
                 {
@@ -574,7 +574,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step7: Revenue Recognition Specifics",
+              stepName: "Step 7: Revenue Recognition Specifics",
               id: "step_7",
               data: [
                 {
@@ -595,7 +595,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step8: Documentation Requirements",
+              stepName: "Step 8: Documentation Requirements",
               id: "step_8",
               data: [
                 {
@@ -615,7 +615,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step9: Allocation Methodology",
+              stepName: "Step 9: Allocation Methodology",
               id: "step_9",
               data: [
                 {
@@ -635,7 +635,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step10: Compliance Check",
+              stepName: "Step 10: Compliance Check",
               id: "step_10",
               data: [
                 {
@@ -662,7 +662,7 @@ const reviewData: DocumentInformation[] = [
           pdfUrl: "/documents/contracts/rizee-invoice.pdf",
           steps: [
             {
-              stepName: "Step1: General Information",
+              stepName: "Step 1: General Information",
               id: "step_1",
               data: [
                 {
@@ -695,7 +695,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step2: Vendor Details",
+              stepName: "Step 2: Vendor Details",
               id: "step_2",
               data: [
                 {
@@ -720,7 +720,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step3: Recipient Details",
+              stepName: "Step 3: Recipient Details",
               id: "step_3",
               data: [
                 {
@@ -735,7 +735,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step4: Services Rendered",
+              stepName: "Step 4: Services Rendered",
               id: "step_4",
               data: [
                 {
@@ -768,7 +768,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step5: Totals",
+              stepName: "Step 5: Totals",
               id: "step_5",
               data: [
                 {
@@ -817,7 +817,7 @@ const reviewData: DocumentInformation[] = [
           pdfUrl: "/documents/contracts/po-risee.pdf",
           steps: [
             {
-              stepName: "Step1: General Information",
+              stepName: "Step 1: General Information",
               id: "step_1",
               data: [
                 {
@@ -868,7 +868,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step2: Services Details",
+              stepName: "Step 2: Services Details",
               id: "step_2",
               data: [
                 {
@@ -901,7 +901,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step3: Financial Summary",
+              stepName: "Step 3: Financial Summary",
               id: "step_3",
               data: [
                 {
@@ -923,7 +923,7 @@ const reviewData: DocumentInformation[] = [
           pdfUrl: "/documents/contracts/so-risee.pdf",
           steps: [
             {
-              stepName: "Step1: Basic Information",
+              stepName: "Step 1: Basic Information",
               id: "step_1",
               data: [
                 {
@@ -974,7 +974,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step2: Service Details",
+              stepName: "Step 2: Service Details",
               id: "step_2",
               data: [
                 {
@@ -1035,7 +1035,7 @@ const reviewData: DocumentInformation[] = [
 
           steps: [
             {
-              stepName: "Step1: General Contract Data",
+              stepName: "Step 1: General Contract Data",
               id: "step_1",
               data: [
                 {
@@ -1083,7 +1083,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step2: Parties & Authority",
+              stepName: "Step 2: Parties & Authority",
               id: "step_2",
               data: [
                 {
@@ -1124,7 +1124,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step3: Financial Terms",
+              stepName: "Step 3: Financial Terms",
               id: "step_3",
               data: [
                 {
@@ -1163,7 +1163,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step4: Performance Obligations",
+              stepName: "Step 4: Performance Obligations",
               id: "step_4",
               data: [
                 {
@@ -1193,7 +1193,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step5: Term & Termination",
+              stepName: "Step 5: Term & Termination",
               id: "step_5",
               data: [
                 {
@@ -1224,7 +1224,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step6: Intellectual Property",
+              stepName: "Step 6: Intellectual Property",
               id: "step_6",
               data: [
                 {
@@ -1245,7 +1245,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step7: Revenue Recognition Specifics",
+              stepName: "Step 7: Revenue Recognition Specifics",
               id: "step_7",
               data: [
                 {
@@ -1265,7 +1265,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step8: Documentation Requirements",
+              stepName: "Step 8: Documentation Requirements",
               id: "step_8",
               data: [
                 {
@@ -1294,7 +1294,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step9: Allocation Methodology",
+              stepName: "Step 9: Allocation Methodology",
               id: "step_9",
               data: [
                 {
@@ -1314,7 +1314,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step10: Compliance Check",
+              stepName: "Step 10: Compliance Check",
               id: "step_10",
               data: [
                 {
@@ -1341,7 +1341,7 @@ const reviewData: DocumentInformation[] = [
           pdfUrl: "/documents/contracts/paxmedica-invoice.pdf",
           steps: [
             {
-              stepName: "Step1: General Information",
+              stepName: "Step 1: General Information",
               id: "step_1",
               data: [
                 {
@@ -1383,7 +1383,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step2: Vendor Details",
+              stepName: "Step 2: Vendor Details",
               id: "step_2",
               data: [
                 {
@@ -1426,7 +1426,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step3: Client Details",
+              stepName: "Step 3: Client Details",
               id: "step_3",
               data: [
                 {
@@ -1469,7 +1469,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step4: Invoice Details",
+              stepName: "Step 4: Invoice Details",
               id: "step_4",
               data: [
                 {
@@ -1583,7 +1583,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step5: Financial Summary",
+              stepName: "Step 5: Financial Summary",
               id: "step_5",
               data: [
                 {
@@ -1668,7 +1668,7 @@ const reviewData: DocumentInformation[] = [
           pdfUrl: "/documents/contracts/paxmedica-po.pdf",
           steps: [
             {
-              stepName: "Step1: General Information",
+              stepName: "Step 1: General Information",
               id: "step_1",
               data: [
                 {
@@ -1719,7 +1719,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step2: Order Details",
+              stepName: "Step 2: Order Details",
               id: "step_2",
               data: [
                 {
@@ -1761,7 +1761,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step3: Additional Services",
+              stepName: "Step 3: Additional Services",
               id: "step_3",
               data: [
                 {
@@ -1803,7 +1803,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step4: Total",
+              stepName: "Step 4: Total",
               id: "step_4",
               data: [
                 {
@@ -1825,7 +1825,7 @@ const reviewData: DocumentInformation[] = [
           pdfUrl: "/documents/contracts/so-paxmedica.pdf",
           steps: [
             {
-              stepName: "Step1: General Information",
+              stepName: "Step 1: General Information",
               id: "step_1",
               data: [
                 {
@@ -1903,7 +1903,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step2: Service Details",
+              stepName: "Step 2: Service Details",
               id: "step_2",
               data: [
                 {
@@ -1945,7 +1945,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step3: Additional Services",
+              stepName: "Step 3: Additional Services",
               id: "step_3",
               data: [
                 {
@@ -1987,7 +1987,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step4: Total Amount",
+              stepName: "Step 4: Total Amount",
               id: "step_4",
               data: [
                 {
@@ -2008,7 +2008,7 @@ const reviewData: DocumentInformation[] = [
   },
   {
     id: "deal_001",
-    clientName: "Bright Future Corp",
+    clientName: "ACME Technologies Inc.",
     assignedTo: "nidhi@adhe.com",
     l1Review: {
       reviewName: "L1 review",
@@ -2019,7 +2019,7 @@ const reviewData: DocumentInformation[] = [
           pdfUrl: "/documents/contracts/medhaj-contract.pdf",
           steps: [
             {
-              stepName: "Step1: General Contract data",
+              stepName: "Step 1: General Contract data",
               id: "step_1",
               data: [
                 {
@@ -2086,7 +2086,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step2: Parties & Authority",
+              stepName: "Step 2: Parties & Authority",
               id: "step_2",
               data: [
                 {
@@ -2139,7 +2139,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step3: Financial Terms",
+              stepName: "Step 3: Financial Terms",
               id: "step_3",
               data: [
                 {
@@ -2177,7 +2177,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step4: Performance Obligations",
+              stepName: "Step 4: Performance Obligations",
               id: "step_4",
               data: [
                 {
@@ -2206,7 +2206,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step5: Term & Termination",
+              stepName: "Step 5: Term & Termination",
               id: "step_5",
               data: [
                 {
@@ -2226,7 +2226,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step6: Intellectual Property",
+              stepName: "Step 6: Intellectual Property",
               id: "step_6",
               data: [
                 {
@@ -2246,7 +2246,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step7: Revenue Recognition Specifics",
+              stepName: "Step 7: Revenue Recognition Specifics",
               id: "step_7",
               data: [
                 {
@@ -2266,7 +2266,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step8: Compliance Requirements",
+              stepName: "Step 8: Compliance Requirements",
               id: "step_8",
               data: [
                 {
@@ -2286,7 +2286,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step9: Allocation Methodology",
+              stepName: "Step 9: Allocation Methodology",
               id: "step_9",
               data: [
                 {
@@ -2306,7 +2306,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step10: Compliance Check",
+              stepName: "Step 10: Compliance Check",
               id: "step_10",
               data: [
                 {
@@ -2333,7 +2333,7 @@ const reviewData: DocumentInformation[] = [
           pdfUrl: "/documents/contracts/medhaj-invoice-002.pdf",
           steps: [
             {
-              stepName: "Step1: General Information",
+              stepName: "Step 1: General Information",
               id: "step_1",
               data: [
                 {
@@ -2393,7 +2393,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step2: Service Provider Details",
+              stepName: "Step 2: Service Provider Details",
               id: "step_2",
               data: [
                 {
@@ -2418,7 +2418,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step3: Billing Information",
+              stepName: "Step 3: Billing Information",
               id: "step_3",
               data: [
                 {
@@ -2443,7 +2443,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step4: Description and Amount",
+              stepName: "Step 4: Description and Amount",
               id: "step_4",
               data: [
                 {
@@ -2510,7 +2510,7 @@ const reviewData: DocumentInformation[] = [
           pdfUrl: "/documents/contracts/medhaj-invoice-001.pdf",
           steps: [
             {
-              stepName: "Step1: General Information",
+              stepName: "Step 1: General Information",
               id: "step_1",
               data: [
                 {
@@ -2570,7 +2570,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step2: Service Provider Details",
+              stepName: "Step 2: Service Provider Details",
               id: "step_2",
               data: [
                 {
@@ -2595,7 +2595,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step3: Billing Information",
+              stepName: "Step 3: Billing Information",
               id: "step_3",
               data: [
                 {
@@ -2620,7 +2620,7 @@ const reviewData: DocumentInformation[] = [
               ],
             },
             {
-              stepName: "Step4: Description and Amount",
+              stepName: "Step 4: Description and Amount",
               id: "step_4",
               data: [
                 {
@@ -2676,6 +2676,252 @@ const reviewData: DocumentInformation[] = [
                       time: "01:30 PM",
                     },
                   ],
+                  compliance: null,
+                },
+              ],
+            },
+          ],
+        },
+        {
+          id: "PO-BF-INV-001",
+          name: "Purchase Order",
+          pdfUrl: "/documents/contracts/medhaj-po.pdf",
+          steps: [
+            {
+              stepName: "Step 1: General Information",
+              id: "step_1",
+              data: [
+                {
+                  id: "data_entry_1",
+                  header: "Purchase Order Number",
+                  title: "PO-BF-INV-001",
+                  contractName: "Bright Future Corp",
+                  matches: null,
+                  comments: [],
+                  compliance: null,
+                },
+                {
+                  id: "data_entry_2",
+                  header: "Date",
+                  title: "February 15, 2024",
+                  contractName: "Bright Future Corp",
+                  matches: null,
+                  comments: [],
+                  compliance: null,
+                },
+              ],
+            },
+            {
+              stepName: "Step 2: Buyer Information",
+              id: "step_2",
+              data: [
+                {
+                  id: "data_entry_3",
+                  header: "Buyer",
+                  title:
+                    "Bright Future Corp, 789 Commerce Ave, Austin, TX 78701",
+                  contractName: "Bright Future Corp",
+                  matches: null,
+                  comments: [],
+                  compliance: null,
+                },
+                {
+                  id: "data_entry_4",
+                  header: "Buyer Email",
+                  title: "finance@brightfuturecorp.com",
+                  contractName: "Bright Future Corp",
+                  matches: null,
+                  comments: [],
+                  compliance: null,
+                },
+              ],
+            },
+            {
+              stepName: "Step 3: Seller Information",
+              id: "step_3",
+              data: [
+                {
+                  id: "data_entry_5",
+                  header: "Seller",
+                  title:
+                    "Acme Technologies, Inc., 123 Innovation Way, San Francisco, CA 94105",
+                  contractName: "Acme Technologies",
+                  matches: null,
+                  comments: [],
+                  compliance: null,
+                },
+                {
+                  id: "data_entry_6",
+                  header: "Seller Email",
+                  title: "sales@acmetech.com",
+                  contractName: "Acme Technologies",
+                  matches: null,
+                  comments: [],
+                  compliance: null,
+                },
+              ],
+            },
+            {
+              stepName: "Step 4: Order Details",
+              id: "step_4",
+              data: [
+                {
+                  id: "data_entry_7",
+                  header: "Description",
+                  title: "Implementation and Training Services",
+                  contractName: "Acme Technologies",
+                  matches: null,
+                  comments: [],
+                  compliance: null,
+                },
+                {
+                  id: "data_entry_8",
+                  header: "Quantity",
+                  title: "1",
+                  contractName: "Acme Technologies",
+                  matches: null,
+                  comments: [],
+                  compliance: null,
+                },
+                {
+                  id: "data_entry_9",
+                  header: "Unit Price",
+                  title: "$35,000",
+                  contractName: "Acme Technologies",
+                  matches: null,
+                  comments: [],
+                  compliance: null,
+                },
+                {
+                  id: "data_entry_10",
+                  header: "Total Amount",
+                  title: "$35,000",
+                  contractName: "Acme Technologies",
+                  matches: null,
+                  comments: [],
+                  compliance: null,
+                },
+              ],
+            },
+          ],
+        },
+        {
+          id: "SO-ACME-INV-001",
+          name: "Sales Order",
+          pdfUrl: "/documents/contracts/medhaj-so.pdf",
+          steps: [
+            {
+              stepName: "Step 1: General Information",
+              id: "step_1",
+              data: [
+                {
+                  id: "data_entry_1",
+                  header: "Sales Order Number",
+                  title: "SO-ACME-INV-001",
+                  contractName: "Acme Technologies",
+                  matches: null,
+                  comments: [],
+                  compliance: null,
+                },
+                {
+                  id: "data_entry_2",
+                  header: "Date",
+                  title: "February 15, 2024",
+                  contractName: "Acme Technologies",
+                  matches: null,
+                  comments: [],
+                  compliance: null,
+                },
+              ],
+            },
+            {
+              stepName: "Step 2: Seller Information",
+              id: "step_2",
+              data: [
+                {
+                  id: "data_entry_3",
+                  header: "Seller",
+                  title:
+                    "Acme Technologies, Inc., 123 Innovation Way, San Francisco, CA 94105",
+                  contractName: "Acme Technologies",
+                  matches: null,
+                  comments: [],
+                  compliance: null,
+                },
+                {
+                  id: "data_entry_4",
+                  header: "Seller Email",
+                  title: "sales@acmetech.com",
+                  contractName: "Acme Technologies",
+                  matches: null,
+                  comments: [],
+                  compliance: null,
+                },
+              ],
+            },
+            {
+              stepName: "Step 3: Buyer Information",
+              id: "step_3",
+              data: [
+                {
+                  id: "data_entry_5",
+                  header: "Buyer",
+                  title:
+                    "Bright Future Corp, 789 Commerce Ave, Austin, TX 78701",
+                  contractName: "Bright Future Corp",
+                  matches: null,
+                  comments: [],
+                  compliance: null,
+                },
+                {
+                  id: "data_entry_6",
+                  header: "Buyer Email",
+                  title: "finance@brightfuturecorp.com",
+                  contractName: "Bright Future Corp",
+                  matches: null,
+                  comments: [],
+                  compliance: null,
+                },
+              ],
+            },
+            {
+              stepName: "Step 4: Order Details",
+              id: "step_4",
+              data: [
+                {
+                  id: "data_entry_7",
+                  header: "Description",
+                  title: "Implementation and Training Services",
+                  contractName: "Acme Technologies",
+                  matches: null,
+                  comments: [],
+                  compliance: null,
+                },
+                {
+                  id: "data_entry_8",
+                  header: "Quantity",
+                  title: "1",
+                  contractName: "Acme Technologies",
+                  matches: null,
+                  comments: [],
+                  compliance: null,
+                },
+                {
+                  id: "data_entry_9",
+                  header: "Unit Price",
+                  title: "$35,000",
+                  contractName: "Acme Technologies",
+                  matches: null,
+                  comments: [],
+                  compliance: null,
+                },
+                {
+                  id: "data_entry_10",
+                  header: "Total Amount",
+                  title: "$35,000",
+                  contractName: "Acme Technologies",
+                  matches: null,
+                  comments: [],
                   compliance: null,
                 },
               ],

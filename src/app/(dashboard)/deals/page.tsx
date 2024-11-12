@@ -5,9 +5,9 @@ const DealsPage = () => {
   const deals = [
     {
       id: "deal_001",
-      name: "Bright Future Corp.",
+      name: "ACME Technologies Inc.",
       assignee: "nidhi@adhe.com",
-      company_name: "Bright Future Corp.",
+      company_name: "ACME Technologies Inc.",
       deal_type: "Service Agreement",
       contract_date: "15-Jan-2024",
       start_date: "15-Jan-2024",
