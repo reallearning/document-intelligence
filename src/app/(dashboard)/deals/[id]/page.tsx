@@ -1352,6 +1352,7 @@ const DealsDetails = () => {
               color="primary-default"
               size="md"
               onClick={handleMarkReview}
+              className="text-white"
             >
               Mark Review
             </Button>
