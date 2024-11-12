@@ -24,6 +24,10 @@ export const ExportDocuments = ({ closeModal }: IExportDocumentsProps) => {
       id: 4,
       icon: "/quickbooks.svg",
     },
+    {
+      id: 5,
+      icon: "/salesforce.svg",
+    },
   ];
 
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
@@ -59,8 +63,13 @@ export const ExportDocuments = ({ closeModal }: IExportDocumentsProps) => {
           {/* Grid layout for icons and checkboxes */}
           <div className="flex flex-col justify-center items-center mt-10">
             <div className="grid grid-cols-2 gap-6">
-              {data.map((item) => (
-                <div key={item.id} className="flex items-center space-x-3">
+              {data.map((item: any, index: number) => (
+                <div
+                  key={item.id}
+                  className={`flex items-center space-x-3 ${
+                    index === data.length - 1 ? "col-span-2 justify-center" : ""
+                  }`}
+                >
                   <input
                     type="checkbox"
                     checked={selectedItems.includes(item.id)}
@@ -75,8 +84,8 @@ export const ExportDocuments = ({ closeModal }: IExportDocumentsProps) => {
                     <Image
                       src={item.icon}
                       alt={`Icon for ${item.icon}`}
-                      height={200}
-                      width={200}
+                      height={150}
+                      width={150}
                     />
                   </label>
                 </div>
@@ -87,7 +96,7 @@ export const ExportDocuments = ({ closeModal }: IExportDocumentsProps) => {
 
         {/* CTA Button */}
 
-        <div className="mx-10">
+        <div className="mx-10 mt-10">
           <Button
             color="primary-default"
             size="md"
