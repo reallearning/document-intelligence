@@ -118,7 +118,10 @@ const ItemList: React.FC<ItemListProps> = ({ title, items }) => {
             <h3 className="font-medium text-md text-black mb-2">
               {item.type}
               {item.date && (
-                <span className="text-sm text-[#8C8C8C] ml-1"> {item.date}</span>
+                <span className="text-sm text-[#8C8C8C] ml-1">
+                  {" "}
+                  {item.date}
+                </span>
               )}
               {item.dueInDays && (
                 <span className="text-sm text-gray-500"> {item.dueInDays}</span>
@@ -230,7 +233,7 @@ const invoices: Invoice[] = [
   },
 ];
 
-export const Invoices: React.FC = () => {
+const Invoices: React.FC = () => {
   return (
     <div className="bg-[#F1EFE9] p-4 rounded-lg shadow-sm">
       <h2 className="text-[#9C9C9C] text-md font-medium mb-4">Invoices</h2>
@@ -335,7 +338,7 @@ export const Invoices: React.FC = () => {
 
 // BentoGrid.tsx
 
-export const BentoGrid: React.FC = () => {
+const BentoGrid: React.FC = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
       {/* Left Column: ItemLists and Deliverables */}
