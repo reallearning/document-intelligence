@@ -18,7 +18,7 @@ export default function RevenueReporting() {
   };
 
   return (
-    <div className="px-4 py-10 w-full flex flex-col gap-10 h-full overflow-auto">
+    <div className="px-6 py-10 w-full flex flex-col gap-10 h-full overflow-auto">
       <div className="flex justify-between items-center">
         <div>
           <p className="font-poly font-normal text-xl leading-[18px] text-black mb-2">
@@ -33,14 +33,14 @@ export default function RevenueReporting() {
             </p>
           </div>
         </div>
-        <div className="flex gap-x-5">
+        <div className="flex gap-x-5 self-start">
           <Button
             color="secondary-default"
             size="xs"
             onClick={handleClick}
             className="px-4 font-nunito text-morrie-primary rounded-md"
           >
-            View Contract
+            View Documents
           </Button>
         </div>
       </div>
@@ -112,13 +112,13 @@ const ItemList: React.FC<ItemListProps> = ({ title, items }) => {
       {items.map((item, index) => (
         <div
           key={index}
-          className="bg-white p-4 rounded-lg mb-4 flex justify-between items-start"
+          className="bg-white p-4 rounded-lg mb-4 flex justify-between items-start min-h-[104px]"
         >
           <div>
-            <h3 className="font-medium text-md text-black">
+            <h3 className="font-medium text-md text-black mb-2">
               {item.type}
               {item.date && (
-                <span className="text-sm text-[#8C8C8C]"> {item.date}</span>
+                <span className="text-sm text-[#8C8C8C] ml-1"> {item.date}</span>
               )}
               {item.dueInDays && (
                 <span className="text-sm text-gray-500"> {item.dueInDays}</span>
@@ -260,7 +260,7 @@ export const Invoices: React.FC = () => {
               {invoice.status}
             </div>
           </div>
-          <table className="w-full mt-4 text-left text-sm">
+          <table className="w-full mt-4 text-left text-sm border border-[#D9D9D959] rounded-2xl">
             <thead className="bg-[#D9D9D959]">
               <tr className="text-gray-600 border-b">
                 <th className="px-1 py-1">Description</th>

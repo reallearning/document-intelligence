@@ -2725,7 +2725,7 @@ const DealsDetails = () => {
               onClick={handleMarkReview}
               className="text-white"
             >
-              Mark Review
+              Mark Reviewed
             </Button>
           ) : (
             <h2 className="text-morrie-primary font-nunito text-md leading-6 font-medium p-4">
