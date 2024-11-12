@@ -49,7 +49,7 @@ export default function RevenueReporting() {
           Revenue Reporting
         </h2>
       </div>
-      <main className="flex items-center justify-center bg-gray-50">
+      <main className="flex items-center justify-center w-full">
         <BentoGrid />
       </main>
     </div>
@@ -138,6 +138,11 @@ const ItemList: React.FC<ItemListProps> = ({ title, items }) => {
             {item.paidOnDate && (
               <p className="text-[#8F8F8F] font-nunito font-medium text-sm leading-[18px]">
                 Paid on: {item.paidOnDate}
+              </p>
+            )}
+            {item.dueInDays && (
+              <p className="text-[#D01212] font-nunito font-medium text-sm leading-[18px]">
+                {item.dueInDays}
               </p>
             )}
           </div>
@@ -240,33 +245,36 @@ export const Invoices: React.FC = () => {
               {invoice.amount}
             </span>
           </div>
-          <p className="text-sm text-gray-500">
-            Generated: {invoice.generatedDate} | Due: {invoice.dueDate}
-            <span
-              className={`px-3 py-1 rounded-full text-sm font-medium ${
+          <div className="flex flex-row justify-between">
+            <div className="w-full">
+              <p className="text-sm text-gray-500 font-normal self-stretch">
+                Generated: {invoice.generatedDate} | Due: {invoice.dueDate}
+              </p>
+            </div>
+            <div
+              className={`px-3 py-1 rounded-full text-[10px] leading-[10px] font-normal self-center ${
                 invoice.status === "paid"
                   ? "text-green-500 bg-green-100"
                   : "text-yellow-500 bg-yellow-100"
               }`}
             >
               {invoice.status}
-            </span>
-          </p>
-
+            </div>
+          </div>
           <table className="w-full mt-4 text-left text-sm">
             <thead className="bg-[#D9D9D959]">
               <tr className="text-gray-600 border-b">
-                <th className="px-2 py-2">Description</th>
-                <th className="px-2 py-2">Type</th>
-                <th className="px-2 py-2">Amount</th>
+                <th className="px-1 py-1">Description</th>
+                <th className="px-1 py-1">Type</th>
+                <th className="px-1 py-1">Amount</th>
               </tr>
             </thead>
             <tbody>
               {invoice.items.map((item, idx) => (
                 <tr key={idx} className="border-t text-black">
-                  <td className="px-2 py-2">{item.description}</td>
-                  <td className="px-2 py-2">{item.type}</td>
-                  <td className="px-2 py-2">{item.amount}</td>
+                  <td className="px-1 py-1">{item.description}</td>
+                  <td className="px-1 py-1">{item.type}</td>
+                  <td className="px-1 py-1">{item.amount}</td>
                 </tr>
               ))}
             </tbody>
@@ -330,7 +338,7 @@ export const Invoices: React.FC = () => {
 
 export const BentoGrid: React.FC = () => {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 p-4">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
       {/* Left Column: ItemLists and Deliverables */}
       <div className="lg:col-span-2 space-y-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
@@ -346,7 +354,7 @@ export const BentoGrid: React.FC = () => {
       </div>
 
       {/* Right Column: Invoices spanning the height of both rows */}
-      <div className="lg:row-span-2">
+      <div className="lg:row-span-2 w-full">
         <Invoices />
       </div>
     </div>
