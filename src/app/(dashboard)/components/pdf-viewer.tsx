@@ -3,7 +3,7 @@ import "react-pdf/dist/Page/TextLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Document, Page } from "react-pdf";
 import { PdfLoader } from "react-pdf-highlighter";
 import "react-pdf-highlighter/dist/style.css";
@@ -15,6 +15,7 @@ type PDFViewerProps = {
 };
 
 const PDFViewer = ({ fileUrl, pageWidth }: PDFViewerProps) => {
+  const [isLoading, setIsLoading] = useState(true);
   console.log(fileUrl);
   const [numPages, setNumPages] = useState<number | null>(null);
 
@@ -22,30 +23,36 @@ const PDFViewer = ({ fileUrl, pageWidth }: PDFViewerProps) => {
     setNumPages(numPages);
   };
 
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+  }, [fileUrl]);
+
   return (
     <div className="w-full h-full overflow-auto no-scrollbar">
-      <PdfLoader url={fileUrl} beforeLoad={<PDFLoadingSkeleton />}>
-        {() => (
-          <div className="w-full h-full">
-            <Document
-              file={fileUrl}
-              onLoadSuccess={onDocumentLoadSuccess}
-              loading={<PDFLoadingSkeleton />}
-            >
-              {Array.from(new Array(numPages), (el, index) => (
-                <div key={`page_${index + 1}`} className="w-full">
-                  <Page
-                    key={`page_${index + 1}`}
-                    pageNumber={index + 1}
-                    width={pageWidth}
-                    height={1000}
-                  />
-                </div>
-              ))}
-            </Document>
-          </div>
-        )}
-      </PdfLoader>
+      {isLoading ? (
+        <PDFLoadingSkeleton />
+      ) : (
+        <PdfLoader url={fileUrl} beforeLoad={<PDFLoadingSkeleton />}>
+          {() => (
+            <div className="w-full h-full">
+              <Document file={fileUrl} onLoadSuccess={onDocumentLoadSuccess}>
+                {Array.from(new Array(numPages), (el, index) => (
+                  <div key={`page_${index + 1}`} className="w-full">
+                    <Page
+                      key={`page_${index + 1}`}
+                      pageNumber={index + 1}
+                      width={pageWidth}
+                      height={1000}
+                    />
+                  </div>
+                ))}
+              </Document>
+            </div>
+          )}
+        </PdfLoader>
+      )}
     </div>
   );
 };

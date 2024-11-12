@@ -1,5 +1,6 @@
 import { DocumentInformation } from "@/types/annotations";
 
 export interface IAnnotationsSidebarProps {
-    documentInformation: DocumentInformation
+  documentInformation: DocumentInformation;
+  activeContract: string;
 }

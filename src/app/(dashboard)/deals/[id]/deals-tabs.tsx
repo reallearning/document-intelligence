@@ -23,15 +23,17 @@ type ReviewData = {
 
 type DealsTabsProps = {
   reviewData: ReviewData[];
+  setActiveContract: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const DealsTabs = ({ reviewData }: DealsTabsProps) => {
+const DealsTabs = ({ reviewData, setActiveContract }: DealsTabsProps) => {
   const [activeTabId, setActiveTabId] = useState<string>(
     reviewData[0].contracts[0].id
   );
 
   const handleTabClick = (id: string) => {
     setActiveTabId(id);
+    setActiveContract(id);
   };
 
   const [pageWidth, setPageWidth] = useState(0);

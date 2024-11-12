@@ -10,7 +10,9 @@ import { ExportDocuments } from "../export-document";
 
 export const AnnotationsSidebar = ({
   documentInformation,
+  activeContract,
 }: IAnnotationsSidebarProps) => {
+  console.log(activeContract, "activeContract");
   const [expandedSteps, setExpandedSteps] = useState<{
     [key: number]: boolean;
   }>({});
@@ -131,166 +133,176 @@ export const AnnotationsSidebar = ({
         </div>
 
         <div>
-          {activeReview?.contracts?.[0]?.steps?.map((info, index) => (
-            <div key={index} className="mb-3 px-2">
-              <div className="bg-[#BAAE921A] p-4 rounded-xl">
-                <div
-                  className="flex justify-between items-center cursor-pointer"
-                  onClick={() => toggleStep(index)}
-                >
-                  <span className="font-semibold font-nunito text-base leading-[18px] text-[#7F7F7F]">
-                    {info.stepName}
-                  </span>
-                  <svg
-                    className={`w-4 h-4 transition-transform duration-300 ${
-                      expandedSteps[index] ? "transform rotate-180" : ""
-                    }`}
-                    fill="none"
-                    stroke="#7F7F7F"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-                </div>
-
-                {expandedSteps[index] && (
-                  <div className="mt-3 space-y-3 font-nunito font-normal leading-[18px]">
-                    {info.data?.map((item, secIndex) => (
-                      <div
-                        key={secIndex}
-                        className={`bg-white rounded-xl border border-transparent pt-3 pb-5 px-5 flex flex-col gap-y-2 hover:border-morrie-primary ${
-                          selectedSection?.id === item.id
-                            ? "border border-morrie-primary"
-                            : ""
+          {activeReview?.contracts
+            .filter((contract) => contract.id === activeContract)
+            .map((contract) =>
+              contract.steps.map((info, index) => (
+                <div key={index} className="mb-3 px-2">
+                  <div className="bg-[#BAAE921A] p-4 rounded-xl">
+                    <div
+                      className="flex justify-between items-center cursor-pointer"
+                      onClick={() => toggleStep(index)}
+                    >
+                      <span className="font-semibold font-nunito text-base leading-[18px] text-[#7F7F7F]">
+                        {info.stepName}
+                      </span>
+                      <svg
+                        className={`w-4 h-4 transition-transform duration-300 ${
+                          expandedSteps[index] ? "transform rotate-180" : ""
                         }`}
-                        onClick={() => selectSection(item)}
+                        fill="none"
+                        stroke="#7F7F7F"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
                       >
-                        <div key={secIndex} className="flex flex-col gap-2">
-                          <div className="flex justify-between items-center">
-                            <p className="text-xs text-[#A8A8A8]">
-                              {item.header}
-                            </p>
-                            <div
-                              className="flex items-center cursor-pointer"
-                              onClick={() => handleCommentClick(item)}
-                            >
-                              <Image
-                                src="/comments.svg"
-                                width={25}
-                                height={25}
-                                alt="comments"
-                              />
-                              <p className="text-xs text-[#7F7F7F] ml-1">
-                                {item.comments?.length || 0}
-                              </p>
-                            </div>
-                          </div>
-                          <p className="text-sm text-black">{item.title}</p>
-                          <p className="text-xs text-[#A8A8A8] flex items-center">
-                            <Image
-                              src="/document.svg"
-                              width={15}
-                              height={15}
-                              alt={item.contractName || ""}
-                              className="mr-1"
-                            />
-                            {item.contractName}
-                          </p>
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
+                    </div>
 
-                          {item.compliance &&
-                            Object.keys(item.compliance || {}).length != 0 && (
-                              <div className="mt-4 border-t-[0.5px] border-gray-200 pt-4 font-nunito font-normal leading-[18px]">
-                                <div className="flex justify-between items-center">
-                                  <div className="flex items-center">
-                                    <p className="text-xs text-[#9C9C9C] mb-1">
-                                      {item.compliance.header}
-                                    </p>
-                                  </div>
-                                  <div
-                                    className={`px-4 py-[2px] rounded-full text-[10px] bg-opacity-[30%] mb-[1px] ${
-                                      item.compliance.status === "Compliant"
-                                        ? "bg-[#3C7167] text-[#3C7167]"
-                                        : item.compliance.status ===
-                                          "Partially compliant"
-                                        ? "bg-[#E58F3C] text-[#E58F3C]"
-                                        : "bg-[#D63735] text-[#D63735]"
-                                    }`}
-                                  >
-                                    <p>{item.compliance.status}</p>
-                                  </div>
-                                </div>
-                                <p className="text-xs text-[#5D6977] mt-1">
-                                  {item.compliance.data}
+                    {expandedSteps[index] && (
+                      <div className="mt-3 space-y-3 font-nunito font-normal leading-[18px]">
+                        {info.data?.map((item, secIndex) => (
+                          <div
+                            key={secIndex}
+                            className={`bg-white rounded-xl border border-transparent pt-3 pb-5 px-5 flex flex-col gap-y-2 hover:border-morrie-primary ${
+                              selectedSection?.id === item.id
+                                ? "border border-morrie-primary"
+                                : ""
+                            }`}
+                            onClick={() => selectSection(item)}
+                          >
+                            <div key={secIndex} className="flex flex-col gap-2">
+                              <div className="flex justify-between items-center">
+                                <p className="text-xs text-[#A8A8A8]">
+                                  {item.header}
                                 </p>
-                              </div>
-                            )}
-
-                          {item.matches &&
-                            Object.keys(item.matches || {}).length != 0 && (
-                              <div className="mt-2 border-t border-gray-200 pt-4">
                                 <div
-                                  className="mb-1 text-[#00A1E0] cursor-pointer flex justify-between"
-                                  onClick={() =>
-                                    toggleMatchInfo(index, secIndex)
-                                  }
+                                  className="flex items-center cursor-pointer"
+                                  onClick={() => handleCommentClick(item)}
                                 >
-                                  <div className="flex gap-x-1">
-                                    <p className="font-normal text-[10px] text-[#00A1E0]">
-                                      Matches with{" "}
-                                      {item.matches.numberOfMatches} fields in
-                                    </p>
-                                    <Image
-                                      src="/salesforce.svg"
-                                      width={15}
-                                      height={15}
-                                      alt="Source Image"
-                                    />
-                                  </div>
-                                  <svg
-                                    className={`w-4 h-4 transition-transform duration-300 ${
-                                      expandedMatchInfo[`${index}-${secIndex}`]
-                                        ? "transform rotate-180"
-                                        : ""
-                                    }`}
-                                    fill="none"
-                                    stroke="#7F7F7F"
-                                    viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                  >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      strokeWidth={2}
-                                      d="M19 9l-7 7-7-7"
-                                    />
-                                  </svg>
+                                  <Image
+                                    src="/comments.svg"
+                                    width={25}
+                                    height={25}
+                                    alt="comments"
+                                  />
+                                  <p className="text-xs text-[#7F7F7F] ml-1">
+                                    {item.comments?.length || 0}
+                                  </p>
                                 </div>
-                                {expandedMatchInfo[`${index}-${secIndex}`] && (
-                                  <div>
-                                    <p className="text-xs text-[#A8A8A8] mb-2">
-                                      {item.matches.header}
-                                    </p>
-                                    <p className="text-sm text-black">
-                                      {item.matches.data}
+                              </div>
+                              <p className="text-sm text-black">{item.title}</p>
+                              <p className="text-xs text-[#A8A8A8] flex items-center">
+                                <Image
+                                  src="/document.svg"
+                                  width={15}
+                                  height={15}
+                                  alt={item.contractName || ""}
+                                  className="mr-1"
+                                />
+                                {item.contractName}
+                              </p>
+
+                              {item.compliance &&
+                                Object.keys(item.compliance || {}).length !=
+                                  0 && (
+                                  <div className="mt-4 border-t-[0.5px] border-gray-200 pt-4 font-nunito font-normal leading-[18px]">
+                                    <div className="flex justify-between items-center">
+                                      <div className="flex items-center">
+                                        <p className="text-xs text-[#9C9C9C] mb-1">
+                                          {item.compliance.header}
+                                        </p>
+                                      </div>
+                                      <div
+                                        className={`px-4 py-[2px] rounded-full text-[10px] bg-opacity-[30%] mb-[1px] ${
+                                          item.compliance.status === "Compliant"
+                                            ? "bg-[#3C7167] text-[#3C7167]"
+                                            : item.compliance.status ===
+                                              "Partially compliant"
+                                            ? "bg-[#E58F3C] text-[#E58F3C]"
+                                            : "bg-[#D63735] text-[#D63735]"
+                                        }`}
+                                      >
+                                        <p>{item.compliance.status}</p>
+                                      </div>
+                                    </div>
+                                    <p className="text-xs text-[#5D6977] mt-1">
+                                      {item.compliance.data}
                                     </p>
                                   </div>
                                 )}
-                              </div>
-                            )}
-                        </div>
+
+                              {item.matches &&
+                                Object.keys(item.matches || {}).length != 0 && (
+                                  <div className="mt-2 border-t border-gray-200 pt-4">
+                                    <div
+                                      className="mb-1 text-[#00A1E0] cursor-pointer flex justify-between"
+                                      onClick={() =>
+                                        toggleMatchInfo(index, secIndex)
+                                      }
+                                    >
+                                      <div className="flex gap-x-1">
+                                        <p className="font-normal text-[10px] text-[#00A1E0]">
+                                          Matches with{" "}
+                                          {item.matches.numberOfMatches} fields
+                                          in
+                                        </p>
+                                        <Image
+                                          src="/salesforce.svg"
+                                          width={15}
+                                          height={15}
+                                          alt="Source Image"
+                                        />
+                                      </div>
+                                      <svg
+                                        className={`w-4 h-4 transition-transform duration-300 ${
+                                          expandedMatchInfo[
+                                            `${index}-${secIndex}`
+                                          ]
+                                            ? "transform rotate-180"
+                                            : ""
+                                        }`}
+                                        fill="none"
+                                        stroke="#7F7F7F"
+                                        viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                      >
+                                        <path
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth={2}
+                                          d="M19 9l-7 7-7-7"
+                                        />
+                                      </svg>
+                                    </div>
+                                    {expandedMatchInfo[
+                                      `${index}-${secIndex}`
+                                    ] && (
+                                      <div>
+                                        <p className="text-xs text-[#A8A8A8] mb-2">
+                                          {item.matches.header}
+                                        </p>
+                                        <p className="text-sm text-black">
+                                          {item.matches.data}
+                                        </p>
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                    ))}
+                    )}
                   </div>
-                )}
-              </div>
-            </div>
-          ))}
+                </div>
+              ))
+            )}
         </div>
         <div className="px-4 py-3 mt-auto">
           <Button

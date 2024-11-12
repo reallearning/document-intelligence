@@ -1012,7 +1012,10 @@ const DealsDetails = () => {
   const pathname = usePathname();
 
   const id = pathname?.split("/").pop();
-
+  const filteredId = reviewData.find((deal) => deal.id === id);
+  const [activeContract, setActiveContract] = useState<string>(
+    filteredId?.l1Review?.contracts[0].id || ""
+  );
   const [selectedDeal, setSelectedDeal] = useState<DocumentInformation | null>(
     null
   );
@@ -1040,8 +1043,11 @@ const DealsDetails = () => {
 
   return (
     <div className="w-full flex flex-row">
-      <AnnotationsSidebar documentInformation={selectedDeal} />
-      <div className="flex flex-col px-6 w-full">
+      <AnnotationsSidebar
+        documentInformation={selectedDeal}
+        activeContract={activeContract}
+      />
+      <div className="flex flex-col pl-6 w-full">
         <div className="flex justify-end p-4 w-full">
           {isReviewMarked === 0 ? (
             <Button
@@ -1059,7 +1065,10 @@ const DealsDetails = () => {
           )}
         </div>
         <div className="w-full">
-          <DealsTabs reviewData={[selectedDeal.l1Review]} />{" "}
+          <DealsTabs
+            reviewData={[selectedDeal.l1Review]}
+            setActiveContract={setActiveContract}
+          />{" "}
           {/* Passing L1 review data */}
         </div>
       </div>

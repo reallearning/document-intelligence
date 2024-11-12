@@ -1,9 +1,8 @@
-import React from 'react';
+import React from "react";
 
 export const PDFLoadingSkeleton: React.FC = () => {
   return (
     <div className="flex w-full h-full bg-gray-100 animate-pulse">
-
       {/* PDF Content Skeleton */}
       <div className="flex-1 flex flex-col p-6 space-y-4">
         {/* Header Skeleton */}
