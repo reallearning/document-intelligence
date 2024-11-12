@@ -50,7 +50,9 @@ export const CommentsSection = ({
             disabled={newComment.length <= 3}
             color="primary-default"
             size="xs"
-            className="px-5 rounded-md text-sm"
+            className={`px-5 rounded-md text-sm ${
+              newComment.length <= 3 ? "bg-gray-400" : ""
+            }`}
             onClick={handleAddComment}
           >
             Send

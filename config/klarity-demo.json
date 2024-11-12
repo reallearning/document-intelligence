@@ -1,0 +1,13 @@
+{
+    "type": "service_account",
+    "project_id": "questt-frida",
+    "private_key_id": "f7daafdea962cbbf0413001d056a358048705da5",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCb0neA5waayfB/\n5sEKcl8Bcw6Wm0Is5M5+uYEHLvEduBVCMjfUjWNF+0rkExjhaMxi1PK1ra6bx5KG\ndR3T+ZGi4oBgMuPZrEa1ZRB+lX/z2Ugb4bjYNvtowExhrEQyMrusFZqQBIN+0cLB\nbqdru296Hz52m0p56j0yinGAS6dylvqv7DtZx43oM3hwD/DN+ruZyivO6YHgNC85\n8vzg0ux+Hjnwrt9n2rZlC8b7HHmc3ge/fvPWqnu6vuHko2/LZL724/P25VlPS8NH\nb1Sr2B3xoA29CEweo37PQZgJrPEjPzONrW3IGsODMRFSn7ZZEijZD113InZ22tXv\nwVqzWavXAgMBAAECggEADw8EcIcjGsNoRBwLTNSnvM6fOsvPVeJY2GNaBlUxhRM8\nrrSGs7pkPSefYbI8xc/obKayu/8IcFKVpPvdgZZNTkYAbQuN/IPLI42cTfdpsamu\nb89dGzwZCNMIrqnEv2squuMtmDxvbsqbvTDR6jXnfJBXa4Pvax/JgUBi3qixCoBJ\nKDyOlKaBmxTjqh2tlQAIzgGJoveuuRV2vVqLIq5dsfAm8f2EDg+au0JOyUzgbtdw\nI1TSjpxeBb5XR0pcPupJDi2cXgalglaS7gK1ahieKsVnxbsj28RwSyCsfw9f0Xzg\ntK2NvOFCCjqhuo7v5CfR2/G7PlMLOOvJigMNolayKQKBgQDH30OGxQ+N1zjYf3EN\n+LGr2yUeU3YnqaOR9i/Uy4GsJg3NDyx2guaXil8gMFukFqjD82Gv6DvE8nZjCgxG\nqoDwhLYQVOzpHOP7YPSRkMRI42l7NOPaL/OV3dxvRs/6zXTSYbLkJqMkd9Iy8/wS\nOxoinAAgqBZANAZSO+vm1+FIXwKBgQDHlHcJX6n8ACTvPmUjW0Cz0/j/zMNBSJCA\nDGVNQrV/d71JPrMDUNkrNUEIDu9on70OfiAjwn++4dBdziKwYgFVnKdo+QOscYm+\nN1/iyGB6ZeGWbURAgKG4VdHneTPzc167uwO3Y4tExFNUlyjtk592rR7KqRTrqtnA\nHkau6k+viQKBgAEGVAJM4FeJ0vDJNnsr2z1WUkplgyWQ6RXGfVhJ8tA/IbL7cO7q\nnOQKAZLYrJ+aviLDDK0qM6Q+2fyIAKgcF60kAQr0ZIKNc13GkXptk5QMFm5bRw/H\nTyhlisvHQSm4A/FQLuqciBmXw6wfNBuj0e57fkSsl/CcU6v4Qq1cTfthAoGASnzy\n4KC/xLoZDuHuxX9tarCWooI97cOzitcVh/x52RVLpGauUXJ/W00I9IT+fcIAwcP5\nIt+Y5hlJt3kUIViyvs00/kzSPi4yBriMJQw8VfJoe8hUTO61bSM6sHXgGeDZXp+y\nB2Qzunq7zzqLoAAU6Co8786jbEHb+4RRRT9WdmECgYBtx9ZkWD/8SU+P1nu7k7/e\nO95GkbALSL7Tqt7/bCd7U2aDInrN35N15pm48O6K16wIdK9tHSfCAUVfqR7NP4fu\nZ4S2I6flJTjflM0tfhCt7NCfA9SBfgUx/PKxlXshteYlCO/9eOUz/kPy+u0y6y+O\nFkMMwVoLe9doTJlVdospYw==\n-----END PRIVATE KEY-----\n",
+    "client_email": "klarity-demo@questt-frida.iam.gserviceaccount.com",
+    "client_id": "104372690789645662401",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/klarity-demo%40questt-frida.iam.gserviceaccount.com",
+    "universe_domain": "googleapis.com"
+  }

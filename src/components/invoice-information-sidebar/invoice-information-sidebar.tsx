@@ -28,13 +28,12 @@ export const InvoiceInformationSidebar = ({
   };
 
   const handleClickOutside = (event: MouseEvent) => {
-    updateInvoiceSidebarCollapsed(false);
-
     if (
       sidebarRef.current &&
       !sidebarRef.current.contains(event.target as Node)
     ) {
       setSelectedSection(null);
+      updateInvoiceSidebarCollapsed(false);
     }
   };
 
@@ -62,8 +61,11 @@ export const InvoiceInformationSidebar = ({
 
   const handleCommentClick = (section: DataItem) => {
     setIsSidebarCollapsed((prevState) => !prevState);
-    updateInvoiceSidebarCollapsed(!isSidebarCollapsed);
-    console.log(selectedSection?.id, section.id);
+    if (selectedSection?.id === section.id) {
+      updateInvoiceSidebarCollapsed(false);
+    } else {
+      updateInvoiceSidebarCollapsed(true);
+    }
 
     // Toggle the selected section based on whether the clicked section is the same as the selected one
     setSelectedSection((prevSelectedSection) =>
