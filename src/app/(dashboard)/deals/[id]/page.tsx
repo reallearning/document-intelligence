@@ -11,7 +11,7 @@ const reviewData: DocumentInformation[] = [
   {
     id: "deal_005",
     clientName: "Oaktree Capital Management",
-    assignedTo: "support@oaktreecapital.com",
+    assignedTo: "ateek@adhe.com",
     l1Review: {
       reviewName: "L1 review",
       contracts: [
@@ -339,7 +339,7 @@ const reviewData: DocumentInformation[] = [
   {
     id: "deal_004",
     clientName: "Rise Education Group",
-    assignedTo: "support@riseeducation.com",
+    assignedTo: "dheeraj@adhe.com",
     l1Review: {
       reviewName: "L1 review",
       contracts: [
@@ -1024,7 +1024,7 @@ const reviewData: DocumentInformation[] = [
   {
     id: "deal_003",
     clientName: "PaxMedica, Inc.",
-    assignedTo: "support@paxmedica.com",
+    assignedTo: "medhaj@adhe.com",
     l1Review: {
       reviewName: "L1 review",
       contracts: [
@@ -2009,7 +2009,7 @@ const reviewData: DocumentInformation[] = [
   {
     id: "deal_001",
     clientName: "Bright Future Corp",
-    assignedTo: "support@brightfuturecorp.com",
+    assignedTo: "nidhi@adhe.com",
     l1Review: {
       reviewName: "L1 review",
       contracts: [
@@ -2025,7 +2025,7 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_1",
                   header: "Document ID",
-                  title: "Not specified",
+                  title: "BRIGHTFUTURECORP_01_15_2024-EX-10.12",
                   contractName: "Service Agreement",
                   matches: {
                     numberOfMatches: 1,
@@ -2055,15 +2055,7 @@ const reviewData: DocumentInformation[] = [
                   comments: [],
                   compliance: null,
                 },
-                {
-                  id: "data_entry_3",
-                  header: "Version Number",
-                  title: "Not specified",
-                  contractName: "Service Agreement",
-                  matches: null,
-                  comments: [],
-                  compliance: null,
-                },
+
                 {
                   id: "data_entry_4",
                   header: "Effective Date",
@@ -2085,7 +2077,7 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_6",
                   header: "Page Count",
-                  title: "Not specified",
+                  title: "4",
                   contractName: "Service Agreement",
                   matches: null,
                   comments: [],
@@ -2398,6 +2390,12 @@ const reviewData: DocumentInformation[] = [
                   ],
                   compliance: null,
                 },
+              ],
+            },
+            {
+              stepName: "Step2: Service Provider Details",
+              id: "step_2",
+              data: [
                 {
                   id: "data_entry_4",
                   header: "Service Provider",
@@ -2417,6 +2415,12 @@ const reviewData: DocumentInformation[] = [
                   ],
                   compliance: null,
                 },
+              ],
+            },
+            {
+              stepName: "Step3: Billing Information",
+              id: "step_3",
+              data: [
                 {
                   id: "data_entry_5",
                   header: "Bill To",
@@ -2436,6 +2440,12 @@ const reviewData: DocumentInformation[] = [
                   ],
                   compliance: null,
                 },
+              ],
+            },
+            {
+              stepName: "Step4: Description and Amount",
+              id: "step_4",
+              data: [
                 {
                   id: "data_entry_6",
                   header: "Description",
