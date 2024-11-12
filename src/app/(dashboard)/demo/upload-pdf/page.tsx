@@ -68,7 +68,7 @@ const UploadPage = () => {
         const { data: responseData } = await uploadFile(body);
 
         if (!responseData) {
-          setUploadError(responseData || "File upload failed.");
+          setUploadError("File upload failed.");
           console.error("Error while uploading pdf: ", responseData);
           return;
         }
