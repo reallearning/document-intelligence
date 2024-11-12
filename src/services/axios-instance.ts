@@ -5,7 +5,7 @@ const axiosInstance = axios.create({
   timeout: 300000,
   withCredentials: true, // Important for CORS with credentials
   headers: {
-    "Accept": "*/*",
+    Accept: "*/*",
     "Content-Type": "application/json",
     "ngrok-skip-browser-warning": true,
     // Remove any custom CORS headers from here - they should be set on the server
@@ -29,16 +29,16 @@ axiosInstance.interceptors.response.use(
   (error) => {
     if (error.response) {
       // Server responded with error status
-      console.error('Response Error:', {
+      console.error("Response Error:", {
         status: error.response.status,
-        data: error.response.data
+        data: error.response.data,
       });
     } else if (error.request) {
       // Request was made but no response received
-      console.error('Request Error:', error.request);
+      console.error("Request Error:", error.request);
     } else {
       // Something else happened
-      console.error('Error:', error.message);
+      console.error("Error:", error.message);
     }
     return Promise.reject(error);
   }

@@ -43,7 +43,11 @@ const UploadPage = () => {
         });
 
         const data = await response.json();
-
+        console.log("Data: ", data);
+        const url = data["url"];
+        const [baseUrl] = url.split("?");
+        const pdfUrl = baseUrl;
+        console.log("PDF URL: ", pdfUrl);
         if (!response.ok) {
           console.error("Error while uploading pdf: ", data);
           setUploadError(data.error || "File upload failed.");
@@ -51,7 +55,7 @@ const UploadPage = () => {
         }
 
         const body = {
-          doc_url: data["url"],
+          doc_url: pdfUrl,
           type: fileType.toLowerCase(),
         };
 
