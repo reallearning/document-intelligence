@@ -57,7 +57,8 @@ export const InvoiceInformationSidebar = ({
       setNewComment("");
     }
   };
-  const { invoiceSidebarCollapsed,updateInvoiceSidebarCollapsed } = useStorage();
+  const { invoiceSidebarCollapsed, updateInvoiceSidebarCollapsed } =
+    useStorage();
 
   const handleCommentClick = (section: DataItem) => {
     if (selectedSection?.id === section.id) {
@@ -117,7 +118,8 @@ export const InvoiceInformationSidebar = ({
                 <div
                   key={`${step.id}/${dataItem.id}`}
                   className={`bg-white px-4 py-3 rounded-xl mb-3 hover:border hover:border-morrie-primary ${
-                    selectedSection?.header === dataItem.header
+                    `${selectedSection?.header}/${selectedSection?.id}` ===
+                    `${dataItem.header}/${dataItem.id}`
                       ? "border border-morrie-primary"
                       : ""
                   }`}
