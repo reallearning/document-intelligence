@@ -3,7 +3,7 @@ import { AnnotationsSidebar } from "@/components/annotations-sidebar";
 import React, { useEffect, useState } from "react";
 import DealsTabs from "./deals-tabs";
 import { Button } from "@/components/button";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { DocumentInformation } from "@/types/annotations";
 
 // Example data structure based on your JSON format
@@ -1010,6 +1010,7 @@ const reviewData: DocumentInformation[] = [
 ];
 const DealsDetails = () => {
   const pathname = usePathname();
+  const router = useRouter();
 
   const id = pathname?.split("/").pop();
   const filteredId = reviewData.find((deal) => deal.id === id);
@@ -1034,7 +1035,7 @@ const DealsDetails = () => {
   const [isReviewMarked, setIsReviewMarked] = useState(0);
 
   const handleMarkReview = () => {
-    setIsReviewMarked((prevIndex) => prevIndex + 1);
+    router.push(`${id}/review-contract`);
   };
 
   if (!selectedDeal) {
