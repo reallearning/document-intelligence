@@ -7,6 +7,7 @@ import { useState } from "react";
 import { Document, Page } from "react-pdf";
 import { PdfLoader } from "react-pdf-highlighter";
 import "react-pdf-highlighter/dist/style.css";
+import { PDFLoadingSkeleton } from "@/components/pdf-loading-skeleton";
 
 type PDFViewerProps = {
   fileUrl: string;
@@ -23,13 +24,13 @@ const PDFViewer = ({ fileUrl, pageWidth }: PDFViewerProps) => {
 
   return (
     <div className="w-full h-full overflow-auto no-scrollbar">
-      <PdfLoader url={fileUrl} beforeLoad={<span>Loading...</span>}>
+      <PdfLoader url={fileUrl} beforeLoad={<PDFLoadingSkeleton />}>
         {() => (
           <div className="w-full h-full">
             <Document
               file={fileUrl}
               onLoadSuccess={onDocumentLoadSuccess}
-              loading={<span>Loading PDF...</span>}
+              loading={<PDFLoadingSkeleton />}
             >
               {Array.from(new Array(numPages), (el, index) => (
                 <div key={`page_${index + 1}`} className="w-full">

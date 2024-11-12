@@ -35,12 +35,13 @@ export const AnnotationsSidebar = ({
   };
 
   const handleClickOutside = (event: MouseEvent) => {
-    updateSidebarCollapsed(false);
     if (
       sidebarRef.current &&
       !sidebarRef.current.contains(event.target as Node)
     ) {
       setSelectedSection(null);
+      updateSidebarCollapsed(false);
+      updateSidebarCollapsed(false);
     }
   };
 
@@ -54,9 +55,11 @@ export const AnnotationsSidebar = ({
 
   const handleCommentClick = (section: Data) => {
     setIsSidebarCollapsed((prevState) => !prevState);
-    updateSidebarCollapsed(!isSidebarCollapsed);
-
-    console.log(selectedSection?.id, section.id);
+    if (selectedSection?.id === section.id) {
+      updateSidebarCollapsed(false);
+    } else {
+      updateSidebarCollapsed(true);
+    }
 
     // Toggle the selected section based on whether the clicked section is the same as the selected one
     setSelectedSection((prevSelectedSection) =>
