@@ -1,8 +1,14 @@
 "use client";
+import { useDocumentData } from "@/context/document-data-context";
 import { uploadFile } from "@/services/upload-file";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const UploadPage = () => {
+  const { saveData } = useDocumentData();
+
+  const router = useRouter();
+
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [fileType, setFileType] = useState<string>("");
   const [isFileSelected, setIsFileSelected] = useState(false);
@@ -61,14 +67,15 @@ const UploadPage = () => {
 
         const { data: responseData } = await uploadFile(body);
 
-        if (!responseData.success) {
-          setUploadError(responseData.message || "File upload failed.");
+        if (!responseData) {
+          setUploadError(responseData || "File upload failed.");
           console.error("Error while uploading pdf: ", responseData);
           return;
         }
 
+        saveData(responseData);
         setUploadSuccess("File uploaded successfully!");
-        //TODO: Redirect user to relevant page
+        router.push("/demo/show-data");
       } catch (error) {
         console.log("Error: ", error);
         setUploadError("An error occurred during upload.");

@@ -1,9 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useStorage } from "@/context/StorageContext";
-import { InvoiceInformationSidebar } from "@/components/invoice-information-sidebar";
 import PDFViewer from "../../components/pdf-viewer";
 import { ActionSidebar } from "../components/action-sidebar";
+import { useDocumentData } from "@/context/document-data-context";
 
 // Assuming this data structure is fetched from an API or passed as props.
 const data = {
@@ -169,6 +169,8 @@ const data = {
 };
 
 const ShowData = () => {
+  //TODO: Uncomment when using data from API
+  // const { data } = useDocumentData();
   const sidebarWidth = 500;
   const [pageWidth, setPageWidth] = useState(0);
   const { invoiceSidebarCollapsed } = useStorage();
@@ -194,11 +196,11 @@ const ShowData = () => {
   return (
     <div className="flex w-full flex-row gap-[24px]">
       {/* Sidebar displaying invoice details */}
-      <ActionSidebar data={data} />
+      <ActionSidebar data={data!} />
 
       {/* PDF Viewer */}
       <div className="w-full h-[100vh]">
-        <PDFViewer fileUrl={data.file_url} pageWidth={pageWidth} />
+        <PDFViewer fileUrl={data!.file_url} pageWidth={pageWidth} />
       </div>
     </div>
   );
