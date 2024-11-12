@@ -3,7 +3,7 @@ import { AnnotationsSidebar } from "@/components/annotations-sidebar";
 import React, { useEffect, useState } from "react";
 import DealsTabs from "./deals-tabs";
 import { Button } from "@/components/button";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { DocumentInformation } from "@/types/annotations";
 
 // Example data structure based on your JSON format

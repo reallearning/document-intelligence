@@ -6,7 +6,7 @@ import { useStorage } from "@/context/StorageContext";
 type StepData = {
   id: string;
   stepName: string;
-  data: any[];
+  data: unknown[];
 };
 
 type ContractData = {
