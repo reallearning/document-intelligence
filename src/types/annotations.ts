@@ -4,7 +4,6 @@ export interface DocumentInformation {
   clientName: string;
   assignedTo: string;
   l1Review: Review;
-  l2Review: Review;
 }
 
 // Review structure containing the review name and contracts

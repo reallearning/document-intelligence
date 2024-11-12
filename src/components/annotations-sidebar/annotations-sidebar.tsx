@@ -164,7 +164,7 @@ export const AnnotationsSidebar = ({
                     {info.data?.map((item, secIndex) => (
                       <div
                         key={secIndex}
-                        className={`bg-white rounded-xl pt-3 pb-5 px-5 flex flex-col gap-y-2 hover:border hover:border-morrie-primary ${
+                        className={`bg-white rounded-xl border border-transparent pt-3 pb-5 px-5 flex flex-col gap-y-2 hover:border-morrie-primary ${
                           selectedSection?.id === item.id
                             ? "border border-morrie-primary"
                             : ""
@@ -205,13 +205,15 @@ export const AnnotationsSidebar = ({
 
                           {item.compliance &&
                             Object.keys(item.compliance || {}).length != 0 && (
-                              <div className="mt-4 border-t-[0.5px] border-gray-200 pt-2 font-nunito font-normal leading-[18px]">
+                              <div className="mt-4 border-t-[0.5px] border-gray-200 pt-4 font-nunito font-normal leading-[18px]">
                                 <div className="flex justify-between items-center">
-                                  <p className="text-xs text-[#9C9C9C] mb-1">
-                                    {item.compliance.header}
-                                  </p>
+                                  <div className="flex items-center">
+                                    <p className="text-xs text-[#9C9C9C] mb-1">
+                                      {item.compliance.header}
+                                    </p>
+                                  </div>
                                   <div
-                                    className={`px-3 py-[2px] rounded-full text-[10px] bg-opacity-[30%] ${
+                                    className={`px-4 py-[2px] rounded-full text-[10px] bg-opacity-[30%] mb-[1px] ${
                                       item.compliance.status === "Compliant"
                                         ? "bg-[#3C7167] text-[#3C7167]"
                                         : item.compliance.status ===
@@ -223,7 +225,7 @@ export const AnnotationsSidebar = ({
                                     <p>{item.compliance.status}</p>
                                   </div>
                                 </div>
-                                <p className="text-xs text-[#5D6977]">
+                                <p className="text-xs text-[#5D6977] mt-1">
                                   {item.compliance.data}
                                 </p>
                               </div>

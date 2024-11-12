@@ -9,16 +9,16 @@ import { DocumentInformation } from "@/types/annotations";
 // Example data structure based on your JSON format
 const reviewData: DocumentInformation[] = [
   {
-    id: "deal_003",
-    clientName: "PaxMedica Inc.",
-    assignedTo: "support@paxmedica.com",
+    id: "deal_005",
+    clientName: "Oaktree Capital Management",
+    assignedTo: "support@oaktreecapital.com",
     l1Review: {
       reviewName: "L1 review",
       contracts: [
         {
-          id: "contract_001",
-          name: "Master Service Agreement",
-          pdfUrl: "/documents/contracts/paxmedica.pdf",
+          id: "contract_005",
+          name: "Services Agreement",
+          pdfUrl: "/document/contracts/oaktree-capital.pdf",
           steps: [
             {
               stepName: "Step1: General Contract Metadata",
@@ -27,463 +27,320 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_1",
                   header: "Document ID",
-                  title: "PAXMEDICA_INC_07_02_2020-EX-10.12",
-                  contractName: "Master Service Agreement",
+                  title: "Exhibit 10.8",
+                  contractName: "Services Agreement",
+                  matches: null,
+                  comments: [
+                    {
+                      id: "comment_1",
+                      senderMail: "reviewer1@mail.com",
+                      profileUrl: "https://profile1.url",
+                      message: "Document ID verified.",
+                      date: "2024-11-12",
+                      time: "10:00 AM",
+                    },
+                  ],
+                  compliance: {
+                    id: "compliance_1",
+                    header: "ASC 606 Check",
+                    status: "Compliant",
+                    data: "Document metadata is complete and aligns with ASC 606 documentation requirements.",
+                  },
+                },
+                {
+                  id: "data_entry_2",
+                  header: "Contract Type",
+                  title: "Services Agreement",
+                  contractName: "Services Agreement",
                   matches: {
                     numberOfMatches: 1,
                     sourceImageUrl: "/salesforce",
                     header: "Document ID",
-                    data: "PAXMEDICA_INC_07_02_2020-EX-10.12",
+                    data: "OAKTREECAPITALGROUP,LLC_03_02_2020-EX-10.8",
                     tag: "Important",
                   },
-                  comments: [
-                    {
-                      id: "comment_1",
-                      senderMail: "example1@mail.com",
-                      profileUrl: "https://profile1.url",
-                      message: "This is a comment message.",
-                      date: "2024-11-11",
-                      time: "10:00 AM",
-                    },
-                    {
-                      id: "comment_2",
-                      senderMail: "example2@mail.com",
-                      profileUrl: "https://profile2.url",
-                      message: "Another comment message.",
-                      date: "2024-11-11",
-                      time: "11:00 AM",
-                    },
-                  ],
-                },
-                {
-                  id: "data_entry_2",
-                  header: "Document Type",
-                  title: "Master Service Agreement",
-                  contractName: "Master Service Agreement",
-                  matches: null,
                   comments: [],
+                  compliance: null,
                 },
                 {
                   id: "data_entry_3",
                   header: "Effective Date",
-                  title: "May 25, 2018",
-                  contractName: "Master Service Agreement",
+                  title: "September 25, 2018",
+                  contractName: "Services Agreement",
                   matches: null,
                   comments: [],
+                  compliance: null,
                 },
                 {
                   id: "data_entry_4",
                   header: "Execution Date",
-                  title: "May 25, 2018",
-                  contractName: "Master Service Agreement",
+                  title: "September 25, 2018",
+                  contractName: "Services Agreement",
                   matches: null,
                   comments: [],
+                  compliance: null,
                 },
                 {
                   id: "data_entry_5",
-                  header: "Document Language",
-                  title: "English",
-                  contractName: "Master Service Agreement",
+                  header: "Page Count",
+                  title: "8",
+                  contractName: "Services Agreement",
                   matches: null,
                   comments: [],
-                },
-                {
-                  id: "data_entry_6",
-                  header: "Total Page Count",
-                  title: "7",
-                  contractName: "Master Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_7",
-                  header: "Document Status",
-                  title: "Executed",
-                  contractName: "Master Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_8",
-                  header: "Governing Law",
-                  title: "Connecticut, USA",
-                  contractName: "Master Service Agreement",
-                  matches: null,
-                  comments: [],
+                  compliance: {
+                    id: "compliance_2",
+                    header: "ASC 606 Check",
+                    status: "Compliant",
+                    data: "Basic metadata complies with ASC 606.",
+                  },
                 },
               ],
             },
             {
-              stepName: "Step2: Financial Terms and Payment Conditions",
+              stepName: "Step2: Parties & Authority",
               id: "step_2",
+              data: [
+                {
+                  id: "data_entry_6",
+                  header: "Contract Parties",
+                  title:
+                    "Oaktree Capital Management, L.P. and Oaktree Capital Management (International) Limited",
+                  contractName: "Services Agreement",
+                  matches: null,
+                  comments: [],
+                  compliance: null,
+                },
+                {
+                  id: "data_entry_7",
+                  header: "Entity Types",
+                  title:
+                    "Limited Partnership (US) and Private Limited Company (UK)",
+                  contractName: "Services Agreement",
+                  matches: null,
+                  comments: [],
+                  compliance: {
+                    id: "compliance_3",
+                    header: "ASC 606 Check",
+                    status: "Compliant",
+                    data: "Entity types verified as per compliance requirements.",
+                  },
+                },
+                {
+                  id: "data_entry_8",
+                  header: "Signatory Authority Verified",
+                  title: "Signatures from authorized signatories present",
+                  contractName: "Services Agreement",
+                  matches: null,
+                  comments: [],
+                  compliance: {
+                    id: "compliance_4",
+                    header: "ASC 606 Check",
+                    status: "Partially compliant",
+                    data: "Signatory authority is present but lacks specific verification details.",
+                  },
+                },
+              ],
+            },
+            {
+              stepName: "Step3: Financial Terms",
+              id: "step_3",
               data: [
                 {
                   id: "data_entry_9",
                   header: "Payment Terms",
                   title:
-                    "Payment required within 30 days of receipt of invoice.",
-                  contractName: "Master Service Agreement",
+                    "Service fees payable for management and advisory services rendered.",
+                  contractName: "Services Agreement",
                   matches: null,
                   comments: [],
+                  compliance: {
+                    id: "compliance_5",
+                    header: "ASC 606 Check",
+                    status: "Partially compliant",
+                    data: "Payment terms are defined but lack full variable consideration details.",
+                  },
                 },
                 {
                   id: "data_entry_10",
-                  header: "Currency Specification",
-                  title: "USD",
-                  contractName: "Master Service Agreement",
+                  header: "Currency Specified",
+                  title: "Not specified",
+                  contractName: "Services Agreement",
                   matches: null,
                   comments: [],
+                  compliance: {
+                    id: "compliance_6",
+                    header: "ASC 606 Check",
+                    status: "Non compliant",
+                    data: "Currency not specified, impacting clarity of transaction price.",
+                  },
                 },
                 {
                   id: "data_entry_11",
-                  header: "Payment Schedule",
-                  title:
-                    "Payments are tied to completion of specific project milestones.",
-                  contractName: "Master Service Agreement",
+                  header: "Invoice Requirements",
+                  title: "Not specified",
+                  contractName: "Services Agreement",
                   matches: null,
                   comments: [],
-                },
-                {
-                  id: "data_entry_12",
-                  header: "Advance Payment Requirements",
-                  title: "20% advance payment required upon contract signing.",
-                  contractName: "Master Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_13",
-                  header: "Reimbursable Expenses",
-                  title:
-                    "Routine communication expenses are included; additional reimbursable expenses must be pre-approved and are detailed in addenda.",
-                  contractName: "Master Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_14",
-                  header: "Taxes and Duties",
-                  title:
-                    "Contractor is responsible for paying its own income taxes.",
-                  contractName: "Master Service Agreement",
-                  matches: null,
-                  comments: [],
+                  compliance: null,
                 },
               ],
             },
             {
-              stepName: "Step3: Term and Termination",
-              id: "step_3",
-              data: [
-                {
-                  id: "data_entry_15",
-                  header: "Initial Term Duration",
-                  title: "Effective immediately upon signing.",
-                  contractName: "Master Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_16",
-                  header: "Termination for Cause",
-                  title:
-                    "Either party may terminate with 30-day notice if the other party fails to correct a material breach.",
-                  contractName: "Master Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_17",
-                  header: "Termination for Convenience",
-                  title:
-                    "The client may terminate at its convenience with 30 days’ notice.",
-                  contractName: "Master Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_18",
-                  header: "Termination Notice Period",
-                  title: "30 days",
-                  contractName: "Master Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_19",
-                  header: "Termination for Insolvency",
-                  title:
-                    "Immediate termination if a party is declared insolvent or undergoes liquidation.",
-                  contractName: "Master Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_20",
-                  header: "Post-Termination Payment",
-                  title:
-                    "All outstanding fees for completed work and necessary termination-related expenses are due upon termination.",
-                  contractName: "Master Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-              ],
-            },
-            {
-              stepName: "Step4: Intellectual Property and Confidentiality",
+              stepName: "Step4: Performance Obligations",
               id: "step_4",
               data: [
                 {
-                  id: "data_entry_21",
-                  header: "IP Assignment",
+                  id: "data_entry_12",
+                  header: "Scope of Work",
                   title:
-                    "All intellectual property, inventions, and work products developed are assigned exclusively to the client.",
-                  contractName: "Master Service Agreement",
+                    "Sub-advisory services, asset management, and marketing for Oaktree US.",
+                  contractName: "Services Agreement",
                   matches: null,
                   comments: [],
+                  compliance: {
+                    id: "compliance_7",
+                    header: "ASC 606 Check",
+                    status: "Compliant",
+                    data: "Scope of work identified and compliant with ASC 606.",
+                  },
                 },
                 {
-                  id: "data_entry_22",
-                  header: "IP Ownership",
-                  title:
-                    "The client retains ownership of all deliverables produced under this agreement.",
-                  contractName: "Master Service Agreement",
+                  id: "data_entry_13",
+                  header: "Service Levels",
+                  title: "Management quality consistent with past practices",
+                  contractName: "Services Agreement",
                   matches: null,
                   comments: [],
-                },
-                {
-                  id: "data_entry_23",
-                  header: "Work for Hire Clause",
-                  title:
-                    "All deliverables are considered work-for-hire for the client.",
-                  contractName: "Master Service Agreement",
-                  matches: null,
-                  comments: [],
+                  compliance: {
+                    id: "compliance_8",
+                    header: "ASC 606 Check",
+                    status: "Compliant",
+                    data: "Service levels defined, meets compliance standards.",
+                  },
                 },
               ],
             },
             {
-              stepName: "Step5: Confidentiality and Data Protection",
+              stepName: "Step5: Term & Termination",
               id: "step_5",
               data: [
                 {
-                  id: "data_entry_24",
-                  header: "Confidential Information Definition",
-                  title:
-                    "Confidential information includes all data, documents, and materials shared in the course of the contract.",
-                  contractName: "Master Service Agreement",
+                  id: "data_entry_14",
+                  header: "Termination Rights",
+                  title: "Either party may terminate with 30 days' notice.",
+                  contractName: "Services Agreement",
                   matches: null,
                   comments: [],
-                },
-                {
-                  id: "data_entry_25",
-                  header: "Non-Disclosure Requirements",
-                  title:
-                    "Contractor must not disclose any confidential information without the client’s written consent.",
-                  contractName: "Master Service Agreement",
-                  matches: null,
-                  comments: [],
+                  compliance: {
+                    id: "compliance_9",
+                    header: "ASC 606 Check",
+                    status: "Compliant",
+                    data: "Termination rights align with ASC 606.",
+                  },
                 },
               ],
             },
             {
-              stepName: "Step6: Warranties and Representations",
+              stepName: "Step6: Intellectual Property",
               id: "step_6",
               data: [
                 {
-                  id: "data_entry_26",
-                  header: "Warranty of Services",
-                  title:
-                    "The contractor warrants that services provided will meet industry and professional standards.",
-                  contractName: "Master Service Agreement",
+                  id: "data_entry_15",
+                  header: "IP Ownership",
+                  title: "Not specified",
+                  contractName: "Services Agreement",
                   matches: null,
                   comments: [],
+                  compliance: {
+                    id: "compliance_10",
+                    header: "ASC 606 Check",
+                    status: "Non compliant",
+                    data: "Lack of IP ownership details impacts compliance.",
+                  },
                 },
               ],
             },
             {
-              stepName: "Step7: Liabilities, Indemnities, and Insurance",
+              stepName: "Step7: Revenue Recognition Specifics",
               id: "step_7",
               data: [
                 {
-                  id: "data_entry_27",
-                  header: "Limitation of Liability",
-                  title:
-                    "The contractor’s liability is capped at the total amount paid under the agreement.",
-                  contractName: "Master Service Agreement",
+                  id: "data_entry_16",
+                  header: "Recognition Method",
+                  title: "Over time as services are rendered",
+                  contractName: "Services Agreement",
                   matches: null,
                   comments: [],
-                },
-                {
-                  id: "data_entry_28",
-                  header: "Indemnification Obligations",
-                  title:
-                    "Mutual indemnification for claims resulting from each party’s negligence.",
-                  contractName: "Master Service Agreement",
-                  matches: null,
-                  comments: [],
+                  compliance: {
+                    id: "compliance_11",
+                    header: "ASC 606 Check",
+                    status: "Compliant",
+                    data: "Revenue recognition method aligns with ASC 606 requirements.",
+                  },
                 },
               ],
             },
             {
-              stepName: "Step8: Service Levels and Performance Standards",
+              stepName: "Step8: Compliance Requirements",
               id: "step_8",
               data: [
                 {
-                  id: "data_entry_29",
-                  header: "Key Performance Indicators (KPIs)",
-                  title: "Weekly progress reports on project activity.",
-                  contractName: "Master Service Agreement",
+                  id: "data_entry_17",
+                  header: "Data Privacy",
+                  title: "Compliance with FCA Rules required.",
+                  contractName: "Services Agreement",
                   matches: null,
                   comments: [],
-                },
-                {
-                  id: "data_entry_30",
-                  header: "Incident Reporting",
-                  title:
-                    "Immediate notification of any suspected fraudulent activities.",
-                  contractName: "Master Service Agreement",
-                  matches: null,
-                  comments: [],
+                  compliance: {
+                    id: "compliance_12",
+                    header: "ASC 606 Check",
+                    status: "Partially compliant",
+                    data: "Basic compliance is in place, but additional requirements on data privacy should be reviewed.",
+                  },
                 },
               ],
             },
             {
-              stepName: "Step9: Rights and Obligations",
+              stepName: "Step9: Allocation Methodology",
               id: "step_9",
               data: [
                 {
-                  id: "data_entry_31",
-                  header: "Scope of Work",
-                  title:
-                    "The scope is outlined in project-specific addenda, detailing tasks, timelines, and deliverables.",
-                  contractName: "Master Service Agreement",
+                  id: "data_entry_18",
+                  header: "Standalone Prices",
+                  title: "Not detailed",
+                  contractName: "Services Agreement",
                   matches: null,
                   comments: [],
-                },
-                {
-                  id: "data_entry_32",
-                  header: "Right to Audit",
-                  title:
-                    "Client has the right to audit documents and information related to the project.",
-                  contractName: "Master Service Agreement",
-                  matches: null,
-                  comments: [],
+                  compliance: {
+                    id: "compliance_13",
+                    header: "ASC 606 Check",
+                    status: "Non compliant",
+                    data: "Standalone pricing not specified, impacting allocation requirements.",
+                  },
                 },
               ],
             },
             {
-              stepName: "Step10: Dispute Resolution and Legal Proceedings",
+              stepName: "Step10: Compliance Check",
               id: "step_10",
               data: [
                 {
-                  id: "data_entry_33",
-                  header: "Choice of Law",
-                  title: "Connecticut, USA",
-                  contractName: "Master Service Agreement",
+                  id: "data_entry_19",
+                  header: "Regulatory",
+                  title: "FCA compliance documented for Sub-Advisor.",
+                  contractName: "Services Agreement",
                   matches: null,
                   comments: [],
-                },
-                {
-                  id: "data_entry_34",
-                  header: "Limitation on Action Period",
-                  title:
-                    "Any legal action related to the agreement must be initiated within five years.",
-                  contractName: "Master Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-              ],
-            },
-            {
-              stepName: "Step11: Operational Requirements",
-              id: "step_11",
-              data: [
-                {
-                  id: "data_entry_35",
-                  header: "Staffing Requirements",
-                  title:
-                    "Contractor must provide project management details and qualifications for proposed staff.",
-                  contractName: "Master Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-              ],
-            },
-            {
-              stepName: "Step12: Compliance and Regulatory",
-              id: "step_12",
-              data: [
-                {
-                  id: "data_entry_36",
-                  header: "Compliance with Laws and Regulations",
-                  title:
-                    "Contractor must comply with applicable laws, regulatory guidelines, and industry standards.",
-                  contractName: "Master Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_37",
-                  header: "Conflict of Interest Disclosure",
-                  title:
-                    "Contractor states that there are no conflicts with existing engagements.",
-                  contractName: "Master Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-              ],
-            },
-            {
-              stepName: "Step13: Miscellaneous Clauses",
-              id: "step_13",
-              data: [
-                {
-                  id: "data_entry_38",
-                  header: "Entire Agreement",
-                  title:
-                    "This agreement, along with any NDAs and addenda, constitutes the full and complete agreement between the parties.",
-                  contractName: "Master Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-              ],
-            },
-            {
-              stepName: "Step14: Specific Project and Engagement Terms",
-              id: "step_14",
-              data: [
-                {
-                  id: "data_entry_39",
-                  header: "Statement of Work (SOW)",
-                  title:
-                    "The projects under this agreement aim to conduct clinical trials and manage research studies focusing on treatments for Autism Spectrum Disorder and neurological conditions.",
-                  contractName: "Master Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_40",
-                  header: "Project Milestones",
-                  title: "Contract Signature: 20% payment upon signing.",
-                  contractName: "Master Service Agreement",
-                  matches: null,
-                  comments: [],
+                  compliance: {
+                    id: "compliance_14",
+                    header: "ASC 606 Final Verification",
+                    status: "Partially compliant",
+                    data: "Regulatory compliance meets basic requirements but lacks anti-corruption and export controls.",
+                  },
                 },
               ],
             },
           ],
-        },
-      ],
-    },
-    l2Review: {
-      reviewName: "L2 review",
-      contracts: [
-        {
-          id: "contract_002",
-          name: "Contract Name 1",
-          pdfUrl: "/document/contract/PAXMEDICA_INC_07_02_2020-EX-10.12.pdf",
-          steps: [],
         },
       ],
     },
@@ -497,9 +354,9 @@ const reviewData: DocumentInformation[] = [
       reviewName: "L1 review",
       contracts: [
         {
-          id: "contract_002",
+          id: "contract_006",
           name: "Service Agreement",
-          pdfUrl: "/documents/contracts/risee-education.pdf",
+          pdfUrl: "/document/contracts/risee-education.pdf",
           steps: [
             {
               stepName: "Step1: General Contract Metadata",
@@ -508,405 +365,31 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_1",
                   header: "Document ID",
-                  title: "RISEEDUCATIONCAYMANLTD_04_17_2020-EX-4.23",
+                  title: "Exhibit 4.23",
                   contractName: "Service Agreement",
-                  matches: {
-                    numberOfMatches: 1,
-                    sourceImageUrl: "/salesforce",
-                    header: "Document ID",
-                    data: "RISEEDUCATIONCAYMANLTD_04_17_2020-EX-4.23",
-                    tag: "Important",
-                  },
+                  matches: null,
                   comments: [
                     {
                       id: "comment_1",
-                      senderMail: "example1@mail.com",
+                      senderMail: "reviewer1@mail.com",
                       profileUrl: "https://profile1.url",
-                      message: "This is a comment message.",
-                      date: "2024-11-11",
+                      message: "Document ID verified.",
+                      date: "2024-11-12",
                       time: "10:00 AM",
                     },
-                    {
-                      id: "comment_2",
-                      senderMail: "example2@mail.com",
-                      profileUrl: "https://profile2.url",
-                      message: "Another comment message.",
-                      date: "2024-11-11",
-                      time: "11:00 AM",
-                    },
                   ],
+                  compliance: {
+                    id: "compliance_1",
+                    header: "ASC 606 Check",
+                    status: "Compliant",
+                    data: "Document ID and metadata meet ASC 606 documentation requirements.",
+                  },
                 },
                 {
                   id: "data_entry_2",
-                  header: "Document Type",
+                  header: "Contract Type",
                   title: "Service Agreement",
                   contractName: "Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_3",
-                  header: "Effective Date",
-                  title: "Date of execution (not specified)",
-                  contractName: "Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_4",
-                  header: "Execution Date",
-                  title: "Date of execution (not specified)",
-                  contractName: "Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_5",
-                  header: "Document Language",
-                  title: "English",
-                  contractName: "Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_6",
-                  header: "Total Page Count",
-                  title: "9",
-                  contractName: "Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_7",
-                  header: "Document Status",
-                  title: "Executed",
-                  contractName: "Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_8",
-                  header: "Governing Law",
-                  title: "China (with dispute resolution in Beijing)",
-                  contractName: "Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-              ],
-            },
-            {
-              stepName: "Step2: Financial Terms and Payment Conditions",
-              id: "step_2",
-              data: [
-                {
-                  id: "data_entry_9",
-                  header: "Payment Terms",
-                  title:
-                    "Service Fee to be paid quarterly, calculated based on actual costs incurred by Service Provider plus a percentage markup.",
-                  contractName: "Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_10",
-                  header: "Currency Specification",
-                  title: "RMB",
-                  contractName: "Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_11",
-                  header: "Payment Schedule",
-                  title:
-                    "Quarterly, based on Service Provider’s written payment instructions.",
-                  contractName: "Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_12",
-                  header: "Interest on Late Payments",
-                  title: "0.5% daily for late payments.",
-                  contractName: "Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_13",
-                  header: "Payment Method",
-                  title: "Bank remittance or other specified methods.",
-                  contractName: "Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-              ],
-            },
-            {
-              stepName: "Step3: Term and Termination",
-              id: "step_3",
-              data: [
-                {
-                  id: "data_entry_14",
-                  header: "Initial Term Duration",
-                  title: "Five years.",
-                  contractName: "Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_15",
-                  header: "Renewal Terms",
-                  title:
-                    "Automatically renews for another five years unless terminated in writing.",
-                  contractName: "Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_16",
-                  header: "Termination for Cause",
-                  title:
-                    "Service Provider may terminate for default in Service Fee payment exceeding 15 days.",
-                  contractName: "Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-              ],
-            },
-            {
-              stepName: "Step4: Intellectual Property and Confidentiality",
-              id: "step_4",
-              data: [
-                {
-                  id: "data_entry_17",
-                  header: "IP Ownership",
-                  title:
-                    "All intellectual property rights belong exclusively to the Service Provider.",
-                  contractName: "Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_18",
-                  header: "Ownership of Deliverables",
-                  title: "Service Provider retains IP rights to deliverables.",
-                  contractName: "Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-              ],
-            },
-            {
-              stepName: "Step5: Confidentiality and Data Protection",
-              id: "step_5",
-              data: [
-                {
-                  id: "data_entry_19",
-                  header: "Confidential Information Definition",
-                  title:
-                    "Includes any information exchanged as part of the agreement, including software codes.",
-                  contractName: "Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_20",
-                  header: "Confidentiality Period",
-                  title: "Survives beyond agreement termination.",
-                  contractName: "Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_21",
-                  header: "Non-Disclosure Requirements",
-                  title: "Confidentiality required except as legally mandated.",
-                  contractName: "Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-              ],
-            },
-            {
-              stepName: "Step6: Warranties and Representations",
-              id: "step_6",
-              data: [],
-            },
-            {
-              stepName: "Step7: Liabilities, Indemnities, and Insurance",
-              id: "step_7",
-              data: [
-                {
-                  id: "data_entry_22",
-                  header: "Indemnification Obligations",
-                  title:
-                    "The defaulting party must indemnify for losses resulting from non-compliance.",
-                  contractName: "Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-              ],
-            },
-            {
-              stepName: "Step8: Service Levels and Performance Standards",
-              id: "step_8",
-              data: [],
-            },
-            {
-              stepName: "Step9: Rights and Obligations",
-              id: "step_9",
-              data: [
-                {
-                  id: "data_entry_23",
-                  header: "Scope of Work",
-                  title:
-                    "Service Provider offers academic, enrollment, HR, financial, legal, customer, IT, and administrative support.",
-                  contractName: "Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_24",
-                  header: "Assignment and Delegation",
-                  title:
-                    "Service Recipient cannot assign or transfer its rights without written consent; Service Provider can assign rights in restructuring scenarios.",
-                  contractName: "Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-              ],
-            },
-            {
-              stepName: "Step10: Dispute Resolution and Legal Proceedings",
-              id: "step_10",
-              data: [
-                {
-                  id: "data_entry_25",
-                  header: "Arbitration Clause",
-                  title:
-                    "Disputes are subject to arbitration by the Beijing Arbitration Commission.",
-                  contractName: "Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_26",
-                  header: "Choice of Law",
-                  title: "Governed by the laws of China.",
-                  contractName: "Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-              ],
-            },
-            {
-              stepName: "Step11: Operational Requirements",
-              id: "step_11",
-              data: [],
-            },
-            {
-              stepName: "Step12: Compliance and Regulatory",
-              id: "step_12",
-              data: [
-                {
-                  id: "data_entry_27",
-                  header: "Compliance with Laws and Regulations",
-                  title:
-                    "Both parties are required to comply with the relevant Chinese laws.",
-                  contractName: "Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-              ],
-            },
-            {
-              stepName: "Step13: Miscellaneous Clauses",
-              id: "step_13",
-              data: [
-                {
-                  id: "data_entry_28",
-                  header: "Entire Agreement",
-                  title:
-                    "This document constitutes the entire agreement between the parties, superseding prior agreements.",
-                  contractName: "Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_29",
-                  header: "Amendments and Modifications",
-                  title:
-                    "Modifications require a written agreement between the parties.",
-                  contractName: "Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-              ],
-            },
-            {
-              stepName: "Step14: Specific Project and Engagement Terms",
-              id: "step_14",
-              data: [
-                {
-                  id: "data_entry_30",
-                  header: "Statement of Work (SOW)",
-                  title:
-                    "Service Provider provides a comprehensive suite of services, including academic, enrollment, HR, financial, legal, customer support, IT, and administrative support.",
-                  contractName: "Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_31",
-                  header: "Project Milestones",
-                  title:
-                    "Quarterly Service Fee assessments, based on the actual costs plus a percentage markup.",
-                  contractName: "Service Agreement",
-                  matches: null,
-                  comments: [],
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-    l2Review: {
-      reviewName: "L2 review",
-      contracts: [
-        {
-          id: "contract_003",
-          name: "Service Agreement",
-          pdfUrl:
-            "/document/contract/RISEEDUCATIONCAYMANLTD_04_17_2020-EX-4.23-SERVICE_AGREEMENT.pdf",
-          steps: [],
-        },
-      ],
-    },
-  },
-
-  {
-    id: "deal_005",
-    clientName: "Oaktree Capital Management",
-    assignedTo: "support@oaktreecapital.com",
-    l1Review: {
-      reviewName: "L1 review",
-      contracts: [
-        {
-          id: "contract_003",
-          name: "Services Agreement",
-          pdfUrl: "/documents/contracts/oaktree-capital.pdf",
-          steps: [
-            {
-              stepName: "Step1: General Contract Metadata",
-              id: "step_1",
-              data: [
-                {
-                  id: "data_entry_1",
-                  header: "Document ID",
-                  title: "OAKTREECAPITALGROUP,LLC_03_02_2020-EX-10.8",
-                  contractName: "Services Agreement",
                   matches: {
                     numberOfMatches: 1,
                     sourceImageUrl: "/salesforce",
@@ -914,382 +397,280 @@ const reviewData: DocumentInformation[] = [
                     data: "OAKTREECAPITALGROUP,LLC_03_02_2020-EX-10.8",
                     tag: "Important",
                   },
-                  comments: [
-                    {
-                      id: "comment_1",
-                      senderMail: "example1@mail.com",
-                      profileUrl: "https://profile1.url",
-                      message: "This is a comment message.",
-                      date: "2024-11-11",
-                      time: "10:00 AM",
-                    },
-                    {
-                      id: "comment_2",
-                      senderMail: "example2@mail.com",
-                      profileUrl: "https://profile2.url",
-                      message: "Another comment message.",
-                      date: "2024-11-11",
-                      time: "11:00 AM",
-                    },
-                  ],
-                },
-                {
-                  id: "data_entry_2",
-                  header: "Document Type",
-                  title: "Services Agreement",
-                  contractName: "Services Agreement",
-                  matches: null,
                   comments: [],
+                  compliance: null,
                 },
                 {
                   id: "data_entry_3",
                   header: "Effective Date",
-                  title: "September 25, 2018",
-                  contractName: "Services Agreement",
+                  title: "Not specified",
+                  contractName: "Service Agreement",
                   matches: null,
                   comments: [],
-                },
-                {
-                  id: "data_entry_4",
-                  header: "Execution Date",
-                  title: "September 25, 2018",
-                  contractName: "Services Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_5",
-                  header: "Document Language",
-                  title: "English",
-                  contractName: "Services Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_6",
-                  header: "Total Page Count",
-                  title: "8",
-                  contractName: "Services Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_7",
-                  header: "Document Status",
-                  title: "Executed",
-                  contractName: "Services Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_8",
-                  header: "Governing Law",
-                  title: "England and Wales",
-                  contractName: "Services Agreement",
-                  matches: null,
-                  comments: [],
+                  compliance: {
+                    id: "compliance_2",
+                    header: "ASC 606 Check",
+                    status: "Non compliant",
+                    data: "Effective date not clearly specified, impacting compliance with ASC 606.",
+                  },
                 },
               ],
             },
             {
-              stepName: "Step2: Financial Terms and Payment Conditions",
+              stepName: "Step2: Parties & Authority",
               id: "step_2",
               data: [
                 {
-                  id: "data_entry_9",
-                  header: "Payment Terms",
+                  id: "data_entry_4",
+                  header: "Contract Parties",
                   title:
-                    "Payment for services rendered by the Sub-Advisor, as agreed periodically.",
-                  contractName: "Services Agreement",
+                    "Rise (Tianjin) Education Information Consulting Co., Ltd. (Service Provider) and Service Recipient",
+                  contractName: "Service Agreement",
                   matches: null,
                   comments: [],
+                  compliance: null,
                 },
                 {
-                  id: "data_entry_10",
-                  header: "Fixed Fee",
-                  title:
-                    "Service Fee based on the agreement between the parties.",
-                  contractName: "Services Agreement",
+                  id: "data_entry_5",
+                  header: "Entity Types",
+                  title: "Limited Liability Company in China",
+                  contractName: "Service Agreement",
                   matches: null,
                   comments: [],
+                  compliance: {
+                    id: "compliance_3",
+                    header: "ASC 606 Check",
+                    status: "Compliant",
+                    data: "Entity types identified in compliance with ASC 606 requirements.",
+                  },
                 },
                 {
-                  id: "data_entry_11",
-                  header: "Allowable Deductions",
-                  title:
-                    "Management fees received by the Sub-Advisor directly for certain services may reduce the Service Fee.",
-                  contractName: "Services Agreement",
+                  id: "data_entry_6",
+                  header: "Signatory Authority",
+                  title: "Corporate seal affixed",
+                  contractName: "Service Agreement",
                   matches: null,
                   comments: [],
+                  compliance: null,
                 },
               ],
             },
             {
-              stepName: "Step3: Term and Termination",
+              stepName: "Step3: Financial Terms",
               id: "step_3",
               data: [
                 {
-                  id: "data_entry_12",
-                  header: "Initial Term Duration",
+                  id: "data_entry_7",
+                  header: "Payment Terms",
                   title:
-                    "Until the expiration of the Fund’s term or specific termination events.",
-                  contractName: "Services Agreement",
+                    "Quarterly payment based on incurred costs with markup or as a percentage of revenues",
+                  contractName: "Service Agreement",
                   matches: null,
                   comments: [],
+                  compliance: {
+                    id: "compliance_4",
+                    header: "ASC 606 Check",
+                    status: "Partially compliant",
+                    data: "Payment terms are partially compliant; revenue-based calculation needs further detail for ASC 606.",
+                  },
                 },
                 {
-                  id: "data_entry_13",
-                  header: "Termination for Cause",
-                  title: "Agreement may be terminated for non-compliance.",
-                  contractName: "Services Agreement",
+                  id: "data_entry_8",
+                  header: "Currency Specified",
+                  title: "RMB",
+                  contractName: "Service Agreement",
                   matches: null,
                   comments: [],
+                  compliance: null,
                 },
                 {
-                  id: "data_entry_14",
-                  header: "Termination for Convenience",
-                  title: "30 days' notice by either party.",
-                  contractName: "Services Agreement",
+                  id: "data_entry_9",
+                  header: "Late Payment Terms",
+                  title:
+                    "Liquidated damages of 0.5% per day for late payments over 15 days",
+                  contractName: "Service Agreement",
                   matches: null,
                   comments: [],
-                },
-                {
-                  id: "data_entry_15",
-                  header: "Termination Notice Period",
-                  title: "30 days",
-                  contractName: "Services Agreement",
-                  matches: null,
-                  comments: [],
+                  compliance: {
+                    id: "compliance_5",
+                    header: "ASC 606 Check",
+                    status: "Compliant",
+                    data: "Late payment penalties defined in compliance with ASC 606 guidelines.",
+                  },
                 },
               ],
             },
             {
-              stepName: "Step4: Intellectual Property and Confidentiality",
+              stepName: "Step4: Performance Obligations",
               id: "step_4",
-              data: [],
+              data: [
+                {
+                  id: "data_entry_10",
+                  header: "Scope of Work",
+                  title:
+                    "Academic, enrollment, HR, financial, legal, customer, IT, and administrative support services",
+                  contractName: "Service Agreement",
+                  matches: null,
+                  comments: [],
+                  compliance: {
+                    id: "compliance_6",
+                    header: "ASC 606 Check",
+                    status: "Compliant",
+                    data: "Scope of services outlined in alignment with performance obligations.",
+                  },
+                },
+                {
+                  id: "data_entry_11",
+                  header: "Service Levels",
+                  title:
+                    "Customized support services provided by dedicated teams",
+                  contractName: "Service Agreement",
+                  matches: null,
+                  comments: [],
+                  compliance: null,
+                },
+                {
+                  id: "data_entry_12",
+                  header: "Success Criteria",
+                  title:
+                    "Successful support for academic, enrollment, and customer needs",
+                  contractName: "Service Agreement",
+                  matches: null,
+                  comments: [],
+                  compliance: null,
+                },
+              ],
             },
             {
-              stepName: "Step5: Confidentiality and Data Protection",
+              stepName: "Step5: Term & Termination",
               id: "step_5",
               data: [
                 {
-                  id: "data_entry_16",
-                  header: "Confidential Information Definition",
+                  id: "data_entry_13",
+                  header: "Termination Rights",
                   title:
-                    "Confidential information includes records and data on services provided.",
-                  contractName: "Services Agreement",
+                    "Service Provider may terminate upon default by Service Recipient",
+                  contractName: "Service Agreement",
                   matches: null,
                   comments: [],
+                  compliance: null,
                 },
                 {
-                  id: "data_entry_17",
-                  header: "Return of Confidential Information",
-                  title: "Required upon termination of the agreement.",
-                  contractName: "Services Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_18",
-                  header: "Data Protection Obligations",
+                  id: "data_entry_14",
+                  header: "Notice Periods",
                   title:
-                    "Compliance with FCA Rules and confidentiality standards.",
-                  contractName: "Services Agreement",
+                    "Termination with notice for defaults exceeding 15 days",
+                  contractName: "Service Agreement",
                   matches: null,
                   comments: [],
-                },
-                {
-                  id: "data_entry_19",
-                  header: "Non-Disclosure Requirements",
-                  title:
-                    "Sub-Advisor required to maintain confidentiality, except as required by law.",
-                  contractName: "Services Agreement",
-                  matches: null,
-                  comments: [],
+                  compliance: {
+                    id: "compliance_7",
+                    header: "ASC 606 Check",
+                    status: "Compliant",
+                    data: "Termination rights and notice periods defined as per ASC 606 requirements.",
+                  },
                 },
               ],
             },
             {
-              stepName: "Step6: Warranties and Representations",
+              stepName: "Step6: Intellectual Property",
               id: "step_6",
-              data: [],
+              data: [
+                {
+                  id: "data_entry_15",
+                  header: "IP Ownership",
+                  title:
+                    "Service Provider retains all IP rights for services provided",
+                  contractName: "Service Agreement",
+                  matches: null,
+                  comments: [],
+                  compliance: {
+                    id: "compliance_8",
+                    header: "ASC 606 Impact",
+                    status: "Compliant",
+                    data: "IP ownership fully retained by Service Provider, compliant with ASC 606.",
+                  },
+                },
+              ],
             },
             {
-              stepName: "Step7: Liabilities, Indemnities, and Insurance",
+              stepName: "Step7: Revenue Recognition Specifics",
               id: "step_7",
               data: [
                 {
-                  id: "data_entry_20",
-                  header: "Indemnification Obligations",
+                  id: "data_entry_16",
+                  header: "Recognition Method",
                   title:
-                    "Sub-Advisor indemnifies Oaktree US for any negligence or willful misconduct.",
-                  contractName: "Services Agreement",
+                    "Revenue recognized over time as services are rendered",
+                  contractName: "Service Agreement",
                   matches: null,
                   comments: [],
+                  compliance: {
+                    id: "compliance_9",
+                    header: "ASC 606 Check",
+                    status: "Compliant",
+                    data: "Revenue recognition aligns with ASC 606 for over-time performance.",
+                  },
                 },
               ],
             },
             {
-              stepName: "Step8: Service Levels and Performance Standards",
+              stepName: "Step8: Documentation Requirements",
               id: "step_8",
-              data: [],
+              data: [
+                {
+                  id: "data_entry_17",
+                  header: "Performance Evidence",
+                  title: "Not specified",
+                  contractName: "Service Agreement",
+                  matches: null,
+                  comments: [],
+                  compliance: {
+                    id: "compliance_10",
+                    header: "ASC 606 Check",
+                    status: "Non compliant",
+                    data: "Performance evidence lacking; compliance not met.",
+                  },
+                },
+              ],
             },
             {
-              stepName: "Step9: Rights and Obligations",
+              stepName: "Step9: Allocation Methodology",
               id: "step_9",
               data: [
                 {
-                  id: "data_entry_21",
-                  header: "Scope of Work",
-                  title:
-                    "Provide sub-advisory, marketing, and promotional services for Oaktree US and its Funds.",
-                  contractName: "Services Agreement",
+                  id: "data_entry_18",
+                  header: "Standalone Prices",
+                  title: "Service fees based on actual costs plus markup",
+                  contractName: "Service Agreement",
                   matches: null,
                   comments: [],
-                },
-                {
-                  id: "data_entry_22",
-                  header: "Customer Obligations",
-                  title:
-                    "Oaktree US oversees fund and investor accounting, reporting, and custodial services.",
-                  contractName: "Services Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_23",
-                  header: "Contractor Obligations",
-                  title:
-                    "Sub-Advisor manages marketing efforts, portfolio management, and investment decisions.",
-                  contractName: "Services Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_24",
-                  header: "Assignment and Delegation",
-                  title:
-                    "Sub-Advisor may not assign its rights and obligations without prior written consent from Oaktree US.",
-                  contractName: "Services Agreement",
-                  matches: null,
-                  comments: [],
+                  compliance: {
+                    id: "compliance_11",
+                    header: "ASC 606 Check",
+                    status: "Partially compliant",
+                    data: "Standalone prices based on costs, though detailed allocation methodology is not fully specified.",
+                  },
                 },
               ],
             },
             {
-              stepName: "Step10: Dispute Resolution and Legal Proceedings",
+              stepName: "Step10: Compliance Check",
               id: "step_10",
               data: [
                 {
-                  id: "data_entry_25",
-                  header: "Choice of Law",
-                  title: "England and Wales",
-                  contractName: "Services Agreement",
+                  id: "data_entry_19",
+                  header: "Data Privacy",
+                  title: "Confidentiality agreement in place between parties",
+                  contractName: "Service Agreement",
                   matches: null,
                   comments: [],
-                },
-                {
-                  id: "data_entry_26",
-                  header: "Governing Law",
-                  title: "England and Wales",
-                  contractName: "Services Agreement",
-                  matches: null,
-                  comments: [],
-                },
-              ],
-            },
-            {
-              stepName: "Step11: Operational Requirements",
-              id: "step_11",
-              data: [
-                {
-                  id: "data_entry_27",
-                  header: "Record Keeping",
-                  title:
-                    "Sub-Advisor is required to maintain records of all services provided to the Funds and ensure secure storage and confidentiality.",
-                  contractName: "Services Agreement",
-                  matches: null,
-                  comments: [],
-                },
-              ],
-            },
-            {
-              stepName: "Step12: Compliance and Regulatory",
-              id: "step_12",
-              data: [
-                {
-                  id: "data_entry_28",
-                  header: "Compliance with Laws and Regulations",
-                  title:
-                    "Compliance with FCA Rules and FSMA regulations is mandatory for Sub-Advisor.",
-                  contractName: "Services Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_29",
-                  header: "Regulatory Approvals",
-                  title: "Sub-Advisor must maintain FCA authorization.",
-                  contractName: "Services Agreement",
-                  matches: null,
-                  comments: [],
-                },
-              ],
-            },
-            {
-              stepName: "Step13: Miscellaneous Clauses",
-              id: "step_13",
-              data: [
-                {
-                  id: "data_entry_30",
-                  header: "Entire Agreement",
-                  title:
-                    "The agreement supersedes all prior agreements between Oaktree US and Sub-Advisor.",
-                  contractName: "Services Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_31",
-                  header: "Amendments and Modifications",
-                  title:
-                    "Modifications require written agreement from both parties.",
-                  contractName: "Services Agreement",
-                  matches: null,
-                  comments: [],
-                },
-              ],
-            },
-            {
-              stepName: "Step14: Specific Project and Engagement Terms",
-              id: "step_14",
-              data: [
-                {
-                  id: "data_entry_32",
-                  header: "Statement of Work (SOW)",
-                  title:
-                    "Sub-Advisor’s duties include sub-advisory and marketing services for Oaktree US-managed Funds.",
-                  contractName: "Services Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_33",
-                  header: "Project Milestones",
-                  title:
-                    "Specific project deliverables are completed based on ongoing advisory needs and investor interest in Oaktree’s Funds.",
-                  contractName: "Services Agreement",
-                  matches: null,
-                  comments: [],
-                },
-                {
-                  id: "data_entry_34",
-                  header: "Acceptance Criteria",
-                  title:
-                    "Deliverables are subject to Oaktree US’s review for quality and adherence to compliance.",
-                  contractName: "Services Agreement",
-                  matches: null,
-                  comments: [],
+                  compliance: {
+                    id: "compliance_12",
+                    header: "ASC 606 Final Verification",
+                    status: "Compliant",
+                    data: "Confidentiality provisions align with regulatory compliance needs.",
+                  },
                 },
               ],
             },
@@ -1297,21 +678,336 @@ const reviewData: DocumentInformation[] = [
         },
       ],
     },
-    l2Review: {
-      reviewName: "L2 review",
+  },
+
+  {
+    id: "deal_003",
+    clientName: "PaxMedica, Inc.",
+    assignedTo: "support@paxmedica.com",
+    l1Review: {
+      reviewName: "L1 review",
       contracts: [
         {
-          id: "contract_004",
-          name: "Services Agreement",
-          pdfUrl:
-            "/document/contract/OAKTREECAPITALGROUP,LLC_03_02_2020-EX-10.8-Services_Agreement.pdf",
-          steps: [],
+          id: "contract_007",
+          name: "Master Service Agreement",
+          pdfUrl: "/documents/contracts/paxmedica.pdf",
+
+          steps: [
+            {
+              stepName: "Step1: General Contract Metadata",
+              id: "step_1",
+              data: [
+                {
+                  id: "data_entry_1",
+                  header: "Document ID",
+                  title: "Exhibit 10.12",
+                  contractName: "Master Service Agreement",
+                  matches: null,
+                  comments: [
+                    {
+                      id: "comment_1",
+                      senderMail: "reviewer1@mail.com",
+                      profileUrl: "https://profile1.url",
+                      message: "Document ID verified.",
+                      date: "2024-11-12",
+                      time: "10:00 AM",
+                    },
+                  ],
+                  compliance: {
+                    id: "compliance_1",
+                    header: "ASC 606 Check",
+                    status: "Compliant",
+                    data: "Document ID and metadata align with ASC 606 documentation requirements.",
+                  },
+                },
+                {
+                  id: "data_entry_2",
+                  header: "Contract Type",
+                  title: "Master Service Agreement",
+                  contractName: "Master Service Agreement",
+                  matches: {
+                    numberOfMatches: 1,
+                    sourceImageUrl: "/salesforce",
+                    header: "Document ID",
+                    data: "OAKTREECAPITALGROUP,LLC_03_02_2020-EX-10.8",
+                    tag: "Important",
+                  },
+                  comments: [],
+                  compliance: null,
+                },
+                {
+                  id: "data_entry_3",
+                  header: "Effective Date",
+                  title: "May 25, 2018",
+                  contractName: "Master Service Agreement",
+                  matches: null,
+                  comments: [],
+                  compliance: {
+                    id: "compliance_2",
+                    header: "ASC 606 Check",
+                    status: "Compliant",
+                    data: "Effective date specified, meeting ASC 606 compliance.",
+                  },
+                },
+              ],
+            },
+            {
+              stepName: "Step2: Parties & Authority",
+              id: "step_2",
+              data: [
+                {
+                  id: "data_entry_4",
+                  header: "Contract Parties",
+                  title:
+                    "CRO Consulting (Pty) Limited and Purinix Pharmaceuticals LLC",
+                  contractName: "Master Service Agreement",
+                  matches: null,
+                  comments: [],
+                  compliance: null,
+                },
+                {
+                  id: "data_entry_5",
+                  header: "Entity Types",
+                  title:
+                    "Limited company in South Africa (CRO) and LLC in the USA (Client)",
+                  contractName: "Master Service Agreement",
+                  matches: null,
+                  comments: [],
+                  compliance: {
+                    id: "compliance_3",
+                    header: "ASC 606 Check",
+                    status: "Compliant",
+                    data: "Entity types defined per ASC 606 requirements.",
+                  },
+                },
+                {
+                  id: "data_entry_6",
+                  header: "Signatory Authority",
+                  title:
+                    "Authorized signatures by CRO Managing Director and Client CEO",
+                  contractName: "Master Service Agreement",
+                  matches: null,
+                  comments: [],
+                  compliance: null,
+                },
+              ],
+            },
+            {
+              stepName: "Step3: Financial Terms",
+              id: "step_3",
+              data: [
+                {
+                  id: "data_entry_7",
+                  header: "Payment Terms",
+                  title:
+                    "Payments based on project-specific Addenda milestones",
+                  contractName: "Master Service Agreement",
+                  matches: null,
+                  comments: [],
+                  compliance: {
+                    id: "compliance_4",
+                    header: "ASC 606 Check",
+                    status: "Partially compliant",
+                    data: "Payment structure and milestones partially detailed; further breakdown required for full compliance.",
+                  },
+                },
+                {
+                  id: "data_entry_8",
+                  header: "Payment Schedule",
+                  title: "Within 30 days of invoice receipt by Client",
+                  contractName: "Master Service Agreement",
+                  matches: null,
+                  comments: [],
+                  compliance: null,
+                },
+                {
+                  id: "data_entry_9",
+                  header: "Variable Rate Components",
+                  title: "Included as per addenda project specifics",
+                  contractName: "Master Service Agreement",
+                  matches: null,
+                  comments: [],
+                  compliance: null,
+                },
+              ],
+            },
+            {
+              stepName: "Step4: Performance Obligations",
+              id: "step_4",
+              data: [
+                {
+                  id: "data_entry_10",
+                  header: "Scope of Work",
+                  title: "Clinical Research Services in South Africa",
+                  contractName: "Master Service Agreement",
+                  matches: null,
+                  comments: [],
+                  compliance: {
+                    id: "compliance_5",
+                    header: "ASC 606 Check",
+                    status: "Compliant",
+                    data: "Scope of work aligns with performance obligation requirements.",
+                  },
+                },
+                {
+                  id: "data_entry_11",
+                  header: "Deliverables",
+                  title:
+                    "Weekly written reports and project-specific tasks per Addenda",
+                  contractName: "Master Service Agreement",
+                  matches: null,
+                  comments: [],
+                  compliance: null,
+                },
+              ],
+            },
+            {
+              stepName: "Step5: Term & Termination",
+              id: "step_5",
+              data: [
+                {
+                  id: "data_entry_12",
+                  header: "Termination Rights",
+                  title:
+                    "Either party may terminate with 30 days' notice, with terms for breach specified",
+                  contractName: "Master Service Agreement",
+                  matches: null,
+                  comments: [],
+                  compliance: {
+                    id: "compliance_6",
+                    header: "ASC 606 Check",
+                    status: "Compliant",
+                    data: "Termination rights and obligations meet ASC 606 guidelines.",
+                  },
+                },
+                {
+                  id: "data_entry_13",
+                  header: "Early Termination Conditions",
+                  title:
+                    "CRO must refund any advance if in breach, with liability limited as defined",
+                  contractName: "Master Service Agreement",
+                  matches: null,
+                  comments: [],
+                  compliance: null,
+                },
+              ],
+            },
+            {
+              stepName: "Step6: Intellectual Property",
+              id: "step_6",
+              data: [
+                {
+                  id: "data_entry_14",
+                  header: "IP Ownership",
+                  title:
+                    "All deliverables and work products deemed works made for hire for Client",
+                  contractName: "Master Service Agreement",
+                  matches: null,
+                  comments: [],
+                  compliance: {
+                    id: "compliance_7",
+                    header: "ASC 606 Check",
+                    status: "Compliant",
+                    data: "IP ownership terms align with ASC 606 for Client ownership.",
+                  },
+                },
+              ],
+            },
+            {
+              stepName: "Step7: Revenue Recognition Specifics",
+              id: "step_7",
+              data: [
+                {
+                  id: "data_entry_15",
+                  header: "Recognition Method",
+                  title: "Over time, based on milestone achievements",
+                  contractName: "Master Service Agreement",
+                  matches: null,
+                  comments: [],
+                  compliance: {
+                    id: "compliance_8",
+                    header: "ASC 606 Check",
+                    status: "Compliant",
+                    data: "Revenue recognition based on milestone completion meets ASC 606 standards.",
+                  },
+                },
+              ],
+            },
+            {
+              stepName: "Step8: Documentation Requirements",
+              id: "step_8",
+              data: [
+                {
+                  id: "data_entry_16",
+                  header: "Progress Reports",
+                  title: "Weekly summary reports provided",
+                  contractName: "Master Service Agreement",
+                  matches: null,
+                  comments: [],
+                  compliance: null,
+                },
+                {
+                  id: "data_entry_17",
+                  header: "Invoice Requirements",
+                  title: "Detailed account of tasks against time in addenda",
+                  contractName: "Master Service Agreement",
+                  matches: null,
+                  comments: [],
+                  compliance: {
+                    id: "compliance_9",
+                    header: "ASC 606 Check",
+                    status: "Partially compliant",
+                    data: "Documentation requirements meet basic compliance, further specifics needed for enhanced traceability.",
+                  },
+                },
+              ],
+            },
+            {
+              stepName: "Step9: Allocation Methodology",
+              id: "step_9",
+              data: [
+                {
+                  id: "data_entry_18",
+                  header: "Allocation Basis",
+                  title: "Allocated by task and time as per Addenda agreements",
+                  contractName: "Master Service Agreement",
+                  matches: null,
+                  comments: [],
+                  compliance: {
+                    id: "compliance_10",
+                    header: "ASC 606 Check",
+                    status: "Compliant",
+                    data: "Allocation basis compliant, defined by task in Addenda.",
+                  },
+                },
+              ],
+            },
+            {
+              stepName: "Step10: Compliance Check",
+              id: "step_10",
+              data: [
+                {
+                  id: "data_entry_19",
+                  header: "Regulatory",
+                  title: "Compliance with ICH GCP and relevant laws",
+                  contractName: "Master Service Agreement",
+                  matches: null,
+                  comments: [],
+                  compliance: {
+                    id: "compliance_11",
+                    header: "ASC 606 Final Verification",
+                    status: "Compliant",
+                    data: "Regulatory compliance aligns with ICH GCP and local regulations, meeting ASC 606 requirements.",
+                  },
+                },
+              ],
+            },
+          ],
         },
       ],
     },
   },
 ];
-
 const DealsDetails = () => {
   const pathname = usePathname();
 

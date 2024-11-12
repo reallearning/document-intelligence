@@ -117,7 +117,7 @@ export const InvoiceInformationSidebar = ({
               {step.data.map((dataItem) => (
                 <div
                   key={`${step.id}/${dataItem.id}`}
-                  className={`bg-white px-4 py-3 rounded-xl mb-3 hover:border hover:border-morrie-primary ${
+                  className={`bg-white px-4 py-3 rounded-xl mb-3 border border-transparent hover:border-morrie-primary ${
                     `${selectedSection?.header}/${selectedSection?.id}` ===
                     `${dataItem.header}/${dataItem.id}`
                       ? "border border-morrie-primary"
