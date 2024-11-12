@@ -1,3 +1,5 @@
+"use client";
+import { StorageProvider } from "@/context/StorageContext";
 import { Sidebar } from "../../components/sidebar";
 
 interface IProps {
@@ -6,9 +8,11 @@ interface IProps {
 
 export default function RootLayout({ children }: IProps) {
   return (
-    <div className="flex flex-row w-full h-screen">
-      <Sidebar />
-      <main className="flex flex-1 h-full">{children}</main>
-    </div>
+    <StorageProvider>
+      <div className="flex flex-row w-full h-screen">
+        <Sidebar />
+        <main className="flex flex-1 h-full">{children}</main>
+      </div>
+    </StorageProvider>
   );
 }
