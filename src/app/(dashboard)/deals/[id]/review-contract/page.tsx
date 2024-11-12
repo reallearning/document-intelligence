@@ -32,7 +32,7 @@ export default function ReviewContract() {
   const handleMarkReviewClick = () => {
     router.push(`/deals/${id}/revenue-reporting`);
   };
-  
+
   return (
     <div className="px-4 py-10 w-full overflow-y-auto h-screen">
       <div className="flex justify-between items-start">
@@ -61,7 +61,7 @@ export default function ReviewContract() {
           <Button
             color="primary-default"
             size="xs"
-            className="px-4 py-2 font-nunito font-medium text-sm rounded-md text-white"
+            className="px-4 py-2 font-nunito font-medium text-sm rounded-md text-white cursor-pointer"
             onClick={handleMarkReviewClick}
           >
             Mark Reviewed
