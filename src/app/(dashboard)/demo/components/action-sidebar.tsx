@@ -97,17 +97,6 @@ export const ActionSidebar = ({ data }: IDataProps) => {
             </div>
           ))}
         </div>
-
-        {/* Export Button at the bottom */}
-        <div className="px-4 py-3 bg-[#D9D9D966] rounded-t-lg mt-auto">
-          <Button
-            color="primary-default"
-            size="md"
-            className="px-4 border-[#D9D9D9] font-nunito text-white w-full"
-          >
-            Export
-          </Button>
-        </div>
       </div>
     </div>
   );
