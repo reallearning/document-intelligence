@@ -2713,7 +2713,11 @@ const DealsDetails = () => {
   const [isReviewMarked, setIsReviewMarked] = useState(0);
 
   const handleMarkReview = () => {
-    router.push(`${id}/review-contract`);
+    if (id === "deal_001") {
+      router.push(`${id}/review-contract`);
+    } else {
+      setIsReviewMarked(1);
+    }
   };
 
   if (!selectedDeal) {
@@ -2735,7 +2739,7 @@ const DealsDetails = () => {
               onClick={handleMarkReview}
               className="text-white"
             >
-              Mark Review
+              Mark Reviewed
             </Button>
           ) : (
             <h2 className="text-morrie-primary font-nunito text-md leading-6 font-medium p-4">
