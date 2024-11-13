@@ -11,7 +11,7 @@ const reviewData: DocumentInformation[] = [
   {
     id: "deal_005",
     clientName: "Oaktree Capital Management",
-    assignedTo: "ateek@adhe.com",
+    assignedTo: "peter@adhe.com",
     l1Review: {
       reviewName: "L1 review",
       contracts: [
@@ -339,7 +339,7 @@ const reviewData: DocumentInformation[] = [
   {
     id: "deal_004",
     clientName: "Rise Education Group",
-    assignedTo: "dheeraj@adhe.com",
+    assignedTo: "dani@adhe.com",
     l1Review: {
       reviewName: "L1 review",
       contracts: [
@@ -1024,7 +1024,7 @@ const reviewData: DocumentInformation[] = [
   {
     id: "deal_003",
     clientName: "PaxMedica, Inc.",
-    assignedTo: "medhaj@adhe.com",
+    assignedTo: "malgorzata@adhe.com",
     l1Review: {
       reviewName: "L1 review",
       contracts: [
@@ -2009,7 +2009,7 @@ const reviewData: DocumentInformation[] = [
   {
     id: "deal_001",
     clientName: "ACME Technologies Inc.",
-    assignedTo: "nidhi@adhe.com",
+    assignedTo: "bence.nemeth@adhe.com",
     l1Review: {
       reviewName: "L1 review",
       contracts: [
