@@ -7,15 +7,6 @@ import { Button } from "@/components/button";
 const InvoicePage = () => {
   const invoices = [
     {
-      id: "invoice-01",
-      name: "INV-OAK-0001",
-      source: "Salesforce",
-      type_of_document: "Invoice",
-      added_on: "01-Dec-2023",
-      assignee: "finance@oaktree.com",
-      last_modified_on: "05-Dec-2023",
-    },
-    {
       id: "invoice-02",
       name: "INV-RISE-0002",
       source: "SAP",
@@ -32,6 +23,15 @@ const InvoicePage = () => {
       added_on: "01-Dec-2023",
       assignee: "billing@paxmedica.com",
       last_modified_on: "07-Dec-2023",
+    },
+    {
+      id: "invoice-01",
+      name: "INV-OAK-0001",
+      source: "Salesforce",
+      type_of_document: "Invoice",
+      added_on: "01-Dec-2023",
+      assignee: "finance@oaktree.com",
+      last_modified_on: "05-Dec-2023",
     },
     {
       id: "invoice-04",

@@ -19,7 +19,7 @@ const invoiceDetails = [
           {
             id: "1",
             header: "Invoice Number",
-            data: "INV-OAK-0001",
+            data: "00001",
             comments: [],
           },
           {
@@ -87,7 +87,7 @@ const invoiceDetails = [
           {
             id: "1",
             header: "Invoice Number",
-            data: "INV-RISE-0002",
+            data: "00002",
             comments: [],
           },
           {
@@ -161,7 +161,7 @@ const invoiceDetails = [
           {
             id: "1",
             header: "Invoice Number",
-            data: "INV-PAX-0003",
+            data: "0000",
             comments: [],
           },
           {

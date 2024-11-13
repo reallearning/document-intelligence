@@ -650,7 +650,7 @@ const reviewData: DocumentInformation[] = [
         {
           id: "invoice_001",
           name: "Invoice",
-          pdfUrl: "/documents/contracts/rizee-invoice.pdf",
+          pdfUrl: "/documents/contracts/risee-invoice.pdf",
           steps: [
             {
               stepName: "Step 1: General Information",
@@ -659,7 +659,7 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_1",
                   header: "Invoice Number",
-                  title: "0000",
+                  title: "00002",
                   contractName: "Rise Education Group",
                   matches: null,
                   comments: [
