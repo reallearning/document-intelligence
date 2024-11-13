@@ -19,7 +19,7 @@ const invoiceDetails = [
           {
             id: "1",
             header: "Invoice Number",
-            data: "00001",
+            data: "0000",
             comments: [],
           },
           {
