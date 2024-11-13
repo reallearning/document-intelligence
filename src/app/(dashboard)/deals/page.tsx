@@ -17,7 +17,7 @@ const DealsPage = () => {
     {
       id: "deal_003",
       name: "PaxMedica Inc.",
-      assignee: "malgorzata@adhe.com",
+      assignee: "stefan@adhe.com",
       company_name: "PaxMedica Inc.",
       deal_type: "Direct Deal",
       contract_date: "25-May-2018",

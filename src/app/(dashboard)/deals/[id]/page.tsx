@@ -1024,7 +1024,7 @@ const reviewData: DocumentInformation[] = [
   {
     id: "deal_003",
     clientName: "PaxMedica, Inc.",
-    assignedTo: "malgorzata@adhe.com",
+    assignedTo: "stefan@adhe.com",
     l1Review: {
       reviewName: "L1 review",
       contracts: [
