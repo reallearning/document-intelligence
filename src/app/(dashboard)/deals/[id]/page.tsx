@@ -27,7 +27,7 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_1",
                   header: "Document ID",
-                  title: "Exhibit 10.8",
+                  title: "Exhibit 10.8 (Cover Page)",
                   contractName: "Services Agreement",
                   matches: null,
                   comments: [
@@ -60,7 +60,7 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_3",
                   header: "Effective Date",
-                  title: "September 25, 2018",
+                  title: "September 25, 2018 (Clause 1.1)",
                   contractName: "Services Agreement",
                   matches: null,
                   comments: [],
@@ -69,7 +69,7 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_4",
                   header: "Execution Date",
-                  title: "September 25, 2018",
+                  title: "September 25, 2018 (Clause 1.1)",
                   contractName: "Services Agreement",
                   matches: null,
                   comments: [],
@@ -78,7 +78,7 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_5",
                   header: "Page Count",
-                  title: "8",
+                  title: "8 (Last Page)",
                   contractName: "Services Agreement",
                   matches: null,
                   comments: [],
@@ -94,7 +94,7 @@ const reviewData: DocumentInformation[] = [
                   id: "data_entry_6",
                   header: "Contract Parties",
                   title:
-                    "Oaktree Capital Management, L.P. and Oaktree Capital Management (International) Limited",
+                    "Oaktree Capital Management, L.P. and Oaktree Capital Management (International) Limited (Introduction)",
                   contractName: "Services Agreement",
                   matches: null,
                   comments: [],
@@ -104,7 +104,7 @@ const reviewData: DocumentInformation[] = [
                   id: "data_entry_7",
                   header: "Entity Types",
                   title:
-                    "Limited Partnership (US) and Private Limited Company (UK)",
+                    "Limited Partnership (US) and Private Limited Company (UK) (Introduction)",
                   contractName: "Services Agreement",
                   matches: null,
                   comments: [],
@@ -113,20 +113,6 @@ const reviewData: DocumentInformation[] = [
                     header: "ASC 606 Check",
                     status: "Compliant",
                     data: "Entity types verified as per compliance requirements.",
-                  },
-                },
-                {
-                  id: "data_entry_8",
-                  header: "Signatory Authority Verified",
-                  title: "Signatures from authorized signatories present",
-                  contractName: "Services Agreement",
-                  matches: null,
-                  comments: [],
-                  compliance: {
-                    id: "compliance_4",
-                    header: "ASC 606 Check",
-                    status: "Partially compliant",
-                    data: "Signatory authority is present but lacks specific verification details.",
                   },
                 },
               ],
@@ -139,7 +125,7 @@ const reviewData: DocumentInformation[] = [
                   id: "data_entry_9",
                   header: "Payment Terms",
                   title:
-                    "Service fees payable for management and advisory services rendered.",
+                    "Service fees payable for management and advisory services rendered (Clause 3.1)",
                   contractName: "Services Agreement",
                   matches: null,
                   comments: [],
@@ -153,7 +139,7 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_10",
                   header: "Currency Specified",
-                  title: "Not specified",
+                  title: "Not specified (Clause 3.3)",
                   contractName: "Services Agreement",
                   matches: null,
                   comments: [],
@@ -167,7 +153,7 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_11",
                   header: "Invoice Requirements",
-                  title: "Not specified",
+                  title: "Not specified (Clause 3.1)",
                   contractName: "Services Agreement",
                   matches: null,
                   comments: [],
@@ -183,7 +169,7 @@ const reviewData: DocumentInformation[] = [
                   id: "data_entry_12",
                   header: "Scope of Work",
                   title:
-                    "Sub-advisory services, asset management, and marketing for Oaktree US.",
+                    "Sub-advisory services, asset management, and marketing for Oaktree US (Clause 2.1)",
                   contractName: "Services Agreement",
                   matches: null,
                   comments: [],
@@ -197,7 +183,8 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_13",
                   header: "Service Levels",
-                  title: "Management quality consistent with past practices",
+                  title:
+                    "Management quality consistent with past practices (Clause 2.3)",
                   contractName: "Services Agreement",
                   matches: null,
                   comments: [],
@@ -217,7 +204,8 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_14",
                   header: "Termination Rights",
-                  title: "Either party may terminate with 30 days' notice.",
+                  title:
+                    "Either party may terminate with 30 days' notice (Clause 10.2)",
                   contractName: "Services Agreement",
                   matches: null,
                   comments: [],
@@ -237,7 +225,7 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_15",
                   header: "IP Ownership",
-                  title: "Not specified",
+                  title: "Not specified (Clause 6.2)",
                   contractName: "Services Agreement",
                   matches: null,
                   comments: [],
@@ -257,7 +245,8 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_16",
                   header: "Recognition Method",
-                  title: "Over time as services are rendered",
+                  title:
+                    "In providing its services under this Agreement, the Sub-Advisor will discharge its duties in accordance with the same standard of care established for Oaktree US in the relevant Fund Agreements, and will be indemnified by each of the Funds as an agent of Oaktree US in accordance with such Fund Agreements. (Clause 7.1)",
                   contractName: "Services Agreement",
                   matches: null,
                   comments: [],
@@ -277,7 +266,7 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_17",
                   header: "Data Privacy",
-                  title: "Compliance with FCA Rules required.",
+                  title: "Compliance with FCA Rules required (Clause 9.1)",
                   contractName: "Services Agreement",
                   matches: null,
                   comments: [],
@@ -297,7 +286,7 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_18",
                   header: "Standalone Prices",
-                  title: "Not detailed",
+                  title: "Not detailed (Clause 9.2)",
                   contractName: "Services Agreement",
                   matches: null,
                   comments: [],
@@ -317,7 +306,8 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_19",
                   header: "Regulatory",
-                  title: "FCA compliance documented for Sub-Advisor.",
+                  title:
+                    "FCA compliance documented for Sub-Advisor (Clause 9.2)",
                   contractName: "Services Agreement",
                   matches: null,
                   comments: [],
@@ -355,7 +345,7 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_1",
                   header: "Document ID",
-                  title: "Exhibit 4.23",
+                  title: "Exhibit 4.23 (Cover Page)",
                   contractName: "Service Agreement",
                   matches: null,
                   comments: [
@@ -388,7 +378,7 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_3",
                   header: "Effective Date",
-                  title: "Not specified",
+                  title: "Not specified in the contract",
                   contractName: "Service Agreement",
                   matches: null,
                   comments: [],
@@ -404,7 +394,7 @@ const reviewData: DocumentInformation[] = [
                   id: "data_entry_4",
                   header: "Contract Parties",
                   title:
-                    "Rise (Tianjin) Education Information Consulting Co., Ltd. (Service Provider) and Service Recipient",
+                    "Rise (Tianjin) Education Information Consulting Co., Ltd. (Service Provider) and Service Recipient (Page 1)",
                   contractName: "Service Agreement",
                   matches: null,
                   comments: [],
@@ -413,7 +403,8 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_5",
                   header: "Entity Types",
-                  title: "Limited Liability Company in China",
+                  title:
+                    "Limited Liability Company in China (Introduction section)",
                   contractName: "Service Agreement",
                   matches: null,
                   comments: [],
@@ -427,7 +418,7 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_6",
                   header: "Signatory Authority",
-                  title: "Corporate seal affixed",
+                  title: "Corporate seal affixed (Signature Page)",
                   contractName: "Service Agreement",
                   matches: null,
                   comments: [],
@@ -443,7 +434,7 @@ const reviewData: DocumentInformation[] = [
                   id: "data_entry_7",
                   header: "Payment Terms",
                   title:
-                    "Quarterly payment based on incurred costs with markup or as a percentage of revenues",
+                    "Quarterly payment based on incurred costs plus markup or as a percentage of revenues (Clause 4, Schedule 1)",
                   contractName: "Service Agreement",
                   matches: null,
                   comments: [],
@@ -451,13 +442,13 @@ const reviewData: DocumentInformation[] = [
                     id: "compliance_4",
                     header: "ASC 606 Check",
                     status: "Partially compliant",
-                    data: "Payment terms are partially compliant; revenue-based calculation needs further detail for ASC 606.",
+                    data: "Payment terms partially compliant; revenue-based calculation requires additional detail.",
                   },
                 },
                 {
                   id: "data_entry_8",
                   header: "Currency Specified",
-                  title: "RMB",
+                  title: "RMB (Schedule 1, Payment Instructions)",
                   contractName: "Service Agreement",
                   matches: null,
                   comments: [],
@@ -467,7 +458,7 @@ const reviewData: DocumentInformation[] = [
                   id: "data_entry_9",
                   header: "Late Payment Terms",
                   title:
-                    "Liquidated damages of 0.5% per day for late payments over 15 days",
+                    "Liquidated damages of 0.5% per day for late payments exceeding 15 days (Clause 9)",
                   contractName: "Service Agreement",
                   matches: null,
                   comments: [],
@@ -475,7 +466,7 @@ const reviewData: DocumentInformation[] = [
                     id: "compliance_5",
                     header: "ASC 606 Check",
                     status: "Compliant",
-                    data: "Late payment penalties defined in compliance with ASC 606 guidelines.",
+                    data: "Late payment terms align with ASC 606.",
                   },
                 },
               ],
@@ -488,7 +479,7 @@ const reviewData: DocumentInformation[] = [
                   id: "data_entry_10",
                   header: "Scope of Work",
                   title:
-                    "Academic, enrollment, HR, financial, legal, customer, IT, and administrative support services",
+                    "Academic, enrollment, HR, financial, legal, customer, IT, and administrative support services (Clause 1, Pages 1-2)",
                   contractName: "Service Agreement",
                   matches: null,
                   comments: [],
@@ -496,14 +487,14 @@ const reviewData: DocumentInformation[] = [
                     id: "compliance_6",
                     header: "ASC 606 Check",
                     status: "Compliant",
-                    data: "Scope of services outlined in alignment with performance obligations.",
+                    data: "Scope of services detailed per ASC 606 obligations.",
                   },
                 },
                 {
                   id: "data_entry_11",
                   header: "Service Levels",
                   title:
-                    "Customized support services provided by dedicated teams",
+                    "Customized support services provided by dedicated teams (Clause 1)",
                   contractName: "Service Agreement",
                   matches: null,
                   comments: [],
@@ -513,7 +504,7 @@ const reviewData: DocumentInformation[] = [
                   id: "data_entry_12",
                   header: "Success Criteria",
                   title:
-                    "Successful support for academic, enrollment, and customer needs",
+                    "Successful support for academic, enrollment, and customer needs (Clause 1)",
                   contractName: "Service Agreement",
                   matches: null,
                   comments: [],
@@ -529,7 +520,7 @@ const reviewData: DocumentInformation[] = [
                   id: "data_entry_13",
                   header: "Termination Rights",
                   title:
-                    "Service Provider may terminate upon default by Service Recipient",
+                    "Service Provider may terminate upon default by Service Recipient (Clause 10)",
                   contractName: "Service Agreement",
                   matches: null,
                   comments: [],
@@ -539,7 +530,7 @@ const reviewData: DocumentInformation[] = [
                   id: "data_entry_14",
                   header: "Notice Periods",
                   title:
-                    "Termination with notice for defaults exceeding 15 days",
+                    "Termination with notice for defaults over 15 days (Clause 10)",
                   contractName: "Service Agreement",
                   matches: null,
                   comments: [],
@@ -547,7 +538,7 @@ const reviewData: DocumentInformation[] = [
                     id: "compliance_7",
                     header: "ASC 606 Check",
                     status: "Compliant",
-                    data: "Termination rights and notice periods defined as per ASC 606 requirements.",
+                    data: "Defined notice periods meet ASC 606 guidelines.",
                   },
                 },
               ],
@@ -560,7 +551,7 @@ const reviewData: DocumentInformation[] = [
                   id: "data_entry_15",
                   header: "IP Ownership",
                   title:
-                    "Service Provider retains all IP rights for services provided",
+                    "Service Provider retains all IP rights for services provided (Clause 6)",
                   contractName: "Service Agreement",
                   matches: null,
                   comments: [],
@@ -568,7 +559,7 @@ const reviewData: DocumentInformation[] = [
                     id: "compliance_8",
                     header: "ASC 606 Impact",
                     status: "Compliant",
-                    data: "IP ownership fully retained by Service Provider, compliant with ASC 606.",
+                    data: "Service Provider's IP ownership fully complies with ASC 606.",
                   },
                 },
               ],
@@ -581,7 +572,7 @@ const reviewData: DocumentInformation[] = [
                   id: "data_entry_16",
                   header: "Recognition Method",
                   title:
-                    "Revenue recognized over time as services are rendered",
+                    "Revenue recognized over time as services are rendered (Clause 4)",
                   contractName: "Service Agreement",
                   matches: null,
                   comments: [],
@@ -589,7 +580,7 @@ const reviewData: DocumentInformation[] = [
                     id: "compliance_9",
                     header: "ASC 606 Check",
                     status: "Compliant",
-                    data: "Revenue recognition aligns with ASC 606 for over-time performance.",
+                    data: "Recognition method aligns with ASC 606 standards.",
                   },
                 },
               ],
@@ -601,7 +592,7 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_17",
                   header: "Performance Evidence",
-                  title: "Not specified",
+                  title: "Not specified (general clause absence)",
                   contractName: "Service Agreement",
                   matches: null,
                   comments: [],
@@ -609,7 +600,7 @@ const reviewData: DocumentInformation[] = [
                     id: "compliance_10",
                     header: "ASC 606 Check",
                     status: "Non compliant",
-                    data: "Performance evidence lacking; compliance not met.",
+                    data: "Lacks performance documentation, not ASC 606 compliant.",
                   },
                 },
               ],
@@ -621,7 +612,7 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_18",
                   header: "Standalone Prices",
-                  title: "Service fees based on actual costs plus markup",
+                  title: "Fees based on actual costs plus markup (Schedule 1)",
                   contractName: "Service Agreement",
                   matches: null,
                   comments: [],
@@ -629,7 +620,7 @@ const reviewData: DocumentInformation[] = [
                     id: "compliance_11",
                     header: "ASC 606 Check",
                     status: "Partially compliant",
-                    data: "Standalone prices based on costs, though detailed allocation methodology is not fully specified.",
+                    data: "Standalone pricing provided, allocation not fully detailed.",
                   },
                 },
               ],
@@ -641,7 +632,7 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_19",
                   header: "Data Privacy",
-                  title: "Confidentiality agreement in place between parties",
+                  title: "Confidentiality provisions in place (Clause 8)",
                   contractName: "Service Agreement",
                   matches: null,
                   comments: [],
@@ -649,7 +640,7 @@ const reviewData: DocumentInformation[] = [
                     id: "compliance_12",
                     header: "ASC 606 Final Verification",
                     status: "Compliant",
-                    data: "Confidentiality provisions align with regulatory compliance needs.",
+                    data: "Confidentiality aligns with compliance requirements.",
                   },
                 },
               ],
@@ -1032,7 +1023,6 @@ const reviewData: DocumentInformation[] = [
           id: "contract_007",
           name: "Master Service Agreement",
           pdfUrl: "/documents/contracts/paxmedica.pdf",
-
           steps: [
             {
               stepName: "Step 1: General Contract Data",
@@ -1041,7 +1031,7 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_1",
                   header: "Document ID",
-                  title: "Exhibit 10.12",
+                  title: "Exhibit 10.12 (Cover Page)",
                   contractName: "Master Service Agreement",
                   matches: null,
                   comments: [
@@ -1090,7 +1080,7 @@ const reviewData: DocumentInformation[] = [
                   id: "data_entry_4",
                   header: "Contract Parties",
                   title:
-                    "CRO Consulting (Pty) Limited and Purinix Pharmaceuticals LLC",
+                    "CRO Consulting (Pty) Limited and Purinix Pharmaceuticals LLC (Clause 1.0)",
                   contractName: "Master Service Agreement",
                   matches: null,
                   comments: [],
@@ -1100,7 +1090,7 @@ const reviewData: DocumentInformation[] = [
                   id: "data_entry_5",
                   header: "Entity Types",
                   title:
-                    "Limited company in South Africa (CRO) and LLC in the USA (Client)",
+                    "Limited company in South Africa (CRO) and LLC in the USA (Client) (Clause 1.0)",
                   contractName: "Master Service Agreement",
                   matches: null,
                   comments: [],
@@ -1115,7 +1105,7 @@ const reviewData: DocumentInformation[] = [
                   id: "data_entry_6",
                   header: "Signatory Authority",
                   title:
-                    "Authorized signatures by CRO Managing Director and Client CEO",
+                    "Authorized signatures by CRO Managing Director and Client CEO (Signature Page)",
                   contractName: "Master Service Agreement",
                   matches: null,
                   comments: [],
@@ -1131,7 +1121,7 @@ const reviewData: DocumentInformation[] = [
                   id: "data_entry_7",
                   header: "Payment Terms",
                   title:
-                    "Payments based on project-specific Addenda milestones",
+                    "Payments based on project-specific Addenda milestones (Clause 2.1)",
                   contractName: "Master Service Agreement",
                   matches: null,
                   comments: [],
@@ -1145,7 +1135,8 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_8",
                   header: "Payment Schedule",
-                  title: "Within 30 days of invoice receipt by Client",
+                  title:
+                    "Within 30 days of invoice receipt by Client (Clause 2.4)",
                   contractName: "Master Service Agreement",
                   matches: null,
                   comments: [],
@@ -1154,7 +1145,8 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_9",
                   header: "Variable Rate Components",
-                  title: "Included as per addenda project specifics",
+                  title:
+                    "Included as per addenda project specifics (Clause 2.2)",
                   contractName: "Master Service Agreement",
                   matches: null,
                   comments: [],
@@ -1169,7 +1161,8 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_10",
                   header: "Scope of Work",
-                  title: "Clinical Research Services in South Africa",
+                  title:
+                    "Clinical Research Services in South Africa (Clause 1.1)",
                   contractName: "Master Service Agreement",
                   matches: null,
                   comments: [],
@@ -1184,7 +1177,7 @@ const reviewData: DocumentInformation[] = [
                   id: "data_entry_11",
                   header: "Deliverables",
                   title:
-                    "Weekly written reports and project-specific tasks per Addenda",
+                    "Weekly written reports and project-specific tasks per Addenda (Clause 1.7)",
                   contractName: "Master Service Agreement",
                   matches: null,
                   comments: [],
@@ -1200,7 +1193,7 @@ const reviewData: DocumentInformation[] = [
                   id: "data_entry_12",
                   header: "Termination Rights",
                   title:
-                    "Either party may terminate with 30 days' notice, with terms for breach specified",
+                    "Either party may terminate with 30 days' notice, with terms for breach specified (Clause 4.1)",
                   contractName: "Master Service Agreement",
                   matches: null,
                   comments: [],
@@ -1215,7 +1208,7 @@ const reviewData: DocumentInformation[] = [
                   id: "data_entry_13",
                   header: "Early Termination Conditions",
                   title:
-                    "CRO must refund any advance if in breach, with liability limited as defined",
+                    "CRO must refund any advance if in breach, with liability limited as defined (Clause 4.3)",
                   contractName: "Master Service Agreement",
                   matches: null,
                   comments: [],
@@ -1231,7 +1224,7 @@ const reviewData: DocumentInformation[] = [
                   id: "data_entry_14",
                   header: "IP Ownership",
                   title:
-                    "All deliverables and work products deemed works made for hire for Client",
+                    "All deliverables and work products deemed works made for hire for Client (Clause 6.1)",
                   contractName: "Master Service Agreement",
                   matches: null,
                   comments: [],
@@ -1251,7 +1244,8 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_15",
                   header: "Recognition Method",
-                  title: "Over time, based on milestone achievements",
+                  title:
+                    "Over time, based on milestone achievements (Clause 7.1)",
                   contractName: "Master Service Agreement",
                   matches: null,
                   comments: [],
@@ -1271,7 +1265,7 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_16",
                   header: "Progress Reports",
-                  title: "Weekly summary reports provided",
+                  title: "Weekly summary reports provided (Clause 1.7)",
                   contractName: "Master Service Agreement",
                   matches: null,
                   comments: [],
@@ -1280,7 +1274,8 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_17",
                   header: "Invoice Requirements",
-                  title: "Detailed account of tasks against time in addenda",
+                  title:
+                    "Detailed account of tasks against time in addenda (Clause 2.4)",
                   contractName: "Master Service Agreement",
                   matches: null,
                   comments: [],
@@ -1300,7 +1295,8 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_18",
                   header: "Allocation Basis",
-                  title: "Allocated by task and time as per Addenda agreements",
+                  title:
+                    "Allocated by task and time as per Addenda agreements (Clause 2.4)",
                   contractName: "Master Service Agreement",
                   matches: null,
                   comments: [],
@@ -1320,7 +1316,8 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_19",
                   header: "Regulatory",
-                  title: "Compliance with ICH GCP and relevant laws",
+                  title:
+                    "Compliance with ICH GCP and relevant laws (Clause 1.4)",
                   contractName: "Master Service Agreement",
                   matches: null,
                   comments: [],
@@ -2019,7 +2016,7 @@ const reviewData: DocumentInformation[] = [
           pdfUrl: "/documents/contracts/medhaj-contract.pdf",
           steps: [
             {
-              stepName: "Step 1: General Contract data",
+              stepName: "Step 1: General Contract Data",
               id: "step_1",
               data: [
                 {
@@ -2055,9 +2052,8 @@ const reviewData: DocumentInformation[] = [
                   comments: [],
                   compliance: null,
                 },
-
                 {
-                  id: "data_entry_4",
+                  id: "data_entry_3",
                   header: "Effective Date",
                   title: "January 15, 2024",
                   contractName: "Service Agreement",
@@ -2066,7 +2062,7 @@ const reviewData: DocumentInformation[] = [
                   compliance: null,
                 },
                 {
-                  id: "data_entry_5",
+                  id: "data_entry_4",
                   header: "Execution Date",
                   title: "January 15, 2024",
                   contractName: "Service Agreement",
@@ -2075,7 +2071,7 @@ const reviewData: DocumentInformation[] = [
                   compliance: null,
                 },
                 {
-                  id: "data_entry_6",
+                  id: "data_entry_5",
                   header: "Page Count",
                   title: "4",
                   contractName: "Service Agreement",
@@ -2090,18 +2086,19 @@ const reviewData: DocumentInformation[] = [
               id: "step_2",
               data: [
                 {
-                  id: "data_entry_7",
+                  id: "data_entry_6",
                   header: "Contract Parties",
-                  title: "Acme Technologies, Inc. and Bright Future Corp",
+                  title:
+                    "Acme Technologies, Inc. and Bright Future Corp (Cover Page)",
                   contractName: "Service Agreement",
                   matches: null,
                   comments: [],
                   compliance: null,
                 },
                 {
-                  id: "data_entry_8",
+                  id: "data_entry_7",
                   header: "Entity Types",
-                  title: "Delaware Corporation and Texas LLC",
+                  title: "Delaware Corporation and Texas LLC (Cover Page)",
                   contractName: "Service Agreement",
                   matches: null,
                   comments: [],
@@ -2113,19 +2110,20 @@ const reviewData: DocumentInformation[] = [
                   },
                 },
                 {
-                  id: "data_entry_9",
+                  id: "data_entry_8",
                   header: "Addresses Listed",
                   title:
-                    "123 Innovation Way, San Francisco, CA; 789 Commerce Ave, Austin, TX",
+                    "123 Innovation Way, San Francisco, CA; 789 Commerce Ave, Austin, TX (Cover Page)",
                   contractName: "Service Agreement",
                   matches: null,
                   comments: [],
                   compliance: null,
                 },
                 {
-                  id: "data_entry_10",
+                  id: "data_entry_9",
                   header: "Signatory Authority Verified",
-                  title: "CEO of Acme and COO of Bright Future",
+                  title:
+                    "CEO of Acme and COO of Bright Future (Signature Page)",
                   contractName: "Service Agreement",
                   matches: null,
                   comments: [],
@@ -2143,9 +2141,19 @@ const reviewData: DocumentInformation[] = [
               id: "step_3",
               data: [
                 {
+                  id: "data_entry_10",
+                  header: "Total Contract Value",
+                  title: "$150,000 (Clause 3.1)",
+                  contractName: "Service Agreement",
+                  matches: null,
+                  comments: [],
+                  compliance: null,
+                },
+                {
                   id: "data_entry_11",
                   header: "Payment Terms",
-                  title: "Quarterly invoicing; $150,000 total value",
+                  title:
+                    "Quarterly invoicing; $150,000 total value (Clause 3.1)",
                   contractName: "Service Agreement",
                   matches: null,
                   comments: [],
@@ -2159,7 +2167,7 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_12",
                   header: "Currency Specified",
-                  title: "USD",
+                  title: "USD (Clause 3.1)",
                   contractName: "Service Agreement",
                   matches: null,
                   comments: [],
@@ -2168,7 +2176,7 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_13",
                   header: "Late Payment Terms",
-                  title: "1.5% per month on overdue payments",
+                  title: "1.5% late fee per month until paid (Clause 3.5)",
                   contractName: "Service Agreement",
                   matches: null,
                   comments: [],
@@ -2183,7 +2191,8 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_14",
                   header: "Scope of Work",
-                  title: "Consulting, IT, and digital transformation",
+                  title:
+                    "Consulting, IT, and digital transformation services (Clause 1.1)",
                   contractName: "Service Agreement",
                   matches: null,
                   comments: [],
@@ -2197,7 +2206,7 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_15",
                   header: "Service Levels",
-                  title: "Defined by quarterly milestones",
+                  title: "Defined by quarterly milestones (Clause 1.2)",
                   contractName: "Service Agreement",
                   matches: null,
                   comments: [],
@@ -2212,7 +2221,8 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_16",
                   header: "Termination Rights",
-                  title: "30 days' notice for cause; 90 days' for convenience",
+                  title:
+                    "30 days' notice for cause; 90 days' for convenience (Clauses 2.2 and 2.3)",
                   contractName: "Service Agreement",
                   matches: null,
                   comments: [],
@@ -2232,7 +2242,8 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_17",
                   header: "IP Ownership",
-                  title: "Client owns deliverables upon payment completion.",
+                  title:
+                    "Client owns deliverables upon payment completion (Clause 6.1)",
                   contractName: "Service Agreement",
                   matches: null,
                   comments: [],
@@ -2252,7 +2263,8 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_18",
                   header: "Recognition Method",
-                  title: "Over time as services are rendered",
+                  title:
+                    "Revenue recognized over time as services are rendered (Clause 3.2)",
                   contractName: "Service Agreement",
                   matches: null,
                   comments: [],
@@ -2272,7 +2284,7 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_19",
                   header: "Data Privacy",
-                  title: "Confidentiality terms specified",
+                  title: "Confidentiality terms specified (Clause 6.2)",
                   contractName: "Service Agreement",
                   matches: null,
                   comments: [],
@@ -2292,7 +2304,7 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_20",
                   header: "Standalone Prices",
-                  title: "Not specified",
+                  title: "Not specified (Clause 5.1)",
                   contractName: "Service Agreement",
                   matches: null,
                   comments: [],
@@ -2312,7 +2324,8 @@ const reviewData: DocumentInformation[] = [
                 {
                   id: "data_entry_21",
                   header: "Regulatory",
-                  title: "Compliance with industry data privacy standards",
+                  title:
+                    "Compliance with industry data privacy standards (Clause 6.2)",
                   contractName: "Service Agreement",
                   matches: null,
                   comments: [],
