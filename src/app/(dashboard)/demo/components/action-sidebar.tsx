@@ -87,11 +87,13 @@ export const ActionSidebar = ({ data }: IDataProps) => {
   };
 
   // Filter out sections with null values before rendering
-  const validAdditionalData = data.additional_data.filter(
-    (section) =>
-      !isEmptyValue(section.value) &&
-      !(typeof section.value === "string" && section.value === "null")
-  );
+  // const validAdditionalData = data.additional_data.filter(
+  //   (section) =>
+  //     !isEmptyValue(section.value) &&
+  //     !(typeof section.value === "string" && section.value === "null")
+  // );
+
+  const validAdditionalData: any[] = [];
 
   return (
     <div className="flex h-screen">
