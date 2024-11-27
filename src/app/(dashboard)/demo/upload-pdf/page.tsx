@@ -74,6 +74,7 @@ const UploadPage = () => {
         }
 
         saveData(responseData);
+        console.log("Response Data: ", responseData);
         setUploadSuccess("File uploaded successfully!");
         router.push("/demo/show-data");
       } catch (error) {
