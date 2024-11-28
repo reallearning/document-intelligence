@@ -1,88 +1,133 @@
 "use client";
 import { useDocumentData } from "@/context/document-data-context";
-import { uploadFile } from "@/services/upload-file";
+import { showHighlights } from "@/services/upload-file";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-const UploadPage = () => {
-  const { saveData } = useDocumentData();
+// Define the type for fileState to ensure consistency
+type FileState = {
+  selectedFile: File | null;
+  fileType: string;
+  isFileSelected: boolean;
+  isUploading: boolean;
+  uploadSuccess: string | null;
+  uploadError: string | null;
+  fileUploadingText: string;
+};
 
+const UploadPage = () => {
+  const { saveHighlights } = useDocumentData();
   const router = useRouter();
 
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [fileType, setFileType] = useState<string>("");
-  const [isFileSelected, setIsFileSelected] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
-  const [uploadSuccess, setUploadSuccess] = useState<string | null>(null);
-  const [uploadError, setUploadError] = useState<string | null>(null);
+  const loadingMessages = [
+    "Hold tight, magic in progress!",
+    "Cooking up your insights...",
+    "Sprinkling some AI dust...",
+    "Almost there, smarty pants!",
+    "Crunching numbers and thoughts!",
+    "Your document’s having a glow-up!",
+    "AI is flexing its brain muscles...",
+    "Loading... smarter than ever!",
+    "We’re decoding the mysteries!",
+    "Sit back, we’ve got this!",
+  ];
+
+  // Set the initial state with correct types
+  const [fileState, setFileState] = useState<FileState>({
+    selectedFile: null,
+    fileType: "",
+    isFileSelected: false,
+    isUploading: false,
+    uploadSuccess: null,
+    uploadError: null,
+    fileUploadingText: "Uploading...",
+  });
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file && file.type === "application/pdf") {
-      setSelectedFile(file);
-      setIsFileSelected(true);
-    } else {
-      setSelectedFile(null);
-      setIsFileSelected(false);
-    }
+    const file = event.target.files?.[0] || null;
+    setFileState((prevState) => ({
+      ...prevState,
+      selectedFile: file,
+      isFileSelected: Boolean(file && file.type === "application/pdf"),
+    }));
   };
 
   const handleTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFileType(event.target.value);
+    setFileState((prevState) => ({
+      ...prevState,
+      fileType: event.target.value,
+    }));
+  };
+
+  const updateLoadingText = () => {
+    let index = 0;
+
+    setInterval(() => {
+      index = (index + 1) % loadingMessages.length;
+      setFileState((prevState) => ({
+        ...prevState,
+        fileUploadingText: loadingMessages[index],
+      }));
+    }, 5000);
   };
 
   const handleFileUpload = async () => {
-    if (selectedFile && fileType) {
-      setIsUploading(true);
-      setUploadSuccess(null);
-      setUploadError(null);
+    if (!fileState.selectedFile || !fileState.fileType) return;
 
-      // Create FormData to send to the API route
+    updateLoadingText();
+
+    setFileState((prevState) => ({
+      ...prevState,
+      isUploading: true,
+      uploadSuccess: null,
+      uploadError: null,
+    }));
+
+    try {
       const formData = new FormData();
-      formData.append("file", selectedFile);
-      formData.append("fileType", fileType);
+      formData.append("file", fileState.selectedFile);
+      formData.append("fileType", fileState.fileType);
 
-      try {
-        const response = await fetch("/api/upload", {
-          method: "POST",
-          body: formData,
-        });
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
 
-        const data = await response.json();
-        console.log("Data: ", data);
-        const url = data["url"];
-        const [baseUrl] = url.split("?");
-        const pdfUrl = baseUrl;
-        console.log("PDF URL: ", pdfUrl);
-        if (!response.ok) {
-          console.error("Error while uploading pdf: ", data);
-          setUploadError(data.error || "File upload failed.");
-          return;
-        }
-
-        const body = {
-          doc_url: pdfUrl,
-          type: fileType.toLowerCase(),
-        };
-
-        const { data: responseData } = await uploadFile(body);
-
-        if (!responseData) {
-          setUploadError("File upload failed.");
-          console.error("Error while uploading pdf: ", responseData);
-          return;
-        }
-
-        saveData(responseData);
-        console.log("Response Data: ", responseData);
-        setUploadSuccess("File uploaded successfully!");
-        router.push("/demo/show-data");
-      } catch (error) {
-        console.log("Error: ", error);
-        setUploadError("An error occurred during upload.");
-      } finally {
-        setIsUploading(false);
+      if (!response.ok) {
+        throw new Error(data.error || "File upload failed.");
       }
+
+      const pdfUrl = data.url.split("?")[0];
+      const { data: highlightsData } = await showHighlights({
+        pdf_url: pdfUrl,
+        type: fileState.fileType.toLowerCase(),
+      });
+
+      if (!highlightsData) {
+        throw new Error("File upload failed.");
+      }
+
+      saveHighlights(highlightsData);
+      setFileState((prevState) => ({
+        ...prevState,
+        uploadSuccess: "File uploaded successfully!",
+        isUploading: false,
+      }));
+
+      router.push("/highlights/highlight-pdf");
+    } catch (error) {
+      let errorMessage = "An error occurred during upload.";
+
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+
+      setFileState((prevState) => ({
+        ...prevState,
+        uploadError: errorMessage,
+        isUploading: false,
+      }));
     }
   };
 
@@ -132,21 +177,29 @@ const UploadPage = () => {
         {/* Upload Button */}
         <button
           onClick={handleFileUpload}
-          disabled={!isFileSelected || !fileType || isUploading}
+          disabled={
+            !fileState.isFileSelected ||
+            !fileState.fileType ||
+            fileState.isUploading
+          }
           className={`w-full py-2 rounded-lg ${
-            isFileSelected && fileType && !isUploading
+            fileState.isFileSelected &&
+            fileState.fileType &&
+            !fileState.isUploading
               ? "bg-morrie-primary text-white"
               : "bg-gray-300 text-gray-500 cursor-not-allowed"
           }`}
         >
-          {isUploading ? "Uploading..." : "Upload File"}
+          {fileState.isUploading ? fileState.fileUploadingText : "Upload File"}
         </button>
 
         {/* Display success or error messages */}
-        {uploadSuccess && (
-          <p className="text-green-500 mt-4">{uploadSuccess}</p>
+        {fileState.uploadSuccess && (
+          <p className="text-green-500 mt-4">{fileState.uploadSuccess}</p>
         )}
-        {uploadError && <p className="text-red-500 mt-4">{uploadError}</p>}
+        {fileState.uploadError && (
+          <p className="text-red-500 mt-4">{fileState.uploadError}</p>
+        )}
       </div>
     </div>
   );

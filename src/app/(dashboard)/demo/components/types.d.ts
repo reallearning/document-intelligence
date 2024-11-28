@@ -35,6 +35,7 @@ export interface Data {
   additional_data: AdditionalData[]; // Sections like line items, totals, party info
   file_url: string; // URL of the PDF file
   document_type: string; // Document type, e.g., "invoice"
+  document_format: string;
 }
 
 export interface Highlights {

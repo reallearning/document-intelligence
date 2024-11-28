@@ -176,7 +176,7 @@ export function Sidebar({
           {highlights.map((highlight, index) => (
             <div
               key={index}
-              className="bg-white px-4 py-3 rounded-xl mb-4 cursor-pointer transition-all duration-200 hover:bg-gray-100 hover:border-gray-300 hover:border"
+              className="bg-white px-4 py-3 rounded-xl mb-4 cursor-pointer transition-all duration-100 hover:border-[#BAAE92] hover:border"
               onClick={() => updateHash(highlight)}
             >
               <div className="flex flex-col gap-2">
@@ -189,9 +189,11 @@ export function Sidebar({
 
                 {/* Highlight Content Text */}
                 {highlight.content.text && (
-                  <blockquote className="m-0 text-gray-600 text-sm  pl-3 break-words">
-                    {`${highlight.content.text.slice(0, 90).trim()}`}
-                  </blockquote>
+                  <div className="border border-[#E5E7EABF] rounded-md px-3 py-1">
+                    <blockquote className="m-0 text-gray-600 text-sm break-words ">
+                      {`${highlight.content.text.slice(0, 90).trim()}`}
+                    </blockquote>
+                  </div>
                 )}
 
                 {/* Highlight Content Image */}

@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import axiosInstance from "./axios-instance";
-import { IUploadFileRequest } from "@/types/upload-file";
+import { IUploadFileRequest, IUploadPdfRequest } from "@/types/upload-file";
 import { Data, Highlights } from "@/app/(dashboard)/demo/components/types";
 
 export async function uploadFile(
@@ -10,7 +10,7 @@ export async function uploadFile(
 }
 
 export async function showHighlights(
-  body: IUploadFileRequest
+  body: IUploadPdfRequest
 ): Promise<AxiosResponse<Highlights>> {
   return axiosInstance.post("/highlights", body);
 }

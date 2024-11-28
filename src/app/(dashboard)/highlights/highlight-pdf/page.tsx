@@ -18,6 +18,7 @@ import type {
 import "react-pdf-highlighter/dist/style.css";
 import { Sidebar } from "./sidebar";
 import { Spinner } from "./spinner";
+import { useDocumentData } from "@/context/document-data-context";
 
 const PRIMARY_PDF_URL = "/acme-contract.pdf";
 const SECONDARY_PDF_URL = "https://arxiv.org/pdf/1604.02480";
@@ -32,12 +33,14 @@ const resetHash = () => {
 
 // Convert JSON data to IHighlight format
 const convertJsonToHighlights = (jsonData: any): Array<IHighlight> => {
-  if (!jsonData || !Array.isArray(jsonData[Object.keys(jsonData)[0]])) {
-    console.error("Invalid JSON data format");
+  // Check if jsonData contains highlights
+  if (!jsonData || !Array.isArray(jsonData.highlights)) {
+    console.error("Invalid JSON data format: highlights array missing");
     return [];
   }
 
-  const highlights = jsonData[Object.keys(jsonData)[0]].map((item: any) => ({
+  // Map the highlights array to IHighlight objects
+  const highlights = jsonData.highlights.map((item: any) => ({
     id: item.id,
     content: {
       text: item.content?.text || "",
@@ -721,7 +724,9 @@ const jsonData = {
 // const jsonData = undefined;
 
 export function App() {
-  const [url, setUrl] = useState<string>(PRIMARY_PDF_URL);
+  const { highlightsData } = useDocumentData();
+
+  const [url, setUrl] = useState<string>("");
   const [highlights, setHighlights] = useState<Array<IHighlight>>([]);
   const scrollViewerTo = useRef<(highlight: IHighlight) => void>(() => {});
   const [activeHighlightId, setActiveHighlightId] = useState<string | null>(
@@ -730,27 +735,37 @@ export function App() {
 
   // Load and process JSON data
   useEffect(() => {
+    // const processHighlights = () => {
+    //   // If you have local JSON data
+    //   if (typeof jsonData !== "undefined") {
+    //     const convertedHighlights = convertJsonToHighlights(jsonData);
+    //     setHighlights(convertedHighlights);
+    //   } else {
+    //     // If you need to fetch JSON data
+    //     fetch("/highlights.json")
+    //       .then((response) => response.json())
+    //       .then((data) => {
+    //         const convertedHighlights = convertJsonToHighlights(data);
+    //         setHighlights(convertedHighlights);
+    //       })
+    //       .catch((error) => {
+    //         console.error("Error loading highlights:", error);
+    //       });
+    //   }
+    // };
+
+    // processHighlights();
+
     const processHighlights = () => {
-      // If you have local JSON data
-      if (typeof jsonData !== "undefined") {
-        const convertedHighlights = convertJsonToHighlights(jsonData);
+      if (highlightsData) {
+        setUrl(highlightsData.pdf_url);
+        const convertedHighlights = convertJsonToHighlights(highlightsData);
         setHighlights(convertedHighlights);
-      } else {
-        // If you need to fetch JSON data
-        fetch("/highlights.json")
-          .then((response) => response.json())
-          .then((data) => {
-            const convertedHighlights = convertJsonToHighlights(data);
-            setHighlights(convertedHighlights);
-          })
-          .catch((error) => {
-            console.error("Error loading highlights:", error);
-          });
       }
     };
 
     processHighlights();
-  }, [url]);
+  }, []);
 
   const getHighlightById = useCallback(
     (id: string) => highlights.find((highlight) => highlight.id === id),
