@@ -726,7 +726,7 @@ const json = {
 };
 // const jsonData = undefined;
 
-export function App() {
+export default function HighlightPdf() {
   const { highlightsData } = useDocumentData();
 
   const [url, setUrl] = useState<string>("");
@@ -939,8 +939,6 @@ export function App() {
     </div>
   );
 }
-
-export default App;
 
 // "use client";
 
