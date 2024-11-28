@@ -21,18 +21,17 @@ const UploadPage = () => {
   const router = useRouter();
 
   const loadingMessages = [
-    "Hold tight, magic in progress!",
-    "Cooking up your insights...",
-    "Sprinkling some AI dust...",
-    "Almost there, smarty pants!",
-    "Crunching numbers and thoughts!",
-    "Your document’s having a glow-up!",
-    "AI is flexing its brain muscles...",
-    "Loading... smarter than ever!",
-    "We’re decoding the mysteries!",
-    "Sit back, we’ve got this!",
+    "Processing...",
+    "Analyzing...",
+    "Generating insights...",
+    "Optimizing...",
+    "Reviewing...",
+    "Preparing data...",
+    "Compiling highlights...",
+    "Finalizing...",
+    "Loading...",
+    "Almost ready...",
   ];
-
   // Set the initial state with correct types
   const [fileState, setFileState] = useState<FileState>({
     selectedFile: null,
