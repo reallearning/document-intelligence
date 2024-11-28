@@ -8,3 +8,9 @@ export async function uploadFile(
 ): Promise<AxiosResponse<Data>> {
   return axiosInstance.post("/doc-intelligence", body);
 }
+
+export async function showHighlights(
+  body: IUploadFileRequest
+): Promise<AxiosResponse<Data>> {
+  return axiosInstance.post("/highlights", body);
+}

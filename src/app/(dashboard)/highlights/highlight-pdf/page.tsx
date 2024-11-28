@@ -67,10 +67,41 @@ const HighlightPopup = ({ comment }: HighlightPopupProps) =>
   comment.text ? <div className="Highlight__popup">{comment.text}</div> : null;
 
 const jsonData = {
-  "/acme-contract.pdf": [
+  highlights: [
     {
       content: {
-        text: "Service Provider",
+        text: "Identified the document title from the text 'SERVICE AGREEMENT' on page 1.",
+      },
+      position: {
+        boundingRect: {
+          x1: 212.28662109375,
+          y1: 239.84814453125,
+          x2: 363.71124267578125,
+          y2: 254.79833984375,
+          width: 612.0,
+          height: 792.0,
+        },
+        rects: [
+          {
+            x1: 212.28662109375,
+            y1: 239.84814453125,
+            x2: 363.71124267578125,
+            y2: 254.79833984375,
+            width: 612.0,
+            height: 792.0,
+          },
+        ],
+        pageNumber: 1,
+      },
+      comment: {
+        text: "Document Title",
+        emoji: "",
+      },
+      id: "4595170796264587",
+    },
+    {
+      content: {
+        text: "Extracted names of the parties involved in the agreement from page 1.",
       },
       position: {
         boundingRect: {
@@ -98,29 +129,6 @@ const jsonData = {
             width: 612.0,
             height: 792.0,
           },
-        ],
-        pageNumber: 1,
-      },
-      comment: {
-        text: "Test Comment",
-        emoji: "",
-      },
-      id: "5857598817309578",
-    },
-    {
-      content: {
-        text: "Client",
-      },
-      position: {
-        boundingRect: {
-          x1: 179.7085418701172,
-          y1: 300.68670654296875,
-          x2: 277.32464599609375,
-          y2: 312.86834716796875,
-          width: 612.0,
-          height: 792.0,
-        },
-        rects: [
           {
             x1: 179.7085418701172,
             y1: 300.68670654296875,
@@ -129,45 +137,45 @@ const jsonData = {
             width: 612.0,
             height: 792.0,
           },
+        ],
+        pageNumber: 1,
+      },
+      comment: {
+        text: "Involved Parties",
+        emoji: "",
+      },
+      id: "8003154071349245",
+    },
+    {
+      content: {
+        text: "Identified sections describing the scope of services provided in the agreement from page 1.",
+      },
+      position: {
+        boundingRect: {
+          x1: 36.0,
+          y1: 515.5105590820312,
+          x2: 159.00064086914062,
+          y2: 527.6921997070312,
+          width: 612.0,
+          height: 792.0,
+        },
+        rects: [
           {
-            x1: 277.3203125,
-            y1: 300.68670654296875,
-            x2: 539.7155151367188,
-            y2: 312.86834716796875,
+            x1: 36.0,
+            y1: 515.5105590820312,
+            x2: 159.00064086914062,
+            y2: 527.6921997070312,
             width: 612.0,
             height: 792.0,
           },
           {
             x1: 36.0,
-            y1: 315.23297119140625,
-            x2: 268.2381591796875,
-            y2: 327.41461181640625,
+            y1: 539.1594848632812,
+            x2: 143.76321411132812,
+            y2: 551.3411254882812,
             width: 612.0,
             height: 792.0,
           },
-        ],
-        pageNumber: 1,
-      },
-      comment: {
-        text: "",
-        emoji: "",
-      },
-      id: "1368647160146813",
-    },
-    {
-      content: {
-        text: "Scope of Services",
-      },
-      position: {
-        boundingRect: {
-          x1: 36.0,
-          y1: 563.8084106445312,
-          x2: 538.8409423828125,
-          y2: 575.9900512695312,
-          width: 612.0,
-          height: 792.0,
-        },
-        rects: [
           {
             x1: 36.0,
             y1: 563.8084106445312,
@@ -228,72 +236,41 @@ const jsonData = {
         pageNumber: 1,
       },
       comment: {
-        text: "",
+        text: "Scope of Services",
         emoji: "",
       },
-      id: "1258341228712847",
+      id: "1431416514301449",
     },
     {
       content: {
-        text: "Deliverables",
-      },
-      position: {
-        boundingRect: {
-          x1: 72.0,
-          y1: 134.55908203125,
-          x2: 432.20538330078125,
-          y2: 146.74072265625,
-          width: 612.0,
-          height: 792.0,
-        },
-        rects: [
-          {
-            x1: 72.0,
-            y1: 134.55908203125,
-            x2: 432.20538330078125,
-            y2: 146.74072265625,
-            width: 612.0,
-            height: 792.0,
-          },
-          {
-            x1: 72.0,
-            y1: 147.25634765625,
-            x2: 373.59466552734375,
-            y2: 159.43798828125,
-            width: 612.0,
-            height: 792.0,
-          },
-          {
-            x1: 72.0,
-            y1: 159.95361328125,
-            x2: 341.165283203125,
-            y2: 172.13525390625,
-            width: 612.0,
-            height: 792.0,
-          },
-        ],
-        pageNumber: 2,
-      },
-      comment: {
-        text: "",
-        emoji: "",
-      },
-      id: "1561262037736507",
-    },
-    {
-      content: {
-        text: "Agreement Term",
+        text: "Collected clauses relating to the term and termination of the agreement from page 2.",
       },
       position: {
         boundingRect: {
           x1: 36.0,
-          y1: 237.900390625,
-          x2: 525.0587768554688,
-          y2: 250.08203125,
+          y1: 189.6025390625,
+          x2: 189.6970977783203,
+          y2: 201.7841796875,
           width: 612.0,
           height: 792.0,
         },
         rects: [
+          {
+            x1: 36.0,
+            y1: 189.6025390625,
+            x2: 189.6970977783203,
+            y2: 201.7841796875,
+            width: 612.0,
+            height: 792.0,
+          },
+          {
+            x1: 36.0,
+            y1: 213.25146484375,
+            x2: 149.6724395751953,
+            y2: 225.43310546875,
+            width: 612.0,
+            height: 792.0,
+          },
           {
             x1: 36.0,
             y1: 237.900390625,
@@ -312,9 +289,49 @@ const jsonData = {
           },
           {
             x1: 36.0,
-            y1: 213.25146484375,
-            x2: 149.6724395751953,
-            y2: 225.43310546875,
+            y1: 275.1982421875,
+            x2: 158.9510040283203,
+            y2: 287.3798828125,
+            width: 612.0,
+            height: 792.0,
+          },
+          {
+            x1: 36.0,
+            y1: 299.84716796875,
+            x2: 535.826416015625,
+            y2: 312.02880859375,
+            width: 612.0,
+            height: 792.0,
+          },
+          {
+            x1: 36.0,
+            y1: 312.49609375,
+            x2: 260.3488464355469,
+            y2: 324.677734375,
+            width: 612.0,
+            height: 792.0,
+          },
+          {
+            x1: 36.0,
+            y1: 337.14501953125,
+            x2: 190.0865936279297,
+            y2: 349.32666015625,
+            width: 612.0,
+            height: 792.0,
+          },
+          {
+            x1: 36.0,
+            y1: 361.7939453125,
+            x2: 526.6961669921875,
+            y2: 373.9755859375,
+            width: 612.0,
+            height: 792.0,
+          },
+          {
+            x1: 36.0,
+            y1: 374.44287109375,
+            x2: 314.9930725097656,
+            y2: 386.62451171875,
             width: 612.0,
             height: 792.0,
           },
@@ -322,46 +339,38 @@ const jsonData = {
         pageNumber: 2,
       },
       comment: {
-        text: "",
+        text: "Term and Termination",
         emoji: "",
       },
-      id: "5941875759556376",
+      id: "3149165288237325",
     },
     {
       content: {
-        text: "Payment Terms",
+        text: "Extracted information about fees and payment terms stated in the agreement from page 2.",
       },
       position: {
         boundingRect: {
-          x1: 72.0,
-          y1: 613.9002075195312,
-          x2: 138.5572967529297,
-          y2: 626.0818481445312,
+          x1: 36.0,
+          y1: 425.6380615234375,
+          x2: 199.37765502929688,
+          y2: 437.8197021484375,
           width: 612.0,
           height: 792.0,
         },
         rects: [
           {
-            x1: 72.0,
-            y1: 613.9002075195312,
-            x2: 138.5572967529297,
-            y2: 626.0818481445312,
+            x1: 36.0,
+            y1: 425.6380615234375,
+            x2: 199.37765502929688,
+            y2: 437.8197021484375,
             width: 612.0,
             height: 792.0,
           },
           {
-            x1: 72.0,
-            y1: 664.6892700195312,
-            x2: 138.5572967529297,
-            y2: 676.8709106445312,
-            width: 612.0,
-            height: 792.0,
-          },
-          {
-            x1: 72.0,
-            y1: 72.515625,
-            x2: 138.5572967529297,
-            y2: 84.697265625,
+            x1: 36.0,
+            y1: 452.184326171875,
+            x2: 150.60952758789062,
+            y2: 464.365966796875,
             width: 612.0,
             height: 792.0,
           },
@@ -370,6 +379,53 @@ const jsonData = {
             y1: 478.7305908203125,
             x2: 249.21160888671875,
             y2: 490.9122314453125,
+            width: 612.0,
+            height: 792.0,
+          },
+          {
+            x1: 36.0,
+            y1: 505.27685546875,
+            x2: 137.6811981201172,
+            y2: 517.45849609375,
+            width: 612.0,
+            height: 792.0,
+          },
+        ],
+        pageNumber: 2,
+      },
+      comment: {
+        text: "Fees and Payment Terms",
+        emoji: "",
+      },
+      id: "1109267243650165",
+    },
+    {
+      content: {
+        text: "Listed invoice schedules and related details from page 3.",
+      },
+      position: {
+        boundingRect: {
+          x1: 36.0,
+          y1: 327.540283203125,
+          x2: 138.89956665039062,
+          y2: 339.721923828125,
+          width: 612.0,
+          height: 792.0,
+        },
+        rects: [
+          {
+            x1: 36.0,
+            y1: 327.540283203125,
+            x2: 138.89956665039062,
+            y2: 339.721923828125,
+            width: 612.0,
+            height: 792.0,
+          },
+          {
+            x1: 72.0,
+            y1: 380.68115234375,
+            x2: 110.78250122070312,
+            y2: 392.86279296875,
             width: 612.0,
             height: 792.0,
           },
@@ -383,9 +439,25 @@ const jsonData = {
           },
           {
             x1: 72.0,
+            y1: 409.8848876953125,
+            x2: 110.78250122070312,
+            y2: 422.0665283203125,
+            width: 612.0,
+            height: 792.0,
+          },
+          {
+            x1: 72.0,
             y1: 424.486572265625,
             x2: 519.3116455078125,
             y2: 436.668212890625,
+            width: 612.0,
+            height: 792.0,
+          },
+          {
+            x1: 72.0,
+            y1: 439.088623046875,
+            x2: 110.78250122070312,
+            y2: 451.270263671875,
             width: 612.0,
             height: 792.0,
           },
@@ -399,6 +471,14 @@ const jsonData = {
           },
           {
             x1: 72.0,
+            y1: 468.292236328125,
+            x2: 110.78250122070312,
+            y2: 480.473876953125,
+            width: 612.0,
+            height: 792.0,
+          },
+          {
+            x1: 72.0,
             y1: 482.89404296875,
             x2: 372.36083984375,
             y2: 495.07568359375,
@@ -406,67 +486,44 @@ const jsonData = {
             height: 792.0,
           },
         ],
-        pageNumber: 1,
+        pageNumber: 3,
       },
       comment: {
-        text: "",
+        text: "Invoices Schedule",
         emoji: "",
       },
-      id: "1871080829726040",
+      id: "3709496930069282",
     },
     {
       content: {
-        text: "Confidentiality",
+        text: "Compiled sections on compliance and contractual terms from page 4.",
       },
       position: {
         boundingRect: {
           x1: 36.0,
-          y1: 457.115234375,
-          x2: 529.616455078125,
-          y2: 469.296875,
+          y1: 279.0322265625,
+          x2: 280.59124755859375,
+          y2: 291.2138671875,
           width: 612.0,
           height: 792.0,
         },
         rects: [
           {
             x1: 36.0,
-            y1: 457.115234375,
-            x2: 529.616455078125,
-            y2: 469.296875,
+            y1: 279.0322265625,
+            x2: 280.59124755859375,
+            y2: 291.2138671875,
             width: 612.0,
             height: 792.0,
           },
           {
             x1: 36.0,
-            y1: 471.66162109375,
-            x2: 206.92831420898438,
-            y2: 483.84326171875,
+            y1: 304.578369140625,
+            x2: 183.5655059814453,
+            y2: 316.760009765625,
             width: 612.0,
             height: 792.0,
           },
-        ],
-        pageNumber: 4,
-      },
-      comment: {
-        text: "",
-        emoji: "",
-      },
-      id: "1269461942461249",
-    },
-    {
-      content: {
-        text: "Intellectual Property",
-      },
-      position: {
-        boundingRect: {
-          x1: 72.0,
-          y1: 331.1728515625,
-          x2: 500.446044921875,
-          y2: 343.3544921875,
-          width: 612.0,
-          height: 792.0,
-        },
-        rects: [
           {
             x1: 72.0,
             y1: 331.1728515625,
@@ -492,6 +549,14 @@ const jsonData = {
             height: 792.0,
           },
           {
+            x1: 36.0,
+            y1: 374.87451171875,
+            x2: 154.42559814453125,
+            y2: 387.05615234375,
+            width: 612.0,
+            height: 792.0,
+          },
+          {
             x1: 72.0,
             y1: 389.46923828125,
             x2: 508.3718566894531,
@@ -507,84 +572,38 @@ const jsonData = {
             width: 612.0,
             height: 792.0,
           },
-        ],
-        pageNumber: 4,
-      },
-      comment: {
-        text: "",
-        emoji: "",
-      },
-      id: "3311074813036039",
-    },
-    {
-      content: {
-        text: "Termination Clauses",
-      },
-      position: {
-        boundingRect: {
-          x1: 36.0,
-          y1: 275.1982421875,
-          x2: 158.9510040283203,
-          y2: 287.3798828125,
-          width: 612.0,
-          height: 792.0,
-        },
-        rects: [
           {
             x1: 36.0,
-            y1: 275.1982421875,
-            x2: 158.9510040283203,
-            y2: 287.3798828125,
+            y1: 430.569091796875,
+            x2: 123.33489990234375,
+            y2: 442.750732421875,
             width: 612.0,
             height: 792.0,
           },
           {
             x1: 36.0,
-            y1: 337.14501953125,
-            x2: 190.0865936279297,
-            y2: 349.32666015625,
+            y1: 457.115234375,
+            x2: 529.616455078125,
+            y2: 469.296875,
             width: 612.0,
             height: 792.0,
           },
           {
             x1: 36.0,
-            y1: 652.142822265625,
-            x2: 327.3646240234375,
-            y2: 664.324462890625,
+            y1: 471.66162109375,
+            x2: 206.92831420898438,
+            y2: 483.84326171875,
             width: 612.0,
             height: 792.0,
           },
           {
             x1: 36.0,
-            y1: 705.2353515625,
-            x2: 404.551513671875,
-            y2: 717.4169921875,
+            y1: 498.207763671875,
+            x2: 191.14553833007812,
+            y2: 510.389404296875,
             width: 612.0,
             height: 792.0,
           },
-        ],
-        pageNumber: 2,
-      },
-      comment: {
-        text: "",
-        emoji: "",
-      },
-      id: "2929640261928540",
-    },
-    {
-      content: {
-        text: "Indemnification",
-      },
-      position: {
-        boundingRect: {
-          x1: 72.0,
-          y1: 524.802490234375,
-          x2: 530.80419921875,
-          y2: 536.984130859375,
-          width: 612.0,
-          height: 792.0,
-        },
-        rects: [
           {
             x1: 72.0,
             y1: 524.802490234375,
@@ -621,20 +640,93 @@ const jsonData = {
         pageNumber: 4,
       },
       comment: {
-        text: "",
+        text: "Compliance and Contractual Terms",
         emoji: "",
       },
-      id: "2388983245324624",
+      id: "2844152029748828",
+    },
+    {
+      content: {
+        text: "Outlined the governing law and dispute resolution process from page 5.",
+      },
+      position: {
+        boundingRect: {
+          x1: 36.0,
+          y1: 72.46728515625,
+          x2: 296.80621337890625,
+          y2: 84.64892578125,
+          width: 612.0,
+          height: 792.0,
+        },
+        rects: [
+          {
+            x1: 36.0,
+            y1: 72.46728515625,
+            x2: 296.80621337890625,
+            y2: 84.64892578125,
+            width: 612.0,
+            height: 792.0,
+          },
+          {
+            x1: 36.0,
+            y1: 98.013671875,
+            x2: 126.08468627929688,
+            y2: 110.1953125,
+            width: 612.0,
+            height: 792.0,
+          },
+          {
+            x1: 36.0,
+            y1: 124.5595703125,
+            x2: 298.5209045410156,
+            y2: 136.7412109375,
+            width: 612.0,
+            height: 792.0,
+          },
+          {
+            x1: 36.0,
+            y1: 151.10595703125,
+            x2: 141.35867309570312,
+            y2: 163.28759765625,
+            width: 612.0,
+            height: 792.0,
+          },
+          {
+            x1: 36.0,
+            y1: 177.65234375,
+            x2: 501.20166015625,
+            y2: 189.833984375,
+            width: 612.0,
+            height: 792.0,
+          },
+          {
+            x1: 36.0,
+            y1: 192.198486328125,
+            x2: 266.0805969238281,
+            y2: 204.380126953125,
+            width: 612.0,
+            height: 792.0,
+          },
+        ],
+        pageNumber: 5,
+      },
+      comment: {
+        text: "Governing Law and Dispute Resolution",
+        emoji: "",
+      },
+      id: "8706554812841314",
     },
   ],
 };
-
 // const jsonData = undefined;
 
 export function App() {
   const [url, setUrl] = useState<string>(PRIMARY_PDF_URL);
   const [highlights, setHighlights] = useState<Array<IHighlight>>([]);
   const scrollViewerTo = useRef<(highlight: IHighlight) => void>(() => {});
+  const [activeHighlightId, setActiveHighlightId] = useState<string | null>(
+    null
+  );
 
   // Load and process JSON data
   useEffect(() => {

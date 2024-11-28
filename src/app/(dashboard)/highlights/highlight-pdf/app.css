@@ -15,10 +15,10 @@
 }
 
 .Highlight__popup {
-  background-color: #f8f9fa !important;
-  border: 1px solid #4dabf7 !important;
+  background-color: white !important;
+  border: 2px solid #3c7167 !important;
   color: #212529 !important;
-  border-radius: 2px !important;
+  border-radius: 5px !important;
   overflow-y: hidden !important;
   padding: 10px !important; /* Maintain the library's padding */
 }
