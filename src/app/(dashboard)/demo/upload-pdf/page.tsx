@@ -175,6 +175,7 @@ const UploadPage = () => {
               value="tax_proof"
               onChange={handleTypeChange}
               className="mr-2 accent-morrie-primary"
+              disabled
             />
             Tax Proof
           </label>
