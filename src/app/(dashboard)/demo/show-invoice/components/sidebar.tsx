@@ -90,43 +90,34 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ data }: SidebarProps) => {
-  // Initialize with Supplier section open by default
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
     Supplier: true,
   });
-
   const [openFields, setOpenFields] = useState<Record<string, boolean>>({});
+  const [openInnerSections, setOpenInnerSections] = useState<
+    Record<string, boolean>
+  >({});
 
-  // Toggle function for main sections
   const toggleSection = (section: string) => {
-    setOpenSections((prev) => {
-      // If clicking the same section that's already open, close it
-      if (prev[section]) {
-        return {
-          ...prev,
-          [section]: false,
-        };
-      }
-
-      // Close all sections and open the clicked one
-      return {
-        ...Object.keys(prev).reduce(
-          (acc, key) => ({ ...acc, [key]: false }),
-          {}
-        ),
-        [section]: true,
-      };
-    });
+    setOpenSections((prev) => ({
+      ...prev,
+      [section]: !prev[section],
+    }));
   };
 
-  // Toggle function for nested fields
+  const toggleInnerSection = (sectionName: string) => {
+    setOpenInnerSections((prev) => ({
+      ...prev,
+      [sectionName]: !prev[sectionName],
+    }));
+  };
+
   const toggleField = (fieldId: string) => {
     setOpenFields((prev) => ({
       ...prev,
       [fieldId]: !prev[fieldId],
     }));
   };
-
   // Helper function to check if a field has multiple values
   const hasMultipleValues = (field?: FieldValue) => {
     if (!field || typeof field.value !== "object") return false;
@@ -134,7 +125,7 @@ const Sidebar = ({ data }: SidebarProps) => {
   };
 
   // Render compliance status
-  const renderCompliance = (status: ComplianceStatus | null) => {
+  const renderCompliance = (status: ComplianceStatus | null, showMargin?: boolean) => {
     if (!status) return null;
 
     const statusColors = {
@@ -150,7 +141,7 @@ const Sidebar = ({ data }: SidebarProps) => {
     };
 
     return (
-      <div className="mt-4 border-t-[0.5px] border-gray-200 pt-4 font-nunito font-normal leading-[18px]">
+      <div className={`${showMargin ? "mt-4" : ""} border-t-[0.5px] border-gray-200 pt-4 font-nunito font-normal leading-[18px]`}>
         <div className="flex justify-between items-center">
           <div
             className={`px-4 py-[2px] rounded-full text-[10px] bg-opacity-[30%] mb-[1px] ${
@@ -243,6 +234,19 @@ const Sidebar = ({ data }: SidebarProps) => {
   };
 
   // Render flat section
+  // Type guard to check if a value is of type ComplianceStatus
+  const isComplianceStatus = (value: unknown): value is ComplianceStatus => {
+    return (
+      typeof value === "object" &&
+      value !== null &&
+      "title" in value &&
+      "type" in value &&
+      (value.type === "positive" ||
+        value.type === "negative" ||
+        value.type === "warning")
+    );
+  };
+
   const renderFlatSection = (
     sectionName: string,
     sectionData:
@@ -254,6 +258,15 @@ const Sidebar = ({ data }: SidebarProps) => {
       | Signature
   ) => {
     const isOpen = openSections[sectionName] || false;
+    const isInnerOpen = openInnerSections[sectionName] || false;
+
+    const sectionKeys = Object.keys(sectionData).filter(
+      (key) => key !== "flag"
+    ) as Array<keyof typeof sectionData>;
+
+    const hasMultipleFields = sectionKeys.length > 1;
+    const firstFieldKey = sectionKeys[0];
+    const firstFieldValue = sectionData[firstFieldKey] || undefined;
 
     return (
       <div
@@ -282,97 +295,45 @@ const Sidebar = ({ data }: SidebarProps) => {
               className="bg-white rounded-lg p-4"
               style={{ boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.1)" }}
             >
-              {"name" in sectionData &&
-                renderField("Name", sectionData.name, `${sectionName}-name`)}
-              {"address" in sectionData &&
-                renderField(
-                  "Address",
-                  sectionData.address,
-                  `${sectionName}-address`
+              <div className="flex justify-between items-start">
+                <div>
+                  {!isComplianceStatus(firstFieldValue) &&
+                    renderField(
+                      formatKey(firstFieldKey),
+                      firstFieldValue,
+                      firstFieldKey
+                    )}
+                </div>
+                {hasMultipleFields && (
+                  <div
+                    className="cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleInnerSection(sectionName);
+                    }}
+                  >
+                    {isInnerOpen ? (
+                      <ChevronUpIcon className="w-4 h-4 text-[#7F7F7F]" />
+                    ) : (
+                      <ChevronDownIcon className="w-4 h-4 text-[#7F7F7F]" />
+                    )}
+                  </div>
                 )}
-              {"gstin" in sectionData &&
-                renderField("GSTIN", sectionData.gstin, `${sectionName}-gstin`)}
-              {"state" in sectionData &&
-                renderField("State", sectionData.state, `${sectionName}-state`)}
-              {"state_code" in sectionData &&
-                renderField(
-                  "State Code",
-                  sectionData.state_code,
-                  `${sectionName}-state-code`
-                )}
+              </div>
 
-              {"number" in sectionData &&
-                renderField(
-                  "Invoice Number",
-                  sectionData.number,
-                  `${sectionName}-number`
-                )}
-              {"date" in sectionData &&
-                renderField("Date", sectionData.date, `${sectionName}-date`)}
-              {"place_of_supply" in sectionData &&
-                renderField(
-                  "Place of Supply",
-                  sectionData.place_of_supply,
-                  `${sectionName}-pos`
-                )}
-
-              {"declaration" in sectionData &&
-                renderField(
-                  "Declaration",
-                  sectionData.declaration,
-                  `${sectionName}-declaration`
-                )}
-              {"lut_number" in sectionData &&
-                renderField(
-                  "LUT Number",
-                  sectionData.lut_number,
-                  `${sectionName}-lut-number`
-                )}
-              {"lut_validity" in sectionData &&
-                renderField(
-                  "LUT Validity",
-                  sectionData.lut_validity,
-                  `${sectionName}-lut-validity`
-                )}
-
-              {"lower_deduction_applicable" in sectionData &&
-                renderField(
-                  "Lower Deduction Applicable",
-                  sectionData.lower_deduction_applicable,
-                  `${sectionName}-lda`
-                )}
-
-              {"taxable_value" in sectionData &&
-                renderField(
-                  "Taxable Value",
-                  sectionData.taxable_value,
-                  `${sectionName}-taxable-value`
-                )}
-              {"tax_amount" in sectionData &&
-                renderField(
-                  "Tax Amount",
-                  sectionData.tax_amount,
-                  `${sectionName}-tax-amount`
-                )}
-              {"rounding" in sectionData &&
-                renderField(
-                  "Rounding",
-                  sectionData.rounding,
-                  `${sectionName}-rounding`
-                )}
-              {"invoice_total" in sectionData &&
-                renderField(
-                  "Invoice Total",
-                  sectionData.invoice_total,
-                  `${sectionName}-invoice-total`
-                )}
-
-              {"authorized_signatory" in sectionData &&
-                renderField(
-                  "Authorized Signatory",
-                  sectionData.authorized_signatory,
-                  `${sectionName}-auth-sign`
-                )}
+              {isInnerOpen &&
+                sectionKeys.map((key, index) => {
+                  if (index === 0 || key === "flag") return null;
+                  return (
+                    <div key={`${sectionName}-${key}`}>
+                      {renderField(
+                        formatKey(key),
+                        sectionData[key] ?? "N/A",
+                        `${sectionName}-${String(key)}`
+                      )}
+                    </div>
+                  );
+                })}
 
               {sectionData.flag && renderCompliance(sectionData.flag)}
             </div>
@@ -381,6 +342,13 @@ const Sidebar = ({ data }: SidebarProps) => {
       </div>
     );
   };
+
+  /**
+   * Helper function to format keys for display.
+   * Converts snake_case to Title Case.
+   */
+  const formatKey = (key: string) =>
+    key.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
 
   // Render nested section (line items)
   const renderNestedSection = (sectionName: string, items: LineItem[]) => {
@@ -409,59 +377,68 @@ const Sidebar = ({ data }: SidebarProps) => {
 
         {isOpen && (
           <div className="px-4">
-            {items.map((item, index) => (
-              <div key={index} className="mb-4">
-                <div
-                  className="bg-white rounded-lg p-4"
-                  style={{ boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.1)" }}
-                >
-                  {renderField(
-                    "Item Number",
-                    item.item_number,
-                    `item-${index}-number`
-                  )}
-                  {renderField("HSN CODE", item.hsn_code, `item-${index}-hsn`)}
-                  {item.quantity &&
-                    renderField("Quantity", item.quantity, `item-${index}-qty`)}
-                  {item.unit_price &&
-                    renderField(
-                      "Unit Price",
-                      item.unit_price,
-                      `item-${index}-price`
-                    )}
-                  {item.description &&
-                    renderField(
-                      "Description",
-                      item.description,
-                      `item-${index}-description`
-                    )}
-                  {item.taxable_value &&
-                    renderField(
-                      "Taxable Value",
-                      item.taxable_value,
-                      `item-${index}-taxable`
-                    )}
-                  {item.tax_rate &&
-                    renderField(
-                      "Tax Rate",
-                      item.tax_rate,
-                      `item-${index}-tax-rate`
-                    )}
-                  {renderField(
-                    "Tax Amount",
-                    item.tax_amount,
-                    `item-${index}-tax-amount`
-                  )}
-                  {renderField(
-                    "Total Value",
-                    item.total_value,
-                    `item-${index}-total`
-                  )}
+            {items.map((item, index) => {
+              const isInnerOpen =
+                openInnerSections[`${sectionName}_${index}`] || false;
+              const sectionKeys = Object.keys(item).filter(
+                (key) => key !== "flag"
+              ) as Array<keyof typeof item>;
 
-                  {item.flag && renderCompliance(item.flag)}
+              const hasMultipleFields = sectionKeys.length > 1;
+              const firstFieldKey = sectionKeys[0];
+              const firstFieldValue = item[firstFieldKey] || undefined;
+
+              return (
+                <div key={index} className="mb-4">
+                  <div
+                    className="bg-white rounded-lg p-4"
+                    style={{ boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.1)" }}
+                  >
+                    <div className="flex justify-between items-start">
+                      <div>
+                        {!isComplianceStatus(firstFieldValue) &&
+                          renderField(
+                            formatKey(firstFieldKey),
+                            firstFieldValue,
+                            firstFieldKey
+                          )}
+                      </div>
+                      {hasMultipleFields && (
+                        <div
+                          className="cursor-pointer"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleInnerSection(`${sectionName}_${index}`);
+                          }}
+                        >
+                          {isInnerOpen ? (
+                            <ChevronUpIcon className="w-4 h-4 text-[#7F7F7F]" />
+                          ) : (
+                            <ChevronDownIcon className="w-4 h-4 text-[#7F7F7F]" />
+                          )}
+                        </div>
+                      )}
+                    </div>
+
+                    {isInnerOpen &&
+                      sectionKeys.map((key, index) => {
+                        if (index === 0 || key === "flag") return null;
+                        return (
+                          <div key={`${sectionName}-${key}`}>
+                            {renderField(
+                              formatKey(key),
+                              item[key] ?? undefined,
+                              `${sectionName}-${String(key)}`
+                            )}
+                          </div>
+                        );
+                      })}
+
+                    {item.flag && renderCompliance(item.flag, false)}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
@@ -470,7 +447,7 @@ const Sidebar = ({ data }: SidebarProps) => {
 
   return (
     <div className="w-[450px] bg-[#F6F6F6] overflow-y-auto no-scrollbar">
-      <div className="px-4 mt-4 text-black">
+      <div className="px-4 mt-4 mb-6 text-black">
         {renderFlatSection("Supplier", data.supplier)}
       </div>
       <div className="mb-6 px-4 text-black">
