@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useStorage } from "@/context/StorageContext";
 import PDFViewer from "../../components/pdf-viewer";
-import { ActionSidebar } from "../components/action-sidebar";
+// import { ActionSidebar } from "../components/action-sidebar";
 import { useDocumentData } from "@/context/document-data-context";
 import { PDFLoadingSkeleton } from "@/components/pdf-loading-skeleton";
 
@@ -199,10 +199,10 @@ const ShowData = () => {
       {data ? (
         <div className="flex w-full flex-row gap-[24px]">
           {/* Sidebar displaying invoice details */}
-          <ActionSidebar data={data} />
+          {/* <ActionSidebar data={data} /> */}
 
           {/* PDF Viewer */}
-          <div className="w-full h-screen mr-4">
+          {/* <div className="w-full h-screen mr-4">
             {data.document_format === "image" ? (
               <div className=" w-full  h-full">
                 <img
@@ -214,7 +214,7 @@ const ShowData = () => {
             ) : (
               <PDFViewer fileUrl={data.file_url} pageWidth={pageWidth} />
             )}
-          </div>
+          </div> */}
         </div>
       ) : (
         <PDFLoadingSkeleton />
