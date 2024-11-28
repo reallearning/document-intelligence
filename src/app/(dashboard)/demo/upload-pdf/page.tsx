@@ -111,11 +111,11 @@ const UploadPage = () => {
             <input
               type="radio"
               name="fileType"
-              value="Contract"
+              value="tax_proof"
               onChange={handleTypeChange}
               className="mr-2 accent-morrie-primary"
             />
-            Contract
+            Tax Proof
           </label>
           <label className="block mb-2 text-black font-nunito">
             <input
