@@ -35,41 +35,6 @@ export interface Data {
   additional_data: AdditionalData[]; // Sections like line items, totals, party info
   file_url: string; // URL of the PDF file
   document_type: string; // Document type, e.g., "invoice"
-  document_format: string;
-}
-
-export interface Highlights {
-  pdf_url: string;
-  highlights: Highlight[];
-}
-
-export interface Highlight {
-  content: {
-    text: string;
-  };
-  position: {
-    boundingRect: {
-      x1: number;
-      y1: number;
-      x2: number;
-      y2: number;
-      width: number;
-      height: number;
-    };
-    rects: {
-      x1: number;
-      y1: number;
-      x2: number;
-      y2: number;
-      width: number;
-      height: number;
-    }[];
-    pageNumber: number;
-  };
-  comment: {
-    text: string;
-    emoji: string;
-  };
 }
 
 export interface IDataProps {

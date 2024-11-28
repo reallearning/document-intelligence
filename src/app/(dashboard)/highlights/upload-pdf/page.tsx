@@ -1,9 +1,8 @@
 "use client";
 import { useDocumentData } from "@/context/document-data-context";
-import { showHighlights, uploadFile } from "@/services/upload-file";
-import { XMarkIcon } from "@heroicons/react/24/solid";
+import { showHighlights } from "@/services/upload-file";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 // Define the type for fileState to ensure consistency
 type FileState = {
@@ -17,7 +16,7 @@ type FileState = {
 };
 
 const UploadPage = () => {
-  const { saveData } = useDocumentData();
+  const { saveHighlights } = useDocumentData();
   const router = useRouter();
 
   const loadingMessages = [
@@ -46,20 +45,10 @@ const UploadPage = () => {
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
-
-    // Validate file type
-    const validFileTypes = [
-      "application/pdf",
-      "image/png",
-      "image/jpeg",
-      "image/jpg",
-    ];
-    const isValidFile = file && validFileTypes.includes(file.type);
-
     setFileState((prevState) => ({
       ...prevState,
-      selectedFile: isValidFile ? file : null,
-      isFileSelected: Boolean(isValidFile),
+      selectedFile: file,
+      isFileSelected: Boolean(file && file.type === "application/pdf"),
     }));
   };
 
@@ -99,11 +88,6 @@ const UploadPage = () => {
       formData.append("file", fileState.selectedFile);
       formData.append("fileType", fileState.fileType);
 
-      // Determine the format from the MIME type
-      const format = fileState.selectedFile.type.startsWith("application/pdf")
-        ? "pdf"
-        : "image";
-
       const response = await fetch("/api/upload", {
         method: "POST",
         body: formData,
@@ -115,24 +99,23 @@ const UploadPage = () => {
       }
 
       const pdfUrl = data.url.split("?")[0];
-      const { data: highlightsData } = await uploadFile({
-        doc_url: pdfUrl,
+      const { data: highlightsData } = await showHighlights({
+        pdf_url: pdfUrl,
         type: fileState.fileType.toLowerCase(),
-        format: format,
       });
 
       if (!highlightsData) {
         throw new Error("File upload failed.");
       }
 
-      saveData(highlightsData);
+      saveHighlights(highlightsData);
       setFileState((prevState) => ({
         ...prevState,
         uploadSuccess: "File uploaded successfully!",
         isUploading: false,
       }));
 
-      router.push("/demo/show-data");
+      router.push("/highlights/highlight-pdf");
     } catch (error) {
       let errorMessage = "An error occurred during upload.";
 
@@ -155,13 +138,13 @@ const UploadPage = () => {
     >
       <div className="bg-white p-10 rounded-lg shadow-lg w-96 text-center">
         <h2 className="text-2xl font-semibold mb-6 font-poly text-black">
-          Upload Document
+          Upload PDF file
         </h2>
 
         {/* File Upload Input */}
         <input
           type="file"
-          accept=".pdf, image/*"
+          accept=".pdf"
           onChange={handleFileChange}
           className="mb-6 block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-morrie-primary file:opacity-80 file:text-white hover:file:opacity-100"
         />

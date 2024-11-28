@@ -167,6 +167,7 @@ import { PDFLoadingSkeleton } from "@/components/pdf-loading-skeleton";
 //     "https://storage.googleapis.com/morrie-resources/documents/invoice-3.pdf",
 //   pdf_url: "/documents/contracts/paxmedica.pdf",
 //   document_type: "invoice",
+//   document_format: "pdf",
 // };
 
 const ShowData = () => {
@@ -201,8 +202,18 @@ const ShowData = () => {
           <ActionSidebar data={data} />
 
           {/* PDF Viewer */}
-          <div className="w-full h-[100vh]">
-            <PDFViewer fileUrl={data.file_url} pageWidth={pageWidth} />
+          <div className="w-full h-screen mr-4">
+            {data.document_format === "image" ? (
+              <div className=" w-full  h-full">
+                <img
+                  src={data.file_url}
+                  alt="image"
+                  className="object-contain w-full h-full mx-auto"
+                />
+              </div>
+            ) : (
+              <PDFViewer fileUrl={data.file_url} pageWidth={pageWidth} />
+            )}
           </div>
         </div>
       ) : (
