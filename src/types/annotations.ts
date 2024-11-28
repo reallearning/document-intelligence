@@ -4,7 +4,6 @@ export interface DocumentInformation {
   clientName: string;
   assignedTo: string;
   l1Review: Review;
-  l2Review: Review;
 }
 
 // Review structure containing the review name and contracts
@@ -34,7 +33,8 @@ export interface Data {
   header?: string;
   title?: string;
   contractName?: string;
-  matches?: MatchInfo | null; // Optional match information
+  matches?: MatchInfo | null;
+  compliance?: Compliance | null;
   comments?: Comment[]; // Optional array of comments
 }
 
@@ -47,12 +47,6 @@ export interface MatchInfo {
   tag: string;
 }
 
-// MatchInfoSections structure for individual match details
-export interface MatchInfoSections {
-  label: string;
-  value: string;
-}
-
 // Comment structure containing comment metadata and message details
 export interface Comment {
   id: string; // Unique identifier for each comment
@@ -61,6 +55,13 @@ export interface Comment {
   message: string;
   date: string;
   time: string;
+}
+
+export interface Compliance {
+  id: string;
+  header: string;
+  status: "Compliant" | "Partially compliant" | "Non compliant";
+  data: string;
 }
 
 // Type alias for representing timestamp as a number

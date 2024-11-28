@@ -7,15 +7,6 @@ import { Button } from "@/components/button";
 const InvoicePage = () => {
   const invoices = [
     {
-      id: "invoice-01",
-      name: "INV-OAK-0001",
-      source: "Salesforce",
-      type_of_document: "Invoice",
-      added_on: "01-Dec-2023",
-      assignee: "finance@oaktree.com",
-      last_modified_on: "05-Dec-2023",
-    },
-    {
       id: "invoice-02",
       name: "INV-RISE-0002",
       source: "SAP",
@@ -33,6 +24,78 @@ const InvoicePage = () => {
       assignee: "billing@paxmedica.com",
       last_modified_on: "07-Dec-2023",
     },
+    {
+      id: "invoice-01",
+      name: "INV-OAK-0001",
+      source: "Salesforce",
+      type_of_document: "Invoice",
+      added_on: "01-Dec-2023",
+      assignee: "finance@oaktree.com",
+      last_modified_on: "05-Dec-2023",
+    },
+    {
+      id: "invoice-04",
+      name: "INV-ALPHA-0004",
+      source: "NetSuite",
+      type_of_document: "Invoice",
+      added_on: "02-Dec-2023",
+      assignee: "finance@alphafintech.com",
+      last_modified_on: "08-Dec-2023",
+    },
+    {
+      id: "invoice-05",
+      name: "INV-ZEN-0005",
+      source: "Zoho Books",
+      type_of_document: "Invoice",
+      added_on: "02-Dec-2023",
+      assignee: "accounting@zenith.com",
+      last_modified_on: "09-Dec-2023",
+    },
+    {
+      id: "invoice-06",
+      name: "INV-GAM-0006",
+      source: "Xero",
+      type_of_document: "Invoice",
+      added_on: "03-Dec-2023",
+      assignee: "finance@gamma.com",
+      last_modified_on: "10-Dec-2023",
+    },
+    {
+      id: "invoice-07",
+      name: "INV-BLUE-0007",
+      source: "FreshBooks",
+      type_of_document: "Invoice",
+      added_on: "03-Dec-2023",
+      assignee: "billing@blueocean.com",
+      last_modified_on: "11-Dec-2023",
+    },
+    {
+      id: "invoice-08",
+      name: "INV-SIG-0008",
+      source: "SAP",
+      type_of_document: "Invoice",
+      added_on: "04-Dec-2023",
+      assignee: "accounts@sigmasolutions.com",
+      last_modified_on: "12-Dec-2023",
+    },
+    {
+      id: "invoice-09",
+      name: "INV-DELTA-0009",
+      source: "Oracle",
+      type_of_document: "Invoice",
+      added_on: "04-Dec-2023",
+      assignee: "billing@deltahealth.com",
+      last_modified_on: "13-Dec-2023",
+    },
+    {
+      id: "invoice-10",
+      name: "INV-BETA-0010",
+      source: "SAP",
+      type_of_document: "Invoice",
+      added_on: "05-Dec-2023",
+      assignee: "finance@beta.com",
+      last_modified_on: "14-Dec-2023",
+    },
   ];
 
   return (
@@ -40,7 +103,7 @@ const InvoicePage = () => {
       <h2 className="font-poly font-normal text-xl leading-[18px] text-black">
         Documents
       </h2>
-      <div className="flex flex-col w-full gap-5">
+      {/* <div className="flex flex-col w-full gap-5">
         <div className="flex justify-start items-center flex-1">
           <div className="relative w-1/2">
             <input
@@ -84,7 +147,7 @@ const InvoicePage = () => {
             Columns
           </Button>
         </div>
-      </div>
+      </div> */}
       <InvoicesTable invoices={invoices} />
     </div>
   );

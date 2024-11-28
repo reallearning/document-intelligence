@@ -2,16 +2,34 @@ import { Comment } from "@/types/annotations";
 import { Button } from "../button";
 import { formatTimestamp } from "@/lib/utils";
 import { ICommentsSectionProps } from "./types";
+import { XMarkIcon } from "@heroicons/react/24/solid";
 
 export const CommentsSection = ({
+  label,
+  value,
   comments,
   newComment,
   setNewComment,
   handleAddComment,
+  closeComments,
 }: ICommentsSectionProps) => {
   return (
-    <div className="w-[300px] bg-[#BAAE921A] pt-28 font-nunito leading-[18px] font-normal">
-      <div className="border-t border-[#8C8C8C] opacity-50 mx-2 pb-3" />
+    <div className="w-[300px] bg-[#BAAE921A] pt-6 font-nunito leading-[18px] font-normal">
+      <div className="flex justify-end px-4 mb-2">
+        <XMarkIcon
+          className="h-3 w-3 text-gray-400 cursor-pointer"
+          onClick={closeComments}
+        />
+      </div>
+      <div className="font-nunito font-normal leading-[18px] px-2">
+        <p className="text-xs text-[#A8A8A8]">
+          {label}
+        </p>
+        <p className="text-sm text-black mt-2 mb-9">
+          {value}
+        </p>
+      </div>
+      <div className="border-t-[0.5px] border-[#8C8C8C] opacity-50 mx-2 pb-3" />
       <p className="font-nunito font-normal text-xs leading-[18px] text-morrie-text px-3 mb-2">
         Comments
       </p>

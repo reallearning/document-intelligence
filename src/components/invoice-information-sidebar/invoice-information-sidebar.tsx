@@ -13,7 +13,7 @@ export const InvoiceInformationSidebar = ({
   invoice,
 }: IInvoiceInformationProps) => {
   const [selectedSection, setSelectedSection] = useState<DataItem | null>(null);
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [showComments, setShowComments] = useState(false);
   const [newComment, setNewComment] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -57,22 +57,26 @@ export const InvoiceInformationSidebar = ({
       setNewComment("");
     }
   };
-  const { updateInvoiceSidebarCollapsed } = useStorage();
+  const { invoiceSidebarCollapsed, updateInvoiceSidebarCollapsed } =
+    useStorage();
 
   const handleCommentClick = (section: DataItem) => {
-    setIsSidebarCollapsed((prevState) => !prevState);
     if (selectedSection?.id === section.id) {
-      updateInvoiceSidebarCollapsed(false);
+      updateInvoiceSidebarCollapsed(!invoiceSidebarCollapsed);
+      setShowComments(!showComments);
     } else {
       updateInvoiceSidebarCollapsed(true);
+      setShowComments(true);
     }
+  };
 
-    // Toggle the selected section based on whether the clicked section is the same as the selected one
-    setSelectedSection((prevSelectedSection) =>
-      prevSelectedSection && prevSelectedSection.id === section.id
-        ? null
-        : section
-    );
+  const selectSection = (section: DataItem) => {
+    setSelectedSection(section);
+  };
+
+  const closeComments = () => {
+    setShowComments(false);
+    updateInvoiceSidebarCollapsed(false);
   };
 
   useEffect(() => {
@@ -112,8 +116,14 @@ export const InvoiceInformationSidebar = ({
 
               {step.data.map((dataItem) => (
                 <div
-                  key={dataItem.id}
-                  className="bg-white px-4 py-3 rounded-xl mb-3"
+                  key={`${step.id}/${dataItem.id}`}
+                  className={`bg-white px-4 py-3 rounded-xl mb-3 border border-transparent hover:border-morrie-primary ${
+                    `${selectedSection?.header}/${selectedSection?.id}` ===
+                    `${dataItem.header}/${dataItem.id}`
+                      ? "border border-morrie-primary"
+                      : ""
+                  }`}
+                  onClick={() => selectSection(dataItem)}
                 >
                   <div className="flex justify-between items-center">
                     <p className="text-xs text-[#A8A8A8] mb-2">
@@ -152,12 +162,15 @@ export const InvoiceInformationSidebar = ({
           </Button>
         </div>
       </div>
-      {selectedSection?.comments && (
+      {selectedSection?.comments && showComments && (
         <CommentsSection
+          label={selectedSection.header}
+          value={selectedSection.data}
           comments={selectedSection.comments}
           newComment={newComment}
           setNewComment={setNewComment}
           handleAddComment={handleAddComment}
+          closeComments={closeComments}
         />
       )}
 

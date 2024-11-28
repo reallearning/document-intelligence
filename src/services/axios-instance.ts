@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "https://d062-223-185-129-150.ngrok-free.app",
+  baseURL: "https://klarity-demo-app-641012202005.asia-south1.run.app",
   timeout: 300000,
   withCredentials: true, // Important for CORS with credentials
   headers: {

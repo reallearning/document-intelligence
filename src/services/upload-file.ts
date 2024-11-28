@@ -6,5 +6,5 @@ import { Data } from "@/app/(dashboard)/demo/components/types";
 export async function uploadFile(
   body: IUploadFileRequest
 ): Promise<AxiosResponse<Data>> {
-  return axiosInstance.post("/doc-highlights", body);
+  return axiosInstance.post("/doc-intelligence", body);
 }
