@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { useStorage } from "@/context/StorageContext";
 import PDFViewer from "../../components/pdf-viewer";
-import { ActionSidebar } from "../components/action-sidebar";
 import { useDocumentData } from "@/context/document-data-context";
 import { PDFLoadingSkeleton } from "@/components/pdf-loading-skeleton";
 import Sidebar, { SidebarData } from "./components/sidebar";
@@ -795,7 +794,7 @@ const complianceCheck = {
 };
 
 const ShowData = () => {
-  //   const { data } = useDocumentData();
+  const { data } = useDocumentData();
   const sidebarWidth = 500;
   const [pageWidth, setPageWidth] = useState(0);
   const { invoiceSidebarCollapsed } = useStorage();
@@ -823,13 +822,10 @@ const ShowData = () => {
       {data ? (
         <div className="flex w-full flex-row gap-[24px]">
           {/* Sidebar displaying invoice details */}
-          <Sidebar data={data as SidebarData} />
+          <Sidebar data={data.data as SidebarData} />
           {/* PDF Viewer */}
           <div className="w-full h-[100vh]">
-            <PDFViewer
-              fileUrl={"/documents/contracts/medhaj-contract.pdf"}
-              pageWidth={pageWidth}
-            />
+            <PDFViewer fileUrl={data.doc_url} pageWidth={pageWidth} />
           </div>
         </div>
       ) : (

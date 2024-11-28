@@ -1,3 +1,5 @@
+import { SidebarData } from "../show-invoice/components/sidebar";
+
 export interface DataItem {
   key: string; // Example: "Tel:", "Invoice No."
   value: string; // For complex sections in `additional_data`, like objects
@@ -31,11 +33,10 @@ export interface Totals {
 }
 
 export interface Data {
-  pdf_key_value_pairs: DataItem[]; // Array of key-value pairs for PDF metadata
-  additional_data: AdditionalData[]; // Sections like line items, totals, party info
-  file_url: string; // URL of the PDF file
-  document_type: string; // Document type, e.g., "invoice"
-  document_format: string;
+  doc_url: string; // URL of the PDF file
+  format: string;
+  type: string;
+  data: SidebarData;
 }
 
 export interface Highlights {

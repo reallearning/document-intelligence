@@ -31,6 +31,7 @@ export interface LineItem {
   item_number: FieldValue;
   hsn_code: FieldValue;
   quantity?: FieldValue;
+  description?: FieldValue;
   unit_price?: FieldValue;
   taxable_value?: FieldValue;
   tax_rate?: FieldValue;
@@ -415,7 +416,7 @@ const Sidebar = ({ data }: SidebarProps) => {
                   style={{ boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.1)" }}
                 >
                   {renderField(
-                    "Item Name",
+                    "Item Number",
                     item.item_number,
                     `item-${index}-number`
                   )}
@@ -427,6 +428,12 @@ const Sidebar = ({ data }: SidebarProps) => {
                       "Unit Price",
                       item.unit_price,
                       `item-${index}-price`
+                    )}
+                  {item.description &&
+                    renderField(
+                      "Description",
+                      item.description,
+                      `item-${index}-description`
                     )}
                   {item.taxable_value &&
                     renderField(
