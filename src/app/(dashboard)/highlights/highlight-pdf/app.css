@@ -22,3 +22,14 @@
   overflow-y: hidden !important;
   padding: 10px !important; /* Maintain the library's padding */
 }
+
+._container_12oj9_1 {
+  /* Hide scrollbars */
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none; /* For Internet Explorer */
+}
+
+._container_12oj9_1::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Edge */
+}
+
