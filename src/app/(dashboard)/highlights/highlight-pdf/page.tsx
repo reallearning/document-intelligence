@@ -856,7 +856,7 @@ export default function HighlightPdf() {
       <div
         style={{
           height: "100vh",
-          width: "75vw",
+          width: `70vw`,
           position: "relative",
           overflow: "hidden",
         }}
