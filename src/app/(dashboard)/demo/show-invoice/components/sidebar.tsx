@@ -193,7 +193,7 @@ const Sidebar = ({ data }: SidebarProps) => {
 
     if (!isMultiValue) {
       return (
-        <div className="mb-4">
+        <div className="mb-2">
           <p className="text-sm font-nunito font-medium text-gray-400 mb-1">
             {label}
           </p>
@@ -318,7 +318,7 @@ const Sidebar = ({ data }: SidebarProps) => {
         {isOpen && (
           <div className="px-4 pb-4">
             <div
-              className="bg-white rounded-lg px-4 py-3"
+              className="bg-white rounded-lg px-4 py-2"
               style={{ boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.1)" }}
             >
               <div className="flex justify-between items-start">
