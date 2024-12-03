@@ -168,7 +168,7 @@ const UploadPage = () => {
         {/* File Type Selection */}
         <div className="text-left mb-6 font-poly">
           <p className="text-black mb-2">Select file type:</p>
-          <label className="block mb-2 text-black font-nunito">
+          {/* <label className="block mb-2 text-black font-nunito">
             <input
               type="radio"
               name="fileType"
@@ -178,7 +178,7 @@ const UploadPage = () => {
               disabled
             />
             Tax Proof
-          </label>
+          </label> */}
           <label className="block mb-2 text-black font-nunito">
             <input
               type="radio"

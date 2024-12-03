@@ -96,20 +96,39 @@ const Sidebar = ({ data }: SidebarProps) => {
   const [openFields, setOpenFields] = useState<Record<string, boolean>>({});
   const [openInnerSections, setOpenInnerSections] = useState<
     Record<string, boolean>
-  >({});
+  >({
+    Supplier: true,
+  });
 
   const toggleSection = (section: string) => {
-    setOpenSections((prev) => ({
-      ...prev,
-      [section]: !prev[section],
-    }));
+    setOpenSections((prev) => {
+      // Create a new object with all sections closed
+      const allClosed: Record<string, boolean> = {};
+
+      // Toggle the clicked section (if it was open, it will close; if it was closed, it will open)
+      const isCurrentlyOpen = prev[section];
+      if (!isCurrentlyOpen) {
+        allClosed[section] = true;
+      }
+
+      return allClosed;
+    });
+    setOpenInnerSections({}); // Close all inner sections when a new outer section is opened/closed
   };
 
   const toggleInnerSection = (sectionName: string) => {
-    setOpenInnerSections((prev) => ({
-      ...prev,
-      [sectionName]: !prev[sectionName],
-    }));
+    setOpenInnerSections((prev) => {
+      // Create a new object with all sections closed
+      const allClosed: Record<string, boolean> = {};
+
+      // Toggle the clicked section (if it was open, it will close; if it was closed, it will open)
+      const isCurrentlyOpen = prev[sectionName];
+      if (!isCurrentlyOpen) {
+        allClosed[sectionName] = true;
+      }
+
+      return allClosed;
+    });
   };
 
   const toggleField = (fieldId: string) => {
@@ -125,7 +144,10 @@ const Sidebar = ({ data }: SidebarProps) => {
   };
 
   // Render compliance status
-  const renderCompliance = (status: ComplianceStatus | null, showMargin?: boolean) => {
+  const renderCompliance = (
+    status: ComplianceStatus | null,
+    showMargin?: boolean
+  ) => {
     if (!status) return null;
 
     const statusColors = {
@@ -141,7 +163,11 @@ const Sidebar = ({ data }: SidebarProps) => {
     };
 
     return (
-      <div className={`${showMargin ? "mt-4" : ""} border-t-[0.5px] border-gray-200 pt-4 font-nunito font-normal leading-[18px]`}>
+      <div
+        className={`${
+          showMargin ? "mt-4" : ""
+        } border-t-[0.5px] border-gray-200 pt-4 font-nunito font-normal leading-[18px]`}
+      >
         <div className="flex justify-between items-center">
           <div
             className={`px-4 py-[2px] rounded-full text-[10px] bg-opacity-[30%] mb-[1px] ${
@@ -171,7 +197,7 @@ const Sidebar = ({ data }: SidebarProps) => {
           <p className="text-sm font-nunito font-medium text-gray-400 mb-1">
             {label}
           </p>
-          <div className="flex items-center justify-between">
+          <div className="flex w-full justify-between">
             <p className="text-sm">{field.value?.toString() || "N/A"}</p>
             {field.flag && (
               <span
@@ -218,7 +244,7 @@ const Sidebar = ({ data }: SidebarProps) => {
         ) : (
           <div className="mt-2 pl-2 border-l-2 border-gray-100">
             {Object.entries(field.value).map(([key, value]) => (
-              <div key={key} className="mb-2">
+              <div key={key} className="mb-3">
                 <p className="text-sm font-nunito font-medium text-gray-400">
                   {key}
                 </p>
@@ -271,10 +297,10 @@ const Sidebar = ({ data }: SidebarProps) => {
     return (
       <div
         key={sectionName}
-        className="mb-2 border rounded-lg bg-[#BAAE921A] font-nunito"
+        className="mb-4 border rounded-lg bg-[#BAAE921A] font-nunito"
       >
         <div
-          className="flex justify-between items-center p-4 cursor-pointer"
+          className="flex justify-between items-center px-4 py-4 cursor-pointer"
           onClick={() => toggleSection(sectionName)}
         >
           <h3 className="text-md font-medium font-nunito text-black">
@@ -290,13 +316,13 @@ const Sidebar = ({ data }: SidebarProps) => {
         </div>
 
         {isOpen && (
-          <div className="p-4">
+          <div className="px-4 pb-4">
             <div
-              className="bg-white rounded-lg p-4"
+              className="bg-white rounded-lg px-4 py-3"
               style={{ boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.1)" }}
             >
               <div className="flex justify-between items-start">
-                <div>
+                <div className="w-full">
                   {!isComplianceStatus(firstFieldValue) &&
                     renderField(
                       formatKey(firstFieldKey),
@@ -357,7 +383,7 @@ const Sidebar = ({ data }: SidebarProps) => {
     return (
       <div
         key={sectionName}
-        className="mb-6 border rounded-lg bg-[#BAAE921A] mx-4 text-black font-nunito"
+        className="mb-3 border rounded-lg bg-[#BAAE921A] mx-4 text-black font-nunito"
       >
         <div
           className="flex justify-between items-center p-4 cursor-pointer"
@@ -447,29 +473,34 @@ const Sidebar = ({ data }: SidebarProps) => {
 
   return (
     <div className="w-[450px] bg-[#F6F6F6] overflow-y-auto no-scrollbar">
-      <div className="px-4 mt-4 mb-6 text-black">
+      <div>
+        <h2 className="font-nunito font-semibold text-md text-black px-4 mt-4 py-2">
+          Extracted Data
+        </h2>
+      </div>
+      <div className="px-4 mb-3 text-black">
         {renderFlatSection("Supplier", data.supplier)}
       </div>
-      <div className="mb-6 px-4 text-black">
+      <div className="mb-3 px-4 text-black">
         {renderFlatSection("Buyer", data.buyer)}
       </div>
-      <div className="mb-6 px-4 text-black">
+      <div className="mb-3 px-4 text-black">
         {renderFlatSection("Consignee", data.consignee)}
       </div>
-      <div className="mb-6 px-4 text-black">
+      <div className="mb-3 px-4 text-black">
         {renderFlatSection("Invoice Details", data.invoice_details)}
       </div>
-      <div className="mb-6 px-4 text-black">
+      <div className="mb-3 px-4 text-black">
         {renderFlatSection("SEZ Details", data.sez_details)}
       </div>
-      <div className="mb-6 px-4 text-black">
+      <div className="mb-3 px-4 text-black">
         {renderFlatSection("TDS Details", data.tds_details)}
       </div>
       {renderNestedSection("Line Items", data.line_items)}
-      <div className="mb-6 px-4 text-black">
+      <div className="mb-3 px-4 text-black">
         {renderFlatSection("Totals", data.totals)}
       </div>
-      <div className="mb-6 px-4 text-black">
+      <div className="mb-3 px-4 text-black">
         {renderFlatSection("Signature", data.signature)}
       </div>
     </div>

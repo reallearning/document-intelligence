@@ -824,8 +824,22 @@ const ShowData = () => {
           {/* Sidebar displaying invoice details */}
           <Sidebar data={data.data as SidebarData} />
           {/* PDF Viewer */}
-          <div className="w-full h-[100vh]">
+          {/* <div className="w-full h-[100vh]">
             <PDFViewer fileUrl={data.doc_url} pageWidth={pageWidth} />
+          </div> */}
+
+          <div className="w-full h-screen mr-4">
+            {data.format === "image" ? (
+              <div className=" w-full h-full">
+                <img
+                  src={data.doc_url}
+                  alt="image"
+                  className="object-contain w-full h-full mx-auto"
+                />
+              </div>
+            ) : (
+              <PDFViewer fileUrl={data.doc_url} pageWidth={pageWidth} />
+            )}
           </div>
         </div>
       ) : (
