@@ -24,6 +24,11 @@ export interface BaseSection {
   gstin?: FieldValue;
   state?: FieldValue;
   state_code?: FieldValue;
+  pan_number?: FieldValue;
+  branch?: FieldValue;
+  ifsc_code?: FieldValue;
+  bank_account_number?: FieldValue;
+  contact_details?: FieldValue;
   flag: ComplianceStatus | null;
 }
 
@@ -32,6 +37,9 @@ export interface LineItem {
   hsn_code: FieldValue;
   quantity?: FieldValue;
   description?: FieldValue;
+  value?: FieldValue;
+  unit?: FieldValue;
+  discount?: FieldValue;
   unit_price?: FieldValue;
   taxable_value?: FieldValue;
   tax_rate?: FieldValue;
@@ -43,8 +51,10 @@ export interface LineItem {
 export interface InvoiceDetails {
   number: FieldValue;
   date: FieldValue;
+  due_date?: FieldValue;
   place_of_supply: FieldValue;
   reverse_charge_applicable: FieldValue;
+  order_number?: FieldValue;
   flag: ComplianceStatus | null;
 }
 
@@ -61,15 +71,40 @@ export interface TdsDetails {
 }
 
 export interface Totals {
+  sub_total?: FieldValue;
   taxable_value: FieldValue;
   tax_amount: FieldValue;
   rounding: FieldValue;
   invoice_total: FieldValue;
+  amount_in_words?: FieldValue;
   flag: ComplianceStatus | null;
 }
 
 export interface Signature {
   authorized_signatory: FieldValue;
+  flag: ComplianceStatus | null;
+}
+
+export interface Remarks {
+  remarks?: FieldValue;
+  flag: ComplianceStatus | null;
+}
+
+export interface AdditionalFields {
+  shipment_tracking_number?: FieldValue;
+  delivery_date?: FieldValue;
+  delivery_terms?: FieldValue;
+  payment_terms?: FieldValue;
+  flag: ComplianceStatus | null;
+}
+
+export interface GstDetails {
+  cgst?: FieldValue;
+  sgst?: FieldValue;
+  igst?: FieldValue;
+  utgst?: FieldValue;
+  cess?: FieldValue;
+  round_off?: FieldValue;
   flag: ComplianceStatus | null;
 }
 
@@ -80,9 +115,12 @@ export interface SidebarData {
   invoice_details: InvoiceDetails;
   sez_details: SezDetails;
   tds_details: TdsDetails;
+  gst_details: GstDetails;
   line_items: LineItem[];
   totals: Totals;
+  remarks: Remarks;
   signature: Signature;
+  additional_fields: AdditionalFields;
 }
 
 interface SidebarProps {
@@ -99,6 +137,8 @@ const Sidebar = ({ data }: SidebarProps) => {
   >({
     Supplier: true,
   });
+
+  console.log(data);
 
   const toggleSection = (section: string) => {
     setOpenSections((prev) => {
@@ -139,7 +179,9 @@ const Sidebar = ({ data }: SidebarProps) => {
   };
   // Helper function to check if a field has multiple values
   const hasMultipleValues = (field?: FieldValue) => {
-    if (!field || typeof field.value !== "object") return false;
+    console.log(field);
+    if (!field || typeof field.value !== "object" || field.value === null)
+      return false;
     return Object.keys(field.value).length > 1;
   };
 
@@ -187,6 +229,8 @@ const Sidebar = ({ data }: SidebarProps) => {
   // Render field with potential nested values
   const renderField = (label: string, field?: FieldValue, fieldId?: string) => {
     if (!field) return null;
+
+    if (field.value === null) return null;
 
     const isMultiValue = hasMultipleValues(field);
     const isOpen = fieldId ? openFields[fieldId] : false;
@@ -243,16 +287,19 @@ const Sidebar = ({ data }: SidebarProps) => {
           </div>
         ) : (
           <div className="mt-2 pl-2 border-l-2 border-gray-100">
-            {Object.entries(field.value).map(([key, value]) => (
-              <div key={key} className="mb-3">
-                <p className="text-sm font-nunito font-medium text-gray-400">
-                  {key}
-                </p>
-                <div className="flex items-center justify-between">
-                  <p className="text-sm">{value?.toString() || "N/A"}</p>
+            {Object.entries(field.value).map(([key, value]) => {
+              if (!value || value === null) return null;
+              return (
+                <div key={key} className="mb-3">
+                  <p className="text-sm font-nunito font-medium text-gray-400">
+                    {key}
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm">{value?.toString() || "N/A"}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
@@ -273,6 +320,15 @@ const Sidebar = ({ data }: SidebarProps) => {
     );
   };
 
+  const hasNonNullValue = (obj: Record<string, any>): boolean => {
+    return Object.values(obj).some((entry) => {
+      if (entry && typeof entry === "object" && "value" in entry) {
+        return entry.value !== null;
+      }
+      return false;
+    });
+  };
+
   const renderFlatSection = (
     sectionName: string,
     sectionData:
@@ -284,7 +340,7 @@ const Sidebar = ({ data }: SidebarProps) => {
       | Signature
   ) => {
     const isOpen = openSections[sectionName] || false;
-    const isInnerOpen = openInnerSections[sectionName] || false;
+    const isInnerOpen = true;
 
     const sectionKeys = Object.keys(sectionData).filter(
       (key) => key !== "flag"
@@ -293,6 +349,13 @@ const Sidebar = ({ data }: SidebarProps) => {
     const hasMultipleFields = sectionKeys.length > 1;
     const firstFieldKey = sectionKeys[0];
     const firstFieldValue = sectionData[firstFieldKey] || undefined;
+
+    const hasValues = hasNonNullValue(sectionData);
+    console.log("section Name:", sectionName, "has Values: ", hasValues);
+
+    if (!hasValues) {
+      return null;
+    }
 
     return (
       <div
@@ -330,7 +393,7 @@ const Sidebar = ({ data }: SidebarProps) => {
                       firstFieldKey
                     )}
                 </div>
-                {hasMultipleFields && (
+                {/* {hasMultipleFields && (
                   <div
                     className="cursor-pointer"
                     onClick={(e) => {
@@ -344,7 +407,7 @@ const Sidebar = ({ data }: SidebarProps) => {
                       <ChevronDownIcon className="w-4 h-4 text-[#7F7F7F]" />
                     )}
                   </div>
-                )}
+                )} */}
               </div>
 
               {isInnerOpen &&
@@ -354,7 +417,7 @@ const Sidebar = ({ data }: SidebarProps) => {
                     <div key={`${sectionName}-${key}`}>
                       {renderField(
                         formatKey(key),
-                        sectionData[key] ?? "N/A",
+                        sectionData[key],
                         `${sectionName}-${String(key)}`
                       )}
                     </div>
@@ -404,8 +467,7 @@ const Sidebar = ({ data }: SidebarProps) => {
         {isOpen && (
           <div className="px-4">
             {items.map((item, index) => {
-              const isInnerOpen =
-                openInnerSections[`${sectionName}_${index}`] || false;
+              const isInnerOpen = true;
               const sectionKeys = Object.keys(item).filter(
                 (key) => key !== "flag"
               ) as Array<keyof typeof item>;
@@ -429,7 +491,7 @@ const Sidebar = ({ data }: SidebarProps) => {
                             firstFieldKey
                           )}
                       </div>
-                      {hasMultipleFields && (
+                      {/* {hasMultipleFields && (
                         <div
                           className="cursor-pointer"
                           onClick={(e) => {
@@ -443,7 +505,7 @@ const Sidebar = ({ data }: SidebarProps) => {
                             <ChevronDownIcon className="w-4 h-4 text-[#7F7F7F]" />
                           )}
                         </div>
-                      )}
+                      )} */}
                     </div>
 
                     {isInnerOpen &&

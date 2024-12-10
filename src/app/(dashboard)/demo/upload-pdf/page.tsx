@@ -35,7 +35,7 @@ const UploadPage = () => {
   // Set the initial state with correct types
   const [fileState, setFileState] = useState<FileState>({
     selectedFile: null,
-    fileType: "",
+    fileType: "Invoice",
     isFileSelected: false,
     isUploading: false,
     uploadSuccess: null,
@@ -154,7 +154,7 @@ const UploadPage = () => {
     >
       <div className="bg-white p-10 rounded-lg shadow-lg w-96 text-center">
         <h2 className="text-2xl font-semibold mb-6 font-poly text-black">
-          Upload Document
+          Upload Invoice
         </h2>
 
         {/* File Upload Input */}
@@ -165,7 +165,7 @@ const UploadPage = () => {
           className="mb-6 block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-morrie-primary file:opacity-80 file:text-white hover:file:opacity-100"
         />
 
-        {/* File Type Selection */}
+        {/* File Type Selection
         <div className="text-left mb-6 font-poly">
           <p className="text-black mb-2">Select file type:</p>
           {/* <label className="block mb-2 text-black font-nunito">
@@ -179,7 +179,7 @@ const UploadPage = () => {
             />
             Tax Proof
           </label> */}
-          <label className="block mb-2 text-black font-nunito">
+          {/* <label className="block mb-2 text-black font-nunito">
             <input
               type="radio"
               name="fileType"
@@ -189,7 +189,7 @@ const UploadPage = () => {
             />
             Invoice
           </label>
-        </div>
+        </div> */}
 
         {/* Upload Button */}
         <button
