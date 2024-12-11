@@ -138,8 +138,6 @@ const Sidebar = ({ data }: SidebarProps) => {
     Supplier: true,
   });
 
-  console.log(data);
-
   const toggleSection = (section: string) => {
     setOpenSections((prev) => {
       // Create a new object with all sections closed
@@ -179,7 +177,6 @@ const Sidebar = ({ data }: SidebarProps) => {
   };
   // Helper function to check if a field has multiple values
   const hasMultipleValues = (field?: FieldValue) => {
-    console.log(field);
     if (!field || typeof field.value !== "object" || field.value === null)
       return false;
     return Object.keys(field.value).length > 1;
@@ -338,6 +335,9 @@ const Sidebar = ({ data }: SidebarProps) => {
       | TdsDetails
       | Totals
       | Signature
+      | GstDetails
+      | Remarks
+      | AdditionalFields
   ) => {
     const isOpen = openSections[sectionName] || false;
     const isInnerOpen = true;
@@ -351,7 +351,6 @@ const Sidebar = ({ data }: SidebarProps) => {
     const firstFieldValue = sectionData[firstFieldKey] || undefined;
 
     const hasValues = hasNonNullValue(sectionData);
-    console.log("section Name:", sectionName, "has Values: ", hasValues);
 
     if (!hasValues) {
       return null;
@@ -550,6 +549,9 @@ const Sidebar = ({ data }: SidebarProps) => {
         {renderFlatSection("Consignee", data.consignee)}
       </div>
       <div className="mb-3 px-4 text-black">
+        {renderFlatSection("GST Details", data.gst_details)}
+      </div>
+      <div className="mb-3 px-4 text-black">
         {renderFlatSection("Invoice Details", data.invoice_details)}
       </div>
       <div className="mb-3 px-4 text-black">
@@ -564,6 +566,12 @@ const Sidebar = ({ data }: SidebarProps) => {
       </div>
       <div className="mb-3 px-4 text-black">
         {renderFlatSection("Signature", data.signature)}
+      </div>
+      <div className="mb-3 px-4 text-black">
+        {renderFlatSection("Remarks", data.remarks)}
+      </div>
+      <div className="mb-3 px-4 text-black">
+        {renderFlatSection("Additional Fields", data.additional_fields)}
       </div>
     </div>
   );
