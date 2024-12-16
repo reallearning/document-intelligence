@@ -132,11 +132,6 @@ const Sidebar = ({ data }: SidebarProps) => {
     Supplier: true,
   });
   const [openFields, setOpenFields] = useState<Record<string, boolean>>({});
-  const [openInnerSections, setOpenInnerSections] = useState<
-    Record<string, boolean>
-  >({
-    Supplier: true,
-  });
 
   const toggleSection = (section: string) => {
     setOpenSections((prev) => {
@@ -147,22 +142,6 @@ const Sidebar = ({ data }: SidebarProps) => {
       const isCurrentlyOpen = prev[section];
       if (!isCurrentlyOpen) {
         allClosed[section] = true;
-      }
-
-      return allClosed;
-    });
-    setOpenInnerSections({}); // Close all inner sections when a new outer section is opened/closed
-  };
-
-  const toggleInnerSection = (sectionName: string) => {
-    setOpenInnerSections((prev) => {
-      // Create a new object with all sections closed
-      const allClosed: Record<string, boolean> = {};
-
-      // Toggle the clicked section (if it was open, it will close; if it was closed, it will open)
-      const isCurrentlyOpen = prev[sectionName];
-      if (!isCurrentlyOpen) {
-        allClosed[sectionName] = true;
       }
 
       return allClosed;
@@ -225,12 +204,12 @@ const Sidebar = ({ data }: SidebarProps) => {
 
   // Render field with potential nested values
   const renderField = (label: string, field?: FieldValue, fieldId?: string) => {
-    if (!field) return null;
-
-    if (field.value === null) return null;
+    if (!field || field.value === null) return null;
 
     const isMultiValue = hasMultipleValues(field);
-    const isOpen = fieldId ? openFields[fieldId] : false;
+    const hasValues = isMultiValue ? hasNonNullValue(field) : true;
+
+    if (!hasValues) return null;
 
     if (!isMultiValue) {
       return (
@@ -267,38 +246,23 @@ const Sidebar = ({ data }: SidebarProps) => {
           <p className="text-sm font-nunito font-medium text-gray-400 mb-1">
             {label}
           </p>
-          <span className="text-gray-400">
-            {isOpen ? (
-              <ChevronUpIcon className="w-3 h-3 text-[#7F7F7F]" />
-            ) : (
-              <ChevronDownIcon className="w-3 h-3 text-[#7F7F7F]" />
-            )}
-          </span>
         </div>
 
-        {!isOpen ? (
-          <div className="flex items-center justify-between">
-            <p className="text-sm">
-              {Object.values(field.value)[0]?.toString() || "N/A"}
-            </p>
-          </div>
-        ) : (
-          <div className="mt-2 pl-2 border-l-2 border-gray-100">
-            {Object.entries(field.value).map(([key, value]) => {
-              if (!value || value === null) return null;
-              return (
-                <div key={key} className="mb-3">
-                  <p className="text-sm font-nunito font-medium text-gray-400">
-                    {key}
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm">{value?.toString() || "N/A"}</p>
-                  </div>
+        <div className="mt-2 pl-2 border-l-2 border-gray-100">
+          {Object.entries(field.value).map(([key, value]) => {
+            if (!value || value === null) return null;
+            return (
+              <div key={key} className="mb-3">
+                <p className="text-sm font-nunito font-medium text-gray-400">
+                  {key}
+                </p>
+                <div className="flex items-center justify-between">
+                  <p className="text-sm">{value?.toString() || "N/A"}</p>
                 </div>
-              );
-            })}
-          </div>
-        )}
+              </div>
+            );
+          })}
+        </div>
       </div>
     );
   };
@@ -318,12 +282,33 @@ const Sidebar = ({ data }: SidebarProps) => {
   };
 
   const hasNonNullValue = (obj: Record<string, any>): boolean => {
-    return Object.values(obj).some((entry) => {
-      if (entry && typeof entry === "object" && "value" in entry) {
-        return entry.value !== null;
+    if ("value" in obj && obj.value !== null) {
+      return true; // Handle cases where "value" is at the top level
+    }
+
+    for (const key in obj) {
+      const entry = obj[key];
+
+      if (entry && typeof entry === "object") {
+        if ("value" in entry) {
+          const value = entry.value;
+
+          if (typeof value === "object" && value !== null) {
+            if (Object.values(value).some((v) => v !== null)) {
+              return true;
+            }
+          } else if (value !== null) {
+            return true;
+          }
+        }
+
+        if (hasNonNullValue(entry)) {
+          return true;
+        }
       }
-      return false;
-    });
+    }
+
+    return false;
   };
 
   const renderFlatSection = (
@@ -346,7 +331,6 @@ const Sidebar = ({ data }: SidebarProps) => {
       (key) => key !== "flag"
     ) as Array<keyof typeof sectionData>;
 
-    const hasMultipleFields = sectionKeys.length > 1;
     const firstFieldKey = sectionKeys[0];
     const firstFieldValue = sectionData[firstFieldKey] || undefined;
 
