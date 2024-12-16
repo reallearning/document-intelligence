@@ -1,11 +1,12 @@
-import { Data, Highlights } from "@/app/(dashboard)/demo/components/types";
+import { Data } from "@/app/(dashboard)/demo/components/types";
 import React, { createContext, useContext, useState, ReactNode } from "react";
+import { HighlightsContentData } from "@/app/(dashboard)/highlights/components/types";
 
 interface DocumentDataContextProps {
   data: Data | null;
-  highlightsData: Highlights | null;
+  highlightsData: HighlightsContentData | null;
   saveData: (responseData: Data) => void;
-  saveHighlights: (responseData: Highlights) => void;
+  saveHighlights: (responseData: HighlightsContentData) => void;
 }
 
 const DocumentDataContext = createContext<DocumentDataContextProps | undefined>(
@@ -20,7 +21,8 @@ export const DocumentDataProvider: React.FC<DocumentDataProviderProps> = ({
   children,
 }) => {
   const [data, setData] = useState<Data | null>(null);
-  const [highlightsData, setHighlightsData] = useState<Highlights | null>(null);
+  const [highlightsData, setHighlightsData] =
+    useState<HighlightsContentData | null>(null);
 
   // Function to save data into the context state
   const saveData = (responseData: Data) => {
@@ -28,7 +30,7 @@ export const DocumentDataProvider: React.FC<DocumentDataProviderProps> = ({
   };
 
   // Function to save highlights into the context state
-  const saveHighlights = (responseData: Highlights) => {
+  const saveHighlights = (responseData: HighlightsContentData) => {
     setHighlightsData(responseData);
   };
 

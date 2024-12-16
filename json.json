@@ -1,0 +1,1205 @@
+{"pdf_url": "dfdfd", "format": "pdf", "highlights": {
+    "supplier": {
+        "name": {
+            "value": "Hangerspace Interior Solutions",
+            "flag": null,
+            "highlight": {
+                "id": "1366790510873494",
+                "content": {
+                    "text": "Hangerspace Interior Solutions"
+                },
+                "position": {
+                    "boundingRect": {
+                        "x1": 94.0,
+                        "y1": 132.44000244140625,
+                        "x2": 223.08189392089844,
+                        "y2": 143.45599365234375,
+                        "width": 595.0,
+                        "height": 841.0
+                    },
+                    "rects": [
+                        {
+                            "x1": 94.0,
+                            "y1": 132.44000244140625,
+                            "x2": 223.08189392089844,
+                            "y2": 143.45599365234375,
+                            "width": 595.0,
+                            "height": 841.0
+                        },
+                        {
+                            "x1": 375.0,
+                            "y1": 717.2960205078125,
+                            "x2": 499.1857604980469,
+                            "y2": 727.2103881835938,
+                            "width": 595.0,
+                            "height": 841.0
+                        },
+                        {
+                            "x1": 31.0,
+                            "y1": 222.29249572753906,
+                            "x2": 145.9033203125,
+                            "y2": 233.42190551757812,
+                            "width": 595.0,
+                            "height": 841.0
+                        }
+                    ],
+                    "pageNumber": 1
+                },
+                "comment": {
+                    "text": "",
+                    "emoji": ""
+                }
+            }
+        },
+        "address": {
+            "value": "67/1, Vittasandra Main Road, Vittasandra Village, Bengaluru-560068",
+            "flag": null,
+            "highlight": {
+                "id": "1394347603384193",
+                "content": {
+                    "text": "67/1,Vittasandra Main Road"
+                },
+                "position": {
+                    "boundingRect": {
+                        "x1": 94.0,
+                        "y1": 142.39999389648438,
+                        "x2": 209.27357482910156,
+                        "y2": 153.39199829101562,
+                        "width": 595.0,
+                        "height": 841.0
+                    },
+                    "rects": [
+                        {
+                            "x1": 94.0,
+                            "y1": 142.39999389648438,
+                            "x2": 209.27357482910156,
+                            "y2": 153.39199829101562,
+                            "width": 595.0,
+                            "height": 841.0
+                        },
+                        {
+                            "x1": 94.0,
+                            "y1": 152.39999389648438,
+                            "x2": 171.53414916992188,
+                            "y2": 163.39199829101562,
+                            "width": 595.0,
+                            "height": 841.0
+                        },
+                        {
+                            "x1": 94.0,
+                            "y1": 162.39999389648438,
+                            "x2": 170.51113891601562,
+                            "y2": 173.39199829101562,
+                            "width": 595.0,
+                            "height": 841.0
+                        },
+                        {
+                            "x1": 31.0,
+                            "y1": 278.260009765625,
+                            "x2": 251.98468017578125,
+                            "y2": 288.1528015136719,
+                            "width": 595.0,
+                            "height": 841.0
+                        },
+                        {
+                            "x1": 31.0,
+                            "y1": 288.260009765625,
+                            "x2": 144.0619354248047,
+                            "y2": 298.1528015136719,
+                            "width": 595.0,
+                            "height": 841.0
+                        }
+                    ],
+                    "pageNumber": 1
+                },
+                "comment": {
+                    "text": "",
+                    "emoji": ""
+                }
+            }
+        },
+        "gstin": {
+            "value": "29AALFH4268C1Z8",
+            "flag": null,
+            "highlight": {
+                "id": "2640699184279780",
+                "content": {
+                    "text": "GSTIN/UIN: 29AALFH4268C1Z8"
+                },
+                "position": {
+                    "boundingRect": {
+                        "x1": 94.0,
+                        "y1": 172.39999389648438,
+                        "x2": 221.15924072265625,
+                        "y2": 183.39199829101562,
+                        "width": 595.0,
+                        "height": 841.0
+                    },
+                    "rects": [
+                        {
+                            "x1": 94.0,
+                            "y1": 172.39999389648438,
+                            "x2": 221.15924072265625,
+                            "y2": 183.39199829101562,
+                            "width": 595.0,
+                            "height": 841.0
+                        },
+                        {
+                            "x1": 31.0,
+                            "y1": 234.29249572753906,
+                            "x2": 138.9227752685547,
+                            "y2": 245.42190551757812,
+                            "width": 595.0,
+                            "height": 841.0
+                        },
+                        {
+                            "x1": 93.0,
+                            "y1": 160.3330078125,
+                            "x2": 169.74449157714844,
+                            "y2": 171.4866943359375,
+                            "width": 595.0,
+                            "height": 841.0
+                        }
+                    ],
+                    "pageNumber": 1
+                },
+                "comment": {
+                    "text": "",
+                    "emoji": ""
+                }
+            }
+        },
+        "state": {
+            "value": "Karnataka",
+            "flag": null,
+            "highlight": {
+                "id": "3420118345101160",
+                "content": {
+                    "text": "State Name"
+                },
+                "position": {
+                    "boundingRect": {
+                        "x1": 32.0,
+                        "y1": 258.3999938964844,
+                        "x2": 83.68940734863281,
+                        "y2": 269.3919982910156,
+                        "width": 595.0,
+                        "height": 841.0
+                    },
+                    "rects": [
+                        {
+                            "x1": 32.0,
+                            "y1": 258.3999938964844,
+                            "x2": 83.68940734863281,
+                            "y2": 269.3919982910156,
+                            "width": 595.0,
+                            "height": 841.0
+                        },
+                        {
+                            "x1": 31.0,
+                            "y1": 246.29249572753906,
+                            "x2": 69.15045928955078,
+                            "y2": 257.4219055175781,
+                            "width": 595.0,
+                            "height": 841.0
+                        }
+                    ],
+                    "pageNumber": 1
+                },
+                "comment": {
+                    "text": "",
+                    "emoji": ""
+                }
+            }
+        },
+        "state_code": {
+            "value": "29",
+            "flag": null,
+            "highlight": {
+                "id": "2897554285795379",
+                "content": {
+                    "text": "State Name : Karnataka, Code : 29"
+                },
+                "position": {
+                    "boundingRect": {
+                        "x1": 94.0,
+                        "y1": 182.39999389648438,
+                        "x2": 219.1517333984375,
+                        "y2": 193.39199829101562,
+                        "width": 595.0,
+                        "height": 841.0
+                    },
+                    "rects": [
+                        {
+                            "x1": 94.0,
+                            "y1": 182.39999389648438,
+                            "x2": 219.1517333984375,
+                            "y2": 193.39199829101562,
+                            "width": 595.0,
+                            "height": 841.0
+                        },
+                        {
+                            "x1": 101.0,
+                            "y1": 258.3999938964844,
+                            "x2": 195.88507080078125,
+                            "y2": 269.3919982910156,
+                            "width": 595.0,
+                            "height": 841.0
+                        }
+                    ],
+                    "pageNumber": 1
+                },
+                "comment": {
+                    "text": "",
+                    "emoji": ""
+                }
+            }
+        },
+        "pan_number": {
+            "value": null,
+            "flag": null,
+            "matching_ids": []
+        },
+        "contact_details": {
+            "value": "hangerspaceinteriors@gmail.com",
+            "flag": null,
+            "highlight": {
+                "id": "2301123294522463",
+                "content": {
+                    "text": "E-Mail : hangerspaceinteriors@gmail.com"
+                },
+                "position": {
+                    "boundingRect": {
+                        "x1": 94.0,
+                        "y1": 192.39999389648438,
+                        "x2": 216.5950164794922,
+                        "y2": 203.39199829101562,
+                        "width": 595.0,
+                        "height": 841.0
+                    },
+                    "rects": [
+                        {
+                            "x1": 94.0,
+                            "y1": 192.39999389648438,
+                            "x2": 216.5950164794922,
+                            "y2": 203.39199829101562,
+                            "width": 595.0,
+                            "height": 841.0
+                        }
+                    ],
+                    "pageNumber": 1
+                },
+                "comment": {
+                    "text": "",
+                    "emoji": ""
+                }
+            }
+        },
+        "bank_account_number": {
+            "value": "39252050000082",
+            "flag": null,
+            "highlight": {
+                "id": "1120477014443561",
+                "content": {
+                    "text": "395205000082"
+                },
+                "position": {
+                    "boundingRect": {
+                        "x1": 375.0,
+                        "y1": 735.2960205078125,
+                        "x2": 430.8446044921875,
+                        "y2": 745.2103881835938,
+                        "width": 595.0,
+                        "height": 841.0
+                    },
+                    "rects": [
+                        {
+                            "x1": 375.0,
+                            "y1": 735.2960205078125,
+                            "x2": 430.8446044921875,
+                            "y2": 745.2103881835938,
+                            "width": 595.0,
+                            "height": 841.0
+                        }
+                    ],
+                    "pageNumber": 1
+                },
+                "comment": {
+                    "text": "",
+                    "emoji": ""
+                }
+            }
+        },
+        "bank_name": {
+            "value": "NA",
+            "flag": null,
+            "highlight": {
+                "id": "3310684961104905",
+                "content": {
+                    "text": "ICICI BANK"
+                },
+                "position": {
+                    "boundingRect": {
+                        "x1": 375.0,
+                        "y1": 726.2960205078125,
+                        "x2": 420.56640625,
+                        "y2": 736.2103881835938,
+                        "width": 595.0,
+                        "height": 841.0
+                    },
+                    "rects": [
+                        {
+                            "x1": 375.0,
+                            "y1": 726.2960205078125,
+                            "x2": 420.56640625,
+                            "y2": 736.2103881835938,
+                            "width": 595.0,
+                            "height": 841.0
+                        }
+                    ],
+                    "pageNumber": 1
+                },
+                "comment": {
+                    "text": "",
+                    "emoji": ""
+                }
+            }
+        },
+        "branch": {
+            "value": "Singasandra & ICIC0003952",
+            "flag": null,
+            "highlight": {
+                "id": "1913159853251931",
+                "content": {
+                    "text": "Singasandra & ICIC0003952"
+                },
+                "position": {
+                    "boundingRect": {
+                        "x1": 375.0,
+                        "y1": 744.2960205078125,
+                        "x2": 485.2497253417969,
+                        "y2": 754.2103881835938,
+                        "width": 595.0,
+                        "height": 841.0
+                    },
+                    "rects": [
+                        {
+                            "x1": 375.0,
+                            "y1": 744.2960205078125,
+                            "x2": 485.2497253417969,
+                            "y2": 754.2103881835938,
+                            "width": 595.0,
+                            "height": 841.0
+                        }
+                    ],
+                    "pageNumber": 1
+                },
+                "comment": {
+                    "text": "",
+                    "emoji": ""
+                }
+            }
+        },
+        "ifsc_code": {
+            "value": "ICIC0003952",
+            "flag": null,
+            "highlight": {
+                "id": "1913159853251931",
+                "content": {
+                    "text": "Singasandra & ICIC0003952"
+                },
+                "position": {
+                    "boundingRect": {
+                        "x1": 375.0,
+                        "y1": 744.2960205078125,
+                        "x2": 485.2497253417969,
+                        "y2": 754.2103881835938,
+                        "width": 595.0,
+                        "height": 841.0
+                    },
+                    "rects": [
+                        {
+                            "x1": 375.0,
+                            "y1": 744.2960205078125,
+                            "x2": 485.2497253417969,
+                            "y2": 754.2103881835938,
+                            "width": 595.0,
+                            "height": 841.0
+                        }
+                    ],
+                    "pageNumber": 1
+                },
+                "comment": {
+                    "text": "",
+                    "emoji": ""
+                }
+            }
+        },
+        "flag": null,
+        "matching_ids": []
+    },
+    "buyer": {
+        "name": {
+            "value": "Home Interior Designs E-Commerce Pvt. Ltd",
+            "flag": null,
+            "highlight": {
+                "id": "2610984906585511",
+                "content": {
+                    "text": "Home Interior Designs E-Commerce Pvt. Ltd"
+                },
+                "position": {
+                    "boundingRect": {
+                        "x1": 32.0,
+                        "y1": 283.44000244140625,
+                        "x2": 219.43392944335938,
+                        "y2": 294.45599365234375,
+                        "width": 595.0,
+                        "height": 841.0
+                    },
+                    "rects": [
+                        {
+                            "x1": 32.0,
+                            "y1": 283.44000244140625,
+                            "x2": 219.43392944335938,
+                            "y2": 294.45599365234375,
+                            "width": 595.0,
+                            "height": 841.0
+                        },
+                        {
+                            "x1": 310.0,
+                            "y1": 222.29249572753906,
+                            "x2": 475.58380126953125,
+                            "y2": 233.42190551757812,
+                            "width": 595.0,
+                            "height": 841.0
+                        }
+                    ],
+                    "pageNumber": 1
+                },
+                "comment": {
+                    "text": "",
+                    "emoji": ""
+                }
+            }
+        },
+        "address": {
+            "value": "283/58/7, 3 Floor, Aurbis Business Park, Outer ring road, Devarabisana Halli, Bellandur, Bengaluru (Bangalore) Urban, Karnataka, 560103",
+            "flag": null,
+            "highlight": {
+                "id": "6618518567977754",
+                "content": {
+                    "text": "283/58/7,3 Floor, Aurbis Business Park"
+                },
+                "position": {
+                    "boundingRect": {
+                        "x1": 32.0,
+                        "y1": 293.3999938964844,
+                        "x2": 193.27130126953125,
+                        "y2": 304.3919982910156,
+                        "width": 595.0,
+                        "height": 841.0
+                    },
+                    "rects": [
+                        {
+                            "x1": 32.0,
+                            "y1": 293.3999938964844,
+                            "x2": 193.27130126953125,
+                            "y2": 304.3919982910156,
+                            "width": 595.0,
+                            "height": 841.0
+                        },
+                        {
+                            "x1": 32.0,
+                            "y1": 303.3999938964844,
+                            "x2": 210.516845703125,
+                            "y2": 314.3919982910156,
+                            "width": 595.0,
+                            "height": 841.0
+                        },
+                        {
+                            "x1": 32.0,
+                            "y1": 313.3999938964844,
+                            "x2": 212.94949340820312,
+                            "y2": 324.3919982910156,
+                            "width": 595.0,
+                            "height": 841.0
+                        }
+                    ],
+                    "pageNumber": 1
+                },
+                "comment": {
+                    "text": "",
+                    "emoji": ""
+                }
+            }
+        },
+        "gstin": {
+            "value": "29AADCH4222R3Z3",
+            "flag": null,
+            "highlight": {
+                "id": "3015830521765685",
+                "content": {
+                    "text": ": 29AADCH4222R3Z3"
+                },
+                "position": {
+                    "boundingRect": {
+                        "x1": 101.0,
+                        "y1": 323.3999938964844,
+                        "x2": 194.31333923339844,
+                        "y2": 334.3919982910156,
+                        "width": 595.0,
+                        "height": 841.0
+                    },
+                    "rects": [
+                        {
+                            "x1": 101.0,
+                            "y1": 323.3999938964844,
+                            "x2": 194.31333923339844,
+                            "y2": 334.3919982910156,
+                            "width": 595.0,
+                            "height": 841.0
+                        },
+                        {
+                            "x1": 310.0,
+                            "y1": 234.29249572753906,
+                            "x2": 420.24139404296875,
+                            "y2": 245.42190551757812,
+                            "width": 595.0,
+                            "height": 841.0
+                        }
+                    ],
+                    "pageNumber": 1
+                },
+                "comment": {
+                    "text": "",
+                    "emoji": ""
+                }
+            }
+        },
+        "contact_details": {
+            "value": null,
+            "flag": null,
+            "matching_ids": []
+        },
+        "flag": null,
+        "matching_ids": []
+    },
+    "consignee": {
+        "name": {
+            "value": "Jayanthi M",
+            "flag": null,
+            "highlight": {
+                "id": "2782066582955081",
+                "content": {
+                    "text": "Jayanthi M-"
+                },
+                "position": {
+                    "boundingRect": {
+                        "x1": 32.0,
+                        "y1": 218.44000244140625,
+                        "x2": 83.15930938720703,
+                        "y2": 229.45599365234375,
+                        "width": 595.0,
+                        "height": 841.0
+                    },
+                    "rects": [
+                        {
+                            "x1": 32.0,
+                            "y1": 218.44000244140625,
+                            "x2": 83.15930938720703,
+                            "y2": 229.45599365234375,
+                            "width": 595.0,
+                            "height": 841.0
+                        },
+                        {
+                            "x1": 454.0,
+                            "y1": 179.44000244140625,
+                            "x2": 505.1593017578125,
+                            "y2": 190.45599365234375,
+                            "width": 595.0,
+                            "height": 841.0
+                        }
+                    ],
+                    "pageNumber": 1
+                },
+                "comment": {
+                    "text": "",
+                    "emoji": ""
+                }
+            }
+        },
+        "address": {
+            "value": "Sai Samrudhi Layout, Site #26, Muthsandra Main Road, Behind Family Mall, Near GKY Tyre Shop, Varthur, Bengaluru - 560087",
+            "flag": null,
+            "highlight": {
+                "id": "8112169460870138",
+                "content": {
+                    "text": "Sai Samruddhi Layout, Site #26, Muthsandra Main Road,"
+                },
+                "position": {
+                    "boundingRect": {
+                        "x1": 32.0,
+                        "y1": 228.39999389648438,
+                        "x2": 206.5009307861328,
+                        "y2": 239.39199829101562,
+                        "width": 595.0,
+                        "height": 841.0
+                    },
+                    "rects": [
+                        {
+                            "x1": 32.0,
+                            "y1": 228.39999389648438,
+                            "x2": 206.5009307861328,
+                            "y2": 239.39199829101562,
+                            "width": 595.0,
+                            "height": 841.0
+                        },
+                        {
+                            "x1": 32.0,
+                            "y1": 238.39999389648438,
+                            "x2": 210.2476806640625,
+                            "y2": 249.39199829101562,
+                            "width": 595.0,
+                            "height": 841.0
+                        },
+                        {
+                            "x1": 32.0,
+                            "y1": 248.39999389648438,
+                            "x2": 113.6819076538086,
+                            "y2": 259.3919982910156,
+                            "width": 595.0,
+                            "height": 841.0
+                        },
+                        {
+                            "x1": 310.0,
+                            "y1": 278.260009765625,
+                            "x2": 552.082275390625,
+                            "y2": 288.1528015136719,
+                            "width": 595.0,
+                            "height": 841.0
+                        },
+                        {
+                            "x1": 310.0,
+                            "y1": 288.260009765625,
+                            "x2": 550.6748046875,
+                            "y2": 298.1528015136719,
+                            "width": 595.0,
+                            "height": 841.0
+                        }
+                    ],
+                    "pageNumber": 1
+                },
+                "comment": {
+                    "text": "",
+                    "emoji": ""
+                }
+            }
+        },
+        "gstin": {
+            "value": null,
+            "flag": null,
+            "matching_ids": []
+        },
+        "flag": null,
+        "matching_ids": []
+    },
+    "invoice_details": {
+        "number": {
+            "value": "HS/212928/24-25",
+            "flag": null,
+            "highlight": {
+                "id": "6163796486271222",
+                "content": {
+                    "text": "HS-2/12928/24-25"
+                },
+                "position": {
+                    "boundingRect": {
+                        "x1": 349.0,
+                        "y1": 140.44000244140625,
+                        "x2": 387.4035949707031,
+                        "y2": 151.45599365234375,
+                        "width": 595.0,
+                        "height": 841.0
+                    },
+                    "rects": [
+                        {
+                            "x1": 349.0,
+                            "y1": 140.44000244140625,
+                            "x2": 387.4035949707031,
+                            "y2": 151.45599365234375,
+                            "width": 595.0,
+                            "height": 841.0
+                        },
+                        {
+                            "x1": 349.0,
+                            "y1": 219.44000244140625,
+                            "x2": 424.9903259277344,
+                            "y2": 230.45599365234375,
+                            "width": 595.0,
+                            "height": 841.0
+                        },
+                        {
+                            "x1": 76.0,
+                            "y1": 49.295997619628906,
+                            "x2": 194.81228637695312,
+                            "y2": 59.21039962768555,
+                            "width": 595.0,
+                            "height": 841.0
+                        }
+                    ],
+                    "pageNumber": 1
+                },
+                "comment": {
+                    "text": "",
+                    "emoji": ""
+                }
+            }
+        },
+        "date": {
+            "value": "1-Aug-24",
+            "flag": null,
+            "highlight": {
+                "id": "2012913731797821",
+                "content": {
+                    "text": "1-Aug-24"
+                },
+                "position": {
+                    "boundingRect": {
+                        "x1": 87.0,
+                        "y1": 104.33300018310547,
+                        "x2": 122.80685424804688,
+                        "y2": 115.48670196533203,
+                        "width": 595.0,
+                        "height": 841.0
+                    },
+                    "rects": [
+                        {
+                            "x1": 87.0,
+                            "y1": 104.33300018310547,
+                            "x2": 122.80685424804688,
+                            "y2": 115.48670196533203,
+                            "width": 595.0,
+                            "height": 841.0
+                        },
+                        {
+                            "x1": 454.0,
+                            "y1": 139.44000244140625,
+                            "x2": 493.7854309082031,
+                            "y2": 150.45599365234375,
+                            "width": 595.0,
+                            "height": 841.0
+                        },
+                        {
+                            "x1": 76.0,
+                            "y1": 58.295997619628906,
+                            "x2": 111.80685424804688,
+                            "y2": 68.21040344238281,
+                            "width": 595.0,
+                            "height": 841.0
+                        }
+                    ],
+                    "pageNumber": 1
+                },
+                "comment": {
+                    "text": "",
+                    "emoji": ""
+                }
+            }
+        },
+        "due_date": {
+            "value": null,
+            "flag": null,
+            "matching_ids": []
+        },
+        "place_of_supply": {
+            "value": "Karnataka",
+            "flag": null,
+            "highlight": {
+                "id": "3420118345101160",
+                "content": {
+                    "text": "State Name"
+                },
+                "position": {
+                    "boundingRect": {
+                        "x1": 32.0,
+                        "y1": 258.3999938964844,
+                        "x2": 83.68940734863281,
+                        "y2": 269.3919982910156,
+                        "width": 595.0,
+                        "height": 841.0
+                    },
+                    "rects": [
+                        {
+                            "x1": 32.0,
+                            "y1": 258.3999938964844,
+                            "x2": 83.68940734863281,
+                            "y2": 269.3919982910156,
+                            "width": 595.0,
+                            "height": 841.0
+                        },
+                        {
+                            "x1": 31.0,
+                            "y1": 246.29249572753906,
+                            "x2": 69.15045928955078,
+                            "y2": 257.4219055175781,
+                            "width": 595.0,
+                            "height": 841.0
+                        }
+                    ],
+                    "pageNumber": 1
+                },
+                "comment": {
+                    "text": "",
+                    "emoji": ""
+                }
+            }
+        },
+        "reverse_charge_applicable": {
+            "value": false,
+            "flag": null,
+            "matching_ids": []
+        },
+        "order_number": {
+            "value": "PO-4613-240708223",
+            "flag": null,
+            "highlight": {
+                "id": "1051917948439261",
+                "content": {
+                    "text": "PO-4613-240708223"
+                },
+                "position": {
+                    "boundingRect": {
+                        "x1": 349.0,
+                        "y1": 199.44000244140625,
+                        "x2": 435.852783203125,
+                        "y2": 210.45599365234375,
+                        "width": 595.0,
+                        "height": 841.0
+                    },
+                    "rects": [
+                        {
+                            "x1": 349.0,
+                            "y1": 199.44000244140625,
+                            "x2": 435.852783203125,
+                            "y2": 210.45599365234375,
+                            "width": 595.0,
+                            "height": 841.0
+                        }
+                    ],
+                    "pageNumber": 1
+                },
+                "comment": {
+                    "text": "",
+                    "emoji": ""
+                }
+            }
+        },
+        "terms_of_delivery": {
+            "value": null,
+            "flag": null,
+            "matching_ids": []
+        },
+        "flag": null,
+        "matching_ids": []
+    },
+    "sez_details": {
+        "declaration": {
+            "value": null,
+            "flag": null,
+            "matching_ids": []
+        },
+        "lut_number": {
+            "value": null,
+            "flag": null,
+            "matching_ids": []
+        },
+        "lut_validity": {
+            "value": null,
+            "flag": null,
+            "matching_ids": []
+        },
+        "flag": null,
+        "matching_ids": []
+    },
+    "tds_details": {
+        "lower_deduction_applicable": {
+            "value": false,
+            "flag": null,
+            "matching_ids": []
+        },
+        "flag": null,
+        "matching_ids": []
+    },
+    "line_items": [
+        {
+            "item_number": {
+                "value": 1,
+                "flag": null,
+                "matching_ids": []
+            },
+            "hsn_code": {
+                "value": "94034000",
+                "flag": null,
+                "matching_ids": [
+                    "7789746169803460",
+                    "2740780194117358"
+                ]
+            },
+            "description": {
+                "value": "Modular Work",
+                "flag": null,
+                "matching_ids": [
+                    "2081924038231267",
+                    "3108352060116887"
+                ]
+            },
+            "unit": {
+                "value": "No's",
+                "flag": null,
+                "matching_ids": [
+                    "1457427730451865",
+                    "2815801451333395"
+                ]
+            },
+            "quantity": {
+                "value": 1,
+                "flag": null,
+                "matching_ids": []
+            },
+            "unit_price": {
+                "value": 1318.69,
+                "flag": null,
+                "matching_ids": [
+                    "1822831010820835"
+                ]
+            },
+            "taxable_value": {
+                "value": 1318.69,
+                "flag": null,
+                "matching_ids": [
+                    "1081250020710654",
+                    "1886894524331160"
+                ]
+            },
+            "tax_rate": {
+                "value": "9% CGST + 9% SGST",
+                "flag": null,
+                "matching_ids": [
+                    "2194265297413974"
+                ]
+            },
+            "tax_amount": {
+                "value": 237.36,
+                "flag": null,
+                "matching_ids": [
+                    "4564718538457127"
+                ]
+            },
+            "total_value": {
+                "value": 1556.05,
+                "flag": null,
+                "matching_ids": [
+                    "2973937906614212"
+                ]
+            },
+            "flag": null,
+            "matching_ids": []
+        }
+    ],
+    "totals": {
+        "taxable_value": {
+            "value": 1318.69,
+            "flag": null,
+            "highlight": {
+                "id": "1500672292769985",
+                "content": {
+                    "text": "1,318.69"
+                },
+                "position": {
+                    "boundingRect": {
+                        "x1": 289.0,
+                        "y1": 669.260009765625,
+                        "x2": 321.5760498046875,
+                        "y2": 679.1527709960938,
+                        "width": 595.0,
+                        "height": 841.0
+                    },
+                    "rects": [
+                        {
+                            "x1": 289.0,
+                            "y1": 669.260009765625,
+                            "x2": 321.5760498046875,
+                            "y2": 679.1527709960938,
+                            "width": 595.0,
+                            "height": 841.0
+                        }
+                    ],
+                    "pageNumber": 1
+                },
+                "comment": {
+                    "text": "",
+                    "emoji": ""
+                }
+            }
+        },
+        "tax_amount": {
+            "value": 237.36,
+            "flag": null,
+            "highlight": {
+                "id": "7057360385116607",
+                "content": {
+                    "text": "237.36"
+                },
+                "position": {
+                    "boundingRect": {
+                        "x1": 531.0,
+                        "y1": 678.2589721679688,
+                        "x2": 556.5955810546875,
+                        "y2": 686.93408203125,
+                        "width": 595.0,
+                        "height": 841.0
+                    },
+                    "rects": [
+                        {
+                            "x1": 531.0,
+                            "y1": 678.2589721679688,
+                            "x2": 556.5955810546875,
+                            "y2": 686.93408203125,
+                            "width": 595.0,
+                            "height": 841.0
+                        }
+                    ],
+                    "pageNumber": 1
+                },
+                "comment": {
+                    "text": "",
+                    "emoji": ""
+                }
+            }
+        },
+        "rounding": {
+            "value": 0,
+            "flag": null,
+            "matching_ids": []
+        },
+        "invoice_total": {
+            "value": 1556.05,
+            "flag": null,
+            "highlight": {
+                "id": "2251182865944875",
+                "content": {
+                    "text": "1,556.05"
+                },
+                "position": {
+                    "boundingRect": {
+                        "x1": 509.0,
+                        "y1": 608.72802734375,
+                        "x2": 555.5371704101562,
+                        "y2": 621.9472045898438,
+                        "width": 595.0,
+                        "height": 841.0
+                    },
+                    "rects": [
+                        {
+                            "x1": 509.0,
+                            "y1": 608.72802734375,
+                            "x2": 555.5371704101562,
+                            "y2": 621.9472045898438,
+                            "width": 595.0,
+                            "height": 841.0
+                        }
+                    ],
+                    "pageNumber": 1
+                },
+                "comment": {
+                    "text": "",
+                    "emoji": ""
+                }
+            }
+        },
+        "amount_in_words": {
+            "value": "INR One Thousand Five Hundred Fifty Six and Five paise Only",
+            "flag": null,
+            "highlight": {
+                "id": "1427749493875538",
+                "content": {
+                    "text": "INR One Thousand Five Hundred Fifty Six and Five paise Only"
+                },
+                "position": {
+                    "boundingRect": {
+                        "x1": 32.0,
+                        "y1": 632.3699951171875,
+                        "x2": 306.4244384765625,
+                        "y2": 644.7630004882812,
+                        "width": 595.0,
+                        "height": 841.0
+                    },
+                    "rects": [
+                        {
+                            "x1": 32.0,
+                            "y1": 632.3699951171875,
+                            "x2": 306.4244384765625,
+                            "y2": 644.7630004882812,
+                            "width": 595.0,
+                            "height": 841.0
+                        }
+                    ],
+                    "pageNumber": 1
+                },
+                "comment": {
+                    "text": "",
+                    "emoji": ""
+                }
+            }
+        },
+        "subtotal": {
+            "value": "NA",
+            "flag": null,
+            "matching_ids": []
+        },
+        "flag": null,
+        "matching_ids": []
+    },
+    "signature": {
+        "authorized_signatory": {
+            "value": "OLAYANKAR L OLAVAPPA MURALI",
+            "flag": null,
+            "matching_ids": []
+        },
+        "flag": null,
+        "matching_ids": []
+    },
+    "remarks": {
+        "remarks": {
+            "value": null,
+            "flag": null,
+            "matching_ids": []
+        },
+        "flag": null,
+        "matching_ids": []
+    },
+    "additional_fields": {
+        "shipment_tracking_number": {
+            "value": null,
+            "flag": null,
+            "matching_ids": []
+        },
+        "delivery_date": {
+            "value": null,
+            "flag": null,
+            "matching_ids": []
+        },
+        "delivery_terms": {
+            "value": null,
+            "flag": null,
+            "matching_ids": []
+        },
+        "payment_terms": {
+            "value": null,
+            "flag": null,
+            "matching_ids": []
+        },
+        "flag": null,
+        "matching_ids": []
+    }
+}}
