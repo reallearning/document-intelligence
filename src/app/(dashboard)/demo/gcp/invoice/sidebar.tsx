@@ -1,4 +1,4 @@
-import { ExtractedField } from "../components/types";
+import { ExtractedField } from "../../components/types";
 
 interface ISidebarProps {
   extractedData: ExtractedField[];

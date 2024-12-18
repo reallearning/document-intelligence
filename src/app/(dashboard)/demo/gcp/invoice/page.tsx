@@ -1,7 +1,7 @@
 "use client";
 import { useDocumentData } from "@/context/document-data-context";
 import { useEffect, useState } from "react";
-import PDFViewer from "../../components/pdf-viewer";
+import PDFViewer from "../../../components/pdf-viewer";
 import { PDFLoadingSkeleton } from "@/components/pdf-loading-skeleton";
 import { useStorage } from "@/context/StorageContext";
 import Sidebar from "./sidebar";
@@ -133,7 +133,7 @@ import Sidebar from "./sidebar";
 // };
 
 export default function Invoice() {
-    const { gcpExtractedData } = useDocumentData();
+  const { gcpExtractedData } = useDocumentData();
 
   const sidebarWidth = 500;
 
@@ -162,7 +162,7 @@ export default function Invoice() {
       {gcpExtractedData ? (
         <div className="flex w-full flex-row gap-[24px]">
           {/* Sidebar displaying invoice details */}
-          <Sidebar extractedData={gcpExtractedData.data}/>
+          <Sidebar extractedData={gcpExtractedData.data} />
 
           <div className="w-full h-screen mr-4">
             {gcpExtractedData.format === "image" ? (
