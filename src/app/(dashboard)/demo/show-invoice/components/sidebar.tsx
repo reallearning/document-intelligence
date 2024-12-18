@@ -215,7 +215,7 @@ const Sidebar = ({ data }: SidebarProps) => {
       return (
         <div className="mb-2">
           <p className="text-sm font-nunito font-medium text-gray-400 mb-1">
-            {label}
+            {formatKey(label)}
           </p>
           <div className="flex w-full justify-between">
             <p className="text-sm">{field.value?.toString() || "N/A"}</p>
@@ -254,7 +254,7 @@ const Sidebar = ({ data }: SidebarProps) => {
             return (
               <div key={key} className="mb-3">
                 <p className="text-sm font-nunito font-medium text-gray-400">
-                  {key}
+                  {formatKey(key)}
                 </p>
                 <div className="flex items-center justify-between">
                   <p className="text-sm">{value?.toString() || "N/A"}</p>
@@ -282,33 +282,28 @@ const Sidebar = ({ data }: SidebarProps) => {
   };
 
   const hasNonNullValue = (obj: Record<string, any>): boolean => {
-    if ("value" in obj && obj.value !== null) {
-      return true; // Handle cases where "value" is at the top level
-    }
+    if ("value" in obj) {
+      const value = obj.value;
 
-    for (const key in obj) {
-      const entry = obj[key];
-
-      if (entry && typeof entry === "object") {
-        if ("value" in entry) {
-          const value = entry.value;
-
-          if (typeof value === "object" && value !== null) {
-            if (Object.values(value).some((v) => v !== null)) {
-              return true;
-            }
-          } else if (value !== null) {
-            return true;
-          }
-        }
-
-        if (hasNonNullValue(entry)) {
-          return true;
-        }
+      if (typeof value === "object" && value !== null) {
+        // Check if any key in the object is non-null
+        return Object.values(value).some((v) => v !== null);
       }
+
+      // If value is not an object, ensure it is not null
+      return value !== null;
     }
 
     return false;
+  };
+
+  const isSectionEmpty = (obj: Record<string, any>): boolean => {
+    return !Object.values(obj).some((entry) => {
+      if (entry && typeof entry === "object" && "value" in entry) {
+        return entry.value !== null && entry.value !== undefined;
+      }
+      return false;
+    });
   };
 
   const renderFlatSection = (
@@ -334,11 +329,9 @@ const Sidebar = ({ data }: SidebarProps) => {
     const firstFieldKey = sectionKeys[0];
     const firstFieldValue = sectionData[firstFieldKey] || undefined;
 
-    const hasValues = hasNonNullValue(sectionData);
+    const isEmpty = isSectionEmpty(sectionData);
+    if (isEmpty) return null;
 
-    if (!hasValues) {
-      return null;
-    }
 
     return (
       <div
