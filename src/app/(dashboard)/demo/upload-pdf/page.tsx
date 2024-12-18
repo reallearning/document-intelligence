@@ -1,9 +1,8 @@
 "use client";
 import { useDocumentData } from "@/context/document-data-context";
-import { showHighlights, uploadFile } from "@/services/upload-file";
-import { XMarkIcon } from "@heroicons/react/24/solid";
+import { showHighlights, uploadFile, uploadFileGCP } from "@/services/upload-file";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 // Define the type for fileState to ensure consistency
 type FileState = {
@@ -17,7 +16,8 @@ type FileState = {
 };
 
 const UploadPage = () => {
-  const { saveData } = useDocumentData();
+  // const { saveData } = useDocumentData();
+  const { saveGcpExtractedData } = useDocumentData();
   const router = useRouter();
 
   const loadingMessages = [
@@ -114,7 +114,7 @@ const UploadPage = () => {
       }
 
       const pdfUrl = data.url.split("?")[0];
-      const { data: highlightsData } = await uploadFile({
+      const { data: highlightsData } = await uploadFileGCP({
         doc_url: pdfUrl,
         type: fileState.fileType.toLowerCase(),
         format: format,
@@ -124,14 +124,16 @@ const UploadPage = () => {
         throw new Error("File upload failed.");
       }
 
-      saveData(highlightsData);
+      // saveData(highlightsData);
+      saveGcpExtractedData(highlightsData);
       setFileState((prevState) => ({
         ...prevState,
         uploadSuccess: "File uploaded successfully!",
         isUploading: false,
       }));
 
-      router.push("/demo/show-invoice");
+      // router.push("/demo/show-invoice");
+      router.push("/demo/invoice");
     } catch (error) {
       let errorMessage = "An error occurred during upload.";
 
