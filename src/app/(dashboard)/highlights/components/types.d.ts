@@ -1,7 +1,7 @@
 export interface HighlightsContentData {
-  pdf_url: string;
+  doc_url: string;
   format: string;
-  highlights: HighlightsContent;
+  data: HighlightsContent;
 }
 
 export interface Highlight {

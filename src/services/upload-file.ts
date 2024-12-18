@@ -1,7 +1,8 @@
 import { AxiosResponse } from "axios";
 import axiosInstance from "./axios-instance";
 import { IUploadFileRequest } from "@/types/upload-file";
-import { Data, Highlights } from "@/app/(dashboard)/demo/components/types";
+import { Data,  } from "@/app/(dashboard)/demo/components/types";
+import { HighlightsContentData } from "@/app/(dashboard)/highlights/components/types";
 
 export async function uploadFile(
   body: IUploadFileRequest
@@ -11,6 +12,6 @@ export async function uploadFile(
 
 export async function showHighlights(
   body: IUploadFileRequest
-): Promise<AxiosResponse<Highlights>> {
-  return axiosInstance.post("/highlights", body);
+): Promise<AxiosResponse<HighlightsContentData>> {
+  return axiosInstance.post("/doc-intelligence/highlights", body);
 }

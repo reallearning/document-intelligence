@@ -1,154 +1,3 @@
-// "use client";
-
-// import React from "react";
-// import type { IHighlight } from "react-pdf-highlighter";
-
-// interface Props {
-//   highlights: Array<IHighlight>;
-//   resetHighlights: () => void;
-//   toggleDocument: () => void;
-// }
-
-// const updateHash = (highlight: IHighlight) => {
-//   document.location.hash = `highlight-${highlight.id}`;
-// };
-
-// export function Sidebar({
-//   highlights,
-//   resetHighlights,
-//   toggleDocument,
-// }: Props) {
-//   return (
-//     <div
-//       className="sidebar"
-//       style={{
-//         width: "25vw",
-//         height: "100vh",
-//         overflow: "hidden",
-//         display: "flex",
-//         flexDirection: "column",
-//         backgroundColor: "#F6F6F6",
-//       }}
-//     >
-//       <ul
-//         className="sidebar__highlights"
-//         style={{
-//           listStyle: "none",
-//           padding: 0,
-//           margin: 0,
-//           overflowY: "auto",
-//           flex: 1,
-//         }}
-//       >
-//         {highlights.map((highlight, index) => (
-//           <li
-//             key={index}
-//             className="sidebar__highlight"
-//             onClick={() => {
-//               updateHash(highlight);
-//             }}
-//             style={{
-//               padding: "1rem",
-//               cursor: "pointer",
-//               borderBottom: "1px solid #e2e8f0",
-//               transition: "all 0.2s ease",
-//               background: "white",
-//             }}
-//             onMouseEnter={(e) => {
-//               e.currentTarget.style.backgroundColor = "#f7fafc";
-//             }}
-//             onMouseLeave={(e) => {
-//               e.currentTarget.style.backgroundColor = "white";
-//             }}
-//           >
-//             <div
-//               style={{
-//                 display: "flex",
-//                 flexDirection: "column",
-//                 gap: "0.5rem",
-//               }}
-//             >
-//               {highlight.comment.text && (
-//                 <strong
-//                   style={{
-//                     color: "#2d3748",
-//                     fontSize: "0.875rem",
-//                     display: "block",
-//                   }}
-//                 >
-//                   {highlight.comment.text}
-//                 </strong>
-//               )}
-
-//               {highlight.content.text && (
-//                 <blockquote
-//                   style={{
-//                     margin: 0,
-//                     color: "#4a5568",
-//                     fontSize: "0.875rem",
-//                     borderLeft: "3px solid #e2e8f0",
-//                     paddingLeft: "0.75rem",
-//                     wordBreak: "break-word",
-//                   }}
-//                 >
-//                   {`${highlight.content.text.slice(0, 90).trim()}…`}
-//                 </blockquote>
-//               )}
-
-//               {highlight.content.image && (
-//                 <div
-//                   style={{
-//                     marginTop: "0.5rem",
-//                     padding: "0.5rem",
-//                     border: "1px solid #e2e8f0",
-//                     borderRadius: "4px",
-//                     background: "#fff",
-//                     width: "100%",
-//                     boxSizing: "border-box",
-//                     overflow: "hidden",
-//                   }}
-//                 >
-//                   <div
-//                     style={{
-//                       width: "100%",
-//                       position: "relative",
-//                       display: "flex",
-//                       justifyContent: "center",
-//                       alignItems: "center",
-//                     }}
-//                   >
-//                     <img
-//                       src={highlight.content.image}
-//                       alt="Highlight area"
-//                       style={{
-//                         maxWidth: "100%",
-//                         height: "auto",
-//                         display: "block",
-//                         objectFit: "contain",
-//                       }}
-//                     />
-//                   </div>
-//                 </div>
-//               )}
-
-//               <div
-//                 style={{
-//                   marginTop: "0.25rem",
-//                   fontSize: "0.75rem",
-//                   color: "#718096",
-//                   textAlign: "right",
-//                 }}
-//               >
-//                 Page {highlight.position.pageNumber}
-//               </div>
-//             </div>
-//           </li>
-//         ))}
-//       </ul>
-//     </div>
-//   );
-// }
-
 "use client";
 
 import React, { useState } from "react";
@@ -192,12 +41,19 @@ export default function Sidebar({
   });
 
   const hasNonNullValue = (obj: Record<string, any>): boolean => {
-    return Object.values(obj).some((entry) => {
-      if (entry && typeof entry === "object" && "value" in entry) {
-        return entry.value !== null;
+    if ("value" in obj) {
+      const value = obj.value;
+
+      if (typeof value === "object" && value !== null) {
+        // Check if any key in the object is non-null
+        return Object.values(value).some((v) => v !== null);
       }
-      return false;
-    });
+
+      // If value is not an object, ensure it is not null
+      return value !== null;
+    }
+
+    return false;
   };
 
   const renderCompliance = (status: Flag | null, showMargin?: boolean) => {
@@ -275,29 +131,65 @@ export default function Sidebar({
   const renderField = (label: string, field?: FieldWithHighlight) => {
     if (!field || field.value === null) return null;
 
+    const isMultiValue = hasMultipleValues(field);
+    const hasValues = isMultiValue ? hasNonNullValue(field) : true;
+
+    if (!hasValues) return null;
+
+    if (!isMultiValue) {
+      return (
+        <div
+          className="cursor-pointer px-4 py-2 border border-transparent rounded-md hover:border-[#BAAE92]"
+          onClick={() => updateHash(field)}
+        >
+          <p className="text-sm font-nunito font-medium text-gray-400 mb-1">
+            {formatKey(String(label))}
+          </p>
+          <div className="flex w-full justify-between">
+            <p className="text-sm">{field.value?.toString()}</p>
+            {field.flag && (
+              <span
+                className={`px-4 py-[2px] rounded-full text-[10px] bg-opacity-[30%] mb-[1px] ${
+                  field.flag.type === "positive"
+                    ? "bg-[#3C7167] text-[#3C7167]"
+                    : field.flag.type === "negative"
+                    ? "bg-[#D63735] text-[#D63735]"
+                    : "bg-red-50 text-red-600"
+                }`}
+              >
+                {field.flag.title}
+              </span>
+            )}
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div
         className="cursor-pointer px-4 py-2 border border-transparent rounded-md hover:border-[#BAAE92]"
         onClick={() => updateHash(field)}
       >
-        <p className="text-sm font-nunito font-medium text-gray-400 mb-1">
-          {label}
-        </p>
-        <div className="flex w-full justify-between">
-          <p className="text-sm">{field.value?.toString()}</p>
-          {field.flag && (
-            <span
-              className={`px-4 py-[2px] rounded-full text-[10px] bg-opacity-[30%] mb-[1px] ${
-                field.flag.type === "positive"
-                  ? "bg-[#3C7167] text-[#3C7167]"
-                  : field.flag.type === "negative"
-                  ? "bg-[#D63735] text-[#D63735]"
-                  : "bg-red-50 text-red-600"
-              }`}
-            >
-              {field.flag.title}
-            </span>
-          )}
+        <div className="flex justify-between items-center cursor-pointer">
+          <p className="text-sm font-nunito font-medium text-gray-400 mb-1">
+            {label}
+          </p>
+        </div>
+
+        <div className="mt-2 pl-2 border-l-2 border-gray-100">
+          {Object.entries(field.value!).map(([key, value]) => {
+            if (!value || value === null) return null;
+            return (
+              <div key={key} className="mb-3">
+                <p className="text-sm font-nunito font-medium text-gray-400">
+                  {formatKey(String(key))}
+                </p>
+                <div className="flex items-center justify-between">
+                  <p className="text-sm">{value?.toString() || "N/A"}</p>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     );
@@ -364,6 +256,15 @@ export default function Sidebar({
     );
   };
 
+  const isSectionEmpty = (obj: Record<string, any>): boolean => {
+    return !Object.values(obj).some((entry) => {
+      if (entry && typeof entry === "object" && "value" in entry) {
+        return entry.value !== null && entry.value !== undefined;
+      }
+      return false;
+    });
+  };
+
   const renderFlatSection = (
     sectionName: string,
     sectionData:
@@ -382,8 +283,8 @@ export default function Sidebar({
       (key) => key !== "flag"
     ) as Array<keyof typeof sectionData>;
 
-    const hasValues = hasNonNullValue(sectionData);
-    if (!hasValues) return null;
+    const isEmpty = isSectionEmpty(sectionData);
+    if (isEmpty) return null;
 
     return (
       <div
@@ -428,8 +329,6 @@ export default function Sidebar({
       </div>
     );
   };
-
-  console.log(sectionNames);
 
   return (
     <div className="flex h-screen">
