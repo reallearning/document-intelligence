@@ -76,3 +76,14 @@ export interface Highlight {
 export interface IDataProps {
   data: Data; // Main data prop passed to the sidebar
 }
+
+export interface GCPExtractedData {
+  doc_url: string;
+  format: string;
+  data: ExtractedField[];
+}
+
+export interface ExtractedField {
+  field_name: string;
+  value: string | number | boolean | null;
+}

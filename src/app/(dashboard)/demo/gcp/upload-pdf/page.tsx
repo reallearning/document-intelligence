@@ -1,10 +1,9 @@
 "use client";
 import { useDocumentData } from "@/context/document-data-context";
-import { uploadFile } from "@/services/upload-file";
+import { uploadFileGCP } from "@/services/upload-file";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-// Define the type for fileState to ensure consistency
 type FileState = {
   selectedFile: File | null;
   fileType: string;
@@ -16,7 +15,7 @@ type FileState = {
 };
 
 const UploadPage = () => {
-  const { saveData } = useDocumentData();
+  const { saveGcpExtractedData } = useDocumentData();
   const router = useRouter();
 
   const loadingMessages = [
@@ -113,7 +112,7 @@ const UploadPage = () => {
       }
 
       const pdfUrl = data.url.split("?")[0];
-      const { data: highlightsData } = await uploadFile({
+      const { data: highlightsData } = await uploadFileGCP({
         doc_url: pdfUrl,
         type: fileState.fileType.toLowerCase(),
         format: format,
@@ -123,14 +122,14 @@ const UploadPage = () => {
         throw new Error("File upload failed.");
       }
 
-      saveData(highlightsData);
+      saveGcpExtractedData(highlightsData);
       setFileState((prevState) => ({
         ...prevState,
         uploadSuccess: "File uploaded successfully!",
         isUploading: false,
       }));
 
-      router.push("/demo/show-invoice");
+      router.push("/demo/gcp/invoice");
     } catch (error) {
       let errorMessage = "An error occurred during upload.";
 
@@ -163,32 +162,6 @@ const UploadPage = () => {
           onChange={handleFileChange}
           className="mb-6 block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-morrie-primary file:opacity-80 file:text-white hover:file:opacity-100"
         />
-
-        {/* File Type Selection
-        <div className="text-left mb-6 font-poly">
-          <p className="text-black mb-2">Select file type:</p>
-          {/* <label className="block mb-2 text-black font-nunito">
-            <input
-              type="radio"
-              name="fileType"
-              value="tax_proof"
-              onChange={handleTypeChange}
-              className="mr-2 accent-morrie-primary"
-              disabled
-            />
-            Tax Proof
-          </label> */}
-          {/* <label className="block mb-2 text-black font-nunito">
-            <input
-              type="radio"
-              name="fileType"
-              value="Invoice"
-              onChange={handleTypeChange}
-              className="mr-2 accent-morrie-primary"
-            />
-            Invoice
-          </label>
-        </div> */}
 
         {/* Upload Button */}
         <button
