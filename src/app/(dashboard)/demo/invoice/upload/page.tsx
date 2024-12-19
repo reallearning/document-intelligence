@@ -129,7 +129,7 @@ const UploadPage = () => {
         isUploading: false,
       }));
 
-      router.push("/demo/gcp/invoice");
+      router.push("/demo/invoice/details");
     } catch (error) {
       let errorMessage = "An error occurred during upload.";
 
