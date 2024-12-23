@@ -1,3 +1,7 @@
+import { useDocumentData } from "@/context/document-data-context";
+import useGlobalHideScrollbar from "@/hooks/use-global-hide-scrolbar";
+import { livspaceFeedback } from "@/services/livspace";
+import { FeedbackRequest } from "@/types/livspace";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { ChevronUpIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
@@ -7,7 +11,9 @@ interface ISidebarProps {
 }
 //bg-[#BAAE921A] rounded-lg
 export default function Sidebar({ data }: ISidebarProps) {
+  const { livspaceData } = useDocumentData();
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
+  const [feedbackState, setFeedbackState] = useState("not-given");
 
   const toggleSection = (section: string) => {
     setOpenSections((prev) => {
@@ -234,19 +240,78 @@ export default function Sidebar({ data }: ISidebarProps) {
     }
   };
 
+  const feedback = [
+    {
+      label: "👍 Positive",
+      color: "bg-morrie-primary",
+      value: "positive",
+    },
+    {
+      label: "👎 Negative",
+      color: "bg-red-500/90",
+      value: "negative",
+    },
+  ];
+
+  const giveFeedbackHandler = async (value: string) => {
+    const payload: FeedbackRequest = {
+      doc_url: livspaceData!.doc_url,
+      feedback: value,
+    };
+
+    try {
+      const response = await livspaceFeedback(payload);
+
+      if (response?.status === 200) {
+        setFeedbackState("success");
+      } else {
+        setFeedbackState("error");
+      }
+    } catch (error) {
+      setFeedbackState("error");
+    }
+  };
+
   const formatKey = (key: string) =>
     key.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
 
+  useGlobalHideScrollbar();
+
   return (
-    <div className="w-[450px] bg-[#F6F6F6] overflow-y-auto no-scrollbar p-4">
-      <div>
-        <h2 className="font-nunito font-semibold text-md text-black mb-4">
-          Extracted Data
-        </h2>
+    <div className="flex h-screen">
+      <div className="w-[350px] bg-[#F6F6F6] flex flex-col">
+        <div className="overflow-y-auto  no-scrollbar p-4">
+          <div>
+            <h2 className="font-nunito font-semibold text-md text-black mb-4">
+              Extracted Data
+            </h2>
+          </div>
+          {Object.entries(data).map(([key, value]) =>
+            renderData(key, value, false)
+          )}
+        </div>
+        <div className="flex space-x-2 px-4 py-4 bg-[#ffffff] rounded-t-lg mt-auto">
+          {feedbackState === "not-given" ? (
+            feedback.map((e) => (
+              <button
+                key={e.value}
+                className={`px-4 py-2 ${e.color} font-nunito text-white w-full rounded-lg`}
+                onClick={() => giveFeedbackHandler(e.value)} // Trigger feedback submission
+              >
+                {e.label}
+              </button>
+            ))
+          ) : feedbackState === "success" ? (
+            <p className="m-auto text-green-600 font-nunito">
+              Thanks for your valuable feedback!
+            </p>
+          ) : feedbackState === "error" ? (
+            <p className="text-red-600 font-nunito m-auto text-center">
+              Error occurred while updating feedback. Please try again.
+            </p>
+          ) : null}
+        </div>
       </div>
-      {Object.entries(data).map(([key, value]) =>
-        renderData(key, value, false)
-      )}
     </div>
   );
 }

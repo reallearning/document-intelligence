@@ -3,3 +3,8 @@ export interface LivspaceData {
   format: string;
   data: Record<string, unknown>;
 }
+
+export interface FeedbackRequest {
+  doc_url: string;
+  feedback: string;
+}
