@@ -2,6 +2,8 @@ import { AxiosResponse } from "axios";
 import axiosInstance from "./axios-instance";
 import { IUploadFileRequest } from "@/types/upload-file";
 import { Data, GCPExtractedData, Highlights } from "@/app/(dashboard)/demo/components/types";
+import { OtoData } from "@/types/oto";
+import { LivspaceData } from "@/types/livspace";
 
 export async function uploadFile(
   body: IUploadFileRequest
@@ -20,3 +22,16 @@ export async function showHighlights(
 ): Promise<AxiosResponse<Highlights>> {
   return axiosInstance.post("/highlights", body);
 }
+
+export async function uploadFileOto(
+  body: IUploadFileRequest
+): Promise<AxiosResponse<OtoData>> {
+  return axiosInstance.post("/oto", body);
+}
+
+export async function uploadFileLivspace(
+  body: IUploadFileRequest
+): Promise<AxiosResponse<LivspaceData>> {
+  return axiosInstance.post("/livspace/demo", body);
+}
+
