@@ -7,7 +7,7 @@ const storage = new Storage({
 });
 
 const bucketName = "morrie-resources";
-const folderPath = "morrie-resources/oto/";
+const folderPath = "oto/";
 
 export async function POST(req: NextRequest) {
   try {
