@@ -1,4 +1,4 @@
-import { SidebarData } from "../show-invoice/components/sidebar";
+import { Invoice } from "../show-invoice/components/sidebar";
 
 export interface DataItem {
   key: string; // Example: "Tel:", "Invoice No."
@@ -36,7 +36,7 @@ export interface Data {
   doc_url: string; // URL of the PDF file
   format: string;
   type: string;
-  data: SidebarData;
+  data: Invoice;
 }
 
 export interface Highlights {
