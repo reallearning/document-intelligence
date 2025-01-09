@@ -149,7 +149,7 @@ const UploadPage = () => {
 
   const fileTypeOptions = [
     "Invoice",
-    "Preforma-Invoice",
+    "Performa-Invoice",
     "Price-List",
     "Rent-Agreement",
   ];
