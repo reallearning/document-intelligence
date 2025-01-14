@@ -24,10 +24,6 @@ export const ExportDocuments = ({ closeModal }: IExportDocumentsProps) => {
       id: 4,
       icon: "/quickbooks.svg",
     },
-    {
-      id: 5,
-      icon: "/salesforce.svg",
-    },
   ];
 
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
@@ -64,18 +60,13 @@ export const ExportDocuments = ({ closeModal }: IExportDocumentsProps) => {
           <div className="flex flex-col justify-center items-center mt-10">
             <div className="grid grid-cols-2 gap-12">
               {data.map((item: any, index: number) => (
-                <div
-                  key={item.id}
-                  className={`flex items-center space-x-3 ${
-                    index === data.length - 1 ? "col-span-2 justify-center" : ""
-                  }`}
-                >
+                <div key={item.id} className={`flex items-center space-x-3 `}>
                   <input
                     type="checkbox"
                     checked={selectedItems.includes(item.id)}
                     onChange={() => handleCheckboxChange(item.id)}
                     id={`checkbox-${item.id}`}
-                    className="h-5 w-5 cursor-pointer accent-morrie-primary"
+                    className="h-5 w-5 cursor-pointer accent-[#7C3AED]"
                   />
                   <label
                     htmlFor={`checkbox-${item.id}`}
@@ -97,17 +88,14 @@ export const ExportDocuments = ({ closeModal }: IExportDocumentsProps) => {
         {/* CTA Button */}
 
         <div className="mx-10 mt-10">
-          <Button
-            color="primary-default"
-            size="md"
-            className={`px-4 border-[#D9D9D9] font-nunito text-white w-full rounded-full ${
-              selectedItems.length === 0 ? "bg-gray-400" : ""
-            }`}
-            disabled={selectedItems.length === 0}
+          <button
             onClick={handleExportData}
+            className={`px-4 py-3 border-[#D9D9D9] font-nunito text-white w-full rounded-xl ${
+              selectedItems.length === 0 ? "bg-gray-400" : "bg-[#7C3AED]"
+            }`}
           >
             Export Data
-          </Button>
+          </button>{" "}
         </div>
       </div>
     </div>
