@@ -82,7 +82,7 @@ const DealsTabs = ({ reviewData, setActiveContract }: DealsTabsProps) => {
         </div>
 
         {/* Render PDF Viewer */}
-        <div className="w-full h-[100vh]">
+        <div className="h-[100vh]" style={{ width: "calc(100vw - 470px)" }}>
           {reviewData.map((review) =>
             review.contracts.map(
               (contract) =>
