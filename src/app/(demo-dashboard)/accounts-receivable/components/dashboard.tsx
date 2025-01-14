@@ -198,7 +198,7 @@ const CustomerDatabase: React.FC<ICustomerDatabaseProps> = ({
   const router = useRouter();
 
   const handleClick = (redirectTo: string, index: number) => {
-    if (index <= 1 && redirectTo) {
+    if (index === 0 && redirectTo) {
       router.push(`/accounts-receivable/${redirectTo}`);
     }
   };

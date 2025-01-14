@@ -13,7 +13,7 @@ const dashboardData = {
       title: "DPO",
       value: "65",
       subtext: "from last month",
-      changePercentage: -3.2,
+      changePercentage: 2.3,
     },
   ],
   topOverduePayments: [
@@ -399,7 +399,7 @@ function DpoCard({ metrics }: ICardProps) {
             className="mr-2"
           />
           <p className="font-nunito text-[10px] font-normal">
-            {metrics[0].changePercentage}%
+            {metrics[1].changePercentage}%
           </p>
         </div>
         <p className="ml-1 font-nunito text-[10px] font-normal text-[#9CA3AF]">

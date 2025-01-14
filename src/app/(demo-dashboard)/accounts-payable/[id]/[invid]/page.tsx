@@ -10,7 +10,7 @@ const invoiceDetails = [
     id: "INV-2025-001",
     invoiceName: "Phoenix Supplies Ltd.",
     pdfUrl:
-      "https://storage.googleapis.com/morrie-resources/demo/invoice%20.pdf",
+      "https://storage.googleapis.com/morrie-resources/demo/invoice%20%20%281%29.pdf",
     data: {
       "Invoice Number": {
         value: "INV-2025-001",
