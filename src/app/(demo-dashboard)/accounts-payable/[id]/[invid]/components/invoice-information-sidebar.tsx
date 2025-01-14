@@ -77,6 +77,16 @@ export const InvoiceInformationSidebar = ({
                   />
                 )}
               </div>
+              {step.matching_value && (
+                <div className="border-t border-[##E2E8F0] mt-2 pt-2">
+                  <p className="font-nunito text-xs font-normal text-[#A8A8A8]">
+                    Value in PO
+                  </p>
+                  <p className="font-nunito font-normal text-sm text-black">
+                    {step.matching_value}
+                  </p>
+                </div>
+              )}
             </div>
           ))}
         </div>

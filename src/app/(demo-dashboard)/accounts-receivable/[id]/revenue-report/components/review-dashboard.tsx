@@ -289,59 +289,9 @@ const InvoicesDatabase: React.FC<{}> = () => {
 function ActualVEstimatedCashFlow() {
   return (
     <div className="border border-[#E2E8F0] rounded-2xl p-5 w-[70%]">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center">
-          <Image
-            src="/search.svg"
-            alt="dots"
-            width={24}
-            height={24}
-            className="mr-2"
-          />
-          <p className="font-nunito text-sm fomt-normal text-black">
-            Actual vs Estimated Cash Flow
-          </p>
-        </div>
-        <div className="flex items-center">
-          <div className="flex items-center mr-4">
-            <div className="w-3 h-3 rounded-sm bg-[#E2E8F0] mr-1"></div>
-            <p className="font-nunito text-[10px] font-normal text-[#4B5563]">
-              Estimated
-            </p>
-          </div>
-          <div className="flex items-center mr-4">
-            <div className="w-3 h-3 rounded-sm bg-[#7C3AED] mr-1"></div>
-            <p className="font-nunito text-[10px] font-normal text-[#4B5563]">
-              Actual
-            </p>
-          </div>
-          <div className="flex items-center mr-4">
-            <div className="w-3 h-3 rounded-sm bg-[#9CA3AF] mr-1"></div>
-            <p className="font-nunito text-[10px] font-normal text-[#4B5563]">
-              Forecasted
-            </p>
-          </div>
-          <div className="flex px-4 py-2 rounded-lg border border-[#E2E8F0]">
-            <p className="font-poly font-normal text-[10px] text-[#4B5563] mr-2 items-center">
-              Monthly
-            </p>
-            <Image
-              src="/drop-down.svg"
-              alt="Bar chart"
-              height={12}
-              width={12}
-            />
-          </div>
-        </div>
-      </div>
-      <div className="mt-4">
-        <p className="font-nunito font-bold text-[32px] text-[#111827]">
-          Rs. 123,858,322
-        </p>
-      </div>
-      <div className="relative mt-6 w-[80%] h-[200px]">
+      <div className="relative w-full h-[90%]">
         <Image
-          src="/bar-chart.svg"
+          src="/bar-chart-2.svg"
           alt="Bar chart"
           fill
           className="object-contain"
