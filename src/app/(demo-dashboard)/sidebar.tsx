@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -125,7 +126,9 @@ export const Sidebar = () => {
   return (
     <div className="h-full flex flex-col justify-between items-center pt-[28px] pl-6 pb-6">
       <div className="w-8 h-8">
-        <Image src="/cfo-logo.svg" width={32} height={32} alt="Logo" />
+        <Link href="dashboard">
+          <Image src="/cfo-logo.svg" width={32} height={32} alt="Logo" />
+        </Link>
         <SideNavigation
           dashboardType={dashboardType}
           handleClick={handleClick}
