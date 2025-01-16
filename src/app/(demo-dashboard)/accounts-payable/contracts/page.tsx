@@ -93,13 +93,85 @@ const invoices = [
     assignee: "finance@beta.com",
     last_modified_on: "14-Dec-2023",
   },
+  {
+    id: "invoice-11",
+    name: "INV-OMEGA-0011",
+    source: "Workday",
+    type_of_document: "Invoice",
+    added_on: "05-Dec-2023",
+    assignee: "invoices@omega.com",
+    last_modified_on: "15-Dec-2023",
+  },
+  {
+    id: "invoice-12",
+    name: "INV-NEO-0012",
+    source: "SAP",
+    type_of_document: "Invoice",
+    added_on: "06-Dec-2023",
+    assignee: "finance@neotech.com",
+    last_modified_on: "16-Dec-2023",
+  },
+  {
+    id: "invoice-13",
+    name: "INV-TITAN-0013",
+    source: "QuickBooks",
+    type_of_document: "Invoice",
+    added_on: "07-Dec-2023",
+    assignee: "billing@titan.com",
+    last_modified_on: "17-Dec-2023",
+  },
+  {
+    id: "invoice-14",
+    name: "INV-PLUTO-0014",
+    source: "Zoho Books",
+    type_of_document: "Invoice",
+    added_on: "07-Dec-2023",
+    assignee: "accounts@plutoinc.com",
+    last_modified_on: "18-Dec-2023",
+  },
+  {
+    id: "invoice-15",
+    name: "INV-CENT-0015",
+    source: "Salesforce",
+    type_of_document: "Invoice",
+    added_on: "08-Dec-2023",
+    assignee: "finance@centauri.com",
+    last_modified_on: "19-Dec-2023",
+  },
+  {
+    id: "invoice-16",
+    name: "INV-ORION-0016",
+    source: "Oracle",
+    type_of_document: "Invoice",
+    added_on: "09-Dec-2023",
+    assignee: "billing@oriontech.com",
+    last_modified_on: "20-Dec-2023",
+  },
+  {
+    id: "invoice-17",
+    name: "INV-VENUS-0017",
+    source: "SAP",
+    type_of_document: "Invoice",
+    added_on: "10-Dec-2023",
+    assignee: "finance@venusventures.com",
+    last_modified_on: "21-Dec-2023",
+  },
+  {
+    id: "invoice-18",
+    name: "INV-MARS-0018",
+    source: "QuickBooks",
+    type_of_document: "Invoice",
+    added_on: "11-Dec-2023",
+    assignee: "accounts@marsmetals.com",
+    last_modified_on: "22-Dec-2023",
+  },
 ];
 
 export default function CompliancePage() {
   return (
     <div className="w-full p-6 h-screen overflow-y-auto">
       <div className="flex justify-between items-center ">
-        <p className="font-poly text-xl font-normal text-black">Contracts</p>
+        <p className="font-poly text-xl font-normal text-black">Compliance</p>
         <div className="flex items-center">
           <div className="mr-6">
             <p className="font-poly font-normal text-sm text-black">
@@ -171,7 +243,7 @@ const VendorsTable: React.FC<VendorsTableProps> = ({ invoices }) => {
           className="mr-2"
         />
         <p className="font-nunito font-medium text-sm text-[#111827]">
-          All Deals
+          All Documents
         </p>
       </div>
       <div className="mt-4 overflow-auto">
