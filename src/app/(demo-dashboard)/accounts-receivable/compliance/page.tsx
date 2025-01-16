@@ -28,7 +28,7 @@ const deals = [
     assignee: "dani@adhe.com",
     startDate: "17th April 2020",
     paymentTerms: "Quarterly",
-    reviewStatus: null,
+    reviewStatus: "Pending",
   },
   {
     id: "",
@@ -46,7 +46,7 @@ const deals = [
     assignee: "maria@adhe.com",
     startDate: "1st September 2021",
     paymentTerms: "NET90",
-    reviewStatus: null,
+    reviewStatus: "Completed",
   },
   {
     id: "",
@@ -55,7 +55,7 @@ const deals = [
     assignee: "lucas@adhe.com",
     startDate: "1st April 2022",
     paymentTerms: "Annually",
-    reviewStatus: null,
+    reviewStatus: "Completed",
   },
   {
     id: "",
@@ -64,7 +64,7 @@ const deals = [
     assignee: "nsusan@adhe.com",
     startDate: "15th May 2023",
     paymentTerms: "NET45",
-    reviewStatus: null,
+    reviewStatus: "Completed",
   },
 ];
 
@@ -72,7 +72,9 @@ export default function CompliancePage() {
   return (
     <div className="w-full p-6 h-screen overflow-y-auto">
       <div className="flex justify-between items-center ">
-        <p className="font-poly text-xl font-normal text-black">Compliance</p>
+        <p className="font-poly text-xl font-normal text-black">
+          Review Status
+        </p>
         <div className="flex items-center">
           <div className="mr-6">
             <p className="font-poly font-normal text-sm text-black">

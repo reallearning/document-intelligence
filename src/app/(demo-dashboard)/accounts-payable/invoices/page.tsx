@@ -44,7 +44,9 @@ export default function CompliancePage() {
   return (
     <div className="w-full p-6 h-screen overflow-y-auto">
       <div className="flex justify-between items-center ">
-        <p className="font-poly text-xl font-normal text-black">Invoices</p>
+        <p className="font-poly text-xl font-normal text-black">
+          Vendor Dashboard
+        </p>
         <div className="flex items-center">
           <div className="mr-6">
             <p className="font-poly font-normal text-sm text-black">
@@ -106,7 +108,7 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({ invoices }) => {
           className="mr-2"
         />
         <p className="font-nunito font-medium text-sm text-[#111827]">
-          All Deals
+          All Vendors
         </p>
       </div>
       <div className="mt-4 overflow-auto">
@@ -116,7 +118,7 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({ invoices }) => {
               <th className="rounded-tl-xl rounded-bl-xl px-4 py-2">
                 Customer Name
               </th>
-              <th className="px-4 py-2">Active Invoice</th>
+              <th className="px-4 py-2">Recent Invoice</th>
               <th className="px-4 py-2">Invoice Amount</th>
               <th className="px-4 py-2">Status</th>
               <th className="px-4 py-2"></th>

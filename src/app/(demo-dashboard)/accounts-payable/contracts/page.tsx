@@ -11,6 +11,7 @@ const invoices = [
     added_on: "01-Dec-2023",
     assignee: "accounts@phoenix.com",
     last_modified_on: "06-Dec-2023",
+    review_status: "Pending",
   },
   {
     id: "invoice-03",
@@ -20,15 +21,17 @@ const invoices = [
     added_on: "01-Dec-2023",
     assignee: "billing@paxmedica.com",
     last_modified_on: "07-Dec-2023",
+    review_status: "Pending",
   },
   {
     id: "invoice-01",
     name: "INV-OAK-0001",
     source: "Salesforce",
-    type_of_document: "Invoice",
+    type_of_document: "Contract",
     added_on: "01-Dec-2023",
     assignee: "finance@oaktree.com",
     last_modified_on: "05-Dec-2023",
+    review_status: "Pending",
   },
   {
     id: "invoice-04",
@@ -38,15 +41,17 @@ const invoices = [
     added_on: "02-Dec-2023",
     assignee: "finance@alphafintech.com",
     last_modified_on: "08-Dec-2023",
+    review_status: "Completed",
   },
   {
     id: "invoice-05",
     name: "INV-ZEN-0005",
     source: "Zoho Books",
-    type_of_document: "Invoice",
+    type_of_document: "Contract",
     added_on: "02-Dec-2023",
     assignee: "accounting@zenith.com",
     last_modified_on: "09-Dec-2023",
+    review_status: "Completed",
   },
   {
     id: "invoice-06",
@@ -56,6 +61,7 @@ const invoices = [
     added_on: "03-Dec-2023",
     assignee: "finance@gamma.com",
     last_modified_on: "10-Dec-2023",
+    review_status: "Completed",
   },
   {
     id: "invoice-07",
@@ -65,6 +71,7 @@ const invoices = [
     added_on: "03-Dec-2023",
     assignee: "billing@blueocean.com",
     last_modified_on: "11-Dec-2023",
+    review_status: "Completed",
   },
   {
     id: "invoice-08",
@@ -74,6 +81,7 @@ const invoices = [
     added_on: "04-Dec-2023",
     assignee: "accounts@sigmasolutions.com",
     last_modified_on: "12-Dec-2023",
+    review_status: "Completed",
   },
   {
     id: "invoice-09",
@@ -83,6 +91,7 @@ const invoices = [
     added_on: "04-Dec-2023",
     assignee: "billing@deltahealth.com",
     last_modified_on: "13-Dec-2023",
+    review_status: "Completed",
   },
   {
     id: "invoice-10",
@@ -92,6 +101,7 @@ const invoices = [
     added_on: "05-Dec-2023",
     assignee: "finance@beta.com",
     last_modified_on: "14-Dec-2023",
+    review_status: "Completed",
   },
   {
     id: "invoice-11",
@@ -101,15 +111,17 @@ const invoices = [
     added_on: "05-Dec-2023",
     assignee: "invoices@omega.com",
     last_modified_on: "15-Dec-2023",
+    review_status: "Completed",
   },
   {
     id: "invoice-12",
     name: "INV-NEO-0012",
     source: "SAP",
-    type_of_document: "Invoice",
+    type_of_document: "Contract",
     added_on: "06-Dec-2023",
     assignee: "finance@neotech.com",
     last_modified_on: "16-Dec-2023",
+    review_status: "Completed",
   },
   {
     id: "invoice-13",
@@ -119,51 +131,57 @@ const invoices = [
     added_on: "07-Dec-2023",
     assignee: "billing@titan.com",
     last_modified_on: "17-Dec-2023",
+    review_status: "Completed",
   },
   {
     id: "invoice-14",
     name: "INV-PLUTO-0014",
     source: "Zoho Books",
-    type_of_document: "Invoice",
+    type_of_document: "Contract",
     added_on: "07-Dec-2023",
     assignee: "accounts@plutoinc.com",
     last_modified_on: "18-Dec-2023",
+    review_status: "Completed",
   },
   {
     id: "invoice-15",
     name: "INV-CENT-0015",
     source: "Salesforce",
-    type_of_document: "Invoice",
+    type_of_document: "Contract",
     added_on: "08-Dec-2023",
     assignee: "finance@centauri.com",
     last_modified_on: "19-Dec-2023",
+    review_status: "Completed",
   },
   {
     id: "invoice-16",
     name: "INV-ORION-0016",
     source: "Oracle",
-    type_of_document: "Invoice",
+    type_of_document: "Contract",
     added_on: "09-Dec-2023",
     assignee: "billing@oriontech.com",
     last_modified_on: "20-Dec-2023",
+    review_status: "Completed",
   },
   {
     id: "invoice-17",
     name: "INV-VENUS-0017",
     source: "SAP",
-    type_of_document: "Invoice",
+    type_of_document: "Contract",
     added_on: "10-Dec-2023",
     assignee: "finance@venusventures.com",
     last_modified_on: "21-Dec-2023",
+    review_status: "Completed",
   },
   {
     id: "invoice-18",
     name: "INV-MARS-0018",
     source: "QuickBooks",
-    type_of_document: "Invoice",
+    type_of_document: "Contract",
     added_on: "11-Dec-2023",
     assignee: "accounts@marsmetals.com",
     last_modified_on: "22-Dec-2023",
+    review_status: "Completed",
   },
 ];
 
@@ -199,6 +217,7 @@ interface Invoice {
   added_on: string;
   assignee: string;
   last_modified_on: string;
+  review_status: string;
 }
 
 interface VendorsTableProps {
@@ -256,10 +275,11 @@ const VendorsTable: React.FC<VendorsTableProps> = ({ invoices }) => {
               <th className="px-4 py-2">Source</th>
               <th className="px-4 py-2">Assignee</th>
               <th className="px-4 py-2">Added On</th>
-              <th className="px-4 py-2">Last Modified</th>
+              {/* <th className="px-4 py-2">Last Modified</th> */}
               <th className="rounded-tr-xl rounded-br-xl px-4 py-2">
                 Document Type
               </th>
+              <th className="px-4 py-2">Review Status</th>
             </tr>
           </thead>
           <tbody>
@@ -279,8 +299,18 @@ const VendorsTable: React.FC<VendorsTableProps> = ({ invoices }) => {
                 <td className="px-4 py-3">{invoice.source}</td>
                 <td className="px-4 py-3">{invoice.assignee}</td>
                 <td className="px-4 py-3">{invoice.added_on}</td>
-                <td className="px-4 py-3">{invoice.last_modified_on}</td>
+                {/* <td className="px-4 py-3">{invoice.last_modified_on}</td> */}
                 <td className="px-4 py-3">{invoice.type_of_document}</td>
+                <td className="px-4 py-3">
+                  {invoice.review_status && (
+                    <span
+                      className={`${StatusContainerCSS(invoice.review_status)}`}
+                    >
+                      {invoice.review_status}
+                    </span>
+                  )}
+                </td>
+                {/* <td className="px-4 py-3">Hello</td> */}
               </tr>
             ))}
           </tbody>
