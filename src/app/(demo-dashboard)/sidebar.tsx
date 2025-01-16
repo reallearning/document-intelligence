@@ -1,88 +1,135 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
+enum DashboardType {
+  dashboard,
+  accountsPayable,
+  accountsReceivable,
+}
+
+interface NavigationItemProps {
+  src: string;
+  alt: string;
+  onClick: () => void;
+}
+
+const NavigationItem: React.FC<NavigationItemProps> = ({
+  src,
+  alt,
+  onClick,
+}) => (
+  <Image
+    src={src}
+    width={24}
+    height={24}
+    alt={alt}
+    className="cursor-pointer"
+    onClick={onClick}
+  />
+);
+
+interface SideNavigationProps {
+  dashboardType: DashboardType;
+  handleClick: (path: string) => void;
+}
+
+const SideNavigation: React.FC<SideNavigationProps> = ({
+  dashboardType,
+  handleClick,
+}) => {
+  const navigationConfig = {
+    [DashboardType.dashboard]: [
+      {
+        src: "/home.svg",
+        alt: "Home",
+        path: "/dashboard",
+      },
+    ],
+    [DashboardType.accountsReceivable]: [
+      {
+        src: "/home.svg",
+        alt: "Home",
+        path: "/accounts-receivable",
+      },
+      {
+        src: "/chart.svg",
+        alt: "Compliance",
+        path: "/accounts-receivable/compliance",
+      },
+      {
+        src: "/doc.svg",
+        alt: "Reconciliation",
+        path: "/accounts-receivable/compliance/active-invoice",
+      },
+    ],
+    [DashboardType.accountsPayable]: [
+      {
+        src: "/home.svg",
+        alt: "Home",
+        path: "/accounts-payable",
+      },
+      {
+        src: "/chart.svg",
+        alt: "Compliance",
+        path: "/accounts-payable/contracts",
+      },
+      {
+        src: "/doc.svg",
+        alt: "Reconciliation",
+        path: "/accounts-payable/invoices",
+      },
+    ],
+  };
+
+  const currentNavigation = navigationConfig[dashboardType];
+
+  return (
+    <div className="mt-10 flex flex-col items-center space-y-8">
+      {currentNavigation?.map((item, index) => (
+        <NavigationItem
+          key={index}
+          src={item.src}
+          alt={item.alt}
+          onClick={() => handleClick(item.path)}
+        />
+      ))}
+    </div>
+  );
+};
+
 export const Sidebar = () => {
-  const [isARScreen, setIsARScreen] = useState(false);
+  const [dashboardType, setDashboardType] = useState<DashboardType>(
+    DashboardType.dashboard
+  );
 
   const router = useRouter();
+  const pathname = usePathname(); // Add this hook
 
   const handleClick = (to: string) => {
     router.push(to);
   };
 
   useEffect(() => {
-    const url = window.location.href;
-    if (url.includes("accounts-receivable")) {
-      setIsARScreen(true);
+    if (pathname.includes("accounts-receivable")) {
+      setDashboardType(DashboardType.accountsReceivable);
+    } else if (pathname.includes("accounts-payable")) {
+      setDashboardType(DashboardType.accountsPayable);
+    } else {
+      setDashboardType(DashboardType.dashboard);
     }
-  }, []);
+  }, [pathname]); // Now it will re-run when pathname changes
 
   return (
     <div className="h-full flex flex-col justify-between items-center pt-[28px] pl-6 pb-6">
       <div className="w-8 h-8">
         <Image src="/cfo-logo.svg" width={32} height={32} alt="Logo" />
-        {isARScreen ? (
-          <div className="mt-10 flex flex-col items-center space-y-8">
-            <Image
-              src="/home.svg"
-              width={24}
-              height={24}
-              alt="Home"
-              className="cursor-pointer"
-              onClick={() => handleClick("/accounts-receivable")}
-            />
-            <Image
-              src="/chart.svg"
-              width={24}
-              height={24}
-              alt="Compliance"
-              className="cursor-pointer"
-              onClick={() => handleClick("/accounts-receivable/compliance")}
-            />
-            <Image
-              src="/doc.svg"
-              width={24}
-              height={24}
-              alt="Reconciliation"
-              className="cursor-pointer"
-              onClick={() =>
-                handleClick("/accounts-receivable/compliance/active-invoice")
-              }
-            />
-          </div>
-        ) : (
-          <div className="mt-10 flex flex-col items-center space-y-8">
-            <Image
-              src="/home.svg"
-              width={24}
-              height={24}
-              alt="Home"
-              className="cursor-pointer"
-              onClick={() => handleClick("/accounts-payable")}
-            />
-            <Image
-              src="/chart.svg"
-              width={24}
-              height={24}
-              alt="Compliance"
-              className="cursor-pointer"
-              onClick={() => handleClick("/accounts-payable/contracts")}
-            />
-            <Image
-              src="/doc.svg"
-              width={24}
-              height={24}
-              alt="Reconciliation"
-              className="cursor-pointer"
-              onClick={() =>
-                handleClick("/accounts-payable/invoices")
-              }
-            />
-          </div>
-        )}
+        <SideNavigation
+          dashboardType={dashboardType}
+          handleClick={handleClick}
+        />
       </div>
 
       <div>
