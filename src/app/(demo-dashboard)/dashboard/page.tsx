@@ -30,9 +30,21 @@ const Dashboard: React.FC = () => {
       </div>
       <div className="flex mt-8">
         <div className="flex gap-10">
-          <LinkCard label="Accounts Payable" link="accounts-payable" />
-          <LinkCard label="Accounts Receivable" link="accounts-receivable" />
-          <LinkCard label="CFO Companion" link="https://morrie.ai/" />
+          <LinkCard
+            label="Accounts Payable"
+            link="accounts-payable"
+            image="ap"
+          />
+          <LinkCard
+            label="Accounts Receivable"
+            link="accounts-receivable"
+            image="ar"
+          />
+          <LinkCard
+            label="CFO Companion"
+            link="https://morrie.ai/"
+            image="cfo-agent"
+          />
         </div>
       </div>
     </div>
@@ -42,10 +54,21 @@ const Dashboard: React.FC = () => {
 interface LinkCardProps {
   label: string;
   link: string;
+  image: string;
 }
 
-function LinkCard({ label, link }: LinkCardProps) {
+const LinkCard = ({ label, link, image }: LinkCardProps) => {
   const isExternalLink = link.startsWith("http") || link.startsWith("https");
+  const cardContent = (
+    <div className="p-5 border border-[#E2E8F0] rounded-2xl min-w-[300px] hover:shadow-lg transition-shadow duration-200">
+      <div>
+        <Image src={`/${image}.svg`} alt={label} width={280} height={280} />
+        <p className="mt-6 font-nunito text-[32px] font-bold leading-[42px] text-[#111827]">
+          {label}
+        </p>
+      </div>
+    </div>
+  );
 
   if (isExternalLink) {
     return (
@@ -53,25 +76,18 @@ function LinkCard({ label, link }: LinkCardProps) {
         href={link}
         target="_blank"
         rel="noopener noreferrer"
-        className="block p-5 border border-[#E2E8F0] rounded-2xl min-w-[300px] hover:shadow-lg transition-shadow duration-200 cursor-pointer"
+        className="block cursor-pointer"
       >
-        <p className="mt-6 font-nunito text-[32px] font-bold leading-[42px] text-[#111827]">
-          {label}
-        </p>
+        {cardContent}
       </a>
     );
   }
 
   return (
-    <Link
-      href={link}
-      className="block p-5 border border-[#E2E8F0] rounded-2xl min-w-[300px] hover:shadow-lg transition-shadow duration-200 cursor-pointer"
-    >
-      <p className="mt-6 font-nunito text-[32px] font-bold leading-[42px] text-[#111827]">
-        {label}
-      </p>
+    <Link href={link} className="block cursor-pointer">
+      {cardContent}
     </Link>
   );
-}
+};
 
 export default Dashboard;
