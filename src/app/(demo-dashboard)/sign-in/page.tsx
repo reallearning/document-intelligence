@@ -76,7 +76,7 @@ export default function SignInPage() {
         </div>
       </div>
 
-      <div className="hidden md:flex md:w-1/2 flex-col items-center justify-center bg-[#f1efe9] p-8 relative">
+      <div className="hidden md:flex md:w-1/2 flex-col items-center justify-center bg-white p-8 relative">
         <CarouselSlider />
       </div>
     </div>
