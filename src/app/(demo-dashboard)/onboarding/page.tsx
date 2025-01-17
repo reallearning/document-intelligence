@@ -22,6 +22,8 @@ const permissions = [
 const PermissionCard: React.FC = () => {
   const [loading, setLoading] = useState<{ [key: string]: boolean }>({});
   const [authorized, setAuthorized] = useState<{ [key: string]: boolean }>({});
+  const [disabled, setDisabled] = useState(true);
+  const [redirecting, setRedirecting] = useState(false);
 
   const router = useRouter();
 
@@ -35,16 +37,21 @@ const PermissionCard: React.FC = () => {
     }, 2000);
   };
 
+  const handleRedirection = () => {
+    setRedirecting(true);
+    setTimeout(() => {
+      router.push("/dashboard");
+    }, 2000);
+  };
+
   useEffect(() => {
-    if (Object.keys(authorized).length >= 4) {
-      setTimeout(() => {
-        router.push("/dashboard");
-      }, 2000);
+    if (Object.keys(authorized).length > 0) {
+      setDisabled(false);
     }
   }, [authorized]);
 
   return (
-    <div className="h-screen bg-morrie-background bg-hero-pattern bg-cover bg-center flex justify-center items-center p-4 sm:p-8 md:p-12 lg:p-16 xl:p-24">
+    <div className="h-screen bg-white bg-hero-pattern bg-cover bg-center flex justify-center items-center p-4 sm:p-8 md:p-12 lg:p-16 xl:p-24">
       <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-lg lg:max-w-3xl flex flex-col justify-center overflow-hidden">
         <div className="flex items-start space-x-3 mt-2 mb-2 w-full fade-in">
           <Image src="/cfo-logo.svg" alt="logo-black" width={30} height={30} />
@@ -100,6 +107,18 @@ const PermissionCard: React.FC = () => {
               </button>
             </div>
           ))}
+        </div>
+        <div className="flex items-center justify-center">
+          <button
+            className={`mt-5 px-8 py-2 rounded-xl min-h-[40px] w-[200px] font-nunito font-medium text-base leading-6 flex items-center justify-center ${
+              disabled
+                ? "bg-gray-300 cursor-not-allowed text-black"
+                : "bg-[#7C3AED] text-white"
+            }`}
+            onClick={handleRedirection}
+          >
+            {redirecting ? <Loader color="#FFFFFF"/> : "Continue"}
+          </button>
         </div>
       </div>
     </div>
