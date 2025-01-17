@@ -28,8 +28,8 @@ const Dashboard: React.FC = () => {
           <Image src="./dots.svg" alt="dots" width={24} height={24} />
         </div>
       </div>
-      <div className="flex mt-8">
-        <div className="flex gap-10">
+      <div className="mt-8 p-6">
+        <div className="flex gap-x-10">
           <LinkCard
             label="Accounts Payable"
             link="accounts-payable"
@@ -60,10 +60,10 @@ interface LinkCardProps {
 const LinkCard = ({ label, link, image }: LinkCardProps) => {
   const isExternalLink = link.startsWith("http") || link.startsWith("https");
   const cardContent = (
-    <div className="p-5 border border-[#E2E8F0] rounded-2xl min-w-[300px] hover:shadow-lg transition-shadow duration-200">
-      <div>
-        <Image src={`/${image}.svg`} alt={label} width={280} height={280} />
-        <p className="mt-6 font-nunito text-[32px] font-bold leading-[42px] text-[#111827]">
+    <div className="p-5 border border-[#E2E8F0] rounded-2xl bg-white hover:bg-[#f9fafb] hover:shadow-xl transition-all duration-300">
+      <div className="flex flex-col items-start">
+        <Image src={`/${image}.svg`} alt={label} width={150} height={150}/>
+        <p className="mt-6 font-nunito text-xl md:text-2xl font-semibold text-gray-800 text-center">
           {label}
         </p>
       </div>
