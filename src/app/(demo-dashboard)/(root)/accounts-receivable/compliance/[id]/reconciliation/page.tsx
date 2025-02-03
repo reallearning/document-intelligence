@@ -205,7 +205,7 @@ function ReceivedCard() {
             className="mr-2"
           />
           <p className="font-nunito font-normal text-sm text-[#111827]">
-            Total Invoiced
+            Total Amount Cleared
           </p>
         </div>
         <Image src="/dots.svg" alt="dots" width={24} height={24} />
