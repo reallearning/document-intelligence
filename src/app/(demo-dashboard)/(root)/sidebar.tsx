@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { LogOut } from "lucide-react";
 
 enum DashboardType {
   dashboard,
@@ -107,10 +108,14 @@ export const Sidebar = () => {
   );
 
   const router = useRouter();
-  const pathname = usePathname(); // Add this hook
-
+  const pathname = usePathname();
   const handleClick = (to: string) => {
     router.push(to);
+  };
+
+  const handleLogout = () => {
+    localStorage.clear();
+    router.push("/sign-in");
   };
 
   useEffect(() => {
@@ -137,10 +142,30 @@ export const Sidebar = () => {
 
       <div>
         <div className="w-6 h-6 mb-6">
-          <Image src="/settings.svg" width={40} height={40} alt="Settings" />
+          <Image
+            src="/settings.svg"
+            width={40}
+            height={40}
+            alt="Settings"
+            className="cursor-pointer"
+          />
         </div>
-        <div className="w-6 h-6">
-          <Image src="/question.svg" width={40} height={40} alt="Help" />
+        <div className="w-6 h-6 mb-6">
+          <Image
+            src="/question.svg"
+            width={40}
+            height={40}
+            alt="Help"
+            className="cursor-pointer"
+          />
+        </div>
+        <div className="">
+          <LogOut
+            color="#000000"
+            size={24}
+            onClick={handleLogout}
+            className="cursor-pointer"
+          />
         </div>
       </div>
     </div>

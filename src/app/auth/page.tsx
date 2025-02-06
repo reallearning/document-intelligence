@@ -1,37 +1,40 @@
-"use client";
+"use client"
 import Image from "next/image";
 import Link from "next/link";
-import CarouselSlider from "./components/carousel-slider";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
-import Loader from "@/components/loader";
+import { useRouter } from "next/navigation";
+import CarouselSlider from "./copmonents/carousel-slider";
 
-export default function SignInPage() {
+export default function AuthPage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  const router = useRouter();
+  const demoEmail = "dheeraj@questt.ai";
+  const demoPassword = "questt123";
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    setLoading(true);
 
-    // Demo credentials
-    const demoEmail = "dheeraj@questt.ai";
-    const demoPassword = "questt123";
+    if (!email || !password) {
+      setError("Email and Password are required");
+      return;
+    }
 
-    setTimeout(() => {
-      if (email === demoEmail && password === demoPassword) {
-        localStorage.setItem("questt-ai-authenticated", "true");
-        router.push("/onboarding");
-      } else {
-        setError("Invalid email or password");
-      }
-      setLoading(false);
-    }, 1000);
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError("Invalid email format");
+      return;
+    }
+
+    if (email === demoEmail && password === demoPassword) {
+      localStorage.setItem("isAuthenticated", "true");
+      router.push("/");
+    } else {
+      setError("Invalid email or password");
+    }
   };
 
   return (
@@ -41,7 +44,7 @@ export default function SignInPage() {
           <div className="w-full max-w-md login-tp">
             <div className="flex flex-col gap-3 items-start">
               <Image
-                src="/cfo-logo.svg"
+                src="/logo.svg"
                 alt="Logo image"
                 width={50}
                 height={50}
@@ -55,35 +58,32 @@ export default function SignInPage() {
               </p>
             </div>
 
-            <form onSubmit={handleLogin} className="mt-6 flex flex-col gap-4 text-black">
+            <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
               <input
                 type="email"
                 placeholder="Email"
-                className="px-4 py-2 border border-gray-300 rounded-lg w-full"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required
+                className="w-full p-2 border rounded-md text-black focus:outline-none focus:ring-none"
               />
               <input
                 type="password"
                 placeholder="Password"
-                className="px-4 py-2 border border-gray-300 rounded-lg w-full"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required
+                className="w-full p-2 border rounded-md text-black focus:outline-none focus:ring-none"
               />
               {error && <p className="text-red-500 text-sm">{error}</p>}
               <button
                 type="submit"
-                className="px-5 py-2 w-full rounded-full bg-[#2463eb] text-white hover:bg-[#2059d3] mt-4 flex justify-center items-center"
-                disabled={loading}
+                className="w-full bg-[#3c7167] text-white py-2 rounded-3xl font-nunito text-base font-normal hover:bg-[#264841]"
               >
-                {loading ? <Loader /> : "Sign In"}
+                Login
               </button>
             </form>
 
             <div className="fixed bottom-10 w-[40%] left-[50%] translate-x-[-50%] md:left-[25%] md:translate-x-[-50%]">
-              <p className="text-xs text-neutral-500 text-center mt-4">
+              <p className=" text-xs text-neutral-500 text-center mt-4">
                 By continuing, you agree to our{" "}
                 <Link href="/privacy-policy" className="text-[#3DBCA2]">
                   Privacy Policy
@@ -99,7 +99,7 @@ export default function SignInPage() {
         </div>
       </div>
 
-      <div className="hidden md:flex md:w-1/2 flex-col items-center justify-center bg-white p-8 relative">
+      <div className="hidden md:flex md:w-1/2 flex-col items-center justify-center bg-[#f1efe9] p-8 relative">
         <CarouselSlider />
       </div>
     </div>
