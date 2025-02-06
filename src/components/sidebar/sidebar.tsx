@@ -1,4 +1,5 @@
 "use client";
+import { LogOut } from "lucide-react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -18,6 +19,11 @@ const data = [
 export const Sidebar = () => {
   const router = useRouter();
   const pathname = usePathname();
+
+  const handleLogout = () => {
+    localStorage.clear();
+    router.push("/auth");
+  };
 
   // Handle click to redirect
   const handleClick = (redirectTo: string) => {
@@ -53,15 +59,19 @@ export const Sidebar = () => {
           ))}
       </div>
 
-      <div
-        className="flex flex-col items-center justify-center h-10 w-10 hover:bg-[#BAAE92AD] rounded-full cursor-pointer"
-      >
+      <div className="">
+        <LogOut
+          color="#000000"
+          size={24}
+          onClick={handleLogout}
+          className="cursor-pointer"
+        />
         <Image
           src="/user.svg"
           width={32}
           height={32}
           alt="User"
-          className="w-6 h-6"
+          className="w-6 h-6 mt-4 cursor-pointer"
         />
       </div>
     </div>

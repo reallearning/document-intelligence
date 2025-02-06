@@ -1,6 +1,4 @@
 "use client";
-import { StorageProvider } from "@/context/StorageContext";
-import { Sidebar } from "../../components/sidebar";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -17,13 +15,6 @@ export default function RootLayout({ children }: IProps) {
       router.push("/auth");
     }
   }, [router]);
-  
-  return (
-    <StorageProvider>
-      <div className="flex flex-row w-full h-screen">
-        <Sidebar />
-        <main className="flex flex-1 h-full">{children}</main>
-      </div>
-    </StorageProvider>
-  );
+
+  return <div className="">{children}</div>;
 }
