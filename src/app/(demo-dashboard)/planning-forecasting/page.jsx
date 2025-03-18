@@ -271,16 +271,16 @@ const ThoughtBubble = ({
 };
 
 const LineChart = ({ data, height = 60, className = "" }) => {
-  // This is a simple placeholder for a line chart
   return (
     <div
-      className={`h-${height} bg-gray-50 rounded-md border flex items-end p-2 ${className}`}
+      className={`bg-gray-50 rounded-md border flex items-end p-2 ${className}`}
+      style={{ height: `${height * 4}px` }} // Use inline styles for height
     >
       {data.map((value, index) => (
         <div
           key={index}
           className="flex-1 mx-0.5"
-          style={{ height: `${value}%` }}
+          style={{ height: `${value}%` }} // Ensure values map correctly
         >
           <div className="h-full w-full bg-teal-500 rounded-sm"></div>
         </div>
