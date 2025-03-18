@@ -438,7 +438,7 @@ const GSTTDSComplianceDashboard = () => {
       <Card className="mb-6">
         <CardHeader className="flex justify-between items-center">
           <CardTitle>Connected Data Sources</CardTitle>
-          <Badge variant="success">Primary System: HOAD Central ERP</Badge>
+          <Badge variant="success">Primary System: Tally</Badge>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-4 gap-4">
@@ -447,7 +447,7 @@ const GSTTDSComplianceDashboard = () => {
                 <Database size={20} />
               </div>
               <div className="flex-1">
-                <div className="font-medium">HOAD Central ERP</div>
+                <div className="font-medium">Tally</div>
                 <div className="text-xs text-gray-500">
                   Sales & Purchase Registers
                 </div>
@@ -465,7 +465,7 @@ const GSTTDSComplianceDashboard = () => {
                 <Database size={20} />
               </div>
               <div className="flex-1">
-                <div className="font-medium">Retail Partner System</div>
+                <div className="font-medium">Zoho</div>
                 <div className="text-xs text-gray-500">Sales Register</div>
                 <div className="flex items-center mt-1">
                   <div className="h-1.5 w-1.5 bg-red-500 rounded-full mr-1"></div>
@@ -479,7 +479,7 @@ const GSTTDSComplianceDashboard = () => {
                 <Database size={20} />
               </div>
               <div className="flex-1">
-                <div className="font-medium">Export Stores App</div>
+                <div className="font-medium">Quickbooks</div>
                 <div className="text-xs text-gray-500">Sales Register</div>
                 <div className="flex items-center mt-1">
                   <div className="h-1.5 w-1.5 bg-red-500 rounded-full mr-1"></div>
@@ -514,7 +514,7 @@ const GSTTDSComplianceDashboard = () => {
               </div>
               <div>
                 <p className="text-sm">
-                  I'm continuously monitoring HOAD’s ERP data and the GST portal
+                  I'm continuously monitoring data from your accounting systems and the GST portal
                   to flag compliance issues before they become major problems.
                   So far, I've analyzed 420 invoices this month.
                 </p>
