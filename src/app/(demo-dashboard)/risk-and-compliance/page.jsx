@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 // Simple UI components
 const Card = ({ children, className = "" }) => (
@@ -414,21 +415,46 @@ const ThoughtBubble = ({ children, direction = "left", className = "" }) => {
 // Main GST & TDS Compliance Risk Dashboard
 const GSTTDSComplianceDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
+  const router = useRouter();
+
+  const handleRouting = (id) => {
+    if (!id && id.lenght === 0) return;
+    router.push(id);
+  };
 
   return (
-    <div className="flex bg-gray-50">
-      {/* SIDEBAR */}
+    <div className="bg-[#F8F8F8] flex">
       <div className="flex flex-col gap-y-6 mx-4 my-6 p-4 rounded-xl bg-[#001D5C] ">
-        <div className="p-2 rounded-lg hover:bg-[#2154C4]">
+        <div
+          onClick={() => {
+            handleRouting("/finance-control-center");
+          }}
+          className="p-2 rounded-xl hover:bg-[#2154C4]"
+        >
           <Image src={"./icons/grid.svg"} height={24} width={24} alt="Grid" />
         </div>
-        <div className="p-2 rounded-lg hover:bg-[#2154C4]">
+        <div
+          onClick={() => {
+            handleRouting("/risk-and-compliance");
+          }}
+          className="p-2 rounded-lg hover:bg-[#2154C4] bg-[#2154C4]"
+        >
           <Image src={"./icons/shield.svg"} height={24} width={24} alt="Grid" />
         </div>
-        <div className="p-2 rounded-lg hover:bg-[#2154C4]">
+        <div
+          onClick={() => {
+            handleRouting("/planning-forecasting");
+          }}
+          className="p-2 rounded-lg hover:bg-[#2154C4]"
+        >
           <Image src={"./icons/graph.svg"} height={24} width={24} alt="Grid" />
         </div>
-        <div className="p-2 rounded-lg hover:bg-[#2154C4]">
+        <div
+          onClick={() => {
+            handleRouting("/business-analytics");
+          }}
+          className="p-2 rounded-lg hover:bg-[#2154C4]"
+        >
           <Image
             src={"./icons/bar-chart.svg"}
             height={24}
@@ -436,7 +462,12 @@ const GSTTDSComplianceDashboard = () => {
             alt="Grid"
           />
         </div>
-        <div className="p-2 rounded-lg hover:bg-[#2154C4]">
+        <div
+          onClick={() => {
+            handleRouting("/dashboard");
+          }}
+          className="p-2 rounded-lg hover:bg-[#2154C4]"
+        >
           <Image
             src={"./icons/network-node.svg"}
             height={24}
@@ -446,7 +477,7 @@ const GSTTDSComplianceDashboard = () => {
         </div>
       </div>
 
-      <div className="flex flex-col w-full h-[98vh]  text-gray-800 mt-6 overflow-y-auto">
+      <div className="flex flex-col w-full h-[98vh] text-gray-800 mt-6 overflow-y-auto">
         {/* Header with Profile and Date */}
         <header className="flex justify-between items-center mb-6">
           <div>

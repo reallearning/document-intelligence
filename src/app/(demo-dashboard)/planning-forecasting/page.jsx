@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-
+import { useRouter } from "next/navigation";
 // Simple component system
 const Card = ({ children, className = "" }) => (
   <div className={`bg-white rounded-lg border shadow-sm ${className}`}>
@@ -128,156 +128,6 @@ const Slider = ({
     </div>
   );
 };
-
-// Icons
-const TrendingUp = ({ size = 24, className = "" }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-  >
-    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-    <polyline points="17 6 23 6 23 12"></polyline>
-  </svg>
-);
-
-const TrendingDown = ({ size = 24, className = "" }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-  >
-    <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline>
-    <polyline points="17 18 23 18 23 12"></polyline>
-  </svg>
-);
-
-const Calendar = ({ size = 24, className = "" }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-  >
-    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-    <line x1="16" y1="2" x2="16" y2="6"></line>
-    <line x1="8" y1="2" x2="8" y2="6"></line>
-    <line x1="3" y1="10" x2="21" y2="10"></line>
-  </svg>
-);
-
-const Clock = ({ size = 24, className = "" }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-  >
-    <circle cx="12" cy="12" r="10"></circle>
-    <polyline points="12 6 12 12 16 14"></polyline>
-  </svg>
-);
-
-const Download = ({ size = 24, className = "" }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-  >
-    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-    <polyline points="7 10 12 15 17 10"></polyline>
-    <line x1="12" y1="15" x2="12" y2="3"></line>
-  </svg>
-);
-
-const AlertCircle = ({ size = 24, className = "" }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-  >
-    <circle cx="12" cy="12" r="10"></circle>
-    <line x1="12" y1="8" x2="12" y2="12"></line>
-    <line x1="12" y1="16" x2="12.01" y2="16"></line>
-  </svg>
-);
-
-const Settings = ({ size = 24, className = "" }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-  >
-    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
-    <circle cx="12" cy="12" r="3"></circle>
-  </svg>
-);
-
-const Save = ({ size = 24, className = "" }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-  >
-    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-    <polyline points="17 21 17 13 7 13 7 21"></polyline>
-    <polyline points="7 3 7 8 15 8"></polyline>
-  </svg>
-);
 
 // Thought bubble component
 const ThoughtBubble = ({
@@ -420,20 +270,46 @@ const PlanningForecastingDashboard = () => {
   };
 
   const { header, cards } = briefingData;
+  const router = useRouter();
+
+  const handleRouting = (id) => {
+    if (!id && id.lenght === 0) return;
+    router.push(id);
+  };
 
   return (
-    <div className="flex px-4 py-4 bg-[#F8F8F8]">
-      <div className="flex flex-col gap-y-6 p-4 rounded-xl mb-4 bg-[#001D5C] ">
-        <div className="p-2 rounded-xl hover:bg-[#2154C4]">
+    <div className="bg-[#F8F8F8] flex">
+      <div className="flex flex-col gap-y-6 mx-4 my-6 p-4 rounded-xl bg-[#001D5C] ">
+        <div
+          onClick={() => {
+            handleRouting("/finance-control-center");
+          }}
+          className="p-2 rounded-xl hover:bg-[#2154C4]"
+        >
           <Image src={"./icons/grid.svg"} height={24} width={24} alt="Grid" />
         </div>
-        <div className="p-2 rounded-lg hover:bg-[#2154C4]">
+        <div
+          onClick={() => {
+            handleRouting("/risk-and-compliance");
+          }}
+          className="p-2 rounded-lg hover:bg-[#2154C4]"
+        >
           <Image src={"./icons/shield.svg"} height={24} width={24} alt="Grid" />
         </div>
-        <div className="p-2 rounded-lg hover:bg-[#2154C4]">
+        <div
+          onClick={() => {
+            handleRouting("/planning-forecasting");
+          }}
+          className="p-2 rounded-lg hover:bg-[#2154C4] bg-[#2154C4]"
+        >
           <Image src={"./icons/graph.svg"} height={24} width={24} alt="Grid" />
         </div>
-        <div className="p-2 rounded-lg hover:bg-[#2154C4]">
+        <div
+          onClick={() => {
+            handleRouting("/business-analytics");
+          }}
+          className="p-2 rounded-lg hover:bg-[#2154C4]"
+        >
           <Image
             src={"./icons/bar-chart.svg"}
             height={24}
@@ -441,7 +317,12 @@ const PlanningForecastingDashboard = () => {
             alt="Grid"
           />
         </div>
-        <div className="p-2 rounded-lg hover:bg-[#2154C4]">
+        <div
+          onClick={() => {
+            handleRouting("/dashboard");
+          }}
+          className="p-2 rounded-lg hover:bg-[#2154C4]"
+        >
           <Image
             src={"./icons/network-node.svg"}
             height={24}
@@ -450,7 +331,7 @@ const PlanningForecastingDashboard = () => {
           />
         </div>
       </div>
-      <div className="w-full h-[98vh] p-4 overflow-y-auto">
+      <div className="flex flex-col w-full h-[98vh] p-4 overflow-y-auto mt-4">
         <div className="mb-2">
           <p className="text-[#001D5C] text-2xl font-bold">
             Planning & Forecasting Assistant
@@ -460,7 +341,7 @@ const PlanningForecastingDashboard = () => {
           </p>
         </div>
 
-        <div className="mx-auto p-6 bg-white rounded-lg border border-gray-300 mb-4">
+        <div className=" bg-white rounded-lg mb-4">
           <div className="flex items-center justify-center mb-4">
             <Image
               src={"./icons/agent.svg"}
@@ -498,10 +379,10 @@ const PlanningForecastingDashboard = () => {
         </div>
 
         {/* Scenario Planning Section */}
-        <div className="mb-8">
+        <div className="">
           <h2 className="text-xl font-bold mb-4">Scenario Modeling</h2>
-          <Card>
-            <Card>
+          <Card className="border-transparent">
+            <Card className="border-transparent">
               <CardHeader className="">
                 <div className="flex justify-between items-center">
                   <CardTitle className="text-base text-[#001D5C] font-semibold">
@@ -797,7 +678,7 @@ const PlanningForecastingDashboard = () => {
               Variance Analysis
             </h2>
 
-            <Card>
+            <Card className="border-transparent">
               <CardHeader className="">
                 <div className="flex justify-between items-center">
                   <CardTitle className="text-[#001D5C] font-semibold font-public-sans">
@@ -1019,7 +900,7 @@ const PlanningForecastingDashboard = () => {
                   </table>
                 </div>
               </CardContent>
-              <CardFooter>
+              <CardFooter className="border-transparent">
                 <div className="flex items-start">
                   <div className="mr-2 self-start">
                     <Image
@@ -1055,310 +936,6 @@ const PlanningForecastingDashboard = () => {
               </CardFooter>
             </Card>
           </div>
-
-          {/* Long-Term Outlook */}
-          <div className="mb-8">
-            <h2 className="text-xl font-bold mb-4">Long-Term Outlook</h2>
-
-            <Card>
-              <CardHeader className="border-b">
-                <div className="flex justify-between items-center">
-                  <CardTitle>3-Year Strategic Plan</CardTitle>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-500">Time Horizon:</span>
-                    <Button variant="outline" size="sm">
-                      1 Year
-                    </Button>
-                    <Button variant="default" size="sm">
-                      3 Year
-                    </Button>
-                    <Button variant="outline" size="sm">
-                      5 Year
-                    </Button>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="py-4">
-                <ThoughtBubble className="mb-6">
-                  <p>
-                    I've refreshed our 3-year outlook based on recent
-                    developments. Here's what I'm seeing:
-                  </p>
-                  <ul className="mt-3 space-y-2 text-sm">
-                    <li>
-                      • The SMB segment is showing stronger-than-expected growth
-                      (+12% vs planned 7%) and this trend appears sustainable.
-                    </li>
-                    <li>
-                      • Raw material costs will likely remain elevated through
-                      FY 2025-26 due to global supply constraints.
-                    </li>
-                    <li>
-                      • Our planned capex for the new facility in Q3 2026 should
-                      improve margins by approximately 2.5 percentage points
-                      once operational.
-                    </li>
-                  </ul>
-                  <p className="mt-3 font-medium">
-                    I've incorporated these insights into our long-term
-                    projections below.
-                  </p>
-                </ThoughtBubble>
-
-                <div className="bg-white p-4 rounded-lg border mb-6">
-                  <h3 className="font-medium mb-4">
-                    3-Year Revenue & Profit Projection
-                  </h3>
-                  <div className="h-60 bg-gray-50 border rounded-md p-4 mb-4">
-                    {/* Simplified chart representation */}
-                    <div className="h-full relative">
-                      {/* Revenue line (top) */}
-                      <div className="absolute left-0 right-0 top-1/4 border-t border-dashed border-teal-300"></div>
-                      <div className="absolute left-1/6 top-1/4 h-2 w-2 bg-teal-500 rounded-full transform -translate-y-1/2"></div>
-                      <div className="absolute left-2/6 top-[22%] h-2 w-2 bg-teal-500 rounded-full transform -translate-y-1/2"></div>
-                      <div className="absolute left-3/6 top-[20%] h-2 w-2 bg-teal-500 rounded-full transform -translate-y-1/2"></div>
-                      <div className="absolute left-4/6 top-[17%] h-2 w-2 bg-teal-500 rounded-full transform -translate-y-1/2"></div>
-                      <div className="absolute left-5/6 top-[14%] h-2 w-2 bg-teal-500 rounded-full transform -translate-y-1/2"></div>
-
-                      {/* Gross Profit line (middle) */}
-                      <div className="absolute left-0 right-0 top-1/2 border-t border-dashed border-indigo-300"></div>
-                      <div className="absolute left-1/6 top-1/2 h-2 w-2 bg-indigo-500 rounded-full transform -translate-y-1/2"></div>
-                      <div className="absolute left-2/6 top-[48%] h-2 w-2 bg-indigo-500 rounded-full transform -translate-y-1/2"></div>
-                      <div className="absolute left-3/6 top-[47%] h-2 w-2 bg-indigo-500 rounded-full transform -translate-y-1/2"></div>
-                      <div className="absolute left-4/6 top-[45%] h-2 w-2 bg-indigo-500 rounded-full transform -translate-y-1/2"></div>
-                      <div className="absolute left-5/6 top-[42%] h-2 w-2 bg-indigo-500 rounded-full transform -translate-y-1/2"></div>
-
-                      {/* Operating Income line (bottom) */}
-                      <div className="absolute left-0 right-0 top-3/4 border-t border-dashed border-purple-300"></div>
-                      <div className="absolute left-1/6 top-3/4 h-2 w-2 bg-purple-500 rounded-full transform -translate-y-1/2"></div>
-                      <div className="absolute left-2/6 top-[76%] h-2 w-2 bg-purple-500 rounded-full transform -translate-y-1/2"></div>
-                      <div className="absolute left-3/6 top-[77%] h-2 w-2 bg-purple-500 rounded-full transform -translate-y-1/2"></div>
-                      <div className="absolute left-4/6 top-[73%] h-2 w-2 bg-purple-500 rounded-full transform -translate-y-1/2"></div>
-                      <div className="absolute left-5/6 top-[70%] h-2 w-2 bg-purple-500 rounded-full transform -translate-y-1/2"></div>
-
-                      {/* Event markers */}
-                      <div className="absolute left-[42%] top-0 bottom-0 border-l border-dashed border-gray-300"></div>
-                      <div className="absolute left-[42%] bottom-0 transform -translate-x-1/2 text-xs text-gray-500">
-                        New Product Launch
-                      </div>
-
-                      <div className="absolute left-[75%] top-0 bottom-0 border-l border-dashed border-gray-300"></div>
-                      <div className="absolute left-[75%] bottom-0 transform -translate-x-1/2 text-xs text-gray-500">
-                        New Facility
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex justify-between text-sm">
-                    <div className="flex items-center gap-2">
-                      <div className="h-3 w-3 bg-teal-500 rounded-full"></div>
-                      <span>Revenue</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="h-3 w-3 bg-indigo-500 rounded-full"></div>
-                      <span>Gross Profit</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="h-3 w-3 bg-purple-500 rounded-full"></div>
-                      <span>Operating Income</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-6">
-                  <div className="bg-white p-4 rounded-lg border">
-                    <h4 className="text-sm font-medium mb-3">
-                      Key Growth Drivers
-                    </h4>
-                    <div className="space-y-3">
-                      <div>
-                        <div className="flex justify-between text-sm mb-1">
-                          <span>SMB Segment Expansion</span>
-                          <span className="font-medium">35%</span>
-                        </div>
-                        <div className="h-2 bg-gray-200 rounded-full">
-                          <div
-                            className="h-full bg-teal-500 rounded-full"
-                            style={{ width: "35%" }}
-                          ></div>
-                        </div>
-                      </div>
-                      <div>
-                        <div className="flex justify-between text-sm mb-1">
-                          <span>New Product Lines</span>
-                          <span className="font-medium">25%</span>
-                        </div>
-                        <div className="h-2 bg-gray-200 rounded-full">
-                          <div
-                            className="h-full bg-teal-500 rounded-full"
-                            style={{ width: "25%" }}
-                          ></div>
-                        </div>
-                      </div>
-                      <div>
-                        <div className="flex justify-between text-sm mb-1">
-                          <span>Enterprise Accounts</span>
-                          <span className="font-medium">20%</span>
-                        </div>
-                        <div className="h-2 bg-gray-200 rounded-full">
-                          <div
-                            className="h-full bg-teal-500 rounded-full"
-                            style={{ width: "20%" }}
-                          ></div>
-                        </div>
-                      </div>
-                      <div>
-                        <div className="flex justify-between text-sm mb-1">
-                          <span>International Expansion</span>
-                          <span className="font-medium">15%</span>
-                        </div>
-                        <div className="h-2 bg-gray-200 rounded-full">
-                          <div
-                            className="h-full bg-teal-500 rounded-full"
-                            style={{ width: "15%" }}
-                          ></div>
-                        </div>
-                      </div>
-                      <div>
-                        <div className="flex justify-between text-sm mb-1">
-                          <span>Service Revenue</span>
-                          <span className="font-medium">5%</span>
-                        </div>
-                        <div className="h-2 bg-gray-200 rounded-full">
-                          <div
-                            className="h-full bg-teal-500 rounded-full"
-                            style={{ width: "5%" }}
-                          ></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <ThoughtBubble variant="insight">
-                      <p className="font-medium">
-                        Strategic considerations for the 3-year horizon:
-                      </p>
-                      <ul className="mt-2 space-y-2 text-sm">
-                        <li>
-                          1.{" "}
-                          <span className="font-medium">Capacity planning</span>
-                          : The new facility in Q3 2026 is well-timed based on
-                          projected growth rates.
-                        </li>
-                        <li>
-                          2.{" "}
-                          <span className="font-medium">
-                            Supply chain resilience
-                          </span>
-                          : Consider diversifying suppliers to mitigate
-                          continued raw material volatility.
-                        </li>
-                        <li>
-                          3.{" "}
-                          <span className="font-medium">
-                            Product mix evolution
-                          </span>
-                          : The shifting revenue mix toward SMB suggests we
-                          should accelerate development of the SMB-focused
-                          product roadmap.
-                        </li>
-                      </ul>
-                      <p className="mt-3 text-sm">
-                        Would you like me to prepare a more detailed analysis of
-                        any of these areas?
-                      </p>
-                      <div className="mt-3 flex gap-2">
-                        <Button size="sm">Supply Chain Analysis</Button>
-                        <Button size="sm">Product Roadmap Impact</Button>
-                      </div>
-                    </ThoughtBubble>
-                  </div>
-                </div>
-              </CardContent>
-              <CardFooter>
-                <p>
-                  This long-term plan is updated monthly with our rolling
-                  forecast and quarterly with major strategic reviews.
-                </p>
-              </CardFooter>
-            </Card>
-          </div>
-
-          {/* Agent reflection and next steps */}
-          <Card className="mb-6">
-            <CardHeader>
-              <CardTitle>What I'm Working On Next</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ThoughtBubble>
-                <p>
-                  Based on our updated forecasts and recent performance, here
-                  are three areas I'm focusing on:
-                </p>
-                <div className="mt-4 space-y-4">
-                  <div className="flex gap-3">
-                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-teal-100 text-teal-600 flex-shrink-0">
-                      1
-                    </div>
-                    <div>
-                      <h4 className="font-medium">
-                        Raw Material Cost Impact Analysis
-                      </h4>
-                      <p className="text-sm text-gray-600 mt-1">
-                        I'm developing a detailed model of how continued raw
-                        material price increases would affect our margins across
-                        product lines.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-3">
-                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-teal-100 text-teal-600 flex-shrink-0">
-                      2
-                    </div>
-                    <div>
-                      <h4 className="font-medium">
-                        Q2 Cash Flow Scenario Planning
-                      </h4>
-                      <p className="text-sm text-gray-600 mt-1">
-                        Given the accelerated growth in the SMB segment, I'm
-                        analyzing whether we need to adjust our working capital
-                        forecasts.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-3">
-                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-teal-100 text-teal-600 flex-shrink-0">
-                      3
-                    </div>
-                    <div>
-                      <h4 className="font-medium">
-                        Capacity Utilization Review
-                      </h4>
-                      <p className="text-sm text-gray-600 mt-1">
-                        I'm examining whether our current facilities can support
-                        the higher-than-expected growth until the new facility
-                        opens.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <p className="mt-4">
-                  Which of these would you like me to prioritize for this week?
-                </p>
-              </ThoughtBubble>
-            </CardContent>
-            <CardFooter>
-              <div className="flex gap-2">
-                <Button>Material Cost Analysis</Button>
-                <Button variant="outline">Cash Flow Planning</Button>
-                <Button variant="outline">Capacity Review</Button>
-              </div>
-            </CardFooter>
-          </Card>
         </div>
       </div>
     </div>

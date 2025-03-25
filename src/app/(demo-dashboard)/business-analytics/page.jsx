@@ -15,6 +15,7 @@ import {
   Coffee,
 } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const BriefingCard = ({ title, content, iconSymbol, iconColor }) => {
   const colorClasses = {
@@ -287,20 +288,46 @@ const AnitaDongreAI = () => {
   };
 
   const { header, cards } = briefingData;
+  const router = useRouter();
+
+  const handleRouting = (id) => {
+    if (!id && id.lenght === 0) return;
+    router.push(id);
+  };
 
   return (
-    <div className="flex px-4 py-4 bg-[#F8F8F8]">
-      <div className="flex flex-col gap-y-6 p-4 rounded-xl mb-4 bg-[#001D5C] ">
-        <div className="p-2 rounded-xl hover:bg-[#2154C4]">
+    <div className="bg-[#F8F8F8] flex">
+      <div className="flex flex-col gap-y-6 mx-4 my-6 p-4 rounded-xl bg-[#001D5C] ">
+        <div
+          onClick={() => {
+            handleRouting("/finance-control-center");
+          }}
+          className="p-2 rounded-xl hover:bg-[#2154C4]"
+        >
           <Image src={"./icons/grid.svg"} height={24} width={24} alt="Grid" />
         </div>
-        <div className="p-2 rounded-lg hover:bg-[#2154C4]">
+        <div
+          onClick={() => {
+            handleRouting("/risk-and-compliance");
+          }}
+          className="p-2 rounded-lg hover:bg-[#2154C4]"
+        >
           <Image src={"./icons/shield.svg"} height={24} width={24} alt="Grid" />
         </div>
-        <div className="p-2 rounded-lg hover:bg-[#2154C4]">
+        <div
+          onClick={() => {
+            handleRouting("/planning-forecasting");
+          }}
+          className="p-2 rounded-lg hover:bg-[#2154C4]"
+        >
           <Image src={"./icons/graph.svg"} height={24} width={24} alt="Grid" />
         </div>
-        <div className="p-2 rounded-lg hover:bg-[#2154C4]">
+        <div
+          onClick={() => {
+            handleRouting("/business-analytics");
+          }}
+          className="p-2 rounded-lg hover:bg-[#2154C4] bg-[#2154C4]"
+        >
           <Image
             src={"./icons/bar-chart.svg"}
             height={24}
@@ -308,7 +335,12 @@ const AnitaDongreAI = () => {
             alt="Grid"
           />
         </div>
-        <div className="p-2 rounded-lg hover:bg-[#2154C4]">
+        <div
+          onClick={() => {
+            handleRouting("/dashboard");
+          }}
+          className="p-2 rounded-lg hover:bg-[#2154C4]"
+        >
           <Image
             src={"./icons/network-node.svg"}
             height={24}
@@ -317,7 +349,7 @@ const AnitaDongreAI = () => {
           />
         </div>
       </div>
-      <div className="w-full h-[98vh] p-4 overflow-y-auto">
+      <div className="flex flex-col w-full h-[98vh] overflow-y-auto mt-6">
         <div className="">
           <div className="mb-2">
             <p className="text-[#001D5C] text-2xl font-bold">
@@ -354,7 +386,7 @@ const AnitaDongreAI = () => {
           </div>
 
           {/* Morning Briefing Section */}
-          <div className="mx-auto p-6 bg-white rounded-lg border border-gray-300 mb-4">
+          <div className="mx-auto p-6 bg-white rounded-lg mb-4">
             <div className="flex items-center justify-center mb-4">
               <Image
                 src={"./icons/agent.svg"}
