@@ -1,510 +1,686 @@
 "use client"
 import React, { useState } from 'react';
-import { 
-  AlertCircle, 
-  TrendingUp, 
-  TrendingDown,
-  ArrowRight, 
-  Store, 
-  ShoppingBag, 
-  DollarSign, 
-  Check, 
-  MessageSquare,
-  Send,
-  Brain,
-  Coffee
-} from 'lucide-react';
+import { AlertTriangle, TrendingUp, ArrowUp, ArrowDown, Package, DollarSign, RefreshCcw, Calendar, Zap, ChevronsUp, Clock, Users, BarChart3 } from 'lucide-react';
 
-const AnitaDongreAI = () => {
-  const [messageInput, setMessageInput] = useState('');
-  const [expandedInsight, setExpandedInsight] = useState(null);
-  const [expandedRecommendation, setExpandedRecommendation] = useState(null);
-  const [messages, setMessages] = useState([
-    { sender: 'ai', text: "Good morning! I've analyzed today's data and found several important insights that need your attention. The most urgent is a potential stockout risk for 5 high-demand ethnic wear SKUs in Mumbai and Bangalore stores. I've outlined everything below to help you make quick decisions today." }
-  ]);
-
-  const handleSendMessage = (e) => {
-    e.preventDefault();
-    if (!messageInput.trim()) return;
-    
-    setMessages([...messages, { sender: 'user', text: messageInput }]);
-    
-    setTimeout(() => {
-      let aiResponse = "I'm analyzing your question...";
-      
-      if (messageInput.toLowerCase().includes('stockout')) {
-        aiResponse = "About the stockout risk - I've noticed a 28% higher sell-through than forecast for these items, specifically due to wedding season demand that wasn't fully accounted for in our original projections. Should we prioritize the express shipment approach or would you prefer the temporary price increase to manage demand while we restock?";
-      } else if (messageInput.toLowerCase().includes('sales')) {
-        aiResponse = "Looking at our sales data more closely, I've noticed Delhi Select's success comes from their unique visual merchandising approach with the new Spring collection - they've placed premium pieces at eye level and created more intuitive customer journeys through the store. We could replicate this at other locations for a potential 8-12% lift.";
-      } else if (messageInput.toLowerCase().includes('cash') || messageInput.toLowerCase().includes('finance')) {
-        aiResponse = "I've been thinking more about our cash flow situation - the main pressure point is actually the payment schedule with our top 3 suppliers. If we renegotiate terms with just Fabrics International and Modern Textiles, we could extend payment windows by 15 days and completely eliminate the projected shortfall without touching our credit line. Would you like me to draft a proposal?";
-      } else {
-        aiResponse = "That's an interesting question. Let me share what I'm seeing in our data. The patterns suggest we should consider a more nuanced approach here. What specific outcome are you hoping to achieve so I can tailor my recommendations accordingly?";
-      }
-      
-      setMessages(prev => [...prev, { sender: 'ai', text: aiResponse }]);
-      setMessageInput('');
-    }, 1000);
+const Badge = ({ children, variant }) => {
+  const variants = {
+    red: "bg-red-100 text-red-800",
+    orange: "bg-orange-100 text-orange-800",
+    green: "bg-green-100 text-green-700",
+    blue: "bg-blue-100 text-blue-800",
+    purple: "bg-purple-100 text-purple-800",
+    gray: "bg-gray-100 text-gray-800",
   };
-
-  const insights = [
-    {
-      id: 1,
-      title: "Ethnic Wear Stockout Risk",
-      summary: "5 high-demand ethnic wear SKUs at risk of stockout in Mumbai, Bangalore",
-      category: "inventory",
-      priority: "high",
-      impact: "₹32L potential revenue at risk",
-      details: {
-        description: "Based on current sales velocity and inventory levels, 5 SKUs in our Premium Ethnic Collection are projecting stockout within 7 days at Mumbai Flagship and Bangalore Mall locations. These items have shown 28% higher sell-through than forecast over the past 2 weeks, driven by wedding season demand.",
-        recommendedActions: [
-          "Expedite shipment of in-transit items with logistics partner",
-          "Place immediate express order for missing SKUs",
-          "Temporarily increase prices by 8% on these items to slow sales velocity",
-          "Transfer 2 units each of ET-2347 and ET-2415 from Delhi store (low velocity location)"
-        ]
-      }
-    },
-    {
-      id: 2,
-      title: "Mumbai Store Conversion Rate Drop",
-      summary: "Mumbai Flagship conversion rate dropped 5.2% this week vs. last week",
-      category: "sales",
-      priority: "medium",
-      impact: "Estimated ₹8.5L weekly revenue loss",
-      details: {
-        description: "The Mumbai Flagship store has experienced a significant drop in conversion rate from 18.3% to 13.1% over the past 7 days, despite consistent footfall numbers. This represents the sharpest week-over-week decline in the past 6 months.",
-        recommendedActions: [
-          "Temporary staff reallocation from lower-traffic stores",
-          "Revert to previous trial room area arrangement",
-          "Price adjustment on slow-converting western wear items (10-15% reduction)"
-        ]
-      }
-    },
-    {
-      id: 3,
-      title: "Cash Flow Warning: June Projection",
-      summary: "June projected cash balance below safety threshold",
-      category: "cash",
-      priority: "high",
-      impact: "₹1.2Cr projected shortfall",
-      details: {
-        description: "Based on current receivables aging, scheduled payments, and sales projections, our cash flow model predicts that end-of-June cash balance will fall approximately ₹1.2Cr below our established minimum operating threshold.",
-        recommendedActions: [
-          "Prioritize collection efforts with ABC Retailer",
-          "Negotiate 30-day extension on 50% of upcoming inventory payment",
-          "Delay non-essential store expansion expenses to July",
-          "Prepare to activate short-term credit line by June 15 if collections do not improve"
-        ]
-      }
-    }
-  ];
-
-  const recommendations = [
-    {
-      id: 1,
-      title: "Optimize Inventory Allocation",
-      summary: "Redistribute 350+ units to prevent stockouts and reduce dead stock",
-      category: "inventory",
-      impact: "Estimated ₹42L revenue protection",
-      confidence: 92,
-      details: {
-        situation: "We have inventory imbalances across 17 stores, with 8 locations risking stockouts on high-demand items while 6 stores have excess inventory on the same SKUs.",
-        analysis: "By analyzing historical sales patterns, current velocity, and upcoming seasonal trends, I've identified optimal inventory levels for each location based on their unique customer demographics and buying patterns.",
-        opportunity: "A precisely targeted redistribution can prevent revenue loss from stockouts while reducing holding costs for slow-moving inventory.",
-        recommendation: "Implement a cross-location inventory transfer plan focusing on 350 units across 42 SKUs, prioritizing high-margin and high-velocity products. This will immediately improve stock allocation efficiency by approximately 27%.",
-        considerations: "Transfer costs will be approximately ₹1.2L, representing a 35x ROI based on protected revenue. Transfers should be completed during low-traffic early morning hours to minimize customer disruption.",
-        brainstormQuestions: [
-          "Could we use this opportunity to test dynamic pricing in stores with varying inventory levels?",
-          "How might we implement real-time inventory visibility tools for store managers?",
-          "What if we created a predictive model to recommend pre-emptive transfers before stockout risks appear?"
-        ]
-      }
-    },
-    {
-      id: 2,
-      title: "Store Staffing Optimization",
-      summary: "Realign staff scheduling with footfall patterns to increase conversion",
-      category: "sales",
-      impact: "Projected 4% conversion increase",
-      confidence: 87,
-      details: {
-        situation: "Our staff scheduling doesn't align with actual customer footfall patterns, creating understaffing during peak hours and overstaffing during slow periods, particularly at our Mumbai and Delhi locations.",
-        analysis: "By analyzing hourly footfall data against conversion rates and staff presence, I've identified a strong correlation between adequate staffing ratios and conversion success, especially during weekend afternoons.",
-        opportunity: "Optimizing staff schedules could increase conversion rates by 3-5% during peak hours without increasing total labor hours.",
-        recommendation: "Implement a dynamic scheduling system that adjusts staffing based on predicted footfall patterns, with particular focus on ensuring adequate coverage during the 2-6pm weekend window when conversion opportunity is highest.",
-        considerations: "This will require flexible scheduling arrangements with staff, potentially including split shifts and weekend incentives. The projected conversion improvement would generate approximately ₹14L in additional monthly revenue.",
-        brainstormQuestions: [
-          "Could we implement a rapid-response team that moves between nearby stores based on real-time footfall?",
-          "What if we tested specialized roles during peak hours (e.g., dedicated stylists, fitting room attendants)?",
-          "How might we involve store associates in developing optimal scheduling approaches?"
-        ]
-      }
-    },
-    {
-      id: 3,
-      title: "Cash Flow Enhancement Plan",
-      summary: "Accelerate receivables and optimize payment schedule",
-      category: "cash",
-      impact: "₹1.6Cr improved cash position",
-      confidence: 90,
-      details: {
-        situation: "Our projected June cash position falls below our minimum threshold, creating potential constraints on inventory purchasing at a critical seasonal transition point.",
-        analysis: "The shortfall is primarily due to payment timing misalignment rather than fundamental business issues - we have ₹3.8Cr in receivables that could be accelerated and ₹4.2Cr in payables that could be optimized.",
-        opportunity: "Through targeted interventions, we can improve our June cash position by ₹1.6Cr without impacting vendor relationships or requiring external financing.",
-        recommendation: "Implement a three-part strategy: 1) Offer 1.5% early payment discounts to key wholesale accounts, 2) Negotiate 15-day extensions with our 3 largest suppliers, and 3) Optimize consignment terms with mall locations.",
-        considerations: "Early payment discounts have a direct P&L impact but are offset by avoiding short-term financing costs. Supplier negotiations should emphasize our growth trajectory and increased order volumes planned for Q3.",
-        brainstormQuestions: [
-          "Could we implement a dynamic discount structure that adjusts based on how early payment is received?",
-          "What if we explored partial prepayment from loyal wholesale customers in exchange for priority allocation?",
-          "How might we create a more predictable cash flow cycle through year-round planning?"
-        ]
-      }
-    }
-  ];
-
-  const toggleInsight = (id) => {
-    if (expandedInsight === id) {
-      setExpandedInsight(null);
-    } else {
-      setExpandedInsight(id);
-    }
-  };
-
-  const toggleRecommendation = (id) => {
-    if (expandedRecommendation === id) {
-      setExpandedRecommendation(null);
-    } else {
-      setExpandedRecommendation(id);
-    }
-  };
-
+  
   return (
-    <div className="h-screen bg-gray-50 p-4 overflow-y-auto">
-      <div className="max-w-6xl mx-auto">
-        <header className="mb-6 bg-white rounded-lg shadow-sm p-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">House of Anita Dongre</h1>
-              <p className="text-gray-600">AI Business Analyst</p>
-            </div>
-            <div className="flex space-x-1">
-              <div className="px-4 py-2 bg-green-100 text-green-800 rounded-lg flex items-center">
-                <TrendingUp className="w-4 h-4 mr-2" />
-                <span className="text-sm font-medium">Sales +7%</span>
-              </div>
-              <div className="px-4 py-2 bg-blue-100 text-blue-800 rounded-lg flex items-center">
-                <ShoppingBag className="w-4 h-4 mr-2" />
-                <span className="text-sm font-medium">Inventory 4.8x</span>
-              </div>
-              <div className="px-4 py-2 bg-amber-100 text-amber-800 rounded-lg flex items-center">
-                <DollarSign className="w-4 h-4 mr-2" />
-                <span className="text-sm font-medium">Cash ₹4.2Cr</span>
-              </div>
-            </div>
-          </div>
-        </header>
+    <span className={`text-xs font-medium px-2 py-1 rounded-full ${variants[variant] || variants.blue}`}>
+      {children}
+    </span>
+  );
+};
 
-        {/* Morning Briefing Section */}
-        <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
-          <div className="flex items-center mb-4">
-            <Coffee className="w-5 h-5 text-amber-600 mr-2" />
-            <h2 className="text-lg font-medium">Morning Briefing</h2>
-          </div>
-          
-          <div className="mb-4 bg-amber-50 border border-amber-100 rounded-lg p-4">
-            <p className="text-gray-800">
-              Good morning! Here's what you need to know today:
-            </p>
-            <ul className="mt-2 space-y-2">
-              <li className="flex items-start">
-                <span className="text-red-500 font-bold mr-2">•</span>
-                <span>High priority: 5 ethnic wear SKUs at risk of stockout within 7 days (₹32L revenue at risk)</span>
-              </li>
-              <li className="flex items-start">
-                <span className="text-red-500 font-bold mr-2">•</span>
-                <span>High priority: June cash projection shows ₹1.2Cr shortfall below minimum threshold</span>
-              </li>
-              <li className="flex items-start">
-                <span className="text-amber-500 font-bold mr-2">•</span>
-                <span>Medium priority: Mumbai Flagship conversion rate dropped 5.2% (₹8.5L weekly revenue impact)</span>
-              </li>
-              <li className="flex items-start">
-                <span className="text-green-500 font-bold mr-2">•</span>
-                <span>Positive: Delhi Select store outperforming sales targets by 17% this month</span>
-              </li>
-            </ul>
-          </div>
-          
-          <div className="border-t border-gray-100 pt-4">
-            <div className="flex space-x-2">
-              <button 
-                className="bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm rounded-lg px-4 py-2 flex items-center"
-                onClick={() => setMessageInput("What's causing the stockout risk in Mumbai?")}
-              >
-                <MessageSquare className="w-4 h-4 mr-2" />
-                Tell me more about stockout risk
-              </button>
-              <button 
-                className="bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm rounded-lg px-4 py-2 flex items-center"
-                onClick={() => setMessageInput("What's your plan for the cash flow issue?")}
-              >
-                <MessageSquare className="w-4 h-4 mr-2" />
-                Ask about cash flow plan
-              </button>
-              <button 
-                className="bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm rounded-lg px-4 py-2 flex items-center"
-                onClick={() => setMessageInput("Why is Delhi performing so well?")}
-              >
-                <MessageSquare className="w-4 h-4 mr-2" />
-                Why is Delhi outperforming?
-              </button>
-            </div>
-          </div>
-        </div>
+const StatusIndicator = ({ priority }) => {
+  const colors = {
+    high: "text-red-500",
+    medium: "text-orange-500",
+    positive: "text-green-600",
+  };
+  
+  return (
+    <div className={`w-2 h-2 rounded-full ${colors[priority]} bg-current`}></div>
+  );
+};
 
-        {/* Chat Section */}
-        <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
-          <div className="flex items-center mb-4">
-            <MessageSquare className="w-5 h-5 text-blue-600 mr-2" />
-            <h2 className="text-lg font-medium">Chat with your AI Analyst</h2>
-          </div>
-          
-          <div className="h-48 overflow-y-auto mb-4 border border-gray-100 rounded-lg p-4 bg-gray-50">
-            {messages.map((message, index) => (
-              <div 
-                key={index} 
-                className={`mb-4 flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-              >
-                <div className={`max-w-[80%] p-3 rounded-lg ${
-                  message.sender === 'user' 
-                    ? 'bg-blue-600 text-white' 
-                    : 'bg-white border border-gray-200 text-gray-800'
-                }`}>
-                  <p className="text-sm">{message.text}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-          
-          <form onSubmit={handleSendMessage} className="flex space-x-2">
-            <input
-              type="text"
-              value={messageInput}
-              onChange={(e) => setMessageInput(e.target.value)}
-              placeholder="Ask me anything about your business data..."
-              className="flex-1 border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <button 
-              type="submit"
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center"
-            >
-              <Send className="w-4 h-4 mr-1" />
-              <span>Ask</span>
-            </button>
-          </form>
-        </div>
+const PriorityItem = ({ priority, children }) => (
+  <li className="flex items-start my-2">
+    <StatusIndicator priority={priority} />
+    <span className="ml-3 text-gray-700">{children}</span>
+  </li>
+);
 
-        {/* Insights Section - Expanded on main screen */}
-        <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
-          <div className="flex justify-between mb-4">
-            <div className="flex items-center">
-              <AlertCircle className="w-5 h-5 text-red-600 mr-2" />
-              <h2 className="text-lg font-medium">Critical Business Insights</h2>
-            </div>
-            <div className="text-sm text-gray-500">Last updated: Today, 9:15 AM</div>
+const ActionButton = ({ icon, children, onClick }) => {
+  const Icon = icon;
+  return (
+    <button 
+      className="flex items-center px-4 py-2 text-sm text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200"
+      onClick={onClick}
+    >
+      <Icon size={16} className="mr-2" />
+      {children}
+    </button>
+  );
+};
+
+const ActionItem = ({ children, checked = true }) => (
+  <div className="flex items-start mb-3">
+    <div className="flex-shrink-0 h-5 w-5 relative mt-1">
+      <div className={`h-5 w-5 rounded border ${checked ? 'bg-green-50 border-green-200' : 'bg-white border-gray-300'}`}>
+        {checked && (
+          <svg className="h-4 w-4 text-green-500 absolute inset-0 m-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+        )}
+      </div>
+    </div>
+    <span className="ml-3 text-sm text-gray-700">{children}</span>
+  </div>
+);
+
+const InsightCard = ({ icon, title, description, priority, impact, children, hideDetails = false }) => {
+  const [isExpanded, setIsExpanded] = useState(!hideDetails);
+  const Icon = icon;
+  
+  return (
+    <div className={`border-l-4 ${priority === 'high' ? 'border-l-red-500' : priority === 'medium' ? 'border-l-orange-500' : 'border-l-green-500'} bg-white rounded-lg shadow-sm mb-4 overflow-hidden`}>
+      <div className="p-4">
+        <div className="flex items-start">
+          <div className={`p-2 rounded-full ${priority === 'high' ? 'bg-red-50 text-red-500' : priority === 'medium' ? 'bg-orange-50 text-orange-500' : 'bg-green-50 text-green-500'} mr-3`}>
+            <Icon size={18} />
           </div>
-          
-          <div className="space-y-6">
-            {insights.map(insight => (
-              <div 
-                key={insight.id} 
-                className={`bg-white rounded-lg border ${
-                  insight.priority === 'high' ? 'border-l-4 border-l-red-500' : 
-                  insight.priority === 'medium' ? 'border-l-4 border-l-amber-500' : 
-                  'border-gray-100'
-                } p-4 hover:shadow-sm transition-shadow`}
-              >
-                <div className="flex items-start mb-3">
-                  <div className={`p-2 rounded-full mr-3 ${
-                    insight.priority === 'high' ? 'bg-red-100' : 
-                    insight.priority === 'medium' ? 'bg-amber-100' : 
-                    'bg-blue-100'
-                  }`}>
-                    <AlertCircle className={`w-5 h-5 ${
-                      insight.priority === 'high' ? 'text-red-600' : 
-                      insight.priority === 'medium' ? 'text-amber-600' : 
-                      'text-blue-600'
-                    }`} />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-medium text-gray-900">{insight.title}</h3>
-                    <p className="text-sm text-gray-600 mt-1">{insight.summary}</p>
-                  </div>
-                  <button 
-                    onClick={() => toggleInsight(insight.id)}
-                    className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded-full flex items-center"
-                  >
-                    {expandedInsight === insight.id ? "Hide Details" : "Show Details"}
-                  </button>
-                </div>
-                
-                <div className="flex items-center justify-between text-xs text-gray-500 mt-2">
-                  <div className="flex items-center">
-                    <span className={`px-2 py-1 rounded-full ${
-                      insight.category === 'inventory' ? 'bg-blue-100 text-blue-800' : 
-                      insight.category === 'sales' ? 'bg-green-100 text-green-800' : 
-                      insight.category === 'cash' ? 'bg-purple-100 text-purple-800' : 
-                      'bg-gray-100 text-gray-800'
-                    }`}>
-                      {insight.category}
-                    </span>
-                    <span className="mx-2">•</span>
-                    <span className={`px-2 py-1 rounded-full ${
-                      insight.priority === 'high' ? 'bg-red-100 text-red-800' : 
-                      'bg-amber-100 text-amber-800'
-                    }`}>
-                      {insight.priority} priority
-                    </span>
-                  </div>
-                  <div className="font-medium">
-                    {insight.impact}
-                  </div>
-                </div>
-                
-                {expandedInsight === insight.id && (
-                  <div className="mt-4 pt-4 border-t border-gray-100">
-                    <div className="mb-4">
-                      <p className="text-sm text-gray-700">{insight.details.description}</p>
-                    </div>
-                    
-                    <div>
-                      <h4 className="font-medium text-gray-900 mb-2 text-sm">Recommended Actions:</h4>
-                      <div className="space-y-2">
-                        {insight.details.recommendedActions.map((action, idx) => (
-                          <div key={idx} className="flex items-center bg-green-50 rounded-lg p-3">
-                            <div className="bg-white rounded-full p-1 mr-2">
-                              <Check className="w-3 h-3 text-green-600" />
-                            </div>
-                            <p className="text-xs flex-1">{action}</p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
+          <div className="flex-1">
+            <div className="flex items-center justify-between mb-1">
+              <h3 className="font-semibold text-gray-800">{title}</h3>
+              <div className="flex space-x-2">
+                {priority && (
+                  <Badge variant={priority === 'high' ? 'red' : priority === 'medium' ? 'orange' : 'green'}>
+                    {priority === 'positive' ? 'positive' : `${priority} priority`}
+                  </Badge>
                 )}
+                {impact && <Badge variant="gray">{impact}</Badge>}
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Recommendations Section - Enhanced with more details */}
-        <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
-          <div className="flex justify-between mb-4">
-            <div className="flex items-center">
-              <Brain className="w-5 h-5 text-purple-600 mr-2" />
-              <h2 className="text-lg font-medium">Strategic Recommendations</h2>
             </div>
-            <div className="text-sm text-gray-500">AI-generated opportunities</div>
-          </div>
-          
-          <div className="space-y-6">
-            {recommendations.map(rec => (
-              <div 
-                key={rec.id} 
-                className="bg-white rounded-lg border border-gray-100 p-4 hover:shadow-sm transition-shadow"
-              >
-                <div className="flex items-start mb-3">
-                  <div className={`p-2 rounded-full mr-3 ${
-                    rec.category === 'inventory' ? 'bg-blue-100' : 
-                    rec.category === 'sales' ? 'bg-green-100' : 
-                    'bg-purple-100'
-                  }`}>
-                    {rec.category === 'inventory' ? (
-                      <ShoppingBag className="w-5 h-5 text-blue-600" />
-                    ) : rec.category === 'sales' ? (
-                      <TrendingUp className="w-5 h-5 text-green-600" />
-                    ) : (
-                      <DollarSign className="w-5 h-5 text-purple-600" />
-                    )}
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-medium text-gray-900">{rec.title}</h3>
-                    <p className="text-sm text-gray-600 mt-1">{rec.summary}</p>
-                  </div>
-                  <button 
-                    onClick={() => toggleRecommendation(rec.id)}
-                    className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded-full flex items-center"
-                  >
-                    {expandedRecommendation === rec.id ? "Hide Details" : "Show Details"}
-                  </button>
-                </div>
-                
-                <div className="grid grid-cols-3 gap-2 mb-2">
-                  <div className="bg-gray-50 rounded p-2 text-center">
-                    <p className="text-xs text-gray-500">Confidence</p>
-                    <p className="font-medium text-sm">{rec.confidence}%</p>
-                  </div>
-                  <div className="bg-gray-50 rounded p-2 text-center">
-                    <p className="text-xs text-gray-500">Impact</p>
-                    <p className="font-medium text-sm">{rec.impact}</p>
-                  </div>
-                  <div className="bg-gray-50 rounded p-2 text-center">
-                    <p className="text-xs text-gray-500">Category</p>
-                    <p className="font-medium text-sm capitalize">{rec.category}</p>
-                  </div>
-                </div>
-                
-                {expandedRecommendation === rec.id && (
-                  <div className="mt-4 pt-4 border-t border-gray-100">
-                    <div className="space-y-3 mb-4">
-                      <div>
-                        <h4 className="text-xs font-semibold text-gray-900 mb-1">SITUATION</h4>
-                        <p className="text-xs text-gray-700">{rec.details.situation}</p>
-                      </div>
-                      <div>
-                        <h4 className="text-xs font-semibold text-gray-900 mb-1">ANALYSIS</h4>
-                        <p className="text-xs text-gray-700">{rec.details.analysis}</p>
-                      </div>
-                      <div>
-                        <h4 className="text-xs font-semibold text-gray-900 mb-1">OPPORTUNITY</h4>
-                        <p className="text-xs text-gray-700">{rec.details.opportunity}</p>
-                      </div>
-                      <div>
-                        <h4 className="text-xs font-semibold text-gray-900 mb-1">RECOMMENDATION</h4>
-                        <p className="text-xs text-gray-700">{rec.details.recommendation}</p>
-                      </div>
-                      <div>
-                        <h4 className="text-xs font-semibold text-gray-900 mb-1">CONSIDERATIONS</h4>
-                        <p className="text-xs text-gray-700">{rec.details.considerations}</p>
-                      </div>
-                    </div>
-                    
-                    <div className="bg-purple-50 p-3 rounded-lg">
-                      <h4 className="text-sm font-medium text-purple-800 mb-2 flex items-center">
-                        <Brain className="w-4 h-4 mr-1" />
-                        Brainstorming Questions
-                      </h4>
-                      <div className="space-y-2">
-                        {rec.details.brainstormQuestions.map((question, idx) => (
-                          <p key={idx} className="text-xs text-purple-800">{question}</p>
-                        ))}
-                      </div>
-                      
-                      <button className="mt-3 w-full bg-purple-600 text-white px-3 py-2 rounded-lg text-xs font-medium flex items-center justify-center">
-                        <Brain className="w-3 h-3 mr-1" />
-                        Brainstorm with me
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
+            <p className="text-sm text-gray-600">{description}</p>
           </div>
         </div>
+        
+        {!isExpanded && (
+          <button 
+            className="mt-3 text-sm text-indigo-600 hover:text-indigo-800 font-medium"
+            onClick={() => setIsExpanded(true)}
+          >
+            Show Details
+          </button>
+        )}
+        
+        {isExpanded && (
+          <div className="mt-4">
+            {children}
+            {!hideDetails && (
+              <button 
+                className="mt-2 text-sm text-indigo-600 hover:text-indigo-800 font-medium"
+                onClick={() => setIsExpanded(false)}
+              >
+                Hide Details
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
-export default AnitaDongreAI;
+const StrategicRecommendation = ({ title, description, icon, confidence, impact, category, hideDetails = false, children }) => {
+  const [isExpanded, setIsExpanded] = useState(!hideDetails);
+  const Icon = icon;
+  
+  return (
+    <div className="bg-white rounded-lg shadow-sm mb-4 overflow-hidden">
+      <div className="p-4">
+        <div className="flex items-start">
+          <div className="p-2 rounded-full bg-blue-50 text-blue-500 mr-3">
+            <Icon size={18} />
+          </div>
+          <div className="flex-1">
+            <div className="flex items-center justify-between mb-1">
+              <h3 className="font-semibold text-gray-800">{title}</h3>
+              <button 
+                className="text-sm text-gray-500 hover:text-gray-700"
+                onClick={() => setIsExpanded(!isExpanded)}
+              >
+                {isExpanded ? 'Hide Details' : 'Show Details'}
+              </button>
+            </div>
+            <p className="text-sm text-gray-600">{description}</p>
+            
+            <div className="grid grid-cols-3 gap-4 mt-3">
+              <div>
+                <div className="text-xs text-gray-500 mb-1">Confidence</div>
+                <div className="font-semibold">{confidence}</div>
+              </div>
+              <div>
+                <div className="text-xs text-gray-500 mb-1">Impact</div>
+                <div className="font-semibold">{impact}</div>
+              </div>
+              <div>
+                <div className="text-xs text-gray-500 mb-1">Category</div>
+                <div className="font-semibold">{category}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {isExpanded && (
+          <div className="mt-4">
+            {children}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const BrainstormingSection = ({ questions }) => (
+  <div className="mt-6">
+    <h4 className="text-sm font-semibold text-purple-600 flex items-center mb-3">
+      <Zap size={16} className="mr-2" /> Brainstorming Questions
+    </h4>
+    <div className="space-y-2">
+      {questions.map((question, index) => (
+        <p key={index} className="text-sm text-purple-700">{question}</p>
+      ))}
+    </div>
+    <button className="mt-4 w-full py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg flex items-center justify-center">
+      <Zap size={16} className="mr-2" /> Brainstorm with me
+    </button>
+  </div>
+);
+
+const Dashboard = () => {
+  return (
+    <div className="bg-gray-50 h-screen overflow-y-auto">
+      {/* Header */}
+      <header className="bg-white shadow-sm px-6 py-4">
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-xl font-bold text-gray-900">House of Anita Dongre</h1>
+            <p className="text-sm text-gray-500">AI Business Analyst</p>
+          </div>
+          <div className="flex items-center space-x-4">
+            <div className="flex space-x-2">
+              <Badge variant="green">Sales +7%</Badge>
+              <Badge variant="blue">Inventory 4.8x</Badge>
+              <Badge variant="orange">Cash ₹4.2Cr</Badge>
+            </div>
+            <div className="text-xs text-gray-500">Last updated: Today, 9:15 AM</div>
+          </div>
+        </div>
+      </header>
+      
+      {/* Main Content */}
+      <main className="container mx-auto px-6 py-6">
+        {/* Morning Briefing */}
+        <section className="mb-8">
+          <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+            <Calendar size={20} className="mr-2 text-gray-700" /> Morning Briefing
+          </h2>
+          <div className="bg-white rounded-lg shadow-sm p-5 border-l-4 border-l-yellow-500">
+            <h3 className="font-medium mb-3">Good morning! Here&apos;s what you need to know today:</h3>
+            <ul className="space-y-2">
+              <PriorityItem priority="high">
+                High priority: 5 ethnic wear SKUs at risk of stockout within 7 days (₹32L revenue at risk)
+              </PriorityItem>
+              <PriorityItem priority="high">
+                High priority: June cash projection shows ₹1.2Cr shortfall below minimum threshold
+              </PriorityItem>
+              <PriorityItem priority="medium">
+                Medium priority: Mumbai Flagship conversion rate dropped 5.2% (₹8.5L weekly revenue impact)
+              </PriorityItem>
+              <PriorityItem priority="positive">
+                Positive: Delhi Select store outperforming sales targets by 17% this month
+              </PriorityItem>
+            </ul>
+            
+            <div className="flex space-x-3 mt-6">
+              <ActionButton icon={AlertTriangle}>
+                Tell me more about stockout risk
+              </ActionButton>
+              <ActionButton icon={DollarSign}>
+                Ask about cash flow plan
+              </ActionButton>
+              <ActionButton icon={TrendingUp}>
+                Why is Delhi outperforming?
+              </ActionButton>
+            </div>
+          </div>
+        </section>
+        
+        {/* Critical Business Insights */}
+        <section className="mb-8">
+          <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+            <AlertTriangle size={20} className="mr-2 text-gray-700" /> Critical Business Insights
+          </h2>
+          
+          <InsightCard
+            icon={AlertTriangle}
+            title="Ethnic Wear Stockout Risk"
+            description="5 high-demand ethnic wear SKUs at risk of stockout in Mumbai, Bangalore"
+            priority="high"
+            impact="₹32L potential revenue at risk"
+          >
+            <div className="bg-gray-50 p-4 rounded-lg mb-4">
+              <p className="text-sm text-gray-700 mb-4">
+                Based on current sales velocity and inventory levels, 5 SKUs in our Premium Ethnic Collection are projecting stockout within 7 days at Mumbai Flagship and Bangalore Mall locations. These items have shown 28% higher sell-through than forecast over the past 2 weeks, driven by wedding season demand.
+              </p>
+              
+              <h4 className="font-medium mb-3">Recommended Actions:</h4>
+              <div className="space-y-2">
+                <ActionItem>Expedite shipment of in-transit items with logistics partner</ActionItem>
+                <ActionItem>Place immediate express order for missing SKUs</ActionItem>
+                <ActionItem>Temporarily increase prices by 8% on these items to slow sales velocity</ActionItem>
+                <ActionItem>Transfer 2 units each of ET-2347 and ET-2415 from Delhi store (low velocity location)</ActionItem>
+              </div>
+            </div>
+          </InsightCard>
+          
+          <InsightCard
+            icon={TrendingUp}
+            title="Mumbai Store Conversion Rate Drop"
+            description="Mumbai Flagship conversion rate dropped 5.2% this week vs. last week"
+            priority="medium"
+            impact="Estimated ₹8.5L weekly revenue loss"
+          >
+            <div className="bg-gray-50 p-4 rounded-lg mb-4">
+              <p className="text-sm text-gray-700 mb-4">
+                Mumbai Flagship store, typically our highest-performing location, has shown a concerning 5.2% drop in conversion rate (foot traffic to purchase) this week. This is resulting in approximately ₹8.5L in weekly revenue impact. This drop is unusual given the store&apos;s historical performance trends.
+              </p>
+              
+              <h4 className="font-medium mb-3">Recommended Actions:</h4>
+              <div className="space-y-2">
+                <ActionItem>Analyze floor staff allocation during peak hours to ensure adequate coverage</ActionItem>
+                <ActionItem>Review recent visual merchandising changes that may have impacted customer flow</ActionItem>
+                <ActionItem>Check competitor promotions in the vicinity that might be drawing customers away</ActionItem>
+                <ActionItem>Consider targeted promotions to boost conversion during typically high-traffic periods</ActionItem>
+              </div>
+            </div>
+          </InsightCard>
+          
+          <InsightCard
+            icon={DollarSign}
+            title="Cash Flow Warning: June Projection"
+            description="June projected cash balance below safety threshold"
+            priority="high"
+            impact="₹1.2Cr projected shortfall"
+          >
+            <div className="bg-gray-50 p-4 rounded-lg mb-4">
+              <p className="text-sm text-gray-700 mb-4">
+                June&apos;s projected cash balance is falling ₹1.2Cr below our minimum safety threshold. This shortfall presents operational risks if not addressed immediately, potentially impacting vendor payments and inventory buys for the upcoming season.
+              </p>
+              
+              <h4 className="font-medium mb-3">Recommended Actions:</h4>
+              <div className="space-y-2">
+                <ActionItem>Accelerate clearance of aged inventory (₹2.5Cr available to liquidate)</ActionItem>
+                <ActionItem>Push flash sales on external marketplaces to clear ₹300K worth of old stock in a week</ActionItem>
+                <ActionItem>Negotiate extended payment terms with top 3 suppliers</ActionItem>
+                <ActionItem>Consider factoring invoices from key accounts to improve immediate cash position</ActionItem>
+                <ActionItem>Prioritize full-price selling of high-margin items to protect contribution</ActionItem>
+              </div>
+            </div>
+          </InsightCard>
+        </section>
+        
+        {/* Strategic Recommendations */}
+        <section>
+          <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+            <Zap size={20} className="mr-2 text-gray-700" /> Strategic Recommendations
+          </h2>
+          
+          <StrategicRecommendation
+            icon={Package}
+            title="Optimize Inventory Allocation"
+            description="Redistribute 350+ units to prevent stockouts and reduce dead stock"
+            confidence="92%"
+            impact="Estimated ₹42L revenue protection"
+            category="Inventory"
+          >
+            <div>
+              <div className="mb-4">
+                <h4 className="text-sm font-semibold uppercase text-gray-500 mb-2">SITUATION</h4>
+                <p className="text-sm text-gray-700">
+                  We have inventory imbalances across 17 stores, with 8 locations risking stockouts on high-demand items while 6 stores have excess inventory on the same SKUs.
+                </p>
+              </div>
+              
+              <div className="mb-4">
+                <h4 className="text-sm font-semibold uppercase text-gray-500 mb-2">ANALYSIS</h4>
+                <p className="text-sm text-gray-700">
+                  By analyzing historical sales patterns, current velocity, and upcoming seasonal trends, I&apos;ve identified optimal inventory levels for each location based on their unique customer demographics and buying patterns.
+                </p>
+              </div>
+              
+              <div className="mb-4">
+                <h4 className="text-sm font-semibold uppercase text-gray-500 mb-2">OPPORTUNITY</h4>
+                <p className="text-sm text-gray-700">
+                  A precisely targeted redistribution can prevent revenue loss from stockouts while reducing holding costs for slow-moving inventory.
+                </p>
+              </div>
+              
+              <div className="mb-4">
+                <h4 className="text-sm font-semibold uppercase text-gray-500 mb-2">RECOMMENDATION</h4>
+                <p className="text-sm text-gray-700">
+                  Implement a cross-location inventory transfer plan focusing on 350 units across 42 SKUs, prioritizing high-margin and high-velocity products. This will immediately improve stock allocation efficiency by approximately 27%.
+                </p>
+              </div>
+              
+              <div className="mb-4">
+                <h4 className="text-sm font-semibold uppercase text-gray-500 mb-2">CONSIDERATIONS</h4>
+                <p className="text-sm text-gray-700">
+                  Transfer costs will be approximately ₹1.2L, representing a 35x ROI based on protected revenue. Transfers should be completed during low-traffic early morning hours to minimize customer disruption.
+                </p>
+              </div>
+              
+              <BrainstormingSection 
+                questions={[
+                  "Could we use this opportunity to test dynamic pricing in stores with varying inventory levels?",
+                  "How might we implement real-time inventory visibility tools for store managers?",
+                  "What if we created a predictive model to recommend pre-emptive transfers before stockout risks appear?"
+                ]}
+              />
+            </div>
+          </StrategicRecommendation>
+          
+          <StrategicRecommendation
+            icon={Users}
+            title="Store Staffing Optimization"
+            description="Realign staff scheduling with footfall patterns to increase conversion"
+            confidence="87%"
+            impact="Projected 4% conversion increase"
+            category="Sales"
+          >
+            <div>
+              <div className="mb-4">
+                <h4 className="text-sm font-semibold uppercase text-gray-500 mb-2">SITUATION</h4>
+                <p className="text-sm text-gray-700">
+                  Mumbai Flagship conversion rate has dropped 5.2% this week, resulting in ₹8.5L weekly revenue impact. Analysis of footfall data suggests misalignment between peak customer traffic and optimal staff coverage.
+                </p>
+              </div>
+              
+              <div className="mb-4">
+                <h4 className="text-sm font-semibold uppercase text-gray-500 mb-2">ANALYSIS</h4>
+                <p className="text-sm text-gray-700">
+                  Customer footfall patterns show highest traffic during evening hours (5-8pm) and weekends, but our current staffing is evenly distributed throughout the week. Additionally, our data shows that staff-to-customer ratio directly correlates with conversion rates, particularly for high-value purchases.
+                </p>
+              </div>
+              
+              <div className="mb-4">
+                <h4 className="text-sm font-semibold uppercase text-gray-500 mb-2">OPPORTUNITY</h4>
+                <p className="text-sm text-gray-700">
+                  By realigning staff schedules to match actual footfall patterns, we can increase conversion rates during peak hours while optimizing labor costs during slower periods. This directly addresses Mumbai&apos;s conversion drop and could be applied to other locations.
+                </p>
+              </div>
+              
+              <div className="mb-4">
+                <h4 className="text-sm font-semibold uppercase text-gray-500 mb-2">RECOMMENDATION</h4>
+                <p className="text-sm text-gray-700">
+                  Implement a revised staffing model that increases coverage during peak hours by 25% and reduces staff during slower periods. Ensure that expert staff with product knowledge and higher conversion rates are scheduled during high-value customer visit periods.
+                </p>
+              </div>
+              
+              <div className="mb-4">
+                <h4 className="text-sm font-semibold uppercase text-gray-500 mb-2">CONSIDERATIONS</h4>
+                <p className="text-sm text-gray-700">
+                  This adjustment requires staff flexibility and cross-training to ensure versatile coverage. Analysis indicates a projected 4% conversion increase would offset any additional labor costs by approximately 3:1 ROI.
+                </p>
+              </div>
+              
+              <BrainstormingSection 
+                questions={[
+                  "Could we implement a flexible staffing app to allow staff to swap shifts based on real-time needs?",
+                  "What if we assigned staff specialists based on demographic patterns in store traffic?",
+                  "How might we leverage Delhi&apos;s successful staffing patterns in other stores?"
+                ]}
+              />
+            </div>
+          </StrategicRecommendation>
+          
+          <StrategicRecommendation
+            icon={RefreshCcw}
+            title="Cross-Channel Inventory Rebalancing"
+            description="Transfer slow-moving products to higher-demand channels"
+            confidence="94%"
+            impact="₹8L additional revenue opportunity"
+            category="Inventory"
+          >
+            <div>
+              <div className="mb-4">
+                <h4 className="text-sm font-semibold uppercase text-gray-500 mb-2">SITUATION</h4>
+                <p className="text-sm text-gray-700">
+                  We have significant inventory imbalances across our channels (EBO, LFS, Online In-house, and Online External). Certain SKUs are underperforming in one channel while showing strong demand in others. For example, SKU 7007 (Classic Polo Tee) is fast-selling online but surplus in LFS, while SKU 8008 (Sports Jacket) is underperforming on marketplaces but selling well in stores.
+                </p>
+              </div>
+              
+              <div className="mb-4">
+                <h4 className="text-sm font-semibold uppercase text-gray-500 mb-2">ANALYSIS</h4>
+                <p className="text-sm text-gray-700">
+                  Sales velocity data shows considerable variance by channel. SKU 7007 sold out 100 units online in 3 weeks while LFS locations have 40 units with slow movement. Similarly, SKU 8008 sold only 5 units on marketplaces (from 100 in stock) but moved 50+ units across EBO stores last month. This variance represents both a risk and opportunity.
+                </p>
+              </div>
+              
+              <div className="mb-4">
+                <h4 className="text-sm font-semibold uppercase text-gray-500 mb-2">OPPORTUNITY</h4>
+                <p className="text-sm text-gray-700">
+                  By strategically reallocating inventory between channels based on demand patterns, we can fulfill current demand, reduce eventual markdowns, and maximize full-price sell-through. This improves both revenue and margin while optimizing working capital.
+                </p>
+              </div>
+              
+              <div className="mb-4">
+                <h4 className="text-sm font-semibold uppercase text-gray-500 mb-2">RECOMMENDATION</h4>
+                <p className="text-sm text-gray-700">
+                  Implement a cross-channel rebalancing strategy for specific high-impact SKUs:
+                  1. Transfer 20 units of SKU 7007 from LFS to online fulfillment (₹50K revenue opportunity)
+                  2. Redeploy 50 units of SKU 8008 from marketplaces to EBO stores (₹2L revenue potential)
+                  3. Consolidate Kids&apos; T-Shirt Packs (SKU 9009) for online liquidation
+                  4. Use our website as an &quot;endless aisle&quot; to sell inventory from anywhere in the network
+                </p>
+              </div>
+              
+              <div className="mb-4">
+                <h4 className="text-sm font-semibold uppercase text-gray-500 mb-2">CONSIDERATIONS</h4>
+                <p className="text-sm text-gray-700">
+                  Transfer logistics will cost approximately ₹0.8L but yield a projected 10:1 ROI in additional revenue. Implementation requires coordinated inventory visibility across all channels to identify optimal rebalancing opportunities in real-time.
+                </p>
+              </div>
+              
+              <BrainstormingSection 
+                questions={[
+                  "How might we create a real-time inventory balancing algorithm that suggests transfers automatically?",
+                  "Could we implement ship-from-store capabilities to further optimize inventory location?",
+                  "What if we used predictive analytics to anticipate channel-specific demand before making purchasing decisions?"
+                ]}
+              />
+            </div>
+          </StrategicRecommendation>
+          
+          <StrategicRecommendation
+            icon={Clock}
+            title="Liquidation Strategy Optimization"
+            description="Systematically clear aging inventory to improve cash flow"
+            confidence="91%"
+            impact="₹1.5Cr cash recovery potential"
+            category="Inventory"
+          >
+            <div>
+              <div className="mb-4">
+                <h4 className="text-sm font-semibold uppercase text-gray-500 mb-2">SITUATION</h4>
+                <p className="text-sm text-gray-700">
+                  Approximately 25% of EBO inventory by value is older than 90 days (slow-moving). Our aging report shows ₹X in stock over 180 days in the warehouse. Additionally, specific SKUs like the Winter Jacket (FW24) in Delhi LFS have 15 units of 10-month-old stock with minimal sales, tying up approximately ₹300K.
+                </p>
+              </div>
+              
+              <div className="mb-4">
+                <h4 className="text-sm font-semibold uppercase text-gray-500 mb-2">ANALYSIS</h4>
+                <p className="text-sm text-gray-700">
+                  Aged inventory is occupying valuable space and tying up working capital. These items are incurring monthly holding costs (~₹50K/month) while continuing to depreciate in value. According to our aging matrix, off-season stock (9-12 months old) should be moved to factory outlets with heavy markdown, or we risk even steeper discounts later.
+                </p>
+              </div>
+              
+              <div className="mb-4">
+                <h4 className="text-sm font-semibold uppercase text-gray-500 mb-2">OPPORTUNITY</h4>
+                <p className="text-sm text-gray-700">
+                  A systematic liquidation strategy can convert stagnant inventory to immediate cash, free up floor space for new arrivals, and help resolve our ₹1.2Cr cash flow shortfall for June. With the right approach, we can recover significant value while minimizing margin erosion.
+                </p>
+              </div>
+              
+              <div className="mb-4">
+                <h4 className="text-sm font-semibold uppercase text-gray-500 mb-2">RECOMMENDATION</h4>
+                <p className="text-sm text-gray-700">
+                  Implement a tiered liquidation strategy based on inventory age and channel:
+                  1. Clear FW24 Winter Jackets from Delhi LFS with 60% markdown (₹30K recovery)
+                  2. Run targeted clearance with 30% markdown on items &gt;90 days old (₹1.2M potential recovery)
+                  3. Create a permanent clearance section for end-of-line products on our website
+                  4. Run flash sales on marketplaces for aging stock (recently cleared ₹300K in a one-day sale)
+                  5. Implement early 15% markdown for mid-season slow-movers like SKU 3003 to prevent deeper discounts later
+                </p>
+              </div>
+              
+              <div className="mb-4">
+                <h4 className="text-sm font-semibold uppercase text-gray-500 mb-2">CONSIDERATIONS</h4>
+                <p className="text-sm text-gray-700">
+                  While markdowns impact gross margin, the recovery of cash and space provides greater long-term value. Our analysis shows recouping ₹30K now from Kids&apos; T-Shirt packs is better than likely ₹10K or less if we wait 6+ months. For Winter Jackets, the aggressive 60% markdown now saves an additional ₹15K versus waiting and marking down to near ₹500 salvage value per item.
+                </p>
+              </div>
+              
+              <BrainstormingSection 
+                questions={[
+                  "Could we create a &quot;last chance&quot; boutique concept for aging inventory?",
+                  "What if we bundled slow-moving items with complementary fast-sellers?",
+                  "How might we leverage customer data to offer personalized clearance offers to likely buyers?"
+                ]}
+              />
+            </div>
+          </StrategicRecommendation>
+        </section>
+
+        {/* SKU-Level Insights */}
+        <section className="mb-8">
+          <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+            <BarChart3 size={20} className="mr-2 text-gray-700" /> SKU-Level Insights
+          </h2>
+          
+          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SKU & Item</th>
+                    <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
+                    <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action Type</th>
+                    <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Recommendation</th>
+                    <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reason</th>
+                    <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Impact</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  <tr>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <div className="text-sm font-medium text-gray-900">SKU 1001</div>
+                      <div className="text-xs text-gray-500">Blue Oxford Shirt</div>
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">Mumbai EBO</td>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <Badge variant="blue">Inventory Buy</Badge>
+                    </td>
+                    <td className="px-4 py-3 text-sm text-gray-700">Replenish ~30 units immediately</td>
+                    <td className="px-4 py-3 text-sm text-gray-700">Top-seller with 50 units sold in 4 weeks, &lt;5 units left; experiencing stockouts</td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">₹30,000–₹40,000 potential sales recovery</td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <div className="text-sm font-medium text-gray-900">SKU 1002</div>
+                      <div className="text-xs text-gray-500">Black Denim Jeans</div>
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">Mumbai EBO</td>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <Badge variant="green">Pricing Strategy</Badge>
+                    </td>
+                    <td className="px-4 py-3 text-sm text-gray-700">Maintain full price</td>
+                    <td className="px-4 py-3 text-sm text-gray-700">80% sell-through at full price mid-season; on track to meet 75% full-price target</td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">₹5,000 protected margin (10 units × ₹500)</td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <div className="text-sm font-medium text-gray-900">SKU 4004</div>
+                      <div className="text-xs text-gray-500">Winter Jacket – FW24</div>
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">Delhi LFS</td>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <Badge variant="red">Liquidation</Badge>
+                    </td>
+                    <td className="px-4 py-3 text-sm text-gray-700">Clear with 60% markdown</td>
+                    <td className="px-4 py-3 text-sm text-gray-700">Off-season stock (~10 months old) with 15 units and minimal sales</td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">₹30,000 cash recovery, prevents deeper future markdowns</td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <div className="text-sm font-medium text-gray-900">SKU 3003</div>
+                      <div className="text-xs text-gray-500">Graphic Tee SS25</div>
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">Bangalore EBO</td>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <Badge variant="orange">Markdown</Badge>
+                    </td>
+                    <td className="px-4 py-3 text-sm text-gray-700">Implement 15% markdown</td>
+                    <td className="px-4 py-3 text-sm text-gray-700">Mid-season slow-mover with only 50% sell-through by week 14 (below 65% benchmark)</td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">₹12,750 accelerated revenue, saves ₹4,500 in future deeper markdowns</td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <div className="text-sm font-medium text-gray-900">SKU 7007</div>
+                      <div className="text-xs text-gray-500">Classic Polo Tee</div>
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">LFS to Online</td>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <Badge variant="purple">Cross-POS</Badge>
+                    </td>
+                    <td className="px-4 py-3 text-sm text-gray-700">Transfer 20 units to online channel</td>
+                    <td className="px-4 py-3 text-sm text-gray-700">Fast-selling online (sold out 100 units in 3 weeks) with back-orders, while LFS has 40 surplus units</td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">₹50,000 additional revenue (20 × ₹2,500)</td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <div className="text-sm font-medium text-gray-900">SKU 8008</div>
+                      <div className="text-xs text-gray-500">Sports Jacket</div>
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">Marketplace to EBO</td>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <Badge variant="purple">Cross-POS</Badge>
+                    </td>
+                    <td className="px-4 py-3 text-sm text-gray-700">Redeploy 50 units to stores</td>
+                    <td className="px-4 py-3 text-sm text-gray-700">Underperforming on external marketplaces (5 units sold from 100 in stock) but a proven seller in EBO stores (50+ units)</td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">₹2,00,000 potential full-price revenue vs. marketplace stagnation</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+        
+        {/* Bottom Chat Area */}
+        <section className="mt-12">
+          <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+            <Zap size={20} className="mr-2 text-gray-700" /> Chat with your AI Analyst
+          </h2>
+          
+          <div className="bg-white rounded-lg shadow-sm p-5 mb-4">
+            <div className="p-4 mb-4 rounded-lg bg-blue-50 text-gray-700 text-sm">
+              <p>Good morning! I&apos;ve analyzed today&apos;s data and found several important insights that need your attention. The most urgent is a potential stockout risk for 5 high-demand ethnic wear SKUs in Mumbai and Bangalore stores. I&apos;ve outlined everything below to help you make quick decisions today.</p>
+            </div>
+            
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Ask me anything about your business data..."
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              />
+              <button className="absolute right-3 top-3 bg-indigo-600 text-white p-1 rounded-lg">
+                <Zap size={18} />
+              </button>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  );
+};
+
+export default Dashboard;
