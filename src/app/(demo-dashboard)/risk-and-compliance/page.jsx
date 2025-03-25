@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import Image from "next/image";
 
 // Simple UI components
 const Card = ({ children, className = "" }) => (
@@ -13,7 +14,7 @@ const CardHeader = ({ children, className = "" }) => (
 );
 
 const CardTitle = ({ children, className = "" }) => (
-  <h3 className={`text-lg font-medium ${className}`}>{children}</h3>
+  <h3 className={`text-lg font-semibold ${className}`}>{children}</h3>
 );
 
 const CardContent = ({ children, className = "" }) => (
@@ -25,7 +26,7 @@ const CardDescription = ({ children }) => (
 );
 
 const CardFooter = ({ children, className = "" }) => (
-  <div className={`p-4 border-t text-sm text-gray-500 ${className}`}>
+  <div className={`mx-4 border-t text-sm text-gray-500 ${className}`}>
     {children}
   </div>
 );
@@ -75,7 +76,7 @@ const Badge = ({ children, variant = "default", className = "" }) => {
 
   return (
     <span
-      className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${variantClasses[variant]} ${className}`}
+      className={`inline-flex items-center rounded-full px-2 py text-xs font-medium ${variantClasses[variant]} ${className}`}
     >
       {children}
     </span>
@@ -85,7 +86,7 @@ const Badge = ({ children, variant = "default", className = "" }) => {
 const Progress = ({ value, variant = "default", className = "" }) => {
   const variantClasses = {
     default: "bg-indigo-600",
-    success: "bg-green-600",
+    success: "bg-[#297250]",
     warning: "bg-amber-600",
     danger: "bg-red-600",
   };
@@ -415,1317 +416,1227 @@ const GSTTDSComplianceDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
 
   return (
-    <div className="flex flex-col w-full h-screen bg-gray-50 text-gray-800 p-6 overflow-y-auto">
-      {/* Header with Profile and Date */}
-      <header className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-2xl font-bold">
-            HOAD GST & TDS Compliance Monitor
-          </h1>
-          <p className="text-sm text-gray-500">
-            Last updated: March 17, 2025 • 10:45 AM
-          </p>
+    <div className="flex bg-gray-50">
+      {/* SIDEBAR */}
+      <div className="flex flex-col gap-y-6 mx-4 my-6 p-4 rounded-xl bg-[#001D5C] ">
+        <div className="p-2 rounded-lg hover:bg-[#2154C4]">
+          <Image src={"./icons/grid.svg"} height={24} width={24} alt="Grid" />
         </div>
-        <div className="flex items-center">
+        <div className="p-2 rounded-lg hover:bg-[#2154C4]">
+          <Image src={"./icons/shield.svg"} height={24} width={24} alt="Grid" />
+        </div>
+        <div className="p-2 rounded-lg hover:bg-[#2154C4]">
+          <Image src={"./icons/graph.svg"} height={24} width={24} alt="Grid" />
+        </div>
+        <div className="p-2 rounded-lg hover:bg-[#2154C4]">
+          <Image
+            src={"./icons/bar-chart.svg"}
+            height={24}
+            width={24}
+            alt="Grid"
+          />
+        </div>
+        <div className="p-2 rounded-lg hover:bg-[#2154C4]">
+          <Image
+            src={"./icons/network-node.svg"}
+            height={24}
+            width={24}
+            alt="Grid"
+          />
+        </div>
+      </div>
+
+      <div className="flex flex-col w-full h-[98vh]  text-gray-800 mt-6 overflow-y-auto">
+        {/* Header with Profile and Date */}
+        <header className="flex justify-between items-center mb-6">
+          <div>
+            <h1 className="text-2xl font-bold">GST & TDS Compliance Monitor</h1>
+            <p className="text-sm text-gray-500">
+              Last updated: March 17th March, 2025 | 10:45 AM
+            </p>
+          </div>
           <div className="flex items-center">
-            <span className="bg-green-500 h-2 w-2 rounded-full mr-2"></span>
-            <span className="text-sm font-medium">Agent Active</span>
-          </div>
-        </div>
-      </header>
-
-      {/* Data Sources Section */}
-      <Card className="mb-6">
-        <CardHeader className="flex justify-between items-center">
-          <CardTitle>Connected Data Sources</CardTitle>
-          <Badge variant="success">Primary System: Tally</Badge>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-4 gap-4">
-            <div className="bg-gray-50 p-3 rounded-lg border flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center">
-                <Database size={20} />
-              </div>
-              <div className="flex-1">
-                <div className="font-medium">Tally</div>
-                <div className="text-xs text-gray-500">
-                  Sales & Purchase Registers
-                </div>
-                <div className="flex items-center mt-1">
-                  <div className="h-1.5 w-1.5 bg-green-500 rounded-full mr-1"></div>
-                  <span className="text-xs text-green-700">
-                    Last sync: Today, 9:15 AM
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-gray-50 p-3 rounded-lg border flex items-center gap-3 opacity-60">
-              <div className="w-10 h-10 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center">
-                <Database size={20} />
-              </div>
-              <div className="flex-1">
-                <div className="font-medium">Zoho</div>
-                <div className="text-xs text-gray-500">Sales Register</div>
-                <div className="flex items-center mt-1">
-                  <div className="h-1.5 w-1.5 bg-red-500 rounded-full mr-1"></div>
-                  <span className="text-xs text-red-700">Not connected</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-gray-50 p-3 rounded-lg border flex items-center gap-3 opacity-60">
-              <div className="w-10 h-10 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center">
-                <Database size={20} />
-              </div>
-              <div className="flex-1">
-                <div className="font-medium">Quickbooks</div>
-                <div className="text-xs text-gray-500">Sales Register</div>
-                <div className="flex items-center mt-1">
-                  <div className="h-1.5 w-1.5 bg-red-500 rounded-full mr-1"></div>
-                  <span className="text-xs text-red-700">Not connected</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-gray-50 p-3 rounded-lg border flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center">
-                <ExternalLink size={20} />
-              </div>
-              <div className="flex-1">
-                <div className="font-medium">India GST Portal</div>
-                <div className="text-xs text-gray-500">
-                  GSTR-1, 2B, 3B Filings
-                </div>
-                <div className="flex items-center mt-1">
-                  <div className="h-1.5 w-1.5 bg-green-500 rounded-full mr-1"></div>
-                  <span className="text-xs text-green-700">
-                    Last sync: Today, 8:30 AM
-                  </span>
-                </div>
-              </div>
+            <div className="flex items-center">
+              <span className="bg-green-500 h-2 w-2 rounded-full mr-2"></span>
+              <span className="text-sm font-medium">Agent Active</span>
             </div>
           </div>
+        </header>
 
-          <ThoughtBubble className="mt-4">
-            <div className="flex items-start gap-3">
-              <div className="h-10 w-10 rounded-full bg-indigo-600 text-white flex items-center justify-center flex-shrink-0 font-bold">
-                A
-              </div>
-              <div>
-                <p className="text-sm">
-                  I'm continuously monitoring data from your accounting systems and the GST portal
-                  to flag compliance issues before they become major problems.
-                  So far, I've analyzed 420 invoices this month.
-                </p>
-
-                <div className="mt-3 text-xs bg-white bg-opacity-50 p-2 rounded">
-                  <div className="flex justify-between mb-1">
-                    <span>Invoice matches across systems</span>
-                    <span className="font-medium">97.3%</span>
-                  </div>
-                  <Progress value={97.3} variant="success" />
-                </div>
-              </div>
-            </div>
-          </ThoughtBubble>
-        </CardContent>
-      </Card>
-
-      {/* Main Navigation Tabs */}
-      <Tabs
-        defaultValue="overview"
-        className="w-full mb-6"
-        onValueChange={setActiveTab}
-      >
-        <TabsList className="mb-4">
-          <TabsTrigger value="overview" className="px-4 py-2">
-            Overview
-          </TabsTrigger>
-          <TabsTrigger value="gst" className="px-4 py-2">
-            GST Compliance
-          </TabsTrigger>
-          <TabsTrigger value="tds" className="px-4 py-2">
-            TDS Compliance
-          </TabsTrigger>
-          <TabsTrigger value="risk" className="px-4 py-2">
-            Risk
-          </TabsTrigger>
-        </TabsList>
-
-        {/* Overview Tab */}
-        <TabsContent value="overview" className="space-y-6">
-          {/* Summary Cards */}
-          <div className="grid grid-cols-4 gap-4">
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-gray-500">
-                  GST Compliance
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-baseline justify-between">
-                  <span className="text-2xl font-bold">85%</span>
-                  <Badge
-                    variant={85 > 80 ? "success" : "danger"}
-                    className="ml-2"
-                  >
-                    {85 > 80 ? "Good" : "Needs Attention"}
-                  </Badge>
-                </div>
-                <Progress value={85} className="h-1 mt-2" />
-              </CardContent>
-              <CardFooter className="pt-0 text-xs text-gray-500">
-                <span>12 issues need attention</span>
-              </CardFooter>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-gray-500">
-                  TDS Compliance
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-baseline justify-between">
-                  <span className="text-2xl font-bold">90%</span>
-                  <Badge
-                    variant={90 > 80 ? "success" : "danger"}
-                    className="ml-2"
-                  >
-                    {90 > 80 ? "Good" : "Needs Attention"}
-                  </Badge>
-                </div>
-                <Progress value={90} className="h-1 mt-2" />
-              </CardContent>
-              <CardFooter className="pt-0 text-xs text-gray-500">
-                <span>8 issues need attention</span>
-              </CardFooter>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-gray-500">
-                  GSTR Filing Status
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">GSTR-1</span>
-                    <Badge variant="success">Filed (Mar 10)</Badge>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">GSTR-3B</span>
-                    <Badge variant="warning">Due in 3 days</Badge>
-                  </div>
-                </div>
-              </CardContent>
-              <CardFooter className="pt-0 text-xs text-gray-500">
-                <Button variant="link" className="p-0 h-auto text-xs">
-                  View filing calendar
-                </Button>
-              </CardFooter>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-gray-500">
-                  Pending Actions
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-baseline justify-between">
-                  <span className="text-2xl font-bold">18</span>
-                  <Badge
-                    variant={18 < 20 ? "warning" : "danger"}
-                    className="ml-2"
-                  >
-                    {18 < 20 ? "Moderate" : "High"}
-                  </Badge>
-                </div>
-                <div className="flex justify-between mt-2 text-xs">
-                  <span className="flex items-center">
-                    <Clock size={12} className="mr-1" /> Urgent: 3
-                  </span>
-                  <span className="flex items-center">
-                    <AlertCircle size={12} className="mr-1" /> High: 7
-                  </span>
-                  <span className="flex items-center">
-                    <CheckCircle size={12} className="mr-1" /> Normal: 8
-                  </span>
-                </div>
-              </CardContent>
-              <CardFooter className="pt-0 text-xs text-gray-500">
-                <Button variant="link" className="p-0 h-auto text-xs">
-                  View all actions
-                </Button>
-              </CardFooter>
-            </Card>
-          </div>
-
-          {/* Action Items */}
-          <Card>
-            <CardHeader>
-              <div className="flex justify-between items-center">
-                <CardTitle>Priority Issues Requiring Attention</CardTitle>
-                <Button variant="outline" size="sm" className="text-xs">
-                  View All
-                </Button>
-              </div>
+        {/* Data Sources Section */}
+        <div className="flex items-start justify-between">
+          <Card className="mb-6 w-full">
+            <CardHeader className="flex justify-between items-center">
+              <CardTitle>Connected Data Sources</CardTitle>
+              <Badge variant="success">Primary System: Tally</Badge>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                {/* GST Issue 1 */}
-                <div className="bg-amber-50 border border-amber-200 rounded-md p-4">
-                  <div className="flex justify-between items-start">
-                    <div className="flex items-start gap-3 w-2/3">
-                      <AlertCircle className="text-amber-500 mt-1" size={20} />
-                      <div>
-                        <h3 className="font-medium">
-                          HSN Code Mismatch - Stitch & Co. Fabrics
-                        </h3>
-                        <p className="text-sm text-gray-600 mt-1">
-                          Invoice #SC-2325 for embroidered fabrics is tagged
-                          with HSN code 6204, but the items described are more
-                          accurately covered under HSN 6211 (still 18% GST).
-                          Incorrect HSN codes may prompt questions during a
-                          department audit.
-                        </p>
-                        <div className="flex gap-2 mt-3">
-                          <Badge className="text-xs">GST Compliance</Badge>
-                          <Badge className="text-xs">HOAD ERP</Badge>
-                          <Badge className="text-xs">Invoice: ₹125,000</Badge>
-                        </div>
-                      </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-gray-50 p-3 rounded-lg border flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center">
+                    <Database size={20} />
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-medium">Tally</div>
+                    <div className="text-xs text-gray-500">
+                      Sales & Purchase Registers
                     </div>
-                    <div className="flex gap-2">
-                      <Button size="sm" variant="outline">
-                        View Invoice
-                      </Button>
-                      <Button size="sm">HSN Guide</Button>
+                    <div className="flex items-center mt-1">
+                      <div className="h-1.5 w-1.5 bg-green-500 rounded-full mr-1"></div>
+                      <span className="text-xs text-green-700">
+                        Last sync: Today, 9:15 AM
+                      </span>
                     </div>
                   </div>
                 </div>
 
-                {/* GST Issue 2 */}
-                <div className="bg-red-50 border border-red-200 rounded-md p-4">
-                  <div className="flex justify-between items-start">
-                    <div className="flex items-start gap-3 w-2/3">
-                      <XCircle className="text-red-500 mt-1" size={20} />
-                      <div>
-                        <h3 className="font-medium">
-                          Invoice Missing in GSTR-2B - Aarohi Textiles
-                        </h3>
-                        <p className="text-sm text-gray-600 mt-1">
-                          I found Invoice #AT-8754 for ₹78,400 in your purchase
-                          register, but it's not appearing in your GSTR-2B. The
-                          supplier might not have filed GSTR-1 or may have filed
-                          with an incorrect GSTIN. You risk losing an input
-                          credit of ₹14,112 unless resolved.
-                        </p>
-                        <p className="text-sm text-gray-600 mt-2">
-                          <span className="font-medium">
-                            Possible resolutions:
-                          </span>{" "}
-                          Request the vendor to rectify their GSTR-1 or confirm
-                          if the invoice details match on both sides.
-                        </p>
-                        <div className="flex gap-2 mt-3">
-                          <Badge variant="danger" className="text-xs">
-                            Input Tax Credit at Risk
-                          </Badge>
-                          <Badge className="text-xs">GSTR-2B Mismatch</Badge>
-                          <Badge className="text-xs">Tax Amount: ₹14,112</Badge>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex gap-2">
-                      <Button size="default" variant="outline">
-                        View Details
-                      </Button>
-                      <Button size="default" variant="danger">
-                        Impact Analysis
-                      </Button>
+                <div className="bg-gray-50 p-3 rounded-lg border flex items-center gap-3 opacity-60">
+                  <div className="w-10 h-10 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center">
+                    <Database size={20} />
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-medium">Zoho</div>
+                    <div className="text-xs text-gray-500">Sales Register</div>
+                    <div className="flex items-center mt-1">
+                      <div className="h-1.5 w-1.5 bg-red-500 rounded-full mr-1"></div>
+                      <span className="text-xs text-red-700">
+                        Not connected
+                      </span>
                     </div>
                   </div>
                 </div>
 
-                {/* TDS Issue */}
-                <div className="bg-red-50 border border-red-200 rounded-md p-4">
-                  <div className="flex justify-between items-start">
-                    <div className="flex items-start gap-3 w-2/3">
-                      <DollarSign className="text-red-500 mt-1" size={20} />
-                      <div>
-                        <h3 className="font-medium">
-                          TDS Not Deducted - Amber Design Consultants
-                        </h3>
-                        <p className="text-sm text-gray-600 mt-1">
-                          Invoice #ADC-1042 (₹85,000) for fashion design
-                          consulting services was not subject to TDS under
-                          section 194J (10%). This can lead to a penalty of
-                          ₹8,500 plus interest if not corrected.
-                        </p>
-                        <p className="text-sm text-gray-600 mt-2">
-                          <span className="font-medium">Required action:</span>{" "}
-                          Deduct TDS and deposit promptly. Late deposit triggers
-                          1.5% monthly interest from the due date.
-                        </p>
-                        <div className="flex gap-2 mt-3">
-                          <Badge variant="danger" className="text-xs">
-                            TDS Non-compliance
-                          </Badge>
-                          <Badge className="text-xs">Section 194J</Badge>
-                          <Badge className="text-xs">Amount: ₹8,500</Badge>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex gap-2">
-                      <Button size="sm" variant="outline">
-                        View Invoice
-                      </Button>
-                      <Button size="sm" variant="danger">
-                        Penalty Calculation
-                      </Button>
+                <div className="bg-gray-50 p-3 rounded-lg border flex items-center gap-3 opacity-60">
+                  <div className="w-10 h-10 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center">
+                    <Database size={20} />
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-medium">Quickbooks</div>
+                    <div className="text-xs text-gray-500">Sales Register</div>
+                    <div className="flex items-center mt-1">
+                      <div className="h-1.5 w-1.5 bg-red-500 rounded-full mr-1"></div>
+                      <span className="text-xs text-red-700">
+                        Not connected
+                      </span>
                     </div>
                   </div>
                 </div>
 
-                {/* TDS Issue 2 */}
-                <div className="bg-amber-50 border border-amber-200 rounded-md p-4">
-                  <div className="flex justify-between items-start">
-                    <div className="flex items-start gap-3 w-2/3">
-                      <AlertCircle className="text-amber-500 mt-1" size={20} />
-                      <div>
-                        <h3 className="font-medium">
-                          Incorrect TDS Section - Ritu Enterprises
-                        </h3>
-                        <p className="text-sm text-gray-600 mt-1">
-                          Invoice #RE-478 (₹135,600) was mistakenly deducted
-                          under Section 194C (2%) instead of 194J (10%) for
-                          creative design services. This results in a TDS
-                          shortfall of ₹10,848, which may lead to an IT notice.
-                        </p>
-                        <p className="text-sm text-gray-600 mt-2">
-                          <span className="font-medium">
-                            Classification note:
-                          </span>{" "}
-                          The invoice states “fashion consultancy,” which
-                          qualifies under 194J, not 194C.
-                        </p>
-                        <div className="flex gap-2 mt-3">
-                          <Badge className="text-xs">
-                            TDS Section Mismatch
-                          </Badge>
-                          <Badge className="text-xs">HOAD ERP</Badge>
-                          <Badge className="text-xs">Shortfall: ₹10,848</Badge>
-                        </div>
-                      </div>
+                <div className="bg-gray-50 p-3 rounded-lg border flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center">
+                    <ExternalLink size={20} />
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-medium">GST Portal</div>
+                    <div className="text-xs text-gray-500">
+                      GSTR-1, 2B, 3B Filings
                     </div>
-                    <div className="flex gap-2">
-                      <Button size="sm" variant="outline">
-                        View Invoice
-                      </Button>
-                      <Button size="sm">TDS Guide</Button>
+                    <div className="flex items-center mt-1">
+                      <div className="h-1.5 w-1.5 bg-green-500 rounded-full mr-1"></div>
+                      <span className="text-xs text-green-700">
+                        Last sync: Today, 8:30 AM
+                      </span>
                     </div>
                   </div>
                 </div>
               </div>
             </CardContent>
-            <CardFooter className="border-t pt-3 pb-1">
-              <p className="text-xs text-gray-500">
-                I've reviewed 420 invoices for HOAD. These 4 are high-priority
-                issues; 14 more have lower priority status.
-              </p>
-            </CardFooter>
           </Card>
-        </TabsContent>
 
-        {/* GST Compliance Tab */}
-        <TabsContent value="gst">
-          <div className="space-y-6">
-            <div className="grid grid-cols-3 gap-4">
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-500">
-                    GSTR-1 vs HOAD ERP (Sales)
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">96.8%</div>
-                  <div className="text-xs text-gray-500 mt-1">
-                    Invoice Matching Rate
-                  </div>
-                  <div className="mt-3 flex gap-4">
-                    <div>
-                      <div className="text-sm font-medium">182</div>
-                      <div className="text-xs text-gray-500">
-                        Invoices Matched
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-sm font-medium text-amber-600">
-                        4
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        HSN Mismatches
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-sm font-medium text-red-600">2</div>
-                      <div className="text-xs text-gray-500">
-                        Missing Invoices
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-                <CardFooter className="pt-0">
-                  <ThoughtBubble className="text-sm max-w-full">
-                    <p>
-                      4 sales invoices may have incorrect HSN codes and 2 more
-                      are in ERP but missing from GSTR-1. One is Invoice
-                      #AF-7752 (₹142,500) to a brand partner that’s not in
-                      GSTR-1 at all.
-                    </p>
-                  </ThoughtBubble>
-                </CardFooter>
-              </Card>
-
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-500">
-                    GSTR-2B ITC Reconciliation
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">₹ 3,45,870</div>
-                  <div className="text-xs text-gray-500 mt-1">
-                    Claimable ITC this month
-                  </div>
-                  <div className="mt-3 flex gap-4">
-                    <div>
-                      <div className="text-sm font-medium">142</div>
-                      <div className="text-xs text-gray-500">
-                        Invoices Matched
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-sm font-medium text-amber-600">
-                        3
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        Amount Mismatches
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-sm font-medium text-red-600">8</div>
-                      <div className="text-xs text-gray-500">
-                        Missing in GSTR-2B
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-                <CardFooter className="pt-0">
-                  <ThoughtBubble className="text-sm max-w-full">
-                    <p>
-                      8 purchase invoices (~₹42,780 ITC) missing in your
-                      GSTR-2B. These vendors haven’t reported them. Largest
-                      shortfall is with Aarohi Textiles at ₹14,112 ITC risk.
-                    </p>
-                  </ThoughtBubble>
-                </CardFooter>
-              </Card>
-
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-500">
-                    GSTR-3B Preparation
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="text-sm font-medium">Output Tax</div>
-                        <div className="text-xs text-gray-500">₹4,32,450</div>
-                      </div>
-                      <Badge className="bg-green-100 text-green-700">
-                        Ready
-                      </Badge>
-                    </div>
-                    <div className="h-px bg-gray-200 my-2"></div>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="text-sm font-medium">
-                          Input Tax Credit
-                        </div>
-                        <div className="text-xs text-gray-500">₹3,45,870</div>
-                      </div>
-                      <Badge className="bg-amber-100 text-amber-700">
-                        Issues Detected
-                      </Badge>
-                    </div>
-                    <div className="h-px bg-gray-200 my-2"></div>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="text-sm font-medium">
-                          Net Tax Payable
-                        </div>
-                        <div className="text-xs text-gray-500">₹86,580</div>
-                      </div>
-                      <Badge className="bg-amber-100 text-amber-700">
-                        Pending Review
-                      </Badge>
-                    </div>
-                  </div>
-                </CardContent>
-                <CardFooter className="pt-0">
-                  <Button variant="link" className="p-0 h-auto">
-                    View GSTR-3B Requirements
-                  </Button>
-                </CardFooter>
-              </Card>
+          <div className="w-[40%] h-[266px] border rounded-xl shadow-sm bg-white ml-4 flex p-4 items-start">
+            <div className="mr-2 self-start">
+              <Image
+                src={"./icons/agent.svg"}
+                height={48}
+                width={48}
+                alt="Grid"
+              />
             </div>
-
-            {/* GST Reconciliation Issues */}
-            <Card>
-              <CardHeader>
-                <div className="flex justify-between items-center">
-                  <CardTitle>GST Reconciliation Issues</CardTitle>
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="text-xs flex items-center gap-1"
-                    >
-                      <Filter size={14} /> Filter
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="text-xs flex items-center gap-1"
-                    >
-                      <Download size={14} /> Export
-                    </Button>
-                  </div>
+            <div className="w-[70%]">
+              <p className="text-sm">
+                I'm continuously monitoring data from your accounting systems
+                and the GST portal to identify compliance issues before they
+                become problems. I've analyzed 375 invoices across all systems
+                in the past month.
+              </p>
+              <div className="mt-4 p-2 rounded-lg bg-[#F8F8F8]">
+                <div className="flex items-center justify-between text-xs">
+                  <p>Matching invoices cross system</p>
+                  <p>97.2%</p>
                 </div>
-              </CardHeader>
-              <CardContent>
-                <div className="rounded-md border overflow-hidden">
-                  <table className="w-full text-sm">
-                    <thead className="bg-gray-100">
-                      <tr>
-                        <th className="text-left px-4 py-2 font-medium text-gray-600">
-                          Invoice No.
-                        </th>
-                        <th className="text-left px-4 py-2 font-medium text-gray-600">
-                          Vendor/Customer
-                        </th>
-                        <th className="text-left px-4 py-2 font-medium text-gray-600">
-                          Issue Type
-                        </th>
-                        <th className="text-right px-4 py-2 font-medium text-gray-600">
-                          Amount
-                        </th>
-                        <th className="text-right px-4 py-2 font-medium text-gray-600">
-                          Tax Impact
-                        </th>
-                        <th className="text-center px-4 py-2 font-medium text-gray-600">
-                          System
-                        </th>
-                        <th className="text-center px-4 py-2 font-medium text-gray-600">
-                          Actions
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y">
-                      <tr className="hover:bg-gray-50">
-                        <td className="px-4 py-3">SC-2325</td>
-                        <td className="px-4 py-3">Stitch & Co. Fabrics</td>
-                        <td className="px-4 py-3 text-amber-600">
-                          HSN Mismatch
-                        </td>
-                        <td className="px-4 py-3 text-right">₹1,25,000</td>
-                        <td className="px-4 py-3 text-right text-amber-600">
-                          Audit Risk
-                        </td>
-                        <td className="px-4 py-3 text-center">HOAD ERP</td>
-                        <td className="px-4 py-3 text-center">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="text-xs"
-                          >
-                            View Details
-                          </Button>
-                        </td>
-                      </tr>
-                      <tr className="hover:bg-gray-50">
-                        <td className="px-4 py-3">AT-8754</td>
-                        <td className="px-4 py-3">Aarohi Textiles</td>
-                        <td className="px-4 py-3 text-red-600">
-                          Missing in GSTR-2B
-                        </td>
-                        <td className="px-4 py-3 text-right">₹78,400</td>
-                        <td className="px-4 py-3 text-right text-red-600">
-                          ₹14,112 ITC
-                        </td>
-                        <td className="px-4 py-3 text-center">HOAD ERP</td>
-                        <td className="px-4 py-3 text-center">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="text-xs"
-                          >
-                            See Impact
-                          </Button>
-                        </td>
-                      </tr>
-                      <tr className="hover:bg-gray-50">
-                        <td className="px-4 py-3">AF-7752</td>
-                        <td className="px-4 py-3">AND Flagship Retail</td>
-                        <td className="px-4 py-3 text-red-600">
-                          Missing in GSTR-1
-                        </td>
-                        <td className="px-4 py-3 text-right">₹1,42,500</td>
-                        <td className="px-4 py-3 text-right text-red-600">
-                          ₹25,650 GST
-                        </td>
-                        <td className="px-4 py-3 text-center">HOAD ERP</td>
-                        <td className="px-4 py-3 text-center">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="text-xs"
-                          >
-                            View Issue
-                          </Button>
-                        </td>
-                      </tr>
-                      <tr className="hover:bg-gray-50">
-                        <td className="px-4 py-3">BD-4421</td>
-                        <td className="px-4 py-3">BlueDiamond Accessories</td>
-                        <td className="px-4 py-3 text-amber-600">
-                          GSTIN Mismatch
-                        </td>
-                        <td className="px-4 py-3 text-right">₹45,200</td>
-                        <td className="px-4 py-3 text-right text-amber-600">
-                          ₹8,136 ITC
-                        </td>
-                        <td className="px-4 py-3 text-center">
-                          Retail Partner Sys
-                        </td>
-                        <td className="px-4 py-3 text-center">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="text-xs"
-                          >
-                            View Details
-                          </Button>
-                        </td>
-                      </tr>
-                      <tr className="hover:bg-gray-50">
-                        <td className="px-4 py-3">AS-1109</td>
-                        <td className="px-4 py-3">Ace Sewing Machines</td>
-                        <td className="px-4 py-3 text-amber-600">
-                          Amount Mismatch
-                        </td>
-                        <td className="px-4 py-3 text-right">
-                          ₹32,800 / ₹38,400
-                        </td>
-                        <td className="px-4 py-3 text-right text-amber-600">
-                          ₹1,008 Diff
-                        </td>
-                        <td className="px-4 py-3 text-center">
-                          Export Stores App
-                        </td>
-                        <td className="px-4 py-3 text-center">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="text-xs"
-                          >
-                            See Details
-                          </Button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
+                  <div
+                    className="bg-green-500 h-2 rounded-full"
+                    style={{ width: "97.2%" }}
+                  ></div>
                 </div>
-              </CardContent>
-              <CardFooter className="border-t pt-3 pb-1">
-                <ThoughtBubble>
-                  <p className="text-sm">
-                    Aarohi Textiles shows a recurring pattern: for three months
-                    straight, invoices are missing in GSTR-2B. We estimate
-                    you've lost ~₹32,000 in ITC. Should I compile a vendor
-                    compliance report for a meeting?
-                  </p>
-                  <div className="mt-3 flex gap-2">
-                    <Button size="sm">View Trend Analysis</Button>
-                    <Button variant="outline" size="sm">
-                      Dismiss
-                    </Button>
-                  </div>
-                </ThoughtBubble>
-              </CardFooter>
-            </Card>
+              </div>
+            </div>
           </div>
-        </TabsContent>
+        </div>
 
-        {/* TDS Compliance Tab */}
-        <TabsContent value="tds">
-          <div className="space-y-6">
-            {/* Quick Stats */}
-            <div className="grid grid-cols-3 gap-4">
+        {/* Main Navigation Tabs */}
+        <div className="mb-6">
+          <Tabs
+            defaultValue="overview"
+            className="w-full mb-6"
+            onValueChange={setActiveTab}
+          >
+            <TabsList className="mb-4">
+              <TabsTrigger value="overview" className="px-4 py-2">
+                Overview
+              </TabsTrigger>
+              <TabsTrigger value="gst" className="px-4 py-2">
+                GST Compliance
+              </TabsTrigger>
+              <TabsTrigger value="tds" className="px-4 py-2">
+                TDS Compliance
+              </TabsTrigger>
+            </TabsList>
+
+            {/* Overview Tab */}
+            <TabsContent value="overview" className="space-y-6">
+              {/* Summary Cards */}
+              <div className="grid grid-cols-4 gap-4">
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm font-medium text-gray-500">
+                      GST Compliance
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-baseline justify-between">
+                      <span className="text-2xl font-bold">87%</span>
+                      <Badge
+                        variant={85 > 80 ? "success" : "danger"}
+                        className="ml-2"
+                      >
+                        {85 > 80 ? "Good" : "Needs Attention"}
+                      </Badge>
+                    </div>
+                    <Progress
+                      value={87}
+                      variant="success"
+                      className="h-1 mt-2"
+                    />
+                  </CardContent>
+                  <CardFooter className="py-4 text-xs text-[#F06C00]">
+                    <p className="flex">
+                      <Image
+                        src={"./icons/warning.svg"}
+                        height={12}
+                        width={12}
+                        alt="warning"
+                      />{" "}
+                      12 issues need attention
+                    </p>
+                  </CardFooter>
+                </Card>
+
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm font-medium text-gray-500">
+                      TDS Compliance
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-baseline justify-between">
+                      <span className="text-2xl font-bold">92%</span>
+                      <Badge
+                        variant={90 > 80 ? "success" : "danger"}
+                        className="ml-2"
+                      >
+                        {90 > 80 ? "Good" : "Needs Attention"}
+                      </Badge>
+                    </div>
+                    <Progress
+                      variant="success"
+                      value={90}
+                      className="h-1 mt-2"
+                    />
+                  </CardContent>
+                  <CardFooter className="py-4 text-xs text-[#F06C00]">
+                    <p className="flex">
+                      <Image
+                        src={"./icons/warning.svg"}
+                        height={12}
+                        width={12}
+                        alt="warning"
+                      />{" "}
+                      12 issues need attention
+                    </p>
+                  </CardFooter>
+                </Card>
+
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm font-medium text-gray-500">
+                      GSTR Filing Status
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="spac">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm">GSTR-1</span>
+                        <Badge variant="success">Filed (Mar 10)</Badge>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm">GSTR-3B</span>
+                        <Badge variant="danger">Due in 3 days</Badge>
+                      </div>
+                    </div>
+                  </CardContent>
+                  <CardFooter className="py-4 text-xs text-[#2569FD]">
+                    <p className="">View filing calendar</p>
+                  </CardFooter>
+                </Card>
+
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm font-medium text-gray-500">
+                      Pending Actions
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-baseline justify-between">
+                      <span className="text-2xl font-bold">19</span>
+                      <Badge
+                        variant={18 < 20 ? "warning" : "danger"}
+                        className="ml-2"
+                      >
+                        {18 < 20 ? "Moderate" : "High"}
+                      </Badge>
+                    </div>
+                    <div className="flex justify-between mt-2 text-xs">
+                      <span className="flex items-center">
+                        <Clock size={12} className="mr-1" /> Urgent: 4
+                      </span>
+                      <span className="flex items-center">
+                        <AlertCircle size={12} className="mr-1" /> High: 8
+                      </span>
+                      <span className="flex items-center">
+                        <CheckCircle size={12} className="mr-1" /> Normal: 8
+                      </span>
+                    </div>
+                  </CardContent>
+                  <CardFooter className="pt-0 text-xs text-gray-500">
+                    <Button variant="link" className="p-0 h-auto text-xs">
+                      View all actions
+                    </Button>
+                  </CardFooter>
+                </Card>
+              </div>
+
+              {/* Action Items */}
               <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-500">
-                    TDS Deducted (Current Month)
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">₹ 2,87,450</div>
-                  <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
-                    <div>
-                      <div className="font-medium">194C (2%)</div>
-                      <div className="text-xs text-gray-500">₹1,24,800</div>
-                    </div>
-                    <div>
-                      <div className="font-medium">194J (10%)</div>
-                      <div className="text-xs text-gray-500">₹92,350</div>
-                    </div>
-                    <div>
-                      <div className="font-medium">194I (10%)</div>
-                      <div className="text-xs text-gray-500">₹45,300</div>
-                    </div>
-                    <div>
-                      <div className="font-medium">Others</div>
-                      <div className="text-xs text-gray-500">₹25,000</div>
+                <CardHeader>
+                  <div className="flex justify-between items-center">
+                    <CardTitle>Priority Issues Requiring Attention</CardTitle>
+                    <div className="px-6 py-2 rounded-full text-sm border border-gray-300">
+                      View All
                     </div>
                   </div>
-                </CardContent>
-                <CardFooter className="pt-0">
-                  <ThoughtBubble className="text-sm max-w-full">
-                    <p>
-                      TDS under 194J is up 32% from last month, largely due to
-                      new consulting invoices from Amber Design Consultants and
-                      Ritu Enterprises.
-                    </p>
-                  </ThoughtBubble>
-                </CardFooter>
-              </Card>
-
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-500">
-                    TDS Filing Compliance
-                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="text-sm font-medium">TDS Deducted</div>
-                        <div className="text-xs text-gray-500">
-                          In ERP records
+                  <div className="space-y-4">
+                    {/* GST Issue 1 */}
+                    <div className="bg-[#F8F8F8] rounded-md p-4">
+                      <div className="flex justify-between items-start">
+                        <div className="flex items-start gap-3 w-2/3">
+                          <AlertCircle
+                            className="text-amber-500 mt-1"
+                            size={20}
+                          />
+                          <div>
+                            <h3 className="font-medium">
+                              HSN Code Mismatch - Stitch & Co. Fabrics
+                            </h3>
+                            <p className="text-sm text-gray-600 mt-1">
+                              Invoice #SC-2325 for embroidered fabrics is tagged
+                              with HSN code 6204, but the items described are
+                              more accurately covered under HSN 6211 (still 18%
+                              GST). Incorrect HSN codes may prompt questions
+                              during a department audit.
+                            </p>
+                            <div className="flex gap-2 mt-3">
+                              <Badge className="text-xs bg-[#E8E8E8] py-1 rounded-md">
+                                GST Compliance
+                              </Badge>
+                              <Badge className="text-xs bg-[#E8E8E8] py-1 rounded-md">
+                                HOAD ERP
+                              </Badge>
+                              <Badge className="text-xs bg-[#E8E8E8] py-1 rounded-md">
+                                Invoice: ₹125,000
+                              </Badge>
+                            </div>
+                            <div className="flex mt-4 gap-x-4">
+                              <div className="flex items-center px-6 py-1 rounded-full text-sm border border-gray-300 bg-white cursor-pointer">
+                                View Invoice
+                              </div>
+                              <div className="flex items-center px-6 py-1 rounded-full text-sm border bg-[#2154C4] cursor-pointer text-white">
+                                View HSN Guide
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                      <div className="text-sm font-medium">₹2,87,450</div>
                     </div>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="text-sm font-medium">TDS Paid</div>
-                        <div className="text-xs text-gray-500">
-                          Deposited to Dept
+
+                    {/* GST Issue 2 */}
+                    <div className="bg-[#F8F8F8] border rounded-md p-4">
+                      <div className="flex justify-between items-start">
+                        <div className="flex items-start gap-3 w-2/3">
+                          <XCircle className="text-red-500 mt-1" size={20} />
+                          <div>
+                            <h3 className="font-medium">
+                              Invoice Missing in GSTR-2B - Aarohi Textiles
+                            </h3>
+                            <p className="text-sm text-gray-600 mt-1">
+                              I found Invoice #AT-8754 for ₹78,400 in your
+                              purchase register, but it's not appearing in your
+                              GSTR-2B. The supplier might not have filed GSTR-1
+                              or may have filed with an incorrect GSTIN. You
+                              risk losing an input credit of ₹14,112 unless
+                              resolved.
+                            </p>
+                            <p className="text-sm text-gray-600 mt-2">
+                              <span className="font-medium">
+                                Possible resolutions:
+                              </span>{" "}
+                              Request the vendor to rectify their GSTR-1 or
+                              confirm if the invoice details match on both
+                              sides.
+                            </p>
+                            <div className="flex gap-2 mt-3">
+                              <Badge
+                                variant="danger"
+                                className="text-xs bg-[#FFD3CB] py-1 rounded-md"
+                              >
+                                Input Tax Credit at Risk
+                              </Badge>
+                              <Badge className="text-xs bg-[#E8E8E8] py-1 rounded-md">
+                                GSTR-2B Mismatch
+                              </Badge>
+                              <Badge className="text-xs bg-[#E8E8E8] py-1 rounded-md">
+                                Tax Amount: ₹14,112
+                              </Badge>
+                            </div>
+                            <div className="flex mt-4 gap-x-4">
+                              <div className="flex items-center px-6 py-1 rounded-full text-sm border border-gray-300 bg-white cursor-pointer">
+                                View Detail
+                              </div>
+                              <div className="flex items-center px-6 py-1 rounded-full text-sm border bg-[#2154C4] cursor-pointer text-white">
+                                View Impact Analysis
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                      <div className="text-sm font-medium">₹2,68,602</div>
                     </div>
-                    <div className="h-px bg-gray-200 my-1"></div>
-                    <div className="flex items-center justify-between text-red-600">
-                      <div className="font-medium">Shortfall</div>
-                      <div className="font-medium">₹18,848</div>
-                    </div>
-                  </div>
-                </CardContent>
-                <CardFooter className="pt-0">
-                  <ThoughtBubble className="text-sm max-w-full">
-                    <p>
-                      There’s an ₹18,848 shortfall between TDS deducted vs. TDS
-                      paid, mostly from missing TDS on Amber Consultants
-                      (₹8,500) and section mismatch for Ritu Enterprises
-                      (₹10,848).
-                    </p>
-                  </ThoughtBubble>
-                </CardFooter>
-              </Card>
 
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-500">
-                    PAN Verification
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">98.2%</div>
-                  <div className="text-xs text-gray-500 mt-1">
-                    Vendors with valid PAN
-                  </div>
-                  <div className="mt-3 flex gap-4">
-                    <div>
-                      <div className="text-sm font-medium">382</div>
-                      <div className="text-xs text-gray-500">Total Vendors</div>
-                    </div>
-                    <div>
-                      <div className="text-sm font-medium text-red-600">7</div>
-                      <div className="text-xs text-gray-500">
-                        Invalid/Missing PAN
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-                <CardFooter className="pt-0">
-                  <ThoughtBubble className="text-sm max-w-full">
-                    <p>
-                      7 vendors lack a valid PAN. TDS for them should be at 20%
-                      until they provide proper details, increasing the TDS
-                      liability by ~₹14,200.
-                    </p>
-                  </ThoughtBubble>
-                </CardFooter>
-              </Card>
-            </div>
-
-            {/* TDS Issues Table */}
-            <Card>
-              <CardHeader>
-                <div className="flex justify-between items-center">
-                  <CardTitle>TDS Compliance Issues</CardTitle>
-                  <Button variant="outline" size="sm">
-                    View All
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="rounded-md border overflow-hidden">
-                  <table className="w-full text-sm">
-                    <thead className="bg-gray-100">
-                      <tr>
-                        <th className="text-left px-4 py-2 font-medium text-gray-600">
-                          Vendor
-                        </th>
-                        <th className="text-left px-4 py-2 font-medium text-gray-600">
-                          Invoice #
-                        </th>
-                        <th className="text-left px-4 py-2 font-medium text-gray-600">
-                          Issue
-                        </th>
-                        <th className="text-center px-4 py-2 font-medium text-gray-600">
-                          Section
-                        </th>
-                        <th className="text-right px-4 py-2 font-medium text-gray-600">
-                          Amount
-                        </th>
-                        <th className="text-right px-4 py-2 font-medium text-gray-600">
-                          TDS Impact
-                        </th>
-                        <th className="text-center px-4 py-2 font-medium text-gray-600">
-                          Actions
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y">
-                      <tr className="hover:bg-gray-50">
-                        <td className="px-4 py-3">Amber Design Consultants</td>
-                        <td className="px-4 py-3">ADC-1042</td>
-                        <td className="px-4 py-3 text-red-600">
-                          TDS Not Deducted
-                        </td>
-                        <td className="px-4 py-3 text-center">194J (10%)</td>
-                        <td className="px-4 py-3 text-right">₹85,000</td>
-                        <td className="px-4 py-3 text-right text-red-600">
-                          ₹8,500
-                        </td>
-                        <td className="px-4 py-3 text-center">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="text-xs"
-                          >
-                            View Invoice
-                          </Button>
-                        </td>
-                      </tr>
-                      <tr className="hover:bg-gray-50">
-                        <td className="px-4 py-3">Ritu Enterprises</td>
-                        <td className="px-4 py-3">RE-478</td>
-                        <td className="px-4 py-3 text-amber-600">
-                          Incorrect Section
-                        </td>
-                        <td className="px-4 py-3 text-center">194C→194J</td>
-                        <td className="px-4 py-3 text-right">₹1,35,600</td>
-                        <td className="px-4 py-3 text-right text-amber-600">
-                          ₹10,848
-                        </td>
-                        <td className="px-4 py-3 text-center">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="text-xs"
-                          >
-                            See Analysis
-                          </Button>
-                        </td>
-                      </tr>
-                      <tr className="hover:bg-gray-50">
-                        <td className="px-4 py-3">Global Trim Supplies</td>
-                        <td className="px-4 py-3">GTS-221</td>
-                        <td className="px-4 py-3 text-amber-600">
-                          Threshold Crossed
-                        </td>
-                        <td className="px-4 py-3 text-center">194C (2%)</td>
-                        <td className="px-4 py-3 text-right">₹45,200</td>
-                        <td className="px-4 py-3 text-right text-amber-600">
-                          ₹904
-                        </td>
-                        <td className="px-4 py-3 text-center">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="text-xs"
-                          >
-                            View Details
-                          </Button>
-                        </td>
-                      </tr>
-                      <tr className="hover:bg-gray-50">
-                        <td className="px-4 py-3">Zeta Label Solutions</td>
-                        <td className="px-4 py-3">ZLS-875</td>
-                        <td className="px-4 py-3 text-red-600">Invalid PAN</td>
-                        <td className="px-4 py-3 text-center">194J (20%)</td>
-                        <td className="px-4 py-3 text-right">₹64,800</td>
-                        <td className="px-4 py-3 text-right text-red-600">
-                          ₹12,960
-                        </td>
-                        <td className="px-4 py-3 text-center">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="text-xs"
-                          >
-                            View Requirements
-                          </Button>
-                        </td>
-                      </tr>
-                      <tr className="hover:bg-gray-50">
-                        <td className="px-4 py-3">Sigma Store Interiors</td>
-                        <td className="px-4 py-3">SSI-334</td>
-                        <td className="px-4 py-3 text-red-600">Late Payment</td>
-                        <td className="px-4 py-3 text-center">194C (2%)</td>
-                        <td className="px-4 py-3 text-right">₹72,500</td>
-                        <td className="px-4 py-3 text-right text-red-600">
-                          ₹1,450 + Interest
-                        </td>
-                        <td className="px-4 py-3 text-center">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="text-xs"
-                          >
-                            Calculate Interest
-                          </Button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </CardContent>
-              <CardFooter className="border-t pt-3 pb-1">
-                <ThoughtBubble>
-                  <p className="text-sm">
-                    Ritu Enterprises often provides design services but is
-                    listed under 194C. This under‐deduction has totaled ~₹22,500
-                    shortfall in the last quarter. Should I review all Ritu
-                    invoices historically?
-                  </p>
-                  <div className="mt-3 flex gap-2">
-                    <Button size="sm">View Historical Pattern</Button>
-                    <Button variant="outline" size="sm">
-                      Dismiss
-                    </Button>
-                  </div>
-                </ThoughtBubble>
-              </CardFooter>
-            </Card>
-          </div>
-        </TabsContent>
-
-        {/* Risk Analysis Tab */}
-        <TabsContent value="risk">
-          <div className="space-y-6">
-            {/* Risk Overview */}
-            <div className="grid grid-cols-3 gap-4">
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-500">
-                    Transaction Risk Analysis
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">587</div>
-                  <div className="text-xs text-gray-500 mt-1">
-                    Total transactions analyzed
-                  </div>
-                  <div className="mt-3 flex gap-4">
-                    <div>
-                      <div className="text-sm font-medium text-green-600">
-                        531
-                      </div>
-                      <div className="text-xs text-gray-500">Low Risk</div>
-                    </div>
-                    <div>
-                      <div className="text-sm font-medium text-amber-600">
-                        48
-                      </div>
-                      <div className="text-xs text-gray-500">Medium Risk</div>
-                    </div>
-                    <div>
-                      <div className="text-sm font-medium text-red-600">8</div>
-                      <div className="text-xs text-gray-500">High Risk</div>
-                    </div>
-                  </div>
-                </CardContent>
-                <CardFooter className="pt-0">
-                  <Button variant="link" className="p-0 h-auto">
-                    View Details
-                  </Button>
-                </CardFooter>
-              </Card>
-
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-500">
-                    Policy Compliance
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">97.4%</div>
-                  <div className="text-xs text-gray-500 mt-1">
-                    Transactions adhering to policy
-                  </div>
-                  <div className="mt-3 flex gap-4">
-                    <div>
-                      <div className="text-sm font-medium text-red-600">15</div>
-                      <div className="text-xs text-gray-500">
-                        Policy Violations
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-sm font-medium">5</div>
-                      <div className="text-xs text-gray-500">
-                        Requiring Override
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-                <CardFooter className="pt-0">
-                  <Button variant="link" className="p-0 h-auto">
-                    Review Violations
-                  </Button>
-                </CardFooter>
-              </Card>
-
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-500">
-                    Vendor Risk Assessment
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">382</div>
-                  <div className="text-xs text-gray-500 mt-1">
-                    Active vendors assessed
-                  </div>
-                  <div className="mt-3 flex gap-4">
-                    <div>
-                      <div className="text-sm font-medium text-green-600">
-                        325
-                      </div>
-                      <div className="text-xs text-gray-500">Low Risk</div>
-                    </div>
-                    <div>
-                      <div className="text-sm font-medium text-amber-600">
-                        42
-                      </div>
-                      <div className="text-xs text-gray-500">Medium Risk</div>
-                    </div>
-                    <div>
-                      <div className="text-sm font-medium text-red-600">15</div>
-                      <div className="text-xs text-gray-500">High Risk</div>
-                    </div>
-                  </div>
-                </CardContent>
-                <CardFooter className="pt-0">
-                  <Button variant="link" className="p-0 h-auto">
-                    View Vendor Analysis
-                  </Button>
-                </CardFooter>
-              </Card>
-            </div>
-
-            {/* High Risk Transactions */}
-            <Card>
-              <CardHeader>
-                <div className="flex justify-between items-center">
-                  <CardTitle>High Risk Transactions</CardTitle>
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="text-xs flex items-center gap-1"
-                    >
-                      <Filter size={14} /> Filter
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="text-xs flex items-center gap-1"
-                    >
-                      <Download size={14} /> Export
-                    </Button>
-                  </div>
-                </div>
-                <CardDescription>
-                  Transactions flagged for potential policy violations or fraud
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="rounded-md border overflow-hidden">
-                  <table className="w-full text-sm">
-                    <thead className="bg-gray-100">
-                      <tr>
-                        <th className="text-left px-4 py-2 font-medium text-gray-600">
-                          Transaction
-                        </th>
-                        <th className="text-left px-4 py-2 font-medium text-gray-600">
-                          Risk Type
-                        </th>
-                        <th className="text-center px-4 py-2 font-medium text-gray-600">
-                          Risk Score
-                        </th>
-                        <th className="text-right px-4 py-2 font-medium text-gray-600">
-                          Amount
-                        </th>
-                        <th className="text-center px-4 py-2 font-medium text-gray-600">
-                          Date
-                        </th>
-                        <th className="text-center px-4 py-2 font-medium text-gray-600">
-                          Actions
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y">
-                      <tr className="hover:bg-gray-50">
-                        <td className="px-4 py-3">
-                          <div>Payment - Sunrise Distributors</div>
-                          <div className="text-xs text-gray-500">
-                            Invoice #SD-4587
+                    {/* TDS Issue */}
+                    <div className="bg-[#F8F8F8] rounded-md p-4">
+                      <div className="flex justify-between items-start">
+                        <div className="flex items-start gap-3 w-2/3">
+                          <DollarSign className="text-red-500 mt-1" size={20} />
+                          <div>
+                            <h3 className="font-medium">
+                              TDS Not Deducted - Amber Design Consultants
+                            </h3>
+                            <p className="text-sm text-gray-600 mt-1">
+                              Invoice #ADC-1042 (₹85,000) for fashion design
+                              consulting services was not subject to TDS under
+                              section 194J (10%). This can lead to a penalty of
+                              ₹8,500 plus interest if not corrected.
+                            </p>
+                            <p className="text-sm text-gray-600 mt-2">
+                              <span className="font-medium">
+                                Required action:
+                              </span>{" "}
+                              Deduct TDS and deposit promptly. Late deposit
+                              triggers 1.5% monthly interest from the due date.
+                            </p>
+                            <div className="flex gap-2 mt-3">
+                              <Badge
+                                variant="danger"
+                                lassName="text-xs bg-[#FFD3CB] py-1 rounded-md"
+                              >
+                                TDS Non-compliance
+                              </Badge>
+                              <Badge lassName="text-xs bg-[#E8E8E8] py-1 rounded-md">
+                                Section 194J
+                              </Badge>
+                              <Badge lassName="text-xs bg-[#E8E8E8] py-1 rounded-md">
+                                Amount: ₹8,500
+                              </Badge>
+                            </div>
+                            <div className="flex mt-4 gap-x-4">
+                              <div className="flex items-center px-6 py-1 rounded-full text-sm border border-gray-300 bg-white cursor-pointer">
+                                View Invoice
+                              </div>
+                              <div className="flex items-center px-6 py-1 rounded-full text-sm border bg-[#2154C4] cursor-pointer text-white">
+                                See Penalty Calculation
+                              </div>
+                            </div>
                           </div>
-                        </td>
-                        <td className="px-4 py-3 text-red-600">
-                          Potential Duplicate
-                        </td>
-                        <td className="px-4 py-3 text-center">
-                          <Badge className="bg-red-100 text-red-700">
-                            High (87/100)
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* TDS Issue 2 */}
+                    <div className="bg-[#F8F8F8] rounded-md p-4">
+                      <div className="flex justify-between items-start">
+                        <div className="flex items-start gap-3 w-2/3">
+                          <AlertCircle
+                            className="text-amber-500 mt-1"
+                            size={20}
+                          />
+                          <div>
+                            <h3 className="font-medium">
+                              Incorrect TDS Section - Ritu Enterprises
+                            </h3>
+                            <p className="text-sm text-gray-600 mt-1">
+                              Invoice #RE-478 (₹135,600) was mistakenly deducted
+                              under Section 194C (2%) instead of 194J (10%) for
+                              creative design services. This results in a TDS
+                              shortfall of ₹10,848, which may lead to an IT
+                              notice.
+                            </p>
+                            <p className="text-sm text-gray-600 mt-2">
+                              <span className="font-medium">
+                                Classification note:
+                              </span>{" "}
+                              The invoice states “fashion consultancy,” which
+                              qualifies under 194J, not 194C.
+                            </p>
+                            <div className="flex gap-2 mt-3">
+                              <Badge className="text-xs bg-[#E8E8E8] py-1 rounded-md">
+                                TDS Section Mismatch
+                              </Badge>
+                              <Badge className="text-xs bg-[#E8E8E8] py-1 rounded-md">
+                                HOAD ERP
+                              </Badge>
+                              <Badge className="text-xs bg-[#E8E8E8] py-1 rounded-md">
+                                Shortfall: ₹10,848
+                              </Badge>
+                            </div>
+                            <div className="flex mt-4 gap-x-4">
+                              <div className="flex items-center px-6 py-1 rounded-full text-sm border border-gray-300 bg-white cursor-pointer">
+                                View Invoice
+                              </div>
+                              <div className="flex items-center px-6 py-1 rounded-full text-sm border bg-[#2154C4] cursor-pointer text-white">
+                                View TDS Guide
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* GST Compliance Tab */}
+            <TabsContent value="gst">
+              <div className="space-y-6">
+                <div className="grid grid-cols-3 gap-4">
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm font-medium text-gray-500">
+                        GSTR-1 vs HOAD ERP (Sales)
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold">96.8%</div>
+                      <div className="text-xs text-gray-500 mt-1">
+                        Invoice Matching Rate
+                      </div>
+                      <div className="mt-3 flex gap-4">
+                        <div>
+                          <div className="text-sm font-semibold">182</div>
+                          <div className="text-xs text-gray-500">
+                            Invoices Matched
+                          </div>
+                        </div>
+                        <div>
+                          <div className="text-sm font-semibold text-amber-600">
+                            4
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            HSN Mismatches
+                          </div>
+                        </div>
+                        <div>
+                          <div className="text-sm font-semibold text-red-600">
+                            2
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            Missing Invoices
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                    <CardFooter className="py-2">
+                      <div className="flex items-start">
+                        <div className="mr-2 self-start">
+                          <Image
+                            src={"./icons/agent.svg"}
+                            height={38}
+                            width={38}
+                            alt="Grid"
+                          />
+                        </div>
+                        <div className="w-[90%]">
+                          <p className="text-sm text-[#001D5C]">
+                            I found 4 sales invoices with potentially incorrect
+                            HSN codes and 2 invoices in Tally that don't appear
+                            in your GSTR-1 filing. The most concerning one is
+                            Invoice #RS-7752 to RetailStar for ₹142,500 which is
+                            in Tally but missing from GSTR-1.
+                          </p>
+                        </div>
+                      </div>
+                    </CardFooter>
+                  </Card>
+
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm font-medium text-gray-500">
+                        GSTR-2B ITC Reconciliation
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold">₹ 3,45,870</div>
+                      <div className="text-xs text-gray-500 mt-1">
+                        Claimable ITC this month
+                      </div>
+                      <div className="mt-3 flex gap-4">
+                        <div>
+                          <div className="text-sm font-semibold">142</div>
+                          <div className="text-xs text-gray-500">
+                            Invoices Matched
+                          </div>
+                        </div>
+                        <div>
+                          <div className="text-sm font-semibold text-amber-600">
+                            3
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            Amount Mismatches
+                          </div>
+                        </div>
+                        <div>
+                          <div className="text-sm font-semibold text-red-600">
+                            8
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            Missing in GSTR-2B
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                    <CardFooter className="py-2">
+                      <div className="flex items-start">
+                        <div className="mr-2 self-start">
+                          <Image
+                            src={"./icons/agent.svg"}
+                            height={38}
+                            width={38}
+                            alt="Grid"
+                          />
+                        </div>
+                        <div className="w-[90%]">
+                          <p className="text-sm text-[#001D5C]">
+                            There are 8 purchase invoices totaling ₹42,780 in
+                            ITC that don't appear in your GSTR-2B. This means
+                            your vendors haven't included these in their GSTR-1
+                            filings. The largest is from Global Supplies
+                            (₹14,112 ITC at risk)
+                          </p>
+                        </div>
+                      </div>
+                    </CardFooter>
+                  </Card>
+
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm font-medium text-gray-500">
+                        GSTR-3B Preparation
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <div className="text-sm font-medium">
+                              Output Tax
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              ₹4,32,450
+                            </div>
+                          </div>
+                          <Badge className="bg-green-100 text-green-700">
+                            Ready
                           </Badge>
-                        </td>
-                        <td className="px-4 py-3 text-right">₹73,450</td>
-                        <td className="px-4 py-3 text-center">Mar 15, 2025</td>
-                        <td className="px-4 py-3 text-center">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="text-xs"
-                          >
-                            Investigate
-                          </Button>
-                        </td>
-                      </tr>
-                      <tr className="hover:bg-gray-50">
-                        <td className="px-4 py-3">
-                          <div>Invoice - Quantum Supplies Ltd.</div>
-                          <div className="text-xs text-gray-500">
-                            Invoice #QSL-9821
+                        </div>
+                        <div className="h-px bg-gray-200 my-2"></div>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <div className="text-sm font-medium">
+                              Input Tax Credit
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              ₹3,45,870
+                            </div>
                           </div>
-                        </td>
-                        <td className="px-4 py-3 text-red-600">
-                          Approval Policy Violation
-                        </td>
-                        <td className="px-4 py-3 text-center">
-                          <Badge className="bg-red-100 text-red-700">
-                            High (82/100)
-                          </Badge>
-                        </td>
-                        <td className="px-4 py-3 text-right">₹2,85,700</td>
-                        <td className="px-4 py-3 text-center">Mar 14, 2025</td>
-                        <td className="px-4 py-3 text-center">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="text-xs"
-                          >
-                            Review
-                          </Button>
-                        </td>
-                      </tr>
-                      <tr className="hover:bg-gray-50">
-                        <td className="px-4 py-3">
-                          <div>Payment - Techsmart Solutions</div>
-                          <div className="text-xs text-gray-500">
-                            Invoice #TS-3325
-                          </div>
-                        </td>
-                        <td className="px-4 py-3 text-amber-600">
-                          Unusual Amount
-                        </td>
-                        <td className="px-4 py-3 text-center">
                           <Badge className="bg-amber-100 text-amber-700">
-                            Medium (65/100)
+                            Issues Detected
                           </Badge>
-                        </td>
-                        <td className="px-4 py-3 text-right">₹1,24,850</td>
-                        <td className="px-4 py-3 text-center">Mar 12, 2025</td>
-                        <td className="px-4 py-3 text-center">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="text-xs"
-                          >
-                            Verify
-                          </Button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                        </div>
+                        <div className="h-px bg-gray-200 my-2"></div>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <div className="text-sm font-medium">
+                              Net Tax Payable
+                            </div>
+                            <div className="text-xs text-gray-500">₹86,580</div>
+                          </div>
+                          <Badge className="bg-amber-100 text-amber-700">
+                            Pending Review
+                          </Badge>
+                        </div>
+                      </div>
+                    </CardContent>
+                    <CardFooter className="pt-2">
+                      <div className="text-sm cursor-pointer text-[#2569FD]">
+                        View GSTR-3B Requirements
+                      </div>
+                    </CardFooter>
+                  </Card>
                 </div>
-              </CardContent>
-              <CardFooter className="border-t pt-3 pb-1">
-                <p className="text-xs text-gray-500">
-                  Agent has flagged 8 high-risk transactions this month.
-                  Historical average: 5 per month.
-                </p>
-              </CardFooter>
-            </Card>
-          </div>
-        </TabsContent>
-      </Tabs>
 
-      {/* Chat with Agent */}
-      <div className="fixed bottom-6 right-6">
-        {/* <div className="bg-white p-3 rounded-lg border shadow-md mb-4 max-w-sm ml-auto">
+                {/* GST Reconciliation Issues */}
+                <Card>
+                  <CardHeader>
+                    <div className="flex justify-between items-center">
+                      <CardTitle>GST Reconciliation Issues</CardTitle>
+                      <div className="flex gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="text-xs flex items-center gap-1"
+                        >
+                          <Filter size={14} /> Filter
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="text-xs flex items-center gap-1"
+                        >
+                          <Download size={14} /> Export
+                        </Button>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="rounded-md border overflow-hidden">
+                      <table className="w-full text-sm">
+                        <thead className="bg-gray-100">
+                          <tr>
+                            <th className="text-left px-4 py-2 font-medium text-gray-600">
+                              Invoice No.
+                            </th>
+                            <th className="text-left px-4 py-2 font-medium text-gray-600">
+                              Vendor/Customer
+                            </th>
+                            <th className="text-left px-4 py-2 font-medium text-gray-600">
+                              Issue Type
+                            </th>
+                            <th className="text-right px-4 py-2 font-medium text-gray-600">
+                              Amount
+                            </th>
+                            <th className="text-right px-4 py-2 font-medium text-gray-600">
+                              Tax Impact
+                            </th>
+                            <th className="text-center px-4 py-2 font-medium text-gray-600">
+                              System
+                            </th>
+                            <th className="text-center px-4 py-2 font-medium text-gray-600">
+                              Actions
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y">
+                          <tr className="hover:bg-gray-50">
+                            <td className="px-4 py-3">SC-2325</td>
+                            <td className="px-4 py-3">Stitch & Co. Fabrics</td>
+                            <td className="px-4 py-3 text-amber-600">
+                              HSN Mismatch
+                            </td>
+                            <td className="px-4 py-3 text-right">₹1,25,000</td>
+                            <td className="px-4 py-3 text-right text-amber-600">
+                              Audit Risk
+                            </td>
+                            <td className="px-4 py-3 text-center">HOAD ERP</td>
+                            <td className="px-4 py-3 text-center">
+                              <div className="border border-gray-300 rounded-full py-1 cursor-pointer text-[#001D5C] text0sm font-medium">
+                                View Details
+                              </div>
+                            </td>
+                          </tr>
+                          <tr className="hover:bg-gray-50">
+                            <td className="px-4 py-3">AT-8754</td>
+                            <td className="px-4 py-3">Aarohi Textiles</td>
+                            <td className="px-4 py-3 text-red-600">
+                              Missing in GSTR-2B
+                            </td>
+                            <td className="px-4 py-3 text-right">₹78,400</td>
+                            <td className="px-4 py-3 text-right text-red-600">
+                              ₹14,112 ITC
+                            </td>
+                            <td className="px-4 py-3 text-center">HOAD ERP</td>
+                            <td className="px-4 py-3 text-center">
+                              <div className="border border-gray-300 rounded-full py-1 cursor-pointer text-[#001D5C] text0sm font-medium">
+                                See Impact
+                              </div>
+                            </td>
+                          </tr>
+                          <tr className="hover:bg-gray-50">
+                            <td className="px-4 py-3">AF-7752</td>
+                            <td className="px-4 py-3">AND Flagship Retail</td>
+                            <td className="px-4 py-3 text-red-600">
+                              Missing in GSTR-1
+                            </td>
+                            <td className="px-4 py-3 text-right">₹1,42,500</td>
+                            <td className="px-4 py-3 text-right text-red-600">
+                              ₹25,650 GST
+                            </td>
+                            <td className="px-4 py-3 text-center">HOAD ERP</td>
+                            <td className="px-4 py-3 text-center">
+                              <div className="border border-gray-300 rounded-full py-1 cursor-pointer text-[#001D5C] text0sm font-medium">
+                                View Details
+                              </div>
+                            </td>
+                          </tr>
+                          <tr className="hover:bg-gray-50">
+                            <td className="px-4 py-3">BD-4421</td>
+                            <td className="px-4 py-3">
+                              BlueDiamond Accessories
+                            </td>
+                            <td className="px-4 py-3 text-amber-600">
+                              GSTIN Mismatch
+                            </td>
+                            <td className="px-4 py-3 text-right">₹45,200</td>
+                            <td className="px-4 py-3 text-right text-amber-600">
+                              ₹8,136 ITC
+                            </td>
+                            <td className="px-4 py-3 text-center">
+                              Retail Partner Sys
+                            </td>
+                            <td className="px-4 py-3 text-center">
+                              <div className="border border-gray-300 rounded-full py-1 cursor-pointer text-[#001D5C] text0sm font-medium">
+                                View Details
+                              </div>
+                            </td>
+                          </tr>
+                          <tr className="hover:bg-gray-50">
+                            <td className="px-4 py-3">AS-1109</td>
+                            <td className="px-4 py-3">Ace Sewing Machines</td>
+                            <td className="px-4 py-3 text-amber-600">
+                              Amount Mismatch
+                            </td>
+                            <td className="px-4 py-3 text-right">
+                              ₹32,800 / ₹38,400
+                            </td>
+                            <td className="px-4 py-3 text-right text-amber-600">
+                              ₹1,008 Diff
+                            </td>
+                            <td className="px-4 py-3 text-center">
+                              Export Stores App
+                            </td>
+                            <td className="px-4 py-3 text-center">
+                              <div className="border border-gray-300 rounded-full py-1 cursor-pointer text-[#001D5C] text0sm font-medium">
+                                See Details
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </CardContent>
+                  <CardFooter className="border-t pt-3 pb-1 mb-8">
+                    <div className="flex items-start">
+                      <div className="mr-2 self-start">
+                        <Image
+                          src={"./icons/agent.svg"}
+                          height={38}
+                          width={38}
+                          alt="Grid"
+                        />
+                      </div>
+                      <div className="w-[90%]">
+                        <p className="text-sm text-[#001D5C]">
+                          There are 8 purchase invoices totaling ₹42,780 in ITC
+                          that don't appear in your GSTR-2B. This means your
+                          vendors haven't included these in their GSTR-1
+                          filings. The largest is from Global Supplies (₹14,112
+                          ITC at risk)
+                        </p>
+                        <div className="flex mt-4 gap-x-4">
+                          <div className="flex items-center px-6 py-1 rounded-full text-sm border border-gray-300 bg-white cursor-pointer">
+                            View Invoice
+                          </div>
+                          <div className="flex items-center px-6 py-1 rounded-full text-sm border bg-[#2154C4] cursor-pointer text-white">
+                            View HSN Guide
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </CardFooter>
+                </Card>
+              </div>
+            </TabsContent>
+
+            {/* TDS Compliance Tab */}
+            <TabsContent value="tds">
+              <div className="space-y-6">
+                <div className="grid grid-cols-3 gap-4">
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm font-medium text-gray-500">
+                        TDS Deducted (Current Month)
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold">₹ 2,87,450</div>
+                      <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
+                        <div>
+                          <div className="font-bold">194C (2%)</div>
+                          <div className="text-xs text-gray-500">₹1,24,800</div>
+                        </div>
+                        <div>
+                          <div className="font-bold">194J (10%)</div>
+                          <div className="text-xs text-gray-500">₹92,350</div>
+                        </div>
+                        <div>
+                          <div className="font-bold">194I (10%)</div>
+                          <div className="text-xs text-gray-500">₹45,300</div>
+                        </div>
+                        <div>
+                          <div className="font-bold">Others</div>
+                          <div className="text-xs text-gray-500">₹25,000</div>
+                        </div>
+                      </div>
+                    </CardContent>
+                    <CardFooter className="py-2">
+                      <div className="flex items-start">
+                        <div className="mr-2 self-start">
+                          <Image
+                            src={"./icons/agent.svg"}
+                            height={38}
+                            width={38}
+                            alt="Grid"
+                          />
+                        </div>
+                        <div className="w-[90%]">
+                          <p className="text-sm text-[#001D5C]">
+                            I found 4 sales invoices with potentially incorrect
+                            HSN codes and 2 invoices in Tally that don't appear
+                            in your GSTR-1 filing. The most concerning one is
+                            Invoice #RS-7752 to RetailStar for ₹142,500 which is
+                            in Tally but missing from GSTR-1.
+                          </p>
+                        </div>
+                      </div>
+                    </CardFooter>
+                  </Card>
+
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm font-medium text-gray-500">
+                        TDS Filing Compliance
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="">
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <div className="text-sm font-bold">
+                              TDS Deducted
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              In ERP records
+                            </div>
+                          </div>
+                          <div className="text-sm font-bold">₹2,87,450</div>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <div className="text-sm font-bold">TDS Paid</div>
+                            <div className="text-xs text-gray-500">
+                              Deposited to Dept
+                            </div>
+                          </div>
+                          <div className="text-sm font-bold">₹2,68,602</div>
+                        </div>
+                        <div className="h-px bg-gray-200 my-1"></div>
+                        <div className="flex items-center justify-between text-red-600">
+                          <div className="font-bold text-xs">Shortfall</div>
+                          <div className="font-bold text-xs">₹18,848</div>
+                        </div>
+                      </div>
+                    </CardContent>
+                    <CardFooter className="py-2">
+                      <div className="flex items-start">
+                        <div className="mr-2 self-start">
+                          <Image
+                            src={"./icons/agent.svg"}
+                            height={38}
+                            width={38}
+                            alt="Grid"
+                          />
+                        </div>
+                        <div className="w-[90%]">
+                          <p className="text-sm text-[#001D5C]">
+                            I found 4 sales invoices with potentially incorrect
+                            HSN codes and 2 invoices in Tally that don't appear
+                            in your GSTR-1 filing. The most concerning one is
+                            Invoice #RS-7752 to RetailStar for ₹142,500 which is
+                            in Tally but missing from GSTR-1.
+                          </p>
+                        </div>
+                      </div>
+                    </CardFooter>
+                  </Card>
+
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm font-medium text-gray-500">
+                        PAN Verification
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold">98.2%</div>
+                      <div className="text-xs text-gray-500 mt-1">
+                        Vendors with valid PAN
+                      </div>
+                      <div className="mt-3 flex gap-4">
+                        <div>
+                          <div className="text-sm font-bold">382</div>
+                          <div className="text-xs text-gray-500">
+                            Total Vendors
+                          </div>
+                        </div>
+                        <div>
+                          <div className="text-sm font-bold text-red-600">
+                            7
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            Invalid/Missing PAN
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                    <CardFooter className="py-2">
+                      <div className="flex items-start">
+                        <div className="mr-2 self-start">
+                          <Image
+                            src={"./icons/agent.svg"}
+                            height={38}
+                            width={38}
+                            alt="Grid"
+                          />
+                        </div>
+                        <div className="w-[90%]">
+                          <p className="text-sm text-[#001D5C]">
+                            I found 4 sales invoices with potentially incorrect
+                            HSN codes and 2 invoices in Tally that don't appear
+                            in your GSTR-1 filing. The most concerning one is
+                            Invoice #RS-7752 to RetailStar for ₹142,500 which is
+                            in Tally but missing from GSTR-1.
+                          </p>
+                        </div>
+                      </div>
+                    </CardFooter>
+                  </Card>
+                </div>
+                {/* TDS Issues Table */}
+                <Card>
+                  <CardHeader>
+                    <div className="flex justify-between items-center">
+                      <CardTitle>TDS Compliance Issues</CardTitle>
+                      <div className="border border-gray-300 rounded-full px-6 py-1 cursor-pointer text-[#001D5C] text0sm font-medium">
+                        View All
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="rounded-md border overflow-hidden">
+                      <table className="w-full text-sm">
+                        <thead className="bg-gray-100">
+                          <tr>
+                            <th className="text-left px-4 py-2 font-medium text-gray-600">
+                              Vendor
+                            </th>
+                            <th className="text-left px-4 py-2 font-medium text-gray-600">
+                              Invoice #
+                            </th>
+                            <th className="text-left px-4 py-2 font-medium text-gray-600">
+                              Issue
+                            </th>
+                            <th className="text-center px-4 py-2 font-medium text-gray-600">
+                              Section
+                            </th>
+                            <th className="text-right px-4 py-2 font-medium text-gray-600">
+                              Amount
+                            </th>
+                            <th className="text-right px-4 py-2 font-medium text-gray-600">
+                              TDS Impact
+                            </th>
+                            <th className="text-center px-4 py-2 font-medium text-gray-600">
+                              Actions
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y">
+                          <tr className="hover:bg-gray-50">
+                            <td className="px-4 py-3">
+                              Amber Design Consultants
+                            </td>
+                            <td className="px-4 py-3">ADC-1042</td>
+                            <td className="px-4 py-3 text-red-600">
+                              TDS Not Deducted
+                            </td>
+                            <td className="px-4 py-3 text-center">
+                              194J (10%)
+                            </td>
+                            <td className="px-4 py-3 text-right">₹85,000</td>
+                            <td className="px-4 py-3 text-right text-red-600">
+                              ₹8,500
+                            </td>
+                            <td className="px-4 py-3 text-center">
+                              <div className="border w-[80%] mx-auto border-gray-300 rounded-full py-1 cursor-pointer text-[#001D5C] text0sm font-medium">
+                                View Invoice
+                              </div>
+                            </td>
+                          </tr>
+                          <tr className="hover:bg-gray-50">
+                            <td className="px-4 py-3">Ritu Enterprises</td>
+                            <td className="px-4 py-3">RE-478</td>
+                            <td className="px-4 py-3 text-amber-600">
+                              Incorrect Section
+                            </td>
+                            <td className="px-4 py-3 text-center">194C→194J</td>
+                            <td className="px-4 py-3 text-right">₹1,35,600</td>
+                            <td className="px-4 py-3 text-right text-amber-600">
+                              ₹10,848
+                            </td>
+                            <td className="px-4 py-3 text-center">
+                              <div className="border w-[80%] mx-auto border-gray-300 rounded-full py-1 cursor-pointer text-[#001D5C] text0sm font-medium">
+                                See Analysis
+                              </div>
+                            </td>
+                          </tr>
+                          <tr className="hover:bg-gray-50">
+                            <td className="px-4 py-3">Global Trim Supplies</td>
+                            <td className="px-4 py-3">GTS-221</td>
+                            <td className="px-4 py-3 text-amber-600">
+                              Threshold Crossed
+                            </td>
+                            <td className="px-4 py-3 text-center">194C (2%)</td>
+                            <td className="px-4 py-3 text-right">₹45,200</td>
+                            <td className="px-4 py-3 text-right text-amber-600">
+                              ₹904
+                            </td>
+                            <td className="px-4 py-3 text-center">
+                              <div className="border w-[80%] mx-auto border-gray-300 rounded-full py-1 cursor-pointer text-[#001D5C] text0sm font-medium">
+                                View Details
+                              </div>
+                            </td>
+                          </tr>
+                          <tr className="hover:bg-gray-50">
+                            <td className="px-4 py-3">Zeta Label Solutions</td>
+                            <td className="px-4 py-3">ZLS-875</td>
+                            <td className="px-4 py-3 text-red-600">
+                              Invalid PAN
+                            </td>
+                            <td className="px-4 py-3 text-center">
+                              194J (20%)
+                            </td>
+                            <td className="px-4 py-3 text-right">₹64,800</td>
+                            <td className="px-4 py-3 text-right text-red-600">
+                              ₹12,960
+                            </td>
+                            <td className="px-4 py-3 text-center">
+                              <div className="border w-[80%] mx-auto border-gray-300 rounded-full py-1 cursor-pointer text-[#001D5C] text0sm font-medium">
+                                View Requireents
+                              </div>
+                            </td>
+                          </tr>
+                          <tr className="hover:bg-gray-50">
+                            <td className="px-4 py-3">Sigma Store Interiors</td>
+                            <td className="px-4 py-3">SSI-334</td>
+                            <td className="px-4 py-3 text-red-600">
+                              Late Payment
+                            </td>
+                            <td className="px-4 py-3 text-center">194C (2%)</td>
+                            <td className="px-4 py-3 text-right">₹72,500</td>
+                            <td className="px-4 py-3 text-right text-red-600">
+                              ₹1,450 + Interest
+                            </td>
+                            <td className="px-4 py-3 text-center">
+                              <div className="border w-[80%] mx-auto border-gray-300 rounded-full py-1 cursor-pointer text-[#001D5C] text0sm font-medium">
+                                Calculate Interest
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </CardContent>
+                  <CardFooter className="border-t pt-3 pb-1 mb-8">
+                    <div className="flex items-start">
+                      <div className="mr-2 self-start">
+                        <Image
+                          src={"./icons/agent.svg"}
+                          height={38}
+                          width={38}
+                          alt="Grid"
+                        />
+                      </div>
+                      <div className="w-[90%]">
+                        <p className="text-sm text-[#001D5C]">
+                          I've detected a potential pattern with Aryan
+                          Enterprises - they're providing technical services,
+                          but their invoices are often categorized incorrectly
+                          under 194C (contracts) instead of 194J (professional
+                          services). This has resulted in under-deduction of
+                          approximately ₹22,500 in the past quarter. Would you
+                          like me to review all their past invoices?
+                        </p>
+                        <div className="flex mt-4 gap-x-4">
+                          <div className="flex items-center px-6 py-1 rounded-full text-sm border border-gray-300 bg-white cursor-pointer">
+                            Dismiss
+                          </div>
+                          <div className="flex items-center px-6 py-1 rounded-full text-sm border bg-[#2154C4] cursor-pointer text-white">
+                            View Historical Pattern
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </CardFooter>
+                </Card>
+              </div>
+            </TabsContent>
+
+            {/* Risk Analysis Tab */}
+          </Tabs>
+        </div>
+
+        {/* Chat with Agent */}
+        {/* <div className="fixed bottom-6 right-6">
+          {/* <div className="bg-white p-3 rounded-lg border shadow-md mb-4 max-w-sm ml-auto">
           <p className="text-sm">
             We’ve seen recurring compliance gaps with certain textile suppliers.
             Interested in a pattern analysis to track frequency and potential
@@ -1738,9 +1649,10 @@ const GSTTDSComplianceDashboard = () => {
             <Button size="sm">Show Analysis</Button>
           </div>
         </div> */}
-        <Button className="h-12 w-12 rounded-full shadow-lg flex items-center justify-center">
-          <Send size={16} />
-        </Button>
+        {/* <Button className="h-12 w-12 rounded-full shadow-lg flex items-center justify-center">
+            <Send size={16} />
+          </Button> 
+        </div> */}
       </div>
     </div>
   );

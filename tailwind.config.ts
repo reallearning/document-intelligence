@@ -19,6 +19,7 @@ export default {
         nunito: ["Nunito", "sans-serif"],
         poly: ["Poly", "serif"],
         poetsen: ["Poetsen One", "sans-serif"],
+        "public-sans": ["Public Sans", 'serif'],
       },
       colors: {
         background: "hsl(var(--background))",
