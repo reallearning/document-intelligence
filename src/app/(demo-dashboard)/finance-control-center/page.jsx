@@ -826,27 +826,7 @@ const FinanceControlCenter = () => {
       </h2>
       <div className="grid grid-cols-2 gap-6 mb-8">
         <AgentCard
-          title="Risk & Compliance Agent"
-          icon={<Shield size={24} />}
-          color="indigo"
-          completedTasks={[
-            "Reconciled 156 purchase invoices with GSTR-2A/2B",
-            "Automatically matched 89% of fabric vendor invoices without issues",
-            "Analyzed GST filing status for retail and e-commerce channels",
-            "Verified TDS deductions for 92 garment contractors",
-          ]}
-          pendingTasks={[
-            "Potential duplicate payment of ₹86,500 to Surat Silk Suppliers",
-            "Invoice #RST-7754 from Rajasthan Textiles missing from GSTR-2B (₹18,720 ITC at risk)",
-            "TDS not deducted for Elegant Embroidery Works' invoice EEW-078",
-          ]}
-          onClick={() => {
-            router.push("/risk-and-compliance");
-          }}
-        />
-
-        <AgentCard
-          title="Business Analytics Agent"
+          title="Business Intelligence Agent"
           icon={<BarChart size={24} />}
           color="blue"
           completedTasks={[
@@ -861,27 +841,7 @@ const FinanceControlCenter = () => {
             "Social media marketing ROI analysis shows declining Instagram performance vs TikTok",
           ]}
           onClick={() => {
-            router.push("/business-analytics");
-          }}
-        />
-
-        <AgentCard
-          title="Planning & Forecasting Agent"
-          icon={<Target size={24} />}
-          color="teal"
-          completedTasks={[
-            "Updated rolling forecast incorporating Lakme Fashion Week sales impact",
-            "Prepared 3 scenarios for Fall-Winter'25 collection based on current trends",
-            "Analyzed variance between Q1 actuals and seasonal forecast",
-            "Updated cash flow projections for April-June production cycles",
-          ]}
-          pendingTasks={[
-            "Cash flow timing issue detected for monsoon fabric procurement (₹42.6L shortfall)",
-            "Organic cotton cost increases need to be factored into eco-friendly line pricing",
-            "Q2-Q4 forecast needs review based on post-pandemic wedding season performance",
-          ]}
-          onClick={() => {
-            router.push("/planning-forecasting");
+            router.push("/business-intelligence");
           }}
         />
 
@@ -904,13 +864,51 @@ const FinanceControlCenter = () => {
             router.push("/dashboard");
           }}
         />
+        <AgentCard
+          title="Risk & Compliance Agent"
+          icon={<Shield size={24} />}
+          color="indigo"
+          completedTasks={[
+            "Reconciled 156 purchase invoices with GSTR-2A/2B",
+            "Automatically matched 89% of fabric vendor invoices without issues",
+            "Analyzed GST filing status for retail and e-commerce channels",
+            "Verified TDS deductions for 92 garment contractors",
+          ]}
+          pendingTasks={[
+            "Potential duplicate payment of ₹86,500 to Surat Silk Suppliers",
+            "Invoice #RST-7754 from Rajasthan Textiles missing from GSTR-2B (₹18,720 ITC at risk)",
+            "TDS not deducted for Elegant Embroidery Works' invoice EEW-078",
+          ]}
+          onClick={() => {
+            router.push("/risk-and-compliance");
+          }}
+        />
+
+        <AgentCard
+          title="Budgeting and forecastingt"
+          icon={<Target size={24} />}
+          color="teal"
+          completedTasks={[
+            "Updated rolling forecast incorporating Lakme Fashion Week sales impact",
+            "Prepared 3 scenarios for Fall-Winter'25 collection based on current trends",
+            "Analyzed variance between Q1 actuals and seasonal forecast",
+            "Updated cash flow projections for April-June production cycles",
+          ]}
+          pendingTasks={[
+            "Cash flow timing issue detected for monsoon fabric procurement (₹42.6L shortfall)",
+            "Organic cotton cost increases need to be factored into eco-friendly line pricing",
+            "Q2-Q4 forecast needs review based on post-pandemic wedding season performance",
+          ]}
+          onClick={() => {
+            router.push("/planning-forecasting");
+          }}
+        />
       </div>
 
-      {/* Priority Items */}
-      <h2 className="text-xl font-bold mb-4 text-black">
+      {/* <h2 className="text-xl font-bold mb-4 text-black">
         Things For You To Close Today
-      </h2>
-      <div className="space-y-4 mb-8">
+      </h2> */}
+      {/* <div className="space-y-4 mb-8">
         <PriorityItem
           title="Potential Duplicate Payment - Surat Silk Suppliers"
           description="Two payments of ₹86,500 were made to Surat Silk Suppliers within 48 hours with identical descriptions for chiffon fabric supply (Invoice #SSS-4587 and #SSS-4587A). The Risk & Compliance Agent has flagged this for immediate review."
@@ -970,14 +968,12 @@ const FinanceControlCenter = () => {
             { label: "Prepare Follow-ups", variant: "default" },
           ]}
         />
-      </div>
+      </div> */}
 
-      {/* Strategic Insights with Chat */}
-      <h2 className="text-xl font-bold mb-4 text-black">
+      {/* <h2 className="text-xl font-bold mb-4 text-black">
         Strategic Insights for Brainstorming
-      </h2>
-      <div className="grid grid-cols-3 gap-4 mb-8">
-        {/* Insight Card 1 */}
+      </h2> */}
+      {/* <div className="grid grid-cols-3 gap-4 mb-8">
         <div className="bg-blue-50 rounded-lg border border-blue-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer">
           <div className="p-4">
             <div className="flex items-center gap-2 mb-3">
@@ -1015,7 +1011,6 @@ const FinanceControlCenter = () => {
           </div>
         </div>
 
-        {/* Insight Card 2 */}
         <div className="bg-teal-50 rounded-lg border border-teal-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer">
           <div className="p-4">
             <div className="flex items-center gap-2 mb-3">
@@ -1053,7 +1048,6 @@ const FinanceControlCenter = () => {
           </div>
         </div>
 
-        {/* Insight Card 3 */}
         <div className="bg-red-50 rounded-lg border border-red-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer">
           <div className="p-4">
             <div className="flex items-center gap-2 mb-3">
@@ -1090,11 +1084,9 @@ const FinanceControlCenter = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
-      {/* Expanded Insight Cards */}
-      <div className="mb-8">
-        {/* Example of an expanded card with chat */}
+      {/* <div className="mb-8">
         <Card className="bg-blue-50 border-blue-200">
           <CardHeader className="border-b border-blue-200 bg-blue-100 bg-opacity-50">
             <div className="flex items-center gap-2">
@@ -1149,7 +1141,6 @@ const FinanceControlCenter = () => {
               </div>
             </div>
 
-            {/* Chat conversation for this specific insight */}
             <div className="border-t border-blue-200 pt-4">
               <div className="space-y-3 mb-4">
                 <div className="bg-white bg-opacity-70 p-3 rounded-md shadow-sm">
@@ -1189,10 +1180,7 @@ const FinanceControlCenter = () => {
             </div>
           </CardContent>
         </Card>
-      </div>
-
-      {/* Recent Autonomous Activities */}
-      {/* Removed as requested */}
+      </div> */}
     </div>
   );
 };
