@@ -648,7 +648,7 @@ const FinanceControlCenter = () => {
   const [briefingChat, setBriefingChat] = useState([
     {
       sender: "bot",
-      text: "Good morning! Any specific information you'd like about today's financial status for House of Anita Dongre?",
+      text: "Good morning! Any specific information you'd like about today's financial status for AvaRetail?",
     },
   ]);
 
@@ -656,7 +656,7 @@ const FinanceControlCenter = () => {
   const [strategicChat, setStrategicChat] = useState([
     {
       sender: "bot",
-      text: "I've identified some strategic opportunities for House of Anita Dongre based on cross-functional data analysis. What aspect would you like to explore further?",
+      text: "I've identified some strategic opportunities for AvaRetail based on cross-functional data analysis. What aspect would you like to explore further?",
     },
   ]);
 
@@ -711,7 +711,7 @@ const FinanceControlCenter = () => {
           </div>
           <div>
             <h1 className="text-2xl font-bold text-black">
-              House of Anita Dongre - Finance Control Center
+              AvaRetail - Finance Control Center
             </h1>
             <p className="text-sm text-gray-500">
               Last updated: March 17, 2025 • 10:45 AM
@@ -802,7 +802,7 @@ const FinanceControlCenter = () => {
             <div className="bg-gray-50 p-3 rounded-lg mb-3">
               <p className="text-sm text-gray-600">
                 Good morning! Any specific information you'd like about today's
-                financial status for House of Anita Dongre?
+                financial status for AvaRetail?
               </p>
             </div>
 
@@ -885,7 +885,7 @@ const FinanceControlCenter = () => {
         />
 
         <AgentCard
-          title="Budgeting and forecastingt"
+          title="Budgeting and forecasting"
           icon={<Target size={24} />}
           color="teal"
           completedTasks={[
@@ -900,7 +900,7 @@ const FinanceControlCenter = () => {
             "Q2-Q4 forecast needs review based on post-pandemic wedding season performance",
           ]}
           onClick={() => {
-            router.push("/planning-forecasting");
+            router.push("/budgeting-forecasting");
           }}
         />
       </div>

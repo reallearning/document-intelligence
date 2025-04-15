@@ -435,7 +435,7 @@ const GSTTDSComplianceDashboard = () => {
       </header>
 
       {/* Data Sources Section */}
-      <Card className="mb-6">
+      {/* <Card className="mb-6">
         <CardHeader className="flex justify-between items-center">
           <CardTitle>Connected Data Sources</CardTitle>
           <Badge variant="success">Primary System: Tally</Badge>
@@ -531,7 +531,7 @@ const GSTTDSComplianceDashboard = () => {
             </div>
           </ThoughtBubble>
         </CardContent>
-      </Card>
+      </Card> */}
 
       <Tabs
         defaultValue="overview"
