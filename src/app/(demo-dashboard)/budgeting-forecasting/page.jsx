@@ -993,27 +993,6 @@ const CompanyBudgetDashboard = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                 <DepartmentCard
-                  name="BME Distribution"
-                  progress={85}
-                  status="Submitted"
-                  deadline="Apr 30, 2025"
-                  icon={Package}
-                />
-                <DepartmentCard
-                  name="Mohebi Logistics"
-                  progress={100}
-                  status="Submitted"
-                  deadline="Apr 30, 2025"
-                  icon={Truck}
-                />
-                <DepartmentCard
-                  name="Le Tabac (Tobacco Division)"
-                  progress={92}
-                  status="Submitted"
-                  deadline="Apr 30, 2025"
-                  icon={Package}
-                />
-                <DepartmentCard
                   name="HORECA Division"
                   progress={78}
                   status="In Progress"
