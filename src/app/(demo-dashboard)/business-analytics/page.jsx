@@ -268,7 +268,7 @@ const Dashboard = () => {
       <header className="bg-white shadow-sm px-6 py-4">
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-xl font-bold text-gray-900">AvaRetail</h1>
+            <h1 className="text-xl font-bold text-gray-900">Mohebi</h1>
             <p className="text-sm text-gray-500">AI Business Analyst</p>
           </div>
           <div className="flex items-center space-x-4">
