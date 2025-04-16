@@ -648,7 +648,7 @@ const FinanceControlCenter = () => {
   const [briefingChat, setBriefingChat] = useState([
     {
       sender: "bot",
-      text: "Good morning! Any specific information you'd like about today's financial status for Mohebi?",
+      text: "Good morning! Any specific information you'd like about today's financial status for AvaRetail?",
     },
   ]);
 
@@ -656,7 +656,7 @@ const FinanceControlCenter = () => {
   const [strategicChat, setStrategicChat] = useState([
     {
       sender: "bot",
-      text: "I've identified some strategic opportunities for Mohebi based on cross-functional data analysis. What aspect would you like to explore further?",
+      text: "I've identified some strategic opportunities for AvaRetail based on cross-functional data analysis. What aspect would you like to explore further?",
     },
   ]);
 
@@ -711,7 +711,7 @@ const FinanceControlCenter = () => {
           </div>
           <div>
             <h1 className="text-2xl font-bold text-black">
-              Mohebi - Finance Control Center
+              AvaRetail - Finance Control Center
             </h1>
             <p className="text-sm text-gray-500">
               Last updated: March 17, 2025 • 10:45 AM
@@ -802,7 +802,7 @@ const FinanceControlCenter = () => {
             <div className="bg-gray-50 p-3 rounded-lg mb-3">
               <p className="text-sm text-gray-600">
                 Good morning! Any specific information you'd like about today's
-                financial status for Mohebi?
+                financial status for AvaRetail?
               </p>
             </div>
 
