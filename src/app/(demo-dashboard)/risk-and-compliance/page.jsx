@@ -412,7 +412,7 @@ const ThoughtBubble = ({ children, direction = "left", className = "" }) => {
 
 // Main GST & TDS Compliance Risk Dashboard
 const GSTTDSComplianceDashboard = () => {
-  const [activeTab, setActiveTab] = useState("overview");
+  const [activeTab, setActiveTab] = useState("gst");
 
   return (
     <div className="flex flex-col w-full h-screen bg-gray-50 text-gray-800 p-6 overflow-y-auto">
@@ -534,14 +534,14 @@ const GSTTDSComplianceDashboard = () => {
       </Card> */}
 
       <Tabs
-        defaultValue="overview"
+        defaultValue="gst"
         className="w-full mb-6"
         onValueChange={setActiveTab}
       >
-        {/* <TabsList className="mb-4">
-          <TabsTrigger value="overview" className="px-4 py-2">
+        <TabsList className="mb-4">
+          {/* <TabsTrigger value="overview" className="px-4 py-2">
             Overview
-          </TabsTrigger>
+          </TabsTrigger> */}
           <TabsTrigger value="gst" className="px-4 py-2">
             GST Compliance
           </TabsTrigger>
@@ -551,7 +551,7 @@ const GSTTDSComplianceDashboard = () => {
           <TabsTrigger value="risk" className="px-4 py-2">
             Risk
           </TabsTrigger>
-        </TabsList> */}
+        </TabsList>
 
         {/* <TabsContent value="overview" className="space-y-6">
           <div className="grid grid-cols-4 gap-4">
@@ -835,7 +835,7 @@ const GSTTDSComplianceDashboard = () => {
         </TabsContent> */}
 
         {/* GST Compliance Tab */}
-        {/* <TabsContent value="gst">
+        <TabsContent value="gst">
           <div className="space-y-6">
             <div className="grid grid-cols-3 gap-4">
               <Card>
@@ -1164,10 +1164,10 @@ const GSTTDSComplianceDashboard = () => {
               </CardFooter>
             </Card>
           </div>
-        </TabsContent> */}
+        </TabsContent>
 
         {/* TDS Compliance Tab */}
-        {/* <TabsContent value="tds">
+        <TabsContent value="tds">
           <div className="space-y-6">
             <div className="grid grid-cols-3 gap-4">
               <Card>
@@ -1450,10 +1450,10 @@ const GSTTDSComplianceDashboard = () => {
               </CardFooter>
             </Card>
           </div>
-        </TabsContent> */}
+        </TabsContent>
 
         {/* Risk Analysis Tab */}
-        {/* <TabsContent value="risk">
+        <TabsContent value="risk">
           <div className="space-y-6">
             <div className="grid grid-cols-3 gap-4">
               <Card>
@@ -1708,7 +1708,7 @@ const GSTTDSComplianceDashboard = () => {
               </CardFooter>
             </Card>
           </div>
-        </TabsContent> */}
+        </TabsContent>
       </Tabs>
 
       <div className="space-y-6">
