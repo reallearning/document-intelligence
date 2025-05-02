@@ -55,9 +55,9 @@ const ContractDetailView = () => {
             <button className="mr-4 p-1.5 rounded-full hover:bg-gray-100 transition-colors">
               <ArrowLeft className="h-5 w-5 text-gray-600" />
             </button>
-            <h1 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-purple-600">
+            {/* <h1 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-purple-600">
               Questt AI
-            </h1>
+            </h1> */}
             <div className="ml-6 flex items-center">
               <span className="text-gray-500">/</span>
               <span className="ml-2 text-gray-600 font-medium">
