@@ -1,7 +1,6 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 interface Metric {
@@ -12,6 +11,16 @@ interface Metric {
 }
 
 const Dashboard: React.FC = () => {
+  const [origin, setOrigin] = useState("vista-smart");
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const data = params.get("origin");
+    if (data) {
+      setOrigin(data);
+    }
+  }, []);
+
   return (
     <div className="w-full p-6 h-screen overflow-y-auto">
       <div className="flex justify-between items-center mb-8">
@@ -37,7 +46,9 @@ const Dashboard: React.FC = () => {
           />
           <LinkCard
             label="Accounts Receivable"
-            link="accounts-receivable"
+            link={`accounts-receivable${
+              origin === "ava-retail" ? "?origin=ava-retail" : ""
+            }`}
             image="ar"
           />
           <LinkCard
@@ -62,7 +73,7 @@ const LinkCard = ({ label, link, image }: LinkCardProps) => {
   const cardContent = (
     <div className="p-5 border border-[#E2E8F0] rounded-2xl bg-white hover:bg-[#f9fafb] hover:shadow-xl transition-all duration-300">
       <div className="flex flex-col items-start">
-        <Image src={`/${image}.svg`} alt={label} width={150} height={150}/>
+        <Image src={`/${image}.svg`} alt={label} width={150} height={150} />
         <p className="mt-6 font-nunito text-xl md:text-2xl font-semibold text-gray-800 text-center">
           {label}
         </p>

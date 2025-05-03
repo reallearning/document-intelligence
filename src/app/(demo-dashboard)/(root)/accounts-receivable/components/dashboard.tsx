@@ -1,8 +1,8 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import TopOverdueAccounts from "./top-overdue-accounts";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const dashboardData = {
   metrics: [
@@ -153,7 +153,7 @@ const Dashboard: React.FC = () => {
               AP Accountant
             </p>
           </div>
-          <Image src="./dots.svg" alt="dots" width={24} height={24} />
+          <Image src="/dots.svg" alt="dots" width={24} height={24} />
         </div>
       </div>
       <div className="border border-[#E2E8F0]  mt-5 p-6">
@@ -227,7 +227,7 @@ const CustomerDatabase: React.FC<ICustomerDatabaseProps> = ({
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <Image
-            src="./users.svg"
+            src="/users.svg"
             alt="users"
             width={24}
             height={24}
@@ -240,7 +240,7 @@ const CustomerDatabase: React.FC<ICustomerDatabaseProps> = ({
 
         <div className="px-4 py-2 rounded-lg border border-[#E2E8F0] flex items-center">
           <Image
-            src="./search-2.svg"
+            src="/search-2.svg"
             alt="search"
             width={24}
             height={24}
@@ -318,7 +318,7 @@ function ActualVEstimatedCashFlow({ metrics }: ICardProps) {
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <Image
-            src="./search.svg"
+            src="/search.svg"
             alt="dots"
             width={24}
             height={24}
@@ -367,7 +367,7 @@ function ActualVEstimatedCashFlow({ metrics }: ICardProps) {
         <div className="flex items-center mt-2">
           <div className="bg-[#F0FDF4] px-2 py-1 flex items-center rounded-lg">
             <Image
-              src="./upwards-green.svg"
+              src="/upwards-green.svg"
               alt="upwards"
               width={16}
               height={16}
@@ -384,7 +384,7 @@ function ActualVEstimatedCashFlow({ metrics }: ICardProps) {
       </div>
       <div className="relative mt-6 w-full h-[200px]">
         <Image
-          src="./bar-chart.svg"
+          src="/bar-chart.svg"
           alt="Bar chart"
           fill
           className="object-contain"
@@ -404,7 +404,7 @@ function OverdueCard({ metrics }: ICardProps) {
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <Image
-            src="./cart.svg"
+            src="/cart.svg"
             alt="cart"
             width={24}
             height={24}
@@ -414,7 +414,7 @@ function OverdueCard({ metrics }: ICardProps) {
             {metrics[0].title}
           </p>
         </div>
-        <Image src="./dots.svg" alt="dots" width={24} height={24} />
+        <Image src="/dots.svg" alt="dots" width={24} height={24} />
       </div>
       <p className="mt-6 font-nunito text-[32px] font-bold leading-[42px] text-[#111827]">
         {metrics[0].value}
@@ -429,7 +429,7 @@ function DsoCard({ metrics }: ICardProps) {
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <Image
-            src="./upwards.svg"
+            src="/upwards.svg"
             alt="upwards"
             width={24}
             height={24}
@@ -439,7 +439,7 @@ function DsoCard({ metrics }: ICardProps) {
             {metrics[1].title}
           </p>
         </div>
-        <Image src="./dots.svg" alt="dots" width={24} height={24} />
+        <Image src="/dots.svg" alt="dots" width={24} height={24} />
       </div>
       <div className="mt-1 flex items-center">
         <p className="mr-1 font-nunito text-[32px] font-bold leading-[42px] text-[#111827]">
@@ -447,7 +447,7 @@ function DsoCard({ metrics }: ICardProps) {
         </p>
         <div className="flex items-center bg-[#FEF2F2] rounded-xl px-4 py-1 text-[#DC2626]">
           <Image
-            src="./upwards-red.svg"
+            src="/upwards-red.svg"
             alt="upwards"
             width={12}
             height={12}
@@ -462,7 +462,7 @@ function DsoCard({ metrics }: ICardProps) {
         </p>
       </div>
       <Image
-        src="./wave.svg"
+        src="/wave.svg"
         alt="upwards"
         width={300}
         height={40}

@@ -18,7 +18,7 @@ const TopOverdueAccounts: React.FC<TopOverdueAccountsProps> = ({
     <div className="p-4 border border-[#E2E8F0] rounded-2xl h-full w-full">
       <div className="flex items-center">
         <Image
-          src="./upwards.svg"
+          src="/upwards.svg"
           alt="upwards"
           width={24}
           height={24}

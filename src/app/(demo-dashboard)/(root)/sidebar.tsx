@@ -42,6 +42,16 @@ const SideNavigation: React.FC<SideNavigationProps> = ({
   dashboardType,
   handleClick,
 }) => {
+  const [origin, setOrigin] = useState("vista-smart");
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const data = params.get("origin");
+    if (data) {
+      setOrigin(data);
+    }
+  }, []);
+
   const navigationConfig = {
     [DashboardType.dashboard]: [
       {
@@ -59,7 +69,9 @@ const SideNavigation: React.FC<SideNavigationProps> = ({
       {
         src: "/chart.svg",
         alt: "Compliance",
-        path: "/accounts-receivable/compliance",
+        path: `/accounts-receivable/compliance${
+          origin === "ava-retail" ? "?origin=ava-retail" : ""
+        }`,
       },
       {
         src: "/doc.svg",

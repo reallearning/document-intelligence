@@ -22,6 +22,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "next.config.mjs", "src/app/(demo-dashboard)/(root)/accounts-receivable/compliance/active-invoice", "src/app/(demo-dashboard)/finance-control-center/page.tsx", "src/app/(demo-dashboard)/risk-and-compliance/page.jsx", "src/app/(demo-dashboard)/business-intelligence/page.jsx", "src/app/(demo-dashboard)/contracts/detail/page.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "next.config.mjs", "src/app/(demo-dashboard)/(root)/accounts-receivable/compliance/active-invoice", "src/app/(demo-dashboard)/vista-smart/enterprise-control-center/page.tsx", "src/app/(demo-dashboard)/vista-smart/risk-and-compliance/page.jsx", "src/app/(demo-dashboard)/vista-smart/business-intelligence/page.jsx", "src/app/(demo-dashboard)/vista-smart/contracts/detail/page.jsx", "src/app/(demo-dashboard)/ava-retail/enterprise-control-center/page.jsx", "src/app/(demo-dashboard)/ava-retail/budgeting-forecasting/page.jsx"],
   "exclude": ["node_modules"]
 }

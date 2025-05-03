@@ -256,7 +256,7 @@ const FinanceControlCenter = () => {
 
                 <button
                   onClick={() => {
-                    router.push("/business-intelligence");
+                    router.push("/vista-smart/business-intelligence");
                   }}
                   className="mt-4 w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-2.5 rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all text-sm font-medium"
                 >
@@ -470,7 +470,7 @@ const FinanceControlCenter = () => {
 
                 <button
                   onClick={() => {
-                    router.push("/risk-and-compliance");
+                    router.push("/vista-smart/risk-and-compliance");
                   }}
                   className="mt-4 w-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white py-2.5 rounded-lg hover:from-indigo-600 hover:to-purple-700 transition-all text-sm font-medium"
                 >
@@ -571,7 +571,7 @@ const FinanceControlCenter = () => {
 
                 <button
                   onClick={() => {
-                    router.push("budgeting-forecasting");
+                    router.push("/vista-smart/budgeting-forecasting");
                   }}
                   className="mt-4 w-full bg-gradient-to-r from-teal-500 to-emerald-500 text-white py-2.5 rounded-lg hover:from-teal-600 hover:to-emerald-600 transition-all text-sm font-medium"
                 >
