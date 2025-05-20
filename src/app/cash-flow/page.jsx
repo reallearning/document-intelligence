@@ -2187,7 +2187,7 @@ const CashFlowDashboard = () => {
       {/* Detailed Report Modal */}
       {showDetailModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-xl max-w-5xl w-full max-h-90vh overflow-y-auto">
+          <div className="bg-white rounded-xl shadow-xl max-w-5xl w-full h-[90vh] overflow-y-auto">
             <div className="sticky top-0 bg-white px-6 py-4 border-b border-gray-200 flex justify-between items-center">
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center">
