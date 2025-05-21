@@ -222,7 +222,7 @@ const ExpenseDashboard = () => {
             </h2>
           </div>
 
-          <div className="space-y-5 max-w-4xl">
+          <div className="space-y-5">
             {/* Greeting Card */}
             <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-5 border border-blue-100/50 shadow-sm">
               <p className="text-gray-700 leading-relaxed">
