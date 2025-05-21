@@ -36,7 +36,7 @@ const travelExpenseData = [
   {
     id: 1,
     employee: "Rahul Sharma",
-    team: "Coverage Team A",
+    team: "Marketing team",
     destination: "Mumbai",
     purpose: "Client Meeting",
     departure: "2025-05-10",
@@ -48,7 +48,7 @@ const travelExpenseData = [
   {
     id: 2,
     employee: "Priya Singh",
-    team: "Coverage Team A",
+    team: "Marketing team",
     destination: "Delhi",
     purpose: "Conference",
     departure: "2025-05-05",
@@ -60,7 +60,7 @@ const travelExpenseData = [
   {
     id: 3,
     employee: "Amit Patel",
-    team: "Coverage Team B",
+    team: "Sales team",
     destination: "Bangalore",
     purpose: "Training",
     departure: "2025-05-15",
@@ -84,7 +84,7 @@ const travelExpenseData = [
   {
     id: 5,
     employee: "Vikram Malhotra",
-    team: "Coverage Team A",
+    team: "Marketing team",
     destination: "Hyderabad",
     purpose: "Client Meeting",
     departure: "2025-05-18",
@@ -108,7 +108,7 @@ const travelExpenseData = [
   {
     id: 7,
     employee: "Rajesh Kumar",
-    team: "Coverage Team B",
+    team: "Sales team",
     destination: "Pune",
     purpose: "Client Meeting",
     departure: "2025-05-08",
@@ -284,14 +284,14 @@ const ExpenseDashboard = () => {
                       Medium Priority
                     </div>
                     <h3 className="font-semibold text-gray-900 text-lg">
-                      Coverage Team A needs attention
+                      Marketing team needs attention
                     </h3>
                   </div>
                 </div>
               </div>
 
               <p className="text-gray-600 mb-5 pl-14">
-                I've been tracking Coverage Team A's expenses, and they're
+                I've been tracking Marketing team's expenses, and they're
                 consistently booking hotels that exceed your policy limits by
                 22%. This has resulted in an excess spend of ₹124,000 in Q2
                 alone.

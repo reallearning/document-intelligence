@@ -46,8 +46,8 @@ const monthlyTrendData = [
 ];
 
 const teamBookingData = [
-  { team: "Coverage Team A", compliant: 25, nonCompliant: 75 },
-  { team: "Coverage Team B", compliant: 40, nonCompliant: 60 },
+  { team: "Marketing team", compliant: 25, nonCompliant: 75 },
+  { team: "Sales team", compliant: 40, nonCompliant: 60 },
   { team: "Finance", compliant: 80, nonCompliant: 20 },
   { team: "Operations", compliant: 65, nonCompliant: 35 },
 ];
@@ -266,8 +266,8 @@ const BookingPatternPopup = ({ isOpen, onClose }: props) => {
             </div>
             <div className="mt-3">
               <p className="text-sm text-gray-600">
-                Coverage Team A has the highest non-compliance rate at 75%,
-                followed by Coverage Team B at 60%.
+                Marketing team has the highest non-compliance rate at 75%,
+                followed by Sales team at 60%.
               </p>
             </div>
           </div>
