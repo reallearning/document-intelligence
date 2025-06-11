@@ -1089,7 +1089,7 @@ const PullRequestView = () => {
   };
 
   const handleClick = () => {
-    router.push("/test-execution-report");
+    router.push("/ai-test-result");
   };
 
   return (
