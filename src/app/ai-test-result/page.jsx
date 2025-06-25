@@ -8,7 +8,6 @@ import {
   Download,
   Eye,
   ChevronRight,
-  ChevronDown,
   BarChart3,
   Code,
   Globe,
@@ -17,15 +16,12 @@ import {
   Shield,
   AlertTriangle,
   ArrowLeft,
-  Settings,
-  Filter,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const TestCasesResults = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const [expandedTest, setExpandedTest] = useState(null);
-  const router = useRouter();
 
   const testSummary = {
     functionalTests: 24,
@@ -59,7 +55,6 @@ const TestCasesResults = () => {
       testData:
         "Employee ID: EMP001, Previous Salary: $95,000, New Salary: $98,000",
       automation: "selenium",
-      estimatedTime: "3m 15s",
     },
     {
       id: "FT002",
@@ -82,7 +77,6 @@ const TestCasesResults = () => {
         "All payroll calculations are accurate and match expected values",
       testData: "December 2024 payroll data",
       automation: "selenium",
-      estimatedTime: "4m 30s",
     },
     {
       id: "FT003",
@@ -103,7 +97,6 @@ const TestCasesResults = () => {
         "Form validates salary input correctly and shows appropriate error messages",
       testData: "Invalid: -1000, abc123; Valid: 75000",
       automation: "selenium",
-      estimatedTime: "2m 45s",
     },
     {
       id: "FT004",
@@ -123,7 +116,6 @@ const TestCasesResults = () => {
         "Salary history table is properly created with correct structure",
       testData: "Migration SQL and test data inserts",
       automation: "database",
-      estimatedTime: "1m 30s",
     },
   ];
 
@@ -178,195 +170,80 @@ const TestCasesResults = () => {
   const unitTests = [
     {
       id: "UT001",
-      title: "should render employee form with all fields",
       file: "frontend/src/components/EmployeeForm.jsx",
-      type: "Component Rendering",
-      priority: "High",
-      description:
-        "Verify that the EmployeeForm component renders all required input fields correctly",
-      estimatedTime: "30s",
+      testCount: 8,
+      coverage: 92,
+      tests: [
+        "should render employee form with all fields",
+        "should handle salary state changes correctly",
+        "should fetch salary history on employee load",
+        "should validate required fields before submission",
+        "should display salary history when available",
+        "should handle API errors gracefully",
+        "should update baseSalary when props change",
+        "should call onSubmit with correct data structure",
+      ],
     },
     {
       id: "UT002",
-      title: "should handle salary state changes correctly",
-      file: "frontend/src/components/EmployeeForm.jsx",
-      type: "State Management",
-      priority: "High",
-      description:
-        "Test that salary input updates component state and triggers re-renders appropriately",
-      estimatedTime: "45s",
+      file: "backend/routes/employee.js",
+      testCount: 12,
+      coverage: 89,
+      tests: [
+        "GET /employees should return employees with salary history",
+        "should join salary_history table correctly",
+        "should filter for most recent salary entries",
+        "POST /employees/:id/salary should create new salary entry",
+        "should validate required salary fields",
+        "should return 400 for invalid salary data",
+        "should return 404 for non-existent employee",
+        "should update employee current salary reference",
+        "should handle database connection errors",
+        "should sanitize SQL injection attempts",
+        "should require authentication for salary updates",
+        "should log salary changes for audit trail",
+      ],
     },
     {
       id: "UT003",
-      title: "should fetch salary history on employee load",
-      file: "frontend/src/components/EmployeeForm.jsx",
-      type: "API Integration",
-      priority: "High",
-      description:
-        "Verify useEffect hook calls salary history API when employee prop changes",
-      estimatedTime: "1m",
+      file: "frontend/src/utils/salaryCalculations.js",
+      testCount: 15,
+      coverage: 95,
+      tests: [
+        "calculateGrossPay should sum base salary, overtime, and bonuses",
+        "calculateTaxes should apply progressive tax rates correctly",
+        "should calculate 15% tax for salaries <= $50,000",
+        "should calculate tiered tax for salaries $50,001-$100,000",
+        "should calculate highest tier for salaries > $100,000",
+        "calculateDeductions should compute health insurance at 3%",
+        "calculateDeductions should compute 401k at 5%",
+        "should handle zero and negative salary inputs",
+        "should round calculations to 2 decimal places",
+        "should handle undefined/null input parameters",
+        "should validate input parameter types",
+        "should return correct net pay calculation",
+        "should handle edge cases at tax bracket boundaries",
+        "should maintain precision for large salary amounts",
+        "should export all calculation functions properly",
+      ],
     },
     {
       id: "UT004",
-      title: "should validate required fields before submission",
-      file: "frontend/src/components/EmployeeForm.jsx",
-      type: "Form Validation",
-      priority: "Medium",
-      description:
-        "Test form validation prevents submission when required fields are empty",
-      estimatedTime: "1m 15s",
-    },
-    {
-      id: "UT005",
-      title: "should display salary history when available",
-      file: "frontend/src/components/EmployeeForm.jsx",
-      type: "Conditional Rendering",
-      priority: "Medium",
-      description: "Verify salary history section appears when data is loaded",
-      estimatedTime: "45s",
-    },
-    {
-      id: "UT006",
-      title: "should handle API errors gracefully",
-      file: "frontend/src/components/EmployeeForm.jsx",
-      type: "Error Handling",
-      priority: "High",
-      description: "Test component behavior when salary history API call fails",
-      estimatedTime: "1m",
-    },
-    {
-      id: "UT007",
-      title: "GET /employees should return employees with salary history",
-      file: "backend/routes/employee.js",
-      type: "API Endpoint",
-      priority: "High",
-      description:
-        "Verify the employees endpoint returns correct data structure with salary information",
-      estimatedTime: "1m 30s",
-    },
-    {
-      id: "UT008",
-      title: "should join salary_history table correctly",
-      file: "backend/routes/employee.js",
-      type: "Database Query",
-      priority: "High",
-      description:
-        "Test SQL join logic retrieves most recent salary history entries",
-      estimatedTime: "2m",
-    },
-    {
-      id: "UT009",
-      title: "POST /employees/:id/salary should create new salary entry",
-      file: "backend/routes/employee.js",
-      type: "API Endpoint",
-      priority: "High",
-      description:
-        "Verify new salary entries are created with correct data validation",
-      estimatedTime: "1m 45s",
-    },
-    {
-      id: "UT010",
-      title: "should validate required salary fields",
-      file: "backend/routes/employee.js",
-      type: "Input Validation",
-      priority: "Medium",
-      description:
-        "Test API validates baseSalary, effectiveDate, and other required fields",
-      estimatedTime: "1m",
-    },
-    {
-      id: "UT011",
-      title: "should return 400 for invalid salary data",
-      file: "backend/routes/employee.js",
-      type: "Error Response",
-      priority: "Medium",
-      description:
-        "Verify appropriate HTTP status codes for validation failures",
-      estimatedTime: "45s",
-    },
-    {
-      id: "UT012",
-      title: "should return 404 for non-existent employee",
-      file: "backend/routes/employee.js",
-      type: "Error Response",
-      priority: "Medium",
-      description:
-        "Test API response when trying to update salary for invalid employee ID",
-      estimatedTime: "30s",
-    },
-    {
-      id: "UT013",
-      title: "calculateGrossPay should sum base salary, overtime, and bonuses",
-      file: "frontend/src/utils/salaryCalculations.js",
-      type: "Pure Function",
-      priority: "High",
-      description: "Test gross pay calculation with various input combinations",
-      estimatedTime: "45s",
-    },
-    {
-      id: "UT014",
-      title: "calculateTaxes should apply progressive tax rates correctly",
-      file: "frontend/src/utils/salaryCalculations.js",
-      type: "Business Logic",
-      priority: "High",
-      description: "Verify tax calculations for different salary brackets",
-      estimatedTime: "2m",
-    },
-    {
-      id: "UT015",
-      title: "should calculate 15% tax for salaries <= $50,000",
-      file: "frontend/src/utils/salaryCalculations.js",
-      type: "Tax Calculation",
-      priority: "High",
-      description: "Test lower tax bracket calculation accuracy",
-      estimatedTime: "30s",
-    },
-    {
-      id: "UT016",
-      title: "should calculate tiered tax for salaries $50,001-$100,000",
-      file: "frontend/src/utils/salaryCalculations.js",
-      type: "Tax Calculation",
-      priority: "High",
-      description: "Test middle tax bracket with progressive rates",
-      estimatedTime: "45s",
-    },
-    {
-      id: "UT017",
-      title: "should calculate highest tier for salaries > $100,000",
-      file: "frontend/src/utils/salaryCalculations.js",
-      type: "Tax Calculation",
-      priority: "High",
-      description: "Test upper tax bracket calculation",
-      estimatedTime: "30s",
-    },
-    {
-      id: "UT018",
-      title: "calculateDeductions should compute health insurance at 3%",
-      file: "frontend/src/utils/salaryCalculations.js",
-      type: "Deduction Calculation",
-      priority: "Medium",
-      description: "Verify health insurance deduction percentage calculation",
-      estimatedTime: "30s",
-    },
-    {
-      id: "UT019",
-      title: "getCurrentPayroll should fetch all employees with salary data",
       file: "backend/controllers/payrollController.js",
-      type: "Controller Logic",
-      priority: "High",
-      description:
-        "Test payroll controller retrieves complete employee dataset",
-      estimatedTime: "1m 30s",
-    },
-    {
-      id: "UT020",
-      title: "should calculate taxes using progressive tax function",
-      file: "backend/controllers/payrollController.js",
-      type: "Integration",
-      priority: "High",
-      description:
-        "Verify controller integrates with tax calculation utilities",
-      estimatedTime: "1m",
+      testCount: 10,
+      coverage: 88,
+      tests: [
+        "getCurrentPayroll should fetch all employees with salary data",
+        "should calculate taxes using progressive tax function",
+        "should calculate deductions for each employee",
+        "should compute net pay correctly (gross - taxes - deductions)",
+        "should return proper JSON response structure",
+        "should handle empty employee database",
+        "should catch and handle database errors",
+        "should return 500 status on server errors",
+        "should validate employee salary data exists",
+        "should format currency values correctly",
+      ],
     },
   ];
 
@@ -377,80 +254,48 @@ const TestCasesResults = () => {
   const getPriorityColor = (priority) => {
     switch (priority) {
       case "High":
-        return "text-red-700 bg-red-50 border-red-200";
+        return "text-red-600 bg-red-100";
       case "Medium":
-        return "text-yellow-700 bg-yellow-50 border-yellow-200";
+        return "text-yellow-600 bg-yellow-100";
       case "Low":
-        return "text-green-700 bg-green-50 border-green-200";
+        return "text-green-600 bg-green-100";
       default:
-        return "text-gray-700 bg-gray-50 border-gray-200";
+        return "text-gray-600 bg-gray-100";
     }
   };
 
-  const handleClick = () => {
-    router.push("/test-execution-report");
-  };
-
-  const getTypeColor = (type) => {
-    const colors = {
-      "Component Rendering": "text-blue-700 bg-blue-50",
-      "State Management": "text-purple-700 bg-purple-50",
-      "API Integration": "text-green-700 bg-green-50",
-      "Form Validation": "text-orange-700 bg-orange-50",
-      "Conditional Rendering": "text-indigo-700 bg-indigo-50",
-      "Error Handling": "text-red-700 bg-red-50",
-      "API Endpoint": "text-emerald-700 bg-emerald-50",
-      "Database Query": "text-cyan-700 bg-cyan-50",
-      "Input Validation": "text-orange-700 bg-orange-50",
-      "Error Response": "text-red-700 bg-red-50",
-      "Pure Function": "text-violet-700 bg-violet-50",
-      "Business Logic": "text-pink-700 bg-pink-50",
-      "Tax Calculation": "text-amber-700 bg-amber-50",
-      "Deduction Calculation": "text-lime-700 bg-lime-50",
-      "Controller Logic": "text-teal-700 bg-teal-50",
-      Integration: "text-rose-700 bg-rose-50",
-    };
-    return colors[type] || "text-gray-700 bg-gray-50";
-  };
-
   return (
-    <div className="h-screen overflow-y-auto bg-gradient-to-br from-gray-50 to-blue-50">
+    <div className="h-screen overflow-auto bg-gray-50">
       {/* Header */}
-      <div className="bg-white shadow-sm border-b border-gray-200">
+      <div className="bg-white border-b border-gray-200">
         <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="py-6">
+          <div className="py-4">
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-6">
-                <button className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors">
+              <div className="flex items-center space-x-4">
+                <button className="flex items-center space-x-2 text-gray-600 hover:text-gray-900">
                   <ArrowLeft className="w-5 h-5" />
-                  <span className="font-medium">Back to Pull Request</span>
+                  <span>Back to Pull Request</span>
                 </button>
-                <div className="border-l border-gray-300 pl-6">
-                  <h1 className="text-2xl font-bold text-gray-900">
+                <div className="border-l border-gray-300 pl-4">
+                  <h1 className="text-xl font-semibold text-gray-900">
                     AI Generated Test Cases
                   </h1>
-                  <p className="text-sm text-gray-600 mt-1">
-                    PR #341: Salary history tracking and payroll dashboard •
-                    Pre-execution review
+                  <p className="text-sm text-gray-600">
+                    PR #341: Salary history tracking and payroll dashboard
                   </p>
                 </div>
               </div>
               <div className="flex items-center space-x-3">
-                <button className="flex items-center space-x-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
-                  <Settings className="w-4 h-4" />
-                  <span>Configure</span>
+                <button className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50">
+                  <Download className="w-4 h-4 inline mr-2" />
+                  Export Tests
                 </button>
-                <button className="flex items-center space-x-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
-                  <Download className="w-4 h-4" />
-                  <span>Export Tests</span>
-                </button>
-                <button
-                  onClick={handleClick}
-                  className="flex items-center space-x-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-md"
-                >
-                  <Play className="w-4 h-4" />
-                  <span>Execute Test Cases</span>
-                </button>
+                <Link href={"/test-execution-report"}>
+                  <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                    <Play className="w-4 h-4 inline mr-2" />
+                    Run All Tests
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -463,10 +308,10 @@ const TestCasesResults = () => {
           <nav className="flex space-x-8">
             <button
               onClick={() => setActiveTab("overview")}
-              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+              className={`py-4 px-1 border-b-2 font-medium text-sm ${
                 activeTab === "overview"
                   ? "border-blue-500 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
               }`}
             >
               <BarChart3 className="w-4 h-4 inline mr-2" />
@@ -474,224 +319,145 @@ const TestCasesResults = () => {
             </button>
             <button
               onClick={() => setActiveTab("functional")}
-              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+              className={`py-4 px-1 border-b-2 font-medium text-sm ${
                 activeTab === "functional"
                   ? "border-blue-500 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
               }`}
             >
               <Globe className="w-4 h-4 inline mr-2" />
-              Functional Tests
-              <span className="ml-2 px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded-full">
-                {functionalTests.length}
-              </span>
+              Functional Tests ({functionalTests.length})
             </button>
             <button
               onClick={() => setActiveTab("performance")}
-              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+              className={`py-4 px-1 border-b-2 font-medium text-sm ${
                 activeTab === "performance"
                   ? "border-blue-500 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
               }`}
             >
               <Zap className="w-4 h-4 inline mr-2" />
-              Performance Tests
-              <span className="ml-2 px-2 py-1 text-xs bg-purple-100 text-purple-700 rounded-full">
-                {performanceTests.length}
-              </span>
+              Performance Tests ({performanceTests.length})
             </button>
             <button
               onClick={() => setActiveTab("unit")}
-              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+              className={`py-4 px-1 border-b-2 font-medium text-sm ${
                 activeTab === "unit"
                   ? "border-blue-500 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
               }`}
             >
               <Code className="w-4 h-4 inline mr-2" />
-              Unit Tests
-              <span className="ml-2 px-2 py-1 text-xs bg-green-100 text-green-700 rounded-full">
-                {unitTests.length}
-              </span>
+              Unit Tests ({testSummary.unitTests})
             </button>
           </nav>
         </div>
       </div>
 
-      <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Overview Tab */}
         {activeTab === "overview" && (
-          <div className="space-y-8">
+          <div className="space-y-6">
             {/* Summary Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
-              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              <div className="bg-white p-4 rounded-lg border border-gray-200">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">
-                      Functional Tests
-                    </p>
-                    <p className="text-3xl font-bold text-blue-600 mt-2">
+                    <p className="text-sm text-gray-600">Functional Tests</p>
+                    <p className="text-2xl font-bold text-blue-600">
                       {testSummary.functionalTests}
                     </p>
-                    <p className="text-xs text-gray-500 mt-1">
-                      End-to-end scenarios
-                    </p>
                   </div>
-                  <div className="p-3 bg-blue-100 rounded-lg">
-                    <Globe className="w-6 h-6 text-blue-600" />
-                  </div>
+                  <Globe className="w-8 h-8 text-blue-500" />
                 </div>
               </div>
-              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+              <div className="bg-white p-4 rounded-lg border border-gray-200">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">
-                      Performance Tests
-                    </p>
-                    <p className="text-3xl font-bold text-purple-600 mt-2">
+                    <p className="text-sm text-gray-600">Performance Tests</p>
+                    <p className="text-2xl font-bold text-purple-600">
                       {testSummary.performanceTests}
                     </p>
-                    <p className="text-xs text-gray-500 mt-1">
-                      Load & stress testing
-                    </p>
                   </div>
-                  <div className="p-3 bg-purple-100 rounded-lg">
-                    <Zap className="w-6 h-6 text-purple-600" />
-                  </div>
+                  <Zap className="w-8 h-8 text-purple-500" />
                 </div>
               </div>
-              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+              <div className="bg-white p-4 rounded-lg border border-gray-200">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">
-                      Unit Tests
-                    </p>
-                    <p className="text-3xl font-bold text-green-600 mt-2">
+                    <p className="text-sm text-gray-600">Unit Tests</p>
+                    <p className="text-2xl font-bold text-green-600">
                       {testSummary.unitTests}
                     </p>
-                    <p className="text-xs text-gray-500 mt-1">
-                      Code-level testing
-                    </p>
                   </div>
-                  <div className="p-3 bg-green-100 rounded-lg">
-                    <Code className="w-6 h-6 text-green-600" />
-                  </div>
+                  <Code className="w-8 h-8 text-green-500" />
                 </div>
               </div>
-              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+              <div className="bg-white p-4 rounded-lg border border-gray-200">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">
-                      Coverage
-                    </p>
-                    <p className="text-3xl font-bold text-indigo-600 mt-2">
+                    <p className="text-sm text-gray-600">Coverage</p>
+                    <p className="text-2xl font-bold text-indigo-600">
                       {testSummary.totalCoverage}%
                     </p>
-                    <p className="text-xs text-gray-500 mt-1">Code coverage</p>
                   </div>
-                  <div className="p-3 bg-indigo-100 rounded-lg">
-                    <Target className="w-6 h-6 text-indigo-600" />
-                  </div>
+                  <Target className="w-8 h-8 text-indigo-500" />
                 </div>
               </div>
-              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+              <div className="bg-white p-4 rounded-lg border border-gray-200">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">
-                      Est. Runtime
-                    </p>
-                    <p className="text-3xl font-bold text-orange-600 mt-2">
+                    <p className="text-sm text-gray-600">Est. Runtime</p>
+                    <p className="text-2xl font-bold text-orange-600">
                       {testSummary.estimatedRunTime}
                     </p>
-                    <p className="text-xs text-gray-500 mt-1">
-                      Total execution time
-                    </p>
                   </div>
-                  <div className="p-3 bg-orange-100 rounded-lg">
-                    <Clock className="w-6 h-6 text-orange-600" />
-                  </div>
+                  <Clock className="w-8 h-8 text-orange-500" />
                 </div>
               </div>
-              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+              <div className="bg-white p-4 rounded-lg border border-gray-200">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">
-                      Risk Score
-                    </p>
-                    <p className="text-3xl font-bold text-yellow-600 mt-2">
+                    <p className="text-sm text-gray-600">Risk Score</p>
+                    <p className="text-2xl font-bold text-yellow-600">
                       {testSummary.riskScore}
                     </p>
-                    <p className="text-xs text-gray-500 mt-1">
-                      Change complexity
-                    </p>
                   </div>
-                  <div className="p-3 ml-2 bg-yellow-100 rounded-lg">
-                    <Shield className="w-6 h-6 text-yellow-600" />
-                  </div>
+                  <Shield className="w-8 h-8 text-yellow-500" />
                 </div>
               </div>
             </div>
 
             {/* AI Analysis Summary */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-              <h3 className="text-xl font-bold text-gray-900 mb-6">
+            <div className="bg-white rounded-lg border border-gray-200 p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">
                 AI Analysis Summary
               </h3>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div className="space-y-4">
-                  <h4 className="font-semibold text-gray-900 flex items-center">
-                    <FileText className="w-5 h-5 mr-2 text-blue-600" />
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div>
+                  <h4 className="font-medium text-gray-900 mb-2">
                     Code Changes Analyzed
                   </h4>
-                  <ul className="space-y-2 text-gray-700">
-                    <li className="flex items-start">
-                      <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 mr-2 flex-shrink-0" />
-                      8 files modified across frontend, backend, and database
+                  <ul className="space-y-1 text-sm text-gray-600">
+                    <li>
+                      • 8 files modified across frontend, backend, and database
                     </li>
-                    <li className="flex items-start">
-                      <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 mr-2 flex-shrink-0" />
-                      New salary history tracking functionality
-                    </li>
-                    <li className="flex items-start">
-                      <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 mr-2 flex-shrink-0" />
-                      Payroll dashboard with complex calculations
-                    </li>
-                    <li className="flex items-start">
-                      <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 mr-2 flex-shrink-0" />
-                      Database schema changes and migrations
-                    </li>
-                    <li className="flex items-start">
-                      <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 mr-2 flex-shrink-0" />
-                      Authentication and authorization updates
-                    </li>
+                    <li>• New salary history tracking functionality</li>
+                    <li>• Payroll dashboard with complex calculations</li>
+                    <li>• Database schema changes and migrations</li>
+                    <li>• Authentication and authorization updates</li>
                   </ul>
                 </div>
-                <div className="space-y-4">
-                  <h4 className="font-semibold text-gray-900 flex items-center">
-                    <Target className="w-5 h-5 mr-2 text-purple-600" />
+                <div>
+                  <h4 className="font-medium text-gray-900 mb-2">
                     Test Strategy Recommendations
                   </h4>
-                  <ul className="space-y-2 text-gray-700">
-                    <li className="flex items-start">
-                      <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 mr-2 flex-shrink-0" />
-                      Focus on salary calculation accuracy testing
-                    </li>
-                    <li className="flex items-start">
-                      <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 mr-2 flex-shrink-0" />
-                      Validate database migration integrity
-                    </li>
-                    <li className="flex items-start">
-                      <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 mr-2 flex-shrink-0" />
-                      Test performance under concurrent payroll access
-                    </li>
-                    <li className="flex items-start">
-                      <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 mr-2 flex-shrink-0" />
-                      Verify security for salary data access
-                    </li>
-                    <li className="flex items-start">
-                      <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 mr-2 flex-shrink-0" />
-                      Comprehensive UI testing for new dashboard
-                    </li>
+                  <ul className="space-y-1 text-sm text-gray-600">
+                    <li>• Focus on salary calculation accuracy testing</li>
+                    <li>• Validate database migration integrity</li>
+                    <li>• Test performance under concurrent payroll access</li>
+                    <li>• Verify security for salary data access</li>
+                    <li>• Comprehensive UI testing for new dashboard</li>
                   </ul>
                 </div>
               </div>
@@ -701,100 +467,84 @@ const TestCasesResults = () => {
 
         {/* Functional Tests Tab */}
         {activeTab === "functional" && (
-          <div className="space-y-6">
+          <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-2xl font-bold text-gray-900">
-                  Functional Test Cases
-                </h2>
-                <p className="text-gray-600 mt-1">
-                  End-to-end Selenium automation scripts
-                </p>
-              </div>
-              <button className="flex items-center space-x-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50">
-                <Filter className="w-4 h-4" />
-                <span>Filter Tests</span>
-              </button>
+              <h2 className="text-lg font-semibold text-gray-900">
+                Functional Test Cases
+              </h2>
+              <span className="text-sm text-gray-600">
+                End-to-end Selenium automation scripts
+              </span>
             </div>
 
             {functionalTests.map((test) => (
               <div
                 key={test.id}
-                className="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow"
+                className="bg-white rounded-lg border border-gray-200"
               >
                 <div
-                  className="p-6 cursor-pointer"
+                  className="p-4 cursor-pointer hover:bg-gray-50"
                   onClick={() => toggleTestExpansion(test.id)}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
-                      <span className="font-mono text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-md">
+                      <span className="font-mono text-sm text-gray-500">
                         {test.id}
                       </span>
-                      <h3 className="font-semibold text-gray-900 text-lg">
+                      <h3 className="font-medium text-gray-900">
                         {test.title}
                       </h3>
                       <span
-                        className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${getPriorityColor(
+                        className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium ${getPriorityColor(
                           test.priority
                         )}`}
                       >
-                        {test.priority} Priority
+                        {test.priority}
                       </span>
-                      <span className="text-xs text-blue-700 bg-blue-50 px-3 py-1 rounded-full">
+                      <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
                         {test.type}
                       </span>
-                      <span className="text-xs text-gray-600 bg-gray-100 px-3 py-1 rounded-full">
-                        ⏱️ {test.estimatedTime}
-                      </span>
                     </div>
-                    <ChevronDown
+                    <ChevronRight
                       className={`w-5 h-5 text-gray-400 transform transition-transform ${
-                        expandedTest === test.id ? "rotate-180" : ""
+                        expandedTest === test.id ? "rotate-90" : ""
                       }`}
                     />
                   </div>
-                  <p className="text-gray-700 mt-3 leading-relaxed">
+                  <p className="text-sm text-gray-600 mt-2">
                     {test.description}
                   </p>
                 </div>
 
                 {expandedTest === test.id && (
-                  <div className="px-6 pb-6 border-t border-gray-100">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
+                  <div className="px-4 pb-4 border-t border-gray-100">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4">
                       <div>
-                        <h4 className="font-semibold text-gray-900 mb-3">
+                        <h4 className="font-medium text-gray-900 mb-2">
                           Test Steps
                         </h4>
-                        <ol className="list-decimal list-inside space-y-2">
+                        <ol className="list-decimal list-inside space-y-1 text-sm text-gray-600">
                           {test.steps.map((step, index) => (
-                            <li
-                              key={index}
-                              className="text-gray-700 leading-relaxed"
-                            >
-                              {step}
-                            </li>
+                            <li key={index}>{step}</li>
                           ))}
                         </ol>
                       </div>
-                      <div className="space-y-6">
+                      <div className="space-y-4">
                         <div>
-                          <h4 className="font-semibold text-gray-900 mb-3">
+                          <h4 className="font-medium text-gray-900 mb-2">
                             Expected Result
                           </h4>
-                          <p className="text-gray-700 leading-relaxed">
+                          <p className="text-sm text-gray-600">
                             {test.expectedResult}
                           </p>
                         </div>
                         <div>
-                          <h4 className="font-semibold text-gray-900 mb-3">
+                          <h4 className="font-medium text-gray-900 mb-2">
                             Test Data
                           </h4>
-                          <div className="bg-gray-50 p-4 rounded-lg">
-                            <code className="text-sm text-gray-800">
-                              {test.testData}
-                            </code>
-                          </div>
+                          <p className="text-sm text-gray-600 font-mono bg-gray-50 p-2 rounded">
+                            {test.testData}
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -807,101 +557,89 @@ const TestCasesResults = () => {
 
         {/* Performance Tests Tab */}
         {activeTab === "performance" && (
-          <div className="space-y-6">
+          <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-2xl font-bold text-gray-900">
-                  Performance Test Scripts
-                </h2>
-                <p className="text-gray-600 mt-1">
-                  JMeter load testing scenarios
-                </p>
-              </div>
+              <h2 className="text-lg font-semibold text-gray-900">
+                Performance Test Scripts
+              </h2>
+              <span className="text-sm text-gray-600">
+                JMeter load testing scenarios
+              </span>
             </div>
 
             {performanceTests.map((test) => (
               <div
                 key={test.id}
-                className="bg-white rounded-xl shadow-sm border border-gray-200 p-8"
+                className="bg-white rounded-lg border border-gray-200 p-6"
               >
-                <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center justify-between mb-4">
                   <div>
-                    <div className="flex items-center space-x-4 mb-2">
-                      <span className="font-mono text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-md">
+                    <div className="flex items-center space-x-4">
+                      <span className="font-mono text-sm text-gray-500">
                         {test.id}
                       </span>
-                      <h3 className="font-semibold text-gray-900 text-lg">
+                      <h3 className="font-medium text-gray-900">
                         {test.title}
                       </h3>
-                      <span className="text-xs text-purple-700 bg-purple-50 px-3 py-1 rounded-full">
+                      <span className="text-xs text-purple-600 bg-purple-100 px-2 py-1 rounded">
                         {test.tool}
                       </span>
                     </div>
-                    <p className="text-gray-700">{test.scenario}</p>
+                    <p className="text-sm text-gray-600 mt-1">
+                      {test.scenario}
+                    </p>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                  <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg">
-                    <p className="text-xs text-blue-600 font-medium mb-1">
-                      Concurrent Users
-                    </p>
-                    <p className="text-2xl font-bold text-blue-700">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                  <div className="text-center p-3 bg-gray-50 rounded">
+                    <p className="text-xs text-gray-500">Concurrent Users</p>
+                    <p className="text-lg font-semibold text-gray-900">
                       {test.users}
                     </p>
                   </div>
-                  <div className="text-center p-4 bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg">
-                    <p className="text-xs text-purple-600 font-medium mb-1">
-                      Duration
-                    </p>
-                    <p className="text-2xl font-bold text-purple-700">
+                  <div className="text-center p-3 bg-gray-50 rounded">
+                    <p className="text-xs text-gray-500">Duration</p>
+                    <p className="text-lg font-semibold text-gray-900">
                       {test.duration}
                     </p>
                   </div>
-                  <div className="text-center p-4 bg-gradient-to-br from-green-50 to-green-100 rounded-lg">
-                    <p className="text-xs text-green-600 font-medium mb-1">
-                      Expected Response
-                    </p>
-                    <p className="text-2xl font-bold text-green-700">
+                  <div className="text-center p-3 bg-gray-50 rounded">
+                    <p className="text-xs text-gray-500">Expected Response</p>
+                    <p className="text-lg font-semibold text-gray-900">
                       {test.expectedResponse}
                     </p>
                   </div>
-                  <div className="text-center p-4 bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg">
-                    <p className="text-xs text-orange-600 font-medium mb-1">
-                      Type
-                    </p>
-                    <p className="text-lg font-bold text-orange-700">
+                  <div className="text-center p-3 bg-gray-50 rounded">
+                    <p className="text-xs text-gray-500">Type</p>
+                    <p className="text-lg font-semibold text-gray-900">
                       {test.type}
                     </p>
                   </div>
                 </div>
 
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-4">
+                  <h4 className="font-medium text-gray-900 mb-2">
                     Performance Thresholds
                   </h4>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
-                      <span className="text-gray-700 font-medium">
+                    <div className="flex justify-between p-2 bg-gray-50 rounded">
+                      <span className="text-sm text-gray-600">
                         Response Time
                       </span>
-                      <span className="text-lg font-bold text-gray-900">
+                      <span className="text-sm font-medium">
                         {test.thresholds.responseTime}
                       </span>
                     </div>
-                    <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
-                      <span className="text-gray-700 font-medium">
-                        Throughput
-                      </span>
-                      <span className="text-lg font-bold text-gray-900">
+                    <div className="flex justify-between p-2 bg-gray-50 rounded">
+                      <span className="text-sm text-gray-600">Throughput</span>
+                      <span className="text-sm font-medium">
                         {test.thresholds.throughput}
                       </span>
                     </div>
-                    <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg">
-                      <span className="text-gray-700 font-medium">
-                        Error Rate
-                      </span>
-                      <span className="text-lg font-bold text-gray-900">
+                    <div className="flex justify-between p-2 bg-gray-50 rounded">
+                      <span className="text-sm text-gray-600">Error Rate</span>
+                      <span className="text-sm font-medium">
                         {test.thresholds.errorRate}
                       </span>
                     </div>
@@ -912,117 +650,78 @@ const TestCasesResults = () => {
           </div>
         )}
 
-        {/* Unit Tests Tab - Individual test cases as rows */}
+        {/* Unit Tests Tab */}
         {activeTab === "unit" && (
-          <div className="space-y-6">
+          <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-2xl font-bold text-gray-900">
-                  Unit Test Cases
-                </h2>
-                <p className="text-gray-600 mt-1">
-                  Individual test cases with code-level coverage analysis
-                </p>
-              </div>
-              <button className="flex items-center space-x-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50">
-                <Filter className="w-4 h-4" />
-                <span>Filter by File</span>
-              </button>
+              <h2 className="text-lg font-semibold text-gray-900">
+                Unit Test Cases
+              </h2>
+              <span className="text-sm text-gray-600">
+                Code-level testing with coverage analysis
+              </span>
             </div>
 
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Test Case
-                      </th>
-                      <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        File
-                      </th>
-                      <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Type
-                      </th>
-                      <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Priority
-                      </th>
-                      <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Est. Time
-                      </th>
-                      <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {unitTests.map((test) => (
-                      <tr
-                        key={test.id}
-                        className="hover:bg-gray-50 transition-colors"
+            {unitTests.map((test) => (
+              <div
+                key={test.id}
+                className="bg-white rounded-lg border border-gray-200"
+              >
+                <div
+                  className="p-4 cursor-pointer hover:bg-gray-50"
+                  onClick={() => toggleTestExpansion(test.id)}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-4">
+                      <span className="font-mono text-sm text-gray-500">
+                        {test.id}
+                      </span>
+                      <h3 className="font-medium text-gray-900">{test.file}</h3>
+                      <span className="text-xs text-green-600 bg-green-100 px-2 py-1 rounded">
+                        {test.testCount} tests
+                      </span>
+                      <span
+                        className={`text-xs px-2 py-1 rounded ${
+                          test.coverage >= 90
+                            ? "text-green-600 bg-green-100"
+                            : test.coverage >= 80
+                            ? "text-yellow-600 bg-yellow-100"
+                            : "text-red-600 bg-red-100"
+                        }`}
                       >
-                        <td className="px-6 py-4">
-                          <div>
-                            <div className="flex items-center space-x-3">
-                              <span className="font-mono text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
-                                {test.id}
-                              </span>
-                              <h4 className="font-medium text-gray-900">
-                                {test.title}
-                              </h4>
-                            </div>
-                            <p className="text-sm text-gray-600 mt-1">
-                              {test.description}
-                            </p>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4">
-                          <span className="text-sm text-gray-700 font-mono bg-gray-100 px-2 py-1 rounded">
-                            {test.file.split("/").pop()}
-                          </span>
-                          <p className="text-xs text-gray-500 mt-1">
-                            {test.file.split("/").slice(0, -1).join("/")}
-                          </p>
-                        </td>
-                        <td className="px-6 py-4">
-                          <span
-                            className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${getTypeColor(
-                              test.type
-                            )}`}
+                        {test.coverage}% coverage
+                      </span>
+                    </div>
+                    <ChevronRight
+                      className={`w-5 h-5 text-gray-400 transform transition-transform ${
+                        expandedTest === test.id ? "rotate-90" : ""
+                      }`}
+                    />
+                  </div>
+                </div>
+
+                {expandedTest === test.id && (
+                  <div className="px-4 pb-4 border-t border-gray-100">
+                    <div className="mt-4">
+                      <h4 className="font-medium text-gray-900 mb-2">
+                        Generated Test Cases
+                      </h4>
+                      <ul className="space-y-1">
+                        {test.tests.map((testCase, index) => (
+                          <li
+                            key={index}
+                            className="flex items-center space-x-2 text-sm"
                           >
-                            {test.type}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4">
-                          <span
-                            className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${getPriorityColor(
-                              test.priority
-                            )}`}
-                          >
-                            {test.priority}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4">
-                          <span className="text-sm text-gray-700">
-                            {test.estimatedTime}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="flex items-center space-x-2">
-                            <button className="text-blue-600 hover:text-blue-700">
-                              <Eye className="w-4 h-4" />
-                            </button>
-                            <button className="text-green-600 hover:text-green-700">
-                              <Play className="w-4 h-4" />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                            <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                            <span className="text-gray-700">{testCase}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                )}
               </div>
-            </div>
+            ))}
           </div>
         )}
       </div>
