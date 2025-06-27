@@ -17,6 +17,7 @@ import {
   AlertTriangle,
   ArrowLeft,
 } from "lucide-react";
+import Link from "next/link";
 
 const TestCasesResults = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -1636,11 +1637,13 @@ describe('Payroll Controller', () => {
                   Export Tests
                 </button>
                 <div className="relative">
-                  <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center">
-                    <Play className="w-4 h-4 mr-2" />
-                    Run All Tests
-                    <ChevronRight className="w-4 h-4 ml-1" />
-                  </button>
+                  <Link href={"/tests"}>
+                    <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center">
+                      <Play className="w-4 h-4 mr-2" />
+                      Run All Tests
+                      <ChevronRight className="w-4 h-4 ml-1" />
+                    </button>
+                  </Link>
                 </div>
                 <div className="flex items-center space-x-2">
                   <button className="px-3 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700">
