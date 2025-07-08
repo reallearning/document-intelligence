@@ -669,23 +669,155 @@ const GitHubPRViewer = () => {
     }
   };
 
-  const highlightSyntax = (content: string, type: string) => {
-    // Simple syntax highlighting for common patterns
-    let highlighted = content
-      .replace(
-        /\b(from|import|def|class|if|else|elif|return|try|except|with|as)\b/g,
-        '<span class="text-purple-600 font-semibold">$1</span>'
-      )
-      .replace(
-        /\b(True|False|None)\b/g,
-        '<span class="text-blue-600">$1</span>'
-      )
-      .replace(/\b(\d+\.?\d*)\b/g, '<span class="text-blue-600">$1</span>')
-      .replace(/"([^"]*)"/g, '<span class="text-green-600">"$1"</span>')
-      .replace(/'([^']*)'/g, "<span class=\"text-green-600\">'$1'</span>")
-      .replace(/#(.*)$/g, '<span class="text-gray-500 italic">#$1</span>');
+  const highlightSyntax = (content: string) => {
+    const tokens: Array<{ text: string; type: string }> = [];
+    const keywords =
+      /\b(from|import|def|class|if|else|elif|return|try|except|with|as|lambda|and|or|not|in)\b/g;
+    const booleans = /\b(True|False|None)\b/g;
+    const numbers = /\b\d+\.?\d*\b/g;
+    const strings = /"[^"]*"|'[^']*'/g;
+    const comments = /#.*$/gm;
 
-    return highlighted;
+    let lastIndex = 0;
+    const matches: Array<{
+      index: number;
+      length: number;
+      type: string;
+      text: string;
+    }> = [];
+
+    // Find all matches
+    let match;
+    while ((match = keywords.exec(content)) !== null) {
+      matches.push({
+        index: match.index,
+        length: match[0].length,
+        type: "keyword",
+        text: match[0],
+      });
+    }
+
+    keywords.lastIndex = 0;
+    while ((match = booleans.exec(content)) !== null) {
+      matches.push({
+        index: match.index,
+        length: match[0].length,
+        type: "boolean",
+        text: match[0],
+      });
+    }
+
+    booleans.lastIndex = 0;
+    while ((match = numbers.exec(content)) !== null) {
+      matches.push({
+        index: match.index,
+        length: match[0].length,
+        type: "number",
+        text: match[0],
+      });
+    }
+
+    numbers.lastIndex = 0;
+    while ((match = strings.exec(content)) !== null) {
+      matches.push({
+        index: match.index,
+        length: match[0].length,
+        type: "string",
+        text: match[0],
+      });
+    }
+
+    strings.lastIndex = 0;
+    while ((match = comments.exec(content)) !== null) {
+      matches.push({
+        index: match.index,
+        length: match[0].length,
+        type: "comment",
+        text: match[0],
+      });
+    }
+
+    // Sort matches by index
+    matches.sort((a, b) => a.index - b.index);
+
+    // Remove overlapping matches (comments take priority)
+    const filteredMatches: any[] = [];
+    for (let i = 0; i < matches.length; i++) {
+      const current = matches[i];
+      const hasOverlap = filteredMatches.some(
+        (existing) =>
+          (current.index >= existing.index &&
+            current.index < existing.index + existing.length) ||
+          (existing.index >= current.index &&
+            existing.index < current.index + current.length)
+      );
+      if (!hasOverlap) {
+        filteredMatches.push(current);
+      }
+    }
+
+    // Build token array
+    lastIndex = 0;
+    for (const match of filteredMatches) {
+      if (match.index > lastIndex) {
+        tokens.push({
+          text: content.slice(lastIndex, match.index),
+          type: "text",
+        });
+      }
+      tokens.push({ text: match.text, type: match.type });
+      lastIndex = match.index + match.length;
+    }
+
+    if (lastIndex < content.length) {
+      tokens.push({ text: content.slice(lastIndex), type: "text" });
+    }
+
+    return tokens;
+  };
+
+  const renderHighlightedCode = (content: string) => {
+    const tokens = highlightSyntax(content);
+    return (
+      <>
+        {tokens.map((token, index) => {
+          switch (token.type) {
+            case "keyword":
+              return (
+                <span key={index} className="text-purple-600 font-semibold">
+                  {token.text}
+                </span>
+              );
+            case "boolean":
+              return (
+                <span key={index} className="text-blue-600">
+                  {token.text}
+                </span>
+              );
+            case "number":
+              return (
+                <span key={index} className="text-blue-600">
+                  {token.text}
+                </span>
+              );
+            case "string":
+              return (
+                <span key={index} className="text-green-600">
+                  {token.text}
+                </span>
+              );
+            case "comment":
+              return (
+                <span key={index} className="text-gray-500 italic">
+                  {token.text}
+                </span>
+              );
+            default:
+              return <span key={index}>{token.text}</span>;
+          }
+        })}
+      </>
+    );
   };
 
   return (
@@ -822,11 +954,7 @@ const GitHubPRViewer = () => {
                           >
                             {getLineContentPrefix(line.type)}
                           </span>
-                          <span
-                            dangerouslySetInnerHTML={{
-                              __html: highlightSyntax(line.content, line.type),
-                            }}
-                          />
+                          {renderHighlightedCode(line.content)}
                         </div>
                       </div>
                     ))
