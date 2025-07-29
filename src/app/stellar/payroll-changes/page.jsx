@@ -491,7 +491,7 @@ const PayrollChangesDetailView = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <div className="text-center">
               <div className="text-sm font-medium text-gray-500 mb-2">
-                Filename
+                Filename 
               </div>
               <div className="text-lg font-mono text-gray-900 bg-gray-50 rounded-lg px-3 py-2 break-words">
                 {reportData.fileInfo.fileName}
