@@ -54,14 +54,14 @@ import {
   HelpCircle,
 } from "lucide-react";
 
-// Knight Frank brand colors with expanded palette
+// ACME Corp brand colors with expanded palette
 const COLORS = {
-  primary: "#C00000", // Knight Frank red
+  primary: "#C00000", // ACME Corp red
   primaryLight: "#F5DBDB",
   primaryLighter: "#FADEDE",
   primaryDark: "#900000",
   primaryDarker: "#700000",
-  secondary: "#1A1A1A", // Knight Frank dark gray/black
+  secondary: "#1A1A1A", // ACME Corp dark gray/black
   secondaryLight: "#E0E0E0",
   secondaryLighter: "#F0F0F0",
   accent: "#333333", // Dark gray as accent
@@ -70,7 +70,7 @@ const COLORS = {
   successLight: "#E7F5EE",
   warning: "#F4C242", // Professional amber
   warningLight: "#FEF7E7",
-  danger: "#C00000", // Using Knight Frank red for danger/alerts
+  danger: "#C00000", // Using ACME Corp red for danger/alerts
   dangerLight: "#FCE8E8",
   caution: "#E87722", // Professional orange
   cautionLight: "#FEF0E8",
@@ -744,7 +744,7 @@ const CashFlowDashboard = () => {
                 </div>
                 <div>
                   <h1 className="text-lg font-bold text-primary">
-                    Knight Frank FM
+                    ACME Corp FM
                   </h1>
                   <p className="text-xs text-text-secondary">
                     Cash Flow Dashboard
@@ -2164,7 +2164,7 @@ const CashFlowDashboard = () => {
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center">
               <div className="text-sm text-gray-500">
-                &copy; 2025 Knight Frank FM. All rights reserved.
+                &copy; 2025 ACME Corp FM. All rights reserved.
               </div>
             </div>
             <div className="mt-4 md:mt-0">
@@ -2614,7 +2614,7 @@ const CashFlowDashboard = () => {
                     </h4>
                     <p className="text-sm text-gray-600 mt-2">
                       Express Housekeepers also provides services to 2 other
-                      sites managed by Knight Frank FM (Mahindra Tech and
+                      sites managed by ACME Corp FM (Mahindra Tech and
                       Infosys Campus), with different payment statuses:
                     </p>
                     <div className="mt-3 overflow-x-auto">
