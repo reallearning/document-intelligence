@@ -1,4 +1,3 @@
-"use client";
 import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 
@@ -20,18 +19,21 @@ interface Link {
   description: string;
 }
 
-interface SimulationLink extends d3.SimulationLinkDatum<Node> {
-  source: Node;
-  target: Node;
-  label: string;
-  description: string;
-}
-
 const BusinessKnowledgeGraph: React.FC = () => {
   const svgRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const tooltipRef = useRef<HTMLDivElement>(null);
-  const [categoryFilter, setCategoryFilter] = useState<string>("all");
+  const [categoryFilter, setCategoryFilter] = useState("all");
+  const [tooltip, setTooltip] = useState<{
+    show: boolean;
+    x: number;
+    y: number;
+    content: { label: string; category: string; description: string };
+  }>({
+    show: false,
+    x: 0,
+    y: 0,
+    content: { label: "", category: "", description: "" },
+  });
 
   const nodes: Node[] = [
     // Business Structure
@@ -324,46 +326,42 @@ const BusinessKnowledgeGraph: React.FC = () => {
   ];
 
   const categoryColors: Record<string, string> = {
-    structure: "#e74c3c",
-    product: "#3498db",
-    transaction: "#2ecc71",
-    marketing: "#f39c12",
-    operations: "#9b59b6",
-    experience: "#1abc9c",
-    geography: "#95a5a6",
+    structure: "#ef4444",
+    product: "#3b82f6",
+    transaction: "#10b981",
+    marketing: "#f59e0b",
+    operations: "#a855f7",
+    experience: "#06b6d4",
+    geography: "#6b7280",
   };
 
-  const categories = [
-    { value: "all", label: "All Categories" },
-    { value: "structure", label: "Business Structure" },
-    { value: "product", label: "Product" },
-    { value: "transaction", label: "Transactions" },
-    { value: "marketing", label: "Marketing" },
-    { value: "operations", label: "Operations" },
-    { value: "experience", label: "Experience" },
-    { value: "geography", label: "Geography" },
+  const legendItems = [
+    { category: "structure", label: "Business Structure", color: "#ef4444" },
+    { category: "product", label: "Product", color: "#3b82f6" },
+    { category: "transaction", label: "Transactions", color: "#10b981" },
+    { category: "marketing", label: "Marketing", color: "#f59e0b" },
+    { category: "operations", label: "Operations", color: "#a855f7" },
+    { category: "experience", label: "Experience", color: "#06b6d4" },
+    { category: "geography", label: "Geography", color: "#6b7280" },
   ];
 
   useEffect(() => {
     if (!svgRef.current || !containerRef.current) return;
 
+    const svg = d3.select(svgRef.current);
     const width = containerRef.current.clientWidth;
     const height = 700;
 
     // Clear previous content
-    d3.select(svgRef.current).selectAll("*").remove();
+    svg.selectAll("*").remove();
 
-    const svg = d3
-      .select(svgRef.current)
-      .attr("width", width)
-      .attr("height", height);
+    // Set up SVG dimensions
+    svg.attr("width", width).attr("height", height);
 
-    // Add zoom behavior
-    const zoom = d3
-      .zoom<SVGSVGElement, unknown>()
-      .on("zoom", (event: { transform: any }) => {
-        container.attr("transform", event.transform);
-      });
+    // Create zoom behavior
+    const zoom = d3.zoom<SVGSVGElement, unknown>().on("zoom", (event) => {
+      container.attr("transform", event.transform);
+    });
 
     svg.call(zoom);
 
@@ -384,23 +382,25 @@ const BusinessKnowledgeGraph: React.FC = () => {
 
     const container = svg.append("g");
 
+    // Create simulation
     const simulation = d3
       .forceSimulation(nodes)
       .force(
         "link",
         d3
-          .forceLink<Node, SimulationLink>(links as SimulationLink[])
-          .id((d: { id: any }) => d.id)
+          .forceLink(links)
+          .id((d: any) => d.id)
           .distance(100)
       )
       .force("charge", d3.forceManyBody().strength(-800))
       .force("center", d3.forceCenter(width / 2, height / 2))
       .force("collision", d3.forceCollide().radius(35));
 
+    // Create links
     const link = container
       .append("g")
       .selectAll("line")
-      .data(links as SimulationLink[])
+      .data(links)
       .enter()
       .append("line")
       .attr("class", "link")
@@ -421,6 +421,7 @@ const BusinessKnowledgeGraph: React.FC = () => {
           .style("stroke-width", "1.5px");
       });
 
+    // Create node groups
     const node = container
       .append("g")
       .selectAll("g")
@@ -432,163 +433,141 @@ const BusinessKnowledgeGraph: React.FC = () => {
       .call(
         d3
           .drag<SVGGElement, Node>()
-          .on(
-            "start",
-            (
-              event: { active: any },
-              d: { fx: any; x: any; fy: any; y: any }
-            ) => {
-              if (!event.active) simulation.alphaTarget(0.3).restart();
-              d.fx = d.x;
-              d.fy = d.y;
-            }
-          )
-          .on("drag", (event: { x: any; y: any }, d: { fx: any; fy: any }) => {
+          .on("start", (event, d) => {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+          })
+          .on("drag", (event, d) => {
             d.fx = event.x;
             d.fy = event.y;
           })
-          .on("end", (event: { active: any }, d: { fx: null; fy: null }) => {
+          .on("end", (event, d) => {
             if (!event.active) simulation.alphaTarget(0);
             d.fx = null;
             d.fy = null;
           })
       );
 
+    // Add circles to nodes
     node
       .append("circle")
       .attr("class", "node")
       .attr("r", 20)
-      .style(
-        "fill",
-        (d: { category: string | number }) => categoryColors[d.category]
-      )
+      .style("fill", (d: Node) => categoryColors[d.category])
       .style("stroke", "#fff")
       .style("stroke-width", "2px")
       .style("filter", "drop-shadow(0 2px 4px rgba(0,0,0,0.2))")
-      .on("mouseover", function (event: MouseEvent, d: Node) {
+      .style("transition", "all 0.3s ease")
+      .on("mouseover", function (event, d) {
         d3.select(this)
           .style("stroke-width", "3px")
           .style("filter", "drop-shadow(0 4px 8px rgba(0,0,0,0.3))");
 
-        showTooltip(event, d);
-        highlightConnections(d);
+        // Show tooltip
+        setTooltip({
+          show: true,
+          x: event.pageX,
+          y: event.pageY,
+          content: {
+            label: d.label,
+            category: d.category,
+            description: d.description,
+          },
+        });
+
+        // Highlight connections
+        link
+          .style("stroke", (l: any) =>
+            l.source === d || l.target === d ? "#ef4444" : "#999"
+          )
+          .style("stroke-width", (l: any) =>
+            l.source === d || l.target === d ? "4px" : "1.5px"
+          );
+
+        node
+          .select("circle")
+          .style("stroke", (n: Node) => {
+            const isConnected = links.some(
+              (l: any) =>
+                (l.source === d && l.target === n) ||
+                (l.target === d && l.source === n)
+            );
+            return isConnected ? "#ef4444" : "#fff";
+          })
+          .style("stroke-width", (n: Node) => {
+            const isConnected = links.some(
+              (l: any) =>
+                (l.source === d && l.target === n) ||
+                (l.target === d && l.source === n)
+            );
+            return isConnected ? "4px" : "2px";
+          });
       })
-      .on("mouseout", function (event: any, d: any) {
+      .on("mouseout", function () {
         d3.select(this)
           .style("stroke-width", "2px")
           .style("filter", "drop-shadow(0 2px 4px rgba(0,0,0,0.2))");
 
-        hideTooltip();
-        removeHighlight();
+        // Hide tooltip
+        setTooltip((prev) => ({ ...prev, show: false }));
+
+        // Remove highlights
+        link.style("stroke", "#999").style("stroke-width", "1.5px");
+        node
+          .select("circle")
+          .style("stroke", "#fff")
+          .style("stroke-width", "2px");
       });
 
+    // Add text to nodes
     node
       .append("text")
-      .attr("class", "node-text")
-      .style("font-family", "Segoe UI, sans-serif")
+      .style("font-family", "ui-sans-serif, system-ui, sans-serif")
       .style("font-size", "11px")
       .style("font-weight", "600")
       .style("text-anchor", "middle")
       .style("dominant-baseline", "middle")
-      .style("fill", "#2c3e50")
+      .style("fill", "#1f2937")
       .style("pointer-events", "none")
       .style("text-shadow", "1px 1px 2px rgba(255,255,255,0.8)")
-      .text((d: { label: string }) => {
+      .text((d: Node) => {
         const words = d.label.split(" ");
         return words.length > 2 ? words.slice(0, 2).join(" ") + "..." : d.label;
       });
 
+    // Animation loop
     simulation.on("tick", () => {
       link
-        .attr("x1", (d: { source: Node }) => (d.source as Node).x!)
-        .attr("y1", (d: { source: Node }) => (d.source as Node).y!)
-        .attr("x2", (d: { target: Node }) => (d.target as Node).x!)
-        .attr("y2", (d: { target: Node }) => (d.target as Node).y!);
+        .attr("x1", (d: any) => d.source.x)
+        .attr("y1", (d: any) => d.source.y)
+        .attr("x2", (d: any) => d.target.x)
+        .attr("y2", (d: any) => d.target.y);
 
-      node.attr(
-        "transform",
-        (d: { x: any; y: any }) => `translate(${d.x}, ${d.y})`
-      );
+      node.attr("transform", (d: Node) => `translate(${d.x}, ${d.y})`);
     });
 
-    const showTooltip = (event: MouseEvent, d: Node) => {
-      if (!tooltipRef.current) return;
-
-      const tooltip = tooltipRef.current;
-      tooltip.innerHTML = `
-        <strong>${d.label}</strong><br>
-        <em>Category: ${d.category}</em><br>
-        ${d.description}
-      `;
-      tooltip.style.opacity = "1";
-      tooltip.style.left = event.pageX + 10 + "px";
-      tooltip.style.top = event.pageY - 10 + "px";
-    };
-
-    const hideTooltip = () => {
-      if (tooltipRef.current) {
-        tooltipRef.current.style.opacity = "0";
-      }
-    };
-
-    const highlightConnections = (d: Node) => {
-      link
-        .style("stroke", (l: SimulationLink) =>
-          l.source === d || l.target === d ? "#e74c3c" : "#999"
-        )
-        .style("stroke-width", (l: SimulationLink) =>
-          l.source === d || l.target === d ? "4px" : "1.5px"
-        );
-
-      node
-        .select("circle")
-        .style("stroke", (n: Node) => {
-          const isConnected = (links as SimulationLink[]).some(
-            (l) =>
-              (l.source === d && l.target === n) ||
-              (l.target === d && l.source === n)
-          );
-          return isConnected ? "#e74c3c" : "#fff";
-        })
-        .style("stroke-width", (n: Node) => {
-          const isConnected = (links as SimulationLink[]).some(
-            (l) =>
-              (l.source === d && l.target === n) ||
-              (l.target === d && l.source === n)
-          );
-          return isConnected ? "4px" : "2px";
-        });
-    };
-
-    const removeHighlight = () => {
-      link.style("stroke", "#999").style("stroke-width", "1.5px");
-      node
-        .select("circle")
-        .style("stroke", "#fff")
-        .style("stroke-width", "2px");
-    };
-
-    // Store references for filtering and controls
-    (window as any).graphElements = {
-      node,
-      link,
-      simulation,
-      svg,
-      container,
-      width,
-      height,
-    };
+    // Store references for controls
+    (window as any).simulation = simulation;
+    (window as any).svg = svg;
+    (window as any).container = container;
+    (window as any).node = node;
+    (window as any).link = link;
+    (window as any).width = width;
+    (window as any).height = height;
   }, []);
 
+  // Filter by category effect
   useEffect(() => {
-    if (!(window as any).graphElements) return;
+    const node = (window as any).node;
+    const link = (window as any).link;
 
-    const { node, link } = (window as any).graphElements;
+    if (!node || !link) return;
 
     node.style("opacity", (d: Node) =>
       categoryFilter === "all" || d.category === categoryFilter ? 1 : 0.2
     );
-    link.style("opacity", (l: SimulationLink) => {
+    link.style("opacity", (l: any) => {
       if (categoryFilter === "all") return 0.6;
       return l.source.category === categoryFilter ||
         l.target.category === categoryFilter
@@ -598,17 +577,20 @@ const BusinessKnowledgeGraph: React.FC = () => {
   }, [categoryFilter]);
 
   const resetSimulation = () => {
-    const elements = (window as any).graphElements;
-    if (elements?.simulation) {
-      elements.simulation.alpha(1).restart();
+    const simulation = (window as any).simulation;
+    if (simulation) {
+      simulation.alpha(1).restart();
     }
   };
 
   const centerGraph = () => {
-    const elements = (window as any).graphElements;
-    if (!elements) return;
+    const svg = (window as any).svg;
+    const container = (window as any).container;
+    const width = (window as any).width;
+    const height = (window as any).height;
 
-    const { svg, container, width, height } = elements;
+    if (!svg || !container) return;
+
     const bounds = container.node().getBBox();
     const fullWidth = bounds.width;
     const fullHeight = bounds.height;
@@ -628,227 +610,94 @@ const BusinessKnowledgeGraph: React.FC = () => {
   };
 
   return (
-    <div
-      style={{
-        margin: 0,
-        padding: "20px",
-        fontFamily: "Segoe UI, Tahoma, Geneva, Verdana, sans-serif",
-        background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-        minHeight: "100vh",
-      }}
-    >
-      <div
-        style={{
-          background: "rgba(255, 255, 255, 0.95)",
-          borderRadius: "15px",
-          padding: "20px",
-          boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
-          backdropFilter: "blur(10px)",
-        }}
-      >
-        <h1
-          style={{
-            textAlign: "center",
-            color: "#2c3e50",
-            marginBottom: "10px",
-            fontSize: "2.2em",
-            fontWeight: 300,
-          }}
-        >
-          Business Knowledge Graph
-        </h1>
-        <p
-          style={{
-            textAlign: "center",
-            color: "#7f8c8d",
-            marginBottom: "20px",
-            fontSize: "1.1em",
-          }}
-        >
-          Interactive visualization of business entities and their relationships
-        </p>
-
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            gap: "15px",
-            marginBottom: "20px",
-            flexWrap: "wrap",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              background: "rgba(255, 255, 255, 0.8)",
-              padding: "8px 12px",
-              borderRadius: "20px",
-              boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-            }}
-          >
-            <label>Filter by Category:</label>
-            <select
-              style={{
-                border: "none",
-                background: "transparent",
-                color: "#2c3e50",
-                fontWeight: "500",
-                cursor: "pointer",
-              }}
-              value={categoryFilter}
-              onChange={(e) => setCategoryFilter(e.target.value)}
-            >
-              {categories.map((cat) => (
-                <option key={cat.value} value={cat.value}>
-                  {cat.label}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              background: "rgba(255, 255, 255, 0.8)",
-              padding: "8px 12px",
-              borderRadius: "20px",
-              boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-            }}
-          >
-            <button
-              style={{
-                border: "none",
-                background: "#3498db",
-                color: "white",
-                padding: "8px 16px",
-                borderRadius: "15px",
-                cursor: "pointer",
-                fontWeight: "500",
-                transition: "all 0.3s ease",
-              }}
-              onClick={resetSimulation}
-              onMouseOver={(e) => {
-                e.currentTarget.style.background = "#2980b9";
-                e.currentTarget.style.transform = "translateY(-1px)";
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.background = "#3498db";
-                e.currentTarget.style.transform = "translateY(0)";
-              }}
-            >
-              Reset Layout
-            </button>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              background: "rgba(255, 255, 255, 0.8)",
-              padding: "8px 12px",
-              borderRadius: "20px",
-              boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-            }}
-          >
-            <button
-              style={{
-                border: "none",
-                background: "#3498db",
-                color: "white",
-                padding: "8px 16px",
-                borderRadius: "15px",
-                cursor: "pointer",
-                fontWeight: "500",
-                transition: "all 0.3s ease",
-              }}
-              onClick={centerGraph}
-              onMouseOver={(e) => {
-                e.currentTarget.style.background = "#2980b9";
-                e.currentTarget.style.transform = "translateY(-1px)";
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.background = "#3498db";
-                e.currentTarget.style.transform = "translateY(0)";
-              }}
-            >
-              Center View
-            </button>
-          </div>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-indigo-700 p-5">
+      <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-5 shadow-2xl">
+        {/* Header */}
+        <div className="text-center mb-5">
+          <h1 className="text-4xl font-light text-gray-800 mb-2">
+            Business Knowledge Graph
+          </h1>
+          <p className="text-lg text-gray-600">
+            Interactive visualization of business entities and their
+            relationships
+          </p>
         </div>
 
+        {/* Controls */}
+        <div className="flex justify-center items-center gap-4 mb-5 flex-wrap">
+          <div className="flex items-center gap-2 bg-white/80 px-3 py-2 rounded-full shadow-lg">
+            <label className="text-sm font-medium text-gray-700">
+              Filter by Category:
+            </label>
+            <select
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+              className="bg-transparent border-none outline-none text-gray-800 font-medium cursor-pointer"
+            >
+              <option value="all">All Categories</option>
+              <option value="structure">Business Structure</option>
+              <option value="product">Product</option>
+              <option value="transaction">Transactions</option>
+              <option value="marketing">Marketing</option>
+              <option value="operations">Operations</option>
+              <option value="experience">Experience</option>
+              <option value="geography">Geography</option>
+            </select>
+          </div>
+          <button
+            onClick={resetSimulation}
+            className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 transition-all duration-300 hover:-translate-y-0.5 shadow-lg font-medium"
+          >
+            Reset Layout
+          </button>
+          <button
+            onClick={centerGraph}
+            className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 transition-all duration-300 hover:-translate-y-0.5 shadow-lg font-medium"
+          >
+            Center View
+          </button>
+        </div>
+
+        {/* Graph Container */}
         <div
           ref={containerRef}
-          style={{
-            width: "100%",
-            height: "700px",
-            border: "2px solid #ecf0f1",
-            borderRadius: "10px",
-            background: "linear-gradient(45deg, #f8f9fa 0%, #ffffff 100%)",
-            overflow: "hidden",
-          }}
+          className="w-full h-[700px] border-2 border-gray-200 rounded-xl bg-gradient-to-br from-gray-50 to-white overflow-hidden"
         >
           <svg ref={svgRef}></svg>
         </div>
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            flexWrap: "wrap",
-            gap: "15px",
-            marginTop: "15px",
-            padding: "15px",
-            background: "rgba(255, 255, 255, 0.7)",
-            borderRadius: "10px",
-          }}
-        >
-          {Object.entries(categoryColors).map(([category, color]) => (
+        {/* Legend */}
+        <div className="flex justify-center flex-wrap gap-4 mt-4 p-4 bg-white/70 rounded-xl">
+          {legendItems.map((item) => (
             <div
-              key={category}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-                fontSize: "12px",
-                fontWeight: "500",
-                color: "#2c3e50",
-              }}
+              key={item.category}
+              className="flex items-center gap-2 text-sm font-medium text-gray-800"
             >
               <div
-                style={{
-                  width: "16px",
-                  height: "16px",
-                  borderRadius: "50%",
-                  background: color,
-                  border: "2px solid #fff",
-                  boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
-                }}
-              />
-              {category.charAt(0).toUpperCase() + category.slice(1)}
+                className="w-4 h-4 rounded-full border-2 border-white shadow-sm"
+                style={{ backgroundColor: item.color }}
+              ></div>
+              <span>{item.label}</span>
             </div>
           ))}
         </div>
 
-        <div
-          ref={tooltipRef}
-          style={{
-            position: "absolute",
-            background: "rgba(0, 0, 0, 0.9)",
-            color: "white",
-            padding: "12px",
-            borderRadius: "8px",
-            fontSize: "12px",
-            pointerEvents: "none",
-            opacity: 0,
-            transition: "opacity 0.3s",
-            maxWidth: "300px",
-            zIndex: 1000,
-            boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
-          }}
-        />
+        {/* Tooltip */}
+        {tooltip.show && (
+          <div
+            className="fixed bg-gray-900/90 text-white p-3 rounded-lg text-xs pointer-events-none opacity-100 transition-opacity duration-300 max-w-xs z-50 shadow-xl"
+            style={{
+              left: tooltip.x + 10,
+              top: tooltip.y - 10,
+            }}
+          >
+            <div className="font-bold">{tooltip.content.label}</div>
+            <div className="italic text-gray-300 mb-1">
+              Category: {tooltip.content.category}
+            </div>
+            <div>{tooltip.content.description}</div>
+          </div>
+        )}
       </div>
     </div>
   );
