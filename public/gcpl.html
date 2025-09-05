@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GCPL Multi-Agent Finance Network Flow</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: radial-gradient(ellipse at center, #0f3460 0%, #1e5799 100%);
+            min-height: 100vh;
+            padding: 10px;
+            overflow: hidden;
+        }
+        
+        .container {
+            max-width: 100vw;
+            height: 100vh;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 15px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+            display: grid;
+            grid-template-rows: auto auto 1fr auto;
+            gap: 10px;
+        }
+        
+        .header {
+            text-align: center;
+            z-index: 100;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            font-size: 1.8em;
+            margin-bottom: 5px;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            z-index: 100;
+        }
+        
+        .question-card {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            text-align: center;
+        }
+        
+        .question-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            border-color: #3498db;
+        }
+        
+        .question-card.active {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border-color: #2471a3;
+        }
+        
+        .question-card h3 {
+            font-size: 1em;
+            margin-bottom: 8px;
+            color: inherit;
+        }
+        
+        .question-card p {
+            font-size: 0.85em;
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+        
+        .question-card .pattern {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.75em;
+            font-weight: 600;
+        }
+        
+        .question-card:not(.active) .pattern {
+            background: rgba(52, 152, 219, 0.1);
+            color: #3498db;
+        }
+        
+        .network-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .network-svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Network Edges */
+        .edge {
+            stroke: #bdc3c7;
+            stroke-width: 2;
+            fill: none;
+            opacity: 0.6;
+            transition: all 0.5s ease;
+        }
+        
+        .edge.active {
+            stroke: #3498db;
+            stroke-width: 4;
+            opacity: 1;
+            animation: pulseEdge 2s ease-in-out infinite;
+        }
+        
+        .edge.completed {
+            stroke: #27ae60;
+            stroke-width: 3;
+            opacity: 0.8;
+        }
+        
+        @keyframes pulseEdge {
+            0%, 100% { stroke-dasharray: 0; }
+            50% { stroke-dasharray: 10, 5; }
+        }
+        
+        /* Data Flow Animation */
+        .data-flow {
+            fill: #3498db;
+            r: 4;
+            opacity: 0;
+        }
+        
+        .data-flow.active {
+            opacity: 1;
+            animation: flowData 3s ease-in-out;
+        }
+        
+        @keyframes flowData {
+            0% { opacity: 1; r: 3; }
+            50% { opacity: 1; r: 6; }
+            100% { opacity: 0; r: 3; }
+        }
+        
+        /* Network Nodes */
+        .node {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .node circle {
+            fill: #f8f9fa;
+            stroke: #dee2e6;
+            stroke-width: 3;
+            transition: all 0.3s ease;
+        }
+        
+        .node.active circle {
+            fill: #3498db;
+            stroke: #2471a3;
+            stroke-width: 4;
+            animation: nodeGlow 2s ease-in-out infinite;
+        }
+        
+        .node.completed circle {
+            fill: #27ae60;
+            stroke: #1e8449;
+        }
+        
+        .node.processing circle {
+            fill: #f39c12;
+            stroke: #d68910;
+            animation: nodeProcess 1.5s ease-in-out infinite;
+        }
+        
+        .node.iteration circle {
+            fill: #e67e22;
+            stroke: #d35400;
+            animation: nodeIteration 1s ease-in-out infinite;
+        }
+        
+        @keyframes nodeGlow {
+            0%, 100% { filter: drop-shadow(0 0 5px rgba(52, 152, 219, 0.5)); }
+            50% { filter: drop-shadow(0 0 15px rgba(52, 152, 219, 0.8)); }
+        }
+        
+        @keyframes nodeProcess {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        @keyframes nodeIteration {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+        
+        .node text {
+            text-anchor: middle;
+            dominant-baseline: middle;
+            font-size: 9px;
+            font-weight: 600;
+            fill: #2c3e50;
+            pointer-events: none;
+        }
+        
+        /* Keep text always black and readable */
+        .node.active text, .node.completed text, .node.processing text, .node.iteration text {
+            fill: #2c3e50;
+            font-weight: 700;
+        }
+        
+        /* Special node types */
+        .classifier circle {
+            fill: #9b59b6;
+            stroke: #8e44ad;
+            r: 35;
+        }
+        
+        .knowledge-graph circle {
+            fill: #16a085;
+            stroke: #138d75;
+        }
+        
+        .agent circle {
+            fill: #3498db;
+            stroke: #2980b9;
+        }
+        
+        .compiler circle {
+            fill: #e74c3c;
+            stroke: #c0392b;
+        }
+        
+        /* Decision Points */
+        .decision-point {
+            fill: #f39c12;
+            stroke: #e67e22;
+            stroke-width: 3;
+        }
+        
+        /* Tooltips */
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 12px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1000;
+            max-width: 200px;
+        }
+        
+        .tooltip.show {
+            opacity: 1;
+        }
+        
+        /* Side Panels */
+        .side-panels {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 15px;
+            height: 120px;
+        }
+        
+        .status-panel {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+        }
+        
+        .status-panel h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+        
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 0;
+            border-bottom: 1px solid #e9ecef;
+            font-size: 0.85em;
+        }
+        
+        .status-item:last-child {
+            border-bottom: none;
+        }
+        
+        .status-badge {
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 9px;
+            font-weight: 600;
+        }
+        
+        .status-badge.waiting {
+            background: #f8f9fa;
+            color: #6c757d;
+        }
+        
+        .status-badge.active {
+            background: #3498db;
+            color: white;
+        }
+        
+        .status-badge.completed {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .status-badge.iteration {
+            background: #e67e22;
+            color: white;
+        }
+        
+        /* Execution Log */
+        .log-panel {
+            background: rgba(44, 62, 80, 0.95);
+            color: #ecf0f1;
+            border-radius: 15px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            overflow-y: auto;
+            font-size: 0.8em;
+        }
+        
+        .log-entry {
+            margin-bottom: 4px;
+            opacity: 0;
+            animation: fadeInLog 0.5s ease forwards;
+        }
+        
+        .log-entry.iteration {
+            color: #f39c12;
+        }
+        
+        .log-entry.highlight {
+            background: rgba(243, 156, 18, 0.1);
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        
+        @keyframes fadeInLog {
+            to { opacity: 1; }
+        }
+        
+        .timestamp {
+            color: #95a5a6;
+            margin-right: 8px;
+        }
+        
+        /* Branch Labels */
+        .branch-label {
+            font-size: 9px;
+            fill: #6c757d;
+            text-anchor: middle;
+        }
+        
+        /* Iteration Indicators */
+        .iteration-indicator {
+            position: absolute;
+            background: #f39c12;
+            color: #212529;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.7em;
+            font-weight: 600;
+            z-index: 150;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s ease;
+        }
+        
+        .iteration-indicator.show {
+            opacity: 1;
+            transform: scale(1);
+            animation: bounce 0.6s ease;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>GCPL Multi-Agent Finance Network Flow</h1>
+            <p>Select a finance question to see different execution patterns</p>
+        </div>
+        
+        <div class="controls">
+            <div class="question-card" onclick="executeQuestion(1)">
+                <h3>📊 P&L Analysis</h3>
+                <p>"Show MTD NSV vs prior month for India cluster"</p>
+                <div class="pattern">Single Agent Pattern</div>
+            </div>
+            
+            <div class="question-card" onclick="executeQuestion(2)">
+                <h3>📈 Variance Analysis</h3>
+                <p>"MoM EBITDA change with bridge for Consolidated view"</p>
+                <div class="pattern">Dual Agent Pattern</div>
+            </div>
+            
+            <div class="question-card" onclick="executeQuestion(3)">
+                <h3>🌍 FX Consolidation</h3>
+                <p>"LATAM cluster performance with constant currency and FX impact isolation"</p>
+                <div class="pattern">Multi-Round Pattern</div>
+            </div>
+        </div>
+        
+        <div class="network-container">
+            <svg class="network-svg" id="networkSvg" viewBox="0 0 1200 500">
+                <!-- Edges will be dynamically generated -->
+            </svg>
+            
+            <!-- Iteration indicators -->
+            <div class="iteration-indicator" id="iteration1" style="top: 200px; left: 300px;">Round 1</div>
+            <div class="iteration-indicator" id="iteration2" style="top: 250px; left: 600px;">Round 2</div>
+            <div class="iteration-indicator" id="iteration3" style="top: 300px; left: 400px;">Round 3</div>
+        </div>
+        
+        <div class="side-panels">
+            <div class="status-panel">
+                <h3>📋 Execution Status</h3>
+                <div id="statusContent">
+                    <div class="status-item">
+                        <span>Classifier</span>
+                        <span class="status-badge waiting" id="classifier-status">Waiting</span>
+                    </div>
+                    <div class="status-item">
+                        <span>Knowledge Graph</span>
+                        <span class="status-badge waiting" id="kg-status">Ready</span>
+                    </div>
+                    <div class="status-item">
+                        <span>P&L Agent</span>
+                        <span class="status-badge waiting" id="agent1-status">Standby</span>
+                    </div>
+                    <div class="status-item">
+                        <span>Variance Agent</span>
+                        <span class="status-badge waiting" id="agent2-status">Standby</span>
+                    </div>
+                    <div class="status-item">
+                        <span>FX Agent</span>
+                        <span class="status-badge waiting" id="agent3-status">Standby</span>
+                    </div>
+                    <div class="status-item">
+                        <span>Consolidation Agent</span>
+                        <span class="status-badge waiting" id="agent4-status">Standby</span>
+                    </div>
+                    <div class="status-item">
+                        <span>Response Compiler</span>
+                        <span class="status-badge waiting" id="compiler-status">Waiting</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="log-panel" id="logPanel">
+                <div style="font-weight: bold; margin-bottom: 8px;">💼 Finance Network Execution Log</div>
+                <div id="logContent"></div>
+            </div>
+        </div>
+        
+        <div class="tooltip" id="tooltip"></div>
+    </div>
+
+    <script>
+        // Network structure definition based on GCPL architecture
+        const networkNodes = [
+            // Core nodes
+            { id: 'user', x: 600, y: 40, r: 20, type: 'user', label: 'Finance\nRequest', description: 'Business finance question initiation point' },
+            { id: 'classifier', x: 600, y: 120, r: 35, type: 'classifier', label: 'Classifier\nAgent', description: 'Intent router with guardrails' },
+            
+            // Business Knowledge Graph
+            { id: 'bkg', x: 300, y: 200, r: 25, type: 'knowledge-graph', label: 'Business\nKnowledge\nGraph', description: 'Semantic backbone with entities and hierarchies' },
+            { id: 'bkg-entities', x: 200, y: 280, r: 16, type: 'knowledge-graph', label: 'Entity\nMapping', description: 'LEGAL_ENTITY, CLUSTER, PERIOD mapping' },
+            { id: 'bkg-vocab', x: 350, y: 280, r: 16, type: 'knowledge-graph', label: 'Vocabulary\n& Alias', description: 'NSV, GC, EBITDA standardization' },
+            { id: 'bkg-joins', x: 250, y: 350, r: 16, type: 'knowledge-graph', label: 'Join\nBlueprints', description: 'Approved join paths and hierarchies' },
+            
+            // Agent decision hub
+            { id: 'decision-agents', x: 600, y: 220, r: 12, type: 'decision', label: 'Agent\nSelection', description: 'Route to appropriate finance agents' },
+            
+            // Finance Dataset Master Agents
+            { id: 'agent-pnl', x: 450, y: 320, r: 22, type: 'agent', label: 'P&L\nAgent', description: 'Revenue, NSV, COGS, GC, EBITDA analysis' },
+            { id: 'agent-variance', x: 600, y: 320, r: 22, type: 'agent', label: 'Variance &\nBridge Agent', description: 'MoM/YoY deltas and bridges' },
+            { id: 'agent-fx', x: 750, y: 320, r: 22, type: 'agent', label: 'FX &\nConversion', description: 'Constant currency and FX impact' },
+            { id: 'agent-consolidation', x: 520, y: 380, r: 22, type: 'agent', label: 'Consolidation\nAgent', description: 'Entity rollups and eliminations' },
+            
+            // Tools and computations
+            { id: 'tool-coa', x: 350, y: 400, r: 15, type: 'agent', label: 'COA\nMapping', description: 'Chart of accounts to P&L lines' },
+            { id: 'tool-hierarchy', x: 450, y: 430, r: 15, type: 'agent', label: 'Entity\nHierarchy', description: 'Cluster rollup calculations' },
+            { id: 'tool-bridge', x: 600, y: 430, r: 15, type: 'agent', label: 'Bridge\nCalc', description: 'Price/Volume/Mix analysis' },
+            { id: 'tool-fx-calc', x: 750, y: 430, r: 15, type: 'agent', label: 'FX\nCalculation', description: 'Currency conversion logic' },
+            { id: 'tool-elimination', x: 650, y: 380, r: 15, type: 'agent', label: 'Elimination\nRules', description: 'Inter-company eliminations' },
+            
+            // Composition and output
+            { id: 'decision-compile', x: 600, y: 360, r: 12, type: 'decision', label: 'Result\nCompilation', description: 'Merge findings for output' },
+            { id: 'compiler', x: 900, y: 280, r: 25, type: 'compiler', label: 'Response\nCompiler', description: 'Consolidate results with lineage' },
+            { id: 'tool-format', x: 950, y: 220, r: 15, type: 'compiler', label: 'Format\n& Notes', description: 'Table formatting and explanations' },
+            { id: 'tool-lineage', x: 1000, y: 320, r: 15, type: 'compiler', label: 'Lineage\nFooter', description: 'How computed provenance' },
+            
+            // Output
+            { id: 'output', x: 900, y: 120, r: 20, type: 'user', label: 'Finance\nOutput', description: 'Defensible finance answer with lineage' }
+        ];
+        
+        const networkEdges = [
+            // Main flow
+            { from: 'user', to: 'classifier', label: 'Request' },
+            { from: 'classifier', to: 'bkg', label: 'Standardize' },
+            { from: 'classifier', to: 'decision-agents', label: 'Route' },
+            
+            // BKG operations
+            { from: 'bkg', to: 'bkg-entities', label: 'Entities' },
+            { from: 'bkg', to: 'bkg-vocab', label: 'Vocab' },
+            { from: 'bkg', to: 'bkg-joins', label: 'Joins' },
+            { from: 'bkg-entities', to: 'classifier', label: 'Mapped' },
+            { from: 'bkg-vocab', to: 'classifier', label: 'Standardized' },
+            { from: 'bkg-joins', to: 'classifier', label: 'Blueprints' },
+            
+            // Agent routing
+            { from: 'decision-agents', to: 'agent-pnl', label: 'P&L Analysis' },
+            { from: 'decision-agents', to: 'agent-variance', label: 'Variance' },
+            { from: 'decision-agents', to: 'agent-fx', label: 'FX Analysis' },
+            { from: 'decision-agents', to: 'agent-consolidation', label: 'Rollup' },
+            
+            // Tool execution
+            { from: 'agent-pnl', to: 'tool-coa', label: 'COA Map' },
+            { from: 'agent-pnl', to: 'tool-hierarchy', label: 'Hierarchy' },
+            { from: 'agent-variance', to: 'tool-bridge', label: 'Bridge' },
+            { from: 'agent-fx', to: 'tool-fx-calc', label: 'Convert' },
+            { from: 'agent-consolidation', to: 'tool-elimination', label: 'Eliminate' },
+            
+            // Results flow
+            { from: 'tool-coa', to: 'decision-compile', label: 'P&L Data' },
+            { from: 'tool-hierarchy', to: 'decision-compile', label: 'Rollup' },
+            { from: 'tool-bridge', to: 'decision-compile', label: 'Bridge' },
+            { from: 'tool-fx-calc', to: 'decision-compile', label: 'FX Data' },
+            { from: 'tool-elimination', to: 'decision-compile', label: 'Clean Data' },
+            
+            // Compilation
+            { from: 'decision-compile', to: 'compiler', label: 'Compile' },
+            { from: 'compiler', to: 'tool-format', label: 'Format' },
+            { from: 'compiler', to: 'tool-lineage', label: 'Lineage' },
+            { from: 'tool-format', to: 'output', label: 'Report' },
+            { from: 'tool-lineage', to: 'output', label: 'Provenance' }
+        ];
+        
+        let currentExecution = [];
+        let executionStep = 0;
+        let selectedQuestion = 0;
+        
+        function initializeNetwork() {
+            const svg = document.getElementById('networkSvg');
+            svg.innerHTML = '';
+            
+            // Create edges first
+            const edgesGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            edgesGroup.id = 'edges';
+            svg.appendChild(edgesGroup);
+            
+            networkEdges.forEach((edge, index) => {
+                const fromNode = networkNodes.find(n => n.id === edge.from);
+                const toNode = networkNodes.find(n => n.id === edge.to);
+                
+                if (fromNode && toNode) {
+                    // Create edge line
+                    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    line.setAttribute('x1', fromNode.x);
+                    line.setAttribute('y1', fromNode.y);
+                    line.setAttribute('x2', toNode.x);
+                    line.setAttribute('y2', toNode.y);
+                    line.classList.add('edge');
+                    line.id = `edge-${edge.from}-${edge.to}`;
+                    edgesGroup.appendChild(line);
+                    
+                    // Create edge label
+                    const midX = (fromNode.x + toNode.x) / 2;
+                    const midY = (fromNode.y + toNode.y) / 2;
+                    const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    label.setAttribute('x', midX);
+                    label.setAttribute('y', midY - 3);
+                    label.textContent = edge.label;
+                    label.classList.add('branch-label');
+                    edgesGroup.appendChild(label);
+                    
+                    // Create data flow circle
+                    const dataFlow = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    dataFlow.setAttribute('cx', fromNode.x);
+                    dataFlow.setAttribute('cy', fromNode.y);
+                    dataFlow.setAttribute('r', 4);
+                    dataFlow.classList.add('data-flow');
+                    dataFlow.id = `flow-${edge.from}-${edge.to}`;
+                    edgesGroup.appendChild(dataFlow);
+                }
+            });
+            
+            // Create nodes
+            const nodesGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            nodesGroup.id = 'nodes';
+            svg.appendChild(nodesGroup);
+            
+            networkNodes.forEach(node => {
+                const nodeGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                nodeGroup.classList.add('node');
+                nodeGroup.id = `node-${node.id}`;
+                
+                // Create circle
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', node.x);
+                circle.setAttribute('cy', node.y);
+                circle.setAttribute('r', node.r);
+                if (node.type === 'decision') {
+                    circle.classList.add('decision-point');
+                } else {
+                    circle.classList.add(node.type);
+                }
+                nodeGroup.appendChild(circle);
+                
+                // Create text label
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', node.x);
+                text.setAttribute('y', node.y);
+                
+                // Handle multi-line text
+                if (node.label.includes('\n')) {
+                    const lines = node.label.split('\n');
+                    lines.forEach((line, index) => {
+                        const tspan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+                        tspan.setAttribute('x', node.x);
+                        tspan.setAttribute('y', node.y + (index - (lines.length - 1) / 2) * 10);
+                        tspan.textContent = line;
+                        text.appendChild(tspan);
+                    });
+                } else {
+                    text.textContent = node.label;
+                }
+                
+                nodeGroup.appendChild(text);
+                
+                // Add event listeners
+                nodeGroup.addEventListener('mouseenter', (e) => showTooltip(e, node));
+                nodeGroup.addEventListener('mouseleave', hideTooltip);
+                
+                nodesGroup.appendChild(nodeGroup);
+            });
+        }
+        
+        function showTooltip(event, node) {
+            const tooltip = document.getElementById('tooltip');
+            const displayLabel = node.label.replace(/\n/g, ' ');
+            tooltip.innerHTML = `<strong>${displayLabel}</strong><br>${node.description}`;
+            tooltip.style.left = (event.pageX + 10) + 'px';
+            tooltip.style.top = (event.pageY - 10) + 'px';
+            tooltip.classList.add('show');
+        }
+        
+        function hideTooltip() {
+            document.getElementById('tooltip').classList.remove('show');
+        }
+        
+        function updateNodeStatus(nodeId, status) {
+            const node = document.getElementById(`node-${nodeId}`);
+            if (node) {
+                node.classList.remove('active', 'completed', 'processing', 'iteration');
+                if (status !== 'waiting') {
+                    node.classList.add(status);
+                }
+            }
+        }
+        
+        function updateStatusPanel(nodeId, status) {
+            const statusMap = {
+                'classifier': 'classifier-status',
+                'bkg': 'kg-status',
+                'agent-pnl': 'agent1-status',
+                'agent-variance': 'agent2-status',
+                'agent-fx': 'agent3-status',
+                'agent-consolidation': 'agent4-status',
+                'compiler': 'compiler-status'
+            };
+            
+            const statusElement = document.getElementById(statusMap[nodeId]);
+            if (statusElement) {
+                statusElement.className = `status-badge ${status}`;
+                statusElement.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+            }
+        }
+        
+        function activateEdge(fromId, toId) {
+            const edge = document.getElementById(`edge-${fromId}-${toId}`);
+            const flow = document.getElementById(`flow-${fromId}-${toId}`);
+            
+            if (edge) {
+                edge.classList.add('active');
+                setTimeout(() => {
+                    edge.classList.remove('active');
+                    edge.classList.add('completed');
+                }, 2000);
+            }
+            
+            if (flow) {
+                flow.classList.add('active');
+                setTimeout(() => {
+                    flow.classList.remove('active');
+                }, 3000);
+            }
+        }
+        
+        function showIteration(iterationId) {
+            document.getElementById(iterationId).classList.add('show');
+            setTimeout(() => {
+                document.getElementById(iterationId).classList.remove('show');
+            }, 3000);
+        }
+        
+        function addLog(message, type = 'normal') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logContent = document.getElementById('logContent');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            if (type === 'iteration') {
+                entry.classList.add('highlight');
+            }
+            entry.innerHTML = `<span class="timestamp">[${timestamp}]</span>${message}`;
+            logContent.appendChild(entry);
+            logContent.scrollTop = logContent.scrollHeight;
+        }
+        
+        async function executeQuestion(questionNumber) {
+            // Reset and highlight selected question
+            document.querySelectorAll('.question-card').forEach(card => card.classList.remove('active'));
+            document.querySelectorAll('.question-card')[questionNumber - 1].classList.add('active');
+            
+            resetNetwork();
+            selectedQuestion = questionNumber;
+            
+            const questions = [
+                null, // index 0 unused
+                {
+                    title: "P&L Analysis",
+                    question: "Show MTD NSV vs prior month for India cluster",
+                    pattern: "pnl-only"
+                },
+                {
+                    title: "Variance Analysis", 
+                    question: "MoM EBITDA change with bridge for Consolidated view",
+                    pattern: "pnl-variance"
+                },
+                {
+                    title: "FX Consolidation",
+                    question: "LATAM cluster performance with constant currency and FX impact isolation",
+                    pattern: "multi-round-fx"
+                }
+            ];
+            
+            const currentQ = questions[questionNumber];
+            addLog(`💼 Starting ${currentQ.title}: "${currentQ.question}"`);
+            
+            // Common initial steps
+            await commonInitialSteps();
+            
+            // Execute based on pattern
+            switch (currentQ.pattern) {
+                case 'pnl-only':
+                    await executePnLAnalysis();
+                    break;
+                case 'pnl-variance':
+                    await executeVarianceAnalysis();
+                    break;
+                case 'multi-round-fx':
+                    await executeFXConsolidation();
+                    break;
+            }
+        }
+        
+        async function commonInitialSteps() {
+            // Step 1: User submits finance request
+            updateNodeStatus('user', 'active');
+            addLog('👤 Finance User: Submitting P&L request');
+            await delay(1000);
+            
+            // Step 2: Classifier receives and routes
+            activateEdge('user', 'classifier');
+            updateNodeStatus('user', 'completed');
+            updateNodeStatus('classifier', 'active');
+            updateStatusPanel('classifier', 'active');
+            addLog('🎯 Classifier Agent: Interpreting finance question and applying guardrails');
+            await delay(1500);
+            
+            // Step 3: BKG standardization
+            activateEdge('classifier', 'bkg');
+            updateNodeStatus('bkg', 'active');
+            updateStatusPanel('bkg', 'active');
+            addLog('🧠 Business Knowledge Graph: Standardizing finance terms');
+            await delay(1000);
+            
+            // Step 4: BKG operations
+            activateEdge('bkg', 'bkg-entities');
+            activateEdge('bkg', 'bkg-vocab');
+            activateEdge('bkg', 'bkg-joins');
+            updateNodeStatus('bkg-entities', 'active');
+            updateNodeStatus('bkg-vocab', 'active');
+            updateNodeStatus('bkg-joins', 'active');
+            addLog('   → Entity mapping: "India" → CLUSTER:IND');
+            addLog('   → Vocabulary: "NSV" → Net Sales Value (IND AS)');
+            addLog('   → Join blueprints: actuals_to_budget loaded');
+            await delay(2000);
+            
+            // Step 5: BKG returns standardized terms
+            activateEdge('bkg-entities', 'classifier');
+            activateEdge('bkg-vocab', 'classifier');
+            activateEdge('bkg-joins', 'classifier');
+            updateNodeStatus('bkg-entities', 'completed');
+            updateNodeStatus('bkg-vocab', 'completed');
+            updateNodeStatus('bkg-joins', 'completed');
+            updateNodeStatus('bkg', 'completed');
+            updateStatusPanel('bkg', 'completed');
+            addLog('✅ BKG: Finance semantics standardized and ready');
+            await delay(1000);
+        }
+        
+        async function executePnLAnalysis() {
+            addLog('📊 Pattern: Single Agent - P&L Analysis Only');
+            
+            // Agent routing decision
+            activateEdge('classifier', 'decision-agents');
+            updateNodeStatus('decision-agents', 'active');
+            addLog('🔀 Classifier: Routing to P&L Agent for revenue analysis');
+            await delay(1000);
+            
+            // P&L Agent execution
+            activateEdge('decision-agents', 'agent-pnl');
+            updateNodeStatus('agent-pnl', 'active');
+            updateStatusPanel('agent-pnl', 'active');
+            addLog('📊 P&L Agent: Starting NSV analysis for India cluster');
+            await delay(1500);
+            
+            // Tool execution
+            activateEdge('agent-pnl', 'tool-coa');
+            updateNodeStatus('tool-coa', 'active');
+            addLog('🔧 Tool: Chart of Accounts mapping to Revenue lines');
+            await delay(2000);
+            
+            // Direct to compilation
+            activateEdge('tool-coa', 'decision-compile');
+            updateNodeStatus('tool-coa', 'completed');
+            updateNodeStatus('decision-compile', 'active');
+            addLog('📈 Result: MTD NSV ₹2,847M vs Prior ₹2,654M (+7.3%)');
+            await delay(1000);
+            
+            // Response compilation
+            activateEdge('decision-compile', 'compiler');
+            updateNodeStatus('compiler', 'active');
+            updateStatusPanel('compiler', 'active');
+            addLog('📝 Response Compiler: Formatting P&L summary with lineage');
+            await delay(1500);
+            
+            // Final output with provenance
+            activateEdge('compiler', 'tool-format');
+            activateEdge('compiler', 'tool-lineage');
+            updateNodeStatus('tool-format', 'active');
+            updateNodeStatus('tool-lineage', 'active');
+            await delay(1500);
+            
+            activateEdge('tool-format', 'output');
+            activateEdge('tool-lineage', 'output');
+            updateNodeStatus('tool-format', 'completed');
+            updateNodeStatus('tool-lineage', 'completed');
+            updateNodeStatus('compiler', 'completed');
+            updateNodeStatus('output', 'active');
+            updateStatusPanel('compiler', 'completed');
+            addLog('✅ Single Agent P&L Analysis Complete with full lineage');
+        }
+        
+        async function executeVarianceAnalysis() {
+            addLog('📈 Pattern: Dual Agent - P&L + Variance Analysis');
+            
+            // Agent routing decision
+            activateEdge('classifier', 'decision-agents');
+            updateNodeStatus('decision-agents', 'active');
+            addLog('🔀 Classifier: Routing to P&L and Variance Agents');
+            await delay(1000);
+            
+            // Parallel agent execution
+            activateEdge('decision-agents', 'agent-pnl');
+            activateEdge('decision-agents', 'agent-variance');
+            updateNodeStatus('agent-pnl', 'active');
+            updateNodeStatus('agent-variance', 'active');
+            updateStatusPanel('agent-pnl', 'active');
+            updateStatusPanel('agent-variance', 'active');
+            addLog('📊 P&L Agent: Computing EBITDA for current period');
+            addLog('📈 Variance Agent: Preparing MoM bridge analysis');
+            await delay(2000);
+            
+            // Tool execution
+            activateEdge('agent-pnl', 'tool-coa');
+            activateEdge('agent-variance', 'tool-bridge');
+            updateNodeStatus('tool-coa', 'active');
+            updateNodeStatus('tool-bridge', 'active');
+            addLog('🔧 Tools: COA mapping and bridge calculations running in parallel');
+            await delay(2500);
+            
+            // Data flows to compilation
+            activateEdge('tool-coa', 'decision-compile');
+            activateEdge('tool-bridge', 'decision-compile');
+            updateNodeStatus('tool-coa', 'completed');
+            updateNodeStatus('tool-bridge', 'completed');
+            updateNodeStatus('decision-compile', 'active');
+            addLog('📊 P&L Data: EBITDA ₹847M current vs ₹782M prior');
+            addLog('📈 Bridge Data: Volume +₹45M, Price +₹30M, Cost -₹10M');
+            await delay(1500);
+            
+            // Response compilation
+            activateEdge('decision-compile', 'compiler');
+            updateNodeStatus('compiler', 'active');
+            updateStatusPanel('compiler', 'active');
+            addLog('📝 Response Compiler: Merging P&L and variance data');
+            await delay(2000);
+            
+            // Final processing with lineage
+            activateEdge('compiler', 'tool-format');
+            activateEdge('compiler', 'tool-lineage');
+            updateNodeStatus('tool-format', 'active');
+            updateNodeStatus('tool-lineage', 'active');
+            addLog('   → EBITDA increased ₹65M (+8.3%) driven by volume and price');
+            await delay(1500);
+            
+            // Final output
+            activateEdge('tool-format', 'output');
+            activateEdge('tool-lineage', 'output');
+            updateNodeStatus('tool-format', 'completed');
+            updateNodeStatus('tool-lineage', 'completed');
+            updateNodeStatus('compiler', 'completed');
+            updateNodeStatus('output', 'active');
+            updateStatusPanel('compiler', 'completed');
+            addLog('✅ Dual Agent Variance Analysis Complete');
+        }
+        
+        async function executeFXConsolidation() {
+            addLog('🌍 Pattern: Multi-Round FX Consolidation Analysis');
+            
+            // Initial routing decision
+            activateEdge('classifier', 'decision-agents');
+            updateNodeStatus('decision-agents', 'active');
+            addLog('🔀 Classifier: Planning multi-round FX consolidation');
+            await delay(1000);
+            
+            // Round 1: P&L Agent for base figures
+            showIteration('iteration1');
+            updateNodeStatus('classifier', 'iteration');
+            updateStatusPanel('classifier', 'iteration');
+            activateEdge('decision-agents', 'agent-pnl');
+            updateNodeStatus('agent-pnl', 'active');
+            updateStatusPanel('agent-pnl', 'active');
+            addLog('📊 Round 1 - Classifier → P&L Agent: "Get LATAM base figures"', 'iteration');
+            await delay(2000);
+            
+            activateEdge('agent-pnl', 'tool-coa');
+            updateNodeStatus('tool-coa', 'active');
+            addLog('   → P&L Agent: Retrieving LATAM figures in local currencies', 'iteration');
+            await delay(2000);
+            
+            // P&L reports back to Classifier
+            updateNodeStatus('tool-coa', 'completed');
+            updateNodeStatus('agent-pnl', 'completed');
+            updateStatusPanel('agent-pnl', 'completed');
+            addLog('   → P&L Agent → Classifier: "LATAM Revenue: BRL 450M, MXN 2.1B"', 'iteration');
+            await delay(1500);
+            
+            // Round 2: FX Agent for currency conversion
+            showIteration('iteration2');
+            updateNodeStatus('classifier', 'processing');
+            activateEdge('classifier', 'agent-fx');
+            updateNodeStatus('agent-fx', 'active');
+            updateStatusPanel('agent-fx', 'active');
+            addLog('💱 Round 2 - Classifier → FX Agent: "Convert to USD and show FX impact"', 'iteration');
+            await delay(2000);
+            
+            activateEdge('agent-fx', 'tool-fx-calc');
+            updateNodeStatus('tool-fx-calc', 'active');
+            addLog('   → FX Agent: Computing reported vs constant currency views', 'iteration');
+            await delay(2500);
+            
+            // FX Agent reports back
+            updateNodeStatus('tool-fx-calc', 'completed');
+            updateNodeStatus('agent-fx', 'completed');
+            updateStatusPanel('agent-fx', 'completed');
+            addLog('   → FX Agent → Classifier: "USD 847M reported, USD 798M constant, FX impact +USD 49M"', 'iteration');
+            await delay(1500);
+            
+            // Round 3: Consolidation Agent for eliminations
+            showIteration('iteration3');
+            activateEdge('classifier', 'agent-consolidation');
+            updateNodeStatus('agent-consolidation', 'active');
+            updateStatusPanel('agent-consolidation', 'active');
+            addLog('🏢 Round 3 - Classifier → Consolidation: "Apply inter-company eliminations"', 'iteration');
+            await delay(2000);
+            
+            activateEdge('agent-consolidation', 'tool-elimination');
+            updateNodeStatus('tool-elimination', 'active');
+            addLog('   → Consolidation Agent: Applying LATAM elimination rules', 'iteration');
+            await delay(2500);
+            
+            // Final consolidation response
+            updateNodeStatus('tool-elimination', 'completed');
+            updateNodeStatus('agent-consolidation', 'completed');
+            updateStatusPanel('agent-consolidation', 'completed');
+            addLog('   → Consolidation → Classifier: "Final consolidated: USD 831M"', 'iteration');
+            await delay(1500);
+            
+            // Classifier directs final compilation
+            updateNodeStatus('classifier', 'completed');
+            updateStatusPanel('classifier', 'completed');
+            activateEdge('classifier', 'decision-compile');
+            updateNodeStatus('decision-compile', 'active');
+            addLog('📊 Classifier: "All rounds complete, compile comprehensive FX report"');
+            await delay(1500);
+            
+            activateEdge('decision-compile', 'compiler');
+            updateNodeStatus('compiler', 'active');
+            updateStatusPanel('compiler', 'active');
+            addLog('📝 Response Compiler: Synthesizing 3-round FX consolidation');
+            await delay(2000);
+            
+            activateEdge('compiler', 'tool-format');
+            activateEdge('compiler', 'tool-lineage');
+            updateNodeStatus('tool-format', 'active');
+            updateNodeStatus('tool-lineage', 'active');
+            addLog('   → Report: LATAM USD 831M (reported), USD 798M (constant), FX +USD 49M');
+            await delay(1500);
+            
+            // Final output
+            activateEdge('tool-format', 'output');
+            activateEdge('tool-lineage', 'output');
+            updateNodeStatus('tool-format', 'completed');
+            updateNodeStatus('tool-lineage', 'completed');
+            updateNodeStatus('compiler', 'completed');
+            updateNodeStatus('output', 'active');
+            updateStatusPanel('compiler', 'completed');
+            addLog('✅ Multi-Round FX Consolidation Complete with full lineage');
+        }
+        
+        function resetNetwork() {
+            // Reset all nodes
+            networkNodes.forEach(node => {
+                updateNodeStatus(node.id, 'waiting');
+            });
+            
+            // Reset all edges
+            document.querySelectorAll('.edge').forEach(edge => {
+                edge.classList.remove('active', 'completed');
+            });
+            
+            // Reset status panel
+            document.querySelectorAll('.status-badge').forEach(badge => {
+                badge.className = 'status-badge waiting';
+                badge.textContent = badge.id.includes('kg') ? 'Ready' : 'Waiting';
+            });
+            
+            // Hide iteration indicators
+            document.querySelectorAll('.iteration-indicator').forEach(indicator => {
+                indicator.classList.remove('show');
+            });
+            
+            // Clear log
+            document.getElementById('logContent').innerHTML = '';
+            addLog('🔄 Finance network reset - Select a question to see execution pattern');
+        }
+        
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        
+        // Initialize the network on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeNetwork();
+            addLog('💼 GCPL Multi-Agent Finance Framework initialized');
+            addLog('💡 Select a finance question above to see different execution patterns');
+        });
+    </script>
+</body>
+</html>
