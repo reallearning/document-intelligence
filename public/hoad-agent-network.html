@@ -1,0 +1,1856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOAD Multi-Agent Retail Analytics Network</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: radial-gradient(ellipse at center, #0a192f 0%, #020c1b 100%);
+            min-height: 100vh;
+            padding: 10px;
+            overflow: hidden;
+        }
+        
+        .container {
+            max-width: 100vw;
+            height: 100vh;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 15px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+            display: grid;
+            grid-template-rows: auto auto 1fr auto;
+            gap: 10px;
+        }
+
+        .main-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr; /* left: questions, right: network */
+  gap: 15px;
+  height: 100%;
+  overflow: hidden;
+}
+        
+        .header {
+            text-align: center;
+            z-index: 100;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            font-size: 1.8em;
+            margin-bottom: 5px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .header p {
+            color: #7f8c8d;
+            font-size: 0.85em;
+        }
+        
+        .controls {
+            display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  padding-right: 5px;
+  max-height: 100%;
+        }
+        
+        .question-card {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 12px;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            text-align: left;
+        }
+        
+        .question-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+            border-color: #667eea;
+        }
+        
+        .question-card.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: #5568d3;
+        }
+        
+        .question-card h3 {
+            font-size: 0.85em;
+            margin-bottom: 5px;
+            color: inherit;
+        }
+        
+        .question-card p {
+            font-size: 0.7em;
+            opacity: 0.8;
+            margin-bottom: 6px;
+            line-height: 1.3;
+        }
+        
+        .question-card .pattern {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 3px 6px;
+            border-radius: 10px;
+            font-size: 0.65em;
+            font-weight: 600;
+        }
+        
+        .question-card:not(.active) .pattern {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+        
+        .network-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .network-svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Network Edges */
+        .edge {
+            stroke: #bdc3c7;
+            stroke-width: 2;
+            fill: none;
+            opacity: 0.6;
+            transition: all 0.5s ease;
+        }
+        
+        .edge.active {
+            stroke: #667eea;
+            stroke-width: 4;
+            opacity: 1;
+            animation: pulseEdge 2s ease-in-out infinite;
+        }
+        
+        .edge.completed {
+            stroke: #27ae60;
+            stroke-width: 3;
+            opacity: 0.8;
+        }
+        
+        @keyframes pulseEdge {
+            0%, 100% { stroke-dasharray: 0; }
+            50% { stroke-dasharray: 10, 5; }
+        }
+        
+        /* Data Flow Animation */
+        .data-flow {
+            fill: #667eea;
+            r: 4;
+            opacity: 0;
+        }
+        
+        .data-flow.active {
+            opacity: 1;
+            animation: flowData 3s ease-in-out;
+        }
+        
+        @keyframes flowData {
+            0% { opacity: 1; r: 3; }
+            50% { opacity: 1; r: 6; }
+            100% { opacity: 0; r: 3; }
+        }
+        
+        /* Network Nodes */
+        .node {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .node circle {
+            fill: #f8f9fa;
+            stroke: #dee2e6;
+            stroke-width: 3;
+            transition: all 0.3s ease;
+        }
+        
+        .node.active circle {
+            fill: #667eea;
+            stroke: #5568d3;
+            stroke-width: 4;
+            animation: nodeGlow 2s ease-in-out infinite;
+        }
+        
+        .node.completed circle {
+            fill: #27ae60;
+            stroke: #1e8449;
+        }
+        
+        .node.processing circle {
+            fill: #f39c12;
+            stroke: #d68910;
+            animation: nodeProcess 1.5s ease-in-out infinite;
+        }
+        
+        .node.iteration circle {
+            fill: #e67e22;
+            stroke: #d35400;
+            animation: nodeIteration 1s ease-in-out infinite;
+        }
+        
+        @keyframes nodeGlow {
+            0%, 100% { filter: drop-shadow(0 0 5px rgba(102, 126, 234, 0.5)); }
+            50% { filter: drop-shadow(0 0 15px rgba(102, 126, 234, 0.8)); }
+        }
+        
+        @keyframes nodeProcess {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        @keyframes nodeIteration {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+        
+        .node text {
+            text-anchor: middle;
+            dominant-baseline: middle;
+            font-size: 8px;
+            font-weight: 600;
+            fill: #2c3e50;
+            pointer-events: none;
+        }
+        
+        .node.active text, .node.completed text, .node.processing text, .node.iteration text {
+            fill: #2c3e50;
+            font-weight: 700;
+        }
+        
+        /* Agent node types */
+        .orchestrator circle {
+            fill: #9b59b6;
+            stroke: #8e44ad;
+            r: 35;
+        }
+        
+        .knowledge-graph circle {
+            fill: #16a085;
+            stroke: #138d75;
+        }
+        
+        .sales-agent circle {
+            fill: #3498db;
+            stroke: #2980b9;
+        }
+        
+        .inventory-agent circle {
+            fill: #e74c3c;
+            stroke: #c0392b;
+        }
+        
+        .product-agent circle {
+            fill: #27ae60;
+            stroke: #229954;
+        }
+        
+        .store-agent circle {
+            fill: #f39c12;
+            stroke: #e67e22;
+        }
+        
+        .executor-agent circle {
+            fill: #e67e22;
+            stroke: #d35400;
+        }
+        
+        .compiler circle {
+            fill: #2c3e50;
+            stroke: #34495e;
+        }
+        
+        .decision-point {
+            fill: #f39c12;
+            stroke: #e67e22;
+            stroke-width: 3;
+        }
+        
+        /* Tooltips */
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 11px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1000;
+            max-width: 220px;
+        }
+        
+        .tooltip.show {
+            opacity: 1;
+        }
+        
+        /* Side Panels */
+        .side-panels {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 15px;
+            height: 120px;
+        }
+        
+        .status-panel {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+        }
+        
+        .status-panel h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+        }
+        
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 3px 0;
+            border-bottom: 1px solid #e9ecef;
+            font-size: 0.8em;
+        }
+        
+        .status-item:last-child {
+            border-bottom: none;
+        }
+        
+        .status-badge {
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 9px;
+            font-weight: 600;
+        }
+        
+        .status-badge.waiting {
+            background: #f8f9fa;
+            color: #6c757d;
+        }
+        
+        .status-badge.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .status-badge.completed {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .status-badge.iteration {
+            background: #e67e22;
+            color: white;
+        }
+        
+        /* Execution Log */
+        .log-panel {
+            background: rgba(44, 62, 80, 0.95);
+            color: #ecf0f1;
+            border-radius: 15px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            overflow-y: auto;
+            font-size: 0.75em;
+        }
+        
+        .log-entry {
+            margin-bottom: 3px;
+            opacity: 0;
+            animation: fadeInLog 0.5s ease forwards;
+        }
+        
+        .log-entry.iteration {
+            color: #f39c12;
+        }
+        
+        .log-entry.highlight {
+            background: rgba(243, 156, 18, 0.1);
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        
+        @keyframes fadeInLog {
+            to { opacity: 1; }
+        }
+        
+        .timestamp {
+            color: #95a5a6;
+            margin-right: 8px;
+        }
+        
+        .branch-label {
+            font-size: 8px;
+            fill: #6c757d;
+            text-anchor: middle;
+        }
+        
+        /* Iteration Indicators */
+        .iteration-indicator {
+            position: absolute;
+            background: #f39c12;
+            color: #212529;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.7em;
+            font-weight: 600;
+            z-index: 150;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s ease;
+        }
+        
+        .iteration-indicator.show {
+            opacity: 1;
+            transform: scale(1);
+            animation: bounce 0.6s ease;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏪 HOAD Multi-Agent Retail Analytics Network</h1>
+            <p>Select a retail analytics question to see agent orchestration and graph traversal</p>
+        </div>
+        <div class="main-layout">
+        <div class="controls">
+            <div class="question-card" onclick="executeQuestion(1)">
+                <h3>💰 Discount ROI</h3>
+                <p>"ROI of last week's TPR for Style S in Cluster West?"</p>
+                <div class="pattern">Multi-Agent Analysis</div>
+            </div>
+            
+            <div class="question-card" onclick="executeQuestion(2)">
+                <h3>📉 Revenue Loss</h3>
+                <p>"Revenue lost last week due to OOS in Tops?"</p>
+                <div class="pattern">Inv + Sales Pattern</div>
+            </div>
+            
+            <div class="question-card" onclick="executeQuestion(3)">
+                <h3>🎯 Style Verdict</h3>
+                <p>"Should we double-down or exit Style S?"</p>
+                <div class="pattern">Scorecard Pattern</div>
+            </div>
+            
+            <div class="question-card" onclick="executeQuestion(4)">
+                <h3>💵 Capital Tied Up</h3>
+                <p>"Capital in aged inventory (>8w) for Dresses?"</p>
+                <div class="pattern">Inv + Product Pattern</div>
+            </div>
+            
+            <div class="question-card" onclick="executeQuestion(5)">
+                <h3>⏰ Ageing Alert</h3>
+                <p>"SKUs crossed 12w age threshold with STR<30%?"</p>
+                <div class="pattern">Dual-Agent Filter</div>
+            </div>
+            
+            <div class="question-card" onclick="executeQuestion(6)">
+                <h3>📈 Store Momentum</h3>
+                <p>"Stores with positive momentum for AND brand (6w)?"</p>
+                <div class="pattern">Trend Analysis</div>
+            </div>
+            
+            <div class="question-card" onclick="executeQuestion(7)">
+                <h3>💲 Price Elasticity</h3>
+                <p>"Price elasticity for Tops in South region?"</p>
+                <div class="pattern">Regression Pattern</div>
+            </div>
+            
+            <div class="question-card" onclick="executeQuestion(8)">
+                <h3>📦 Replenishment</h3>
+                <p>"Reorder quantities for Core SKUs (10d lead)?"</p>
+                <div class="pattern">ROP Calculation</div>
+            </div>
+            
+            <div class="question-card" onclick="executeQuestion(9)">
+                <h3>👗 Size Mix</h3>
+                <p>"Where is size curve broken for Women's Kurtas?"</p>
+                <div class="pattern">Mix Analysis</div>
+            </div>
+            
+            <div class="question-card" onclick="executeQuestion(10)">
+                <h3>🔄 Recovery Mix</h3>
+                <p>"Lost revenue: what % recoverable via replen vs discount?"</p>
+                <div class="pattern">Multi-Round Simulation</div>
+            </div>
+        </div>
+        
+        <div class="network-container">
+            <svg class="network-svg" id="networkSvg" viewBox="0 0 1200 500">
+                <!-- Edges dynamically generated -->
+            </svg>
+            
+            <div class="iteration-indicator" id="iteration1" style="top: 200px; left: 300px;">Round 1</div>
+            <div class="iteration-indicator" id="iteration2" style="top: 250px; left: 600px;">Round 2</div>
+            <div class="iteration-indicator" id="iteration3" style="top: 300px; left: 400px;">Round 3</div>
+        </div>
+        </div>
+        <div class="side-panels">
+            <div class="status-panel">
+                <h3>⚙️ Agent Status</h3>
+                <div id="statusContent">
+                    <div class="status-item">
+                        <span>Orchestrator</span>
+                        <span class="status-badge waiting" id="orchestrator-status">Waiting</span>
+                    </div>
+                    <div class="status-item">
+                        <span>Sales Agent</span>
+                        <span class="status-badge waiting" id="sales-status">Standby</span>
+                    </div>
+                    <div class="status-item">
+                        <span>Inventory Agent</span>
+                        <span class="status-badge waiting" id="inventory-status">Standby</span>
+                    </div>
+                    <div class="status-item">
+                        <span>Product Agent</span>
+                        <span class="status-badge waiting" id="product-status">Standby</span>
+                    </div>
+                    <div class="status-item">
+                        <span>Store Agent</span>
+                        <span class="status-badge waiting" id="store-status">Standby</span>
+                    </div>
+                    <div class="status-item">
+                        <span>Executor Agent</span>
+                        <span class="status-badge waiting" id="executor-status">Standby</span>
+                    </div>
+                    <div class="status-item">
+                        <span>Response Compiler</span>
+                        <span class="status-badge waiting" id="compiler-status">Waiting</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="log-panel" id="logPanel">
+                <div style="font-weight: bold; margin-bottom: 8px;">🏪 HOAD Retail Analytics Execution Log</div>
+                <div id="logContent"></div>
+            </div>
+        </div>
+        
+        <div class="tooltip" id="tooltip"></div>
+    </div>
+
+    <script>
+        
+        // HOAD Network Architecture
+        const networkNodes = [
+            // Core orchestration
+            { id: 'user', x: 600, y: 40, r: 20, type: 'user', label: 'Retail\nQuery', description: 'Business question from merchandiser/buyer' },
+            { id: 'planner', x: 600, y: 100, r: 25, type: 'orchestrator', label: 'Planner', description: 'Query classification and intent routing' },
+            { id: 'orchestrator', x: 600, y: 180, r: 35, type: 'orchestrator', label: 'Orchestrator', description: 'Agent coordination & graph query execution' },
+            
+            // Knowledge Graph
+            { id: 'graph', x: 200, y: 250, r: 28, type: 'knowledge-graph', label: 'Retail\nKnowledge\nGraph', description: 'Store/SKU/Style/Sale/Inventory graph' },
+            { id: 'graph-style', x: 100, y: 320, r: 15, type: 'knowledge-graph', label: 'Style→SKU', description: 'Product hierarchy relationships' },
+            { id: 'graph-store', x: 180, y: 350, r: 15, type: 'knowledge-graph', label: 'Store→Region', description: 'Location hierarchy' },
+            { id: 'graph-promo', x: 260, y: 320, r: 15, type: 'knowledge-graph', label: 'Promo→Day', description: 'Promotional calendar' },
+            
+            // Domain Agents (arranged in arc)
+            { id: 'agent-sales', x: 420, y: 280, r: 24, type: 'sales-agent', label: 'Sales\nAgent', description: 'Velocity, returns, discounts, projections' },
+            { id: 'agent-inventory', x: 520, y: 300, r: 24, type: 'inventory-agent', label: 'Inventory\nAgent', description: 'Stock status, movements, WOS, age' },
+            { id: 'agent-product', x: 620, y: 310, r: 24, type: 'product-agent', label: 'Product\nAgent', description: 'Style/SKU mapping, cost, categories' },
+            { id: 'agent-store', x: 720, y: 300, r: 24, type: 'store-agent', label: 'Store\nAgent', description: 'Store attributes, clusters, regions' },
+            
+            // Tools layer (Sales Agent)
+            { id: 'tool-velocity', x: 350, y: 360, r: 14, type: 'sales-agent', label: 'Sales\nVelocity', description: 'Availability-adjusted velocity calc' },
+            { id: 'tool-returns', x: 400, y: 380, r: 14, type: 'sales-agent', label: 'Returns\nTool', description: 'Return rate and value analysis' },
+            { id: 'tool-discount', x: 450, y: 360, r: 14, type: 'sales-agent', label: 'Discount\nTool', description: 'Promo window and depth analysis' },
+            { id: 'tool-projection', x: 400, y: 340, r: 14, type: 'sales-agent', label: 'Sales\nProjection', description: 'Baseline demand estimation' },
+            { id: 'tool-lfl', x: 350, y: 400, r: 14, type: 'sales-agent', label: 'Like-for-Like', description: 'Sell-through rate calculation' },
+            
+            // Tools layer (Inventory Agent)
+            { id: 'tool-stock', x: 500, y: 380, r: 14, type: 'inventory-agent', label: 'Stock\nStatus', description: 'OH, OOS, age, WOS tracking' },
+            { id: 'tool-movement', x: 540, y: 360, r: 14, type: 'inventory-agent', label: 'Stock\nMovement', description: 'Receipts, transfers, clearance' },
+            { id: 'tool-cutsize', x: 560, y: 400, r: 14, type: 'inventory-agent', label: 'Cut-Size', description: 'Size curve analysis' },
+            
+            // Tools layer (Product Agent)
+            { id: 'tool-mapping', x: 620, y: 380, r: 14, type: 'product-agent', label: 'SKU\nMapping', description: 'Style→SKU→Category resolution' },
+            { id: 'tool-cost', x: 660, y: 360, r: 14, type: 'product-agent', label: 'Cost\nData', description: 'Unit cost and pricing' },
+            
+            // Tools layer (Store Agent)
+            { id: 'tool-cluster', x: 720, y: 370, r: 14, type: 'store-agent', label: 'Store\nCluster', description: 'Region and cluster mapping' },
+            
+            // Executor & Compiler
+            { id: 'executor', x: 850, y: 250, r: 28, type: 'executor-agent', label: 'Executor\nAgent', description: 'Business logic, calculations, simulations' },
+            { id: 'tool-roi', x: 920, y: 200, r: 14, type: 'executor-agent', label: 'ROI\nCalc', description: 'Lift, margin, avoided clearance' },
+            { id: 'tool-scorecard', x: 920, y: 240, r: 14, type: 'executor-agent', label: 'Scorecard', description: 'Multi-factor scoring' },
+            { id: 'tool-elasticity', x: 920, y: 280, r: 14, type: 'executor-agent', label: 'Elasticity', description: 'Log-log regression' },
+            { id: 'tool-rop', x: 920, y: 320, r: 14, type: 'executor-agent', label: 'ROP', description: 'Reorder point calculation' },
+            
+            { id: 'compiler', x: 1000, y: 180, r: 28, type: 'compiler', label: 'Response\nCompiler', description: 'Business insights with rationale' },
+            { id: 'tool-insights', x: 1080, y: 140, r: 14, type: 'compiler', label: 'Insights', description: 'Actionable recommendations' },
+            { id: 'tool-actions', x: 1080, y: 180, r: 14, type: 'compiler', label: 'Action\nFile', description: 'Store×SKU×Qty action list' },
+            
+            { id: 'output', x: 1000, y: 100, r: 20, type: 'user', label: 'Business\nInsights', description: 'Actionable retail recommendations' }
+        ];
+        
+        const networkEdges = [
+            // Core flow
+            { from: 'user', to: 'planner', label: 'Query' },
+            { from: 'planner', to: 'orchestrator', label: 'Intent' },
+            { from: 'orchestrator', to: 'graph', label: 'Graph Query' },
+            
+            // Graph operations
+            { from: 'graph', to: 'graph-style', label: 'Hierarchy' },
+            { from: 'graph', to: 'graph-store', label: 'Location' },
+            { from: 'graph', to: 'graph-promo', label: 'Promo' },
+            { from: 'graph-style', to: 'orchestrator', label: 'Relations' },
+            { from: 'graph-store', to: 'orchestrator', label: 'Regions' },
+            { from: 'graph-promo', to: 'orchestrator', label: 'Windows' },
+            
+            // Orchestrator to Agents
+            { from: 'orchestrator', to: 'agent-sales', label: 'Sales Data' },
+            { from: 'orchestrator', to: 'agent-inventory', label: 'Inventory' },
+            { from: 'orchestrator', to: 'agent-product', label: 'Product' },
+            { from: 'orchestrator', to: 'agent-store', label: 'Store' },
+            
+            // Sales Agent tools
+            { from: 'agent-sales', to: 'tool-velocity', label: 'Velocity' },
+            { from: 'agent-sales', to: 'tool-returns', label: 'Returns' },
+            { from: 'agent-sales', to: 'tool-discount', label: 'Discount' },
+            { from: 'agent-sales', to: 'tool-projection', label: 'Forecast' },
+            { from: 'agent-sales', to: 'tool-lfl', label: 'LFL' },
+            
+            // Inventory Agent tools
+            { from: 'agent-inventory', to: 'tool-stock', label: 'Status' },
+            { from: 'agent-inventory', to: 'tool-movement', label: 'Movement' },
+            { from: 'agent-inventory', to: 'tool-cutsize', label: 'Size' },
+            
+            // Product Agent tools
+            { from: 'agent-product', to: 'tool-mapping', label: 'Map' },
+            { from: 'agent-product', to: 'tool-cost', label: 'Cost' },
+            
+            // Store Agent tools
+            { from: 'agent-store', to: 'tool-cluster', label: 'Cluster' },
+            
+            // Tools to Executor
+            { from: 'tool-velocity', to: 'executor', label: 'Data' },
+            { from: 'tool-returns', to: 'executor', label: 'Data' },
+            { from: 'tool-discount', to: 'executor', label: 'Data' },
+            { from: 'tool-projection', to: 'executor', label: 'Data' },
+            { from: 'tool-lfl', to: 'executor', label: 'Data' },
+            { from: 'tool-stock', to: 'executor', label: 'Data' },
+            { from: 'tool-movement', to: 'executor', label: 'Data' },
+            { from: 'tool-cutsize', to: 'executor', label: 'Data' },
+            { from: 'tool-mapping', to: 'executor', label: 'Data' },
+            { from: 'tool-cost', to: 'executor', label: 'Data' },
+            { from: 'tool-cluster', to: 'executor', label: 'Data' },
+            
+            // Executor tools
+            { from: 'executor', to: 'tool-roi', label: 'ROI' },
+            { from: 'executor', to: 'tool-scorecard', label: 'Score' },
+            { from: 'executor', to: 'tool-elasticity', label: 'Elasticity' },
+            { from: 'executor', to: 'tool-rop', label: 'ROP' },
+            
+            // Compilation
+            { from: 'tool-roi', to: 'compiler', label: 'Results' },
+            { from: 'tool-scorecard', to: 'compiler', label: 'Results' },
+            { from: 'tool-elasticity', to: 'compiler', label: 'Results' },
+            { from: 'tool-rop', to: 'compiler', label: 'Results' },
+            { from: 'executor', to: 'compiler', label: 'Compute' },
+            
+            // Final output
+            { from: 'compiler', to: 'tool-insights', label: 'Format' },
+            { from: 'compiler', to: 'tool-actions', label: 'Actions' },
+            { from: 'tool-insights', to: 'output', label: 'Report' },
+            { from: 'tool-actions', to: 'output', label: 'Actions' }
+        ];
+        
+        let currentExecution = [];
+        let executionStep = 0;
+        let selectedQuestion = 0;
+        
+        function initializeNetwork() {
+            const svg = document.getElementById('networkSvg');
+            svg.innerHTML = '';
+            
+            // Create edges first
+            const edgesGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            edgesGroup.id = 'edges';
+            svg.appendChild(edgesGroup);
+            
+            networkEdges.forEach((edge, index) => {
+                const fromNode = networkNodes.find(n => n.id === edge.from);
+                const toNode = networkNodes.find(n => n.id === edge.to);
+                
+                if (fromNode && toNode) {
+                    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    line.setAttribute('x1', fromNode.x);
+                    line.setAttribute('y1', fromNode.y);
+                    line.setAttribute('x2', toNode.x);
+                    line.setAttribute('y2', toNode.y);
+                    line.classList.add('edge');
+                    line.id = `edge-${edge.from}-${edge.to}`;
+                    edgesGroup.appendChild(line);
+                    
+                    const midX = (fromNode.x + toNode.x) / 2;
+                    const midY = (fromNode.y + toNode.y) / 2;
+                    const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    label.setAttribute('x', midX);
+                    label.setAttribute('y', midY - 3);
+                    label.textContent = edge.label;
+                    label.classList.add('branch-label');
+                    edgesGroup.appendChild(label);
+                    
+                    const dataFlow = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    dataFlow.setAttribute('cx', fromNode.x);
+                    dataFlow.setAttribute('cy', fromNode.y);
+                    dataFlow.setAttribute('r', 4);
+                    dataFlow.classList.add('data-flow');
+                    dataFlow.id = `flow-${edge.from}-${edge.to}`;
+                    edgesGroup.appendChild(dataFlow);
+                }
+            });
+            
+            // Create nodes
+            const nodesGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            nodesGroup.id = 'nodes';
+            svg.appendChild(nodesGroup);
+            
+            networkNodes.forEach(node => {
+                const nodeGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                nodeGroup.classList.add('node');
+                nodeGroup.id = `node-${node.id}`;
+                
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', node.x);
+                circle.setAttribute('cy', node.y);
+                circle.setAttribute('r', node.r);
+                if (node.type === 'decision') {
+                    circle.classList.add('decision-point');
+                } else {
+                    circle.classList.add(node.type);
+                }
+                nodeGroup.appendChild(circle);
+                
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', node.x);
+                text.setAttribute('y', node.y);
+                
+                if (node.label.includes('\n')) {
+                    const lines = node.label.split('\n');
+                    lines.forEach((line, index) => {
+                        const tspan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+                        tspan.setAttribute('x', node.x);
+                        tspan.setAttribute('y', node.y + (index - (lines.length - 1) / 2) * 9);
+                        tspan.textContent = line;
+                        text.appendChild(tspan);
+                    });
+                } else {
+                    text.textContent = node.label;
+                }
+                
+                nodeGroup.appendChild(text);
+                
+                nodeGroup.addEventListener('mouseenter', (e) => showTooltip(e, node));
+                nodeGroup.addEventListener('mouseleave', hideTooltip);
+                
+                nodesGroup.appendChild(nodeGroup);
+            });
+        }
+        
+        function showTooltip(event, node) {
+            const tooltip = document.getElementById('tooltip');
+            const displayLabel = node.label.replace(/\n/g, ' ');
+            tooltip.innerHTML = `<strong>${displayLabel}</strong><br>${node.description}`;
+            tooltip.style.left = (event.pageX + 10) + 'px';
+            tooltip.style.top = (event.pageY - 10) + 'px';
+            tooltip.classList.add('show');
+        }
+        
+        function hideTooltip() {
+            document.getElementById('tooltip').classList.remove('show');
+        }
+        
+        function updateNodeStatus(nodeId, status) {
+            const node = document.getElementById(`node-${nodeId}`);
+            if (node) {
+                node.classList.remove('active', 'completed', 'processing', 'iteration');
+                if (status !== 'waiting') {
+                    node.classList.add(status);
+                }
+            }
+        }
+        
+        function updateStatusPanel(nodeId, status) {
+            const statusMap = {
+                'orchestrator': 'orchestrator-status',
+                'agent-sales': 'sales-status',
+                'agent-inventory': 'inventory-status',
+                'agent-product': 'product-status',
+                'agent-store': 'store-status',
+                'executor': 'executor-status',
+                'compiler': 'compiler-status'
+            };
+            
+            const statusElement = document.getElementById(statusMap[nodeId]);
+            if (statusElement) {
+                statusElement.className = `status-badge ${status}`;
+                statusElement.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+            }
+        }
+        
+        function activateEdge(fromId, toId) {
+            const edge = document.getElementById(`edge-${fromId}-${toId}`);
+            const flow = document.getElementById(`flow-${fromId}-${toId}`);
+            
+            if (edge) {
+                edge.classList.add('active');
+                setTimeout(() => {
+                    edge.classList.remove('active');
+                    edge.classList.add('completed');
+                }, 2000);
+            }
+            
+            if (flow) {
+                flow.classList.add('active');
+                setTimeout(() => {
+                    flow.classList.remove('active');
+                }, 3000);
+            }
+        }
+        
+        function showIteration(iterationId) {
+            document.getElementById(iterationId).classList.add('show');
+            setTimeout(() => {
+                document.getElementById(iterationId).classList.remove('show');
+            }, 3000);
+        }
+        
+        function addLog(message, type = 'normal') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logContent = document.getElementById('logContent');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            if (type === 'iteration') {
+                entry.classList.add('highlight');
+            }
+            entry.innerHTML = `<span class="timestamp">[${timestamp}]</span>${message}`;
+            logContent.appendChild(entry);
+            logContent.scrollTop = logContent.scrollHeight;
+        }
+        
+        async function executeQuestion(questionNumber) {
+            document.querySelectorAll('.question-card').forEach(card => card.classList.remove('active'));
+            document.querySelectorAll('.question-card')[questionNumber - 1].classList.add('active');
+            
+            resetNetwork();
+            selectedQuestion = questionNumber;
+            
+            const questions = [
+                null,
+                { title: "Discount/Markdown ROI", pattern: "discount-roi" },
+                { title: "Revenue Loss", pattern: "revenue-loss" },
+                { title: "Style Verdict", pattern: "style-verdict" },
+                { title: "Capital Tied Up", pattern: "capital-tied" },
+                { title: "Ageing Alert", pattern: "ageing-alert" },
+                { title: "Store Momentum", pattern: "store-momentum" },
+                { title: "Price Elasticity", pattern: "price-elasticity" },
+                { title: "Replenishment", pattern: "replenishment" },
+                { title: "Size Mix", pattern: "size-mix" },
+                { title: "Recovery Mix", pattern: "recovery-mix" }
+            ];
+            
+            const currentQ = questions[questionNumber];
+            addLog(`🏪 Starting ${currentQ.title} Analysis`);
+            
+            await commonInitialSteps();
+            
+            switch (currentQ.pattern) {
+                case 'discount-roi':
+                    await executeDiscountROI();
+                    break;
+                case 'revenue-loss':
+                    await executeRevenueLoss();
+                    break;
+                case 'style-verdict':
+                    await executeStyleVerdict();
+                    break;
+                case 'capital-tied':
+                    await executeCapitalTied();
+                    break;
+                case 'ageing-alert':
+                    await executeAgeingAlert();
+                    break;
+                case 'store-momentum':
+                    await executeStoreMomentum();
+                    break;
+                case 'price-elasticity':
+                    await executePriceElasticity();
+                    break;
+                case 'replenishment':
+                    await executeReplenishment();
+                    break;
+                case 'size-mix':
+                    await executeSizeMix();
+                    break;
+                case 'recovery-mix':
+                    await executeRecoveryMix();
+                    break;
+            }
+        }
+        
+        async function commonInitialSteps() {
+            updateNodeStatus('user', 'active');
+            addLog('👤 Merchandiser: Submitting retail analytics query');
+            await delay(1000);
+            
+            activateEdge('user', 'planner');
+            updateNodeStatus('user', 'completed');
+            updateNodeStatus('planner', 'active');
+            addLog('🎯 Planner: Classifying query intent');
+            await delay(1500);
+            
+            activateEdge('planner', 'orchestrator');
+            updateNodeStatus('planner', 'completed');
+            updateNodeStatus('orchestrator', 'active');
+            updateStatusPanel('orchestrator', 'active');
+            addLog('🎭 Orchestrator: Routing to domain agents and preparing graph traversal');
+            await delay(1500);
+            
+            activateEdge('orchestrator', 'graph');
+            updateNodeStatus('graph', 'active');
+            addLog('📊 Knowledge Graph: Loading retail ontology');
+            await delay(1000);
+            
+            activateEdge('graph', 'graph-style');
+            activateEdge('graph', 'graph-store');
+            activateEdge('graph', 'graph-promo');
+            updateNodeStatus('graph-style', 'active');
+            updateNodeStatus('graph-store', 'active');
+            updateNodeStatus('graph-promo', 'active');
+            addLog('   → Loading Style→SKU hierarchy');
+            addLog('   → Loading Store→Region→Cluster mappings');
+            addLog('   → Loading Promotional calendar');
+            await delay(2000);
+            
+            activateEdge('graph-style', 'orchestrator');
+            activateEdge('graph-store', 'orchestrator');
+            activateEdge('graph-promo', 'orchestrator');
+            updateNodeStatus('graph-style', 'completed');
+            updateNodeStatus('graph-store', 'completed');
+            updateNodeStatus('graph-promo', 'completed');
+            updateNodeStatus('graph', 'completed');
+            addLog('✅ Graph context loaded - executing agent workflow');
+            await delay(1000);
+        }
+        
+        async function executeDiscountROI() {
+            addLog('💰 Pattern: Multi-Agent ROI Analysis for TPR');
+            
+            // Sales Agent - Discount tool
+            activateEdge('orchestrator', 'agent-sales');
+            updateNodeStatus('agent-sales', 'active');
+            updateStatusPanel('agent-sales', 'active');
+            addLog('📊 Sales Agent: Analyzing TPR window and realized pricing');
+            await delay(1500);
+            
+            activateEdge('agent-sales', 'tool-discount');
+            activateEdge('agent-sales', 'tool-velocity');
+            updateNodeStatus('tool-discount', 'active');
+            updateNodeStatus('tool-velocity', 'active');
+            addLog('   → Discount Tool: TPR depth 30%, realized price ₹699 (reg ₹999)');
+            addLog('   → Velocity Tool: 847 units during window vs 320 baseline');
+            await delay(2000);
+            
+            // Sales Agent - Returns tool
+            activateEdge('agent-sales', 'tool-returns');
+            updateNodeStatus('tool-returns', 'active');
+            addLog('   → Returns Tool: 42 returns (₹29,358 impact)');
+            await delay(1500);
+            
+            // Inventory Agent - Stock movement
+            activateEdge('orchestrator', 'agent-inventory');
+            updateNodeStatus('agent-inventory', 'active');
+            updateStatusPanel('agent-inventory', 'active');
+            addLog('📦 Inventory Agent: Checking clearance avoidance');
+            await delay(1500);
+            
+            activateEdge('agent-inventory', 'tool-stock');
+            activateEdge('agent-inventory', 'tool-movement');
+            updateNodeStatus('tool-stock', 'active');
+            updateNodeStatus('tool-movement', 'active');
+            addLog('   → Stock Tool: Age reduced from 11w to 4w');
+            addLog('   → Movement Tool: Avoided 180 units to clearance');
+            await delay(2000);
+            
+            // Product Agent - Cost data
+            activateEdge('orchestrator', 'agent-product');
+            updateNodeStatus('agent-product', 'active');
+            updateStatusPanel('agent-product', 'active');
+            addLog('🏷️ Product Agent: Loading cost and style mapping');
+            await delay(1000);
+            
+            activateEdge('agent-product', 'tool-cost');
+            activateEdge('agent-product', 'tool-mapping');
+            updateNodeStatus('tool-cost', 'active');
+            updateNodeStatus('tool-mapping', 'active');
+            addLog('   → Cost: ₹420/unit, Regular margin 58%');
+            await delay(1500);
+            
+            // Flow to Executor
+            activateEdge('tool-discount', 'executor');
+            activateEdge('tool-velocity', 'executor');
+            activateEdge('tool-returns', 'executor');
+            activateEdge('tool-stock', 'executor');
+            activateEdge('tool-movement', 'executor');
+            activateEdge('tool-cost', 'executor');
+            updateNodeStatus('tool-discount', 'completed');
+            updateNodeStatus('tool-velocity', 'completed');
+            updateNodeStatus('tool-returns', 'completed');
+            updateNodeStatus('tool-stock', 'completed');
+            updateNodeStatus('tool-movement', 'completed');
+            updateNodeStatus('tool-cost', 'completed');
+            updateNodeStatus('executor', 'active');
+            updateStatusPanel('executor', 'active');
+            addLog('🧮 Executor Agent: Computing ROI with lift, margin, and clearance avoidance');
+            await delay(2000);
+            
+            activateEdge('executor', 'tool-roi');
+            updateNodeStatus('tool-roi', 'active');
+            addLog('   → Incremental units: 527 (lift 165%)');
+            addLog('   → Incremental margin: ₹146,853');
+            addLog('   → Clearance avoided value: ₹50,400');
+            addLog('   → Total benefit: ₹197,253 | TPR cost: ₹254,100');
+            addLog('   → **ROI: -22% (Stop further TPRs)**');
+            await delay(2500);
+            
+            // Compilation
+            activateEdge('tool-roi', 'compiler');
+            updateNodeStatus('tool-roi', 'completed');
+            updateNodeStatus('executor', 'completed');
+            updateStatusPanel('executor', 'completed');
+            updateNodeStatus('compiler', 'active');
+            updateStatusPanel('compiler', 'active');
+            addLog('📝 Response Compiler: Generating ROI report with recommendations');
+            await delay(1500);
+            
+            activateEdge('compiler', 'tool-insights');
+            activateEdge('compiler', 'tool-actions');
+            updateNodeStatus('tool-insights', 'active');
+            updateNodeStatus('tool-actions', 'active');
+            addLog('   → Insight: TPR not profitable due to high discount depth');
+            addLog('   → Action: Exit TPR, test 15% depth on similar styles');
+            await delay(2000);
+            
+            activateEdge('tool-insights', 'output');
+            activateEdge('tool-actions', 'output');
+            updateNodeStatus('tool-insights', 'completed');
+            updateNodeStatus('tool-actions', 'completed');
+            updateNodeStatus('compiler', 'completed');
+            updateNodeStatus('output', 'active');
+            updateStatusPanel('compiler', 'completed');
+            addLog('✅ Discount ROI Analysis Complete');
+        }
+        
+        async function executeRevenueLoss() {
+            addLog('📉 Pattern: Revenue Loss Analysis (Inv + Sales)');
+            
+            // Inventory Agent - OOS days
+            activateEdge('orchestrator', 'agent-inventory');
+            updateNodeStatus('agent-inventory', 'active');
+            updateStatusPanel('agent-inventory', 'active');
+            addLog('📦 Inventory Agent: Identifying OOS periods');
+            await delay(1500);
+            
+            activateEdge('agent-inventory', 'tool-stock');
+            updateNodeStatus('tool-stock', 'active');
+            addLog('   → Stock Tool: 847 SKU-store-days with OOS in Tops');
+            await delay(2000);
+            
+            // Sales Agent - Baseline projection
+            activateEdge('orchestrator', 'agent-sales');
+            updateNodeStatus('agent-sales', 'active');
+            updateStatusPanel('agent-sales', 'active');
+            addLog('📊 Sales Agent: Projecting baseline demand for OOS periods');
+            await delay(1500);
+            
+            activateEdge('agent-sales', 'tool-projection');
+            updateNodeStatus('tool-projection', 'active');
+            addLog('   → Projection Tool: Expected 3,247 units during OOS');
+            await delay(2000);
+            
+            // Product Agent - Category mapping
+            activateEdge('orchestrator', 'agent-product');
+            updateNodeStatus('agent-product', 'active');
+            updateStatusPanel('agent-product', 'active');
+            addLog('🏷️ Product Agent: Mapping Tops category SKUs');
+            await delay(1000);
+            
+            activateEdge('agent-product', 'tool-mapping');
+            activateEdge('agent-product', 'tool-cost');
+            updateNodeStatus('tool-mapping', 'active');
+            updateNodeStatus('tool-cost', 'active');
+            addLog('   → 247 SKUs in Tops, avg price ₹849');
+            await delay(1500);
+            
+            // Executor calculation
+            activateEdge('tool-stock', 'executor');
+            activateEdge('tool-projection', 'executor');
+            activateEdge('tool-mapping', 'executor');
+            activateEdge('tool-cost', 'executor');
+            updateNodeStatus('tool-stock', 'completed');
+            updateNodeStatus('tool-projection', 'completed');
+            updateNodeStatus('tool-mapping', 'completed');
+            updateNodeStatus('tool-cost', 'completed');
+            updateNodeStatus('executor', 'active');
+            updateStatusPanel('executor', 'active');
+            addLog('🧮 Executor: lost_units × price_realization');
+            await delay(1500);
+            
+            addLog('   → Lost Revenue: ₹27,56,703');
+            addLog('   → Top cause: Size XL OOS (32% of loss)');
+            addLog('   → Top 10 SKUs contribute 58% of loss');
+            await delay(2000);
+            
+            // Compilation
+            activateEdge('executor', 'compiler');
+            updateNodeStatus('executor', 'completed');
+            updateStatusPanel('executor', 'completed');
+            updateNodeStatus('compiler', 'active');
+            updateStatusPanel('compiler', 'active');
+            await delay(1500);
+            
+            activateEdge('compiler', 'tool-insights');
+            activateEdge('compiler', 'tool-actions');
+            updateNodeStatus('tool-insights', 'active');
+            updateNodeStatus('tool-actions', 'active');
+            addLog('   → Action cascade: Transfer (if demand exists) → TPR → Clearance');
+            addLog('   → Priority list: 47 SKU-store pairs with action codes');
+            await delay(1500);
+            
+            activateEdge('tool-insights', 'output');
+            activateEdge('tool-actions', 'output');
+            updateNodeStatus('tool-insights', 'completed');
+            updateNodeStatus('tool-actions', 'completed');
+            updateNodeStatus('compiler', 'completed');
+            updateNodeStatus('output', 'active');
+            updateStatusPanel('compiler', 'completed');
+            addLog('✅ Ageing Alert Analysis Complete');
+        }
+        
+        async function executeStoreMomentum() {
+            addLog('📈 Pattern: Trend Analysis with Store Context');
+            
+            activateEdge('orchestrator', 'agent-sales');
+            updateNodeStatus('agent-sales', 'active');
+            updateStatusPanel('agent-sales', 'active');
+            addLog('📊 Sales Agent: Fetching weekly sales trend (6 weeks)');
+            await delay(1500);
+            
+            activateEdge('agent-sales', 'tool-velocity');
+            updateNodeStatus('tool-velocity', 'active');
+            addLog('   → Weekly sales per store for AND brand');
+            await delay(2000);
+            
+            activateEdge('orchestrator', 'agent-product');
+            updateNodeStatus('agent-product', 'active');
+            updateStatusPanel('agent-product', 'active');
+            addLog('🏷️ Product Agent: Filtering brand = AND');
+            await delay(1000);
+            
+            activateEdge('agent-product', 'tool-mapping');
+            updateNodeStatus('tool-mapping', 'active');
+            await delay(1500);
+            
+            activateEdge('orchestrator', 'agent-store');
+            updateNodeStatus('agent-store', 'active');
+            updateStatusPanel('agent-store', 'active');
+            addLog('🏬 Store Agent: Loading store attributes');
+            await delay(1000);
+            
+            activateEdge('agent-store', 'tool-cluster');
+            updateNodeStatus('tool-cluster', 'active');
+            await delay(1500);
+            
+            activateEdge('tool-velocity', 'executor');
+            activateEdge('tool-mapping', 'executor');
+            activateEdge('tool-cluster', 'executor');
+            updateNodeStatus('tool-velocity', 'completed');
+            updateNodeStatus('tool-mapping', 'completed');
+            updateNodeStatus('tool-cluster', 'completed');
+            updateNodeStatus('executor', 'active');
+            updateStatusPanel('executor', 'active');
+            addLog('🧮 Executor: Computing trend slope + statistical significance');
+            await delay(1500);
+            
+            addLog('   → 12 stores show positive momentum (p<0.05)');
+            addLog('   → Top: Mumbai Phoenix Mall (+18% WoW growth)');
+            addLog('   → Avg momentum: +12.4% across positive stores');
+            await delay(2000);
+            
+            activateEdge('executor', 'compiler');
+            updateNodeStatus('executor', 'completed');
+            updateStatusPanel('executor', 'completed');
+            updateNodeStatus('compiler', 'active');
+            updateStatusPanel('compiler', 'active');
+            await delay(1500);
+            
+            activateEdge('compiler', 'tool-insights');
+            activateEdge('compiler', 'tool-actions');
+            updateNodeStatus('tool-insights', 'active');
+            updateNodeStatus('tool-actions', 'active');
+            addLog('   → Recommendation: Expand AND range in top 12 stores');
+            addLog('   → Action: +25% depth for top performers, test new styles');
+            await delay(1500);
+            
+            activateEdge('tool-insights', 'output');
+            activateEdge('tool-actions', 'output');
+            updateNodeStatus('tool-insights', 'completed');
+            updateNodeStatus('tool-actions', 'completed');
+            updateNodeStatus('compiler', 'completed');
+            updateNodeStatus('output', 'active');
+            updateStatusPanel('compiler', 'completed');
+            addLog('✅ Store Momentum Analysis Complete');
+        }
+        
+        async function executePriceElasticity() {
+            addLog('💲 Pattern: Regression with Data Hygiene');
+            
+            activateEdge('orchestrator', 'agent-sales');
+            updateNodeStatus('agent-sales', 'active');
+            updateStatusPanel('agent-sales', 'active');
+            addLog('📊 Sales Agent: Gathering price and unit history');
+            await delay(1500);
+            
+            activateEdge('agent-sales', 'tool-velocity');
+            activateEdge('agent-sales', 'tool-discount');
+            updateNodeStatus('tool-velocity', 'active');
+            updateNodeStatus('tool-discount', 'active');
+            addLog('   → Price changes and promotional windows');
+            await delay(2000);
+            
+            activateEdge('orchestrator', 'agent-inventory');
+            updateNodeStatus('agent-inventory', 'active');
+            updateStatusPanel('agent-inventory', 'active');
+            addLog('📦 Inventory Agent: Identifying OOS/ghost days to exclude');
+            await delay(1500);
+            
+            activateEdge('agent-inventory', 'tool-stock');
+            updateNodeStatus('tool-stock', 'active');
+            addLog('   → Suppressing 127 OOS days from regression');
+            await delay(2000);
+            
+            activateEdge('orchestrator', 'agent-store');
+            updateNodeStatus('agent-store', 'active');
+            updateStatusPanel('agent-store', 'active');
+            addLog('🏬 Store Agent: Filtering region = South');
+            await delay(1000);
+            
+            activateEdge('agent-store', 'tool-cluster');
+            updateNodeStatus('tool-cluster', 'active');
+            await delay(1500);
+            
+            activateEdge('tool-velocity', 'executor');
+            activateEdge('tool-discount', 'executor');
+            activateEdge('tool-stock', 'executor');
+            activateEdge('tool-cluster', 'executor');
+            updateNodeStatus('tool-velocity', 'completed');
+            updateNodeStatus('tool-discount', 'completed');
+            updateNodeStatus('tool-stock', 'completed');
+            updateNodeStatus('tool-cluster', 'completed');
+            updateNodeStatus('executor', 'active');
+            updateStatusPanel('executor', 'active');
+            addLog('🧮 Executor: Running log-log regression');
+            await delay(1500);
+            
+            activateEdge('executor', 'tool-elasticity');
+            updateNodeStatus('tool-elasticity', 'active');
+            addLog('   → Price Elasticity: -1.42 (elastic)');
+            addLog('   → 95% CI: [-1.68, -1.16]');
+            addLog('   → Profit-maximizing discount: 18-22%');
+            await delay(2500);
+            
+            activateEdge('tool-elasticity', 'compiler');
+            updateNodeStatus('tool-elasticity', 'completed');
+            updateNodeStatus('executor', 'completed');
+            updateStatusPanel('executor', 'completed');
+            updateNodeStatus('compiler', 'active');
+            updateStatusPanel('compiler', 'active');
+            await delay(1500);
+            
+            activateEdge('compiler', 'tool-insights');
+            activateEdge('compiler', 'tool-actions');
+            updateNodeStatus('tool-insights', 'active');
+            updateNodeStatus('tool-actions', 'active');
+            addLog('   → Insight: Elastic demand - discounts drive volume');
+            addLog('   → Action: Test 20% TPR on slow Tops in South region');
+            await delay(1500);
+            
+            activateEdge('tool-insights', 'output');
+            activateEdge('tool-actions', 'output');
+            updateNodeStatus('tool-insights', 'completed');
+            updateNodeStatus('tool-actions', 'completed');
+            updateNodeStatus('compiler', 'completed');
+            updateNodeStatus('output', 'active');
+            updateStatusPanel('compiler', 'completed');
+            addLog('✅ Price Elasticity Analysis Complete');
+        }
+        
+        async function executeReplenishment() {
+            addLog('📦 Pattern: ROP Calculation (Multi-Agent)');
+            
+            activateEdge('orchestrator', 'agent-product');
+            updateNodeStatus('agent-product', 'active');
+            updateStatusPanel('agent-product', 'active');
+            addLog('🏷️ Product Agent: Loading core SKU list');
+            await delay(1000);
+            
+            activateEdge('agent-product', 'tool-mapping');
+            activateEdge('agent-product', 'tool-cost');
+            updateNodeStatus('tool-mapping', 'active');
+            updateNodeStatus('tool-cost', 'active');
+            addLog('   → 342 core SKUs identified');
+            await delay(1500);
+            
+            activateEdge('orchestrator', 'agent-sales');
+            updateNodeStatus('agent-sales', 'active');
+            updateStatusPanel('agent-sales', 'active');
+            addLog('📊 Sales Agent: Computing avg daily demand & variance');
+            await delay(1500);
+            
+            activateEdge('agent-sales', 'tool-velocity');
+            updateNodeStatus('tool-velocity', 'active');
+            addLog('   → μ(daily) and σ(daily) per SKU-store');
+            await delay(2000);
+            
+            activateEdge('orchestrator', 'agent-inventory');
+            updateNodeStatus('agent-inventory', 'active');
+            updateStatusPanel('agent-inventory', 'active');
+            addLog('📦 Inventory Agent: Checking current stock levels');
+            await delay(1500);
+            
+            activateEdge('agent-inventory', 'tool-stock');
+            updateNodeStatus('tool-stock', 'active');
+            addLog('   → On-hand and on-order quantities');
+            await delay(2000);
+            
+            activateEdge('tool-mapping', 'executor');
+            activateEdge('tool-cost', 'executor');
+            activateEdge('tool-velocity', 'executor');
+            activateEdge('tool-stock', 'executor');
+            updateNodeStatus('tool-mapping', 'completed');
+            updateNodeStatus('tool-cost', 'completed');
+            updateNodeStatus('tool-velocity', 'completed');
+            updateNodeStatus('tool-stock', 'completed');
+            updateNodeStatus('executor', 'active');
+            updateStatusPanel('executor', 'active');
+            addLog('🧮 Executor: Computing ROP with safety stock');
+            await delay(1500);
+            
+            activateEdge('executor', 'tool-rop');
+            updateNodeStatus('tool-rop', 'active');
+            addLog('   → ROP = μ(10d) + 1.65×σ(10d)  [95% service level]');
+            addLog('   → Order Qty = max(0, Target - (OH + OO))');
+            addLog('   → Generated 847 reorder recommendations');
+            addLog('   → Suppressed 23 with ghost inventory flags');
+            await delay(2500);
+            
+            activateEdge('tool-rop', 'compiler');
+            updateNodeStatus('tool-rop', 'completed');
+            updateNodeStatus('executor', 'completed');
+            updateStatusPanel('executor', 'completed');
+            updateNodeStatus('compiler', 'active');
+            updateStatusPanel('compiler', 'active');
+            await delay(1500);
+            
+            activateEdge('compiler', 'tool-actions');
+            updateNodeStatus('tool-actions', 'active');
+            addLog('   → Action File: Store-SKU-Qty replenishment orders');
+            await delay(1500);
+            
+            activateEdge('tool-actions', 'output');
+            updateNodeStatus('tool-actions', 'completed');
+            updateNodeStatus('compiler', 'completed');
+            updateNodeStatus('output', 'active');
+            updateStatusPanel('compiler', 'completed');
+            addLog('✅ Replenishment Analysis Complete');
+        }
+        
+        async function executeSizeMix() {
+            addLog('👗 Pattern: Size Curve Analysis (Product + Inventory)');
+            
+            activateEdge('orchestrator', 'agent-product');
+            updateNodeStatus('agent-product', 'active');
+            updateStatusPanel('agent-product', 'active');
+            addLog('🏷️ Product Agent: Loading Women\'s Kurtas category');
+            await delay(1000);
+            
+            activateEdge('agent-product', 'tool-mapping');
+            updateNodeStatus('tool-mapping', 'active');
+            addLog('   → 156 SKUs with size breakdown');
+            await delay(1500);
+            
+            activateEdge('orchestrator', 'agent-sales');
+            updateNodeStatus('agent-sales', 'active');
+            updateStatusPanel('agent-sales', 'active');
+            addLog('📊 Sales Agent: Computing reference size curve');
+            await delay(1500);
+            
+            activateEdge('agent-sales', 'tool-lfl');
+            updateNodeStatus('tool-lfl', 'active');
+            addLog('   → Ideal curve from first 4 weeks chain-wide sales');
+            addLog('   → XS:8% | S:22% | M:35% | L:25% | XL:10%');
+            await delay(2000);
+            
+            activateEdge('orchestrator', 'agent-inventory');
+            updateNodeStatus('agent-inventory', 'active');
+            updateStatusPanel('agent-inventory', 'active');
+            addLog('📦 Inventory Agent: Current on-hand share by size');
+            await delay(1500);
+            
+            activateEdge('agent-inventory', 'tool-cutsize');
+            updateNodeStatus('tool-cutsize', 'active');
+            addLog('   → Current: XS:12% | S:28% | M:31% | L:18% | XL:11%');
+            await delay(2000);
+            
+            activateEdge('tool-mapping', 'executor');
+            activateEdge('tool-lfl', 'executor');
+            activateEdge('tool-cutsize', 'executor');
+            updateNodeStatus('tool-mapping', 'completed');
+            updateNodeStatus('tool-lfl', 'completed');
+            updateNodeStatus('tool-cutsize', 'completed');
+            updateNodeStatus('executor', 'active');
+            updateStatusPanel('executor', 'active');
+            addLog('🧮 Executor: Computing gap = on_hand_share - ideal_share');
+            await delay(1500);
+            
+            addLog('   → Size XS: +4% (over-indexed)');
+            addLog('   → Size S: +6% (over-indexed)');
+            addLog('   → Size M: -4% (under-indexed) ⚠️');
+            addLog('   → Size L: -7% (under-indexed) ⚠️');
+            addLog('   → Size XL: +1% (aligned)');
+            await delay(2500);
+            
+            activateEdge('executor', 'compiler');
+            updateNodeStatus('executor', 'completed');
+            updateStatusPanel('executor', 'completed');
+            updateNodeStatus('compiler', 'active');
+            updateStatusPanel('compiler', 'active');
+            await delay(1500);
+            
+            activateEdge('compiler', 'tool-insights');
+            activateEdge('compiler', 'tool-actions');
+            updateNodeStatus('tool-insights', 'active');
+            updateNodeStatus('tool-actions', 'active');
+            addLog('   → Insight: Size L severely broken (-7pp)');
+            addLog('   → Action: Transfer 180 units Size L, reduce S/XS buy ratio');
+            await delay(1500);
+            
+            activateEdge('tool-insights', 'output');
+            activateEdge('tool-actions', 'output');
+            updateNodeStatus('tool-insights', 'completed');
+            updateNodeStatus('tool-actions', 'completed');
+            updateNodeStatus('compiler', 'completed');
+            updateNodeStatus('output', 'active');
+            updateStatusPanel('compiler', 'completed');
+            addLog('✅ Size Mix Analysis Complete');
+        }
+        
+        async function executeRecoveryMix() {
+            addLog('🔄 Pattern: Multi-Round Simulation (Systemic Recovery)');
+            
+            // Round 1: Baseline loss quantification
+            showIteration('iteration1');
+            updateNodeStatus('orchestrator', 'iteration');
+            updateStatusPanel('orchestrator', 'iteration');
+            
+            activateEdge('orchestrator', 'agent-sales');
+            updateNodeStatus('agent-sales', 'active');
+            updateStatusPanel('agent-sales', 'active');
+            addLog('🔄 Round 1 - Sales Agent: Quantifying lost revenue', 'iteration');
+            await delay(1500);
+            
+            activateEdge('agent-sales', 'tool-projection');
+            updateNodeStatus('tool-projection', 'active');
+            addLog('   → Baseline demand for lost-sales windows', 'iteration');
+            await delay(2000);
+            
+            activateEdge('orchestrator', 'agent-inventory');
+            updateNodeStatus('agent-inventory', 'active');
+            updateStatusPanel('agent-inventory', 'active');
+            addLog('   → Inventory Agent: Classifying loss causes', 'iteration');
+            await delay(1500);
+            
+            activateEdge('agent-inventory', 'tool-stock');
+            updateNodeStatus('tool-stock', 'active');
+            addLog('   → Loss breakdown: OOS 54% | SizeGap 28% | Ghost 18%', 'iteration');
+            await delay(2000);
+            
+            activateEdge('tool-projection', 'executor');
+            activateEdge('tool-stock', 'executor');
+            updateNodeStatus('tool-projection', 'completed');
+            updateNodeStatus('tool-stock', 'completed');
+            addLog('   → Total lost revenue: ₹38,47,200', 'iteration');
+            await delay(1500);
+            
+            // Round 2: Discount lift simulation
+            showIteration('iteration2');
+            updateNodeStatus('orchestrator', 'processing');
+            updateNodeStatus('executor', 'active');
+            updateStatusPanel('executor', 'active');
+            addLog('🔄 Round 2 - Executor: Simulating TPR recovery potential', 'iteration');
+            await delay(1500);
+            
+            activateEdge('orchestrator', 'agent-sales');
+            updateNodeStatus('agent-sales', 'processing');
+            activateEdge('agent-sales', 'tool-discount');
+            updateNodeStatus('tool-discount', 'active');
+            addLog('   → Discount Tool: Loading elasticity estimates', 'iteration');
+            await delay(2000);
+            
+            activateEdge('tool-discount', 'executor');
+            updateNodeStatus('tool-discount', 'completed');
+            activateEdge('executor', 'tool-elasticity');
+            updateNodeStatus('tool-elasticity', 'active');
+            addLog('   → Elasticity Tool: Simulating 20% TPR lift on elastic SKUs', 'iteration');
+            addLog('   → Estimated recoverable via discount: ₹8,42,000 (22%)', 'iteration');
+            await delay(2500);
+            
+            updateNodeStatus('tool-elasticity', 'completed');
+            
+            // Round 3: Replenishment/transfer feasibility
+            showIteration('iteration3');
+            updateNodeStatus('orchestrator', 'processing');
+            addLog('🔄 Round 3 - Inventory Agent: Replenishment feasibility', 'iteration');
+            await delay(1500);
+            
+            updateNodeStatus('agent-inventory', 'processing');
+            activateEdge('agent-inventory', 'tool-movement');
+            updateNodeStatus('tool-movement', 'active');
+            addLog('   → Movement Tool: Testing supply/transfer within 10d lead', 'iteration');
+            await delay(2000);
+            
+            activateEdge('tool-movement', 'executor');
+            updateNodeStatus('tool-movement', 'completed');
+            activateEdge('executor', 'tool-rop');
+            updateNodeStatus('tool-rop', 'active');
+            addLog('   → ROP Tool: Can replenish 847 SKU-stores within window', 'iteration');
+            addLog('   → Estimated recoverable via replen: ₹20,84,000 (54%)', 'iteration');
+            addLog('   → Transfer-eligible: ₹4,68,000 (12%)', 'iteration');
+            await delay(2500);
+            
+            updateNodeStatus('tool-rop', 'completed');
+            
+            // De-duplication and final calculation
+            updateNodeStatus('orchestrator', 'completed');
+            updateStatusPanel('orchestrator', 'completed');
+            addLog('🧮 Executor: De-duplicating effects and computing final split');
+            await delay(1500);
+            
+            addLog('   → Overlapping SKUs adjusted (no double-count)');
+            addLog('   → Total recoverable: ₹29,56,000 (77% of loss)');
+            addLog('   → Split: Replen 54% | Discount 22% | Transfer 12%');
+            addLog('   → Unrecoverable: 23% (ghost inventory issues)');
+            await delay(2500);
+            
+            // Compilation with prioritization
+            activateEdge('executor', 'compiler');
+            updateNodeStatus('executor', 'completed');
+            updateStatusPanel('executor', 'completed');
+            updateNodeStatus('compiler', 'active');
+            updateStatusPanel('compiler', 'active');
+            addLog('📝 Response Compiler: Generating prioritized recovery plan');
+            await delay(1500);
+            
+            activateEdge('compiler', 'tool-insights');
+            activateEdge('compiler', 'tool-actions');
+            updateNodeStatus('tool-insights', 'active');
+            updateNodeStatus('tool-actions', 'active');
+            addLog('   → Priority 1: Replenish high-velocity core SKUs (54%)');
+            addLog('   → Priority 2: Transfer size-gaps where demand exists (12%)');
+            addLog('   → Priority 3: TPR on elastic slow-movers (22%)');
+            addLog('   → Action File: 847 SKU-store pairs with lever assignments');
+            await delay(2500);
+            
+            activateEdge('tool-insights', 'output');
+            activateEdge('tool-actions', 'output');
+            updateNodeStatus('tool-insights', 'completed');
+            updateNodeStatus('tool-actions', 'completed');
+            updateNodeStatus('compiler', 'completed');
+            updateNodeStatus('output', 'active');
+            updateStatusPanel('compiler', 'completed');
+            addLog('✅ Multi-Round Recovery Mix Analysis Complete');
+        }
+        
+        function resetNetwork() {
+            networkNodes.forEach(node => {
+                updateNodeStatus(node.id, 'waiting');
+            });
+            
+            document.querySelectorAll('.edge').forEach(edge => {
+                edge.classList.remove('active', 'completed');
+            });
+            
+            document.querySelectorAll('.status-badge').forEach(badge => {
+                badge.className = 'status-badge waiting';
+                badge.textContent = badge.textContent.includes('Orchestrator') ? 'Waiting' : 'Standby';
+            });
+            
+            document.querySelectorAll('.iteration-indicator').forEach(indicator => {
+                indicator.classList.remove('show');
+            });
+            
+            document.getElementById('logContent').innerHTML = '';
+            addLog('🏪 HOAD Multi-Agent Retail Analytics Framework initialized');
+            addLog('💡 Select a retail analytics question to see agent orchestration');
+        }
+        
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeNetwork();
+            addLog('🏪 HOAD Retail Analytics Network ready');
+            addLog('📊 10 high-value analytics patterns available');
+        });
+    </script>
+</body>
+</html>'active');
+            await delay(1500);
+            
+            activateEdge('compiler', 'tool-insights');
+            activateEdge('compiler', 'tool-actions');
+            updateNodeStatus('tool-insights', 'active');
+            updateNodeStatus('tool-actions', 'active');
+            addLog('   → Action File: Prioritize XL replenishment for top 10 SKUs');
+            await delay(1500);
+            
+            activateEdge('tool-insights', 'output');
+            activateEdge('tool-actions', 'output');
+            updateNodeStatus('tool-insights', 'completed');
+            updateNodeStatus('tool-actions', 'completed');
+            updateNodeStatus('compiler', 'completed');
+            updateNodeStatus('output', 'active');
+            updateStatusPanel('compiler', 'completed');
+            addLog('✅ Revenue Loss Analysis Complete');
+        }
+        
+        async function executeStyleVerdict() {
+            addLog('🎯 Pattern: Multi-Factor Scorecard for Style Decision');
+            
+            // Sales Agent - Multiple tools
+            activateEdge('orchestrator', 'agent-sales');
+            updateNodeStatus('agent-sales', 'active');
+            updateStatusPanel('agent-sales', 'active');
+            addLog('📊 Sales Agent: Analyzing style performance metrics');
+            await delay(1500);
+            
+            activateEdge('agent-sales', 'tool-velocity');
+            activateEdge('agent-sales', 'tool-returns');
+            activateEdge('agent-sales', 'tool-discount');
+            updateNodeStatus('tool-velocity', 'active');
+            updateNodeStatus('tool-returns', 'active');
+            updateNodeStatus('tool-discount', 'active');
+            addLog('   → Velocity: 2.3 units/day (availability-adj)');
+            addLog('   → Return Rate: 8.2% (below 12% threshold ✓)');
+            addLog('   → Discount dependency: 78% at full price');
+            await delay(2500);
+            
+            // Inventory Agent - Stock metrics
+            activateEdge('orchestrator', 'agent-inventory');
+            updateNodeStatus('agent-inventory', 'active');
+            updateStatusPanel('agent-inventory', 'active');
+            addLog('📦 Inventory Agent: Checking inventory health');
+            await delay(1500);
+            
+            activateEdge('agent-inventory', 'tool-stock');
+            updateNodeStatus('tool-stock', 'active');
+            addLog('   → WOS: 4.2 weeks (healthy)');
+            addLog('   → Age: 6 weeks (no ageing concern)');
+            await delay(2000);
+            
+            // Executor - Scorecard
+            activateEdge('tool-velocity', 'executor');
+            activateEdge('tool-returns', 'executor');
+            activateEdge('tool-discount', 'executor');
+            activateEdge('tool-stock', 'executor');
+            updateNodeStatus('tool-velocity', 'completed');
+            updateNodeStatus('tool-returns', 'completed');
+            updateNodeStatus('tool-discount', 'completed');
+            updateNodeStatus('tool-stock', 'completed');
+            updateNodeStatus('executor', 'active');
+            updateStatusPanel('executor', 'active');
+            addLog('🧮 Executor: Computing multi-factor scorecard');
+            await delay(1500);
+            
+            activateEdge('executor', 'tool-scorecard');
+            updateNodeStatus('tool-scorecard', 'active');
+            addLog('   → Velocity Score: 85/100 (strong)');
+            addLog('   → Quality Score: 92/100 (low returns)');
+            addLog('   → Price Realization: 78/100 (good)');
+            addLog('   → Inventory Health: 88/100 (healthy)');
+            addLog('   → **Overall: 86/100 → DOUBLE-DOWN Quadrant**');
+            await delay(2500);
+            
+            // Compilation
+            activateEdge('tool-scorecard', 'compiler');
+            updateNodeStatus('tool-scorecard', 'completed');
+            updateNodeStatus('executor', 'completed');
+            updateStatusPanel('executor', 'completed');
+            updateNodeStatus('compiler', 'active');
+            updateStatusPanel('compiler', 'active');
+            await delay(1500);
+            
+            activateEdge('compiler', 'tool-insights');
+            activateEdge('compiler', 'tool-actions');
+            updateNodeStatus('tool-insights', 'active');
+            updateNodeStatus('tool-actions', 'active');
+            addLog('   → Recommendation: DOUBLE-DOWN');
+            addLog('   → Action: Increase buy depth 30%, expand to 12 more stores');
+            await delay(1500);
+            
+            activateEdge('tool-insights', 'output');
+            activateEdge('tool-actions', 'output');
+            updateNodeStatus('tool-insights', 'completed');
+            updateNodeStatus('tool-actions', 'completed');
+            updateNodeStatus('compiler', 'completed');
+            updateNodeStatus('output', 'active');
+            updateStatusPanel('compiler', 'completed');
+            addLog('✅ Style Verdict Complete');
+        }
+        
+        async function executeCapitalTied() {
+            addLog('💵 Pattern: Capital Analysis (Inventory + Product)');
+            
+            activateEdge('orchestrator', 'agent-inventory');
+            updateNodeStatus('agent-inventory', 'active');
+            updateStatusPanel('agent-inventory', 'active');
+            addLog('📦 Inventory Agent: Querying aged inventory');
+            await delay(1500);
+            
+            activateEdge('agent-inventory', 'tool-stock');
+            updateNodeStatus('tool-stock', 'active');
+            addLog('   → Filtering: age_weeks > 8 in Dresses category');
+            await delay(2000);
+            
+            activateEdge('orchestrator', 'agent-product');
+            updateNodeStatus('agent-product', 'active');
+            updateStatusPanel('agent-product', 'active');
+            addLog('🏷️ Product Agent: Loading Dresses category and cost data');
+            await delay(1000);
+            
+            activateEdge('agent-product', 'tool-mapping');
+            activateEdge('agent-product', 'tool-cost');
+            updateNodeStatus('tool-mapping', 'active');
+            updateNodeStatus('tool-cost', 'active');
+            addLog('   → 189 Dress SKUs, avg cost ₹680/unit');
+            await delay(1500);
+            
+            activateEdge('tool-stock', 'executor');
+            activateEdge('tool-mapping', 'executor');
+            activateEdge('tool-cost', 'executor');
+            updateNodeStatus('tool-stock', 'completed');
+            updateNodeStatus('tool-mapping', 'completed');
+            updateNodeStatus('tool-cost', 'completed');
+            updateNodeStatus('executor', 'active');
+            updateStatusPanel('executor', 'active');
+            addLog('🧮 Executor: sum(on_hand × unit_cost) for aged inventory');
+            await delay(1500);
+            
+            addLog('   → Total Capital Tied: ₹42,73,840');
+            addLog('   → Excess vs target WOS: ₹18,56,200');
+            addLog('   → Top store: Bangalore Brigade Road (₹6,84,000)');
+            await delay(2000);
+            
+            activateEdge('executor', 'compiler');
+            updateNodeStatus('executor', 'completed');
+            updateStatusPanel('executor', 'completed');
+            updateNodeStatus('compiler', 'active');
+            updateStatusPanel('compiler', 'active');
+            await delay(1500);
+            
+            activateEdge('compiler', 'tool-insights');
+            activateEdge('compiler', 'tool-actions');
+            updateNodeStatus('tool-insights', 'active');
+            updateNodeStatus('tool-actions', 'active');
+            addLog('   → Insight: 43% of aged capital in 3 stores (hotspots)');
+            addLog('   → Action: Transfer 380 units + 20% TPR on slow SKUs');
+            await delay(1500);
+            
+            activateEdge('tool-insights', 'output');
+            activateEdge('tool-actions', 'output');
+            updateNodeStatus('tool-insights', 'completed');
+            updateNodeStatus('tool-actions', 'completed');
+            updateNodeStatus('compiler', 'completed');
+            updateNodeStatus('output', 'active');
+            updateStatusPanel('compiler', 'completed');
+            addLog('✅ Capital Analysis Complete');
+        }
+        
+        async function executeAgeingAlert() {
+            addLog('⏰ Pattern: Dual-Agent Filtering (Age + STR)');
+            
+            activateEdge('orchestrator', 'agent-inventory');
+            updateNodeStatus('agent-inventory', 'active');
+            updateStatusPanel('agent-inventory', 'active');
+            addLog('📦 Inventory Agent: Finding SKUs with age ≥ 12 weeks');
+            await delay(1500);
+            
+            activateEdge('agent-inventory', 'tool-stock');
+            updateNodeStatus('tool-stock', 'active');
+            addLog('   → 127 SKU-store combos crossed 12w threshold');
+            await delay(2000);
+            
+            activateEdge('orchestrator', 'agent-sales');
+            updateNodeStatus('agent-sales', 'active');
+            updateStatusPanel('agent-sales', 'active');
+            addLog('📊 Sales Agent: Computing cumulative sell-through rate');
+            await delay(1500);
+            
+            activateEdge('agent-sales', 'tool-lfl');
+            updateNodeStatus('tool-lfl', 'active');
+            addLog('   → LFL Tool: Calculating STR = sold ÷ (sold + on_hand)');
+            await delay(2000);
+            
+            activateEdge('tool-stock', 'executor');
+            activateEdge('tool-lfl', 'executor');
+            updateNodeStatus('tool-stock', 'completed');
+            updateNodeStatus('tool-lfl', 'completed');
+            updateNodeStatus('executor', 'active');
+            updateStatusPanel('executor', 'active');
+            addLog('🧮 Executor: Filtering age ≥ 12w AND STR < 30%');
+            await delay(1500);
+            
+            addLog('   → 47 SKU-store pairs meet criteria');
+            addLog('   → Avg STR: 18.4% (very slow movers)');
+            await delay(2000);
+            
+            activateEdge('executor', 'compiler');
+            updateNodeStatus('executor', 'completed');
+            updateStatusPanel('executor', 'completed');
+            updateNodeStatus('compiler', 'active');
+            updateStatusPanel('compiler', 
