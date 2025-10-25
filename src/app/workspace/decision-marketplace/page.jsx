@@ -469,7 +469,7 @@ const DecisionMarketplace = () => {
         </div>
 
         <div className="bg-white rounded-3xl shadow-sm p-8 mt-6">
-         <Link href={"/workspace/source-connection"}>
+         <Link href={"/workspace/decision-factor"}>
           <button className="w-full bg-teal-700 hover:bg-teal-800 text-white py-4 rounded-xl font-semibold text-lg transition-all hover:shadow-lg">
             Continue
           </button></Link>

@@ -629,7 +629,7 @@ const QuestionGraphTraversal = () => {
             </button>
           ))}
         </div>
-        <Link className="ml-5 mb-4" href={"/workspace/decision-factor"}>
+        <Link className="ml-5 mb-4" href={"/workspace/decision-marketplace"}>
           <button
             type="button"
             className={`w-[90%] py-4 rounded-xl font-semibold text-lg transition-all bg-teal-700

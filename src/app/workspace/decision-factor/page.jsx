@@ -432,7 +432,7 @@ const DecisionFactorNetwork = () => {
             </button>
           ))}
         </div>
-         <Link className="m-4" href={"/workspace/decision-marketplace"}>
+         <Link className="m-4" href={"/workspace/source-connection"}>
                   <button
                     type="button"
                     className={`w-[90%] py-2 rounded-xl font-semibold text-lg transition-all bg-teal-700
