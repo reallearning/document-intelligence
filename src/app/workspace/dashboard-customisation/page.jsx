@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import { Settings, Plus, X } from 'lucide-react';
+import Link from 'next/link';
 
 const CustomizableDashboard = () => {
   const [activeTab, setActiveTab] = useState('questions');
@@ -287,13 +288,12 @@ const CustomizableDashboard = () => {
                 Select all the questions that you want to see in regular intervals, and if you want me to send you notifications for it.
               </p>
             </div>
-            <button 
-              onClick={() => setShowAddModal(true)}
+           <Link href={"/workspace/workflow-builder"}> <button 
               className="flex items-center gap-2 px-5 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
             >
               <Plus size={18} />
               <span>Add new</span>
-            </button>
+            </button></Link>
           </div>
 
           {/* Tabs */}
