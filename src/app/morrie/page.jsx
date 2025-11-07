@@ -831,7 +831,6 @@ const MorrieDashboard = () => {
 <div className='h-10 w-26 relative'>
   <Image src={"/morrie.svg"} fill className='absolute object-contain' alt='Logo'/>
 </div>
-          <p className="text-xs text-[#000000] mt-1 font-light">Multivariate Intelligence</p>
         </div>
         
         <nav className="flex-1 p-4">
