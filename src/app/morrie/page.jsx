@@ -826,12 +826,12 @@ const MorrieDashboard = () => {
   return (
     <div className="flex h-screen bg-[#E7DDCA]">
       {/* Sidebar */}
-      <div className="w-64 bg-[#0C2C18] border-r border-[#1B2A21] flex flex-col">
-        <div className="p-6 border-b border-[#1B2A21]">
+      <div className="w-64 bg-white border-r border-gray-200 flex flex-col">
+        <div className="p-6 border-b border-gray-200">
 <div className='h-10 w-26 relative'>
-  <Image src={"/morrie.svg"} fill className='absolute object-cover' alt='Logo'/>
+  <Image src={"/morrie.svg"} fill className='absolute object-contain' alt='Logo'/>
 </div>
-          <p className="text-xs text-[#85A383] mt-1 font-light">Multivariate Intelligence</p>
+          <p className="text-xs text-[#000000] mt-1 font-light">Multivariate Intelligence</p>
         </div>
         
         <nav className="flex-1 p-4">
@@ -844,11 +844,7 @@ const MorrieDashboard = () => {
             <button
               key={item.id}
               onClick={() => setCurrentView(item.id)}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg mb-2 transition-all font-light ${
-                currentView === item.id
-                  ? 'bg-[#85A383] text-[#0C2C18]'
-                  : 'text-[#E7DDCA] hover:bg-[#1B2A21]'
-              }`}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg mb-2 transition-all font-light text-black`}
             >
               <item.icon className="w-5 h-5" strokeWidth={1} />
               <span>{item.label}</span>
@@ -872,7 +868,7 @@ const MorrieDashboard = () => {
                 <>
                   <button 
                     onClick={() => setShowFilters(!showFilters)}
-                    className="px-4 py-2 bg-[#E7DDCA] hover:bg-[#85A383] hover:text-white rounded text-sm text-[#0C2C18] flex items-center gap-2 transition-all font-medium"
+                    className="px-4 py-2 bg-[#ffffff] rounded text-sm text-[#000000] flex items-center gap-2 transition-all font-medium"
                   >
                     <Filter className="w-4 h-4" strokeWidth={1.5} />
                     Filters
@@ -918,7 +914,7 @@ const MorrieDashboard = () => {
               )}
               
               {currentView !== 'dashboard' && (
-                <button className="px-5 py-2.5 bg-white border-2 border-[#0C2C18] hover:bg-[#E7DDCA] text-[#0C2C18] rounded text-sm flex items-center gap-2 transition-all font-medium">
+                <button className="px-5 py-2.5 bg-white border-2 border-gray-300 text-[#000000] rounded text-sm flex items-center gap-2 transition-all font-medium">
                   <Download className="w-4 h-4" strokeWidth={1.5} />
                   Export
                 </button>
@@ -980,7 +976,7 @@ const MorrieDashboard = () => {
         </div>
 
         {/* Content Area */}
-        <div className="flex-1 overflow-y-auto px-8 py-8 bg-[#E7DDCA]">
+        <div className="flex-1 overflow-y-auto px-8 py-8 bg-[#ffffff]">
           {currentView === 'dashboard' && (
             <div>
               <div className="mb-10">
@@ -1945,7 +1941,7 @@ const MorrieDashboard = () => {
       {decisionTrailModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-8">
           <div className="bg-white rounded-xl max-w-7xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="sticky top-0 bg-white border-b border-gray-200 px-8 py-6" style={{ backgroundColor: '#E7DDCA' }}>
+            <div className="sticky top-0 bg-white border-b border-gray-200 px-8 py-6 z-20" style={{ backgroundColor: '#ffffff' }}>
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <h3 className="text-2xl text-[#0C2C18] font-light">Decision Trail</h3>
