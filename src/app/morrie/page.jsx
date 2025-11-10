@@ -1019,7 +1019,7 @@ const MorrieDashboard = () => {
                 <div className="bg-white rounded-xl p-6 shadow-md border-l-4" style={{ borderLeftColor: '#85A383' }}>
                   <div className="flex items-center gap-3 mb-4">
                     <ShoppingBag className="w-5 h-5" style={{ color: '#85A383' }} strokeWidth={1.5} />
-                    <h3 className="text-lg text-[#0C2C18] font-medium">Marketing is driving urgency</h3>
+                    <h3 className="text-lg text-[#0C2C18] font-medium">Campaign spend locks in Nov 1-14 demand window</h3>
                   </div>
                   <div className="space-y-3">
                     <p className="text-sm text-[#878B87] font-light leading-relaxed">
@@ -1043,21 +1043,20 @@ const MorrieDashboard = () => {
                 <div className="bg-white rounded-xl p-6 shadow-md border-l-4" style={{ borderLeftColor: '#85A383' }}>
                   <div className="flex items-center gap-3 mb-4">
                     <Truck className="w-5 h-5" style={{ color: '#85A383' }} strokeWidth={1.5} />
-                    <h3 className="text-lg text-[#0C2C18] font-medium">Supply chain is ready</h3>
+                    <h3 className="text-lg text-[#0C2C18] font-medium">Warehouse stock covers only 4 days at campaign velocity</h3>
                   </div>
                   <div className="space-y-3">
                     <p className="text-sm text-[#878B87] font-light leading-relaxed">
-                      Good news: your suppliers can support the recommendations. Lead times are 2-3 days with 94-96% reliability. 
-                      There are already 12 units of the white shirt in transit, arriving in 2 days.
+                      Your Mumbai DC currently holds 340 units of RS-2407 and 180 units of RS-2412—the two hero SKUs in the Diwali campaign. At normal velocity, this is 18 days of cover. But when the campaign launches Nov 1, these SKUs typically accelerate to 4.2x baseline velocity based on last year's festive campaign data, which drops your coverage to just 4.3 days.
                     </p>
                     <div className="p-3 rounded-lg" style={{ backgroundColor: '#85A38315' }}>
-                      <div className="text-xs uppercase tracking-wider font-medium text-[#0C2C18] mb-1">Timing Works</div>
+                      <div className="text-xs uppercase tracking-wider font-medium text-[#0C2C18] mb-1">ALLOCATION DECISION</div>
                       <div className="text-sm text-[#878B87] font-light">
-                        If we order today, stock arrives Nov 9-10, giving 1-2 days buffer before the Nov 11 campaign launch.
+          Delhi and Bangalore flagships are forecasting 65% of the campaign traffic but currently allocated only 42% of available stock. Reallocating 140 units from slower stores to these high-traffic locations could capture an additional ₹2.8L in GMV during the peak campaign window, but it leaves tier-2 stores understocked if the campaign performs differently than expected.
                       </div>
                     </div>
                     <button className="text-sm font-medium hover:underline" style={{ color: '#85A383' }}>
-                      What if supplier is delayed? →
+                      Compare allocation scenarios →
                     </button>
                   </div>
                 </div>
@@ -1066,7 +1065,7 @@ const MorrieDashboard = () => {
                 <div className="bg-white rounded-xl p-6 shadow-md border-l-4" style={{ borderLeftColor: '#DF7649' }}>
                   <div className="flex items-center gap-3 mb-4">
                     <MapPin className="w-5 h-5" style={{ color: '#DF7649' }} strokeWidth={1.5} />
-                    <h3 className="text-lg text-[#0C2C18] font-medium">Location mismatches detected</h3>
+                    <h3 className="text-lg text-[#0C2C18] font-medium">₹9.2L stuck in weather-wrong locations"</h3>
                   </div>
                   <div className="space-y-3">
                     <p className="text-sm text-[#878B87] font-light leading-relaxed">
@@ -1090,7 +1089,7 @@ const MorrieDashboard = () => {
                 <div className="bg-white rounded-xl p-6 shadow-md border-l-4" style={{ borderLeftColor: '#85A383' }}>
                   <div className="flex items-center gap-3 mb-4">
                     <DollarSign className="w-5 h-5" style={{ color: '#85A383' }} strokeWidth={1.5} />
-                    <h3 className="text-lg text-[#0C2C18] font-medium">Pricing power is strong</h3>
+                    <h3 className="text-lg text-[#0C2C18] font-medium">Full-price velocity protects 54% margins</h3>
                   </div>
                   <div className="space-y-3">
                     <p className="text-sm text-[#878B87] font-light leading-relaxed">
