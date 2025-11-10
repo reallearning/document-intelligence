@@ -1030,7 +1030,7 @@ const MorrieDashboard = () => {
                     <div className="p-3 rounded-lg" style={{ backgroundColor: '#85A38315' }}>
                       <div className="text-xs uppercase tracking-wider font-medium text-[#0C2C18] mb-1">Campaign Impact</div>
                       <div className="text-sm text-[#878B87] font-light">
-                        2 SKUs in replenishment queue are featured in this campaign. Both need stock before campaign start to capture the lift.
+                      2 SKUs in replenishment queue are featured in this campaign. Both need stock before campaign start Nov 1 to capture the lift. Historical data shows this campaign type typically drives 28-35% traffic increase with 19% conversion over 14 days.
                       </div>
                     </div>
                     <button onClick={() => setCurrentView('replenishment')} className="text-sm font-medium hover:underline" style={{ color: '#85A383' }}>
