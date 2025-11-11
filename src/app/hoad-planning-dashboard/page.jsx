@@ -33,6 +33,17 @@ const MorrieDashboard = () => {
   ]);
   const [chatInput, setChatInput] = useState('');
   const [chatContext, setChatContext] = useState(null);
+    const [filters, setFilters] = useState({
+    season: 'all',
+    zone: 'all',
+    lifecycle: 'all',
+    ageing: 'all',
+    category: 'all',
+    price: 'all',
+    store: 'all',
+    promotion: 'all',
+    performance: 'all'
+  });
 
 const toggleReplenishmentSelection = (id) => {
   setSelectedReplenishment((prev) =>
@@ -145,6 +156,14 @@ const selectAllReplenishment = () => {
     );
   };
 
+   const performanceOptions = [
+    { value: 'all', label: 'All Performance' },
+    { value: 'top', label: 'Top Performers', icon: TrendingUp },
+    { value: 'bottom', label: 'Bottom Performers', icon: TrendingDown },
+    { value: 'critical', label: 'Critical Items', icon: AlertCircle },
+    { value: 'opportunity', label: 'High Opportunity', icon: Sparkles }
+  ];
+
   const openChatWithContext = (item, type) => {
     setChatContext({ ...item, type });
     setChatOpen(true);
@@ -199,7 +218,8 @@ const selectAllReplenishment = () => {
         { store: 'AND Delhi Connaught', zone: 'North', grade: 'A++', dispatch: 14, avgPLC: 31, transferOut: 1, value: 89.7 },
         { store: 'AND Bangalore MG Road', zone: 'South', grade: 'A+', dispatch: 11, avgPLC: 29, transferOut: 0, value: 65.8 },
         { store: 'AND Pune Aundh', zone: 'West', grade: 'A', dispatch: 8, avgPLC: 31, transferOut: 3, value: 47.8 }
-      ]
+      ],
+      performance: 'top'
     },
     {
       id: 'F25C42TPWHT',
@@ -235,7 +255,8 @@ const selectAllReplenishment = () => {
         { size: 'M', total: 312, ebo: 186, ecom: 58, lfs: 38, rtv: 3, warehouse: 102, ros: 1.8, sellThrough: 80 },
         { size: 'L', total: 268, ebo: 156, ecom: 42, lfs: 28, rtv: 2, warehouse: 78, ros: 1.2, sellThrough: 74 },
         { size: 'XL', total: 186, ebo: 94, ecom: 20, lfs: 12, rtv: 0, warehouse: 42, ros: 0.3, sellThrough: 68 }
-      ]
+      ],
+      performance: 'top'
     },
     {
       id: 'F24W18DNMBL',
@@ -272,7 +293,8 @@ const selectAllReplenishment = () => {
         { size: '32', total: 58, ebo: 36, ecom: 10, lfs: 8, rtv: 4, warehouse: 18, ros: 0.2, sellThrough: 86 },
         { size: '34', total: 42, ebo: 28, ecom: 6, lfs: 4, rtv: 4, warehouse: 12, ros: 0.1, sellThrough: 84 },
         { size: '36', total: 26, ebo: 18, ecom: 3, lfs: 2, rtv: 3, warehouse: 8, ros: 0.1, sellThrough: 82 }
-      ]
+      ],
+      performance: 'critical',
     },
     {
       id: 'F25P35BLZPK',
@@ -308,7 +330,8 @@ const selectAllReplenishment = () => {
         { size: 'M', total: 112, ebo: 86, ecom: 16, lfs: 6, rtv: 0, warehouse: 38, ros: 0.4, sellThrough: 46 },
         { size: 'L', total: 94, ebo: 72, ecom: 14, lfs: 6, rtv: 0, warehouse: 32, ros: 0.2, sellThrough: 40 },
         { size: 'XL', total: 58, ebo: 56, ecom: 10, lfs: 4, rtv: 0, warehouse: 22, ros: 0.1, sellThrough: 36 }
-      ]
+      ],
+      performance: 'bottom',
     }
   ];
 
@@ -461,6 +484,11 @@ const selectAllReplenishment = () => {
       ]
     }
   ];
+
+    const filteredSKUs = fashionSKUs.filter(sku => {
+    if (filters.performance === 'all') return true;
+    return sku.performance === filters.performance;
+  });
 
 
   const movementItems = [
@@ -624,7 +652,29 @@ const selectAllReplenishment = () => {
            {/* Filter Panel */}
           {showFilters && (
             <div className="mt-5 p-6 rounded-lg border border-gray-200" style={{ backgroundColor: '#E7DDCA30' }}>
-              <div className="grid grid-cols-4 gap-6">
+              <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">PERFORMANCE</label>
+                  <div className="grid grid-cols-5 gap-3">
+                    {performanceOptions.map(option => {
+                      const Icon = option.icon;
+                      return (
+                        <button
+                          key={option.value}
+                          onClick={() => setFilters({...filters, performance: option.value})}
+                          className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg border-2 transition-all ${
+                            filters.performance === option.value 
+                              ? 'border-[#7C9473] bg-[#7C9473]/5 text-[#7C9473] font-medium' 
+                              : 'border-gray-200 text-gray-600 hover:border-gray-300'
+                          }`}
+                        >
+                          {Icon && <Icon size={16} />}
+                          <span className="text-sm">{option.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              <div className="grid grid-cols-4 gap-6 mt-4">
                 {/* Season Filter */}
                 <div>
                   <label className="text-xs uppercase tracking-wider font-medium text-[#0C2C18] mb-2 block">Season</label>
@@ -911,13 +961,24 @@ const selectAllReplenishment = () => {
 
           {currentView === 'overview' && (
             <div>
-              <div className="mb-10">
+              <div className={`${filters.performance !== 'all' ? "" : "mb-10"}`}>
                 <h2 className="text-3xl text-[#0C2C18] mb-3 font-light">SKU Lifecycle Overview</h2>
                 <p className="text-[#878B87] font-light">Complete product performance tracking</p>
               </div>
 
+             {filters.performance !== 'all' &&  <div className="mt-4 mb-10 px-8 py-4 bg-gray-50 border-b border-gray-200">
+            <p className="text-sm text-gray-600">
+              Showing <span className="font-semibold text-gray-900">{filteredSKUs.length}</span> SKUs
+              {filters.performance !== 'all' && (
+                <span className="ml-2 text-[#7C9473]">
+                  • {performanceOptions.find(o => o.value === filters.performance)?.label}
+                </span>
+              )}
+            </p>
+          </div>}
+
               <div className="space-y-5">
-                {fashionSKUs.map((sku) => (
+                {filteredSKUs.map((sku) => (
                   <div key={sku.id} className="bg-white rounded-xl border-l-4 overflow-hidden shadow-md" style={{ borderLeftColor: '#85A383' }}>
                     <div className="p-7">
                       <div className="flex gap-6">
