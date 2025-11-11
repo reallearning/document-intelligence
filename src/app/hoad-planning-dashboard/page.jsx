@@ -158,7 +158,7 @@ const selectAllReplenishment = () => {
     setChatMessages(prev => [...prev, contextMessage]);
   };
 
-  const fashionSKUs = [
+    const fashionSKUs = [
     {
       id: 'F25P28DRCEY',
       name: 'Indigo V-Neck Dress',
@@ -169,13 +169,18 @@ const selectAllReplenishment = () => {
       season: 'SS25',
       collection: 'Pret',
       category: 'Dresses',
+      subCategory: 'Midi Dresses',
       fabric: 'Cotton Blend',
+      print: 'Solid',
       color: 'Indigo',
+      priceBand: '₹2,500-3,000',
       ageingBucket: '0-30 days',
       lifecycle: 'Growth',
+      initialAllocation: 850,
       eboInventory: 456,
       ecomInventory: 124,
       lfsInventory: 87,
+      rtvInventory: 12,
       avgROS: 3.2,
       sellThrough: 68,
       margin: 52,
@@ -183,11 +188,17 @@ const selectAllReplenishment = () => {
       markdownStatus: 'Full Price',
       velocityTrend: 'up',
       sizeBreakdown: [
-        { size: 'XS', total: 85, ebo: 42, ecom: 18, lfs: 12, ros: 0.6, sellThrough: 52 },
-        { size: 'S', total: 142, ebo: 88, ecom: 28, lfs: 16, ros: 1.2, sellThrough: 68 },
-        { size: 'M', total: 198, ebo: 124, ecom: 36, lfs: 22, ros: 1.4, sellThrough: 74 },
-        { size: 'L', total: 176, ebo: 106, ecom: 26, lfs: 20, ros: 1.0, sellThrough: 65 },
-        { size: 'XL', total: 121, ebo: 96, ecom: 16, lfs: 17, ros: 0.6, sellThrough: 58 }
+        { size: 'XS', total: 85, ebo: 42, ecom: 18, lfs: 12, rtv: 2, warehouse: 45, ros: 0.6, sellThrough: 52 },
+        { size: 'S', total: 142, ebo: 88, ecom: 28, lfs: 16, rtv: 3, warehouse: 52, ros: 1.2, sellThrough: 68 },
+        { size: 'M', total: 198, ebo: 124, ecom: 36, lfs: 22, rtv: 4, warehouse: 64, ros: 1.4, sellThrough: 74 },
+        { size: 'L', total: 176, ebo: 106, ecom: 26, lfs: 20, rtv: 2, warehouse: 48, ros: 1.0, sellThrough: 65 },
+        { size: 'XL', total: 121, ebo: 96, ecom: 16, lfs: 17, rtv: 1, warehouse: 25, ros: 0.6, sellThrough: 58 }
+      ],
+      storeBreakdown: [
+        { store: 'AND Mumbai Central', zone: 'West', grade: 'A+', dispatch: 12, avgPLC: 28, transferOut: 2, value: 59.8 },
+        { store: 'AND Delhi Connaught', zone: 'North', grade: 'A++', dispatch: 14, avgPLC: 31, transferOut: 1, value: 89.7 },
+        { store: 'AND Bangalore MG Road', zone: 'South', grade: 'A+', dispatch: 11, avgPLC: 29, transferOut: 0, value: 65.8 },
+        { store: 'AND Pune Aundh', zone: 'West', grade: 'A', dispatch: 8, avgPLC: 31, transferOut: 3, value: 47.8 }
       ]
     },
     {
@@ -200,19 +211,31 @@ const selectAllReplenishment = () => {
       season: 'SS25',
       collection: 'Core',
       category: 'Tops',
+      subCategory: 'Casual Tops',
       fabric: '100% Cotton',
+      print: 'Solid',
       color: 'White',
+      priceBand: '₹1,500-2,000',
       ageingBucket: '0-30 days',
       lifecycle: 'Peak',
+      initialAllocation: 1240,
       eboInventory: 682,
       ecomInventory: 186,
       lfsInventory: 124,
+      rtvInventory: 8,
       avgROS: 4.8,
       sellThrough: 78,
       margin: 58,
       stockCover: 35,
       markdownStatus: 'Full Price',
-      velocityTrend: 'stable'
+      velocityTrend: 'stable',
+      sizeBreakdown: [
+        { size: 'XS', total: 142, ebo: 88, ecom: 24, lfs: 18, rtv: 1, warehouse: 56, ros: 0.9, sellThrough: 76 },
+        { size: 'S', total: 256, ebo: 158, ecom: 42, lfs: 28, rtv: 2, warehouse: 88, ros: 1.6, sellThrough: 82 },
+        { size: 'M', total: 312, ebo: 186, ecom: 58, lfs: 38, rtv: 3, warehouse: 102, ros: 1.8, sellThrough: 80 },
+        { size: 'L', total: 268, ebo: 156, ecom: 42, lfs: 28, rtv: 2, warehouse: 78, ros: 1.2, sellThrough: 74 },
+        { size: 'XL', total: 186, ebo: 94, ecom: 20, lfs: 12, rtv: 0, warehouse: 42, ros: 0.3, sellThrough: 68 }
+      ]
     },
     {
       id: 'F24W18DNMBL',
@@ -224,19 +247,32 @@ const selectAllReplenishment = () => {
       season: 'AW24',
       collection: 'Denim Edit',
       category: 'Bottoms',
+      subCategory: 'Jeans',
       fabric: 'Stretch Denim',
+      print: 'Solid',
       color: 'Dark Blue',
+      priceBand: '₹2,000-2,500',
       ageingBucket: '120+ days',
       lifecycle: 'Decline',
+      initialAllocation: 980,
       eboInventory: 156,
       ecomInventory: 42,
       lfsInventory: 28,
+      rtvInventory: 18,
       avgROS: 0.8,
       sellThrough: 88,
       margin: 42,
       stockCover: 68,
       markdownStatus: '30% Off',
-      velocityTrend: 'down'
+      velocityTrend: 'down',
+      sizeBreakdown: [
+        { size: '26', total: 18, ebo: 12, ecom: 3, lfs: 2, rtv: 1, warehouse: 8, ros: 0.1, sellThrough: 92 },
+        { size: '28', total: 38, ebo: 24, ecom: 8, lfs: 4, rtv: 2, warehouse: 14, ros: 0.2, sellThrough: 90 },
+        { size: '30', total: 62, ebo: 38, ecom: 12, lfs: 8, rtv: 4, warehouse: 22, ros: 0.3, sellThrough: 88 },
+        { size: '32', total: 58, ebo: 36, ecom: 10, lfs: 8, rtv: 4, warehouse: 18, ros: 0.2, sellThrough: 86 },
+        { size: '34', total: 42, ebo: 28, ecom: 6, lfs: 4, rtv: 4, warehouse: 12, ros: 0.1, sellThrough: 84 },
+        { size: '36', total: 26, ebo: 18, ecom: 3, lfs: 2, rtv: 3, warehouse: 8, ros: 0.1, sellThrough: 82 }
+      ]
     },
     {
       id: 'F25P35BLZPK',
@@ -248,19 +284,31 @@ const selectAllReplenishment = () => {
       season: 'SS25',
       collection: 'Premium',
       category: 'Outerwear',
+      subCategory: 'Blazers',
       fabric: 'Linen Blend',
+      print: 'Solid',
       color: 'Pastel Pink',
+      priceBand: '₹4,500-5,000',
       ageingBucket: '0-30 days',
       lifecycle: 'Launch',
+      initialAllocation: 420,
       eboInventory: 324,
       ecomInventory: 58,
       lfsInventory: 22,
+      rtvInventory: 0,
       avgROS: 1.2,
       sellThrough: 42,
       margin: 62,
       stockCover: 58,
       markdownStatus: 'Full Price',
-      velocityTrend: 'up'
+      velocityTrend: 'up',
+      sizeBreakdown: [
+        { size: 'XS', total: 52, ebo: 42, ecom: 6, lfs: 2, rtv: 0, warehouse: 18, ros: 0.2, sellThrough: 38 },
+        { size: 'S', total: 88, ebo: 68, ecom: 12, lfs: 4, rtv: 0, warehouse: 28, ros: 0.3, sellThrough: 44 },
+        { size: 'M', total: 112, ebo: 86, ecom: 16, lfs: 6, rtv: 0, warehouse: 38, ros: 0.4, sellThrough: 46 },
+        { size: 'L', total: 94, ebo: 72, ecom: 14, lfs: 6, rtv: 0, warehouse: 32, ros: 0.2, sellThrough: 40 },
+        { size: 'XL', total: 58, ebo: 56, ecom: 10, lfs: 4, rtv: 0, warehouse: 22, ros: 0.1, sellThrough: 36 }
+      ]
     }
   ];
 
@@ -918,6 +966,16 @@ const selectAllReplenishment = () => {
                                 </span>
                               </div>
                             </div>
+                            <button
+                                                          onClick={() => setLifecycleModal(lifecycleModal === sku.id ? null : sku.id)}
+                                                          className="px-5 py-2.5 rounded-lg text-sm flex items-center gap-2 transition-all font-medium shadow-md hover:shadow-lg ml-4"
+                                                          style={{ backgroundColor: '#85A383', color: 'white' }}
+                                                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#6B8A6A'}
+                                                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#85A383'}
+                                                        >
+                                                          <BarChart3 className="w-4 h-4" strokeWidth={1.5} />
+                                                          View Lifecycle
+                                                        </button>
                           </div>
                           
                           <div className="grid grid-cols-7 gap-3 mb-4">
@@ -1001,6 +1059,157 @@ const selectAllReplenishment = () => {
                   </div>
                 ))}
               </div>
+               {/* SKU-Level Lifecycle Modal */}
+                            {lifecycleModal && (
+                              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-8">
+                                <div className="bg-white rounded-xl max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+                                  <div className="sticky top-0 bg-white border-b border-gray-200 px-8 py-6 flex items-center justify-between">
+                                    <div>
+                                      <h3 className="text-2xl text-[#0C2C18] font-light">Product Lifecycle Report</h3>
+                                      <p className="text-sm text-[#878B87] mt-1 font-light">
+                                        {fashionSKUs.find(s => s.id === lifecycleModal)?.name} • {lifecycleModal}
+                                      </p>
+                                    </div>
+                                    <button
+                                      onClick={() => setLifecycleModal(false)}
+                                      className="text-[#878B87] hover:text-[#0C2C18]"
+                                    >
+                                      <X className="w-6 h-6" strokeWidth={1} />
+                                    </button>
+                                  </div>
+              
+                                  <div className="p-8">
+                                    {(() => {
+                                      const sku = fashionSKUs.find(s => s.id === lifecycleModal);
+                                      if (!sku) return null;
+                                      
+                                      return (
+                                        <>
+                                          {/* Product Header */}
+                                          <div className="flex gap-6 mb-8 p-6 rounded-xl" style={{ backgroundColor: '#E7DDCA30' }}>
+                                            <div className="w-32 h-32 rounded-lg flex items-center justify-center text-6xl border-2" style={{ 
+                                              background: '#ffffff',
+                                              borderColor: '#85A383'
+                                            }}>
+                                              {sku.image}
+                                            </div>
+                                            <div className="flex-1">
+                                              <h4 className="text-2xl text-[#0C2C18] mb-3 font-light">{sku.name}</h4>
+                                              <div className="grid grid-cols-4 gap-4 mb-4">
+                                                <div>
+                                                  <div className="text-xs uppercase tracking-wider font-light" style={{ color: '#878B87' }}>MRP</div>
+                                                  <div className="text-xl text-[#0C2C18] font-medium">{sku.mrp}</div>
+                                                </div>
+                                                <div>
+                                                  <div className="text-xs uppercase tracking-wider font-light" style={{ color: '#878B87' }}>Launch Date</div>
+                                                  <div className="text-xl text-[#0C2C18] font-light">{sku.launchDate}</div>
+                                                </div>
+                                                <div>
+                                                  <div className="text-xs uppercase tracking-wider font-light" style={{ color: '#878B87' }}>Days Since Launch</div>
+                                                  <div className="text-xl font-medium" style={{ color: '#85A383' }}>{sku.daysSinceLaunch} days</div>
+                                                </div>
+                                                <div>
+                                                  <div className="text-xs uppercase tracking-wider font-light" style={{ color: '#878B87' }}>Lifecycle Stage</div>
+                                                  <div className="text-xl text-[#0C2C18] font-light">{sku.lifecycle}</div>
+                                                </div>
+                                              </div>
+                                              <div className="grid grid-cols-5 gap-4">
+                                                <div>
+                                                  <div className="text-xs uppercase tracking-wider font-light" style={{ color: '#878B87' }}>EBO Inventory</div>
+                                                  <div className="text-lg text-[#0C2C18] font-light">{sku.eboInventory}</div>
+                                                </div>
+                                                <div>
+                                                  <div className="text-xs uppercase tracking-wider font-light" style={{ color: '#878B87' }}>Ecom Inventory</div>
+                                                  <div className="text-lg text-[#0C2C18] font-light">{sku.ecomInventory}</div>
+                                                </div>
+                                                <div>
+                                                  <div className="text-xs uppercase tracking-wider font-light" style={{ color: '#878B87' }}>LFS Inventory</div>
+                                                  <div className="text-lg text-[#0C2C18] font-light">{sku.lfsInventory}</div>
+                                                </div>
+                                                <div>
+                                                  <div className="text-xs uppercase tracking-wider font-light" style={{ color: '#878B87' }}>RTV Inventory</div>
+                                                  <div className="text-lg text-[#0C2C18] font-light">{sku.rtvInventory}</div>
+                                                </div>
+                                                <div>
+                                                  <div className="text-xs uppercase tracking-wider font-light" style={{ color: '#878B87' }}>Initial Allocation</div>
+                                                  <div className="text-lg text-[#0C2C18] font-light">{sku.initialAllocation}</div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+              
+                                          {/* Store-Level Breakdown */}
+                                          {sku.storeBreakdown && (
+                                            <div>
+                                              <h5 className="text-lg text-[#0C2C18] mb-4 font-medium">Store-Level Performance</h5>
+                                              <div className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm">
+                                                <table className="w-full text-sm">
+                                                  <thead>
+                                                    <tr className="border-b-2 border-gray-200" style={{ backgroundColor: '#E7DDCA50' }}>
+                                                      <th className="py-3 px-4 text-left text-[#0C2C18] font-medium uppercase tracking-wider text-xs">Store Name</th>
+                                                      <th className="py-3 px-3 text-center text-[#0C2C18] font-medium uppercase tracking-wider text-xs">Zone</th>
+                                                      <th className="py-3 px-3 text-center text-[#0C2C18] font-medium uppercase tracking-wider text-xs">Grade</th>
+                                                      <th className="py-3 px-3 text-right text-[#0C2C18] font-medium uppercase tracking-wider text-xs">Dispatch Qty</th>
+                                                      <th className="py-3 px-3 text-right text-[#0C2C18] font-medium uppercase tracking-wider text-xs">Avg PLC Days</th>
+                                                      <th className="py-3 px-3 text-right text-[#0C2C18] font-medium uppercase tracking-wider text-xs">Transfer Out</th>
+                                                      <th className="py-3 px-3 text-right font-medium uppercase tracking-wider text-xs" style={{ color: '#85A383' }}>Value (₹K)</th>
+                                                    </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                    {sku.storeBreakdown.map((store, idx) => (
+                                                      <tr key={idx} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                                                        <td className="py-3 px-4 text-[#0C2C18] font-medium">{store.store}</td>
+                                                        <td className="py-3 px-3 text-center">
+                                                          <span className="px-2 py-1 rounded text-xs font-medium" style={{
+                                                            backgroundColor: '#E7DDCA',
+                                                            color: '#0C2C18'
+                                                          }}>
+                                                            {store.zone}
+                                                          </span>
+                                                        </td>
+                                                        <td className="py-3 px-3 text-center">
+                                                          <span className="px-2 py-1 rounded text-xs font-medium" style={{
+                                                            backgroundColor: store.grade.includes('++') ? '#85A38330' : '#E7DDCA50',
+                                                            color: store.grade.includes('++') ? '#85A383' : '#0C2C18'
+                                                          }}>
+                                                            {store.grade}
+                                                          </span>
+                                                        </td>
+                                                        <td className="py-3 px-3 text-right text-[#0C2C18] font-light">{store.dispatch}</td>
+                                                        <td className="py-3 px-3 text-right text-[#878B87] font-light">{store.avgPLC}</td>
+                                                        <td className="py-3 px-3 text-right text-[#878B87] font-light">{store.transferOut}</td>
+                                                        <td className="py-3 px-3 text-right font-medium" style={{ color: '#85A383' }}>{store.value}</td>
+                                                      </tr>
+                                                    ))}
+                                                  </tbody>
+                                                </table>
+                                              </div>
+                                            </div>
+                                          )}
+              
+                                          {/* Action Footer */}
+                                          <div className="mt-8 pt-6 border-t border-gray-200 flex justify-end gap-3">
+                                            <button
+                                              onClick={() => setLifecycleModal(false)}
+                                              className="px-6 py-2.5 bg-white border-2 border-gray-300 hover:bg-gray-50 text-[#0C2C18] rounded text-sm font-medium transition-all"
+                                            >
+                                              Close
+                                            </button>
+                                            <button 
+                                              className="px-6 py-2.5 rounded text-sm font-medium transition-all shadow-lg flex items-center gap-2"
+                                              style={{ backgroundColor: '#85A383', color: 'white' }}
+                                            >
+                                              <Download className="w-4 h-4" strokeWidth={1.5} />
+                                              Export Report
+                                            </button>
+                                          </div>
+                                        </>
+                                      );
+                                    })()}
+                                  </div>
+                                </div>
+                              </div>
+                            )}
             </div>
           )}
 
