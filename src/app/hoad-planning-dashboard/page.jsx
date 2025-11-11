@@ -652,7 +652,7 @@ const selectAllReplenishment = () => {
            {/* Filter Panel */}
           {showFilters && (
             <div className="mt-5 p-6 rounded-lg border border-gray-200" style={{ backgroundColor: '#E7DDCA30' }}>
-              <div>
+              {currentView === 'overview' && <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">PERFORMANCE</label>
                   <div className="grid grid-cols-5 gap-3">
                     {performanceOptions.map(option => {
@@ -673,7 +673,8 @@ const selectAllReplenishment = () => {
                       );
                     })}
                   </div>
-                </div>
+                </div>}
+              
               <div className="grid grid-cols-4 gap-6 mt-4">
                 {/* Season Filter */}
                 <div>
