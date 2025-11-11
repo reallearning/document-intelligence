@@ -22,6 +22,8 @@ const MorrieDashboard = () => {
   const [replenishmentView, setReplenishmentView] = useState('card');
   const [movementView, setMovementView] = useState('card');
   const [chatOpen, setChatOpen] = useState(false);
+  const [expandedStores, setExpandedStores] = useState({});
+   const [selectedValues, setSelectedValues] = useState([]);
   const [chatMessages, setChatMessages] = useState([
     { 
       role: 'assistant', 
@@ -32,10 +34,36 @@ const MorrieDashboard = () => {
   const [chatInput, setChatInput] = useState('');
   const [chatContext, setChatContext] = useState(null);
 
-  const toggleReplenishmentSelection = (id) => {
-    setSelectedReplenishment(prev => 
-      prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
-    );
+const toggleReplenishmentSelection = (id) => {
+  setSelectedReplenishment((prev) =>
+    prev.includes(id)
+      ? prev.filter((item) => item !== id)
+      : [...prev, id]
+  );
+
+  const item = replenishmentItems.find((e) => e.id === id);
+  if (!item) return;
+
+  const storeIds = item.stores.map((s) => s.storeId);
+
+  setSelectedValues((prev) => {
+    // If this item is already selected → remove its storeIds
+    const isSelected = selectedReplenishment.includes(id);
+    if (isSelected) {
+      return prev.filter((storeId) => !storeIds.includes(storeId));
+    }
+
+    // Else → add its storeIds
+    return [...prev, ...storeIds];
+  });
+};
+
+
+   const toggleStoreExpansion = (itemId, storeId) => {
+    setExpandedStores(prev => ({
+      ...prev,
+      [`${itemId}-${storeId}`]: !prev[`${itemId}-${storeId}`]
+    }));
   };
 
   const toggleMovementSelection = (id) => {
@@ -44,13 +72,26 @@ const MorrieDashboard = () => {
     );
   };
 
-  const selectAllReplenishment = () => {
-    if (selectedReplenishment.length === replenishmentItems.length) {
-      setSelectedReplenishment([]);
-    } else {
-      setSelectedReplenishment(replenishmentItems.map(item => item.id));
-    }
-  };
+const selectAllReplenishment = () => {
+  const allSelected = selectedReplenishment.length === replenishmentItems.length;
+
+  if (allSelected) {
+    // Deselect everything
+    setSelectedReplenishment([]);
+    setSelectedValues([]);
+  } else {
+    // Select all replenishment items
+    setSelectedReplenishment(replenishmentItems.map(item => item.id));
+
+    // Flatten all storeIds from all items
+    const allStoreIds = replenishmentItems.flatMap(item =>
+      item.stores.map(store => store.storeId)
+    );
+
+    setSelectedValues(allStoreIds);
+  }
+};
+
 
   const selectAllMovement = () => {
     if (selectedMovement.length === movementItems.length) {
@@ -94,6 +135,14 @@ const MorrieDashboard = () => {
       
       setChatMessages(prev => [...prev, aiResponse]);
     }, 800);
+  };
+
+    const handleCheckboxChange = (value) => {
+    setSelectedValues((prev) =>
+      prev.includes(value)
+        ? prev.filter((v) => v !== value) // remove if already selected
+        : [...prev, value] // add if not selected
+    );
   };
 
   const openChatWithContext = (item, type) => {
@@ -215,75 +264,156 @@ const MorrieDashboard = () => {
     }
   ];
 
-  const replenishmentItems = [
+   const replenishmentItems = [
     {
       id: 'SKU001',
       name: 'Floral Summer Dress',
       image: '🌺',
-      store: 'AND Mumbai Central',
-      storeId: 'STR023',
-      zone: 'West',
+      skuCode: 'F25-FSD-RAY',
       category: 'Dresses',
       season: 'SS25',
       fabric: 'Rayon',
-      currentStock: 12,
-      warehouseStock: 45,
-      inTransit: 18,
-      rateOfSale: 4.5,
-      daysToStockout: 2.7,
-      aiConfidence: 94,
-      priority: 'Critical',
-      totalImpact: '₹89,964',
-      sizes: [
-        { size: 'S', stock: 2, recommendation: 8, impact: '₹19,992' },
-        { size: 'M', stock: 4, recommendation: 12, impact: '₹29,988' },
-        { size: 'L', stock: 4, recommendation: 10, impact: '₹24,990' },
-        { size: 'XL', stock: 2, recommendation: 6, impact: '₹14,994' }
+      stores: [
+        {
+          store: 'AND Mumbai Central',
+          storeId: 'STR023',
+          zone: 'West',
+          currentStock: 12,
+          warehouseStock: 45,
+          inTransit: 18,
+          rateOfSale: 4.5,
+          daysToStockout: 2.7,
+          aiConfidence: 94,
+          priority: 'Critical',
+          totalImpact: '₹89,964',
+          sizes: [
+            { size: 'S', stock: 2, recommendation: 8, impact: '₹19,992' },
+            { size: 'M', stock: 4, recommendation: 12, impact: '₹29,988' },
+            { size: 'L', stock: 4, recommendation: 10, impact: '₹24,990' },
+            { size: 'XL', stock: 2, recommendation: 6, impact: '₹14,994' }
+          ]
+        },
+        {
+          store: 'AND Pune Aundh',
+          storeId: 'STR089',
+          zone: 'West',
+          currentStock: 8,
+          warehouseStock: 45,
+          inTransit: 18,
+          rateOfSale: 3.8,
+          daysToStockout: 2.1,
+          aiConfidence: 91,
+          priority: 'Critical',
+          totalImpact: '₹67,482',
+          sizes: [
+            { size: 'S', stock: 1, recommendation: 6, impact: '₹14,994' },
+            { size: 'M', stock: 3, recommendation: 9, impact: '₹22,491' },
+            { size: 'L', stock: 3, recommendation: 8, impact: '₹19,992' },
+            { size: 'XL', stock: 1, recommendation: 5, impact: '₹12,495' }
+          ]
+        },
+        {
+          store: 'AND Bangalore Koramangala',
+          storeId: 'STR067',
+          zone: 'South',
+          currentStock: 15,
+          warehouseStock: 45,
+          inTransit: 18,
+          rateOfSale: 5.2,
+          daysToStockout: 2.9,
+          aiConfidence: 96,
+          priority: 'High',
+          totalImpact: '₹98,750',
+          sizes: [
+            { size: 'S', stock: 3, recommendation: 10, impact: '₹24,990' },
+            { size: 'M', stock: 5, recommendation: 14, impact: '₹34,986' },
+            { size: 'L', stock: 5, recommendation: 11, impact: '₹27,489' },
+            { size: 'XL', stock: 2, recommendation: 7, impact: '₹17,493' }
+          ]
+        }
       ]
     },
     {
       id: 'SKU002',
       name: 'Classic White Shirt',
       image: '👔',
-      store: 'AND Delhi Saket',
-      storeId: 'STR045',
-      zone: 'North',
+      skuCode: 'F25-CWS-COT',
       category: 'Tops',
       season: 'SS25',
       fabric: 'Cotton',
-      currentStock: 8,
-      warehouseStock: 32,
-      inTransit: 12,
-      rateOfSale: 3.8,
-      daysToStockout: 2.1,
-      aiConfidence: 91,
-      priority: 'Critical',
-      totalImpact: '₹69,982',
-      sizes: [
-        { size: 'S', stock: 1, recommendation: 6, impact: '₹14,994' },
-        { size: 'M', stock: 3, recommendation: 10, impact: '₹24,990' }
+      stores: [
+        {
+          store: 'AND Delhi Saket',
+          storeId: 'STR045',
+          zone: 'North',
+          currentStock: 8,
+          warehouseStock: 32,
+          inTransit: 12,
+          rateOfSale: 3.8,
+          daysToStockout: 2.1,
+          aiConfidence: 91,
+          priority: 'Critical',
+          totalImpact: '₹69,982',
+          sizes: [
+            { size: 'S', stock: 1, recommendation: 6, impact: '₹14,994' },
+            { size: 'M', stock: 3, recommendation: 10, impact: '₹24,990' },
+            { size: 'L', stock: 3, recommendation: 8, impact: '₹19,992' },
+            { size: 'XL', stock: 1, recommendation: 4, impact: '₹9,996' }
+          ]
+        }
       ]
     },
     {
       id: 'SKU003',
       name: 'Denim Skinny Jeans',
       image: '👖',
-      store: 'AND Bangalore Koramangala',
-      storeId: 'STR067',
-      zone: 'South',
+      skuCode: 'F25-DSJ-DEN',
       category: 'Bottoms',
       season: 'SS25',
       fabric: 'Stretch Denim',
-      currentStock: 15,
-      warehouseStock: 58,
-      inTransit: 24,
-      rateOfSale: 5.2,
-      daysToStockout: 2.9,
-      aiConfidence: 96,
-      priority: 'High',
-      totalImpact: '₹131,964'
+      stores: [
+        {
+          store: 'AND Bangalore Koramangala',
+          storeId: 'STR067',
+          zone: 'South',
+          currentStock: 15,
+          warehouseStock: 58,
+          inTransit: 24,
+          rateOfSale: 5.2,
+          daysToStockout: 2.9,
+          aiConfidence: 96,
+          priority: 'High',
+          totalImpact: '₹131,964',
+          sizes: [
+            { size: '28', stock: 2, recommendation: 10, impact: '₹29,990' },
+            { size: '30', stock: 5, recommendation: 14, impact: '₹41,986' },
+            { size: '32', stock: 5, recommendation: 12, impact: '₹35,988' },
+            { size: '34', stock: 3, recommendation: 8, impact: '₹23,992' }
+          ]
+        },
+        {
+          store: 'AND Chennai Express Avenue',
+          storeId: 'STR092',
+          zone: 'South',
+          currentStock: 11,
+          warehouseStock: 58,
+          inTransit: 24,
+          rateOfSale: 4.2,
+          daysToStockout: 2.6,
+          aiConfidence: 93,
+          priority: 'High',
+          totalImpact: '₹104,765',
+          sizes: [
+            { size: '28', stock: 2, recommendation: 8, impact: '₹23,992' },
+            { size: '30', stock: 4, recommendation: 11, impact: '₹32,989' },
+            { size: '32', stock: 3, recommendation: 10, impact: '₹29,990' },
+            { size: '34', stock: 2, recommendation: 6, impact: '₹17,994' }
+          ]
+        }
+      ]
     }
   ];
+
 
   const movementItems = [
     {
@@ -330,6 +460,21 @@ const MorrieDashboard = () => {
       reason: 'Minimal movement in current location. Footwear category shows 72% higher ROS in target North zone stores.'
     }
   ];
+
+    const getHighestPriority = (stores) => {
+    const priorities = { 'Critical': 3, 'High': 2, 'Medium': 1, 'Low': 0 };
+    return stores.reduce((highest, store) => {
+      return priorities[store.priority] > priorities[highest] ? store.priority : highest;
+    }, 'Low');
+  };
+
+  const getTotalImpact = (stores) => {
+    const total = stores.reduce((sum, store) => {
+      const value = parseInt(store.totalImpact.replace(/[₹,]/g, ''));
+      return sum + value;
+    }, 0);
+    return `₹${total.toLocaleString()}`;
+  };
 
   return (
     <div className="flex h-screen bg-[#E7DDCA]">
@@ -859,345 +1004,348 @@ const MorrieDashboard = () => {
             </div>
           )}
 
-          {currentView === 'replenishment' && (
-            <div>
-              <div className="mb-10 flex items-center justify-between">
-                <div>
-                  <h2 className="text-3xl text-[#0C2C18] mb-3 font-light">Replenishment Recommendations</h2>
-                  <p className="text-[#878B87] font-light">AI-powered recommendations for stockout risks</p>
-                </div>
-                <div className="flex items-center gap-3">
-                  {/* View Toggle */}
-                  <div className="flex items-center gap-2 bg-white border border-gray-300 rounded-lg p-1">
-                    <button
-                      onClick={() => setReplenishmentView('card')}
-                      className={`px-4 py-2 rounded flex items-center gap-2 text-sm font-medium transition-all ${
-                        replenishmentView === 'card'
-                          ? 'bg-[#85A383] text-white'
-                          : 'text-[#878B87] hover:bg-gray-100'
-                      }`}
-                    >
-                      <Grid className="w-4 h-4" strokeWidth={1.5} />
-                      Card View
-                    </button>
-                    <button
-                      onClick={() => setReplenishmentView('table')}
-                      className={`px-4 py-2 rounded flex items-center gap-2 text-sm font-medium transition-all ${
-                        replenishmentView === 'table'
-                          ? 'bg-[#85A383] text-white'
-                          : 'text-[#878B87] hover:bg-gray-100'
-                      }`}
-                    >
-                      <List className="w-4 h-4" strokeWidth={1.5} />
-                      Table View
-                    </button>
-                  </div>
-                  
-                  <button
-                    onClick={selectAllReplenishment}
-                    className="px-5 py-2.5 rounded-lg text-sm font-medium transition-all border-2 flex items-center gap-2"
-                    style={{ borderColor: '#85A383', color: '#85A383' }}
-                  >
-                    <Check className="w-4 h-4" strokeWidth={2} />
-                    Select All
-                  </button>
-                </div>
-              </div>
-
-              {replenishmentView === 'card' ? (
-                <div className="space-y-6">
-                  {replenishmentItems.map((item) => (
-                    <div key={item.id} className="bg-white rounded-xl border-l-4 overflow-hidden shadow-md" style={{ 
-                      borderLeftColor: item.priority === 'Critical' ? '#DF7649' : '#85A383'
-                    }}>
-                      <div className="p-7">
-                        <div className="flex gap-6">
-                          <div className="flex items-start pt-2">
-                            <input
-                              type="checkbox"
-                              checked={selectedReplenishment.includes(item.id)}
-                              onChange={() => toggleReplenishmentSelection(item.id)}
-                              className="w-5 h-5 rounded border-2 cursor-pointer"
-                            />
+             {currentView === 'replenishment' && (
+                      <div>
+                        <div className="mb-10 flex items-center justify-between">
+                          <div>
+                            <h2 className="text-3xl text-[#0C2C18] mb-3 font-light">Replenishment Recommendations</h2>
+                            <p className="text-[#878B87] font-light">AI-powered recommendations for stockout risks</p>
                           </div>
-                          <div className="w-28 h-28 rounded-lg flex items-center justify-center text-5xl border-2 flex-shrink-0" style={{ 
-                            background: '#ffffff',
-                            borderColor: item.priority === 'Critical' ? '#DF7649' : '#85A383'
-                          }}>
-                            {item.image}
-                          </div>
-                          
-                          <div className="flex-1">
-                            <div className="flex items-start justify-between mb-4">
-                              <div className="flex-1">
-                                <div className="flex items-center gap-3 mb-3">
-                                  <h3 className="text-2xl text-[#0C2C18] font-light">{item.name}</h3>
-                                  <span className="px-3 py-1.5 rounded-full text-xs uppercase tracking-wider font-medium" style={{
-                                    backgroundColor: item.priority === 'Critical' ? '#DF764920' : '#85A38320',
-                                    color: item.priority === 'Critical' ? '#DF7649' : '#85A383'
-                                  }}>
-                                    {item.priority}
-                                  </span>
-                                </div>
-                                <div className="flex items-center gap-4 text-sm mb-3">
-                                  <span className="flex items-center gap-1.5 text-[#878B87] font-light">
-                                    <MapPin className="w-4 h-4" strokeWidth={1.5} />
-                                    {item.store}
-                                  </span>
-                                  <span className="px-2 py-1 rounded text-xs font-medium" style={{ backgroundColor: '#E7DDCA', color: '#0C2C18' }}>
-                                    {item.zone}
-                                  </span>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                  <div className="text-sm">
-                                    <span className="text-[#878B87] font-light">Total Impact: </span>
-                                    <span className="font-medium" style={{ color: '#85A383' }}>{item.totalImpact}</span>
-                                  </div>
-                                  <div className="text-sm">
-                                    <span className="text-[#878B87] font-light">AI Confidence: </span>
-                                    <span className="font-medium" style={{ color: '#85A383' }}>{item.aiConfidence}%</span>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="flex items-center gap-3 ml-4"><button
-                                onClick={() => setDataModal(item.id)}
-                                className="px-4 py-2.5 rounded-lg text-sm flex items-center gap-2 transition-all font-medium shadow-md border-2 ml-4"
-                                style={{ borderColor: '#85A383', color: '#85A383', backgroundColor: 'white' }}
-                              >
-                                <BarChart3 className="w-4 h-4" strokeWidth={1.5} />
-                                View Data
-                              </button>
-                              {/* GREEN CTA - Why This */}
+                          <div className="flex items-center gap-3">
+                            {/* View Toggle */}
+                            <div className="flex items-center gap-2 bg-white border border-gray-300 rounded-lg p-1">
                               <button
-                                onClick={() => setAiChatOpen(aiChatOpen === item.id ? null : item.id)}
-                                className="px-6 py-2.5 rounded-lg text-sm flex items-center gap-2 transition-all font-medium shadow-md hover:shadow-lg"
-                                style={{ backgroundColor: '#85A383', color: 'white' }}
-                                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#6B8A6A'}
-                                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#85A383'}
+                                onClick={() => setReplenishmentView('card')}
+                                className={`px-4 py-2 rounded flex items-center gap-2 text-sm font-medium transition-all ${
+                                  replenishmentView === 'card'
+                                    ? 'bg-[#85A383] text-white'
+                                    : 'text-[#878B87] hover:bg-gray-100'
+                                }`}
                               >
-                                <Sparkles className="w-4 h-4" strokeWidth={2} />
-                                Why This?
-                              </button></div>
+                                <Grid className="w-4 h-4" strokeWidth={1.5} />
+                                Card View
+                              </button>
+                              <button
+                                onClick={() => setReplenishmentView('table')}
+                                className={`px-4 py-2 rounded flex items-center gap-2 text-sm font-medium transition-all ${
+                                  replenishmentView === 'table'
+                                    ? 'bg-[#85A383] text-white'
+                                    : 'text-[#878B87] hover:bg-gray-100'
+                                }`}
+                              >
+                                <List className="w-4 h-4" strokeWidth={1.5} />
+                                Table View
+                              </button>
+                            </div>
+                            
+                            <button
+                              onClick={selectAllReplenishment}
+                              className="px-5 py-2.5 rounded-lg text-sm font-medium transition-all border-2 flex items-center gap-2"
+                              style={{ borderColor: '#85A383', color: '#85A383' }}
+                            >
+                              <Check className="w-4 h-4" strokeWidth={2} />
+                              Select All
+                            </button>
+                          </div>
+                        </div>
+          
+                        {replenishmentView === 'card' ? (
+                          <div className="space-y-6">
+                            {replenishmentItems.map((item) => {
+                              const highestPriority = getHighestPriority(item.stores);
+                              const totalImpact = getTotalImpact(item.stores);
                               
-                            </div>
-                            
-                            <div className="flex items-center gap-2 mb-4">
-                              <button
-                                onClick={() => openChatWithContext(item, 'replenishment')}
-                                className="text-sm font-medium flex items-center gap-2 transition-all hover:underline"
-                                style={{ color: '#85A383' }}
-                              >
-                                <MessageSquare className="w-4 h-4" strokeWidth={1.5} />
-                                Ask Morrie about this recommendation
-                              </button>
-                            </div>
-                            
-                            <div className="grid grid-cols-5 gap-4 mb-5">
-                              <div className="p-4 rounded-lg" style={{ backgroundColor: '#E7DDCA50' }}>
-                                <div className="text-xs uppercase tracking-wider font-light mb-1.5" style={{ color: '#878B87' }}>Current Stock</div>
-                                <div className="text-xl text-[#0C2C18] font-light">{item.currentStock}</div>
-                              </div>
-                              <div className="p-4 rounded-lg" style={{ backgroundColor: '#E7DDCA50' }}>
-                                <div className="text-xs uppercase tracking-wider font-light mb-1.5" style={{ color: '#878B87' }}>Warehouse</div>
-                                <div className="text-xl text-[#0C2C18] font-light">{item.warehouseStock}</div>
-                              </div>
-                              <div className="p-4 rounded-lg" style={{ backgroundColor: '#E7DDCA50' }}>
-                                <div className="text-xs uppercase tracking-wider font-light mb-1.5" style={{ color: '#878B87' }}>In Transit</div>
-                                <div className="text-xl text-[#0C2C18] font-light">{item.inTransit}</div>
-                              </div>
-                              <div className="p-4 rounded-lg" style={{ backgroundColor: '#E7DDCA50' }}>
-                                <div className="text-xs uppercase tracking-wider font-light mb-1.5" style={{ color: '#878B87' }}>ROS</div>
-                                <div className="text-xl text-[#0C2C18] font-light">{item.rateOfSale}/d</div>
-                              </div>
-                              <div className="p-4 rounded-lg" style={{ backgroundColor: '#DF764920' }}>
-                                <div className="text-xs uppercase tracking-wider font-light mb-1.5" style={{ color: '#878B87' }}>Stockout</div>
-                                <div className="text-xl font-medium" style={{ color: '#DF7649' }}>{item.daysToStockout}d</div>
-                              </div>
-                            </div>
-
-                            {item.sizes && (
-                              <div className="grid grid-cols-4 gap-4">
-                                {item.sizes.map((size, idx) => (
-                                  <div key={idx} className="p-4 rounded-lg border-2" style={{ 
-                                    backgroundColor: '#85A38310',
-                                    borderColor: '#85A38330'
-                                  }}>
-                                    <div className="text-xs uppercase tracking-wider font-light mb-2" style={{ color: '#878B87' }}>Size {size.size}</div>
-                                    <div className="text-sm text-[#878B87] mb-1 font-light">Stock: {size.stock}</div>
-                                    <div className="text-lg text-[#0C2C18] font-medium mb-1">Order: {size.recommendation}</div>
-                                    <div className="text-sm font-medium" style={{ color: '#85A383' }}>{size.impact}</div>
-                                  </div>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                         {/* AI Reasoning Panel */}
-                      {aiChatOpen === item.id && (
-                        <div className="mt-6 border-t border-gray-200 pt-6">
-                          <div className="rounded-lg p-6 border-2" style={{ 
-                            backgroundColor: '#85A38308',
-                            borderColor: '#85A38320'
-                          }}>
-                            <div className="flex items-start gap-4">
-                              <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#85A383' }}>
-                                <Sparkles className="w-6 h-6 text-white" strokeWidth={1.5} />
-                              </div>
-                              <div className="flex-1">
-                                <h4 className="text-sm text-[#0C2C18] mb-3 uppercase tracking-wider font-medium">Morrie AI Reasoning</h4>
-                                <p className="text-sm text-[#878B87] mb-6 font-light leading-relaxed">
-                                  High-velocity item at critical stock level with strong historical performance. 
-                                  Rate of sale is 38% above store average with consistent demand over the last 14 days. 
-                                  Warehouse stock and in-transit inventory factored into recommendation.
-                                </p>
-                                
-                                <div className="space-y-3 mb-5">
-                                  <div className="bg-white rounded-lg p-4 border border-gray-200 shadow-sm">
-                                    <div className="flex items-start justify-between mb-2">
-                                      <div className="flex items-center gap-2">
-                                        <ArrowUpRight className="w-4 h-4" style={{ color: '#85A383' }} />
-                                        <span className="text-sm text-[#0C2C18] font-medium">Rate of Sale Trend</span>
-                                      </div>
-                                      <span className="text-xs uppercase tracking-wider font-medium px-2 py-1 rounded" style={{
-                                        backgroundColor: '#DF764920',
-                                        color: '#DF7649'
-                                      }}>Critical</span>
-                                    </div>
-                                    <div className="text-sm text-[#0C2C18] mb-1 font-light">{item.rateOfSale} units/day</div>
-                                    <div className="text-xs text-[#878B87] font-light leading-relaxed">
-                                      38% above store average, consistently high over last 14 days
-                                    </div>
-                                  </div>
-
-                                  <div className="bg-white rounded-lg p-4 border border-gray-200 shadow-sm">
-                                    <div className="flex items-start justify-between mb-2">
-                                      <div className="flex items-center gap-2">
-                                        <Package className="w-4 h-4" style={{ color: '#85A383' }} />
-                                        <span className="text-sm text-[#0C2C18] font-medium">Stock Analysis</span>
-                                      </div>
-                                      <span className="text-xs uppercase tracking-wider font-medium px-2 py-1 rounded" style={{
-                                        backgroundColor: '#85A38320',
-                                        color: '#85A383'
-                                      }}>Available</span>
-                                    </div>
-                                    <div className="text-sm text-[#0C2C18] mb-1 font-light">Warehouse: {item.warehouseStock} | Transit: {item.inTransit}</div>
-                                    <div className="text-xs text-[#878B87] font-light leading-relaxed">
-                                      Sufficient warehouse inventory to fulfill recommendation within 2-3 days
-                                    </div>
-                                  </div>
-                                </div>
-                                
-                                <div className="mt-6 pt-6 border-t border-gray-200 flex items-center gap-2">
-                                  <MessageSquare className="w-4 h-4" style={{ color: '#85A383' }} strokeWidth={1.5} />
-                                  <button className="text-sm font-medium hover:underline" style={{ color: '#85A383' }}>
-                                    Continue conversation with Morrie AI
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="bg-white rounded-xl shadow-md overflow-hidden">
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-sm">
-                      <thead>
-                        <tr className="border-b-2 border-gray-200" style={{ backgroundColor: '#E7DDCA50' }}>
-                          <th className="py-4 px-4 text-left">
-                            <input
-                              type="checkbox"
-                              checked={selectedReplenishment.length === replenishmentItems.length}
-                              onChange={selectAllReplenishment}
-                              className="w-4 h-4 rounded border-2 cursor-pointer"
-                            />
-                          </th>
-                          <th className="py-4 px-4 text-left text-[#0C2C18] font-medium uppercase tracking-wider text-xs">SKU</th>
-                          <th className="py-4 px-4 text-left text-[#0C2C18] font-medium uppercase tracking-wider text-xs">Store</th>
-                          <th className="py-4 px-4 text-center text-[#0C2C18] font-medium uppercase tracking-wider text-xs">Zone</th>
-                          <th className="py-4 px-4 text-right text-[#0C2C18] font-medium uppercase tracking-wider text-xs">Stock</th>
-                          <th className="py-4 px-4 text-right text-[#0C2C18] font-medium uppercase tracking-wider text-xs">Warehouse</th>
-                          <th className="py-4 px-4 text-right text-[#0C2C18] font-medium uppercase tracking-wider text-xs">ROS</th>
-                          <th className="py-4 px-4 text-right text-[#0C2C18] font-medium uppercase tracking-wider text-xs">Stockout</th>
-                          <th className="py-4 px-4 text-center text-[#0C2C18] font-medium uppercase tracking-wider text-xs">Priority</th>
-                          <th className="py-4 px-4 text-right text-[#0C2C18] font-medium uppercase tracking-wider text-xs">Impact</th>
-                          <th className="py-4 px-4 text-center text-[#0C2C18] font-medium uppercase tracking-wider text-xs">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {replenishmentItems.map((item) => (
-                          <tr key={item.id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                            <td className="py-4 px-4">
-                              <input
-                                type="checkbox"
-                                checked={selectedReplenishment.includes(item.id)}
-                                onChange={() => toggleReplenishmentSelection(item.id)}
-                                className="w-4 h-4 rounded border-2 cursor-pointer"
-                              />
-                            </td>
-                            <td className="py-4 px-4">
-                              <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded flex items-center justify-center text-xl" style={{ 
-                                  background: 'linear-gradient(135deg, #E7DDCA 0%, #D4C7B0 100%)'
+                              return (
+                                <div key={item.id} className="bg-white rounded-xl border-l-4 overflow-hidden shadow-md hover:shadow-2xl transition-all" style={{ 
+                                  borderLeftColor: highestPriority === 'Critical' ? '#DF7649' : '#85A383'
                                 }}>
-                                  {item.image}
+                                  <div className="p-7">
+                                    <div className="flex gap-6">
+                                      <div className="flex items-start pt-2">
+                                        <input
+                                          type="checkbox"
+                                          checked={selectedReplenishment.includes(item.id)}
+                                          onChange={() => toggleReplenishmentSelection(item.id)}
+                                          className="w-5 h-5 rounded border-2 cursor-pointer"
+                                        />
+                                      </div>
+                                      <div className="w-28 h-28 rounded-lg flex items-center justify-center text-5xl border-2 flex-shrink-0" style={{ 
+                                        background: 'linear-gradient(135deg, #E7DDCA 0%, #D4C7B0 100%)',
+                                        borderColor: highestPriority === 'Critical' ? '#DF7649' : '#85A383'
+                                      }}>
+                                        {item.image}
+                                      </div>
+                                      
+                                      <div className="flex-1">
+                                        <div className="flex items-start justify-between mb-4">
+                                          <div className="flex-1">
+                                            <div className="flex items-center gap-3 mb-3">
+                                              <h3 className="text-2xl text-[#0C2C18] font-light">{item.name}</h3>
+                                              <span className="text-xs text-[#878B87] font-mono font-light px-2 py-1 bg-gray-100 rounded">{item.skuCode}</span>
+                                              <span className="px-3 py-1.5 rounded-full text-xs uppercase tracking-wider font-medium" style={{
+                                                backgroundColor: highestPriority === 'Critical' ? '#DF764920' : '#85A38320',
+                                                color: highestPriority === 'Critical' ? '#DF7649' : '#85A383'
+                                              }}>
+                                                {highestPriority}
+                                              </span>
+                                            </div>
+                                            <div className="flex items-center gap-4 text-sm mb-3">
+                                              <span className="flex items-center gap-1.5 text-[#878B87] font-light">
+                                                <Store className="w-4 h-4" strokeWidth={1.5} />
+                                                {item.stores.length} {item.stores.length === 1 ? 'Store' : 'Stores'} Need Replenishment
+                                              </span>
+                                              <span className="px-2 py-1 rounded text-xs font-medium" style={{ backgroundColor: '#E7DDCA', color: '#0C2C18' }}>
+                                                {item.category} • {item.season}
+                                              </span>
+                                            </div>
+                                            <div className="flex items-center gap-3">
+                                              <div className="text-sm">
+                                                <span className="text-[#878B87] font-light">Total Impact: </span>
+                                                <span className="font-medium" style={{ color: '#85A383' }}>{totalImpact}</span>
+                                              </div>
+                                              <div className="text-sm">
+                                                <span className="text-[#878B87] font-light">Fabric: </span>
+                                                <span className="font-medium text-[#0C2C18]">{item.fabric}</span>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          
+                                          <button
+                                            onClick={() => setDataModal(item.id)}
+                                            className="px-4 py-2.5 rounded-lg text-sm flex items-center gap-2 transition-all font-medium shadow-md border-2 ml-4"
+                                            style={{ borderColor: '#85A383', color: '#85A383', backgroundColor: 'white' }}
+                                          >
+                                            <BarChart3 className="w-4 h-4" strokeWidth={1.5} />
+                                            View Data
+                                          </button>
+                                        </div>
+                                        
+                                        <div className="flex items-center gap-2 mb-5">
+                                          <button
+                                            onClick={() => openChatWithContext(item.stores[0], 'replenishment')}
+                                            className="text-sm font-medium flex items-center gap-2 transition-all hover:underline"
+                                            style={{ color: '#85A383' }}
+                                          >
+                                            <MessageSquare className="w-4 h-4" strokeWidth={1.5} />
+                                            Ask Morrie about this SKU
+                                          </button>
+                                        </div>
+          
+                                        {/* Store-by-Store Breakdown */}
+                                        <div className="space-y-3">
+                                          {item.stores.map((store, storeIdx) => {
+                                            const isExpanded = expandedStores[`${item.id}-${store.storeId}`];
+                                            
+                                            return (
+                                              <div key={store.storeId} className="rounded-lg border-2 overflow-hidden" style={{ 
+                                                borderColor: store.priority === 'Critical' ? '#DF7649' : '#85A38330',
+                                                backgroundColor: store.priority === 'Critical' ? '#DF764908' : '#85A38308'
+                                              }}>
+                                                {/* Store Header */}
+                                                <div className="p-4">
+                                                  <div className="flex items-center justify-between mb-3">
+ <input
+            type="checkbox"
+            checked={selectedValues.includes(store.storeId)}
+            onChange={() => handleCheckboxChange(store.storeId)}
+            className="w-4 h-4 mr-2 rounded border-2 border-gray-300 text-blue-600 cursor-pointer focus:ring-2 focus:ring-blue-500 hover:border-blue-400"
+          />
+
+                                                    <div className="flex items-center gap-3 flex-1">
+                                                      <MapPin className="w-4 h-4" style={{ color: '#878B87' }} strokeWidth={1.5} />
+                                                      <div>
+                                                        <div className="font-medium text-[#0C2C18]">{store.store}</div>
+                                                        <div className="text-xs text-[#878B87] font-light">{store.storeId} • {store.zone} Zone</div>
+                                                      </div>
+                                                    </div>
+                                                    <div className="flex items-center gap-3">
+                                                      <div className="text-right">
+                                                        <div className="text-xs text-[#878B87] font-light">Stockout In</div>
+                                                        <div className="text-lg font-medium" style={{ color: '#DF7649' }}>{store.daysToStockout}d</div>
+                                                      </div>
+                                                      <div className="text-right">
+                                                        <div className="text-xs text-[#878B87] font-light">Impact</div>
+                                                        <div className="text-lg font-medium" style={{ color: '#85A383' }}>{store.totalImpact}</div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+          
+                                                  {/* Store Metrics */}
+                                                  <div className="grid grid-cols-5 gap-3 mb-3">
+                                                    <div className="bg-white rounded p-2 text-center">
+                                                      <div className="text-xs text-[#878B87] font-light">Stock</div>
+                                                      <div className="text-base font-medium text-[#0C2C18]">{store.currentStock}</div>
+                                                    </div>
+                                                    <div className="bg-white rounded p-2 text-center">
+                                                      <div className="text-xs text-[#878B87] font-light">Warehouse</div>
+                                                      <div className="text-base font-medium text-[#0C2C18]">{store.warehouseStock}</div>
+                                                    </div>
+                                                    <div className="bg-white rounded p-2 text-center">
+                                                      <div className="text-xs text-[#878B87] font-light">In Transit</div>
+                                                      <div className="text-base font-medium text-[#0C2C18]">{store.inTransit}</div>
+                                                    </div>
+                                                    <div className="bg-white rounded p-2 text-center">
+                                                      <div className="text-xs text-[#878B87] font-light">ROS</div>
+                                                      <div className="text-base font-medium text-[#0C2C18]">{store.rateOfSale}/d</div>
+                                                    </div>
+                                                    <div className="bg-white rounded p-2 text-center">
+                                                      <div className="text-xs text-[#878B87] font-light">AI Conf.</div>
+                                                      <div className="text-base font-medium" style={{ color: '#85A383' }}>{store.aiConfidence}%</div>
+                                                    </div>
+                                                  </div>
+          
+                                                  <button
+                                                    onClick={() => toggleStoreExpansion(item.id, store.storeId)}
+                                                    className="text-sm font-medium flex items-center gap-2 transition-all"
+                                                    style={{ color: '#85A383' }}
+                                                  >
+                                                    {isExpanded ? (
+                                                      <><ChevronDown className="w-4 h-4" strokeWidth={2} />Hide Size Breakdown</>
+                                                    ) : (
+                                                      <><ChevronRight className="w-4 h-4" strokeWidth={2} />View Size Breakdown</>
+                                                    )}
+                                                  </button>
+                                                </div>
+          
+                                                {/* Size Breakdown */}
+                                                {isExpanded && store.sizes && (
+                                                  <div className="px-4 pb-4">
+                                                    <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                                                      <table className="w-full text-sm">
+                                                        <thead>
+                                                          <tr className="border-b border-gray-200" style={{ backgroundColor: '#E7DDCA30' }}>
+                                                            <th className="py-2 px-3 text-left text-[#0C2C18] font-medium uppercase tracking-wider text-xs">Size</th>
+                                                            <th className="py-2 px-3 text-right text-[#0C2C18] font-medium uppercase tracking-wider text-xs">Stock</th>
+                                                            <th className="py-2 px-3 text-right text-[#0C2C18] font-medium uppercase tracking-wider text-xs">Order</th>
+                                                            <th className="py-2 px-3 text-right text-[#0C2C18] font-medium uppercase tracking-wider text-xs">Impact</th>
+                                                          </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                          {store.sizes.map((size, idx) => (
+                                                            <tr key={idx} className="border-b border-gray-100 last:border-0">
+                                                              <td className="py-2 px-3 text-[#0C2C18] font-medium">{size.size}</td>
+                                                              <td className="py-2 px-3 text-right text-[#878B87] font-light">{size.stock}</td>
+                                                              <td className="py-2 px-3 text-right font-medium" style={{ color: '#85A383' }}>{size.recommendation}</td>
+                                                              <td className="py-2 px-3 text-right font-medium text-[#0C2C18]">{size.impact}</td>
+                                                            </tr>
+                                                          ))}
+                                                        </tbody>
+                                                      </table>
+                                                    </div>
+                                                  </div>
+                                                )}
+                                              </div>
+                                            );
+                                          })}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
                                 </div>
-                                <div>
-                                  <div className="text-[#0C2C18] font-medium">{item.name}</div>
-                                  <div className="text-xs text-[#878B87]">{item.storeId}</div>
-                                </div>
-                              </div>
-                            </td>
-                            <td className="py-4 px-4 text-[#0C2C18] font-light">{item.store}</td>
-                            <td className="py-4 px-4 text-center">
-                              <span className="px-2 py-1 rounded text-xs font-medium" style={{ backgroundColor: '#E7DDCA', color: '#0C2C18' }}>
-                                {item.zone}
-                              </span>
-                            </td>
-                            <td className="py-4 px-4 text-right text-[#0C2C18] font-light">{item.currentStock}</td>
-                            <td className="py-4 px-4 text-right text-[#0C2C18] font-light">{item.warehouseStock}</td>
-                            <td className="py-4 px-4 text-right text-[#0C2C18] font-light">{item.rateOfSale}/d</td>
-                            <td className="py-4 px-4 text-right font-medium" style={{ color: '#DF7649' }}>{item.daysToStockout}d</td>
-                            <td className="py-4 px-4 text-center">
-                              <span className="px-2 py-1 rounded text-xs uppercase tracking-wider font-medium" style={{
-                                backgroundColor: item.priority === 'Critical' ? '#DF764920' : '#85A38320',
-                                color: item.priority === 'Critical' ? '#DF7649' : '#85A383'
-                              }}>
-                                {item.priority}
-                              </span>
-                            </td>
-                            <td className="py-4 px-4 text-right font-medium" style={{ color: '#85A383' }}>{item.totalImpact}</td>
-                            <td className="py-4 px-4 text-center items-center h-28 w-64 flex">
-                              <button
-                                onClick={() => setDataModal(item.id)}
-                                className="px-3 py-1.5 rounded text-xs flex items-center gap-1.5 transition-all font-medium border mx-auto"
-                                style={{ borderColor: '#85A383', color: '#85A383', backgroundColor: 'white' }}
-                              >
-                                <BarChart3 className="w-3 h-3" strokeWidth={1.5} />
-                                View Data
-                              </button>
-                              <button
-                                onClick={() => openChatWithContext(item, 'replenishment')}
-                                className="px-3 py-1.5 rounded text-xs flex items-center gap-1.5 transition-all font-medium mx-auto"
-                                style={{ backgroundColor: '#85A383', color: 'white' }}
-                              >
-                                <MessageSquare className="w-3 h-3" strokeWidth={1.5} />
-                                Ask
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
+                              );
+                            })}
+                          </div>
+                        ) : (
+                          <div className="bg-white rounded-xl shadow-md overflow-hidden">
+                            <div className="overflow-x-auto">
+                              <table className="w-full text-sm">
+                                <thead>
+                                  <tr className="border-b-2 border-gray-200" style={{ backgroundColor: '#E7DDCA50' }}>
+                                    <th className="py-4 px-4 text-left">
+                                      <input
+                                        type="checkbox"
+                                        checked={selectedReplenishment.length === replenishmentItems.length}
+                                        onChange={selectAllReplenishment}
+                                        className="w-4 h-4 rounded border-2 cursor-pointer"
+                                      />
+                                    </th>
+                                    <th className="py-4 px-4 text-left text-[#0C2C18] font-medium uppercase tracking-wider text-xs">SKU</th>
+                                    <th className="py-4 px-4 text-left text-[#0C2C18] font-medium uppercase tracking-wider text-xs">Stores</th>
+                                    <th className="py-4 px-4 text-right text-[#0C2C18] font-medium uppercase tracking-wider text-xs">Total Impact</th>
+                                    <th className="py-4 px-4 text-center text-[#0C2C18] font-medium uppercase tracking-wider text-xs">Priority</th>
+                                    <th className="py-4 px-4 text-center text-[#0C2C18] font-medium uppercase tracking-wider text-xs">Actions</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {replenishmentItems.map((item) => {
+                                    const highestPriority = getHighestPriority(item.stores);
+                                    const totalImpact = getTotalImpact(item.stores);
+                                    
+                                    return (
+                                      <React.Fragment key={item.id}>
+                                        <tr className="border-b border-gray-200 bg-gray-50">
+                                          <td className="py-4 px-4" rowSpan={item.stores.length + 1}>
+                                            <input
+                                              type="checkbox"
+                                              checked={selectedReplenishment.includes(item.id)}
+                                              onChange={() => toggleReplenishmentSelection(item.id)}
+                                              className="w-4 h-4 rounded border-2 cursor-pointer"
+                                            />
+                                          </td>
+                                          <td className="py-4 px-4" rowSpan={item.stores.length + 1}>
+                                            <div className="flex items-center gap-3">
+                                              <div className="w-10 h-10 rounded flex items-center justify-center text-xl" style={{ 
+                                                background: 'linear-gradient(135deg, #E7DDCA 0%, #D4C7B0 100%)'
+                                              }}>
+                                                {item.image}
+                                              </div>
+                                              <div>
+                                                <div className="text-[#0C2C18] font-medium">{item.name}</div>
+                                                <div className="text-xs text-[#878B87]">{item.skuCode}</div>
+                                              </div>
+                                            </div>
+                                          </td>
+                                          <td className="py-2 px-4 font-medium text-[#0C2C18]" colSpan={4}>
+                                            {item.stores.length} {item.stores.length === 1 ? 'Store' : 'Stores'} • {item.category} • {item.season}
+                                          </td>
+                                        </tr>
+                                        {item.stores.map((store, storeIdx) => (
+                                          <tr key={`${item.id}-${store.storeId}`} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                                            <td className="py-3 px-4 pl-8">
+                                              <div>
+                                                <div className="text-[#0C2C18] font-medium">{store.store}</div>
+                                                <div className="text-xs text-[#878B87]">{store.storeId} • {store.zone}</div>
+                                                <div className="flex items-center gap-3 mt-1 text-xs">
+                                                  <span className="text-[#878B87]">Stock: {store.currentStock}</span>
+                                                  <span className="text-[#878B87]">ROS: {store.rateOfSale}/d</span>
+                                                  <span style={{ color: '#DF7649' }} className="font-medium">Stockout: {store.daysToStockout}d</span>
+                                                </div>
+                                              </div>
+                                            </td>
+                                            <td className="py-3 px-4 text-right font-medium" style={{ color: '#85A383' }}>{store.totalImpact}</td>
+                                            <td className="py-3 px-4 text-center">
+                                              <span className="px-2 py-1 rounded text-xs uppercase tracking-wider font-medium" style={{
+                                                backgroundColor: store.priority === 'Critical' ? '#DF764920' : '#85A38320',
+                                                color: store.priority === 'Critical' ? '#DF7649' : '#85A383'
+                                              }}>
+                                                {store.priority}
+                                              </span>
+                                            </td>
+                                            <td className="py-3 px-4 text-center">
+                                              <button
+                                                onClick={() => openChatWithContext(store, 'replenishment')}
+                                                className="px-3 py-1.5 rounded text-xs flex items-center gap-1.5 transition-all font-medium mx-auto"
+                                                style={{ backgroundColor: '#85A383', color: 'white' }}
+                                              >
+                                                <MessageSquare className="w-3 h-3" strokeWidth={1.5} />
+                                                Ask
+                                              </button>
+                                            </td>
+                                          </tr>
+                                        ))}
+                                        <tr className="border-b-2 border-gray-200">
+                                          <td colSpan={6} className="py-0"></td>
+                                        </tr>
+                                      </React.Fragment>
+                                    );
+                                  })}
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
 
           {currentView === 'movement' && (
             <div>
