@@ -2,7 +2,7 @@
 import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
 import { SiGooglecloud, SiDatabricks, SiOracle } from "react-icons/si";
-
+import { TbFileTypeSql, TbBrandGoogleBigQuery } from "react-icons/tb";
 // Type definitions
 interface Stage {
   label: string;
@@ -293,6 +293,29 @@ const DataProcessingPage = () => {
                 <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center flex-shrink-0">
                   {source.id === "sap-hana" ? (
                     <SiDatabricks className="text-red-500" size={20} />
+                  ) : source.id === "sap-ewm" ? (
+                    <svg viewBox="0 0 32 32" className="w-full h-full">
+                      <rect
+                        x="6"
+                        y="10"
+                        width="20"
+                        height="12"
+                        rx="1"
+                        fill="#0070C0"
+                      />
+                      <text
+                        x="16"
+                        y="20"
+                        fontSize="8"
+                        fill="white"
+                        textAnchor="middle"
+                        fontWeight="bold"
+                      >
+                        SAP
+                      </text>
+                    </svg>
+                  ) : source.id === "sql" ? (
+                    <TbFileTypeSql className="text-red-500" size={26} />
                   ) : (
                     <svg
                       className="w-6 h-6 text-gray-400"
