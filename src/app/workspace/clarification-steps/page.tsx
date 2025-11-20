@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
+import { SiGooglecloud, SiDatabricks, SiOracle } from "react-icons/si";
 
 // Type definitions
 interface Stage {
@@ -39,7 +40,7 @@ const DataProcessingPage = () => {
   const sources: Source[] = [
     {
       id: "sap-hana",
-      name: "SAP HANA",
+      name: "Databricks",
       stages: [
         { label: "Connecting to the data" },
         { label: "12 tables found, exploring the data" },
@@ -168,8 +169,8 @@ const DataProcessingPage = () => {
         currentMessageIndex === 0
           ? 500
           : allMessages[currentMessageIndex].type === "question"
-          ? 2000
-          : 3000
+          ? 1000
+          : 1000
       );
 
       return () => clearTimeout(timer);
@@ -290,19 +291,23 @@ const DataProcessingPage = () => {
             >
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <svg
-                    className="w-6 h-6 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"
-                    />
-                  </svg>
+                  {source.id === "sap-hana" ? (
+                    <SiDatabricks className="text-red-500" size={20} />
+                  ) : (
+                    <svg
+                      className="w-6 h-6 text-gray-400"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"
+                      />
+                    </svg>
+                  )}
                 </div>
 
                 <div className="flex-1">

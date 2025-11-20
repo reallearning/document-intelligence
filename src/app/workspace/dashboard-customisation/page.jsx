@@ -1,345 +1,431 @@
-"use client";
+"use client"
 import React, { useState } from 'react';
-import { Settings, Plus, X } from 'lucide-react';
-import Link from 'next/link';
+import { Users, ChevronRight, Check, Database, MessageSquare, Zap, Eye, Shield } from 'lucide-react';
 
-const CustomizableDashboard = () => {
-  const [activeTab, setActiveTab] = useState('questions');
-  const [showAddModal, setShowAddModal] = useState(false);
-  const [selectedCard, setSelectedCard] = useState(null);
-  
-  const questionCards = [
+const UserRoleConfiguration = () => {
+  const [selectedRole, setSelectedRole] = useState(null);
+  const [roleConfigs, setRoleConfigs] = useState({});
+
+  // Pre-defined user roles/personas
+  const userRoles = [
     {
-      id: 1,
-      category: '🧵 Product / Style Selection',
-      text: 'Which new styles are performing above plan in their first two weeks of launch?',
-      description: 'Identifies early winners using sell-through, velocity, and GM%.'
+      id: 'store-manager',
+      title: 'Store Manager',
+      description: 'Front-line retail operations',
+      icon: '🏪',
+      color: 'blue',
+      defaultAccess: {
+        questions: ['inventory-stockout', 'sales-performance', 'slow-movers'],
+        decisions: [],
+        dataDomains: ['store-data', 'inventory', 'sales']
+      }
     },
     {
-      id: 2,
-      category: '🧵 Product / Style Selection',
-      text: 'Which SKUs should move to markdown this week based on ageing and sell-through?',
-      description: 'Flags items with low rotation and high WOC relative to peers.'
+      id: 'regional-manager',
+      title: 'Regional Sales Manager',
+      description: 'Multi-store oversight and planning',
+      icon: '🗺️',
+      color: 'purple',
+      defaultAccess: {
+        questions: ['inventory-stockout', 'sales-performance', 'pricing-analysis', 'regional-trends'],
+        decisions: ['inventory-movement'],
+        dataDomains: ['store-data', 'inventory', 'sales', 'regional']
+      }
     },
     {
-      id: 3,
-      category: '🏬 Store / Channel Selection',
-      text: 'Which stores are underperforming on sell-through despite adequate stock?',
-      description: 'Finds stores needing VM or pricing attention.'
+      id: 'buyer',
+      title: 'Buyer / Planner',
+      description: 'Procurement and inventory planning',
+      icon: '📦',
+      color: 'green',
+      defaultAccess: {
+        questions: ['inventory-stockout', 'reorder-recommendations', 'vendor-performance', 'sell-through'],
+        decisions: ['inventory-buy', 'safety-stock', 'reorder-optimization'],
+        dataDomains: ['inventory', 'vendors', 'purchasing', 'forecasting']
+      }
     },
     {
-      id: 4,
-      category: '🏬 Store / Channel Selection',
-      text: 'Which cities or clusters delivered the highest uplift during the festive campaign?',
-      description: 'Evaluates campaign impact geographically to decide next-phase targeting.'
+      id: 'merchandiser',
+      title: 'Merchandiser',
+      description: 'Product assortment and pricing',
+      icon: '🏷️',
+      color: 'pink',
+      defaultAccess: {
+        questions: ['pricing-analysis', 'product-performance', 'markdown-candidates', 'assortment-gaps'],
+        decisions: ['pricing-strategy', 'liquidation', 'markdown-optimization'],
+        dataDomains: ['products', 'pricing', 'sales', 'competition']
+      }
     },
     {
-      id: 5,
-      category: '🧾 Pricing & Promotion Selection',
-      text: 'Which SKUs are price-sensitive versus margin-sensitive?',
-      description: 'Segments SKUs by elasticity to guide future markdown ladders.'
+      id: 'supply-chain',
+      title: 'Supply Chain Manager',
+      description: 'Logistics and distribution',
+      icon: '🚛',
+      color: 'orange',
+      defaultAccess: {
+        questions: ['inventory-movement', 'logistics-costs', 'supplier-leadtime', 'distribution-efficiency'],
+        decisions: ['inventory-movement', 'safety-stock', 'reorder-optimization'],
+        dataDomains: ['inventory', 'logistics', 'vendors', 'warehouses']
+      }
     },
     {
-      id: 6,
-      category: '🧾 Pricing & Promotion Selection',
-      text: 'Which promotions generated the highest incremental GM per ₹ spent?',
-      description: 'Ranks past promos by ROI and redemption efficiency.'
+      id: 'finance',
+      title: 'Finance / CFO',
+      description: 'Financial analytics and reporting',
+      icon: '💰',
+      color: 'emerald',
+      defaultAccess: {
+        questions: ['financial-kpis', 'gmroi', 'inventory-carrying-cost', 'markdown-impact'],
+        decisions: ['liquidation', 'pricing-strategy'],
+        dataDomains: ['financial', 'sales', 'inventory', 'costs']
+      }
     },
     {
-      id: 7,
-      category: '🧳 Inventory & Replenishment Selection',
-      text: 'Which DC-to-store lanes show recurring stock-out risk?',
-      description: 'Prioritizes routes for replenishment frequency increases.'
+      id: 'executive',
+      title: 'Executive / CEO',
+      description: 'Strategic overview and KPIs',
+      icon: '👔',
+      color: 'gray',
+      defaultAccess: {
+        questions: ['all'],
+        decisions: [],
+        dataDomains: ['all']
+      }
     },
     {
-      id: 8,
-      category: '🧳 Inventory & Replenishment Selection',
-      text: 'Which stores consistently exceed safety stock without higher sales?',
-      description: 'Identifies over-stocked nodes for transfer planning.'
-    },
-    {
-      id: 9,
-      category: '🧑‍🤝‍🧑 Vendor & Supply Selection',
-      text: 'Which vendors deliver fastest and at the lowest defect rate?',
-      description: 'Ranks suppliers on lead-time reliability × quality × cost.'
-    },
-    {
-      id: 10,
-      category: '📅 Collection & Assortment Selection',
-      text: 'Which collections or product lines should be scaled next season?',
-      description: 'Compares collections by full-price sell-through, GM, return rate, and contribution to overall sales.'
+      id: 'data-analyst',
+      title: 'Data Analyst',
+      description: 'Deep analytics and custom queries',
+      icon: '📊',
+      color: 'indigo',
+      defaultAccess: {
+        questions: ['all'],
+        decisions: [],
+        dataDomains: ['all']
+      }
     }
   ];
 
-  const decisionCards = [
-    {
-      id: 1,
-      category: '1️⃣ Inventory Buy (Seasonal & Core)',
-      text: 'Determine how much to buy, when to commit, and how to phase deliveries across vendors and DCs.',
-      description: 'Balances: Forecasted demand ↑ | Working capital ↓ | Vendor lead-time reliability ↑ | Sell-through targets ↑ | Obsolescence risk ↓'
-    },
-    {
-      id: 2,
-      category: '2️⃣ Inventory Liquidation',
-      text: 'Plan what to clear, where, and at what markdown to unlock cash without eroding brand value.',
-      description: 'Balances: Sell-through ↑ | Gross margin ₹ ↑ | Ageing ↓ | Transfer/logistics cost ↓ | Price consistency ↔'
-    },
-    {
-      id: 3,
-      category: '3️⃣ Pricing Strategy',
-      text: 'Define base price architecture, geo/channel pricing, and discount ladders.',
-      description: 'Balances: Revenue ↑ | GM % ↑ | Competitor price index ↔ | Elasticity response ↑ | Brand perception ↔'
-    },
-    {
-      id: 4,
-      category: '4️⃣ Marketing & Footfall Increase',
-      text: 'Decide which campaigns to run, where, and how much to invest to drive store traffic and conversions.',
-      description: 'Balances: Incremental footfall ↑ | ROAS ↑ | Customer fatigue ↓ | Promo budget utilization ↑ | Cross-channel uplift ↑'
-    },
-    {
-      id: 5,
-      category: '5️⃣ Simultaneous Optimization of Inventory Movement across POS',
-      text: 'Coordinate inventory flows across stores, DCs, and e-commerce for real-time efficiency.',
-      description: 'Balances: Service level ↑ | Fulfilment cost ↓ | Stock-out risk ↓ | Overstock redistribution ↑ | Freight & carbon footprint ↓'
-    }
+  const availableQuestions = [
+    { id: 'inventory-stockout', name: 'Stock-out predictions (7/14/30 days)', category: 'Inventory' },
+    { id: 'reorder-recommendations', name: 'What to reorder and how much', category: 'Inventory' },
+    { id: 'slow-movers', name: 'Slow-moving and aged inventory', category: 'Inventory' },
+    { id: 'inventory-movement', name: 'Optimal inventory movement between nodes', category: 'Inventory' },
+    { id: 'sales-performance', name: 'Sales performance by SKU/Store/Region', category: 'Sales' },
+    { id: 'sell-through', name: 'Sell-through rates and forecasts', category: 'Sales' },
+    { id: 'regional-trends', name: 'Regional sales trends and patterns', category: 'Sales' },
+    { id: 'pricing-analysis', name: 'Pricing effectiveness and elasticity', category: 'Pricing' },
+    { id: 'markdown-candidates', name: 'Markdown candidates and timing', category: 'Pricing' },
+    { id: 'product-performance', name: 'Product performance across channels', category: 'Products' },
+    { id: 'assortment-gaps', name: 'Assortment gaps and opportunities', category: 'Products' },
+    { id: 'vendor-performance', name: 'Vendor performance and lead times', category: 'Supply Chain' },
+    { id: 'logistics-costs', name: 'Logistics costs and optimization', category: 'Supply Chain' },
+    { id: 'financial-kpis', name: 'Financial KPIs and metrics', category: 'Finance' },
+    { id: 'gmroi', name: 'GMROI analysis by category', category: 'Finance' },
   ];
 
-  const activeCards = activeTab === 'questions' ? questionCards : decisionCards;
+  const availableDecisions = [
+    { id: 'inventory-buy', name: 'Inventory Buy Optimization', description: 'What to reorder, how much, when' },
+    { id: 'safety-stock', name: 'Safety Stock Levels', description: 'Optimal buffer stock by SKU×Node' },
+    { id: 'reorder-optimization', name: 'Reorder Point Optimization', description: 'Dynamic reorder triggers' },
+    { id: 'inventory-movement', name: 'Inventory Movement', description: 'Transfer recommendations between stores/DCs' },
+    { id: 'pricing-strategy', name: 'Pricing Strategy', description: 'Optimal pricing by SKU×Channel' },
+    { id: 'markdown-optimization', name: 'Markdown Optimization', description: 'When and how much to markdown' },
+    { id: 'liquidation', name: 'Liquidation Strategy', description: 'Clear aged inventory profitably' },
+  ];
 
-  const EditModal = ({ card, onClose }) => (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" onClick={onClose}>
-      <div className="bg-white rounded-2xl p-8 max-w-2xl w-full mx-4 shadow-xl" onClick={e => e.stopPropagation()}>
-        <div className="flex items-start justify-between mb-6">
-          <div>
-            <h3 className="text-2xl font-semibold text-gray-900 mb-2">Customize Card</h3>
-            <p className="text-gray-500">Set up scheduled runs and notifications</p>
-          </div>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
-            <X size={24} />
-          </button>
-        </div>
-        
-        <div className="space-y-6">
-          <div>
-            <h4 className="text-sm font-medium text-gray-500 mb-3">{card.category}</h4>
-            <div className="p-4 bg-gray-50 rounded-lg">
-              <p className="text-sm font-medium text-gray-900 mb-2">{card.text}</p>
-              <p className="text-xs text-gray-500">{card.description}</p>
+  const dataDomains = [
+    { id: 'store-data', name: 'Store & Location Data', description: 'Store master, formats, attributes' },
+    { id: 'inventory', name: 'Inventory Data', description: 'Stock levels, movements, SKU details' },
+    { id: 'sales', name: 'Sales Transactions', description: 'Historical and real-time sales' },
+    { id: 'products', name: 'Product & Assortment', description: 'SKU master, collections, brands' },
+    { id: 'pricing', name: 'Pricing & Markdowns', description: 'Price history, discount ladders' },
+    { id: 'vendors', name: 'Vendor & Procurement', description: 'Supplier data, lead times, orders' },
+    { id: 'logistics', name: 'Logistics & Shipping', description: 'Distribution, costs, routes' },
+    { id: 'financial', name: 'Financial Data', description: 'P&L, costs, margins' },
+    { id: 'regional', name: 'Regional Data', description: 'Region/cluster aggregations' },
+    { id: 'warehouses', name: 'Warehouse Data', description: 'DC inventory, capacity' },
+    { id: 'competition', name: 'Competitive Data', description: 'Market intelligence, competitor pricing' },
+    { id: 'forecasting', name: 'Forecasting Data', description: 'Demand forecasts, predictions' },
+  ];
+
+  const RoleCard = ({ role }) => {
+    const isSelected = selectedRole?.id === role.id;
+    const colorMap = {
+      blue: 'border-blue-300 bg-blue-50',
+      purple: 'border-purple-300 bg-purple-50',
+      green: 'border-green-300 bg-green-50',
+      pink: 'border-pink-300 bg-pink-50',
+      orange: 'border-orange-300 bg-orange-50',
+      emerald: 'border-emerald-300 bg-emerald-50',
+      gray: 'border-gray-300 bg-gray-50',
+      indigo: 'border-indigo-300 bg-indigo-50',
+    };
+
+    return (
+      <button
+        onClick={() => setSelectedRole(role)}
+        className={`
+          w-full p-5 rounded-lg border-2 transition-all text-left
+          ${isSelected 
+            ? `${colorMap[role.color]} shadow-md` 
+            : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-sm'
+          }
+        `}
+      >
+        <div className="flex items-start justify-between mb-3">
+          <div className="text-4xl">{role.icon}</div>
+          {isSelected && (
+            <div className="w-6 h-6 rounded-full bg-teal-600 flex items-center justify-center">
+              <Check className="w-4 h-4 text-white" />
             </div>
-          </div>
-
-          <div className="border-t pt-6">
-            <h5 className="text-sm font-medium text-gray-900 mb-4">Schedule Settings</h5>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm text-gray-600 mb-2">Run Frequency</label>
-                <select className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                  <option>Daily</option>
-                  <option>Weekly</option>
-                  <option>Monthly</option>
-                  <option>Custom</option>
-                </select>
-              </div>
-              
-              <div>
-                <label className="block text-sm text-gray-600 mb-2">Notification Time</label>
-                <input 
-                  type="time" 
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  defaultValue="09:00"
-                />
-              </div>
-
-              <div>
-                <label className="flex items-center space-x-2 text-sm text-gray-700">
-                  <input type="checkbox" className="w-4 h-4 rounded border-gray-300" defaultChecked />
-                  <span>Send email notifications</span>
-                </label>
-              </div>
-
-              <div>
-                <label className="flex items-center space-x-2 text-sm text-gray-700">
-                  <input type="checkbox" className="w-4 h-4 rounded border-gray-300" />
-                  <span>Send push notifications</span>
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex gap-3 pt-4">
-            <button 
-              onClick={onClose}
-              className="flex-1 px-6 py-3 border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
-            >
-              Cancel
-            </button>
-            <button 
-              onClick={() => {
-                alert('Settings saved!');
-                onClose();
-              }}
-              className="flex-1 px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-medium"
-            >
-              Save Settings
-            </button>
-          </div>
+          )}
         </div>
-      </div>
-    </div>
-  );
+        <h3 className="font-semibold text-gray-900 mb-1">{role.title}</h3>
+        <p className="text-sm text-gray-600">{role.description}</p>
+      </button>
+    );
+  };
 
-  const AddCardModal = ({ onClose }) => (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" onClick={onClose}>
-      <div className="bg-white rounded-2xl p-8 max-w-2xl w-full mx-4 shadow-xl" onClick={e => e.stopPropagation()}>
-        <div className="flex items-start justify-between mb-6">
-          <div>
-            <h3 className="text-2xl font-semibold text-gray-900 mb-2">Add New Card</h3>
-            <p className="text-gray-500">Create a new {activeTab === 'questions' ? 'question' : 'decision'} card</p>
-          </div>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
-            <X size={24} />
-          </button>
-        </div>
-        
-        <div className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
-            <input 
-              type="text" 
-              placeholder="e.g., 🧵 Product / Style Selection"
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
+  const ConfigurationPanel = ({ role }) => {
+    const [activeTab, setActiveTab] = useState('questions');
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {activeTab === 'questions' ? 'Question' : 'Decision'}
-            </label>
-            <textarea 
-              placeholder={activeTab === 'questions' ? 'Enter your question...' : 'Enter your decision statement...'}
-              rows="3"
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
-            <textarea 
-              placeholder={activeTab === 'questions' ? 'Brief description of what this question identifies...' : 'Key factors this decision balances...'}
-              rows="2"
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-            />
-          </div>
-
-          <div className="flex gap-3 pt-4">
-            <button 
-              onClick={onClose}
-              className="flex-1 px-6 py-3 border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
-            >
-              Cancel
-            </button>
-            <button 
-              onClick={() => {
-                alert('Card added successfully!');
-                onClose();
-              }}
-              className="flex-1 px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-medium"
-            >
-              Add Card
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const QuestionCard = ({ card }) => (
-    <div className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-md transition-all duration-200 flex flex-col h-full">
-      <div className="mb-3">
-        <h3 className="text-xs font-medium text-gray-500 mb-3">{card.category}</h3>
-      </div>
-      
-      <div className="flex-1 space-y-3 mb-6">
-        <p className="text-sm font-medium text-gray-900 leading-snug">{card.text}</p>
-        <p className="text-xs text-gray-500 leading-relaxed">{card.description}</p>
-      </div>
-
-      <div className="mt-auto">
-        <button 
-          onClick={() => setSelectedCard(card)}
-          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors"
-        >
-          <Settings size={16} />
-          <span>Edit / Customise</span>
-        </button>
-      </div>
-    </div>
-  );
-
-  return (
-    <div className="h-screen overflow-auto bg-gray-50 p-8">
-      <div className="max-w-[1600px] mx-auto">
+    return (
+      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         {/* Header */}
-        <div className="bg-white rounded-2xl shadow-sm p-8 mb-8">
-          <div className="flex items-start justify-between mb-4">
+        <div className="bg-gradient-to-r from-gray-900 to-gray-800 p-6">
+          <div className="flex items-center gap-4 mb-4">
+            <div className="text-5xl">{role.icon}</div>
             <div>
-              <h1 className="text-3xl font-semibold text-gray-900 mb-3">Customise your dashboard</h1>
-              <p className="text-gray-500 max-w-3xl">
-                Select all the questions that you want to see in regular intervals, and if you want me to send you notifications for it.
-              </p>
+              <h2 className="text-2xl font-semibold text-white">{role.title}</h2>
+              <p className="text-gray-300">{role.description}</p>
             </div>
-           <Link href={"/workspace/workflow-builder"}> <button 
-              className="flex items-center gap-2 px-5 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
-            >
-              <Plus size={18} />
-              <span>Add new</span>
-            </button></Link>
           </div>
-
-          {/* Tabs */}
-          <div className="flex gap-6 border-b border-gray-200 mt-8">
+          <div className="flex gap-2">
             <button
               onClick={() => setActiveTab('questions')}
-              className={`pb-3 px-1 font-medium transition-colors relative ${
+              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 activeTab === 'questions'
-                  ? 'text-gray-900'
-                  : 'text-gray-500 hover:text-gray-700'
+                  ? 'bg-white text-gray-900'
+                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
               }`}
             >
-              Questions
-              {activeTab === 'questions' && (
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gray-900" />
-              )}
+              <MessageSquare className="w-4 h-4 inline mr-2" />
+              Questions Access
             </button>
             <button
               onClick={() => setActiveTab('decisions')}
-              className={`pb-3 px-1 font-medium transition-colors relative ${
+              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 activeTab === 'decisions'
-                  ? 'text-gray-900'
-                  : 'text-gray-500 hover:text-gray-700'
+                  ? 'bg-white text-gray-900'
+                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
               }`}
             >
-              Decisions
-              {activeTab === 'decisions' && (
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gray-900" />
-              )}
+              <Zap className="w-4 h-4 inline mr-2" />
+              Decisions Access
+            </button>
+            <button
+              onClick={() => setActiveTab('data')}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                activeTab === 'data'
+                  ? 'bg-white text-gray-900'
+                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+              }`}
+            >
+              <Database className="w-4 h-4 inline mr-2" />
+              Data Access
             </button>
           </div>
         </div>
 
-        {/* Cards Grid */}
-        <div className="grid grid-cols-3 gap-6">
-          {activeCards.map(card => (
-            <QuestionCard key={card.id} card={card} />
-          ))}
+        {/* Content */}
+        <div className="p-6">
+          {activeTab === 'questions' && (
+            <div className="space-y-4">
+              <div className="flex items-start gap-3 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <Shield className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                <div className="text-sm">
+                  <p className="text-blue-900 font-medium mb-1">Configure question access</p>
+                  <p className="text-blue-800">
+                    Select which Cortex questions this role can ask. Users with this role will only see these questions in their interface.
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                {availableQuestions.map((question) => (
+                  <label
+                    key={question.id}
+                    className="flex items-start gap-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer"
+                  >
+                    <input type="checkbox" className="w-5 h-5 text-teal-600 rounded mt-0.5" />
+                    <div className="flex-1">
+                      <div className="font-medium text-gray-900">{question.name}</div>
+                      <div className="text-sm text-gray-500">{question.category}</div>
+                    </div>
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'decisions' && (
+            <div className="space-y-4">
+              <div className="flex items-start gap-3 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                <Shield className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                <div className="text-sm">
+                  <p className="text-amber-900 font-medium mb-1">Configure decision access</p>
+                  <p className="text-amber-800">
+                    Select which Cortex-X decisions this role can trigger or view. Decisions involve AI-powered recommendations that can affect business operations.
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                {availableDecisions.map((decision) => (
+                  <label
+                    key={decision.id}
+                    className="flex items-start gap-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer"
+                  >
+                    <input type="checkbox" className="w-5 h-5 text-teal-600 rounded mt-0.5" />
+                    <div className="flex-1">
+                      <div className="font-medium text-gray-900">{decision.name}</div>
+                      <div className="text-sm text-gray-500">{decision.description}</div>
+                    </div>
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'data' && (
+            <div className="space-y-4">
+              <div className="flex items-start gap-3 p-4 bg-purple-50 border border-purple-200 rounded-lg">
+                <Shield className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
+                <div className="text-sm">
+                  <p className="text-purple-900 font-medium mb-1">Configure data domain access</p>
+                  <p className="text-purple-800">
+                    Control which data domains this role can access. This determines what underlying data they can see in reports and analyses.
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                {dataDomains.map((domain) => (
+                  <label
+                    key={domain.id}
+                    className="flex items-start gap-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer"
+                  >
+                    <input type="checkbox" className="w-5 h-5 text-teal-600 rounded mt-0.5" />
+                    <div className="flex-1">
+                      <div className="font-medium text-gray-900">{domain.name}</div>
+                      <div className="text-sm text-gray-500">{domain.description}</div>
+                    </div>
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="h-screen overflow-auto bg-gray-50 p-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <div className="text-sm text-gray-500 mb-2">5/6</div>
+          <h1 className="text-3xl font-normal text-gray-900 mb-3">
+            Configure user roles and access
+          </h1>
+          <p className="text-gray-600 leading-relaxed">
+            Define what each user type can see and do. Set up role-based access control (RBAC) for questions, decisions, and data domains.
+          </p>
         </div>
 
-        {/* Modals */}
-        {selectedCard && <EditModal card={selectedCard} onClose={() => setSelectedCard(null)} />}
-        {showAddModal && <AddCardModal onClose={() => setShowAddModal(false)} />}
+        {/* Info Box */}
+        <div className="bg-blue-50 rounded-lg p-4 mb-8 border border-blue-200">
+          <div className="flex gap-3">
+            <Users className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+            <div className="text-sm">
+              <p className="text-blue-900 font-medium mb-1">About user roles</p>
+              <p className="text-blue-800">
+                Each role represents a user persona in your organization. Configure what they can access based on their job function. You can customize these defaults or add new roles later.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-12 gap-6">
+          {/* Left: Role Selection */}
+          <div className="col-span-4 space-y-4">
+            <div className="bg-white rounded-lg p-4 border border-gray-200">
+              <h3 className="font-semibold text-gray-900 mb-3">Select a role to configure</h3>
+              <div className="space-y-3">
+                {userRoles.map((role) => (
+                  <RoleCard key={role.id} role={role} />
+                ))}
+              </div>
+            </div>
+
+            {selectedRole && (
+              <div className="bg-white rounded-lg p-4 border border-gray-200">
+                <h4 className="font-semibold text-gray-900 mb-2">Quick Stats</h4>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Questions enabled:</span>
+                    <span className="font-medium text-gray-900">12/15</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Decisions enabled:</span>
+                    <span className="font-medium text-gray-900">3/7</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Data domains:</span>
+                    <span className="font-medium text-gray-900">4/12</span>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Right: Configuration Panel */}
+          <div className="col-span-8">
+            {selectedRole ? (
+              <ConfigurationPanel role={selectedRole} />
+            ) : (
+              <div className="bg-white rounded-lg border border-gray-200 p-16 text-center">
+                <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  Select a role to configure
+                </h3>
+                <p className="text-gray-600">
+                  Choose a user role from the left panel to configure their access to questions, decisions, and data domains.
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Footer Actions */}
+        <div className="mt-8 flex items-center justify-between">
+          <button className="px-6 py-3 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium">
+            Back
+          </button>
+          <div className="flex gap-3">
+            <button className="px-6 py-3 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium">
+              Save as Draft
+            </button>
+            <button className="px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors font-medium">
+              Continue to Review
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
 
-export default CustomizableDashboard;
+export default UserRoleConfiguration;
