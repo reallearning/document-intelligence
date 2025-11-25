@@ -161,7 +161,9 @@ export default function RSMDashboard() {
 
   const openConv = ctx => {
     setConversationContext(ctx);
-    setConversationOpen(true);
+    if (activeTab !== 'askmorrie') {
+      setConversationOpen(true);
+    }
     
     let msg = { type: 'ai', text: '', ts: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), sugg: [] };
 
@@ -188,6 +190,29 @@ export default function RSMDashboard() {
     } else if (ctx.type === 'supply') {
       msg.text = `**₹2.8Cr Stock Mismatch**\n\n**Issue:** Thane 480 units excess (3mo cover), Mumbai ₹2.8Cr backlog, same SKUs\n\n**Root causes:**\n• Forecasting: Allocates on historical sales, not demand potential\n• Mumbai sales down 22% (manpower) → system says "needs less stock"\n• Confusing "sold" with "could have sold"\n\n**Structural problems:**\n• Branch incentives: Thane measured on inventory turns (no incentive to help Mumbai)\n• Information gap: Mumbai doesn't see Thane inventory, Thane doesn't see Mumbai stockouts\n• Nobody has cross-branch visibility\n\n**Why this recurs:** Fixed 3x in 6 months because treating symptom (stock move) not disease (information flow)\n\n**Fixes:**\n• Immediate: Move 480 units (₹35k cost, ₹2.8Cr impact, 80x ROI)\n• This month: Give ASMs cross-branch inventory visibility + direct transfer authority\n• This quarter: Fix forecasting (separate demand from realized sales) + change branch incentives to regional fill rate\n\n**True problem:** ₹1.2Cr excess inventory + ₹350k/month lost revenue = worst of both worlds (high WC + stockouts)`;
       msg.sugg = ['All regional stock mismatches right now?', 'Risk of cross-branch visibility for ASMs?', 'Change branch incentives without corporate?', 'Total WC locked in regional inefficiency?'];
+    } else if (ctx.type === 'business') {
+      if (ctx.subtype === 'growth') {
+        msg.text = `**Where is growth coming from?**\n\n**MTD Mumbai + Thane: +7.5% vs LY**\n\n**Growth breakdown:**\n• +3.0% from more active outlets (~4% more outlets buying)\n• +3.8% from higher drop size per bill\n• +0.7% from bulk/one-time deals in Thane\n\n**Insight:** ~90% of growth is steady (outlets + order size), not one-off\n\n**Quality check:**\n• Drop size driven by pack size shift (larger packs) not price inflation\n• Outlet growth concentrated in GT channel\n• Traditional retail flat at +1.2%`;
+        msg.sugg = ['Which outlets drive drop size increase?', 'Is GT growth sustainable or promotion-driven?', 'Traditional retail: why flat despite more coverage?', 'Break down by ASM territory'];
+      } else if (ctx.subtype === 'risk') {
+        msg.text = `**Business health: Last 4 weeks**\n\n**Status:** Growing but risk increasing\n\n**3 risk signals:**\n\n**1. Distributor concentration:**\n• Top 10: 56% of sales (was 51% Q3)\n• Shah + Metro: 38% of regional sales\n• Any disruption has outsized impact\n\n**2. Economy vs Premium shift:**\n• Economy soaps: 62% → 67% (+5 pts)\n• Cinthol premium: Down ~5 pts\n• Avg realization/kg: -2.3%\n\n**3. Key outlet weakness:**\n• 6-7% of top outlets down >20% vs 3mo back\n• South Mumbai + Bandra premium zones\n• Competitor schemes aggressive\n\n**Recommendation:** Topline fine, but diversify distributors + arrest premium erosion`;
+        msg.sugg = ['Which distributors to add?', 'Why premium losing in South Mumbai?', 'Economy shift: can I reverse it?', 'Top outlet retention plan?'];
+      } else if (ctx.subtype === 'outlets') {
+        msg.text = `**Old vs New Outlets**\n\n**Repeat outlets (billed last 3mo):**\n• 88% of sales\n• +5.8% vs LY\n• ~70% flat or growing\n\n**New outlets (started last 90d):**\n• 12% of sales\n• +30%+ growth\n• But 60% drop after 1-2 orders\n\n**Insight:** Growth from existing outlets. New outlets good but high churn.\n\n**Churn analysis:**\n• Highest in traditional retail (small chemists, kirana)\n• GT/wholesale: 8 in 10 stick\n• Primary reason: Credit terms (60% cite payment flexibility)`;
+        msg.sugg = ['Why 60% drop off?', 'Change onboarding for better retention?', 'Quality vs quantity new outlets?', 'Cost of churn?'];
+      } else if (ctx.subtype === 'efficiency') {
+        msg.text = `**High effort, low output**\n\n**3 areas: calls good, productivity weak**\n\n**1. Andheri-Goregaon:**\n• Calls: 108% of plan\n• Lines/bill: 5.1 → 4.3 (-16%)\n• Drop size: -7%\n• Issue: Push Godrej No.1 only, HI/hair colour under-pushed\n\n**2. Dadar-Sion:**\n• Good call numbers\n• Hair colour lines/bill: -12%\n• Issue: Competitor offer active, our scheme late\n\n**3. Thane city:**\n• Coverage above plan\n• New SKUs barely move\n• Issue: TSRs focus on old SKUs for easy targets\n\n**Root:** Visiting outlets, but product mix + counter story weak`;
+        msg.sugg = ['Fix Andheri-Goregaon: specific plan?', 'Why scheme reach late Dadar-Sion?', 'Incentivize new SKU push Thane?', 'Revenue loss from weak mix?'];
+      } else if (ctx.subtype === 'opportunity') {
+        msg.text = `**₹1 Cr without margin hit**\n\n**3 opportunities:**\n\n**1. Cinthol in premium outlets:**\n• 600 outlets (S Mumbai, Bandra-Khar, Powai, Thane W)\n• Extra facing + display, link Godrej No.1\n• Uplift: ₹45-50L\n\n**2. HI refill bundles:**\n• ~400 outlets (Thane/Kalyan/Mira Road)\n• Move single → 2-3 pack bundles\n• Uplift: ₹35-40L\n\n**3. Hair colour cosmetics/salons:**\n• ~150 outlets, competitor strong\n• Better visibility + simple scheme\n• Uplift: ₹20-25L\n\n**Total: ₹1.0-1.1 Cr**\n**Margin impact: ~10 bps**`;
+        msg.sugg = ['Which 600 outlets for Cinthol?', 'HI bundle: will retailers agree?', 'Salon activation execution?', 'Timeline for ₹1 Cr?'];
+      } else if (ctx.subtype === 'levers') {
+        msg.text = `**95% → 102% with 3 actions**\n\n**Current:** 95% of target\n\n**3 levers:**\n\n**1. Fix 25 weakest beats:**\n• Thane, Kalyan-Dombivli, Kurla\n• Coverage to 95%+\n• Uplift: ₹1.2-1.4 Cr\n\n**2. Premium in 700 outlets:**\n• Cinthol + hair colour focus\n• Uplift: ₹1.0-1.2 Cr\n\n**3. Fix 3 key distributors:**\n• Credit + inventory on top 15 SKUs\n• Uplift: ₹0.8-1.0 Cr\n\n**Total: ₹3.0-3.6 Cr**\n**Result: 95% → 101.5-102.5%**\n**Execute: Next 3 weeks**`;
+        msg.sugg = ['Which 25 beats?', '700 outlets: how prioritize?', 'Which 3 distributors?', 'Week-by-week plan?'];
+      } else {
+        msg.text = `**Business Intelligence**\n\nI can answer:\n• Growth drivers and quality\n• Risk and concentration\n• Outlet dynamics\n• Efficiency gaps\n• Revenue opportunities\n• Action planning`;
+        msg.sugg = ['Where is growth from?', 'Risk signals?', 'Best opportunities?', 'Efficiency problems?'];
+      }
     } else {
       msg.text = `**Analysis Capabilities**\n\n**Root cause forensics:** Causal chains, correlation vs causation, symptoms vs diseases\n\n**Intervention design:** ROI with second-order effects, recovery timelines, risk scenarios\n\n**Comparative intelligence:** Why similar inputs yield different outputs, capability gaps, replicability\n\nWhat do you need?`;
       msg.sugg = ['Biggest risk not visible in dashboard?', 'Success pattern worth replicating?', 'Which problem to solve first?', 'Highest ROI intervention across dimensions?'];
@@ -202,24 +227,28 @@ export default function RSMDashboard() {
     const uMsg = { type: 'user', text: msg, ts: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) };
     let aMsg = { type: 'ai', text: '', ts: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), sugg: [] };
 
-    if (msg.toLowerCase().includes('why') && msg.toLowerCase().includes('shah')) {
+    const lowerMsg = msg.toLowerCase();
+
+    // Specific pattern matching
+    if (lowerMsg.includes('why') && lowerMsg.includes('shah')) {
       aMsg.text = `**Why Shah specifically:**\n\n**Structural vulnerabilities:**\n• Beat density: 8 beats, 60 outlets each (urban retail)\n• Credit buffer: 85% pre-crisis (zero buffer) vs Metro 65% (₹2Cr buffer)\n• Customer mix: 75% small retail (churns in 2 weeks) vs Metro 60% wholesale (sticky 6-8 weeks)\n\n**Cascade mechanics:**\n• 25% capacity loss → immediate churn due to urban retail dependency\n• Revenue drop front-loaded: 60% hits first 4 weeks vs Metro 40%\n• Zero credit buffer → immediate order blocking\n\n**Metro Traders comparison:**\n• 5 beats, 65 outlets each (suburban/wholesale)\n• 65% credit utilization (₹2Cr buffer)\n• Revenue drop gradual (40% first 4 weeks)\n• Result: Same manpower gap, 35% less damage\n\n**Implication:** One-size-fits-all solutions won't work. Shah needs immediate credit relief, Metro can wait.`;
       aMsg.sugg = ['Restructure Shah to fewer, larger beats?', 'Am I enabling poor management by extending credit?', 'Change customer mix toward wholesale?', 'Calculate credit buffer needed per distributor type'];
-    } else if (msg.toLowerCase().includes('what if') && (msg.toLowerCase().includes('implement') || msg.toLowerCase().includes('actions'))) {
+    } else if ((lowerMsg.includes('what if') || lowerMsg.includes('simulate')) && (lowerMsg.includes('implement') || lowerMsg.includes('actions'))) {
       aMsg.text = `**3-Action Integrated Simulation**\n\n**Month 1:**\n• Investment: ₹15k + ₹3L + ₹35k = ₹3.5L\n• Returns: ₹45k (unblocked) + ₹65k (fulfilled) + ₹84k (partial execution) = ₹194k\n• Net: -₹3.31L (in the hole)\n\n**Month 2:**\n• TSRs hit productivity, coverage 83%\n• Returns: +₹340k\n• Credit utilization 95% → 89%, ₹1.5L freed\n• Net: +₹190k\n\n**Month 3:**\n• Full execution recovery, coverage 85%\n• Returns: +₹510k\n• Credit fully freed (₹3L back)\n• Cumulative ROI: 4.2x\n\n**Alternative: Execution + Supply only (₹50k)**\n• Month 1: ₹149k return\n• Month 2: ₹340k + credit eases naturally\n• Month 3: ₹510k + ₹3L freed for other uses\n• ROI: 12x vs 4.2x\n\n**Recommendation:** Do execution + supply, skip credit extension. Credit self-corrects in 6-8 weeks. Deploy saved ₹3L elsewhere (2-5x ROI vs 0.15x on credit).`;
       aMsg.sugg = ['Phased approach: execution → supply → credit if needed?', 'Downside if TSRs underperform?', 'Model doing nothing for 3 months', 'Revolving credit buffer vs permanent increase?'];
-    } else if (msg.toLowerCase().includes('compare')) {
+    } else if (lowerMsg.includes('compare') && (lowerMsg.includes('rajesh') || lowerMsg.includes('amit'))) {
       aMsg.text = `**Rajesh vs Amit Attribution**\n\n**Amit's 103%:**\n• Market advantage: 40 points (Kalyan 15% less competition)\n• Distributor infrastructure: 35 points (West Supply 3x maturity vs Shah)\n• TSR execution: 20 points (full staffing, zero gaps)\n• Management: 8 points (coaching, escalation)\n\n**Rajesh's 78%:**\n• Market: -10 points (Mumbai hyper-competitive)\n• Distributor: -18 points (Shah weak training, reactive inventory, hiring failures)\n• Execution: -20 points (2 vacant beats, coverage collapse)\n• Management: -2 points (slow escalation)\n\n**Replicability analysis:**\n• Market: Not replicable (structural)\n• Distributor: 60% replicable (6-month program, ₹20 of 35 points)\n• Execution: 100% replicable (8 weeks, 20 points)\n• Management: 100% replicable (4 weeks, 8 points)\n\n**Rajesh's realistic ceiling:** 93% (not 103%)\n• Current: 78%\n• Add execution fix: +20 → 98%\n• Add management: +8 → 106%\n• Add partial distributor: +20 → 126%\n• Minus structural market: -10 → **93% ceiling**\n\n**Reality check:** Rajesh at 89% of achievable ceiling. Problem is distributor capability, not his execution.`;
       aMsg.sugg = ['Swap distributors across territories?', 'Cost-benefit of 6-month capability program?', 'Adjust targets for market competitiveness?', 'Who else has distributor capability gaps?'];
-    } else if (msg.toLowerCase().includes('calculate') || msg.toLowerCase().includes('roi')) {
+    } else if (lowerMsg.includes('calculate') || lowerMsg.includes('roi')) {
       aMsg.text = `**ROI Comparison**\n\n**Option 1: Execution only (₹105k)**\n• Direct: ₹934k over 3 months\n• Indirect: ₹180k (credit eases, margin improves)\n• Total: ₹1.11Cr, **10.6x ROI**, 5-week payback\n• Risk: 30% TSR underperformance → 6.2x downside\n\n**Option 2: Credit only (₹3L)**\n• Unblock ₹45k orders\n• But Shah keeps underperforming without execution fix\n• Credit stays at 93% (can't get ₹3L back)\n• **ROI: 0.15x** (value-destroying)\n\n**Option 3: Supply only (₹35k)**\n• Clear ₹65k backlog immediately\n• New backlog builds in 4 weeks without execution fix\n• **ROI: -0.5x** (loses money)\n\n**Option 4: Execution + Supply (₹140k) - RECOMMENDED**\n• Direct: ₹999k\n• Indirect: ₹165k (credit + margin)\n• Total: ₹1.16Cr, **8.3x ROI**, 4-week payback\n• Credit improves organically without locking ₹3L\n\n**Option 5: All three (₹3.5L)**\n• Return: ₹1.19Cr (only ₹30k more than Option 4)\n• **ROI: 3.4x** (capital inefficient)\n\n**Winner: Execution + Supply**\n• Best capital efficiency (₹140k vs ₹3.5L)\n• Solves root cause\n• Frees ₹3L for 2-5x ROI elsewhere`;
       aMsg.sugg = ['Credit trigger: extend only if execution fails by week 6?', 'Where to deploy saved ₹3L for better ROI?', 'Breakeven: when does credit extension make sense?', 'Pilot 1 month, then decide?'];
-    } else if (msg.toLowerCase().includes('recovery') || msg.toLowerCase().includes('timeline')) {
+    } else if (lowerMsg.includes('recovery') || lowerMsg.includes('timeline') || lowerMsg.includes('week')) {
       aMsg.text = `**8-Week Recovery Timeline (Execution + Supply)**\n\n**Week 1-2: Setup (no visible progress)**\n• Actions: Recruit TSRs (5d), move stock (2d), onboard (3d)\n• Results: ₹65k from backlog fulfillment, still 72% coverage, 95% credit\n\n**Week 3-4: Ramp (slow)**\n• TSRs at 40% productivity\n• Results: +₹21k/week, 72% → 75% coverage, 2 outlets recovered, 94% credit\n\n**Week 5-6: Inflection**\n• TSRs 70% productive, Arjun's productivity improves 15%\n• Results: +₹75k/week, 75% → 80% coverage, 4 outlets total, 91% credit\n\n**Week 7-8: Stabilization**\n• TSRs 85% productive\n• Results: +₹85k/week stable, 80% → 83% coverage, 7 of 8 outlets (1 lost to competitor), 87% credit, **80% achievement**\n\n**Final state:**\n• 85% of gap recovered (₹1.02Cr of ₹1.2Cr)\n• Coverage: 83% (vs 85% target) - 2% permanent loss\n• Achievement: 80% (5 points short of 85% target)\n\n**To close final 15%:**\n• Convert temps to permanent (removes 15% productivity gap)\n• OR accept 83% as new baseline\n• OR add 1 more TSR (9 beats vs 8)\n\n**Expectation setting:** Full recovery is 8 weeks to 80%, not 85%. Set stakeholder expectations now.`;
       aMsg.sugg = ['Risk points where recovery could stall?', 'Accelerate with more investment?', 'Contingency if temps don\'t convert?', 'Adjust Shah target to 83% permanently?'];
     } else {
-      aMsg.text = `**Analysis capabilities:**\n\n• Root cause forensics (causal chains, symptoms vs diseases)\n• Intervention design (ROI, timelines, risks)\n• Comparative intelligence (capability gaps, replicability)`;
-      aMsg.sugg = ['Why does pattern happen here not elsewhere?', 'Exact ROI with risks and timelines', 'What am I missing in the data?', 'Optimal intervention sequence'];
+      // General fallback for open-ended questions
+      aMsg.text = `I can help analyze this question. Based on your query, I can provide insights on:\n\n**Available analysis:**\n• Root cause diagnostics across all dimensions\n• Performance comparisons (ASMs, distributors, territories)\n• ROI calculations for interventions\n• Recovery timelines and action plans\n• Risk assessment and opportunity identification\n• Growth driver analysis\n• Efficiency and productivity gaps\n\nCould you rephrase or ask about a specific aspect you'd like me to analyze?`;
+      aMsg.sugg = ['Where is growth coming from?', 'What are my biggest risks?', 'Which problems to solve first?', 'Calculate ROI for top interventions'];
     }
 
     setChatMessages([...chatMessages, uMsg, aMsg]);
@@ -311,7 +340,7 @@ export default function RSMDashboard() {
       {/* Tabs */}
       <div style={{ backgroundColor: C.off, borderBottom: `1px solid ${C.darkGreen}15`, padding: '0 32px' }}>
         <div style={{ maxWidth: conversationOpen ? 'none' : '1400px', margin: '0 auto', display: 'flex', gap: '8px' }}>
-          {['dashboard', 'deepdive'].map(tab => (
+          {['dashboard', 'deepdive', 'askmorrie'].map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -328,7 +357,7 @@ export default function RSMDashboard() {
                 textTransform: 'capitalize'
               }}
             >
-              {tab === 'deepdive' ? 'Deep Dive' : 'Dashboard'}
+              {tab === 'deepdive' ? 'Deep Dive' : tab === 'askmorrie' ? 'Ask Morrie' : 'Dashboard'}
             </button>
           ))}
         </div>
@@ -441,9 +470,6 @@ export default function RSMDashboard() {
                         <p style={{ fontSize: '13px', color: C.grey, margin: 0 }}>Patterns detected across all dimensions</p>
                       </div>
                     </div>
-                    <button onClick={() => openConv({ type: 'territory', name: 'Territory Overview' })} style={{ padding: '10px 20px', backgroundColor: C.darkGreen, color: C.cream, border: 'none', borderRadius: '4px', fontSize: '13px', fontWeight: '500', cursor: 'pointer', fontFamily: "'Inter', sans-serif", display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <MessageSquare size={14} />Ask AI Anything
-                    </button>
                   </div>
 
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
@@ -689,11 +715,144 @@ export default function RSMDashboard() {
               </div>
             )}
 
+            {activeTab === 'askmorrie' && (
+              <div style={{ height: 'calc(100vh - 240px)', display: 'flex', flexDirection: 'column' }}>
+                {/* Chat Area */}
+                <div style={{ flex: 1, overflowY: 'auto', padding: '32px', backgroundColor: C.cream }}>
+                  {chatMessages.length === 0 ? (
+                    <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+                      <div style={{ marginBottom: '24px' }}>
+                        <h3 style={{ fontSize: '15px', fontWeight: '600', color: C.darkGreen, marginBottom: '12px' }}>Popular questions:</h3>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
+                          {[
+                            'Where is growth really coming from?',
+                            'Is the business getting stronger or more risky?',
+                            'Old outlets vs new outlets - who drives growth?',
+                            'Where are we working hard but not getting results?',
+                            'Get extra ₹1 Cr without hurting margin?',
+                            'Minimum levers to go from 95% → 102%?'
+                          ].map((q, idx) => (
+                            <button 
+                              key={idx}
+                              onClick={() => {
+                                const typeMap = {
+                                  'Where is growth really coming from?': 'growth',
+                                  'Is the business getting stronger or more risky?': 'risk',
+                                  'Old outlets vs new outlets - who drives growth?': 'outlets',
+                                  'Where are we working hard but not getting results?': 'efficiency',
+                                  'Get extra ₹1 Cr without hurting margin?': 'opportunity',
+                                  'Minimum levers to go from 95% → 102%?': 'levers'
+                                };
+                                openConv({ type: 'business', subtype: typeMap[q], name: q });
+                              }}
+                              style={{ 
+                                padding: '12px 14px', 
+                                backgroundColor: 'white', 
+                                border: `1.5px solid ${C.darkGreen}20`, 
+                                borderRadius: '6px', 
+                                fontSize: '13px', 
+                                color: C.darkGreen, 
+                                textAlign: 'left', 
+                                cursor: 'pointer', 
+                                fontFamily: "'Inter', sans-serif", 
+                                transition: 'all 0.2s',
+                                fontWeight: '500',
+                                lineHeight: '1.3'
+                              }}
+                              onMouseEnter={e => { 
+                                e.currentTarget.style.backgroundColor = `${C.sage}08`; 
+                                e.currentTarget.style.borderColor = C.sage;
+                                e.currentTarget.style.transform = 'translateX(4px)';
+                              }}
+                              onMouseLeave={e => { 
+                                e.currentTarget.style.backgroundColor = 'white'; 
+                                e.currentTarget.style.borderColor = `${C.darkGreen}20`;
+                                e.currentTarget.style.transform = 'translateX(0)';
+                              }}
+                            >
+                              {q}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+                      {chatMessages.map((m, i) => (
+                        <div key={i} style={{ marginBottom: '24px' }}>
+                          <div style={{ padding: '16px 20px', backgroundColor: m.type === 'user' ? C.darkGreen : 'white', color: m.type === 'user' ? C.cream : C.darkest, borderRadius: m.type === 'user' ? '12px 12px 4px 12px' : '12px 12px 12px 4px', fontSize: '14px', lineHeight: '1.6', boxShadow: m.type === 'user' ? '0 2px 8px rgba(0,0,0,0.1)' : '0 1px 3px rgba(0,0,0,0.08)', border: m.type === 'user' ? 'none' : `1px solid ${C.darkGreen}10` }}>
+                            {m.type === 'user' ? m.text : fmt(m.text)}
+                          </div>
+                          <div style={{ fontSize: '11px', color: C.grey, marginTop: '6px', paddingLeft: m.type === 'user' ? '0' : '4px', textAlign: m.type === 'user' ? 'right' : 'left' }}>{m.ts}</div>
+                          {m.sugg && (
+                            <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                              <div style={{ fontSize: '11px', color: C.grey, fontWeight: '500', paddingLeft: '4px' }}>Suggested follow-ups:</div>
+                              {m.sugg.map((s, j) => (
+                                <button key={j} onClick={() => sendMsg(s)} style={{ padding: '12px 16px', backgroundColor: 'white', border: `1.5px solid ${C.darkGreen}25`, borderRadius: '8px', fontSize: '13px', color: C.darkGreen, textAlign: 'left', cursor: 'pointer', fontFamily: "'Inter', sans-serif", transition: 'all 0.2s', fontWeight: '500' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = `${C.sage}10`; e.currentTarget.style.borderColor = C.sage; e.currentTarget.style.transform = 'translateX(4px)'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'white'; e.currentTarget.style.borderColor = `${C.darkGreen}25`; e.currentTarget.style.transform = 'translateX(0)'; }}>
+                                  {s}
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                      <div ref={chatMessagesEndRef} />
+                    </div>
+                  )}
+                </div>
+
+                {/* Input Area */}
+                <div style={{ padding: '20px 32px', borderTop: `1px solid ${C.darkGreen}15`, backgroundColor: 'white' }}>
+                  <div style={{ maxWidth: '900px', margin: '0 auto', display: 'flex', gap: '12px' }}>
+                    <input
+                      type="text"
+                      value={inputMessage}
+                      onChange={e => setInputMessage(e.target.value)}
+                      onKeyPress={e => e.key === 'Enter' && sendMsg(inputMessage)}
+                      placeholder="Ask anything about your territory..."
+                      style={{
+                        flex: 1,
+                        padding: '14px 18px',
+                        fontSize: '14px',
+                        border: `1.5px solid ${C.darkGreen}30`,
+                        borderRadius: '8px',
+                        fontFamily: "'Inter', sans-serif",
+                        outline: 'none',
+                        backgroundColor: C.cream
+                      }}
+                      onFocus={e => e.currentTarget.style.borderColor = C.sage}
+                      onBlur={e => e.currentTarget.style.borderColor = `${C.darkGreen}30`}
+                    />
+                    <button
+                      onClick={() => sendMsg(inputMessage)}
+                      disabled={!inputMessage.trim()}
+                      style={{
+                        padding: '14px 28px',
+                        backgroundColor: inputMessage.trim() ? C.darkGreen : C.grey,
+                        color: C.cream,
+                        border: 'none',
+                        borderRadius: '8px',
+                        fontSize: '14px',
+                        fontWeight: '600',
+                        cursor: inputMessage.trim() ? 'pointer' : 'not-allowed',
+                        fontFamily: "'Inter', sans-serif",
+                        transition: 'all 0.2s'
+                      }}
+                      onMouseEnter={e => { if (inputMessage.trim()) e.currentTarget.style.backgroundColor = C.sage; }}
+                      onMouseLeave={e => { if (inputMessage.trim()) e.currentTarget.style.backgroundColor = C.darkGreen; }}
+                    >
+                      Ask
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
           </div>
         </div>
 
         {/* Conversation Panel */}
-        {conversationOpen && (
+        {conversationOpen && activeTab !== 'askmorrie' && (
           <div style={{ flex: '0 0 40%', borderLeft: `1px solid ${C.darkGreen}15`, backgroundColor: 'white', display: 'flex', flexDirection: 'column', maxHeight: '100%' }}>
             <div style={{ padding: '20px', borderBottom: `1px solid ${C.darkGreen}15`, backgroundColor: C.off }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
