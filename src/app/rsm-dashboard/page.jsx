@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from 'react';
 import { TrendingUp, TrendingDown, MapPin, MessageSquare, Zap, Target, AlertCircle, Send, X, ChevronDown, ChevronRight, BarChart3, Activity, Users, Package } from 'lucide-react';
 
