@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Field Sales WhatsApp Nudges - Realistic Flow</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #0a0a0a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .phone-container {
+            width: 100%;
+            max-width: 400px;
+            height: 800px;
+            background: #000;
+            border-radius: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            overflow: hidden;
+            position: relative;
+            border: 8px solid #1a1a1a;
+        }
+
+        .phone-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 30px;
+            background: #000;
+            border-radius: 0 0 20px 20px;
+            z-index: 10;
+        }
+
+        .whatsapp-header {
+            background: #075E54;
+            color: white;
+            padding: 50px 16px 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .back-arrow {
+            font-size: 24px;
+        }
+
+        .contact-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #128C7E;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .contact-info {
+            flex: 1;
+        }
+
+        .contact-name {
+            font-size: 17px;
+            font-weight: 500;
+        }
+
+        .contact-status {
+            font-size: 13px;
+            opacity: 0.8;
+        }
+
+        .chat-background {
+            background: #0d1418;
+            height: calc(100% - 142px);
+            overflow-y: auto;
+            padding: 16px 12px 80px 12px;
+            position: relative;
+        }
+
+        .chat-background::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-background::-webkit-scrollbar-thumb {
+            background: #2a3942;
+            border-radius: 3px;
+        }
+
+        .message-group {
+            margin-bottom: 20px;
+        }
+
+        .timestamp {
+            text-align: center;
+            color: #8696a0;
+            font-size: 12px;
+            margin: 16px 0 12px 0;
+            background: #1c2830;
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 8px;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .message {
+            max-width: 80%;
+            margin-bottom: 4px;
+            animation: fadeInUp 0.3s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.received {
+            margin-right: auto;
+        }
+
+        .message.sent {
+            margin-left: auto;
+        }
+
+        .message-bubble {
+            padding: 8px 12px;
+            border-radius: 8px;
+            position: relative;
+            word-wrap: break-word;
+        }
+
+        .received .message-bubble {
+            background: #1f2c34;
+            color: #e9edef;
+            border-radius: 8px 8px 8px 0;
+        }
+
+        .sent .message-bubble {
+            background: #005c4b;
+            color: #e9edef;
+            border-radius: 8px 8px 0 8px;
+        }
+
+        .message-text {
+            font-size: 14.5px;
+            line-height: 1.4;
+            white-space: pre-wrap;
+        }
+
+        .message-time {
+            font-size: 11px;
+            color: #8696a0;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            justify-content: flex-end;
+        }
+
+        .sent .message-time {
+            color: #9fb4bd;
+        }
+
+        .checkmark {
+            color: #53bdeb;
+            font-size: 16px;
+        }
+
+        .voice-note {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: #1f2c34;
+            border-radius: 8px 8px 8px 0;
+            min-width: 200px;
+        }
+
+        .play-button {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #06cf9c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .play-icon {
+            width: 0;
+            height: 0;
+            border-left: 8px solid white;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            margin-left: 2px;
+        }
+
+        .waveform {
+            flex: 1;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .waveform-bar {
+            width: 3px;
+            background: #667781;
+            border-radius: 2px;
+        }
+
+        .voice-duration {
+            font-size: 12px;
+            color: #8696a0;
+            flex-shrink: 0;
+        }
+
+        .image-message {
+            background: none !important;
+            padding: 0 !important;
+            border-radius: 12px;
+            overflow: hidden;
+            max-width: 280px;
+        }
+
+        .image-message img {
+            width: 100%;
+            display: block;
+        }
+
+        .image-caption {
+            padding: 8px 12px;
+            background: #1f2c34;
+            color: #e9edef;
+            font-size: 14px;
+        }
+
+        .quick-replies {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .quick-reply-btn {
+            background: #1f2c34;
+            color: #06cf9c;
+            border: 1px solid #06cf9c;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-reply-btn:hover {
+            background: #06cf9c;
+            color: white;
+        }
+
+        .list-image {
+            background: #1f2c34;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 4px;
+        }
+
+        .list-item {
+            color: #e9edef;
+            font-size: 13px;
+            padding: 6px 0;
+            border-bottom: 1px solid #2a3942;
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        .store-highlight {
+            color: #06cf9c;
+            font-weight: 500;
+        }
+
+        .amount-highlight {
+            color: #ffd666;
+            font-weight: 500;
+        }
+
+        .emoji {
+            font-size: 16px;
+        }
+
+        .input-area {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #1f2c34;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .input-field {
+            flex: 1;
+            background: #2a3942;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 24px;
+            color: #e9edef;
+            font-size: 14px;
+        }
+
+        .send-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #06cf9c;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .map-preview {
+            width: 100%;
+            height: 120px;
+            background: #2a3942;
+            border-radius: 8px 8px 0 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .map-pin {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 32px;
+        }
+
+        .location-details {
+            background: #1f2c34;
+            padding: 12px;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .location-name {
+            color: #06cf9c;
+            font-weight: 500;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .location-address {
+            color: #8696a0;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-container">
+        <div class="phone-notch"></div>
+        
+        <div class="whatsapp-header">
+            <div class="back-arrow">←</div>
+            <div class="contact-avatar">M</div>
+            <div class="contact-info">
+                <div class="contact-name">Morrie</div>
+                <div class="contact-status">online</div>
+            </div>
+        </div>
+
+        <div class="chat-background" id="chatContainer">
+            <div class="timestamp">TODAY</div>
+
+            <!-- Morning Brief - 7:45 AM -->
+            <div class="message-group">
+                <div class="message received">
+                    <div class="message-bubble">
+                        <div class="message-text">🌅 शुभ प्रभात अर्जुन!
+
+📊 Nov Performance:
+Target: ₹1,25,000 | Done: ₹85,000 (68%)
+Focus Brand: 62% 🔴
+
+💰 Incentive: ₹8,200
+🏆 Team Rank: 4/7
+
+आज का Target: ₹4,200</div>
+                        <div class="message-time">7:45 AM</div>
+                    </div>
+                </div>
+
+                <div class="message received">
+                    <div class="voice-note">
+                        <div class="play-button">
+                            <div class="play-icon"></div>
+                        </div>
+                        <div class="waveform">
+                            <div class="waveform-bar" style="height: 12px;"></div>
+                            <div class="waveform-bar" style="height: 18px;"></div>
+                            <div class="waveform-bar" style="height: 8px;"></div>
+                            <div class="waveform-bar" style="height: 20px;"></div>
+                            <div class="waveform-bar" style="height: 14px;"></div>
+                            <div class="waveform-bar" style="height: 22px;"></div>
+                            <div class="waveform-bar" style="height: 10px;"></div>
+                            <div class="waveform-bar" style="height: 16px;"></div>
+                            <div class="waveform-bar" style="height: 12px;"></div>
+                            <div class="waveform-bar" style="height: 8px;"></div>
+                        </div>
+                        <div class="voice-duration">0:42</div>
+                    </div>
+                    <div class="message-time" style="margin-left: 12px;">7:45 AM</div>
+                </div>
+            </div>
+
+            <!-- Pre-route - 8:15 AM with Image -->
+            <div class="message-group">
+                <div class="message received">
+                    <div class="message-bubble">
+                        <div class="message-text">⚠️ URGENT: 15 unbilled stores
+
+आज की beat में 8 हैं
+List भेज रहा हूं 👇</div>
+                        <div class="message-time">8:15 AM</div>
+                    </div>
+                </div>
+
+                <div class="message received">
+                    <div class="message-bubble image-message">
+                        <div style="background: #1a2027; padding: 16px;">
+                            <div style="color: #ff6b6b; font-weight: 600; margin-bottom: 12px; font-size: 13px;">
+                                📦 UNBILLED STORES - आज की Beat
+                            </div>
+                            <div class="list-item">
+                                <span class="store-highlight">1. विशाल जनरल</span> - <span class="amount-highlight">₹620</span>
+                            </div>
+                            <div class="list-item">
+                                <span class="store-highlight">2. शर्मा किराना</span> - <span class="amount-highlight">₹580</span>
+                            </div>
+                            <div class="list-item">
+                                <span class="store-highlight">3. गुप्ता स्टोर</span> - <span class="amount-highlight">₹710</span>
+                            </div>
+                            <div class="list-item">
+                                <span class="store-highlight">4. पटेल ट्रेडर्स</span> - <span class="amount-highlight">₹450</span>
+                            </div>
+                            <div class="list-item">
+                                <span class="store-highlight">5. मुंबई स्टोर</span> - <span class="amount-highlight">₹380</span>
+                            </div>
+                            <div class="list-item" style="border-bottom: 1px dashed #2a3942; padding-bottom: 8px;">
+                                <span style="color: #8696a0;">...+3 more</span>
+                            </div>
+                            <div style="margin-top: 12px; padding: 8px; background: #0f3a2e; border-radius: 6px; border-left: 3px solid #06cf9c;">
+                                <div style="color: #06cf9c; font-size: 12px; font-weight: 500;">💡 SCHEME ACTIVE</div>
+                                <div style="color: #e9edef; font-size: 12px; margin-top: 4px;">Winter Combo: 8% + Free rack</div>
+                            </div>
+                            <div style="margin-top: 12px; text-align: center; color: #ffd666; font-weight: 600;">
+                                Total: ₹3,890
+                            </div>
+                        </div>
+                        <div class="message-time" style="padding: 8px 12px; background: #1f2c34;">8:15 AM</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Response -->
+            <div class="message-group">
+                <div class="message sent">
+                    <div class="message-bubble">
+                        <div class="message-text">👍 OK</div>
+                        <div class="message-time">8:17 AM <span class="checkmark">✓✓</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- At Store - 9:30 AM with Location -->
+            <div class="message-group">
+                <div class="message received">
+                    <div class="message-bubble image-message">
+                        <div class="map-preview">
+                            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, #1a4d3e 0%, #0d2921 100%);"></div>
+                            <div style="position: absolute; top: 20px; left: 30px; width: 60px; height: 2px; background: #06cf9c; opacity: 0.3;"></div>
+                            <div style="position: absolute; top: 40px; left: 20px; width: 80px; height: 2px; background: #06cf9c; opacity: 0.3;"></div>
+                            <div style="position: absolute; top: 60px; left: 50px; width: 40px; height: 2px; background: #06cf9c; opacity: 0.3;"></div>
+                            <div class="map-pin">📍</div>
+                            <div style="position: absolute; bottom: 20px; right: 30px; font-size: 10px; color: #8696a0;">0.3 km</div>
+                        </div>
+                        <div class="location-details">
+                            <div class="location-name">विशाल जनरल स्टोर</div>
+                            <div class="location-address">Andheri West • Last visit: 28 Oct</div>
+                        </div>
+                        <div class="message-time" style="padding: 8px 12px; background: #1f2c34;">9:28 AM</div>
+                    </div>
+                </div>
+
+                <div class="message received">
+                    <div class="message-bubble">
+                        <div class="message-text">💡 Store Tips:
+
+Last: 12 pcs Godrej No.1
+✅ Today: Try Combo Pack (better margin)
+
+⚠️ Missing: Cinthol Talc
+(5 nearby stores selling it)</div>
+                        <div class="message-time">9:28 AM</div>
+                    </div>
+                </div>
+
+                <div class="message received">
+                    <div class="voice-note">
+                        <div class="play-button">
+                            <div class="play-icon"></div>
+                        </div>
+                        <div class="waveform">
+                            <div class="waveform-bar" style="height: 14px;"></div>
+                            <div class="waveform-bar" style="height: 10px;"></div>
+                            <div class="waveform-bar" style="height: 18px;"></div>
+                            <div class="waveform-bar" style="height: 22px;"></div>
+                            <div class="waveform-bar" style="height: 12px;"></div>
+                            <div class="waveform-bar" style="height: 16px;"></div>
+                            <div class="waveform-bar" style="height: 8px;"></div>
+                            <div class="waveform-bar" style="height: 20px;"></div>
+                        </div>
+                        <div class="voice-duration">0:35</div>
+                    </div>
+                    <div class="message-time" style="margin-left: 12px;">9:28 AM</div>
+                </div>
+
+                <div class="message received">
+                    <div class="message-bubble">
+                        <div class="message-text">📸 Photo lo category shelf ka
+Denver Deo dikhegi toh Cinthol push karo</div>
+                        <div class="quick-replies">
+                            <button class="quick-reply-btn">✅ Done</button>
+                            <button class="quick-reply-btn">📸 Photo</button>
+                            <button class="quick-reply-btn">Skip</button>
+                        </div>
+                        <div class="message-time">9:29 AM</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Response with photo -->
+            <div class="message-group">
+                <div class="message sent">
+                    <div class="message-bubble image-message">
+                        <div style="background: #1a2027; padding: 40px; text-align: center; color: #667781;">
+                            📷 Category Shelf Photo
+                            <div style="font-size: 11px; margin-top: 8px;">Denver Deo visible</div>
+                        </div>
+                        <div class="message-time" style="padding: 8px 12px; background: #005c4b;">9:45 AM <span class="checkmark">✓✓</span></div>
+                    </div>
+                </div>
+
+                <div class="message sent">
+                    <div class="message-bubble">
+                        <div class="message-text">Vishal ne combo pack le liya
+₹850 bill hua 👍</div>
+                        <div class="message-time">9:52 AM <span class="checkmark">✓✓</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User asks for help - 11:45 AM -->
+            <div class="message-group">
+                <div class="message sent">
+                    <div class="message-bubble">
+                        <div class="message-text">Sharma Store pe last 3 months ka order dikhao</div>
+                        <div class="message-time">11:42 AM <span class="checkmark">✓✓</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="message-group">
+                <div class="message received">
+                    <div class="message-bubble image-message">
+                        <div style="background: #1a2027; padding: 16px;">
+                            <div style="color: #06cf9c; font-weight: 600; margin-bottom: 12px; font-size: 13px;">
+                                📊 शर्मा किराना - Last 3 Months
+                            </div>
+                            <div class="list-item">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span style="color: #8696a0; font-size: 12px;">28 Oct</span>
+                                    <span class="amount-highlight">₹580</span>
+                                </div>
+                                <div style="color: #e9edef; font-size: 11px; margin-top: 4px;">Harpic, Good Knight, Hit</div>
+                            </div>
+                            <div class="list-item">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span style="color: #8696a0; font-size: 12px;">14 Oct</span>
+                                    <span class="amount-highlight">₹620</span>
+                                </div>
+                                <div style="color: #e9edef; font-size: 11px; margin-top: 4px;">Godrej No.1, Cinthol</div>
+                            </div>
+                            <div class="list-item">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span style="color: #8696a0; font-size: 12px;">1 Oct</span>
+                                    <span class="amount-highlight">₹490</span>
+                                </div>
+                                <div style="color: #e9edef; font-size: 11px; margin-top: 4px;">Home care items</div>
+                            </div>
+                            <div class="list-item">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span style="color: #8696a0; font-size: 12px;">18 Sep</span>
+                                    <span class="amount-highlight">₹550</span>
+                                </div>
+                                <div style="color: #e9edef; font-size: 11px; margin-top: 4px;">Mixed items</div>
+                            </div>
+                            <div style="margin-top: 12px; padding: 8px; background: #0f3a2e; border-radius: 6px;">
+                                <div style="color: #e9edef; font-size: 12px;">Avg Order: ₹560</div>
+                                <div style="color: #8696a0; font-size: 11px; margin-top: 2px;">Buys every 2 weeks</div>
+                            </div>
+                        </div>
+                        <div class="message-time" style="padding: 8px 12px; background: #1f2c34;">11:43 AM</div>
+                    </div>
+                </div>
+
+                <div class="message received">
+                    <div class="message-bubble">
+                        <div class="message-text">✅ Regular customer hai
+Target: ₹580-620 range me billing karo</div>
+                        <div class="message-time">11:43 AM</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Response -->
+            <div class="message-group">
+                <div class="message sent">
+                    <div class="message-bubble">
+                        <div class="message-text">Perfect 👍</div>
+                        <div class="message-time">11:44 AM <span class="checkmark">✓✓</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User asks about nearby stores - 12:30 PM -->
+            <div class="message-group">
+                <div class="message sent">
+                    <div class="message-bubble">
+                        <div class="message-text">Abhi Andheri market me hu
+Aas paas koi high value store hai?</div>
+                        <div class="message-time">12:28 PM <span class="checkmark">✓✓</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="message-group">
+                <div class="message received">
+                    <div class="message-bubble">
+                        <div class="message-text">📍 Tumhare 500m radius me:
+
+1. मंगल स्टोर (250m)
+   Last: ₹890 | Unbilled Nov
+
+2. अग्रवाल ट्रेडर्स (380m)  
+   Last: ₹1,240 | High value! 🔥
+
+3. नीलम जनरल (450m)
+   Last: ₹720</div>
+                        <div class="message-time">12:29 PM</div>
+                    </div>
+                </div>
+
+                <div class="message received">
+                    <div class="message-bubble">
+                        <div class="message-text">💡 अग्रवाल try karo - sabse bada order
+Scheme X push karo wahan</div>
+                        <div class="message-time">12:29 PM</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Response -->
+            <div class="message-group">
+                <div class="message sent">
+                    <div class="message-bubble">
+                        <div class="message-text">Agrawal ja raha 🚗</div>
+                        <div class="message-time">12:31 PM <span class="checkmark">✓✓</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Midday Check - 1:15 PM -->
+            <div class="message-group">
+                <div class="message received">
+                    <div class="message-bubble">
+                        <div class="message-text">⏰ दोपहर का Update
+
+✅ PC: 8 (Team: 10) 📊
+✅ Lines/call: 4.0 (Team: 3.5) 🔥
+💰 Billing: ₹2,450 / ₹4,200 (58%)
+
+⚠️ 4 stores missed - regular wale</div>
+                        <div class="message-time">1:15 PM</div>
+                    </div>
+                </div>
+
+                <div class="message received">
+                    <div class="message-bubble image-message">
+                        <div style="background: #1a2027; padding: 16px;">
+                            <div style="color: #ff6b6b; font-weight: 600; margin-bottom: 12px; font-size: 13px;">
+                                ⚠️ MISSED STORES (Weekly regular)
+                            </div>
+                            <div class="list-item">
+                                <span class="store-highlight">सिंह स्टोर</span> - <span class="amount-highlight">₹340</span>
+                            </div>
+                            <div class="list-item">
+                                <span class="store-highlight">वर्मा जनरल</span> - <span class="amount-highlight">₹290</span>
+                            </div>
+                            <div class="list-item">
+                                <span class="store-highlight">अग्रवाल ट्रेडर्स</span> - <span class="amount-highlight">₹470</span>
+                            </div>
+                            <div class="list-item">
+                                <span class="store-highlight">शाह किराना</span> - <span class="amount-highlight">₹380</span>
+                            </div>
+                            <div style="margin-top: 12px; text-align: center; padding: 8px; background: #2a1a1a; border-radius: 6px;">
+                                <div style="color: #ff6b6b; font-size: 12px;">Afternoon में cover karo</div>
+                            </div>
+                        </div>
+                        <div class="message-time" style="padding: 8px 12px; background: #1f2c34;">1:15 PM</div>
+                    </div>
+                </div>
+
+                <div class="message received">
+                    <div class="voice-note">
+                        <div class="play-button">
+                            <div class="play-icon"></div>
+                        </div>
+                        <div class="waveform">
+                            <div class="waveform-bar" style="height: 16px;"></div>
+                            <div class="waveform-bar" style="height: 12px;"></div>
+                            <div class="waveform-bar" style="height: 20px;"></div>
+                            <div class="waveform-bar" style="height: 8px;"></div>
+                            <div class="waveform-bar" style="height: 18px;"></div>
+                            <div class="waveform-bar" style="height: 14px;"></div>
+                            <div class="waveform-bar" style="height: 10px;"></div>
+                        </div>
+                        <div class="voice-duration">0:28</div>
+                    </div>
+                    <div class="message-time" style="margin-left: 12px;">1:16 PM</div>
+                </div>
+            </div>
+
+            <!-- User Response -->
+            <div class="message-group">
+                <div class="message sent">
+                    <div class="message-bubble">
+                        <div class="message-text">OK boss. Abhi 3 aur stores jaa raha</div>
+                        <div class="message-time">1:18 PM <span class="checkmark">✓✓</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User asks about scheme - 3:45 PM -->
+            <div class="message-group">
+                <div class="message sent">
+                    <div class="message-bubble">
+                        <div class="message-text">Patel store pe Godrej ka kaunsa scheme chalega?</div>
+                        <div class="message-time">3:42 PM <span class="checkmark">✓✓</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="message-group">
+                <div class="message received">
+                    <div class="message-bubble image-message">
+                        <div style="background: #1a2027; padding: 16px;">
+                            <div style="color: #06cf9c; font-weight: 600; margin-bottom: 12px; font-size: 13px;">
+                                🎁 पटेल ट्रेडर्स - Active Schemes
+                            </div>
+                            <div style="padding: 10px; background: #0f3a2e; border-radius: 6px; border-left: 3px solid #06cf9c; margin-bottom: 8px;">
+                                <div style="color: #06cf9c; font-weight: 600; font-size: 13px;">Winter Combo</div>
+                                <div style="color: #e9edef; font-size: 12px; margin-top: 4px;">8% margin + Free rack</div>
+                                <div style="color: #8696a0; font-size: 11px; margin-top: 4px;">Valid: Till 30 Nov</div>
+                            </div>
+                            <div style="padding: 10px; background: #2a1f0f; border-radius: 6px; border-left: 3px solid #ffd666; margin-bottom: 8px;">
+                                <div style="color: #ffd666; font-weight: 600; font-size: 13px;">Focus SKU Push</div>
+                                <div style="color: #e9edef; font-size: 12px; margin-top: 4px;">Godrej No.1 - 12% on 24 pcs</div>
+                                <div style="color: #8696a0; font-size: 11px; margin-top: 4px;">Best margin! 🔥</div>
+                            </div>
+                            <div style="margin-top: 12px; padding: 8px; background: #1f2c34; border-radius: 6px; text-align: center;">
+                                <div style="color: #e9edef; font-size: 11px;">📊 Patel last time: ₹450</div>
+                                <div style="color: #06cf9c; font-size: 12px; font-weight: 500; margin-top: 4px;">Target: ₹600+ with schemes</div>
+                            </div>
+                        </div>
+                        <div class="message-time" style="padding: 8px 12px; background: #1f2c34;">3:43 PM</div>
+                    </div>
+                </div>
+
+                <div class="message received">
+                    <div class="voice-note">
+                        <div class="play-button">
+                            <div class="play-icon"></div>
+                        </div>
+                        <div class="waveform">
+                            <div class="waveform-bar" style="height: 16px;"></div>
+                            <div class="waveform-bar" style="height: 20px;"></div>
+                            <div class="waveform-bar" style="height: 12px;"></div>
+                            <div class="waveform-bar" style="height: 18px;"></div>
+                            <div class="waveform-bar" style="height: 10px;"></div>
+                            <div class="waveform-bar" style="height: 22px;"></div>
+                            <div class="waveform-bar" style="height: 14px;"></div>
+                        </div>
+                        <div class="voice-duration">0:32</div>
+                    </div>
+                    <div class="message-time" style="margin-left: 12px;">3:43 PM</div>
+                </div>
+            </div>
+
+            <!-- User Response -->
+            <div class="message-group">
+                <div class="message sent">
+                    <div class="message-bubble">
+                        <div class="message-text">12% wala push karunga 💪</div>
+                        <div class="message-time">3:45 PM <span class="checkmark">✓✓</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- End of Day - 6:45 PM -->
+            <div class="message-group">
+                <div class="message received">
+                    <div class="message-bubble">
+                        <div class="message-text">🎉 Bahut badhiya Arjun!
+
+📊 Today:
+PC: 11 (Target: 10) ✅
+Lines: 4.2 ✅
+Billing: ₹3,890
+
+💰 MTD: 68% → 71.1%
+Incentive: ₹8,980
+
+🏆 Rank: 4/7 → 3/7 ⬆️</div>
+                        <div class="message-time">6:45 PM</div>
+                    </div>
+                </div>
+
+                <div class="message received">
+                    <div class="voice-note">
+                        <div class="play-button">
+                            <div class="play-icon"></div>
+                        </div>
+                        <div class="waveform">
+                            <div class="waveform-bar" style="height: 18px;"></div>
+                            <div class="waveform-bar" style="height: 14px;"></div>
+                            <div class="waveform-bar" style="height: 22px;"></div>
+                            <div class="waveform-bar" style="height: 10px;"></div>
+                            <div class="waveform-bar" style="height: 16px;"></div>
+                            <div class="waveform-bar" style="height: 12px;"></div>
+                            <div class="waveform-bar" style="height: 20px;"></div>
+                            <div class="waveform-bar" style="height: 8px;"></div>
+                        </div>
+                        <div class="voice-duration">0:38</div>
+                    </div>
+                    <div class="message-time" style="margin-left: 12px;">6:45 PM</div>
+                </div>
+
+                <div class="message received">
+                    <div class="message-bubble">
+                        <div class="message-text">📅 Kal ki prep:
+Route: Andheri East
+Target: ₹7,500
+First store: राज किराना (8:15 AM)
+
+Shubh ratri! 🌙</div>
+                        <div class="message-time">6:46 PM</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Response -->
+            <div class="message-group">
+                <div class="message sent">
+                    <div class="message-bubble">
+                        <div class="message-text">Thanks! 🙏</div>
+                        <div class="message-time">6:48 PM <span class="checkmark">✓✓</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-area">
+            <input type="text" class="input-field" placeholder="Type a message">
+            <button class="send-button">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Auto-scroll to bottom
+        const chatContainer = document.getElementById('chatContainer');
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+
+        // Add click handlers for quick reply buttons
+        document.querySelectorAll('.quick-reply-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.style.background = '#06cf9c';
+                this.style.color = 'white';
+                setTimeout(() => {
+                    this.style.background = '#1f2c34';
+                    this.style.color = '#06cf9c';
+                }, 200);
+            });
+        });
+
+        // Play button animation
+        document.querySelectorAll('.play-button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.style.background = '#05b589';
+                setTimeout(() => {
+                    this.style.background = '#06cf9c';
+                }, 200);
+            });
+        });
+    </script>
+</body>
+</html>
