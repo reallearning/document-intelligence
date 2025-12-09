@@ -1,20 +1,21 @@
 "use client"
 import React, { useState } from 'react';
 import { 
-  Users, Download, Search, MessageSquare, Send, 
-  Activity, Settings, Filter, X, Sparkles,
-  Check, LayoutDashboard, Target, MapPin, 
-  TrendingUp, AlertTriangle, BarChart3, Store,
-  Zap, Award, TrendingDown, Calendar, Package
+  Package, Download, Search, MessageSquare, Truck, Send, Bell, 
+  Activity, Clock, Building2, Settings, Filter, X, Sparkles,
+  Check, ShoppingCart, LayoutDashboard, Move, RotateCcw, 
+  TrendingDown, ArrowRight, Store, MapPin, Target
 } from 'lucide-react';
 
-export default function CromaBusinessMarketingDashboard() {
-  const [currentSection, setCurrentSection] = useState('store-health');
+export default function CromaSupplyChainDashboard() {
+  const [currentSection, setCurrentSection] = useState('inventory');
+  const [inventorySubTab, setInventorySubTab] = useState('buy-planning');
   const [selectedItems, setSelectedItems] = useState([]);
   const [decisionTrailModal, setDecisionTrailModal] = useState(null);
   const [chatOpen, setChatOpen] = useState(null);
   const [chatMessages, setChatMessages] = useState({});
   const [currentMessage, setCurrentMessage] = useState('');
+  const [expandedSections, setExpandedSections] = useState({});
 
   const sendMessage = (itemId) => {
     if (!currentMessage.trim()) return;
@@ -22,1123 +23,1321 @@ export default function CromaBusinessMarketingDashboard() {
       ...prev,
       [itemId]: [...(prev[itemId] || []), 
         { type: 'user', text: currentMessage },
-        { type: 'ai', text: 'Based on store performance data, I can model scenarios and expected outcomes.' }
+        { type: 'ai', text: 'Based on current trends and supplier lead times, I can model different scenarios for you. The recommendation balances stockout risk against inventory holding costs.' }
       ]
     }));
     setCurrentMessage('');
   };
 
-  // PLACEHOLDER: Full data structures will be populated
-  const storeHealthDecisions = [
+  const toggleSection = (itemId, section) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [`${itemId}-${section}`]: !prev[`${itemId}-${section}`]
+    }));
+  };
+
+  // Buy Planning Decisions (3 cards)
+  const buyPlanningDecisions = [
     {
-      id: 'SH001',
-      storeName: 'Croma Select City Walk Delhi',
-      storeCode: 'DEL_SCW',
-      healthStatus: 'RED',
-      issue: 'Poor Smartphone Conversion + Excessive Markdowns',
+      id: 'BP001',
+      sku: 'Samsung Neo QLED 65" QN90D',
+      skuCode: 'TV065SAM',
+      category: 'Large Screen TVs',
+      brand: 'Samsung',
       urgency: 'HIGH',
-      rootCause: 'Red due to Staff/Experience + Pricing',
-      
-      storeKPIs: {
-        footfall: '24,500',
-        conversion: '8.2%',
-        avgTicket: '₹18,400',
-        margin: '11.2%',
-        markdown: '18%',
-        returns: '6.8%'
+      event: 'Diwali Peak (Oct 20 - Nov 15)',
+      currentState: {
+        networkStock: 50,
+        warehouseStock: 15,
+        avgROS: '2.8/d',
+        lastYearST: '87%'
       },
-      
-      benchmarks: {
-        clusterConv: '14.5%',
-        clusterMargin: '15.8%',
-        clusterMarkdown: '8.2%'
-      },
-      
       recommendation: {
-        action: '4-Pillar Intervention: Display + Training + Pricing + Vendor Quality',
-        reasoning: 'Store has 24.5K footfall but 8.2% conversion (vs 14.5% cluster). Smartphones critical: 4.2% conversion, 24% markdown, 12.4% returns. Root causes: locked displays (8+ min wait), undertrained staff (8mo tenure vs 14mo cluster), excessive discounting (manager discretion), OnePlus/Realme quality issues (18%/15% DOA vs Samsung 2%). 4-pillar intervention targets 12%+ conversion, 12% markdown, 5% returns.',
-        confidence: 87,
-        impact: '₹2.4Cr revenue recovery, ₹38L margin improvement'
+        action: 'Order 200 Units via 3 Phased Deliveries (Week 1: 80u | Week 3: 70u | Week 5: 50u)',
+        reasoning: 'Current 65 units will exhaust in 23 days at baseline but only 10 days once Diwali lift begins. Event spans 4 weeks with phased intensity: pre-build (1.5x), peak (2.8x for 10 days), tail (1.5x). Samsung weekly supply + 2-week lead time enables phased approach. Order 200 units across 3 deliveries to match demand curve while avoiding over-inventory post-event. Total coverage: 2 weeks lead time + 4 weeks event + 1 week buffer = 7 weeks.',
+        qty: 200,
+        investment: '₹2.9Cr',
+        confidence: 87
       },
-      
       reasoningBreakdown: {
-        summary: 'Strong footfall but poor conversion. Root causes: locked displays, undertrained staff, excessive discounting, vendor quality issues.',
+        summary: 'Current 65 units inadequate for 4-week Diwali window with phased demand lift. Event pattern: gradual 10-day build (1.5x), sharp 10-day peak (2.8x), quick 10-day tail (1.5x). Samsung\'s weekly supply flexibility allows phased orders matching demand curve. 200 units sized for total event demand (~185 units) plus safety stock, avoiding post-event surplus.',
         factors: [
           {
-            name: 'Display & Experience',
+            name: 'Inventory Gap Analysis',
+            weight: 35,
+            score: 91,
+            reasoning: 'Current: 65 units (50 network + 15 warehouse) = 23 days at baseline 2.8/d. Event demand over 4 weeks: Pre-build 10d (4.2/d) = 42u, Peak 10d (7.8/d) = 78u, Tail 10d (4.2/d) = 42u. Total need: ~162 units for event. Current + Order (65 + 200 = 265) provides coverage with 30% buffer for variability.'
+          },
+          {
+            name: 'Event Demand Pattern',
             weight: 30,
-            score: 68,
-            reasoning: 'Phones locked in cabinets, 8+ min wait time. Customers wait for staff to unlock. Competitors (Apple Store, Samsung Store nearby) have open demos. Need live demo units, charging stations, comparison displays.'
+            score: 89,
+            reasoning: 'Diwali lift follows predictable 3-phase curve: (1) Pre-build starts post-Shraddh with 1.5x lift building over 10 days, (2) Core peak (Dhanteras through Bhai Dooj) hits 2.8x for 10 days, (3) Quick 1.5x tail over final 10 days before returning to baseline. Total effective window: 30 days, not uniform lift.'
           },
           {
-            name: 'Staff Training',
-            weight: 30,
-            score: 72,
-            reasoning: 'Staff 8mo tenure, 4hr training/month vs 14mo, 8hr cluster avg. Default to discount pitches instead of value selling. Flagships require consultative approach. Need product certification program.'
+            name: 'Supply Chain Flexibility',
+            weight: 20,
+            score: 93,
+            reasoning: 'Samsung offers weekly deliveries with 2-week lead time and 94% OTD reliability. Phased ordering (80u Week 1, 70u Week 3, 50u Week 5) matches demand curve, reduces cash lock-up, and minimizes post-event inventory surplus. MOQ 50 units easily met per delivery.'
           },
           {
-            name: 'Pricing Discipline',
-            weight: 25,
-            score: 58,
-            reasoning: '24% markdown vs 8% cluster. Manager overusing discounts to compensate for poor conversion. Training customers to wait for deals. Need guardrails: max 8% without approval.'
-          },
-          {
-            name: 'Vendor Quality',
+            name: 'Allocation Strategy',
             weight: 15,
-            score: 65,
-            reasoning: 'OnePlus 18% DOA, Realme 15% DOA vs Samsung 2%, Apple 1%. High returns damage store NPS (42 vs cluster 58) and drive warranty costs. Escalate to vendors.'
+            score: 86,
+            reasoning: 'Samsung limits premium TV allocation nationally during Diwali. Early commitment for 200 units secures our priority in allocation queue. Competitor retailers ordering 4-6 weeks out. Our 2-week lead order timing + volume commitment increases allocation reliability. 87% historical ST gives Samsung confidence.'
           }
         ]
       },
-      
-      interventionPlan: [
-        { pillar: 'Display Redesign', timeline: '2 weeks', cost: '₹1.2L', impact: 'Conv: 4.2% → 8.5%' },
-        { pillar: 'Staff Training', timeline: '4 weeks', cost: '₹80K', impact: 'Conv: 8.5% → 11%, MD: 24% → 15%' },
-        { pillar: 'Pricing Controls', timeline: 'Immediate', cost: '₹0', impact: 'MD: 15% → 12%, Margin +₹28L' },
-        { pillar: 'Vendor Quality', timeline: '8 weeks', cost: '₹0', impact: 'Returns: 12.4% → 6%, NPS +12pts' }
+      storeAllocation: [
+        { cluster: 'Flagship (5 stores)', qty: 75, perStore: 15, reasoning: 'Premium locations with highest Diwali gifting traffic' },
+        { cluster: 'Metro A+ (15 stores)', qty: 75, perStore: 5, reasoning: 'Strong event performance, balanced coverage' },
+        { cluster: 'Metro A (28 stores)', qty: 30, perStore: 1, reasoning: 'Maintain presence, focus on high performers' },
+        { cluster: 'Experience Centers (8 stores)', qty: 20, perStore: 2, reasoning: 'Demo-driven sales for feature-rich premium segment' }
       ],
-      
+      demandCurve: [
+        { phase: 'Pre-Build (10 days)', lift: '1.5x', velocity: '4.2/d', units: 42, timing: 'Oct 20-29' },
+        { phase: 'Core Peak (10 days)', lift: '2.8x', velocity: '7.8/d', units: 78, timing: 'Oct 30-Nov 8' },
+        { phase: 'Tail (10 days)', lift: '1.5x', velocity: '4.2/d', units: 42, timing: 'Nov 9-18' }
+      ],
+      phasedDelivery: [
+        { delivery: 1, week: 'Week 1 (Oct 15)', units: 80, arrival: 'Oct 29', reasoning: 'Arrives as pre-build accelerates, covers initial surge' },
+        { delivery: 2, week: 'Week 3 (Oct 29)', units: 70, arrival: 'Nov 12', reasoning: 'Timed for peak period replenishment' },
+        { delivery: 3, week: 'Week 5 (Nov 12)', units: 50, arrival: 'Nov 26', reasoning: 'Tail coverage + safety stock for extended demand' }
+      ],
       whatIfScenarios: [
-        'What if we only fix displays but not staff training?',
-        'What if vendors refuse quality escalation?',
-        'What if we implement chain-wide (100 stores)?'
+        'What if peak intensity reaches 3.2x instead of 2.8x?',
+        'What if we front-load with 120 units in first delivery?',
+        'What if Samsung can only deliver 150 units total?',
+        'What if post-Diwali demand sustains at 1.3x baseline?'
       ],
-      
-      decisionTrail: []
+      decisionTrail: [
+        { time: '09:15:22', agent: 'Inventory Agent', action: 'Diwali planning trigger: Current stock at 65 units', thinking: 'Network shows 50 units, warehouse 15. At baseline 2.8/d = 23 days coverage. Insufficient for 4-week Diwali event. Need demand modeling and supplier options.' },
+        { time: '09:18:45', agent: 'Demand Forecasting Agent', action: 'Built 3-phase demand curve from historical patterns', thinking: 'Last 3 Diwalis show consistent pattern: gradual 10d pre-build (1.5x avg), sharp 10d peak (2.8x centered on Dhanteras-Bhai Dooj), quick 10d tail (1.5x). Total window: 30 days effective, not 60. Demand: Pre-build 42u, Peak 78u, Tail 42u = 162 units total event need.' },
+        { time: '09:23:10', agent: 'Supply Chain Agent', action: 'Confirmed Samsung weekly supply capability', thinking: 'Samsung offers weekly deliveries, 2-week lead time, 94% OTD. Current date Oct 1 means first delivery arrives Oct 15. Can do phased: 80u (arrives Oct 29 for pre-build end), 70u (arrives Nov 12 for peak), 50u (arrives Nov 26 for tail). Phased approach matches demand curve better than single bulk order.' },
+        { time: '09:28:35', agent: 'Inventory Optimization Agent', action: 'Sized order at 200 units across 3 phases', thinking: 'Event needs 162 units. Current stock 65 units. Gap: 97 units minimum. But need buffer for: (a) demand variability ±15%, (b) allocation flexibility across stores, (c) Samsung allocation competition. 200 units = 162 event + 38 buffer (23%). Avoids over-inventory vs single 300-unit order.' },
+        { time: '09:33:50', agent: 'Allocation Strategy Agent', action: 'Checked Samsung national allocation constraints', thinking: 'Samsung limits premium Neo QLED allocation during Diwali - high demand, constrained supply. Competitors ordering 4-6 weeks out. Our early commitment for 200 units signals serious demand, increases priority. If we wait or order small, risk being deprioritized. Volume + timing = allocation leverage.' },
+        { time: '09:38:15', agent: 'Financial Risk Agent', action: 'Validated investment and margin protection', thinking: '200 units @ ₹14.5L each = ₹2.9Cr investment. Base margin 14% + incentive 3.5% at 90% ST = 17.5% blended. With 87% historical ST, risk is low. 60-day price protection covers entire event window. Phased delivery spreads cash outflow: ₹1.16Cr, ₹1.02Cr, ₹725L across 6 weeks vs ₹2.9Cr upfront.' },
+        { time: '09:42:40', agent: 'Orchestrator', action: 'Finalized recommendation: 200 units, 3-phase delivery', thinking: 'All signals align: (1) Current 65 units inadequate, (2) Event needs ~162 units over phased curve, (3) Samsung weekly supply enables phased approach, (4) 200 units balances demand + buffer without over-inventory, (5) Allocation strategy requires early volume commitment. Confidence: 87%. Execute phased order: 80-70-50 units.' }
+      ]
     },
     {
-      id: 'SH002',
-      storeName: 'Croma Phoenix Pune',
-      storeCode: 'PNQ_PHX',
-      healthStatus: 'AMBER',
-      issue: 'Declining Footfall + Assortment Mismatch',
-      urgency: 'MEDIUM',
-      rootCause: 'Amber due to Assortment',
-      
-      storeKPIs: {
-        footfall: '18,200',
-        footfallTrend: '-15% YoY',
-        conversion: '13.8%',
-        avgTicket: '₹22,100',
-        margin: '14.8%',
-        revPerSqFt: '₹10,800'
+      id: 'BP002',
+      sku: 'Sony PlayStation 5 + Top 3 Game Bundle',
+      skuCode: 'GAMEPS5B',
+      category: 'Gaming Consoles',
+      brand: 'Sony',
+      urgency: 'CRITICAL',
+      event: 'Holiday Gaming Season',
+      currentState: {
+        networkStock: 24,
+        warehouseStock: 0,
+        avgROS: '4.2/d',
+        lastYearST: '98%'
       },
-      
-      benchmarks: {
-        clusterFootfall: '21,500',
-        clusterConv: '14.2%'
-      },
-      
       recommendation: {
-        action: 'Assortment Realignment: Gaming & WFH Focus + Experience Zone',
-        reasoning: '15% YoY footfall decline despite healthy 13.8% conversion. Catchment is 40% IT professionals, gaming demand surging (+220% searches), yet store allocates only 8% space to gaming vs 35% to appliances. Reallocate 400 sq ft to Gaming Zone with live demos. Expected: +4,500 monthly visitors, ₹1.8Cr revenue.',
-        confidence: 82,
-        impact: '₹1.8Cr revenue, +4,500 monthly footfall'
+        action: 'Emergency Order: 850 Units with Express Delivery',
+        reasoning: 'Critical stockout risk. Current 24 units = only 6 days coverage at baseline 4.2/d velocity. Holiday season (Nov-Dec) drives 380% lift based on last year. Major game launches add urgency. Competitors Amazon and Flipkart out of stock - rare market capture opportunity. Despite thin 8% margin, 98% historical sell-through and ₹4.67Cr revenue justifies immediate action.',
+        qty: 850,
+        investment: '₹4.67Cr',
+        confidence: 96
       },
-      
       reasoningBreakdown: {
-        summary: 'Footfall declining 15% YoY. Catchment: 40% IT professionals, gaming searches +220%, but store allocates 35% to appliances (22% sales) vs 8% gaming (18% sales). Reallocate to Gaming Zone.',
+        summary: 'Critically low stock of 24 units with high velocity (4.2/d) creates immediate stockout risk. Holiday gaming season historically drives 380% demand surge. Competitor stockouts create rare market share opportunity. 98% historical sell-through gives high confidence despite thin margins.',
         factors: [
           {
-            name: 'Catchment Mismatch',
-            weight: 35,
-            score: 74,
-            reasoning: '5km radius: 40% IT professionals, ₹12.4L median income, 60% aged 25-40. High gaming/WFH demand but current assortment skews to family appliances. Need to match store to audience.'
+            name: 'Inventory',
+            weight: 40,
+            score: 95,
+            reasoning: 'Only 24 units with 4.2/d velocity = 6 days stock at baseline. Holiday season needs 8-week coverage. Warehouse empty. 98% last year sell-through confirms sustained demand.'
           },
           {
-            name: 'Category Performance Gap',
+            name: 'Marketing',
+            weight: 35,
+            score: 94,
+            reasoning: 'Holiday gifting drives 65% of annual console sales (380% lift vs baseline). New game releases create additional momentum. Gaming zones in 12 stores planned for tournaments.'
+          },
+          {
+            name: 'Supply Chain',
+            weight: 15,
+            score: 88,
+            reasoning: 'Sony standard lead time 10-12 days. Express delivery available (+₹45K). Limited India allocation - large order signals commitment and may increase our priority.'
+          },
+          {
+            name: 'Competition',
+            weight: 10,
+            score: 96,
+            reasoning: 'Amazon and Flipkart out of stock for 2+ weeks. Reliance Digital low inventory. Customers will buy from whoever has stock - first-mover advantage critical.'
+          }
+        ]
+      },
+      storeAllocation: [
+        { cluster: 'Gaming Zones (12 stores)', qty: 360, perStore: 30, reasoning: 'Dedicated gaming sections with expert staff and demo stations' },
+        { cluster: 'Metro A++ (8 stores)', qty: 240, perStore: 30, reasoning: 'Young affluent demographic, strong pre-order pipeline' },
+        { cluster: 'Experience Centers (6 stores)', qty: 180, perStore: 30, reasoning: 'Demo stations drive 42% higher conversion rates' }
+      ],
+      whatIfScenarios: [
+        'What if major game launch gets delayed to Q1 2026?',
+        'What if we bundle with 2 games instead of 3 to reduce price point?',
+        'What if Sony announces PS5 Pro during our holiday window?',
+        'What if we allocate 60% online vs 40% stores?'
+      ],
+      decisionTrail: [
+        { time: '10:05:18', agent: 'Inventory Agent', action: 'CRITICAL ALERT: PS5 stock at 24 units', thinking: 'At 4.2/d velocity, stockout imminent in 6 days. Holiday season starting - this is emergency territory.' },
+        { time: '10:07:32', agent: 'Demand Forecasting Agent', action: 'Holiday surge forecast: 380% lift', thinking: 'Last year data: Nov-Dec accounted for 65% of annual console sales. Need 850+ units for 8-week holiday period.' },
+        { time: '10:09:45', agent: 'Competition Agent', action: 'Competitor analysis: Amazon, Flipkart out of stock', thinking: 'Major competitors showing 2+ week stockouts. This is rare market capture window - customers desperate for stock.' },
+        { time: '10:12:20', agent: 'Category Economics Agent', action: 'Margin check: 8% thin but 98% ST justifies', thinking: 'Low margin offset by near-guaranteed sellthrough. ₹4.67Cr revenue at stake. Risk of not ordering >> risk of margin pressure.' },
+        { time: '10:15:05', agent: 'Orchestrator', action: 'EMERGENCY ORDER APPROVED: 850 units express', thinking: 'All signals point to critical need. Confidence 96% - highest priority order. Express delivery essential.' }
+      ]
+    },
+    {
+      id: 'BP003',
+      sku: 'Voltas 1.5 Ton 5-Star Inverter AC',
+      skuCode: 'AC15VOL',
+      category: 'Air Conditioners',
+      brand: 'Voltas',
+      urgency: 'MEDIUM',
+      event: 'Summer Pre-Season Build',
+      currentState: {
+        networkStock: 420,
+        warehouseStock: 180,
+        avgROS: '1.8/d',
+        lastYearST: '76%'
+      },
+      recommendation: {
+        action: 'Strategic Pre-Season Build: 2,400 Units over 8 Weeks',
+        reasoning: 'Pre-season positioning for April-June summer peak. Current stock sufficient for now but early order captures consumer research phase and secures favorable Voltas allocation. 3-4 week lead time means February order for March availability. 2,400 units based on regional demand patterns (North 60%, West 22%, South 14%) and 85% pre-season demand lift.',
+        qty: 2400,
+        investment: '₹9.36Cr',
+        confidence: 84
+      },
+      reasoningBreakdown: {
+        summary: 'Summer AC sales concentrate in April-June but pre-season buying starts in February. Early inventory build captures research phase customers and secures priority in Voltas allocation system. Regional split based on temperature patterns and historical sales distribution.',
+        factors: [
+          {
+            name: 'Inventory',
+            weight: 30,
+            score: 82,
+            reasoning: 'Current 600 units adequate for now. Pre-season strategy focused on March-April positioning. 2,400 units sized for summer peak based on last year 76% ST - targeting 85% with better allocation.'
+          },
+          {
+            name: 'Demand Seasonality',
+            weight: 35,
+            score: 88,
+            reasoning: 'Pre-season (Feb-Mar) shows 85% demand increase as consumers research. Summer peak (Apr-Jun) shows 300% lift. Early positioning captures entire buying cycle.'
+          },
+          {
+            name: 'Supply Chain',
+            weight: 20,
+            score: 85,
+            reasoning: 'Voltas 3-4 week lead time means February order for March delivery. Pre-season orders get priority allocation. 15% RTV available provides downside protection.'
+          },
+          {
+            name: 'Regional Strategy',
+            weight: 15,
+            score: 86,
+            reasoning: 'North accounts for 68% of AC sales (extreme summer heat). West 22% (urban metros). South 14% (year-round but lower peak). Allocation reflects this pattern.'
+          }
+        ]
+      },
+      storeAllocation: [
+        { cluster: 'North & Central (85 stores)', qty: 1440, perStore: 17, reasoning: 'Highest summer temperatures, 68% of AC sales volume' },
+        { cluster: 'West (42 stores)', qty: 528, perStore: 13, reasoning: 'Mumbai, Pune metro heat island effect' },
+        { cluster: 'South (28 stores)', qty: 336, perStore: 12, reasoning: 'Year-round demand but lower peak seasonality' }
+      ],
+      whatIfScenarios: [
+        'What if summer temperatures are below normal (El Niño effect)?',
+        'What if we order 30% more and push aggressive pre-season discounts?',
+        'What if competitor launches inverter AC at ₹32,990 undercutting us?',
+        'What if we focus 80% allocation on North region only?'
+      ],
+      decisionTrail: [
+        { time: '11:20:45', agent: 'Seasonal Planning Agent', action: 'Pre-season window opening: Feb-Mar critical', thinking: 'AC sales follow predictable seasonal pattern. Early positioning captures research phase and secures allocation.' },
+        { time: '11:23:10', agent: 'Demand Forecasting Agent', action: 'Summer forecast: 2,400 units for peak season', thinking: 'Based on regional temperature patterns and 76% historical ST. North allocation 60% reflects extreme summer heat zones.' },
+        { time: '11:25:35', agent: 'Supply Chain Agent', action: 'Voltas lead time check: 3-4 weeks', thinking: 'February order ensures March delivery. Pre-season orders get priority. 15% RTV provides safety net if demand disappoints.' },
+        { time: '11:28:20', agent: 'Orchestrator', action: 'Recommendation: 2,400 units phased build', thinking: 'Strategic vs emergency. Pre-season positioning with downside protection via RTV. Confidence 84% based on seasonal patterns.' }
+      ]
+    }
+  ];
+
+  // Store Allocation Decisions (3 cards)
+  const allocationDecisions = [
+    {
+      id: 'AL001',
+      sku: 'iPhone 15 Pro 256GB Natural Titanium',
+      skuCode: 'PH256APP',
+      category: 'Premium Smartphones',
+      brand: 'Apple',
+      urgency: 'CRITICAL',
+      issue: 'Flagship Stores Approaching Stockout - Immediate Transfer Needed',
+      currentDistribution: {
+        total: 142,
+        mumbai: { qty: 45, highVel: 18, lowVel: 27, avgROS: '8.4/d' },
+        delhi: { qty: 52, highVel: 22, lowVel: 30, avgROS: '7.8/d' },
+        bangalore: { qty: 28, highVel: 12, lowVel: 16, avgROS: '6.2/d' },
+        other: { qty: 17, ros: '2.1/d' }
+      },
+      recommendation: {
+        action: 'Tier 1 Transfers: 18 Units via Intra-City Moves (Mumbai: 8u, Delhi: 7u, Bangalore: 3u)',
+        reasoning: 'High-velocity flagship stores in metro cities stockout in 4-5 days while low-velocity stores in same cities have 8-10 days coverage. Execute intra-city transfers within Mumbai, Delhi, and Bangalore networks. 24-hour logistics, zero GST complications, minimal cost (₹400-600/unit). Prevents ₹21.6L revenue loss. Next Apple allocation in 8 days - these transfers bridge the critical gap.',
+        confidence: 96,
+        impact: '₹21.6L revenue protection'
+      },
+      reasoningBreakdown: {
+        summary: 'Velocity mismatch exists within each city network, not across cities. Mumbai flagships selling 15/d while suburban stores sell 2/d. Same pattern in Delhi and Bangalore. Intra-city transfers are operationally simple, GST-neutral, and fast (24hrs). This is the default IST strategy Croma uses daily.',
+        factors: [
+          {
+            name: 'Within-City Velocity Gaps',
+            weight: 40,
+            score: 96,
+            reasoning: 'Mumbai: BKC/Inorbit (flagship) 15/d vs Hiranandani/Lower Parel 2.5/d = 6x gap. Delhi: Pacific Mall/DLF Promenade 13/d vs Ambience/Select City 3/d = 4x gap. Bangalore: Forum/Phoenix 11/d vs Whitefield/Koramangala 2.8/d = 4x gap. Clear intra-city rebalancing opportunity.'
+          },
+          {
+            name: 'Operational Feasibility',
+            weight: 30,
+            score: 98,
+            reasoning: 'Intra-city transfers are Croma\'s workhorse IST method. 24-hour delivery via local courier. Zero GST issues (same state, same tax). Cost ₹400-600/unit (negligible vs ₹1.8L ASP). Store managers coordinate directly. This is business-as-usual, not exception.'
+          },
+          {
+            name: 'Revenue Protection',
+            weight: 20,
+            score: 94,
+            reasoning: 'Flagships generate 72% of metro iPhone revenue. Each stockout day in flagship = ₹3.8L loss. Low-velocity stores contribute 15%. Moving 18 units prevents ₹21.6L stockout losses. Transfer cost ₹9K total. ROI: 240x.'
+          },
+          {
+            name: 'Alternative Options',
+            weight: 10,
+            score: 82,
+            reasoning: 'Warehouse empty, next allocation 8 days away. Cross-state transfers avoided due to GST complexity, high cost (₹2K/unit), and 3-day timelines. Intra-city is only viable immediate solution.'
+          }
+        ]
+      },
+      transferTiers: [
+        {
+          tier: 'TIER 1: Intra-City (Recommended)',
+          description: 'Within same city network - fast, simple, GST-neutral',
+          transfers: [
+            {
+              type: 'transfer',
+              city: 'Mumbai',
+              from: 'Croma Hiranandani Powai',
+              fromStock: 9,
+              fromROS: '2.2/d',
+              to: 'Croma BKC (Flagship)',
+              toStock: 4,
+              toROS: '15.8/d',
+              units: 4,
+              cost: '₹1,600 (₹400/unit)',
+              eta: '24 hours',
+              revenueImpact: '₹7.2L protected',
+              gstImpact: 'None (same state)',
+              feasibility: 'HIGH'
+            },
+            {
+              type: 'transfer',
+              city: 'Mumbai',
+              from: 'Croma Lower Parel',
+              fromStock: 8,
+              fromROS: '2.5/d',
+              to: 'Croma Inorbit Malad (Flagship)',
+              toStock: 5,
+              toROS: '14.2/d',
+              units: 4,
+              cost: '₹1,600 (₹400/unit)',
+              eta: '24 hours',
+              revenueImpact: '₹7.2L protected',
+              gstImpact: 'None (same state)',
+              feasibility: 'HIGH'
+            },
+            {
+              type: 'transfer',
+              city: 'Delhi NCR',
+              from: 'Croma Ambience Gurgaon',
+              fromStock: 11,
+              fromROS: '3.2/d',
+              to: 'Croma Pacific Mall (Flagship)',
+              toStock: 6,
+              toROS: '13.4/d',
+              units: 4,
+              cost: '₹2,000 (₹500/unit)',
+              eta: '24 hours',
+              revenueImpact: '₹7.2L protected',
+              gstImpact: 'None (within NCR)',
+              feasibility: 'HIGH'
+            },
+            {
+              type: 'transfer',
+              city: 'Delhi NCR',
+              from: 'Croma Select City Walk',
+              fromStock: 10,
+              fromROS: '2.8/d',
+              to: 'Croma DLF Promenade (Flagship)',
+              toStock: 4,
+              toROS: '12.8/d',
+              units: 3,
+              cost: '₹1,500 (₹500/unit)',
+              eta: '24 hours',
+              revenueImpact: '₹5.4L protected',
+              gstImpact: 'None (within NCR)',
+              feasibility: 'HIGH'
+            },
+            {
+              type: 'transfer',
+              city: 'Bangalore',
+              from: 'Croma Whitefield',
+              fromStock: 7,
+              fromROS: '2.6/d',
+              to: 'Croma Forum Mall (Flagship)',
+              toStock: 3,
+              toROS: '11.2/d',
+              units: 3,
+              cost: '₹1,800 (₹600/unit)',
+              eta: '24 hours',
+              revenueImpact: '₹5.4L protected',
+              gstImpact: 'None (same city)',
+              feasibility: 'HIGH'
+            }
+          ]
+        },
+        {
+          tier: 'TIER 2: Intra-State (Lower Priority)',
+          description: 'Within state but different cities - moderate complexity, some logistics cost',
+          note: 'Currently no Tier 2 recommendations. All transfers optimally handled within city networks. Intra-state would only be considered if within-city options exhausted.',
+          transfers: []
+        }
+      ],
+      whatIfScenarios: [
+        'What if we transfer 25 units instead of 18?',
+        'What if iPhone 16 announcement happens next week?',
+        'What if we also consider Tier 2 intra-state moves?',
+        'What would justify a Tier 3 inter-state transfer?'
+      ],
+      decisionTrail: [
+        { time: '14:10:05', agent: 'Inventory Agent', action: 'Detected velocity gaps within metro networks', thinking: 'Mumbai: Flagships 15/d vs suburban 2.5/d. Delhi: Flagships 13/d vs outer 3/d. Bangalore: Flagships 11/d vs peripheral 2.8/d. Velocity mismatch is intra-city, not inter-city.' },
+        { time: '14:13:20', agent: 'Logistics Agent', action: 'Evaluated transfer feasibility by tier', thinking: 'Tier 1 (intra-city): 24hr, ₹400-600/unit, zero GST issues. Tier 2 (intra-state): 48hr, ₹1,200/unit, manageable. Cross-state avoided: 72hr, ₹2,000+/unit, GST paperwork, operationally messy. Clear winner: Tier 1.' },
+        { time: '14:17:45', agent: 'Network Optimization Agent', action: 'Built 5 intra-city transfer recommendations', thinking: 'Mumbai: 8 units (BKC + Inorbit). Delhi: 7 units (Pacific + DLF Promenade). Bangalore: 3 units (Forum). All 24-hour execution. Total cost ₹9K. Revenue protected ₹21.6L. This is standard IST playbook.' },
+        { time: '14:21:30', agent: 'GST Compliance Agent', action: 'Verified all transfers are GST-neutral', thinking: 'All recommended transfers within same state. Mumbai (MH), Delhi NCR (same GST zone), Bangalore (KA). Zero interstate complications. Store managers can execute immediately without tax team involvement.' },
+        { time: '14:25:10', agent: 'Orchestrator', action: 'Approved Tier 1 strategy: 18 units across 3 cities', thinking: 'Velocity gaps are city-specific. Intra-city transfers operationally simple, fast, cheap, GST-clean. This is Croma\'s daily IST method. High confidence (96%). Execute immediately.' }
+      ]
+    },
+    {
+      id: 'AL002',
+      sku: 'Samsung 43" Crystal 4K Smart TV',
+      skuCode: 'TV043SAM',
+      category: 'Mid-Range TVs',
+      brand: 'Samsung',
+      urgency: 'HIGH',
+      issue: 'Maharashtra Network Imbalance - Mumbai Overstocked, Pune/Nagpur Understocked',
+      currentDistribution: {
+        total: 285,
+        mumbai: { qty: 180, ros: '1.8/d', stockDays: 100 },
+        pune: { qty: 65, ros: '4.2/d', stockDays: 15 },
+        nagpur: { qty: 28, ros: '3.1/d', stockDays: 9 },
+        nasik: { qty: 12, ros: '2.2/d', stockDays: 5 }
+      },
+      recommendation: {
+        action: 'Tier 2 Transfer: 75 Units Mumbai → Pune/Nagpur/Nasik (Intra-State Maharashtra)',
+        reasoning: 'Mumbai overstocked with 100 days coverage at slow 1.8/d velocity while Pune/Nagpur/Nasik face stockouts in 5-15 days with faster velocities (3-4/d). All stores within Maharashtra - intra-state transfers avoid inter-state GST but involve 6-12 hour logistics. Cost ₹800-1,000/unit justified by preventing ₹32L stockout losses. This is Tier 2 strategy: within-state but cross-city, used when within-city options exhausted.',
+        confidence: 89,
+        impact: '₹32L revenue protection'
+      },
+      reasoningBreakdown: {
+        summary: 'Regional velocity mismatch within Maharashtra network. Mumbai slow-moving (1.8/d, 100 days stock) vs Pune/Nagpur fast-moving (3-4/d, 5-15 days stock). Intra-state transfers manageable: 6-12 hour logistics, same GST zone, moderate cost. Tier 2 strategy justified when city-level rebalancing insufficient.',
+        factors: [
+          {
+            name: 'Regional Velocity Imbalance',
+            weight: 40,
+            score: 91,
+            reasoning: 'Mumbai: 180 units, 1.8/d = 100 days stock (massive overstock). Pune: 65 units, 4.2/d = 15 days. Nagpur: 28 units, 3.1/d = 9 days. Nasik: 12 units, 2.2/d = 5 days (critical). Clear regional imbalance within Maharashtra.'
+          },
+          {
+            name: 'Intra-State Feasibility',
             weight: 30,
             score: 88,
-            reasoning: 'Large appliances: 35% space, 22% sales (-13pt gap). Gaming & WFH: 8% space, 18% sales (+10pt gap). Every 1% space shift from appliances to gaming improves revenue per sq ft.'
+            reasoning: 'All Maharashtra stores = same GST zone, no inter-state complications. Mumbai→Pune 3hrs, Mumbai→Nagpur 12hrs, Mumbai→Nasik 4hrs. Cost ₹800-1,000/unit. Acceptable for Tier 2 strategy when preventing major stockouts.'
           },
           {
-            name: 'App Search Intent',
+            name: 'Revenue Impact',
             weight: 20,
-            score: 81,
-            reasoning: 'Gaming monitors +220% YoY, chairs +180%, keyboards +145%. But search-to-store conversion only 12% (vs 28% TVs). Gap = unmet demand. Need better in-store offering.'
+            score: 92,
+            reasoning: 'Pune/Nagpur/Nasik combined: 4,200 units/month revenue vs Mumbai 3,240. Transfer 75 units unlocks ₹32L over 60 days. Mumbai loses minimal velocity. Net network gain: ₹28L. Transfer cost: ₹60K-75K (negligible).'
           },
           {
-            name: 'Competitive White Space',
-            weight: 15,
-            score: 85,
-            reasoning: 'Mall has gaming arcade (15K visitors/month), co-working spaces (400+ members). No major retailer has gaming zones. First-mover advantage available.'
+            name: 'Alternative Options',
+            weight: 10,
+            score: 84,
+            reasoning: 'Within Mumbai transfers inadequate - entire city overstocked. Cross-state moves to Karnataka/Gujarat would be operationally complex with GST issues and high logistics cost. Intra-state Maharashtra is optimal solution - manageable logistics without complications.'
           }
         ]
       },
-      
-      interventionPlan: [
-        { pillar: 'Space Reallocation', timeline: '3 weeks', cost: '₹8L', impact: 'Gaming: ₹40L → ₹1.2Cr annually' },
-        { pillar: 'Experience Zone', timeline: '4 weeks', cost: '₹12L', impact: '+4,500 footfall, dwell +35min' },
-        { pillar: 'Community Events', timeline: '6 weeks', cost: '₹2.5L/qtr', impact: '+2,000 visitors, brand building' },
-        { pillar: 'Staff Training', timeline: '2 weeks', cost: '₹1.8L', impact: 'Gaming Expert hire, expertise signal' }
+      transferTiers: [
+        {
+          tier: 'TIER 1: Intra-City',
+          description: 'Within same city - not applicable here',
+          note: 'Mumbai city-level already analyzed - entire Mumbai network is slow-moving (1.8/d avg). Intra-Mumbai transfers don\'t solve the regional imbalance. Need to look at Tier 2.',
+          transfers: []
+        },
+        {
+          tier: 'TIER 2: Intra-State (Recommended)',
+          description: 'Within Maharashtra - manageable logistics, same GST zone',
+          transfers: [
+            {
+              type: 'transfer',
+              city: 'Maharashtra',
+              from: 'Croma Phoenix Mumbai',
+              fromStock: 45,
+              fromROS: '1.6/d',
+              to: 'Croma Phoenix Pune',
+              toStock: 18,
+              toROS: '4.8/d',
+              units: 35,
+              cost: '₹28,000 (₹800/unit)',
+              eta: '6 hours (3hr drive)',
+              revenueImpact: '₹14L protected',
+              gstImpact: 'None (intra-state)',
+              feasibility: 'MEDIUM-HIGH'
+            },
+            {
+              type: 'transfer',
+              city: 'Maharashtra',
+              from: 'Croma R-City Mumbai',
+              fromStock: 38,
+              fromROS: '1.9/d',
+              to: 'Croma Eternity Mall Nagpur',
+              toStock: 8,
+              toROS: '3.6/d',
+              units: 25,
+              cost: '₹25,000 (₹1,000/unit)',
+              eta: '12 hours (via logistics)',
+              revenueImpact: '₹10L protected',
+              gstImpact: 'None (intra-state)',
+              feasibility: 'MEDIUM'
+            },
+            {
+              type: 'transfer',
+              city: 'Maharashtra',
+              from: 'Croma Infiniti Mumbai',
+              fromStock: 42,
+              fromROS: '2.0/d',
+              to: 'Croma City Center Nasik',
+              toStock: 4,
+              toROS: '2.6/d',
+              units: 15,
+              cost: '₹12,000 (₹800/unit)',
+              eta: '8 hours (4hr drive)',
+              revenueImpact: '₹6L protected',
+              gstImpact: 'None (intra-state)',
+              feasibility: 'MEDIUM-HIGH'
+            }
+          ]
+        }
       ],
-      
       whatIfScenarios: [
-        'What if gaming trend is short-term?',
-        'What if we can\'t shift appliance allocation?',
-        'What if we roll to 5 other IT-hub stores?'
+        'What if Mumbai velocity drops further to 1.5/d?',
+        'What if we transfer 100 units instead of 75?',
+        'What would justify a Tier 3 Mumbai→Bangalore transfer?',
+        'What if intra-state logistics cost doubles to ₹2,000/unit?'
       ],
-      
-      decisionTrail: []
+      decisionTrail: [
+        { time: '15:30:20', agent: 'Regional Analysis Agent', action: 'Detected Maharashtra network imbalance', thinking: 'Mumbai 180 units at 1.8/d = 100 days. Pune 65 units at 4.2/d = 15 days. Nagpur 28 units at 3.1/d = 9 days. Clear regional mismatch within state.' },
+        { time: '15:34:45', agent: 'Inventory Agent', action: 'Analyzed Mumbai city-level transfers', thinking: 'All Mumbai stores slow (1.6-2.0/d range). Intra-Mumbai moves don\'t solve problem. Need to look outside city but stay within state.' },
+        { time: '15:38:10', agent: 'Logistics Agent', action: 'Evaluated Tier 2 intra-state feasibility', thinking: 'Mumbai→Pune 3hrs, Mumbai→Nagpur 12hrs, Mumbai→Nasik 4hrs. All Maharashtra = same GST. Cost ₹800-1,000/unit. Tier 2 acceptable for preventing stockouts.' },
+        { time: '15:42:35', agent: 'GST Compliance Agent', action: 'Confirmed intra-Maharashtra transfers GST-neutral', thinking: 'All stores in Maharashtra tax zone. No E-way bill complications. Standard intra-state logistics. Store managers familiar with this process.' },
+        { time: '15:47:00', agent: 'Orchestrator', action: 'Approved Tier 2: 75 units Mumbai → Pune/Nagpur/Nasik', thinking: 'City-level inadequate. Intra-state manageable. Prevents ₹32L losses. Cost ₹60K-75K negligible vs revenue. Execute Tier 2 strategy.' }
+      ]
     },
     {
-      id: 'SH003',
-      storeName: 'Croma Inorbit Bangalore',
-      storeCode: 'BLR_INO',
-      healthStatus: 'AMBER',
-      issue: 'Strong Conversion but Low Ticket Size',
-      urgency: 'MEDIUM',
-      rootCause: 'Amber due to Assortment',
-      
-      storeKPIs: {
-        footfall: '28,200',
-        conversion: '16.8%',
-        avgTicket: '₹12,400',
-        margin: '16.2%',
-        markdown: '7.8%',
-        returns: '2.8%'
+      id: 'AL003',
+      sku: 'LG 55" OLED C3 4K TV',
+      skuCode: 'TV055LGO',
+      category: 'Premium TVs',
+      brand: 'LG',
+      urgency: 'HIGH',
+      issue: 'Event-Driven Demand Spike - Sports Finals Weekend (Mumbai Network)',
+      currentDistribution: {
+        total: 86,
+        mumbai: { 
+          sportsZones: { stores: 3, qty: 12, ros: '2.8/d' },
+          flagships: { stores: 4, qty: 22, ros: '1.8/d' },
+          suburban: { stores: 8, qty: 38, ros: '0.6/d' },
+          peripheral: { stores: 5, qty: 14, ros: '0.4/d' }
+        }
       },
-      
-      benchmarks: {
-        clusterConv: '14.5%',
-        clusterTicket: '₹18,200'
-      },
-      
       recommendation: {
-        action: 'Premium Assortment Upgrade: Flagships + Audio + Smart Home',
-        reasoning: 'Excellent 16.8% conversion but low ₹12.4K ticket (vs ₹18.2K cluster). Catchment affluent: ₹14.2L income, 58% IT professionals. Current mix: 28% budget, 52% mid-range, only 20% premium. Missing: flagship phones, premium audio, smart home. Add 40 premium SKUs, create listening zone. Expected: ₹12.4K → ₹16.8K ticket, +₹2.8Cr revenue.',
-        confidence: 84,
-        impact: '₹2.8Cr revenue, ticket +35%'
+        action: 'Tier 1 Emergency Transfer: 16 Units Within Mumbai (Suburban/Peripheral → Sports Zones)',
+        reasoning: 'UEFA Champions League Final + IPL Finals this weekend drive concentrated premium TV demand at 3 Mumbai sports zone stores (BKC, Phoenix Lower Parel, Palladium). These stores will stockout in 4 days at current 12 units (2.8/d velocity) while suburban/peripheral stores have excess at 0.4-0.6/d velocity. Transfer 16 units via intra-city Mumbai logistics (4-6 hours). Zero GST, minimal cost (₹500-700/unit), captures time-sensitive event window. Standard Tier 1 IST strategy.',
+        confidence: 95,
+        impact: '₹24L revenue protection'
       },
-      
       reasoningBreakdown: {
-        summary: 'Excellent conversion but low ticket. Catchment affluent but assortment skews mid-range. Add premium categories to leverage existing conversion strength.',
+        summary: 'Sports finals create concentrated premium TV demand at specific sports-oriented stores within Mumbai. Sports zones will stockout in 4 days while suburban stores have 60+ days stock. Pure intra-city Mumbai transfer opportunity - operationally simple, fast execution (4-6 hours), zero GST complications. This is textbook Tier 1 IST.',
         factors: [
           {
-            name: 'Catchment Affluence',
+            name: 'Event-Driven Concentration',
+            weight: 40,
+            score: 96,
+            reasoning: 'UEFA Final + IPL Finals drive sports viewing demand. Sports zone stores (BKC, Phoenix, Palladium) curate premium TV sections for sports enthusiasts. These 3 stores show 2.8/d velocity vs suburban 0.6/d = 4.7x gap. Event window: 4-5 days. Time-critical transfer.'
+          },
+          {
+            name: 'Intra-City Execution',
+            weight: 30,
+            score: 98,
+            reasoning: 'All stores within Mumbai city limits. Transfers via local courier/driver: 4-6 hours max. Cost ₹500-700/unit (negligible vs ₹1.5L ASP). Zero GST issues. Store managers coordinate directly. This is daily BAU for Croma Mumbai network.'
+          },
+          {
+            name: 'Revenue Timing',
+            weight: 20,
+            score: 93,
+            reasoning: 'Sports finals weekend = concentrated 4-5 day purchase window. Sports zones sell 2.8/d during event vs 1.2/d baseline. Missing stock = lost revenue (customers won\'t wait). 16 units transferred protects ₹24L event revenue. Suburban stores unaffected (low velocity).'
+          },
+          {
+            name: 'Alternative Options',
+            weight: 10,
+            score: 91,
+            reasoning: 'Warehouse empty (OLED allocation tight). Cross-state transfers from Delhi/Bangalore would take 24-48 hours - by the time units arrive, 4-day event window would be over. Intra-city is only viable option for time-critical event capture.'
+          }
+        ]
+      },
+      transferTiers: [
+        {
+          tier: 'TIER 1: Intra-City Mumbai (Recommended)',
+          description: 'Within Mumbai network - fast, simple, zero GST',
+          transfers: [
+            {
+              type: 'transfer',
+              city: 'Mumbai',
+              from: 'Croma Thane',
+              fromStock: 9,
+              fromROS: '0.5/d',
+              to: 'Croma BKC Sports Zone',
+              toStock: 3,
+              toROS: '3.2/d',
+              units: 5,
+              cost: '₹2,500 (₹500/unit)',
+              eta: '4 hours',
+              revenueImpact: '₹7.5L protected',
+              gstImpact: 'None (same city)',
+              feasibility: 'HIGH'
+            },
+            {
+              type: 'transfer',
+              city: 'Mumbai',
+              from: 'Croma Ghatkopar',
+              fromStock: 8,
+              fromROS: '0.6/d',
+              to: 'Croma Phoenix Lower Parel (Sports)',
+              toStock: 4,
+              toROS: '2.9/d',
+              units: 6,
+              cost: '₹3,000 (₹500/unit)',
+              eta: '4 hours',
+              revenueImpact: '₹9.0L protected',
+              gstImpact: 'None (same city)',
+              feasibility: 'HIGH'
+            },
+            {
+              type: 'transfer',
+              city: 'Mumbai',
+              from: 'Croma Mulund',
+              fromStock: 7,
+              fromROS: '0.4/d',
+              to: 'Croma Palladium Sports Section',
+              toStock: 5,
+              toROS: '2.4/d',
+              units: 5,
+              cost: '₹3,500 (₹700/unit)',
+              eta: '6 hours',
+              revenueImpact: '₹7.5L protected',
+              gstImpact: 'None (same city)',
+              feasibility: 'HIGH'
+            }
+          ]
+        },
+        {
+          tier: 'TIER 2: Intra-State',
+          description: 'Not applicable - all relevant stores within Mumbai',
+          note: 'Event demand concentrated in Mumbai sports zones. No need for Tier 2 intra-state transfers from Pune/Nagpur - insufficient inventory and event timing too tight. Tier 1 intra-Mumbai fully addresses need.',
+          transfers: []
+        }
+      ],
+      whatIfScenarios: [
+        'What if finals viewership disappoints and demand doesn\'t spike?',
+        'What if we transfer 20 units instead of 16?',
+        'What if sports zones also need Samsung QLEDs (different SKU)?',
+        'What would justify pulling from Pune (Tier 2) instead of Mumbai suburbs?'
+      ],
+      decisionTrail: [
+        { time: '16:05:10', agent: 'Event Calendar Agent', action: 'Flagged major sports events: Finals this weekend', thinking: 'UEFA Final Saturday + IPL Finals Sunday create premium TV demand spike. Sports enthusiasts research/purchase in 4-5 day window. Check sports zone store inventory.' },
+        { time: '16:08:25', agent: 'Inventory Agent', action: 'Mumbai sports zones critical: 4 days stock', thinking: 'BKC, Phoenix, Palladium sports sections at 3-5 units each. Event velocity 2.8/d = 4-day stockout. Suburban stores (Thane, Ghatkopar, Mulund) have 9-15 units each at 0.4-0.6/d = 60+ days. Clear intra-Mumbai opportunity.' },
+        { time: '16:11:40', agent: 'Logistics Agent', action: 'Intra-Mumbai transfers: 4-6hr execution', thinking: 'All stores within city limits. Local courier can complete in single day. Cost ₹500-700/unit negligible. Zero GST. This is standard Tier 1 playbook for Mumbai network.' },
+        { time: '16:14:55', agent: 'Revenue Impact Agent', action: 'Event window revenue: ₹24L at stake', thinking: 'Sports zones sell 2.8/d during event (vs 1.2/d baseline). 16 units over 4 days = ₹24L. Suburban stores unaffected (0.5/d velocity barely changes). Pure network gain.' },
+        { time: '16:18:20', agent: 'Orchestrator', action: 'Emergency transfer: 16 units within Mumbai', thinking: 'Time-critical event demand. Intra-city execution simple and fast. ₹24L revenue at stake vs ₹9K transfer cost. Textbook Tier 1 IST. High confidence (95%). Execute immediately.' }
+      ]
+    }
+  ];
+
+  // Ageing Inventory Decisions (3 cards)
+  const ageingDecisions = [
+    {
+      id: 'AG001',
+      sku: 'iPhone 14 Pro 128GB (All Colors)',
+      skuCode: 'PH128I14',
+      category: 'Smartphones',
+      brand: 'Apple',
+      urgency: 'CRITICAL',
+      issue: '10-Day Runway Before iPhone 16 Launch - Immediate Liquidation Required',
+      ageingProfile: {
+        totalUnits: 234,
+        totalValue: '₹2.81Cr',
+        avgAge: '45 days',
+        currentSellThrough: '68%',
+        timeWindow: '10 days until iPhone 16 launch'
+      },
+      recommendation: {
+        action: '3-Pronged Clearance: Enhanced Trade-In (140u) + Flash Sale (70u) + Flagship Consolidation (24u)',
+        reasoning: 'iPhone 16 launches in 10 days - historical data shows 60-75% demand crash for previous gen within days of announcement. 234 units at risk. Strategy ranked by impact: (1) Enhanced trade-in (₹8K boost) converts early upgraders, clears 140 units (60%), builds iPhone 16 pipeline. (2) 48hr flash sale (₹79,900) matches Amazon/Flipkart, moves 70 units (30%). (3) Consolidate final 24 units to top 5 flagships for 7-day final push. Net ₹8.2L margin hit acceptable vs deeper post-launch write-offs.',
+        confidence: 91,
+        netMarginImpact: '-₹8.2L',
+        cashRecovery: '₹2.68Cr'
+      },
+      reasoningBreakdown: {
+        summary: 'iPhone 16 announcement in 10 days will crash iPhone 14 Pro demand by 60-75% based on every past launch cycle. Current 68% ST leaves 234 units at risk. At 1.2/d velocity would take 195 days to clear naturally, but post-launch velocity drops to 0.3/d = 780 days. Competitors already cutting ₹7-10K - we must match to move units.',
+        factors: [
+          {
+            name: 'Product Lifecycle',
             weight: 35,
             score: 92,
-            reasoning: '5km radius: ₹14.2L median income (top 15% Bangalore), 58% IT professionals (Google, Microsoft, Amazon within 5km). Mall has Apple Store, Samsung Flagship. Purchasing power exists but not matched by inventory.'
+            reasoning: 'iPhone 16 launches in 10 days with better camera, A18 chip, USB-C. Every past launch shows 60-75% demand drop for previous gen within 10 days. Pattern repeats annually - high confidence in forecast.'
           },
           {
-            name: 'Assortment Gap',
+            name: 'Inventory Risk',
             weight: 30,
-            score: 74,
-            reasoning: 'Current: Budget 28%, Mid-range 52%, Premium 20%. But catchment suggests: Budget 10%, Mid 35%, Premium 55%. Missing flagship phones, premium audio (Bose, Sony), smart home (Nest, Philips Hue).'
+            score: 88,
+            reasoning: '234 units at 45 days age, 68% sold. Current 1.2/d velocity = 195 days to clear. Post-launch velocity historically drops to 0.3/d = 780 days. Immediate action critical in 10-day window.'
           },
           {
-            name: 'Conversion Strength',
+            name: 'Competitive Pricing',
             weight: 20,
+            score: 85,
+            reasoning: 'Amazon ₹84,900 vs our ₹89,900. Flipkart ₹82,900 with exchange. Reliance running enhanced trade-in. Flash sale at ₹79,900 matches floor, trade-in boost makes upgrade compelling.'
+          },
+          {
+            name: 'Strategy Sequencing',
+            weight: 15,
+            score: 90,
+            reasoning: 'Trade-in (Priority 1) targets early adopters (60% volume). Flash sale (Priority 2) captures price-sensitive (30%). Flagship consolidation (Priority 3) maximizes final 10%. Ranked by unit volume impact.'
+          }
+        ]
+      },
+      specificActions: [
+        {
+          type: 'tradeInBoost',
+          action: 'PRIORITY 1: Enhanced Trade-In (₹8K Boost): ₹42K → ₹50K',
+          currentTradeIn: '₹42,000',
+          enhancedTradeIn: '₹50,000',
+          targetUnits: 140,
+          totalCost: '₹11.2L',
+          reasoning: 'Highest impact - converts early upgraders (60% of clearance). Clears pre-launch, builds iPhone 16 pipeline. Cost ₹11.2L offset by avoided post-launch write-downs.'
+        },
+        {
+          type: 'flashSale',
+          action: 'PRIORITY 2: 48-Hour Flash Sale: ₹89,900 → ₹79,900',
+          discount: '₹10,000 off',
+          targetUnits: 70,
+          reasoning: 'Matches Amazon ₹84,900 and Flipkart ₹82,900 pricing floor. Creates urgency + competitive parity. Targets 30% of remaining inventory in 48-hour window.'
+        },
+        {
+          type: 'consolidation',
+          action: 'PRIORITY 3: Consolidate 24 Units → Top 5 Flagships',
+          units: 24,
+          reasoning: 'Days 3-10 final push. Concentrates remaining inventory in highest-traffic stores with best iPhone expertise. Targets final 10% clearance.'
+        }
+      ],
+      whatIfScenarios: [
+        'What if iPhone 16 launch delays by 3 weeks?',
+        'What if we skip flash sale and only do trade-in?',
+        'What if Apple prices iPhone 16 ₹20K higher making iPhone 14 Pro competitive?'
+      ],
+      decisionTrail: [
+        { time: '08:15:30', agent: 'Product Lifecycle Agent', action: 'ALERT: iPhone 16 launch in 10 days', thinking: 'Historical pattern: 60-75% demand crash for previous gen within days. 234 units at immediate risk.' },
+        { time: '08:18:45', agent: 'Inventory Agent', action: 'Current ST 68%, 234 units aging at 45 days', thinking: 'At current 1.2/d velocity = 195 days to clear. Post-launch drops to 0.3/d = 780 days. Window closing fast.' },
+        { time: '08:22:10', agent: 'Competition Agent', action: 'Competitors already discounting ₹7-10K', thinking: 'Amazon ₹84,900, Flipkart ₹82,900. Market racing to clear before launch. We must match or exceed to move units.' },
+        { time: '08:26:35', agent: 'Strategy Agent', action: 'Built 3-tier clearance plan', thinking: 'Trade-in converts upgraders (60%), flash sale matches competition (30%), consolidation final push (10%). Sequenced by volume impact.' },
+        { time: '08:30:50', agent: 'Orchestrator', action: 'URGENT APPROVAL: Execute 3-pronged clearance', thinking: 'High confidence (91%) based on historical launch patterns. ₹8.2L margin hit acceptable vs post-launch write-offs. Execute immediately.' }
+      ]
+    },
+    {
+      id: 'AG002',
+      sku: 'LG 1.5 Ton 3-Star Window AC',
+      skuCode: 'AC15LGW',
+      category: 'Air Conditioners',
+      brand: 'LG',
+      urgency: 'HIGH',
+      issue: 'Off-Season Inventory Build-Up',
+      ageingProfile: {
+        totalUnits: 186,
+        totalValue: '₹55.8L',
+        avgAge: '68 days',
+        currentSellThrough: '48%',
+        timeWindow: '4 months until next season (Feb 2026)'
+      },
+      recommendation: {
+        action: 'Off-Season Campaign (112u) + RTV South/East (46u) + Warehouse for Pre-Season (28u)',
+        reasoning: 'Window ACs face 4-month off-season trough (Oct-Jan). Strategy splits inventory: (1) Clear 60% through off-season value campaign at ₹25,990 (13% discount) targeting new home buyers and offices - volume clears holding cost. (2) RTV 25% (46 units) from South/East showing structural shift to split ACs - 15% RTV clause protects downside. (3) Warehouse 15% (28 units) for Feb pre-season to capture early demand without store holding cost.',
+        confidence: 83,
+        netMarginImpact: '-₹2.8L',
+        cashRecovery: '₹49.2L'
+      },
+      reasoningBreakdown: {
+        summary: 'Off-season (Oct-Jan) sees 70% demand drop for window ACs. 186 units at 68 days age with only 48% ST creates holding cost burden. Split strategy: campaign clears majority, RTV protects against South/East preference shift, warehouse lean stock for pre-season without retail floor cost.',
+        factors: [
+          {
+            name: 'Seasonal Pattern',
+            weight: 35,
+            score: 82,
+            reasoning: 'Window AC demand drops 70% Oct-Jan (0.8 units/d vs 2.7 peak). Natural off-season trough. Pre-season (Feb) revives to 1.5/d. Campaign timing captures winter new-home and office buyers.'
+          },
+          {
+            name: 'Regional Shift',
+            weight: 30,
+            score: 80,
+            reasoning: 'South/East showing structural preference shift from window to split ACs (better aesthetics, efficiency). 46 units in these regions slow-moving. RTV recovers ₹11.7L cash.'
+          },
+          {
+            name: 'Campaign Strategy',
+            weight: 25,
+            score: 85,
+            reasoning: '₹4K discount (13%) creates competitive value prop for off-season buyers. New homes, office fit-outs, industrial use less seasonal. 112 units (60%) clears majority stock, recovers ₹31L.'
+          },
+          {
+            name: 'Pre-Season Positioning',
+            weight: 10,
+            score: 84,
+            reasoning: '28 units warehoused for Feb pre-season. Avoids retail floor holding cost. Captures early Feb-Mar buyers without risk of deeper discounts. Strategic lean inventory.'
+          }
+        ]
+      },
+      specificActions: [
+        {
+          type: 'offSeasonCampaign',
+          action: 'Off-Season Value Campaign: ₹29,990 → ₹25,990 (13% off)',
+          discount: '₹4,000',
+          targetUnits: 112,
+          targetSegment: 'New home buyers, office fit-outs, industrial facilities, budget-conscious'
+        },
+        {
+          type: 'rtv',
+          action: 'RTV 46 Slowest Units from South & East Regions',
+          totalUnits: 46,
+          recoveryValue: '₹11.7L (85% of cost)',
+          reasoning: 'South/East structural shift to split ACs. 15% RTV clause allows 46 units return. Protects against regional preference mismatch.'
+        },
+        {
+          type: 'warehouseConsolidation',
+          action: 'Warehouse 28 Units for Feb Pre-Season',
+          totalUnits: 28,
+          reasoning: 'Strategic lean inventory for pre-season. Avoids retail floor cost. Captures Feb-Mar early buyers without discount pressure.'
+        }
+      ],
+      whatIfScenarios: [
+        'What if we warehouse 100% and wait for summer peak demand?',
+        'What if El Niño brings warmer winter and Dec-Jan demand spikes?',
+        'What if we pivot all 186 units to commercial/office channel exclusively?'
+      ],
+      decisionTrail: [
+        { time: '09:45:15', agent: 'Seasonal Analysis Agent', action: 'Off-season trough identified: 4 months low demand', thinking: '186 units with 48% ST face 4-month trough. Need multi-pronged approach: clear, RTV, warehouse.' },
+        { time: '09:48:40', agent: 'Regional Analysis Agent', action: 'South/East showing split AC preference shift', thinking: '46 units in South/East slow-moving. Structural preference change. RTV protects against continued sluggishness.' },
+        { time: '09:52:05', agent: 'Campaign Strategy Agent', action: 'Designed off-season value campaign at ₹25,990', thinking: '₹4K discount targets new homes, offices. Less seasonal sensitivity. 112 units (60%) clearance target reasonable.' },
+        { time: '09:55:30', agent: 'Orchestrator', action: 'Approved 3-way split: Campaign + RTV + Warehouse', thinking: 'Balanced approach. Campaign clears majority (60%), RTV protects downside (25%), warehouse positions for pre-season (15%). Execute.' }
+      ]
+    },
+    {
+      id: 'AG003',
+      sku: 'Whirlpool 260L Frost-Free Refrigerator',
+      skuCode: 'RF260WHP',
+      category: 'Refrigerators',
+      brand: 'Whirlpool',
+      urgency: 'MEDIUM',
+      issue: 'Discontinued Model - New Series in Stores',
+      ageingProfile: {
+        totalUnits: 94,
+        totalValue: '₹23.5L',
+        avgAge: '52 days',
+        currentSellThrough: '61%',
+        timeWindow: 'Model discontinued, new series launched'
+      },
+      recommendation: {
+        action: 'Liquidation Sale (68u) + Kitchen Bundle (18u) + Employee/Floor Clearance (8u)',
+        reasoning: 'Model discontinued - new Whirlpool series launched with better specs at same ₹24,990 price. Must clear completely. Strategy: (1) Clearance sale at ₹19,990 (20% off) creates ₹5K gap vs new series, moves 68 units (72%). (2) Kitchen bundle (fridge + microwave ₹27,990) adds value perception, clears both categories, targets 18 units (19%). (3) Convert 8 display units to employee/bulk sales at ₹16,990, frees floor space for new series.',
+        confidence: 88,
+        netMarginImpact: '-₹1.8L',
+        cashRecovery: '₹21.2L'
+      },
+      reasoningBreakdown: {
+        summary: 'Discontinued model competing with superior new series at same retail price creates impossible sell-through. Must clear completely to free floor space and inventory capital. 20% discount creates clear value gap vs new model. Bundling and floor model sales maximize recovery.',
+        factors: [
+          {
+            name: 'Product Obsolescence',
+            weight: 40,
+            score: 90,
+            reasoning: 'New Whirlpool series launched with better energy rating, features at same ₹24,990 price. Old model at ₹24,990 has zero competitive advantage. Clearance at ₹19,990 creates clear "deal" positioning.'
+          },
+          {
+            name: 'Floor Space Value',
+            weight: 30,
+            score: 86,
+            reasoning: 'Premium refrigerator floor space limited. New series needs visibility. Old model occupying space = opportunity cost. Complete clearance unlocks ₹45L annual revenue potential on that footage.'
+          },
+          {
+            name: 'Bundle Strategy',
+            weight: 20,
+            score: 85,
+            reasoning: 'Kitchen bundle (fridge + microwave ₹27,990) perceived as deal vs ₹19,990 + ₹12,990 separate. Clears microwave inventory simultaneously. Targets 18 units (19%) as complementary sale.'
+          },
+          {
+            name: 'Asset Recovery',
+            weight: 10,
             score: 88,
-            reasoning: '16.8% vs 14.5% cluster (+16% better). Staff can close deals. Problem is basket size not ability to sell. Adding premium assortment leverages existing strength. Historical: strong conversion + premium = 30-40% ticket lift.'
+            reasoning: 'Floor models aged, minor cosmetic wear. Employee pricing at ₹16,990 (₹8K below wholesale) recovers cash, frees floor space. 8 units = ₹1.4L recovery vs write-off.'
+          }
+        ]
+      },
+      specificActions: [
+        {
+          type: 'liquidationSale',
+          action: 'Clearance Sale: ₹24,990 → ₹19,990 (20% discount)',
+          discount: '₹5,000',
+          targetUnits: 68,
+          reasoning: 'New series at ₹24,990 has better specs. ₹5K gap creates clear "deal" positioning for discontinued model. Targets 72% clearance.'
+        },
+        {
+          type: 'bundleStrategy',
+          action: 'Kitchen Bundle: Fridge + Microwave = ₹27,990 (vs ₹32,980 separate)',
+          targetUnits: 18,
+          reasoning: 'Bundle value perception. Saves ₹4,990 vs buying separate. Clears microwave inventory simultaneously. Targets 19% as complementary sale.'
+        },
+        {
+          type: 'floorModelClearance',
+          action: 'Convert 8 Display Units → Employee/Bulk Sales at ₹16,990',
+          displayUnits: 8,
+          employeePrice: '₹16,990',
+          reasoning: 'Floor models with minor wear. Employee pricing recovers cash (₹1.4L), frees premium floor space. Better than write-off.'
+        }
+      ],
+      whatIfScenarios: [
+        'What if we keep 10 units as permanent "budget option" at ₹18,990?',
+        'What if Whirlpool offers buy-back program for old inventory?',
+        'What if we donate remaining units for CSR tax benefit vs liquidation?'
+      ],
+      decisionTrail: [
+        { time: '13:20:25', agent: 'Product Lifecycle Agent', action: 'Flagged: Discontinued model competing with new series', thinking: 'New Whirlpool series at same price but better specs. Old model has zero competitive advantage. Must clear completely.' },
+        { time: '13:23:50', agent: 'Pricing Strategy Agent', action: 'Recommended ₹5K discount to ₹19,990', thinking: 'Creates clear value gap vs new ₹24,990 model. Positions as "deal" rather than inferior product. 20% discount reasonable for clearance.' },
+        { time: '13:27:15', agent: 'Merchandising Agent', action: 'Designed kitchen bundle strategy', thinking: 'Fridge + microwave bundle adds value perception. Clears both categories. Targets 18 units as complementary clearance.' },
+        { time: '13:30:40', agent: 'Orchestrator', action: 'Approved: Complete clearance via 3-tier strategy', thinking: 'Liquidation (72%) + Bundle (19%) + Floor models (9%) = 100% clearance. Frees space for new series. Execute clearance.' }
+      ]
+    }
+  ];
+
+  // Vendor/Supply Chain Management Decisions (3 cards)
+  const vendorDecisions = [
+    {
+      id: 'VEN001',
+      vendor: 'Samsung India Electronics',
+      category: 'TVs, Appliances, Phones',
+      contractStatus: 'Renewal Due in 42 Days',
+      urgency: 'HIGH',
+      metrics: {
+        annualNSV: '₹248Cr',
+        marginContribution: '₹29.8Cr',
+        sellThrough: '84%',
+        returnRate: '2.8%',
+        otd: '92%',
+        fillRate: '88%'
+      },
+      currentTerms: {
+        baseMargin: 13,
+        sellOutIncentive: '2% at 80%, 3% at 90%',
+        rtvAllowed: true,
+        rtvPercentage: 12,
+        priceProtection: '60 days',
+        paymentTerms: '45 days',
+        coMarketing: 1.2
+      },
+      recommendation: {
+        action: 'Negotiate 4-Point Package: Base Margin +1.5% | New 95% ST Tier | Co-Marketing +1% | Price Protection 90d',
+        reasoning: 'We are Samsung\'s #2 partner nationally by volume (₹248Cr NSV, 84% ST vs network 72%). Our premium TV ST outperforms national by 12 points. Samsung margins structurally lower than LG/Sony but our performance justifies targeted 1.5% margin lift to 14.5%, new 3.5% incentive tier at 95% ST, co-marketing boost to 2.2% (event windows drive 40% volume), and 90-day price protection (competitive parity with LG/Sony). 4-point package targets ₹4.2Cr annual value.',
+        confidence: 86,
+        annualImpact: '₹4.2Cr incremental'
+      },
+      reasoningBreakdown: {
+        summary: 'We outperform other Samsung retailers significantly (84% ST vs Vijay Sales 68%, Reliance 71%). Premium TV ST beats national by 12 points. ₹248Cr makes us strategic partner. Contract renewal in 42 days creates negotiation window. Samsung margins lower than competitors but our exceptional execution justifies targeted improvements.',
+        factors: [
+          {
+            name: 'Performance Leverage',
+            weight: 40,
+            score: 89,
+            reasoning: 'Premium TV ST 87% beats Samsung national 75% by 12 points. Overall 84% ST vs network 72% (+12pts). Crucially outperform Vijay Sales (68%) and Reliance (71%). Strategic partner Samsung wants to retain.'
+          },
+          {
+            name: 'Volume Significance',
+            weight: 30,
+            score: 88,
+            reasoning: '₹248Cr annual NSV = #2 Samsung partner. ₹142Cr TVs = 4.2% national Samsung TV sales. Premium placement, zero quality issues. Reallocating floor space low-risk for us, high-risk for Samsung.'
+          },
+          {
+            name: 'Contract Timing',
+            weight: 20,
+            score: 82,
+            reasoning: 'Renewal in 42 days. Samsung values continuity, wants no disruption with top performer. Alternative retailers have lower ST. Our renewal strategically important to Samsung.'
           },
           {
             name: 'Competitive Context',
-            weight: 15,
-            score: 81,
-            reasoning: 'Apple Store in mall does ₹2.2Cr/month vs our ₹1.4Cr despite smaller space. 32% abandon to "check Apple/Samsung first". Need to become one-stop premium destination.'
-          }
-        ]
-      },
-      
-      interventionPlan: [
-        { pillar: 'Premium Assortment', timeline: '2 weeks', cost: '₹18L', impact: 'Ticket: ₹12.4K → ₹16.8K (+35%)' },
-        { pillar: 'Audio Listening Zone', timeline: '2 weeks', cost: '₹8L', impact: 'Audio: ₹4L → ₹18L/month (4.5x)' },
-        { pillar: 'Smart Home Corner', timeline: '3 weeks', cost: '₹6L', impact: 'New category: ₹0 → ₹12L/month' },
-        { pillar: 'Premium Training', timeline: '1 week', cost: '₹1.2L', impact: 'Premium Specialists, white-glove service' }
-      ],
-      
-      whatIfScenarios: [
-        'What if premium products don\'t sell?',
-        'What if customers still prefer Apple Store?',
-        'What if we roll to all 8 Metro A+ stores?'
-      ],
-      
-      decisionTrail: []
-    },
-    {
-      id: 'SH004',
-      storeName: 'Croma Forum Mall Bangalore',
-      storeCode: 'BLR_FOR',
-      healthStatus: 'GREEN',
-      issue: 'Healthy Performance - Maintain & Optimize',
-      urgency: 'LOW',
-      rootCause: 'Green - Benchmark Performance',
-      
-      storeKPIs: {
-        footfall: '26,800',
-        conversion: '15.2%',
-        avgTicket: '₹19,400',
-        margin: '17.1%',
-        markdown: '7.2%',
-        returns: '2.4%'
-      },
-      
-      benchmarks: {
-        clusterConv: '14.5%',
-        clusterTicket: '₹18,200',
-        clusterMargin: '15.8%'
-      },
-      
-      recommendation: {
-        action: 'Maintain Excellence + Test New Concepts',
-        reasoning: 'Store performing at/above cluster benchmarks across all metrics. Conversion 15.2% (vs 14.5%), ticket ₹19.4K (vs ₹18.2K), margin 17.1% (vs 15.8%). Use as test bed for new concepts: (1) Self-checkout kiosks, (2) AR try-before-buy for appliances, (3) Same-day delivery promise. Maintain staffing levels, continue quarterly training refreshers.',
-        confidence: 88,
-        impact: 'Maintain ₹18.2Cr annual, test concepts for chain rollout'
-      },
-      
-      reasoningBreakdown: {
-        summary: 'All metrics at or above cluster benchmarks. Healthy store performance. Use as innovation test bed for chain-wide rollout.',
-        factors: [
-          {
-            name: 'Balanced Performance',
-            weight: 30,
-            score: 92,
-            reasoning: 'Conversion 15.2% (vs 14.5% cluster, +0.7pts). Ticket ₹19.4K (vs ₹18.2K, +₹1.2K). Margin 17.1% (vs 15.8%, +1.3pts). No red flags across categories. Balanced, healthy operation.'
-          },
-          {
-            name: 'Staff Quality',
-            weight: 25,
-            score: 88,
-            reasoning: 'Avg staff tenure 18 months (vs 14 cluster), training 10hrs/month (vs 8). Low turnover 22% (vs 35%). Staff engagement scores 82/100. Maintain investment in people.'
-          },
-          {
-            name: 'Assortment Match',
-            weight: 25,
-            score: 86,
-            reasoning: 'Category mix aligns with catchment. Smartphone 32%, TVs 24%, appliances 28%, accessories 16%. Space allocation matches sales contribution. No major gaps identified.'
-          },
-          {
-            name: 'Innovation Readiness',
-            weight: 20,
-            score: 90,
-            reasoning: 'Stable performance = low execution risk. Can test new concepts without disrupting baseline. Tech-savvy catchment (Koramangala) = ideal for AR, self-checkout pilots.'
-          }
-        ]
-      },
-      
-      interventionPlan: [
-        { pillar: 'Self-Checkout Pilot', timeline: '6 weeks', cost: '₹4L', impact: 'Reduce checkout wait 35%, learn for chain' },
-        { pillar: 'AR Try-Before-Buy', timeline: '8 weeks', cost: '₹6L', impact: 'Appliance visualization, conversion lift test' },
-        { pillar: 'Same-Day Delivery', timeline: '4 weeks', cost: '₹2L setup', impact: 'Compete with Amazon, measure uptake' },
-        { pillar: 'Staff Recognition', timeline: 'Ongoing', cost: '₹80K/qtr', impact: 'Maintain morale, reduce turnover' }
-      ],
-      
-      whatIfScenarios: [
-        'What if self-checkout cannibalizes staff-assisted sales?',
-        'What if AR tech confuses customers?',
-        'What if same-day delivery economics don\'t work?'
-      ],
-      
-      decisionTrail: []
-    }
-  ];
-
-  const regionalAssortmentDecisions = [
-    {
-      id: 'RA001',
-      decision: 'Regional Cooling Strategy: North vs South India',
-      region: 'Pan-India',
-      category: 'Cooling (AC, Air Coolers, Air Purifiers)',
-      urgency: 'HIGH',
-      season: 'Pre-Summer (Feb-Mar for Apr-Jun)',
-      
-      currentState: {
-        totalNSV: '₹284Cr',
-        northShare: '68%',
-        southShare: '22%',
-        uniformMix: 'AC 75%, Coolers 20%, Purifiers 5%'
-      },
-      
-      recommendation: {
-        action: 'Differentiated Strategy: North 55-40-5, South 90-3-7, West 80-15-5',
-        reasoning: 'Current uniform 75-20-5 mix ignores climate/economic differences. North: 45-48°C dry heat + ₹2.8L income + ₹8-9/unit power → coolers economically rational (42% app searches). South: 35-40°C humid + ₹4.2L income + ₹5-6/unit → AC preferred (89% searches). North allocates only 20% to coolers = stockouts. South forces 20% coolers = deadstock. Differentiate: North 55-40-5, South 90-3-7. Expected: ₹18Cr incremental revenue, +24pts sell-through, ₹4.2Cr working capital release.',
-        confidence: 91,
-        impact: '₹18Cr revenue, +24pts sell-through, ₹4.2Cr capital release'
-      },
-      
-      reasoningBreakdown: {
-        summary: 'Uniform mix ignores regional differences. North needs coolers (42% searches, 45-48°C dry, low income). South needs AC (89% searches, 35-40°C humid, higher income). Differentiate regionally.',
-        factors: [
-          {
-            name: 'Climate & Product Effectiveness',
-            weight: 30,
-            score: 94,
-            reasoning: 'North: 45-48°C dry heat (20-30% humidity) perfect for evaporative coolers - can drop temp 8-12°C. South: 35-40°C with 60-80% humidity makes coolers ineffective, can increase perceived heat. Climate fundamentally drives fit.'
-          },
-          {
-            name: 'Economics & Power Cost',
-            weight: 30,
-            score: 89,
-            reasoning: 'North: ₹2.8L income, power ₹8-9/unit. AC costs ₹4,200/month (1.8% income) vs cooler ₹600 (0.26% income) - 7x difference. South: ₹4.2L income, power ₹5-6/unit. AC ₹2,800/month (0.67% income) - easily affordable.'
-          },
-          {
-            name: 'Customer Search Intent',
-            weight: 25,
-            score: 92,
-            reasoning: 'App data (12 months, geo-tagged): North 42% search "air cooler", 38% "AC". South: 89% "AC", 4% "cooler". Search intent = purchase intent. Can\'t inventory against customer preference.'
-          },
-          {
-            name: 'Competitive Dynamics',
-            weight: 15,
-            score: 87,
-            reasoning: 'North: Bajaj/Symphony dominate coolers (60% share), positioned everywhere. Need cooler breadth to compete. South: LG/Samsung/Voltas dominate AC (70% share). Coolers niche/irrelevant.'
-          }
-        ]
-      },
-      
-      regionalStrategy: [
-        { region: 'North (42 stores)', current: 'AC 75%, Cooler 20%', target: 'AC 55%, Cooler 40%', impact: '+₹8.4Cr, cooler ST 68% → 82%' },
-        { region: 'South (28 stores)', current: 'AC 75%, Cooler 20%', target: 'AC 90%, Cooler 3%', impact: '+₹9.2Cr, AC ST 78% → 88%, ₹4.2Cr capital freed' },
-        { region: 'West (24 stores)', current: 'AC 75%, Cooler 20%', target: 'AC 80%, Cooler 15%', impact: '+₹1.8Cr, balanced approach' }
-      ],
-      
-      whatIfScenarios: [
-        'What if North summer is cooler than expected (early monsoon)?',
-        'What if power costs drop 30% (government subsidy)?',
-        'What if we apply this to heaters for winter?'
-      ],
-      
-      decisionTrail: []
-    },
-    {
-      id: 'RA002',
-      decision: 'Gaming Boom in IT Hubs: App Insights → Store Allocation',
-      region: 'Bangalore, Pune, Hyderabad IT Clusters',
-      category: 'Gaming & WFH Equipment',
-      urgency: 'HIGH',
-      trend: 'Gaming Surge',
-      
-      currentState: {
-        gamingNSV: '₹2.8Cr (current)',
-        appSearches: 'Monitors +220%, Chairs +180%, Keyboards +145%',
-        searchToStoreConv: '12% (vs 28% TVs)',
-        currentSKUs: '8-10 gaming SKUs vs 60 TV SKUs'
-      },
-      
-      recommendation: {
-        action: 'Launch Gaming Zones in 8 IT-Hub Stores with 3x Inventory',
-        reasoning: 'App shows gaming explosion: monitors +220%, chairs +180%, keyboards +145%. But only 12% search-to-store conversion (vs 28% TVs) and stores stock 8-10 SKUs. 68% cart abandoners want "see before buy" - experience category. Create Gaming Experience Zones in 8 stores (3 Bangalore, 2 Pune, 2 Hyderabad, 1 Chennai), 3x inventory (8→25 SKUs), live demo setups. Target stores in IT clusters: Whitefield, Koramangala, Hinjewadi, Gachibowli. Expected: 22K incremental monthly visitors, ₹14.2Cr annual gaming revenue (5x current ₹2.8Cr).',
-        confidence: 88,
-        impact: '₹14.2Cr revenue (5x current), +22K monthly visitors'
-      },
-      
-      reasoningBreakdown: {
-        summary: 'Gaming searches exploding but search-to-store only 12%, stores stock 8-10 SKUs. 68% want "see before buy". Launch Gaming Zones in 8 IT-hub stores, 3x inventory, live demos.',
-        factors: [
-          {
-            name: 'App Search Intent',
-            weight: 35,
-            score: 93,
-            reasoning: 'Gaming searches surging: monitors +220%, chairs +180%, keyboards +145%. But search-to-store 12% vs 28% TVs. Gap = unmet demand. Wishlists show 6,440 gaming items across 3 cities. Need better in-store offering.'
-          },
-          {
-            name: 'Experience-Driven Category',
-            weight: 30,
-            score: 91,
-            reasoning: '68% cart abandoners cite "want to see in store" vs 22% phones, 18% TVs. Gaming is high-touch: test chair comfort, see monitor clarity, feel keyboard response. Experience zones convert browsers at 2.5x rate.'
-          },
-          {
-            name: 'Catchment Demographics',
-            weight: 20,
-            score: 89,
-            reasoning: 'Target stores in IT clusters: Bangalore (Whitefield, Koramangala), Pune (Hinjewadi, Kharadi), Hyderabad (Gachibowli, HITEC City). 45% aged 22-35, 60% IT professionals, median income ₹8L+. Perfect gaming demographic.'
-          },
-          {
-            name: 'Competitive White Space',
-            weight: 15,
-            score: 87,
-            reasoning: 'No major retailer has dedicated gaming zones in these clusters. Amazon/Flipkart dominant online but can\'t offer try-before-buy. Gaming cafes exist but don\'t sell hardware. White space opportunity.'
-          }
-        ]
-      },
-      
-      implementationPhases: [
-        { phase: 'Phase 1: Pilot (3 stores)', timeline: '3 months', investment: '₹24L', target: '₹4.2Cr revenue, test & learn' },
-        { phase: 'Phase 2: Rollout (5 stores)', timeline: 'Month 4-6', investment: '₹40L', target: '₹10Cr revenue, full network impact' }
-      ],
-      
-      whatIfScenarios: [
-        'What if gaming trend is COVID-driven and normalizes?',
-        'What if tournaments attract non-buyers?',
-        'What if we expand to laptops, consoles, VR?'
-      ],
-      
-      decisionTrail: []
-    },
-    {
-      id: 'RA003',
-      decision: 'Washing Machine Regional Preferences: Front-Load vs Semi-Auto',
-      region: 'Pan-India',
-      category: 'Washing Machines',
-      urgency: 'MEDIUM',
-      insight: 'Regional Usage Patterns',
-      
-      currentState: {
-        totalWMNSV: '₹186Cr',
-        currentMix: 'Front-load 50%, Top-load 35%, Semi-auto 15%',
-        issueIdentified: 'Uniform mix ignores regional water availability, income, housing type'
-      },
-      
-      recommendation: {
-        action: 'Differentiated WM Strategy by Region: South Front-Load, North Semi-Auto, West Balanced',
-        reasoning: 'Current 50-35-15 mix (Front-Top-Semi) doesn\'t match regional usage patterns. South India: Apartments (78% urban), stable water supply, higher income (₹4.2L) → front-load preferred (water efficient, space-saving, better wash). North India: Water scarcity (monsoon-dependent), lower income (₹2.8L), larger homes → semi-auto practical (separate wash/spin, water reuse, lower cost). East: Price-sensitive (₹2.4L income), frequent power cuts → semi-auto dominates (manual operation possible). Recommendation: South 70-25-5 (front-top-semi), North 30-35-35, East 20-30-50. Expected: ₹8.4Cr incremental revenue, WM ST 72% → 84%.',
-        confidence: 86,
-        impact: '₹8.4Cr revenue, WM ST +12pts'
-      },
-      
-      reasoningBreakdown: {
-        summary: 'Uniform mix ignores regional water, income, housing differences. South: apartments + water → front-load. North: water scarcity → semi-auto. East: price-sensitive → semi-auto dominates.',
-        factors: [
-          {
-            name: 'Water Availability & Usage',
-            weight: 35,
-            score: 91,
-            reasoning: 'South: Stable municipal water, Cauvery/Krishna rivers. Front-load uses 50L/cycle vs semi-auto 120L - conservation matters. North: Yamuna depleted, monsoon-dependent, frequent water cuts. Semi-auto allows reuse of wash water for rinse - practical for scarcity.'
-          },
-          {
-            name: 'Housing Type & Space',
-            weight: 30,
-            score: 88,
-            reasoning: 'South: 78% urban live in apartments (vs 52% North). Apartments = space constraints, balcony placement. Front-load compact, stackable, quiet (important for apartments). North: Larger homes, terrace/outdoor space. Semi-auto can sit outside, size not constraint.'
-          },
-          {
-            name: 'Income & Affordability',
-            weight: 20,
-            score: 84,
-            reasoning: 'South median income ₹4.2L, front-load ₹25-35K affordable. North ₹2.8L, semi-auto ₹8-12K fits budget (₹25K is 0.9% income). East ₹2.4L (lowest), semi-auto dominates (0.5% income). Price sensitivity drives down-market in lower-income regions.'
-          },
-          {
-            name: 'Customer Purchase Behavior',
-            weight: 15,
-            score: 87,
-            reasoning: 'In-store observation: South customers ask "Is it water efficient?", "Will it fit in my 2BHK?". North customers ask "Can I reuse rinse water for garden?", "How much does it cost to run?". East customers ask "What if power goes off during cycle?". Different concerns = different products.'
-          }
-        ]
-      },
-      
-      regionalStrategy: [
-        { region: 'South (28 stores)', current: 'Front 50%, Top 35%, Semi 15%', target: 'Front 70%, Top 25%, Semi 5%', rationale: 'Apartments, water, income favor front-load', impact: '+₹4.2Cr' },
-        { region: 'North (42 stores)', current: 'Front 50%, Top 35%, Semi 15%', target: 'Front 30%, Top 35%, Semi 35%', rationale: 'Water scarcity, larger homes, price → semi-auto', impact: '+₹3.2Cr' },
-        { region: 'East (12 stores)', current: 'Front 50%, Top 35%, Semi 15%', target: 'Front 20%, Top 30%, Semi 50%', rationale: 'Price-sensitive, power cuts → semi-auto dominates', impact: '+₹1.0Cr' }
-      ],
-      
-      whatIfScenarios: [
-        'What if South water crisis worsens (Cauvery disputes)?',
-        'What if government subsidizes front-load for water conservation?',
-        'What if we apply this to refrigerators (single-door vs double-door)?'
-      ],
-      
-      decisionTrail: []
-    },
-    {
-      id: 'RA004',
-      decision: 'Diwali Gifting: TVs (North) vs Gold Appliances (South) vs Gadgets (West)',
-      region: 'Pan-India',
-      category: 'Diwali Festive Season Strategy',
-      urgency: 'HIGH',
-      season: 'Diwali (Oct 25 - Nov 5)',
-      
-      currentState: {
-        diwaliNSV: '₹420Cr (28% of annual)',
-        uniformPromo: 'Same campaign/offers across all regions',
-        opportunityCost: 'Regional gifting preferences not capitalized'
-      },
-      
-      recommendation: {
-        action: 'Differentiated Diwali Strategy: North TV-First, South Gold Appliances, West Gadget Bundles',
-        reasoning: 'Diwali drives 28% annual sales but current uniform campaign misses regional gifting preferences. North India: Diwali = Lakshmi Puja, home upgrades → TVs are #1 Diwali purchase (42% of festive electronics, 2.8x baseline). South India: Gold appliances (mixer-grinders, pressure cookers in gold/copper) are auspicious → 38% of Diwali kitchen purchases. West India: Tech-savvy youth gifting → smartphone + accessories bundles, smartwatches (32% of festive gadgets). Recommendation: North campaign spotlight 55"+ TVs, South spotlight gold/copper appliances, West spotlight gadget bundles. Expected: ₹18Cr incremental Diwali revenue, +15% festive basket size.',
-        confidence: 89,
-        impact: '₹18Cr Diwali revenue, festive basket +15%'
-      },
-      
-      reasoningBreakdown: {
-        summary: 'Uniform Diwali campaign misses regional gifting preferences. North: TVs for home upgrade. South: Gold appliances for auspicious kitchens. West: Gadgets for youth gifting. Differentiate regionally.',
-        factors: [
-          {
-            name: 'Cultural Gifting Traditions',
-            weight: 35,
-            score: 93,
-            reasoning: 'North: Diwali = Lakshmi Puja (wealth goddess) + home upgrades. New TVs considered auspicious, entire families gather to watch. South: Gold/copper associated with prosperity. Gold mixer-grinders, copper-bottom pressure cookers gifted to newlyweds, new homes. West: More secular, youth-oriented. Gadgets (phones, watches, earbuds) popular for cousins, colleagues.'
-          },
-          {
-            name: 'Historical Sales Data',
-            weight: 30,
-            score: 91,
-            reasoning: 'Last 3 Diwalis: North TV sales spike 2.8x baseline (55"+ TVs), 42% of festive electronics. South mixer-grinder/pressure cooker spike 3.2x, 38% of kitchen. West smartphones spike 2.1x, smartwatch/earbuds 2.6x, 32% of gadgets. Regional patterns consistent year-over-year.'
-          },
-          {
-            name: 'App Search & Wishlist Behavior',
-            weight: 20,
-            score: 88,
-            reasoning: 'Diwali season app searches (Sep 15 - Oct 25): North 48% search "TV Diwali offer", 32% "AC". South 42% "mixer grinder gold", 28% "pressure cooker copper". West 38% "smartphone gift", 34% "smartwatch under 10K". Search intent validates purchase behavior.'
-          },
-          {
-            name: 'Basket Composition Analysis',
-            weight: 15,
+            weight: 10,
             score: 85,
-            reasoning: 'Diwali transactions: North avg basket ₹52K (TV + soundbar/streaming), South ₹28K (3-4 kitchen appliances bundled), West ₹34K (phone + watch + earbuds). Different basket types need different merchandising, bundling, EMI structures.'
+            reasoning: 'LG 15% margin, Sony 17% vs Samsung 13% gives leverage. Can credibly threaten space reallocation. But Samsung structurally lower margin, so target realistic 1.5% lift to 14.5%, not full parity.'
           }
         ]
       },
-      
-      regionalCampaigns: [
-        { 
-          region: 'North (42 stores)', 
-          focus: 'TV-First: "Big Screen Diwali"', 
-          creative: 'Family watching together, Lakshmi imagery', 
-          offers: '55"+ TVs ₹10K instant discount + soundbar free, 0% EMI',
-          expectedLift: '+₹8.2Cr vs uniform campaign'
+      negotiationPackage: [
+        {
+          priority: 1,
+          ask: 'Increase base margin 13% → 14.5% on premium TVs',
+          reasoning: 'Premium TV ST outperforms Samsung national by 12 points. We move ₹142Cr TV NSV with premium placement. Target 1.5% improvement within Samsung pricing structure.',
+          leverage: '87% premium TV ST vs 75% national + premium placement + competitor underperformance',
+          likelihood: 'Medium',
+          impact: '₹1.5Cr annually',
+          dataPoints: [
+            'Croma premium TV ST: 87% vs Samsung network 75% (+12pts)',
+            'Croma represents 4.2% of national Samsung TV sales',
+            'Competitors: Vijay Sales 68% ST, Reliance 71% ST',
+            'Premium in-store placement, zero quality complaints'
+          ]
         },
-        { 
-          region: 'South (28 stores)', 
-          focus: 'Gold Appliances: "Auspicious Kitchen"', 
-          creative: 'Gold mixer-grinder, copper pressure cookers, puja thali',
-          offers: 'Buy 2 kitchen appliances get 3rd at 50%, gold-finish SKUs highlighted',
-          expectedLift: '+₹6.8Cr vs uniform'
+        {
+          priority: 2,
+          ask: 'New incentive tier: 3.5% at 95% sell-through',
+          reasoning: 'We consistently hit 90%+ on flagships. Current max at 90% leaves upside unrewarded. Reliance gets 2.5% max - room to negotiate higher tier.',
+          leverage: '14 of 24 flagship SKUs exceeded 95% ST last year',
+          likelihood: 'High',
+          impact: '₹1.0Cr on high-velocity SKUs',
+          dataPoints: [
+            'FY24: 14 SKUs exceeded 95% ST',
+            'Neo QLED 65": 97% ST, 240 units',
+            'Frame TV 55": 96% ST, 180 units',
+            'Competitor max: Reliance 86%, Vijay 82%'
+          ]
         },
-        { 
-          region: 'West (24 stores)', 
-          focus: 'Gadget Bundles: "Gift Tech, Gift Joy"', 
-          creative: 'Youth-oriented, sleek product shots, gifting scenarios',
-          offers: 'Phone + Watch ₹5K off, Phone + Earbuds + Powerbank ₹3.5K off',
-          expectedLift: '+₹3.4Cr vs uniform'
+        {
+          priority: 3,
+          ask: 'Increase co-marketing 1.2% → 2.2%',
+          reasoning: 'Event windows drive 40% annual volume but need heavy promo investment. LG/Sony offer higher co-marketing, giving leverage.',
+          leverage: 'Event performance data + Croma strategic value as top partner',
+          likelihood: 'Medium',
+          impact: '₹2.5Cr incremental marketing',
+          dataPoints: [
+            'Diwali 2024: 28% of annual Samsung TV sales in 4 weeks',
+            'Joint campaign ROI: 4.2x average',
+            'Croma footfall: 2.4M/month vs Reliance 1.8M',
+            'LG 2.0% co-marketing, Sony 1.8%'
+          ]
+        },
+        {
+          priority: 4,
+          ask: 'Extend price protection 60 → 90 days',
+          reasoning: 'Electronics pricing volatile. 60-day insufficient for premium SKUs (85-day lifecycle). Competitors offer 75-90 days.',
+          leverage: 'LG/Sony both 75-90 day protection. Space reallocation more attractive without parity',
+          likelihood: 'Medium',
+          impact: '₹1.2Cr risk mitigation',
+          dataPoints: [
+            'Last year: ₹2.2Cr unprotected markdowns',
+            'Avg premium SKU lifecycle: 85 days',
+            'Competitor terms: LG 90d, Sony 75d',
+            'Can credibly threaten space reallocation'
+          ]
         }
       ],
-      
+      competitiveContext: {
+        lgTerms: { margin: 15, incentive: '3% at 85%', rtv: 15, coMarketing: 2.0 },
+        sonyTerms: { margin: 17, incentive: '2% at 80%', rtv: 10, coMarketing: 1.8 },
+        note: 'LG/Sony higher margin structures due to positioning. Samsung aggressive volume strategy = lower margins. Our leverage: exceptional performance vs other Samsung retailers. Premium TV ST +12pts national average. Competitors underperform making us strategic.'
+      },
       whatIfScenarios: [
-        'What if we unify message for brand consistency (trade-off)?',
-        'What if South customers also want TVs (don\'t want to miss)?',
-        'What if we apply this to other festivals (Pongal, Holi, Eid)?'
+        'What if Samsung rejects margin but offers 5% incentive at 95% ST instead?',
+        'What if we threaten 15% Samsung floor space reduction?',
+        'What if we get all 4 asks approved - total P&L impact?',
+        'What if Samsung offers exclusive 2025 flagship launch rights?'
       ],
-      
-      decisionTrail: []
-    }
-  ];
-
-  const campaignDecisions = [
-    {
-      id: 'CT001',
-      campaign: 'WFH Pro: Laptops + Monitors + Accessories Bundle',
-      audience: 'IT Professionals, Freelancers, Remote Workers',
-      urgency: 'HIGH',
-      budget: '₹2.8Cr',
-      channels: 'App Push, Email, Instagram, LinkedIn',
-      
-      segmentAnalysis: {
-        totalAddressable: '840K users',
-        targetSegment: '280K (33%)',
-        segmentCriteria: 'Viewed laptops/monitors 3+ times (6 months), 25-45 age, ₹6L+ income, metro cities',
-        historicalResponse: 'Tech bundles: 8.2% CTR, 4.1% conversion (vs 3.2% baseline)'
-      },
-      
-      recommendation: {
-        action: '3-Tier Bundle Campaign: Essential (₹45K), Pro (₹85K), Premium (₹1.4L)',
-        reasoning: 'WFH normalized post-COVID but 62% still hybrid/remote. Target segment: 280K users who viewed laptops/monitors 3+ times but haven\'t purchased. Offer barrier = fragmented shopping (laptop from us, monitor from Amazon, desk from Urban Ladder). Solution: curated bundles with instant savings. Essential: ₹45K laptop + 24" monitor + wireless KB/mouse. Pro: ₹85K laptop + 27" monitor + webcam + noise-canceling headphones. Premium: ₹1.4L laptop + 32" 4K monitor + ergonomic chair + desk lamp. Expected: 4.8% conversion on 280K = 13,440 orders, ₹68Cr revenue, 18% margin = ₹12.2Cr contribution.',
-        confidence: 86,
-        impact: '₹68Cr revenue, 13.4K orders, ₹12.2Cr contribution'
-      },
-      
-      reasoningBreakdown: {
-        summary: '280K users viewed laptops/monitors 3+ times but didn\'t buy. Barrier = fragmented shopping. Offer curated bundles with instant savings. Target conversion 4.8%.',
-        factors: [
-          {
-            name: 'Segment Behavior & Intent',
-            weight: 35,
-            score: 89,
-            reasoning: '280K users viewed laptops (avg 4.2 views) + monitors (avg 3.8 views) but didn\'t convert. 68% also searched "best monitor for laptop", "keyboard mouse combo", "webcam for meetings". High intent, fragmented research = purchase barrier. Bundle simplifies decision.'
-          },
-          {
-            name: 'Historical Bundle Performance',
-            weight: 30,
-            score: 88,
-            reasoning: 'Past tech bundles (Diwali Gaming, Back-to-School) achieved 8.2% CTR (vs 4.1% standalone), 4.1% conversion (vs 3.2%), 22% higher AOV. Bundles work because: simplified choice, perceived savings, convenience. WFH bundles expected similar lift.'
-          },
-          {
-            name: 'Competitive Landscape',
-            weight: 20,
-            score: 84,
-            reasoning: 'Amazon/Flipkart offer bundles but generic ("Frequently bought together"). We can curate based on expertise + offer white-glove setup (Premium tier). Also 0% EMI for 6 months (vs Amazon 3 months). Competitive edge in service + financing.'
-          },
-          {
-            name: 'Cross-Sell Opportunity',
-            weight: 15,
-            score: 87,
-            reasoning: 'WFH customers high-value: avg LTV ₹2.8L (vs ₹1.2L baseline). After setup, they return for printers (42% within 6 months), smart lights (28%), routers (38%). Bundle is entry point to long-term relationship.'
-          }
-        ]
-      },
-      
-      whatIfScenarios: [
-        'What if we add furniture to bundles (desks, chairs)?',
-        'What if conversion is 3% instead of 4.8%?',
-        'What if we extend to "Gaming Pro" bundles?'
-      ],
-      
-      decisionTrail: []
+      decisionTrail: [
+        { time: '10:30:15', agent: 'Contract Management Agent', action: 'Triggered quarterly vendor review', thinking: 'Samsung contract renewal in 42 days. Analyzing performance metrics to build negotiation leverage case.' },
+        { time: '10:31:08', agent: 'Vendor Performance Agent', action: 'Performance aggregation: 84% ST strong', thinking: 'We hit 84% ST vs network 72%. Clear outperformance. Premium TV 87% vs national 75% (+12pts). Strong leverage position.' },
+        { time: '10:32:22', agent: 'Category Economics Agent', action: 'Category breakdown: TVs are hero', thinking: 'TVs ₹142Cr NSV, 87% ST, 12pts above brand avg. This is our primary negotiation lever. Focus margin improvement here.' },
+        { time: '10:34:45', agent: 'Competitive Analysis Agent', action: 'Competitor benchmarking complete', thinking: 'We outperform Vijay Sales 68% ST and Reliance 71% ST significantly. LG/Sony offer higher margins (15%/17% vs Samsung 13%). Multiple leverage points.' },
+        { time: '10:37:30', agent: 'Strategy Agent', action: 'Built 4-point negotiation package', thinking: 'Margin +1.5% (realistic given Samsung structure), new 95% tier, co-marketing boost, price protection extension. Prioritized by financial impact.' },
+        { time: '10:40:50', agent: 'Orchestrator', action: 'Finalized negotiation strategy: ₹4.2Cr target', thinking: 'Strong performance leverage + contract timing + competitive context = solid negotiation position. 4-point package balanced and achievable. Confidence 86%.' }
+      ]
     },
     {
-      id: 'CT002',
-      campaign: 'Exchange Fest: Trade Old for New with ₹15K Extra',
-      audience: 'Upgraders - Purchased 3-5 Years Ago',
-      urgency: 'MEDIUM',
-      budget: '₹1.8Cr',
-      channels: 'SMS, Email, Retargeting Ads',
-      
-      segmentAnalysis: {
-        totalAddressable: '1.2M past customers',
-        targetSegment: '340K (28%)',
-        segmentCriteria: 'Purchased TV/fridge/WM 3-5 years ago, no recent purchase, ₹4L+ income',
-        averageOldPurchase: '₹32K (2019-2021)',
-        expectedUpgrade: '₹58K new purchase'
+      id: 'VEN002',
+      vendor: 'Apple India Private Limited',
+      category: 'iPhones, iPads, MacBooks, Accessories',
+      contractStatus: 'Active - Performance Review',
+      urgency: 'CRITICAL',
+      metrics: {
+        annualNSV: '₹312Cr',
+        marginContribution: '₹15.6Cr',
+        sellThrough: '94%',
+        returnRate: '0.9%',
+        otd: '96%',
+        fillRate: '72%'
       },
-      
+      currentTerms: {
+        baseMargin: 4.5,
+        sellOutIncentive: 'None',
+        rtvAllowed: false,
+        rtvPercentage: 0,
+        priceProtection: 'None',
+        paymentTerms: '30 days',
+        coMarketing: 0.5
+      },
       recommendation: {
-        action: 'Exchange Fest with ₹15K Extra Value + Free Pickup + Installation',
-        reasoning: '340K customers bought big-ticket items 3-5 years ago (typical upgrade cycle). Currently 0% have exchanged with us = opportunity loss. Barrier: hassle of selling old appliance, unclear value, installation logistics. Solution: Exchange Fest - bring old appliance, get market value + ₹15K extra Croma credit, free pickup/installation. Target categories: TVs (55" 2019 models → 65" 4K/OLED), refrigerators (single-door → frost-free double-door), washing machines (semi-auto → front-load). Expected: 6.2% response on 340K = 21,080 exchanges, ₹122Cr revenue (₹58K avg), ₹15.8Cr margin (12.9% after exchange costs).',
-        confidence: 84,
-        impact: '₹122Cr revenue, 21K exchanges, ₹15.8Cr contribution'
+        action: 'Focus on Allocation Priority (4.5% Guaranteed) + Co-Marketing 1.5% + Launch Velocity Bonus',
+        reasoning: 'Apple margins industry-fixed, non-negotiable. Real value in allocation priority and marketing support. We are #3 Apple partner nationally by volume (₹312Cr NSV, 96% iPhone ST vs 87% network). Frequent stockouts during launches cost ₹8Cr+ annually. Request: (1) Guaranteed 4.5% national iPhone allocation for all launches - prevents costly stockouts. (2) Co-marketing 0.5% → 1.5% - our activations drive 23% higher accessory attach. (3) 1% launch velocity bonus - we lead first-month sales. Total impact: ₹12.4Cr annually.',
+        confidence: 78,
+        annualImpact: '₹12.4Cr incremental'
       },
-      
       reasoningBreakdown: {
-        summary: '340K customers in 3-5 year upgrade window. Current exchange rate 0% = opportunity loss. Offer ₹15K extra value + convenience. Target 6.2% response = 21K exchanges.',
+        summary: 'Apple maintains fixed margins across resellers - differentiation comes from allocation priority and marketing support, not margin points. We are #3 partner with exceptional 96% ST. Stockouts during launch windows our biggest pain point costing ₹8Cr+ annually. Focus negotiation on guaranteed allocation, marketing support, and launch bonuses.',
         factors: [
           {
-            name: 'Upgrade Cycle Timing',
-            weight: 35,
-            score: 91,
-            reasoning: '3-5 year window is peak upgrade intent for electronics. TVs: 4K → OLED/8K. Fridges: single-door → inverter double-door. WMs: semi-auto → front-load. Technology improvements create genuine upgrade desire. Historical data: 3-year customers 2.8x more likely to upgrade than 1-year customers.'
-          },
-          {
-            name: 'Exchange Friction Reduction',
-            weight: 30,
-            score: 86,
-            reasoning: 'Current exchange rate 0% vs OLX/Quikr/Facebook Marketplace 18%. Why low? Hassle: find buyer, negotiate, coordinate pickup, installation. Our offer: instant value (market + ₹15K), single visit (pickup old + deliver new), zero hassle. Convenience worth premium.'
-          },
-          {
-            name: 'Margin Economics',
-            weight: 20,
-            score: 78,
-            reasoning: 'Exchange ₹15K subsidy looks expensive but: (1) Old appliance resale value ₹8-12K (refurbish + sell), net cost ₹3-7K. (2) Higher AOV: ₹58K vs ₹42K non-exchange (+38%). (3) Margin on premium products 14-16% vs 11-12% mid-range. Economics work at scale.'
-          },
-          {
-            name: 'Competitive Moat',
-            weight: 15,
-            score: 82,
-            reasoning: 'Amazon/Flipkart offer exchange but logistics weak (partner-dependent, delayed pickups, disputes over valuation). We control entire chain: own logistics, refurbishment unit, resale channel. Better experience = competitive advantage. NPS for exchange customers 68 vs 52 baseline.'
-          }
-        ]
-      },
-      
-      whatIfScenarios: [
-        'What if old appliance resale value drops (refurbishment costs)?',
-        'What if response is 4% instead of 6.2%?',
-        'What if we extend to smartphones (2-year cycle)?'
-      ],
-      
-      decisionTrail: []
-    },
-    {
-      id: 'CT003',
-      campaign: 'First-Time Buyer: Smart TVs Under ₹25K with 0% EMI',
-      audience: 'New to Category - Never Purchased TVs',
-      urgency: 'MEDIUM',
-      budget: '₹1.2Cr',
-      channels: 'YouTube Pre-Roll, Facebook Video, App Banners',
-      
-      segmentAnalysis: {
-        totalAddressable: '2.8M app users',
-        targetSegment: '680K (24%)',
-        segmentCriteria: 'Browsed TVs 2+ times, never purchased electronics from us, 22-35 age, ₹3-5L income',
-        intentSignals: 'Searched "best TV under 25K", "smart TV WiFi", viewed 32-43" models'
-      },
-      
-      recommendation: {
-        action: 'First-Timer Campaign: Smart TVs ₹15-25K with 6-Month 0% EMI + Free Demo at Home',
-        reasoning: '680K users browsed TVs but never purchased electronics from us. Profile: young (22-35), first apartment/home, price-conscious (₹15-25K budget), digital-native (want smart/streaming). Barriers: uncertainty about quality, no brand loyalty, price sensitivity, "can I afford?". Solution: curated selection of 12 best-selling smart TVs ₹15-25K, highlight streaming apps (Netflix, Prime, Disney+), 6-month 0% EMI (₹2.5K/month feels affordable vs ₹25K upfront), free home demo (reduce purchase anxiety). Expected: 3.8% conversion on 680K = 25,840 first-time buyers, ₹52Cr revenue, ₹6.2Cr contribution (12% margin). More importantly: 25K new customers with LTV ₹2.4L = ₹600Cr lifetime potential.',
-        confidence: 81,
-        impact: '₹52Cr revenue, 25.8K first-timers, ₹600Cr LTV potential'
-      },
-      
-      reasoningBreakdown: {
-        summary: '680K browsed TVs but never bought from us. Young, first apartment, price-conscious. Offer curated ₹15-25K smart TVs, 6-month 0% EMI, free home demo. Target 3.8% conversion.',
-        factors: [
-          {
-            name: 'First-Time Buyer Psychology',
-            weight: 35,
-            score: 86,
-            reasoning: 'First electronics purchase = high anxiety. Questions: "Am I overpaying?", "Will it break?", "Do I need 4K?". Need education + reassurance. Our approach: curated selection (remove choice paralysis), clear feature comparison, free demo (try before commit), easy returns. Historical: first-timer campaigns convert at 3.2-4.5% with education focus.'
-          },
-          {
-            name: 'EMI as Affordability Tool',
-            weight: 30,
-            score: 89,
-            reasoning: '₹25K upfront is barrier for ₹3-5L income (0.5-0.8% annual income). But ₹2.5K/month for 6 months feels manageable (0.06% monthly income). EMI unlocks purchase. Historical: 0% EMI campaigns have 2.2x higher conversion than upfront-payment campaigns for this cohort.'
-          },
-          {
-            name: 'Content & Streaming Hook',
-            weight: 20,
-            score: 88,
-            reasoning: 'Target cohort consumes streaming content heavily (4.2 hrs/day avg). Smart TV = gateway to cord-cutting lifestyle. Messaging: "Your Netflix/Prime theater at home" resonates better than "Full HD resolution, 178° viewing angle". Feature-focused = boring. Lifestyle-focused = compelling.'
-          },
-          {
-            name: 'Lifetime Value Play',
-            weight: 15,
-            score: 84,
-            reasoning: 'First electronics purchase = gateway to category expansion. Customers who buy TV return within 18 months for: soundbar (48%), streaming device (32%), gaming console (22%), then laptop (38% in 24 months). First-timer LTV ₹2.4L vs one-time buyer ₹42K. Acquisition cost justified by LTV.'
-          }
-        ]
-      },
-      
-      whatIfScenarios: [
-        'What if EMI default rate is higher than expected?',
-        'What if free demo is exploited (no-show buyers)?',
-        'What if we extend to refrigerators, washing machines?'
-      ],
-      
-      decisionTrail: []
-    },
-    {
-      id: 'CT004',
-      campaign: 'VIP Loyalty: Exclusive Early Access to iPhone 17 Launch',
-      audience: 'High-Value Customers - ₹3L+ Spend (2 Years)',
-      urgency: 'HIGH',
-      budget: '₹80L',
-      channels: 'Email, SMS, App Notification, WhatsApp',
-      
-      segmentAnalysis: {
-        totalAddressable: '42K VIP customers',
-        targetSegment: '42K (100%)',
-        segmentCriteria: '₹3L+ spend (24 months), 3+ purchases, 85+ NPS, avg ₹8.2K/month engagement',
-        historicalLTV: '₹8.4L per customer',
-        churnRisk: 'Low (12% annual)'
-      },
-      
-      recommendation: {
-        action: 'VIP iPhone 17 Launch: 24-Hour Early Access + ₹8K Accessories Credit + Concierge Setup',
-        reasoning: '42K VIP customers (₹3L+ spend) drive 28% of revenue but feel under-appreciated (NPS 72 vs 85 potential). iPhone 17 launch (Sep 15) = opportunity to delight. Offer: 24-hour early access (Sep 14 pre-launch), guaranteed stock allocation, ₹8K accessories credit (cases, AirPods, AppleCare), white-glove concierge setup at home/office. VIPs love exclusivity + convenience more than discounts. Expected: 18% take-rate on 42K = 7,560 iPhone sales, ₹75Cr revenue (₹99K avg), but more importantly: NPS boost to 88, churn reduction 12% → 6%, LTV extension ₹8.4L → ₹10.2L per customer = ₹75Cr incremental LTV across cohort.',
-        confidence: 88,
-        impact: '₹75Cr revenue, NPS +16pts, churn -50%, ₹75Cr LTV gain'
-      },
-      
-      reasoningBreakdown: {
-        summary: '42K VIPs drive 28% revenue but NPS 72 (under-realized). iPhone launch = exclusivity opportunity. Offer early access, guaranteed stock, ₹8K accessories, concierge. Target 18% take-rate = 7,560 sales.',
-        factors: [
-          {
-            name: 'VIP Psychology & Exclusivity',
-            weight: 35,
+            name: 'Launch Allocation Gap',
+            weight: 40,
             score: 92,
-            reasoning: 'VIPs don\'t need discounts (₹3L+ spend = affluent). They value: early access, guarantee (no sold-out frustration), recognition, convenience. Apple Store limits stock, creates FOMO. We can guarantee stock for VIPs = powerful value prop. Historical: exclusive launches have 2.5x higher NPS than discount campaigns for this cohort.'
+            reasoning: '#3 partner by volume but frequent launch stockouts. iPhone 15 stockout in 4 days = ₹3.2Cr lost. 96% ST vs 87% network proves demand. Guaranteed 4.5% allocation prevents ₹8Cr+ annual stockout losses.'
           },
           {
-            name: 'Churn Risk Mitigation',
+            name: 'Ecosystem Development',
             weight: 30,
-            score: 89,
-            reasoning: 'VIP churn 12% annually = ₹42Cr revenue loss. Exit interviews: "didn\'t feel valued", "Amazon faster", "Apple Store better experience". This campaign addresses all three: feel valued (exclusive access), faster (pre-launch), better experience (concierge). Expected churn reduction 12% → 6% = ₹21Cr retained revenue annually.'
+            score: 88,
+            reasoning: 'Our activations drive 42% accessory attach vs 19% network (+23pts). AppleCare 31% vs 18% network. Trade-in 28% of sales. Ecosystem strength justifies higher co-marketing investment from Apple.'
           },
           {
-            name: 'Halo Effect on Category',
-            weight: 20,
-            score: 87,
-            reasoning: 'iPhone buyers purchase ₹28K accessories within 6 months (cases, AirPods, chargers, AppleCare). Our ₹8K credit ensures we capture accessory spend vs Amazon/Apple. Also, iPhone buyers return for Apple Watch (42%), iPad (28%), MacBook (18%) within 18 months. Gateway product.'
-          },
-          {
-            name: 'Word-of-Mouth Amplification',
-            weight: 15,
-            score: 91,
-            reasoning: 'VIPs are influencers in social circles. "I got iPhone 17 a day early through Croma VIP" = powerful social proof. Referral rate from VIPs 3.8x higher than baseline. Expected: 2,200 referrals from 7,560 buyers = ₹18Cr incremental revenue. WOM ROI often exceeds campaign ROI.'
-          }
-        ]
-      },
-      
-      whatIfScenarios: [
-        'What if Apple limits our stock allocation?',
-        'What if take-rate is 12% instead of 18%?',
-        'What if we extend VIP perks year-round (quarterly exclusives)?'
-      ],
-      
-      decisionTrail: []
-    }
-  ];
-  const portfolioDecisions = [
-    {
-      id: 'PS001',
-      decision: 'OnePlus Portfolio Rationalization: Cut Underperforming Models',
-      category: 'Smartphones - OnePlus Brand',
-      urgency: 'HIGH',
-      status: 'Rationalize',
-      
-      currentState: {
-        totalSKUs: '18 OnePlus models',
-        totalNSV: '₹142Cr annually',
-        margin: '8.2% (vs 12.8% Samsung, 14.2% Apple)',
-        returns: '18% DOA (vs 2.4% Samsung)',
-        inventoryDays: '68 days (vs 42 cluster avg)'
-      },
-      
-      recommendation: {
-        action: 'Cut 12 SKUs to 6 Core Models: Nord 4, 12, 12 Pro, Open, Pad (Kill 67% of portfolio)',
-        reasoning: 'OnePlus 18 SKUs drive ₹142Cr but only 8.2% margin (vs 12.8% Samsung). Problem: too many models cannibalize each other, confuse customers, tie up inventory. Top 6 SKUs drive 78% of revenue but only 33% of SKUs. Long tail (12 SKUs) drives 22% revenue but 58% of service costs (high DOA, warranty claims). Recommendation: Kill 12 models, focus on 6 core (Nord 4 budget, 12/12 Pro mid-range, Open flagship, Pad tablet). Free up ₹28Cr working capital (68→42 inventory days), reduce service costs ₹4.2Cr, improve margin 8.2%→11.8%. Accept ₹8Cr revenue loss (long tail) for ₹18Cr contribution gain.',
-        confidence: 88,
-        impact: '₹28Cr capital freed, margin +3.6pts, -₹8Cr revenue (accept)'
-      },
-      
-      reasoningBreakdown: {
-        summary: 'OnePlus 18 SKUs, top 6 drive 78% revenue. Long tail (12 SKUs) = 22% revenue, 58% service costs. Cut to 6 core models, free capital, improve margin.',
-        factors: [
-          {
-            name: 'SKU Proliferation & Cannibalization',
-            weight: 35,
-            score: 82,
-            reasoning: '18 SKUs create choice paralysis for customers + cannibalization. Example: Nord CE 3, Nord CE 3 Lite, Nord 3 all priced ₹22-28K, nearly identical specs. Customers confused, delay purchase. Staff spend 18 mins explaining differences (vs 8 mins Samsung). Rationalize to Nord 4 only = clearer positioning.'
-          },
-          {
-            name: 'Quality & Returns Issue',
-            weight: 30,
-            score: 74,
-            reasoning: '18% DOA rate (vs 2.4% Samsung) driven by mid-tier models (Nord CE series, older flagships). High returns = warranty costs ₹6.8Cr, NPS damage (38 vs 58 cluster). Top 6 models have 8% DOA (better but still high). Kill worst offenders, improve quality focus.'
-          },
-          {
-            name: 'Working Capital Efficiency',
+            name: 'Launch Velocity Leadership',
             weight: 20,
             score: 86,
-            reasoning: '18 SKUs across 100 stores = 1,800 inventory positions. 68 days inventory (vs 42 cluster) = ₹28Cr tied up. Rationalize to 6 SKUs = 600 positions, 42 days inventory. Free ₹28Cr to redeploy to Samsung/Apple (higher margin).'
+            reasoning: 'iPhone 15: 840 units in first 30 days (32% of annual). Launch velocity 28/d vs 12/d baseline. We lead on launch impact but incentives reward sustained, not launch performance. Velocity bonus aligns with our strength.'
           },
           {
-            name: 'Vendor Negotiation Leverage',
-            weight: 15,
-            score: 79,
-            reasoning: 'OnePlus knows we stock 18 models = committed partner. But commitment hasn\'t earned better terms. Threat of rationalization = negotiation leverage. "We cut to 6 unless you improve: (1) margin to 11.5%+, (2) DOA to <10%, (3) marketing co-op ₹2Cr." Credible threat improves terms.'
-          }
-        ]
-      },
-      
-      portfolioAction: [
-        { action: 'KEEP (6 SKUs)', models: 'Nord 4, 12, 12 Pro, Open, Pad, Buds Pro 2', revenue: '₹110Cr (78%)', rationale: 'Clear positioning, lower DOA, brand halo' },
-        { action: 'KILL (12 SKUs)', models: 'Nord CE 3, CE 3 Lite, Nord 3, 11, 11R, 10 Pro, 10T, 10R, 9, 9RT, Nord Watch, Buds Z2', revenue: '₹32Cr (22%)', rationale: 'Cannibalization, high DOA, inventory drag' }
-      ],
-      
-      whatIfScenarios: [
-        'What if OnePlus refuses to improve terms?',
-        'What if rationalization costs customer loyalty?',
-        'What if we apply this to other brands (Realme, Vivo)?'
-      ],
-      
-      decisionTrail: []
-    },
-    {
-      id: 'PS002',
-      decision: 'Premium Audio Expansion: Bose, Sony, Sennheiser Growth',
-      category: 'Audio - Premium Segment',
-      urgency: 'HIGH',
-      status: 'Grow',
-      
-      currentState: {
-        premiumAudioNSV: '₹18Cr (current)',
-        totalAudioNSV: '₹124Cr',
-        premiumShare: '14.5% (vs 38% market avg)',
-        skuCount: '22 premium SKUs (vs 180 budget SKUs)',
-        margin: '22% premium vs 8% budget'
-      },
-      
-      recommendation: {
-        action: 'Triple Premium Audio Investment: ₹18Cr → ₹58Cr with Listening Zones + Expert Staff',
-        reasoning: 'Premium audio only 14.5% of our ₹124Cr audio business (vs 38% market). Why underindexed? (1) Limited SKUs: 22 premium vs 180 budget = selection gap. (2) No experience zones: premium audio needs trial (sound quality subjective). (3) Untrained staff: can\'t articulate Bose QuietComfort vs Sony WH-1000XM5 differences. (4) Prime catchment untapped: our stores in affluent areas (median income ₹8.2L) but selling budget ₹2-4K earbuds. Recommendation: Expand SKUs 22→65, create listening zones in 12 flagship stores, hire 24 Audio Specialists, stock Bose 700, Sony XM5, Sennheiser Momentum, B&O. Expected: ₹18Cr → ₹58Cr revenue (+222%), 22% margin = ₹12.8Cr contribution (vs ₹4Cr current), NPS 82 (vs 58 budget audio).',
-        confidence: 91,
-        impact: '₹40Cr incremental revenue, ₹8.8Cr margin gain, NPS +24pts'
-      },
-      
-      reasoningBreakdown: {
-        summary: 'Premium audio 14.5% vs 38% market = underpenetrated. Barriers: limited SKUs, no experience zones, untrained staff. Expand 3x with listening zones + experts. Target ₹58Cr (+222%).',
-        factors: [
-          {
-            name: 'Catchment-Assortment Mismatch',
-            weight: 35,
-            score: 93,
-            reasoning: 'Flagship stores (Whitefield, Koramangala, Inorbit, Select City Walk) in affluent areas: ₹8.2L median income, 58% IT professionals, 42% own Apple products. But we stock 180 budget SKUs (₹2-4K) vs 22 premium (₹15-40K). Catchment wants Bose/Sony, we push boAt/Noise. Gap = ₹40Cr opportunity.'
-          },
-          {
-            name: 'Experience-Driven Category',
-            weight: 30,
-            score: 89,
-            reasoning: 'Audio is subjective - sound signature, noise cancellation effectiveness, comfort vary by ear shape. Can\'t buy ₹28K headphones without trying. Apple Store has listening bar, Sony has sound rooms, we have locked cabinets. Create 12 listening zones with sound isolation, A/B comparison setups. Expected: 3.2x conversion vs non-experience stores.'
-          },
-          {
-            name: 'Margin Opportunity',
-            weight: 20,
-            score: 88,
-            reasoning: 'Premium audio 22% margin (vs 8% budget). Why? Brand strength (Bose, Sony), lower price sensitivity (₹28K buyer doesn\'t haggle like ₹2K buyer), vendor support (40% co-op marketing). ₹40Cr revenue at 22% = ₹8.8Cr margin vs ₹40Cr budget audio at 8% = ₹3.2Cr. 2.75x margin for same revenue.'
-          },
-          {
-            name: 'Halo Effect on Brand',
-            weight: 15,
-            score: 87,
-            reasoning: 'Premium audio customers are brand ambassadors. Word-of-mouth: "I tried 5 headphones at Croma listening zone" = powerful referral. Also, premium audio buyers return for speakers (52%), soundbars (38%), turntables (18%). Gateway to broader premium electronics relationship.'
-          }
-        ]
-      },
-      
-      expansionPlan: [
-        { phase: 'SKU Expansion', timeline: '2 months', investment: '₹8Cr', action: 'Add 43 SKUs: Bose 700, Sony XM5, Sennheiser Momentum 4, B&O H95, Master & Dynamic MW75' },
-        { phase: 'Listening Zones', timeline: '3 months', investment: '₹18Cr', action: '12 flagship stores, sound-isolated rooms, A/B comparison setups, acoustic treatment' },
-        { phase: 'Expert Hiring', timeline: '1 month', investment: '₹2.4Cr/yr', action: '24 Audio Specialists (2 per store), Bose/Sony certification, 40hrs training' },
-        { phase: 'Marketing Co-Op', timeline: 'Ongoing', investment: '₹4Cr/yr', action: 'Vendor-funded demos, listening events, audiophile community building' }
-      ],
-      
-      whatIfScenarios: [
-        'What if premium audio trend is COVID-driven and normalizes?',
-        'What if listening zones are underutilized?',
-        'What if we expand to turntables, vinyl (audiophile ecosystem)?'
-      ],
-      
-      decisionTrail: []
-    },
-    {
-      id: 'PS003',
-      decision: 'Large Appliances: Maintain Leadership, Optimize Mix',
-      category: 'Refrigerators, Washing Machines, ACs',
-      urgency: 'MEDIUM',
-      status: 'Maintain',
-      
-      currentState: {
-        appliancesNSV: '₹680Cr (38% of total)',
-        margin: '14.2%',
-        marketShare: '#2 (18.4% vs Reliance Digital 22%, Vijay Sales 12%)',
-        customerSat: 'NPS 68'
-      },
-      
-      recommendation: {
-        action: 'Maintain Category Leadership: Optimize Mix (Inverter/Smart), Service Excellence, Prevent Margin Erosion',
-        reasoning: 'Appliances drive ₹680Cr (38% of business), healthy 14.2% margin, strong NPS 68. Don\'t break what\'s working. But maintain requires active defense: (1) Mix shift to inverter/smart (currently 42% inverter vs 65% market, margin drag). (2) Installation excellence (12% installation complaints = NPS killer). (3) Prevent Amazon encroachment (delivering refrigerators in 24hrs now). Actions: Shift mix 42%→60% inverter (₹4.8Cr margin gain), reduce installation time 72hrs→24hrs (match Amazon), create Smart Home bundles (fridge + AC + WM with unified app control). Expected: maintain ₹680Cr, margin 14.2%→15.8% (+1.6pts), NPS 68→74.',
-        confidence: 86,
-        impact: 'Maintain ₹680Cr, margin +1.6pts, NPS +6pts, defend share'
-      },
-      
-      reasoningBreakdown: {
-        summary: 'Appliances ₹680Cr, 14.2% margin, NPS 68 = healthy. Maintain = active defense. Shift to inverter, improve installation, counter Amazon. Maintain revenue, improve margin 1.6pts.',
-        factors: [
-          {
-            name: 'Category Health & Scale',
-            weight: 30,
-            score: 88,
-            reasoning: 'Appliances are core: 38% of revenue, 32% of margin dollars. Market share #2 (18.4%), growing +8% YoY vs market +6%. Healthy business doesn\'t need disruption. Focus on optimization not transformation.'
-          },
-          {
-            name: 'Inverter/Smart Mix Shift',
-            weight: 30,
-            score: 82,
-            reasoning: 'Currently 42% inverter (vs 65% market) = lagging. Inverter margin 16.2% vs non-inverter 12.8% = +3.4pts. Customer preference shifted: 78% search "inverter refrigerator", 68% "inverter AC". We\'re under-allocating to customer demand + leaving margin on table. Shift 42%→60% = ₹4.8Cr margin gain.'
-          },
-          {
-            name: 'Installation as Differentiation',
-            weight: 25,
-            score: 76,
-            reasoning: 'Amazon now delivers refrigerators in 24hrs (warehouse expansion). Our avg: 72hrs. Installation complaints 12% of NPS detractors. Appliances aren\'t appliances until installed. Match Amazon speed (24hrs), improve quality (certified installers, 95% first-time-right vs 82%). Installation = competitive moat if done right.'
-          },
-          {
-            name: 'Margin Erosion Risk',
-            weight: 15,
+            name: 'Premium Variant Mix',
+            weight: 10,
             score: 84,
-            reasoning: 'Margin 14.2% stable but pressured: Amazon discounting, vendor demands (rebate reductions), EMI costs rising. Without active defense, margin drifts to 12.8% = ₹9.5Cr loss. Actions: shift to higher-margin inverter, reduce EMI subsidy (tighten credit), negotiate better vendor terms. Maintain requires fighting entropy.'
+            reasoning: '512GB iPhones stockout in 11 days vs 2 days for 256GB. Customer asks: 32% want 512GB+. Priority allocation for premium variants improves margin realization by ₹1.2Cr (5.2% vs 4.5% margin).'
           }
         ]
       },
-      
-      maintenanceActions: [
-        { action: 'Inverter Mix Shift', target: '42% → 60% inverter allocation', timeline: '6 months', impact: '+₹4.8Cr margin' },
-        { action: 'Installation Excellence', target: '24hr delivery, 95% FTR', timeline: '3 months', impact: 'NPS +6pts, reduce complaints' },
-        { action: 'Smart Home Bundles', target: 'Fridge + AC + WM unified control', timeline: '4 months', impact: '+₹12Cr cross-sell, differentiation' },
-        { action: 'Vendor Renegotiation', target: 'Rebate +1.2pts, co-op +₹2.8Cr', timeline: '2 months', impact: 'Margin +1.2pts' }
+      negotiationPackage: [
+        {
+          priority: 1,
+          ask: 'Guaranteed 4.5% of national iPhone allocation for all launches',
+          reasoning: '#3 partner nationally, 96% ST exceeds network 87%. Frequent launch stockouts cost ₹8Cr+ annually. Guaranteed allocation prevents losses.',
+          leverage: 'Historical launch performance + threat to reduce iPhone floor space',
+          likelihood: 'High',
+          impact: '₹8.2Cr prevented stockouts',
+          dataPoints: [
+            'iPhone 15 launch: Stockout in 4 days, lost ₹3.2Cr revenue',
+            'Croma iPhone ST: 96% vs network avg 87%',
+            'We sell 240 iPhones/day during launch vs 180 network avg',
+            '#3 Apple partner nationally by volume (₹312Cr NSV)'
+          ]
+        },
+        {
+          priority: 2,
+          ask: 'Increase co-marketing fund 0.5% → 1.5%',
+          reasoning: 'Our in-store activations, trade-in program drive Apple ecosystem adoption. 23% higher accessory attach rate vs network.',
+          leverage: 'Data showing activations drive superior ecosystem metrics',
+          likelihood: 'Medium',
+          impact: '₹3.1Cr incremental marketing',
+          dataPoints: [
+            'Accessory attach: 42% vs network 19% (+23pts)',
+            'AppleCare adoption: 31% vs network 18%',
+            'Trade-in program drives 28% of iPhone sales',
+            'In-store activations create ecosystem stickiness'
+          ]
+        },
+        {
+          priority: 3,
+          ask: 'Launch velocity bonus: 1% margin on units sold in first 30 days',
+          reasoning: 'We consistently lead launch velocity. Current incentives reward sustained not launch performance. Velocity bonus aligns with strength.',
+          leverage: 'Historical first-month performance data shows leadership',
+          likelihood: 'Medium',
+          impact: '₹1.8Cr on major launches',
+          dataPoints: [
+            'iPhone 15: 840 units in first 30 days (32% of annual)',
+            'Launch velocity: 28 units/day vs 12 units/day baseline',
+            'First month gross margin: ₹11.2Cr',
+            'Launch leadership not rewarded in current structure'
+          ]
+        },
+        {
+          priority: 4,
+          ask: 'Priority allocation for high-demand variants (512GB, 1TB)',
+          reasoning: 'Premium variants stockout in 3-5 days, 256GB has longer tail. Better variant mix improves margin realization.',
+          leverage: 'Variant velocity data shows faster premium SKU sellthrough',
+          likelihood: 'High',
+          impact: '₹1.2Cr improved mix',
+          dataPoints: [
+            '512GB stockout avg: 11 days vs 2 days for 256GB',
+            'Premium variant margin: 5.2% vs 4.5% base',
+            'Customer preference: 32% ask for 512GB+',
+            'Current allocation skews to 256GB despite demand'
+          ]
+        }
       ],
-      
+      competitiveContext: {
+        note: 'Apple maintains consistent terms across authorized resellers. Differentiation comes from allocation priority, marketing support, launch exclusives rather than margin variation. Focus negotiation on non-margin levers.'
+      },
       whatIfScenarios: [
-        'What if Amazon subsidizes appliance delivery aggressively?',
-        'What if inverter premium erodes (commoditization)?',
-        'What if we lose market share to Reliance Digital?'
+        'What if Apple offers exclusive 48-hour launch window for iPhone 16?',
+        'What if we reduce iPhone floor space by 20% - impact on allocation?',
+        'What if Samsung aggressive switcher program during iPhone launch?',
+        'What if we get priority allocation but fill rate drops to 60%?'
       ],
-      
-      decisionTrail: []
+      decisionTrail: [
+        { time: '11:15:40', agent: 'Vendor Performance Agent', action: 'Apple review: ₹312Cr NSV, 96% ST exceptional', thinking: 'Top-tier performance but margins non-negotiable with Apple. Must focus on allocation and marketing support instead.' },
+        { time: '11:18:25', agent: 'Inventory Agent', action: 'Identified chronic launch stockout pattern', thinking: 'iPhone 15 stockout in 4 days = ₹3.2Cr lost. Happens every launch. Allocation priority our #1 issue, not margin.' },
+        { time: '11:21:50', agent: 'Marketing Agent', action: 'Ecosystem metrics analysis complete', thinking: 'We drive 42% accessory attach vs 19% network. AppleCare 31% vs 18%. Strong ecosystem justifies co-marketing increase.' },
+        { time: '11:25:15', agent: 'Strategy Agent', action: 'Built allocation-focused negotiation package', thinking: 'Apple margins fixed. Real value in guaranteed allocation (prevents ₹8Cr losses), marketing support, launch bonuses. 4-point package targets ₹12.4Cr.' },
+        { time: '11:28:45', agent: 'Orchestrator', action: 'Approved: Allocation-focused strategy', thinking: 'Can\'t negotiate margins with Apple. Allocation priority prevents massive stockout losses. Co-marketing and bonuses align with our strengths. Confidence 78%.' }
+      ]
     },
     {
-      id: 'PS004',
-      decision: 'Budget Smartwatch Rationalization: Cut boAt, Noise, Fire-Boltt',
-      category: 'Wearables - Budget Segment',
+      id: 'VEN003',
+      vendor: 'Xiaomi India',
+      category: 'Smart TVs, Phones, IoT',
+      contractStatus: 'Active - Operational Issues',
       urgency: 'MEDIUM',
-      status: 'Rationalize',
-      
-      currentState: {
-        budgetWatchNSV: '₹24Cr',
-        skuCount: '68 SKUs (boAt, Noise, Fire-Boltt, Fastrack)',
-        margin: '6.2% (vs 18% Apple Watch)',
-        returns: '22% (vs 4% Apple Watch)',
-        inventoryDays: '82 days (vs 28 Apple Watch)'
+      metrics: {
+        annualNSV: '₹86Cr',
+        marginContribution: '₹8.2Cr',
+        sellThrough: '68%',
+        returnRate: '4.2%',
+        otd: '78%',
+        fillRate: '82%'
       },
-      
+      currentTerms: {
+        baseMargin: 8,
+        sellOutIncentive: '1.5% at 75%, 2.5% at 85%',
+        rtvAllowed: true,
+        rtvPercentage: 20,
+        priceProtection: '45 days',
+        paymentTerms: '60 days',
+        coMarketing: 2.8
+      },
       recommendation: {
-        action: 'Rationalize Budget Watches: Cut 68→20 SKUs, Focus on Apple Watch + Samsung Galaxy',
-        reasoning: 'Budget smartwatches (boAt, Noise, Fire-Boltt) drive ₹24Cr but destroy value: 6.2% margin (vs 18% Apple), 22% returns (quality issues), 82 days inventory (slow-moving). Staff spend disproportionate time on ₹2K watches vs ₹35K Apple Watches. Problem: commodity category, 68 SKUs with minimal differentiation (all have heart rate, step counter, cheap displays). Recommendation: Cut 68→20 SKUs (keep top 5 boAt, top 3 each Noise/Fire-Boltt/Fastrack), reallocate space/capital to Apple Watch + Samsung Galaxy (18% margin, 4% returns, 28 days inventory). Accept ₹6Cr revenue loss (budget watches) for ₹8.4Cr contribution gain (premium watches). Free ₹12Cr working capital.',
-        confidence: 84,
-        impact: '-₹6Cr revenue (accept), +₹8.4Cr margin, ₹12Cr capital freed'
+        action: 'Operational Improvements Over Margin: OTD 90%+ SLA | Reduce Phone Exposure | Joint Quality Program',
+        reasoning: 'Terms already generous (8% margin, 2.8% co-marketing, 20% RTV). Real problem is execution: poor OTD 78% (vs Samsung 92%, LG 89%) causing stockouts, high returns 4.2% (vs Samsung 2.8%) increasing costs, low phone ST 58% dragging blended performance. Strategy: (1) Make 90%+ OTD mandatory SLA tied to incentive eligibility - prevents ₹4Cr stockout losses. (2) Reduce smartphone SKU count, increase TV focus (72% ST vs 58% phones). (3) Joint quality program reduces returns from 4.2% to <3%, saves ₹1.8Cr handling costs.',
+        confidence: 82,
+        annualImpact: '₹4Cr operational savings'
       },
-      
       reasoningBreakdown: {
-        summary: 'Budget watches 68 SKUs, ₹24Cr revenue but 6.2% margin, 22% returns, 82 days inventory = value destruction. Cut to 20 SKUs, reallocate to Apple/Samsung. Accept ₹6Cr loss for ₹8.4Cr gain.',
+        summary: 'Xiaomi offers competitive commercial terms. Performance issues are operational not commercial. Poor 78% OTD creates chronic stockouts. High 4.2% return rate increases handling costs. Phone 58% ST drags blended performance. Focus negotiation on operational improvements (OTD SLA, quality program) and category mix optimization (TV focus) rather than margin requests.',
         factors: [
           {
-            name: 'Margin Destruction',
-            weight: 35,
-            score: 78,
-            reasoning: 'Budget watches 6.2% margin (vs 18% Apple, 14% Samsung). Why so low? (1) Price wars: boAt ₹2K → Noise ₹1.8K → Fire-Boltt ₹1.5K. (2) No brand loyalty: customers switch for ₹200 discount. (3) Vendor squeeze: "match Amazon price or we pull". Economics don\'t work. ₹24Cr × 6.2% = ₹1.5Cr vs ₹18Cr × 18% = ₹3.2Cr. Premium is 2.1x more profitable per rupee.'
-          },
-          {
-            name: 'Quality & Returns Crisis',
-            weight: 30,
+            name: 'Delivery Performance',
+            weight: 40,
             score: 72,
-            reasoning: '22% returns (vs 4% Apple) driven by: touch screen failures, battery drain, strap breakage, software bugs. Returns cost ₹5.2Cr (processing, shipping, refurbishment, disposal). Net margin 6.2% - 21.7% returns cost = -15.5% = losing money on every unit after returns. Unsustainable.'
+            reasoning: '78% OTD vs Samsung 92%, LG 89% unacceptable. Last quarter: 18 stockouts due to late delivery = ₹4Cr lost sales. Make 90%+ OTD mandatory SLA tied to incentive eligibility.'
           },
           {
-            name: 'Staff Time Misallocation',
+            name: 'Category Mix Optimization',
+            weight: 30,
+            score: 78,
+            reasoning: 'TVs performing well (72% ST, 9% margin) but phones underperforming (58% ST, 6% margin). Reduce phone exposure, increase TV floor space. Focus on winning category.'
+          },
+          {
+            name: 'Quality Issues',
             weight: 20,
-            score: 81,
-            reasoning: 'Staff spend 40% of time on wearables but they drive only 12% of revenue. Why? 68 SKUs = explaining differences, comparing specs, handling returns. Time is zero-sum: 40% on wearables = not helping ₹1.2L laptop buyer or ₹85K fridge buyer. Rationalize = free staff for high-value customers.'
+            score: 70,
+            reasoning: 'Returns 4.2% vs Samsung 2.8%, Sony 2.1% significantly higher. Top reasons: DOA 38%, quality 29%. Each return costs ₹1.2K handling. Joint quality program targets <3% saves ₹1.8Cr.'
           },
           {
-            name: 'Working Capital Trap',
-            weight: 15,
-            score: 86,
-            reasoning: '68 SKUs × 100 stores = 6,800 inventory positions. Many don\'t move: 82 days inventory vs 42 cluster avg. ₹12Cr tied up in slow-moving watches that earn 6.2%. Could redeploy ₹12Cr to Apple Watch (18% margin, 28 days inventory). Opportunity cost of capital.'
+            name: 'Commercial Terms',
+            weight: 10,
+            score: 85,
+            reasoning: 'Terms already competitive: 8% margin, 2.8% co-marketing, 20% RTV. No need to negotiate margins. Focus on operational execution improvements instead.'
           }
         ]
       },
-      
-      rationalizationPlan: [
-        { action: 'CUT (48 SKUs)', brands: 'boAt (32 SKUs → 5), Noise (18 → 3), Fire-Boltt (14 → 3), Fastrack (4 → 1)', impact: '-₹14Cr revenue, -₹12Cr inventory capital' },
-        { action: 'KEEP (20 SKUs)', brands: 'Top 5 boAt, top 3 each Noise/Fire-Boltt, Fastrack 1', impact: '₹10Cr revenue, focused assortment' },
-        { action: 'REALLOCATE', opportunity: 'Freed capital → Apple Watch Series 9, SE, Ultra + Samsung Galaxy Watch 6', impact: '+₹20Cr revenue, 18% margin, ₹12Cr capital redeployed' }
+      negotiationPackage: [
+        {
+          priority: 1,
+          ask: 'Improve OTD to 90%+ (currently 78%) with mandatory SLA',
+          reasoning: 'Poor delivery creates chronic stockouts and lost sales. Make SLA compliance mandatory for incentive eligibility.',
+          leverage: 'Threaten to reduce SKU count if OTD doesn\'t improve',
+          likelihood: 'High',
+          impact: '₹4Cr prevented stockouts',
+          dataPoints: [
+            'Last quarter: 18 stockouts due to late Xiaomi delivery',
+            'Samsung OTD: 92%, LG: 89%, Xiaomi: 78%',
+            'Each stockout costs avg ₹22K lost revenue',
+            'OTD below 90% unacceptable for partner of this scale'
+          ]
+        },
+        {
+          priority: 2,
+          ask: 'Reduce smartphone exposure, increase TV category focus',
+          reasoning: 'Xiaomi phones underperforming (58% ST, 6% margin). TVs performing well (72% ST, 9% margin). Reallocate floor space to winning category.',
+          leverage: 'Performance data showing TV vs phone gap',
+          likelihood: 'High',
+          impact: 'Mix optimization improves blended margin',
+          dataPoints: [
+            'TV ST: 72% vs Phone ST: 58% (14pt gap)',
+            'TV margin: 9% vs Phone margin: 6% (3pt gap)',
+            'Customer preference shifting to premium brands for phones',
+            'Xiaomi TV value proposition stronger than phones'
+          ]
+        },
+        {
+          priority: 3,
+          ask: 'Joint quality program: Reduce returns from 4.2% to <3%',
+          reasoning: 'High return rate increases handling costs and damages brand perception. Joint program targets root causes.',
+          leverage: 'Comparison with Samsung (2.8%) and Sony (2.1%) benchmarks',
+          likelihood: 'Medium',
+          impact: '₹1.8Cr cost reduction',
+          dataPoints: [
+            'Xiaomi returns: 4.2% vs Samsung: 2.8%, Sony: 2.1%',
+            'Top return reasons: DOA (38%), quality issues (29%)',
+            'Each return costs ₹1,200 in handling + reverse logistics',
+            'Joint pre-shipment quality checks could reduce DOA 38% → 15%'
+          ]
+        }
       ],
-      
       whatIfScenarios: [
-        'What if budget watch buyers don\'t trade up to Apple/Samsung?',
-        'What if vendors retaliate (pull other categories)?',
-        'What if we apply this to budget earbuds (similar dynamics)?'
+        'What if Xiaomi can\'t improve OTD to 90%+ - should we exit phones entirely?',
+        'What if we shift 80% of phone space to Realme/OnePlus?',
+        'What if quality issues persist - impact on Croma brand perception?'
       ],
-      
-      decisionTrail: []
+      decisionTrail: [
+        { time: '12:40:30', agent: 'Vendor Performance Agent', action: 'Xiaomi review: Terms good, execution poor', thinking: '8% margin, 2.8% co-marketing generous. But 78% OTD, 4.2% returns, 58% phone ST are operational problems not commercial.' },
+        { time: '12:43:55', agent: 'Operations Agent', action: 'OTD analysis: 18 stockouts last quarter', thinking: '78% OTD vs 92% Samsung, 89% LG unacceptable. Make 90%+ mandatory SLA tied to incentives. This is leverage point.' },
+        { time: '12:47:20', agent: 'Category Analysis Agent', action: 'Category performance: TVs strong, phones weak', thinking: 'TVs 72% ST vs phones 58%. TVs 9% margin vs phones 6%. Clear winner. Shift floor space to TVs, reduce phone exposure.' },
+        { time: '12:50:45', agent: 'Quality Agent', action: 'Return rate 4.2% significantly above benchmark', thinking: 'Samsung 2.8%, Sony 2.1% vs Xiaomi 4.2%. DOA 38% suggests pre-shipment quality issues. Joint program could save ₹1.8Cr.' },
+        { time: '12:54:10', agent: 'Orchestrator', action: 'Finalized operational-focused strategy', thinking: 'Don\'t need margin negotiation - terms already good. Focus on execution: OTD SLA, category mix, quality program. ₹4Cr operational savings target. Execute.' }
+      ]
     }
   ];
 
-  const navigationTabs = [
-    { id: 'store-health', label: 'Store Health', icon: AlertTriangle, count: storeHealthDecisions.length },
-    { id: 'regional-assortment', label: 'Regional Assortment', icon: MapPin, count: regionalAssortmentDecisions.length },
-    { id: 'campaign-targeting', label: 'Campaigns', icon: Target, count: campaignDecisions.length },
-    { id: 'portfolio-strategy', label: 'Portfolio', icon: TrendingUp, count: portfolioDecisions.length }
+  const inventorySubTabs = [
+    { id: 'buy-planning', label: 'Buy Planning', icon: ShoppingCart, count: buyPlanningDecisions.length },
+    { id: 'allocation', label: 'Store Allocation', icon: Building2, count: allocationDecisions.length },
+    { id: 'ageing', label: 'Ageing Inventory', icon: Clock, count: ageingDecisions.length }
   ];
 
   const getCurrentDecisions = () => {
-    if (currentSection === 'store-health') return storeHealthDecisions;
-    if (currentSection === 'regional-assortment') return regionalAssortmentDecisions;
-    if (currentSection === 'campaign-targeting') return campaignDecisions;
-    if (currentSection === 'portfolio-strategy') return portfolioDecisions;
+    if (currentSection === 'supply-chain') return vendorDecisions;
+    if (currentSection === 'inventory') {
+      if (inventorySubTab === 'buy-planning') return buyPlanningDecisions;
+      if (inventorySubTab === 'allocation') return allocationDecisions;
+      if (inventorySubTab === 'ageing') return ageingDecisions;
+    }
     return [];
   };
 
@@ -1146,20 +1345,40 @@ export default function CromaBusinessMarketingDashboard() {
 
   const DecisionTrailModal = ({ item }) => {
     if (!item) return null;
+    const trails = item.decisionTrail || [];
+
     return (
       <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6">
         <div className="bg-white rounded-2xl max-w-5xl w-full max-h-[80vh] overflow-hidden flex flex-col">
           <div className="px-6 py-4 border-b flex items-center justify-between">
-            <h3 className="text-lg font-medium">Decision Trail</h3>
+            <div>
+              <h3 className="text-lg font-medium">Decision Trail</h3>
+              <p className="text-sm text-gray-500">{item.sku || item.vendor}</p>
+            </div>
             <button onClick={() => setDecisionTrailModal(null)} className="p-2 hover:bg-gray-100 rounded-lg">
               <X className="w-5 h-5" />
             </button>
           </div>
           <div className="flex-1 overflow-y-auto p-6">
-            <div className="text-center py-12">
-              <Activity className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-              <p className="text-gray-500">Decision trail available once analysis complete.</p>
-            </div>
+            {trails.length === 0 ? (
+              <div className="text-center py-12">
+                <Activity className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                <p className="text-gray-500">Decision trail will be available once analysis is complete.</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {trails.map((entry, idx) => (
+                  <div key={idx} className="border rounded-lg p-4" style={{ borderColor: '#E7DDCA' }}>
+                    <div className="flex items-center gap-3 mb-2">
+                      <span className="text-xs font-mono text-gray-500">{entry.time}</span>
+                      <span className="text-sm font-medium" style={{ color: '#85A383' }}>{entry.agent}</span>
+                    </div>
+                    <div className="text-sm text-gray-900 mb-1">{entry.action}</div>
+                    <div className="text-xs text-gray-600">{entry.thinking}</div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -1168,39 +1387,59 @@ export default function CromaBusinessMarketingDashboard() {
 
   return (
     <div className="flex h-screen overflow-auto bg-gray-50">
+      {/* Left Sidebar */}
       <div className="w-64 bg-white border-r flex flex-col">
         <div className="p-6 border-b">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#85A383' }}>
-              <Users className="w-5 h-5 text-white" />
+              <Package className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h1 className="text-lg font-semibold">CROMA</h1>
-              <p className="text-xs text-gray-500">Business & Marketing</p>
+              <h1 className="text-lg font-semibold text-gray-900">CROMA</h1>
+              <p className="text-xs text-gray-500">Supply Chain AI</p>
             </div>
           </div>
         </div>
 
         <nav className="flex-1 p-4">
           <div className="space-y-1">
-            {navigationTabs.map(tab => (
-              <button
-                key={tab.id}
-                onClick={() => setCurrentSection(tab.id)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium ${
-                  currentSection === tab.id ? 'text-gray-900' : 'text-gray-600 hover:bg-gray-50'
-                }`}
-                style={currentSection === tab.id ? { backgroundColor: '#85A38315' } : {}}
-              >
-                <tab.icon className="w-4 h-4" />
-                <span className="flex-1 text-left text-xs">{tab.label}</span>
-                {tab.count > 0 && (
-                  <span className="px-2 py-0.5 rounded-full text-xs text-white" style={{ backgroundColor: '#85A383' }}>
-                    {tab.count}
-                  </span>
-                )}
-              </button>
-            ))}
+            <button
+              onClick={() => setCurrentSection('dashboard')}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium ${
+                currentSection === 'dashboard' ? 'bg-gray-100 text-gray-900' : 'text-gray-600 hover:bg-gray-50'
+              }`}
+            >
+              <LayoutDashboard className="w-4 h-4" />
+              Dashboard
+            </button>
+
+            <button
+              onClick={() => setCurrentSection('inventory')}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium ${
+                currentSection === 'inventory' ? 'text-gray-900' : 'text-gray-600 hover:bg-gray-50'
+              }`}
+              style={currentSection === 'inventory' ? { backgroundColor: '#85A38315' } : {}}
+            >
+              <Package className="w-4 h-4" />
+              <span className="flex-1 text-left">Inventory Decisions</span>
+              <span className="px-2 py-0.5 rounded-full text-xs text-white" style={{ backgroundColor: '#85A383' }}>
+                9
+              </span>
+            </button>
+
+            <button
+              onClick={() => setCurrentSection('supply-chain')}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium ${
+                currentSection === 'supply-chain' ? 'text-gray-900' : 'text-gray-600 hover:bg-gray-50'
+              }`}
+              style={currentSection === 'supply-chain' ? { backgroundColor: '#85A38315' } : {}}
+            >
+              <Truck className="w-4 h-4" />
+              <span className="flex-1 text-left">Supply Chain Mgmt</span>
+              <span className="px-2 py-0.5 rounded-full text-xs text-white" style={{ backgroundColor: '#85A383' }}>
+                3
+              </span>
+            </button>
           </div>
         </nav>
 
@@ -1212,18 +1451,40 @@ export default function CromaBusinessMarketingDashboard() {
         </div>
       </div>
 
+      {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Top Bar */}
         <div className="bg-white border-b px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-medium">
-                {navigationTabs.find(t => t.id === currentSection)?.label || 'Dashboard'}
+              <h2 className="text-lg font-medium text-gray-900">
+                {currentSection === 'inventory' && 'Inventory Decisions'}
+                {currentSection === 'supply-chain' && 'Supply Chain Management'}
+                {currentSection === 'dashboard' && 'Dashboard Overview'}
               </h2>
               <p className="text-sm text-gray-500 mt-0.5">
-                System-level decisions on stores, regions, audiences, and campaigns
+                {currentSection === 'inventory' && 'Multivariate analysis considering inventory, marketing, supply chain, and pricing'}
+                {currentSection === 'supply-chain' && 'Vendor performance analysis and contract negotiation strategies'}
               </p>
             </div>
             <div className="flex items-center gap-3">
+              <button className="p-2 hover:bg-gray-100 rounded-lg">
+                <Filter className="w-5 h-5 text-gray-600" />
+              </button>
+              <div className="relative">
+                <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Search SKU, Store..."
+                  className="pl-10 pr-4 py-2 border rounded-lg text-sm w-64 focus:outline-none focus:border-gray-400"
+                />
+              </div>
+              {selectedItems.length > 0 && (
+                <button className="px-4 py-2 text-sm font-medium rounded-lg text-white" style={{ backgroundColor: '#85A383' }}>
+                  <Check className="w-4 h-4 inline mr-2" />
+                  Execute ({selectedItems.length})
+                </button>
+              )}
               <button className="px-4 py-2 text-sm font-medium border rounded-lg hover:bg-gray-50">
                 <Download className="w-4 h-4 inline mr-2" />
                 Export
@@ -1232,252 +1493,686 @@ export default function CromaBusinessMarketingDashboard() {
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-6">
-          <div className="max-w-7xl mx-auto space-y-4">
-            {decisions.length === 0 ? (
-              <div className="bg-white rounded-xl border p-12 text-center" style={{ borderColor: '#E7DDCA' }}>
-                <Package className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-                <h3 className="text-lg font-medium mb-2">No Decisions Yet</h3>
-                <p className="text-sm text-gray-500">Decisions will appear once analysis is complete.</p>
-              </div>
-            ) : (
-              decisions.map(item => (
-                <div key={item.id} className="bg-white rounded-xl border" style={{ borderColor: '#E7DDCA' }}>
-                  <div className="p-6 border-b" style={{ borderColor: '#E7DDCA' }}>
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2">
-                          <h3 className="text-lg font-medium">{item.storeName || item.decision || item.campaign}</h3>
-                          {item.healthStatus && (
-                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                              item.healthStatus === 'RED' ? 'bg-red-100 text-red-700' :
-                              item.healthStatus === 'AMBER' ? 'bg-yellow-100 text-yellow-700' :
-                              'bg-green-100 text-green-700'
-                            }`}>
-                              {item.healthStatus}
-                            </span>
-                          )}
-                          {item.urgency && (
-                            <span className="px-3 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-700">
-                              ⚠ {item.urgency}
-                            </span>
-                          )}
-                        </div>
-                        {item.issue && <div className="text-sm text-gray-700 font-medium mb-2">{item.issue}</div>}
-                        {item.audience && <div className="text-sm text-gray-700 font-medium mb-2">Target: {item.audience}</div>}
-                        {item.category && !item.issue && <div className="text-sm text-gray-700 font-medium mb-2">{item.category}</div>}
-                        {item.rootCause && (
-                          <div className="text-xs px-2 py-1 rounded inline-block" style={{ backgroundColor: '#E7DDCA' }}>
-                            {item.rootCause}
-                          </div>
-                        )}
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <button
-                          onClick={() => setDecisionTrailModal(item)}
-                          className="px-4 py-2 text-sm font-medium border-2 rounded-lg"
-                          style={{ borderColor: '#85A383', color: '#85A383' }}
-                        >
-                          <Activity className="w-4 h-4 inline mr-2" />
-                          Trail
-                        </button>
-                        <button
-                          onClick={() => setChatOpen(chatOpen === item.id ? null : item.id)}
-                          className="px-4 py-2 text-sm font-medium rounded-lg text-white"
-                          style={{ backgroundColor: '#85A383' }}
-                        >
-                          <MessageSquare className="w-4 h-4 inline mr-2" />
-                          Ask Morrie
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  {item.storeKPIs && (
-                    <div className="px-6 py-4 grid grid-cols-6 gap-4" style={{ backgroundColor: '#F5F0E8' }}>
-                      {Object.entries(item.storeKPIs).map(([key, value]) => (
-                        <div key={key}>
-                          <div className="text-xs text-gray-500 mb-1 uppercase">{key}</div>
-                          <div className="text-lg font-medium">{value}</div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {item.benchmarks && (
-                    <div className="px-6 py-3 border-b flex gap-6 text-sm" style={{ borderColor: '#E7DDCA', backgroundColor: '#FAFAF8' }}>
-                      {Object.entries(item.benchmarks).map(([key, value]) => (
-                        <span key={key} className="text-gray-600">
-                          {key}: <span className="font-medium">{value}</span>
-                        </span>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Campaign-specific fields */}
-                  {item.audience && (
-                    <div className="px-6 py-3 border-b" style={{ borderColor: '#E7DDCA', backgroundColor: '#F5F0E8' }}>
-                      <div className="grid grid-cols-2 gap-4 text-sm">
-                        <div>
-                          <span className="text-gray-600">Target Audience: </span>
-                          <span className="font-medium">{item.audience}</span>
-                        </div>
-                        <div>
-                          <span className="text-gray-600">Budget: </span>
-                          <span className="font-medium">{item.budget}</span>
-                        </div>
-                        {item.channels && (
-                          <div className="col-span-2">
-                            <span className="text-gray-600">Channels: </span>
-                            <span className="font-medium">{item.channels}</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
-
-                  {item.segmentAnalysis && (
-                    <div className="px-6 py-4 border-b" style={{ borderColor: '#E7DDCA', backgroundColor: '#FAFAF8' }}>
-                      <h4 className="text-xs font-medium text-gray-900 mb-3 uppercase">Segment Analysis</h4>
-                      <div className="grid grid-cols-2 gap-4 text-sm">
-                        {Object.entries(item.segmentAnalysis).map(([key, value]) => (
-                          <div key={key}>
-                            <div className="text-xs text-gray-500 mb-1">{key}</div>
-                            <div className="font-medium">{value}</div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Portfolio-specific fields */}
-                  {item.status && (
-                    <div className="px-6 py-3 border-b flex gap-6 text-sm" style={{ borderColor: '#E7DDCA', backgroundColor: '#F5F0E8' }}>
-                      <div>
-                        <span className="text-gray-600">Category: </span>
-                        <span className="font-medium">{item.category}</span>
-                      </div>
-                      <div>
-                        <span className="text-gray-600">Strategy: </span>
-                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                          item.status === 'Grow' ? 'bg-green-100 text-green-700' :
-                          item.status === 'Maintain' ? 'bg-blue-100 text-blue-700' :
-                          'bg-orange-100 text-orange-700'
-                        }`}>
-                          {item.status}
-                        </span>
-                      </div>
-                    </div>
-                  )}
-
-                  {item.currentState && !item.segmentAnalysis && (
-                    <div className="px-6 py-4 border-b" style={{ borderColor: '#E7DDCA', backgroundColor: '#FAFAF8' }}>
-                      <h4 className="text-xs font-medium text-gray-900 mb-3 uppercase">Current State</h4>
-                      <div className="grid grid-cols-2 gap-4 text-sm">
-                        {Object.entries(item.currentState).map(([key, value]) => (
-                          <div key={key}>
-                            <div className="text-xs text-gray-500 mb-1">{key}</div>
-                            <div className="font-medium">{value}</div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="px-6 py-3 border-b flex justify-between" style={{ borderColor: '#E7DDCA', backgroundColor: '#FAFAF8' }}>
-                    <div className="text-sm text-gray-600">
-                      Impact: <span className="font-medium">{item.recommendation.impact}</span>
-                    </div>
-                    <span className="text-sm text-gray-600">
-                      Confidence: <span className="font-medium" style={{ color: '#85A383' }}>{item.recommendation.confidence}%</span>
+        {/* Sub-Tabs for Inventory */}
+        {currentSection === 'inventory' && (
+          <div className="bg-white border-b px-6">
+            <div className="flex gap-1">
+              {inventorySubTabs.map(tab => (
+                <button
+                  key={tab.id}
+                  onClick={() => setInventorySubTab(tab.id)}
+                  className={`px-5 py-3 text-sm relative ${
+                    inventorySubTab === tab.id ? 'text-gray-900' : 'text-gray-500'
+                  }`}
+                >
+                  <div className="flex items-center gap-2">
+                    <tab.icon className="w-4 h-4" />
+                    <span className="font-medium">{tab.label}</span>
+                    <span className={`px-2 py-0.5 rounded-full text-xs ${
+                      inventorySubTab === tab.id ? 'text-white' : 'bg-gray-200'
+                    }`} style={inventorySubTab === tab.id ? { backgroundColor: '#85A383' } : {}}>
+                      {tab.count}
                     </span>
                   </div>
-
-                  {/* Recommended Action */}
-                  {item.recommendation && (
-                    <div className="px-6 py-4" style={{ backgroundColor: '#E7DDCA' }}>
-                      <h4 className="text-xs font-medium text-gray-900 mb-2 uppercase">Recommended Action</h4>
-                      <p className="text-sm font-medium text-gray-900">{item.recommendation.action}</p>
-                    </div>
+                  {inventorySubTab === tab.id && (
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5" style={{ backgroundColor: '#85A383' }} />
                   )}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
-                  {item.reasoningBreakdown && (
-                    <div className="p-6 border-b" style={{ borderColor: '#E7DDCA' }}>
-                      <h4 className="text-sm font-medium text-gray-900 mb-4 uppercase">Why This Recommendation</h4>
-                      <p className="text-sm text-gray-600 leading-relaxed mb-6">{item.reasoningBreakdown.summary}</p>
-                      
-                      <div className="space-y-4">
-                        {item.reasoningBreakdown.factors.map((factor, idx) => (
-                          <div key={idx} className="border-l-4 pl-4" style={{ borderColor: '#85A383' }}>
-                            <div className="flex justify-between mb-2">
-                              <span className="text-sm font-medium">{factor.name}</span>
-                              <div className="flex gap-3">
-                                <span className="text-xs text-gray-500">{factor.weight}%</span>
-                                <span className="text-sm font-medium" style={{ color: '#85A383' }}>{factor.score}</span>
-                              </div>
-                            </div>
-                            <p className="text-xs text-gray-600">{factor.reasoning}</p>
+        {/* Content */}
+        <div className="flex-1 overflow-y-auto p-6">
+          <div className="max-w-7xl mx-auto space-y-4">
+            {decisions.map(item => (
+              <div key={item.id} className="bg-white rounded-xl border" style={{ borderColor: '#E7DDCA' }}>
+                {/* Header */}
+                <div className="p-6 border-b" style={{ borderColor: '#E7DDCA' }}>
+                  <div className="flex items-start justify-between gap-6">
+                    <div className="flex items-start gap-4 flex-1">
+                      <input
+                        type="checkbox"
+                        checked={selectedItems.includes(item.id)}
+                        onChange={() => {
+                          if (selectedItems.includes(item.id)) {
+                            setSelectedItems(selectedItems.filter(id => id !== item.id));
+                          } else {
+                            setSelectedItems([...selectedItems, item.id]);
+                          }
+                        }}
+                        className="mt-1.5 w-5 h-5 rounded border-2"
+                        style={{ accentColor: '#85A383' }}
+                      />
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <h3 className="text-xl font-semibold text-gray-900">{item.sku || item.vendor}</h3>
+                          {item.skuCode && (
+                            <span className="px-2 py-1 rounded text-xs font-mono bg-gray-100 text-gray-600">
+                              {item.skuCode}
+                            </span>
+                          )}
+                        </div>
+                        
+                        <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
+                          {item.category && <span className="font-medium">{item.category}</span>}
+                          {item.brand && (
+                            <>
+                              <span className="text-gray-300">•</span>
+                              <span>{item.brand}</span>
+                            </>
+                          )}
+                          {item.urgency && (
+                            <>
+                              <span className="text-gray-300">•</span>
+                              <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                                item.urgency === 'CRITICAL' ? 'bg-red-100 text-red-700' : 
+                                item.urgency === 'HIGH' ? 'bg-orange-100 text-orange-700' : 
+                                'bg-yellow-100 text-yellow-700'
+                              }`}>
+                                {item.urgency}
+                              </span>
+                            </>
+                          )}
+                        </div>
+
+                        {item.event && (
+                          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm" style={{ backgroundColor: '#E7DDCA' }}>
+                            <Clock className="w-3.5 h-3.5" style={{ color: '#85A383' }} />
+                            <span className="font-medium text-gray-900">{item.event}</span>
                           </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {chatOpen === item.id && (
-                    <div className="px-6 py-4 border-b" style={{ borderColor: '#E7DDCA', backgroundColor: '#F5F0E8' }}>
-                      <div className="space-y-3 mb-4">
-                        {(chatMessages[item.id] || []).map((msg, idx) => (
-                          <div key={idx} className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}>
-                            <div className={`px-4 py-2 rounded-lg text-sm ${msg.type === 'user' ? 'bg-gray-200' : ''}`}
-                                 style={msg.type === 'ai' ? { backgroundColor: '#E7DDCA' } : {}}>
-                              {msg.text}
+                        )}
+                        
+                        {item.issue && (
+                          <div className="mt-3 text-sm font-medium text-gray-800 bg-gray-50 px-3 py-2 rounded-lg">
+                            {item.issue}
+                          </div>
+                        )}
+                        
+                        {item.contractStatus && (
+                          <div className="mt-3 text-sm text-gray-700 bg-blue-50 px-3 py-2 rounded-lg border border-blue-200">
+                            {item.contractStatus}
+                          </div>
+                        )}
+                        
+                        {/* RECOMMENDATION - PROMINENT */}
+                        <div className="mt-5 p-5 rounded-xl" style={{ backgroundColor: '#F0F4F0', border: '2px solid #85A383' }}>
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center gap-2">
+                              <div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#85A383' }} />
+                              <span className="text-xs font-bold uppercase tracking-wider" style={{ color: '#85A383' }}>
+                                Recommended Action
+                              </span>
+                            </div>
+                            <div className="px-3 py-1 rounded-full text-xs font-bold" style={{ backgroundColor: '#85A383', color: 'white' }}>
+                              {item.recommendation.confidence}% Confidence
                             </div>
                           </div>
-                        ))}
-                      </div>
-                      <div className="flex gap-2">
-                        <input
-                          type="text"
-                          value={currentMessage}
-                          onChange={(e) => setCurrentMessage(e.target.value)}
-                          onKeyPress={(e) => e.key === 'Enter' && sendMessage(item.id)}
-                          placeholder="Ask about scenarios..."
-                          className="flex-1 px-4 py-2 border-2 rounded-lg text-sm"
-                          style={{ borderColor: '#E7DDCA' }}
-                        />
-                        <button onClick={() => sendMessage(item.id)} className="px-4 py-2 rounded-lg text-white" style={{ backgroundColor: '#85A383' }}>
-                          <Send className="w-4 h-4" />
-                        </button>
+                          <div className="text-base font-semibold text-gray-900 mb-3">
+                            {item.recommendation.action}
+                          </div>
+                          <div className="text-sm text-gray-700 leading-relaxed">
+                            {item.recommendation.reasoning}
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  )}
+                    <div className="flex items-center gap-3 ml-4">
+                      <button
+                        onClick={() => setDecisionTrailModal(item)}
+                        className="px-4 py-2 text-sm font-medium border-2 rounded-lg hover:bg-gray-50"
+                        style={{ borderColor: '#85A383', color: '#85A383' }}
+                      >
+                        <Activity className="w-4 h-4 inline mr-2" />
+                        Decision Trail
+                      </button>
+                      <button
+                        onClick={() => setChatOpen(chatOpen === item.id ? null : item.id)}
+                        className="px-4 py-2 text-sm font-medium rounded-lg text-white"
+                        style={{ backgroundColor: '#85A383' }}
+                      >
+                        <MessageSquare className="w-4 h-4 inline mr-2" />
+                        Ask Morrie
+                      </button>
+                    </div>
+                  </div>
+                </div>
 
-                  {item.whatIfScenarios && (
-                    <div className="px-6 py-5" style={{ borderColor: '#E7DDCA' }}>
-                      <div className="flex items-center gap-2 mb-3">
-                        <Sparkles className="w-4 h-4" style={{ color: '#85A383' }} />
-                        <span className="text-sm font-medium uppercase">What-If Analysis</span>
+                {/* Metrics - Inventory */}
+                {item.currentState && (
+                  <div className="px-6 py-4" style={{ backgroundColor: '#FAFAF8' }}>
+                    <div className="grid grid-cols-4 gap-6">
+                      <div>
+                        <div className="text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wide">Network Stock</div>
+                        <div className="text-3xl font-light text-gray-900">{item.currentState.networkStock}</div>
                       </div>
-                      <div className="grid grid-cols-2 gap-3">
-                        {item.whatIfScenarios.map((scenario, idx) => (
-                          <button
-                            key={idx}
-                            onClick={() => {
-                              setChatOpen(item.id);
-                              setCurrentMessage(scenario);
-                            }}
-                            className="px-4 py-3 text-left text-sm border-2 rounded-lg hover:bg-gray-50"
-                            style={{ borderColor: '#E7DDCA' }}
-                          >
-                            "{scenario}"
-                          </button>
-                        ))}
+                      <div>
+                        <div className="text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wide">Warehouse</div>
+                        <div className="text-3xl font-light text-gray-900">{item.currentState.warehouseStock}</div>
                       </div>
+                      <div>
+                        <div className="text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wide">Avg ROS</div>
+                        <div className="text-3xl font-light text-gray-900">{item.currentState.avgROS}</div>
+                      </div>
+                      <div>
+                        <div className="text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wide">Last Year ST</div>
+                        <div className="text-3xl font-light" style={{ color: '#85A383' }}>{item.currentState.lastYearST}</div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Metrics - Ageing */}
+                {item.ageingProfile && (
+                  <div className="px-6 py-4 grid grid-cols-5 gap-4" style={{ backgroundColor: '#F5F0E8' }}>
+                    <div>
+                      <div className="text-xs text-gray-500 mb-1">Total Units</div>
+                      <div className="text-2xl font-light">{item.ageingProfile.totalUnits}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-gray-500 mb-1">Value</div>
+                      <div className="text-2xl font-light">{item.ageingProfile.totalValue}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-gray-500 mb-1">Avg Age</div>
+                      <div className="text-2xl font-light">{item.ageingProfile.avgAge}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-gray-500 mb-1">Sell-Through</div>
+                      <div className="text-2xl font-light text-red-600">{item.ageingProfile.currentSellThrough}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-gray-500 mb-1">Time Window</div>
+                      <div className="text-sm font-light">{item.ageingProfile.timeWindow}</div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Metrics - Vendor */}
+                {item.metrics && (
+                  <div className="px-6 py-4 grid grid-cols-6 gap-4" style={{ backgroundColor: '#F5F0E8' }}>
+                    <div>
+                      <div className="text-xs text-gray-500 mb-1 uppercase">Annual NSV</div>
+                      <div className="text-lg font-medium">{item.metrics.annualNSV}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-gray-500 mb-1 uppercase">Margin</div>
+                      <div className="text-lg font-medium">{item.metrics.marginContribution}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-gray-500 mb-1 uppercase">Sell-Through</div>
+                      <div className="text-lg font-medium" style={{ color: '#85A383' }}>{item.metrics.sellThrough}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-gray-500 mb-1 uppercase">Return Rate</div>
+                      <div className="text-lg font-light">{item.metrics.returnRate}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-gray-500 mb-1 uppercase">OTD</div>
+                      <div className="text-lg font-light">{item.metrics.otd}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-gray-500 mb-1 uppercase">Fill Rate</div>
+                      <div className="text-lg font-light">{item.metrics.fillRate}</div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Impact Bar */}
+                <div className="px-6 py-3 flex items-center gap-8 text-sm" style={{ backgroundColor: '#FAFAF8', borderTop: '1px solid #E7DDCA', borderBottom: '1px solid #E7DDCA' }}>
+                  {item.recommendation.qty && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-gray-500">Quantity</span>
+                      <span className="font-semibold text-gray-900">{item.recommendation.qty} units</span>
+                    </div>
+                  )}
+                  {item.recommendation.investment && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-gray-500">Investment</span>
+                      <span className="font-semibold text-gray-900">{item.recommendation.investment}</span>
+                    </div>
+                  )}
+                  {item.recommendation.annualImpact && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-gray-500">Annual Impact</span>
+                      <span className="font-semibold" style={{ color: '#85A383' }}>{item.recommendation.annualImpact}</span>
+                    </div>
+                  )}
+                  {item.recommendation.impact && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-gray-500">Impact</span>
+                      <span className="font-semibold" style={{ color: '#85A383' }}>{item.recommendation.impact}</span>
+                    </div>
+                  )}
+                  {item.recommendation.netMarginImpact && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-gray-500">Net Margin</span>
+                      <span className="font-semibold text-gray-900">{item.recommendation.netMarginImpact}</span>
+                    </div>
+                  )}
+                  {item.recommendation.cashRecovery && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-gray-500">Cash Recovery</span>
+                      <span className="font-semibold" style={{ color: '#85A383' }}>{item.recommendation.cashRecovery}</span>
                     </div>
                   )}
                 </div>
-              ))
-            )}
+
+                {/* Demand Curve - Only for Buy Planning with demandCurve */}
+                {item.demandCurve && (
+                  <div className="p-6 border-b" style={{ borderColor: '#E7DDCA' }}>
+                    <h4 className="text-sm font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                      <Activity className="w-4 h-4" style={{ color: '#85A383' }} />
+                      EVENT DEMAND CURVE
+                    </h4>
+                    <div className="space-y-3">
+                      {item.demandCurve.map((phase, idx) => (
+                        <div key={idx} className="flex items-center gap-4 p-3 rounded-lg" style={{ backgroundColor: '#FAFAF8' }}>
+                          <div className="w-32">
+                            <div className="text-xs font-medium text-gray-900">{phase.phase}</div>
+                            <div className="text-xs text-gray-500">{phase.timing}</div>
+                          </div>
+                          <div className="flex-1 flex items-center gap-6">
+                            <div className="flex items-center gap-2">
+                              <TrendingDown className="w-3 h-3 text-gray-400" />
+                              <span className="text-xs text-gray-500">Lift:</span>
+                              <span className="text-sm font-semibold" style={{ color: '#85A383' }}>{phase.lift}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Activity className="w-3 h-3 text-gray-400" />
+                              <span className="text-xs text-gray-500">Velocity:</span>
+                              <span className="text-sm font-medium text-gray-900">{phase.velocity}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Package className="w-3 h-3 text-gray-400" />
+                              <span className="text-xs text-gray-500">Units Needed:</span>
+                              <span className="text-sm font-medium text-gray-900">{phase.units}</span>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Phased Delivery Plan - Only for Buy Planning with phasedDelivery */}
+                {item.phasedDelivery && (
+                  <div className="p-6 border-b" style={{ borderColor: '#E7DDCA' }}>
+                    <h4 className="text-sm font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                      <Truck className="w-4 h-4" style={{ color: '#85A383' }} />
+                      PHASED DELIVERY SCHEDULE
+                    </h4>
+                    <div className="space-y-3">
+                      {item.phasedDelivery.map((delivery, idx) => (
+                        <div key={idx} className="flex items-center gap-4 p-4 rounded-lg border" style={{ borderColor: '#E7DDCA', backgroundColor: '#FAFAF8' }}>
+                          <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white" style={{ backgroundColor: '#85A383' }}>
+                            {delivery.delivery}
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center gap-4 mb-1">
+                              <span className="text-sm font-medium text-gray-900">{delivery.week}</span>
+                              <span className="text-xs text-gray-500">→ Arrives {delivery.arrival}</span>
+                              <span className="text-sm font-semibold" style={{ color: '#85A383' }}>{delivery.units} units</span>
+                            </div>
+                            <div className="text-xs text-gray-600">{delivery.reasoning}</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Reasoning Breakdown */}
+                {item.reasoningBreakdown && (
+                  <div className="border-b" style={{ borderColor: '#E7DDCA' }}>
+                    <button
+                      onClick={() => toggleSection(item.id, 'reasoning')}
+                      className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                    >
+                      <h4 className="text-sm font-semibold text-gray-900 uppercase tracking-wide flex items-center gap-2">
+                        <Sparkles className="w-4 h-4" style={{ color: '#85A383' }} />
+                        WHY THIS RECOMMENDATION
+                      </h4>
+                      <X className={`w-5 h-5 text-gray-400 transition-transform ${expandedSections[`${item.id}-reasoning`] ? 'rotate-45' : 'rotate-0'}`} />
+                    </button>
+                    
+                    {expandedSections[`${item.id}-reasoning`] && (
+                      <div className="px-6 pb-6">
+                        <p className="text-sm text-gray-700 leading-relaxed mb-6 p-4 rounded-lg" style={{ backgroundColor: '#FAFAF8' }}>
+                          {item.reasoningBreakdown.summary}
+                        </p>
+                        
+                        <div className="space-y-4">
+                          {item.reasoningBreakdown.factors.map((factor, idx) => (
+                            <div key={idx} className="relative pl-6">
+                              <div className="absolute left-0 top-0 bottom-0 w-1 rounded-full" style={{ backgroundColor: '#85A383' }} />
+                              <div className="flex items-start justify-between mb-2">
+                                <span className="text-sm font-semibold text-gray-900">{factor.name}</span>
+                                <div className="flex items-center gap-3">
+                                  <span className="text-xs text-gray-500">{factor.weight}% weight</span>
+                                  <span className="px-2 py-1 rounded text-xs font-bold text-white" style={{ backgroundColor: '#85A383' }}>
+                                    {factor.score}
+                                  </span>
+                                </div>
+                              </div>
+                              <p className="text-xs text-gray-600 leading-relaxed">{factor.reasoning}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Chat */}
+                {chatOpen === item.id && (
+                  <div className="px-6 py-4 border-b" style={{ borderColor: '#E7DDCA', backgroundColor: '#F5F0E8' }}>
+                    <div className="space-y-3 mb-4 max-h-48 overflow-y-auto">
+                      {(chatMessages[item.id] || []).map((msg, idx) => (
+                        <div key={idx} className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}>
+                          <div className={`max-w-md px-4 py-2 rounded-lg text-sm ${
+                            msg.type === 'user' ? 'bg-gray-200' : ''
+                          }`} style={msg.type === 'ai' ? { backgroundColor: '#E7DDCA' } : {}}>
+                            {msg.text}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={currentMessage}
+                        onChange={(e) => setCurrentMessage(e.target.value)}
+                        onKeyPress={(e) => e.key === 'Enter' && sendMessage(item.id)}
+                        placeholder="Ask about scenarios, risks, alternatives..."
+                        className="flex-1 px-4 py-2 border-2 rounded-lg text-sm"
+                        style={{ borderColor: '#E7DDCA' }}
+                      />
+                      <button onClick={() => sendMessage(item.id)} className="px-4 py-2 rounded-lg text-white" style={{ backgroundColor: '#85A383' }}>
+                        <Send className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* What-If */}
+                {item.whatIfScenarios && (
+                  <div className="px-6 py-5 border-b" style={{ borderColor: '#E7DDCA' }}>
+                    <div className="flex items-center gap-2 mb-4">
+                      <Sparkles className="w-4 h-4" style={{ color: '#85A383' }} />
+                      <span className="text-sm font-semibold text-gray-900 uppercase tracking-wide">WHAT-IF SCENARIOS</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      {item.whatIfScenarios.map((scenario, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => {
+                            setChatOpen(item.id);
+                            setCurrentMessage(scenario);
+                          }}
+                          className="px-4 py-3 text-left text-sm text-gray-700 border rounded-lg hover:border-gray-400 transition-colors"
+                          style={{ borderColor: '#E7DDCA', backgroundColor: '#FAFAF8' }}
+                        >
+                          <MessageSquare className="w-3 h-3 inline mr-2 text-gray-400" />
+                          {scenario}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Store Allocation Details */}
+                {item.storeAllocation && (
+                  <div className="border-b" style={{ borderColor: '#E7DDCA' }}>
+                    <button
+                      onClick={() => toggleSection(item.id, 'allocation')}
+                      className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                    >
+                      <h4 className="text-sm font-semibold text-gray-900 uppercase tracking-wide flex items-center gap-2">
+                        <Building2 className="w-4 h-4" style={{ color: '#85A383' }} />
+                        STORE ALLOCATION PLAN
+                      </h4>
+                      <X className={`w-5 h-5 text-gray-400 transition-transform ${expandedSections[`${item.id}-allocation`] ? 'rotate-45' : 'rotate-0'}`} />
+                    </button>
+                    
+                    {expandedSections[`${item.id}-allocation`] && (
+                      <div className="px-6 pb-6 space-y-3">
+                        {item.storeAllocation.map((allocation, idx) => (
+                          <div key={idx} className="p-4 rounded-lg border" style={{ borderColor: '#E7DDCA', backgroundColor: '#FAFAF8' }}>
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="text-sm font-semibold text-gray-900">{allocation.cluster}</span>
+                              <span className="text-sm font-bold" style={{ color: '#85A383' }}>
+                                {allocation.qty} units <span className="text-xs font-normal text-gray-500">({allocation.perStore}/store)</span>
+                              </span>
+                            </div>
+                            <div className="text-xs text-gray-600">{allocation.reasoning}</div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Transfer Tiers - For Allocation Decisions */}
+                {item.transferTiers && (
+                  <div className="border-b" style={{ borderColor: '#E7DDCA' }}>
+                    <button
+                      onClick={() => toggleSection(item.id, 'transfers')}
+                      className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                    >
+                      <h4 className="text-sm font-semibold text-gray-900 uppercase tracking-wide flex items-center gap-2">
+                        <Move className="w-4 h-4" style={{ color: '#85A383' }} />
+                        INTER-STORE TRANSFER PLAN
+                      </h4>
+                      <X className={`w-5 h-5 text-gray-400 transition-transform ${expandedSections[`${item.id}-transfers`] ? 'rotate-45' : 'rotate-0'}`} />
+                    </button>
+                    
+                    {expandedSections[`${item.id}-transfers`] && (
+                      <div className="px-6 pb-6 space-y-6">
+                        {item.transferTiers.map((tier, tierIdx) => (
+                          <div key={tierIdx}>
+                            <div className="mb-3">
+                              <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider ${
+                                tier.tier.includes('TIER 1') ? 'text-white' :
+                                tier.tier.includes('TIER 2') ? 'bg-yellow-100 text-yellow-800' :
+                                'bg-gray-100 text-gray-600'
+                              }`} style={tier.tier.includes('TIER 1') ? { backgroundColor: '#85A383' } : {}}>
+                                {tier.tier}
+                              </div>
+                              <p className="text-xs text-gray-600 mt-1">{tier.description}</p>
+                              {tier.note && (
+                                <p className="text-xs text-gray-500 italic mt-1">{tier.note}</p>
+                              )}
+                            </div>
+
+                            {tier.transfers && tier.transfers.length > 0 && (
+                              <div className="space-y-3">
+                                {tier.transfers.map((transfer, idx) => (
+                                  <div key={idx} className="p-4 rounded-lg border-2" style={{ 
+                                    borderColor: tier.tier.includes('TIER 1') ? '#85A383' : '#E7DDCA',
+                                    backgroundColor: '#FAFAF8' 
+                                  }}>
+                                    <div className="flex items-start justify-between mb-3">
+                                      <div className="flex items-center gap-3">
+                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
+                                          tier.tier.includes('TIER 1') ? 'text-white' : 'bg-gray-200 text-gray-700'
+                                        }`} style={tier.tier.includes('TIER 1') ? { backgroundColor: '#85A383' } : {}}>
+                                          {idx + 1}
+                                        </div>
+                                        <div>
+                                          <div className="text-xs font-medium text-gray-500 mb-1">{transfer.city}</div>
+                                          <div className="flex items-center gap-2 text-sm">
+                                            <span className="text-gray-700">{transfer.from}</span>
+                                            <ArrowRight className="w-4 h-4 text-gray-400" />
+                                            <span className="font-semibold" style={{ color: '#85A383' }}>{transfer.to}</span>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      {transfer.revenueImpact && (
+                                        <div className="text-right">
+                                          <div className="text-xs text-gray-500">Revenue Impact</div>
+                                          <div className="text-sm font-bold" style={{ color: '#2D9CDB' }}>{transfer.revenueImpact}</div>
+                                        </div>
+                                      )}
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-4 text-xs">
+                                      <div className="space-y-1">
+                                        <div className="flex justify-between">
+                                          <span className="text-gray-500">Units:</span>
+                                          <span className="font-semibold text-gray-900">{transfer.units}</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                          <span className="text-gray-500">Cost:</span>
+                                          <span className="font-medium text-gray-900">{transfer.cost}</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                          <span className="text-gray-500">ETA:</span>
+                                          <span className="font-medium text-gray-900">{transfer.eta}</span>
+                                        </div>
+                                      </div>
+                                      <div className="space-y-1">
+                                        <div className="flex justify-between">
+                                          <span className="text-gray-500">From Stock:</span>
+                                          <span className="text-gray-700">{transfer.fromStock} @ {transfer.fromROS}</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                          <span className="text-gray-500">To Stock:</span>
+                                          <span className="text-gray-700">{transfer.toStock} @ {transfer.toROS}</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                          <span className="text-gray-500">GST:</span>
+                                          <span className="font-medium" style={{ color: transfer.gstImpact === 'None (same city)' || transfer.gstImpact === 'None (same state)' || transfer.gstImpact === 'None (intra-state)' || transfer.gstImpact === 'None (within NCR)' ? '#85A383' : '#D97706' }}>
+                                            {transfer.gstImpact}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    {transfer.feasibility && (
+                                      <div className="mt-3 pt-3 border-t" style={{ borderColor: '#E7DDCA' }}>
+                                        <div className="flex items-center justify-between">
+                                          <span className="text-xs text-gray-500">Operational Feasibility:</span>
+                                          <span className={`px-2 py-1 rounded text-xs font-semibold ${
+                                            transfer.feasibility === 'HIGH' ? 'bg-green-100 text-green-700' :
+                                            transfer.feasibility === 'MEDIUM-HIGH' ? 'bg-green-100 text-green-700' :
+                                            transfer.feasibility === 'MEDIUM' ? 'bg-yellow-100 text-yellow-700' :
+                                            'bg-red-100 text-red-700'
+                                          }`}>
+                                            {transfer.feasibility}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    )}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Specific Actions - For Ageing Inventory */}
+                {item.specificActions && (
+                  <div className="p-6 border-b" style={{ borderColor: '#E7DDCA' }}>
+                    <h4 className="text-sm font-semibold text-gray-900 mb-4 uppercase tracking-wide flex items-center gap-2">
+                      <RotateCcw className="w-4 h-4" style={{ color: '#85A383' }} />
+                      CLEARANCE ACTIONS
+                    </h4>
+                    <div className="space-y-3">
+                      {item.specificActions.map((action, idx) => (
+                        <div key={idx} className="p-4 rounded-lg border-2" style={{ borderColor: '#E7DDCA', backgroundColor: '#FAFAF8' }}>
+                          <div className="text-sm font-semibold text-gray-900 mb-2">{action.action}</div>
+                          <div className="text-xs text-gray-600 leading-relaxed">{action.reasoning}</div>
+                          {action.targetUnits && (
+                            <div className="mt-2 pt-2 border-t" style={{ borderColor: '#E7DDCA' }}>
+                              <span className="text-xs text-gray-500">Target: <span className="font-semibold text-gray-900">{action.targetUnits} units</span></span>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Negotiation Package for Vendors */}
+                {item.negotiationPackage && (
+                  <div className="p-6">
+                    <h4 className="text-sm font-medium text-gray-900 mb-4 uppercase tracking-wide">Prioritized Negotiation Package</h4>
+                    <div className="space-y-3">
+                      {item.negotiationPackage.map((pkg, idx) => (
+                        <div key={idx} className="p-4 rounded-lg border-2" style={{ borderColor: '#E7DDCA', backgroundColor: '#FAFAF8' }}>
+                          <div className="flex items-start justify-between mb-3">
+                            <div className="flex items-center gap-3">
+                              <div className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-white" style={{ backgroundColor: '#85A383' }}>
+                                {pkg.priority}
+                              </div>
+                              <div className="text-sm font-medium text-gray-900">{pkg.ask}</div>
+                            </div>
+                            <div className="flex items-center gap-3">
+                              <span className={`px-2 py-1 rounded text-xs font-medium ${
+                                pkg.likelihood === 'High' ? 'bg-green-100 text-green-700' :
+                                pkg.likelihood === 'Medium' ? 'bg-yellow-100 text-yellow-700' :
+                                'bg-red-100 text-red-700'
+                              }`}>
+                                {pkg.likelihood}
+                              </span>
+                              <span className="text-sm font-medium" style={{ color: '#2D9CDB' }}>{pkg.impact}</span>
+                            </div>
+                          </div>
+                          <div className="space-y-2 text-sm mb-3">
+                            <div><span className="text-gray-500">Reasoning: </span><span className="text-gray-700">{pkg.reasoning}</span></div>
+                            <div><span className="text-gray-500">Leverage: </span><span className="text-gray-700">{pkg.leverage}</span></div>
+                          </div>
+                          {pkg.dataPoints && (
+                            <div className="pt-3 border-t" style={{ borderColor: '#E7DDCA' }}>
+                              <div className="text-xs font-medium text-gray-500 mb-2">Supporting Data:</div>
+                              <div className="space-y-1">
+                                {pkg.dataPoints.map((point, pidx) => (
+                                  <div key={pidx} className="text-xs text-gray-600 flex items-start gap-2">
+                                    <span className="text-gray-400">•</span>
+                                    <span>{point}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Current Terms */}
+                    {item.currentTerms && (
+                      <div className="mt-6 p-4 rounded-lg" style={{ backgroundColor: '#F5F0E8' }}>
+                        <h5 className="text-xs font-medium text-gray-500 mb-3 uppercase">Current Contract Terms</h5>
+                        <div className="grid grid-cols-4 gap-4">
+                          <div>
+                            <div className="text-xs text-gray-500">Base Margin</div>
+                            <div className="text-sm font-medium">{item.currentTerms.baseMargin}%</div>
+                          </div>
+                          <div>
+                            <div className="text-xs text-gray-500">Incentive</div>
+                            <div className="text-sm font-medium">{item.currentTerms.sellOutIncentive}</div>
+                          </div>
+                          <div>
+                            <div className="text-xs text-gray-500">RTV</div>
+                            <div className="text-sm font-medium">{item.currentTerms.rtvAllowed ? `✓ ${item.currentTerms.rtvPercentage}%` : '✗'}</div>
+                          </div>
+                          <div>
+                            <div className="text-xs text-gray-500">Payment</div>
+                            <div className="text-sm font-medium">{item.currentTerms.paymentTerms}</div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         </div>
       </div>

@@ -858,7 +858,7 @@ export default function CromaStoreManagerDashboard() {
                 <div key={item.id} className="bg-white rounded-xl border" style={{ borderColor: '#E7DDCA' }}>
                   {/* Header */}
                   <div className="p-6 border-b" style={{ borderColor: '#E7DDCA' }}>
-                    <div className="flex items-start justify-between">
+                    <div className="flex items-start justify-between mb-4">
                       <div className="flex items-start gap-4">
                         <input
                           type="checkbox"
@@ -874,9 +874,9 @@ export default function CromaStoreManagerDashboard() {
                         />
                         <div>
                           <div className="flex items-start gap-3 mb-2">
-                            <h3 className="text-lg font-medium text-gray-900 w-3/4">{item.title}</h3>
+                            <h3 className="text-lg font-medium text-gray-900 max-w-2/4">{item.title}</h3>
                             {item.urgency && (
-                              <span className={`px-3 py-1 rounded-full text-xs shrink-0 font-medium ${
+                              <span className={`shrink-0 px-3 py-1 rounded-full text-xs font-medium ${
                                 item.urgency === 'CRITICAL' ? 'bg-red-100 text-red-700' : 
                                 item.urgency === 'HIGH' ? 'bg-orange-100 text-orange-700' : 
                                 'bg-yellow-100 text-yellow-700'
@@ -892,10 +892,10 @@ export default function CromaStoreManagerDashboard() {
                           </div>
                         </div>
                       </div>
-                      <div className="flex items-center gap-3 shrink-0">
+                      <div className="flex items-center gap-3 shrink-0 ml-4">
                         <button
                           onClick={() => setDecisionTrailModal(item)}
-                          className="px-4 py-2 text-sm font-medium border-2  rounded-lg hover:bg-gray-50"
+                          className="px-4 py-2  text-sm font-medium border-2 rounded-lg hover:bg-gray-50"
                           style={{ borderColor: '#85A383', color: '#85A383' }}
                         >
                           <Activity className="w-4 h-4 inline mr-2" />
@@ -910,6 +910,36 @@ export default function CromaStoreManagerDashboard() {
                           Ask Morrie
                         </button>
                       </div>
+                    </div>
+
+                    {/* Recommendation Card - Featured */}
+                    <div className="rounded-xl p-6" style={{ backgroundColor: '#85A38308', border: '2px solid #85A383' }}>
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex items-center gap-2">
+                          <Sparkles className="w-5 h-5" style={{ color: '#85A383' }} />
+                          <span className="text-sm font-semibold uppercase tracking-wide" style={{ color: '#85A383' }}>Recommended Action</span>
+                        </div>
+                        <div className="flex items-center gap-6">
+                          <div className="text-right">
+                            <div className="text-xs text-gray-500 mb-1">Confidence</div>
+                            <div className="text-2xl font-semibold" style={{ color: '#85A383' }}>{item.recommendation.confidence}%</div>
+                          </div>
+                          {item.recommendation.impact && (
+                            <div className="text-right">
+                              <div className="text-xs text-gray-500 mb-1">Impact</div>
+                              <div className="text-lg font-semibold text-gray-900">{item.recommendation.impact}</div>
+                            </div>
+                          )}
+                          {item.recommendation.cost && (
+                            <div className="text-right">
+                              <div className="text-xs text-gray-500 mb-1">Cost</div>
+                              <div className="text-lg font-semibold text-gray-900">{item.recommendation.cost}</div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <h4 className="text-xl font-semibold text-gray-900 mb-3">{item.recommendation.action}</h4>
+                      <p className="text-sm text-gray-700 leading-relaxed">{item.recommendation.reasoning}</p>
                     </div>
                   </div>
 
@@ -992,19 +1022,6 @@ export default function CromaStoreManagerDashboard() {
                       </div>
                     </div>
                   )}
-
-                  {/* Impact Bar */}
-                  <div className="px-6 py-3 border-b flex items-center justify-between" style={{ borderColor: '#E7DDCA', backgroundColor: '#FAFAF8' }}>
-                    <div className="flex items-center gap-6 text-sm">
-                      {item.recommendation.impact && (
-                        <span className="text-gray-600">Impact: <span className="font-medium">{item.recommendation.impact}</span></span>
-                      )}
-                      {item.recommendation.cost && (
-                        <span className="text-gray-600">Cost: <span className="font-medium">{item.recommendation.cost}</span></span>
-                      )}
-                    </div>
-                    <span className="text-sm text-gray-600">Confidence: <span className="font-medium" style={{ color: '#85A383' }}>{item.recommendation.confidence}%</span></span>
-                  </div>
 
                   {/* Reasoning */}
                   {item.reasoningBreakdown && (

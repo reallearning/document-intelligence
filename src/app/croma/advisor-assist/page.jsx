@@ -15,8 +15,14 @@ export default function CromaAdvisorAssist() {
   const [customerData, setCustomerData] = useState(null);
   const [showDiscountCalculator, setShowDiscountCalculator] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [advisorStats] = useState({
+    todayEarnings: 1620,
+    weeklyRank: 3,
+    nextMilestone: 3800,
+    weeklyTarget: 12000,
+    weeklyEarnings: 8200
+  });
 
-  // Sample customer data with purchase history
   const sampleCustomers = {
     '9876543210': {
       name: 'Rahul Sharma',
@@ -50,7 +56,6 @@ export default function CromaAdvisorAssist() {
     }
   };
 
-  // Sample product database with dynamic pricing
   const products = {
     'LAP001': {
       id: 'LAP001',
@@ -58,15 +63,20 @@ export default function CromaAdvisorAssist() {
       category: 'Laptop',
       basePrice: 45990,
       cost: 39544,
-      margin: 14,
+      incentiveTiers: {
+        atMRP: 550,
+        at2Percent: 350,
+        at4Percent: 250,
+        atFloor: 200
+      },
       stock: 8,
       image: '💻',
       pricingRules: {
-        floor: 43990, // Minimum allowed price
-        ceiling: 45990, // Maximum price (MRP)
+        floor: 43990,
+        ceiling: 45990,
         competitorMatch: true,
-        maxDiscount: 4, // Max 4% discount allowed
-        minMargin: 10 // Minimum margin to maintain
+        maxDiscount: 4,
+        minMargin: 10
       },
       competitorPrices: {
         amazon: 44990,
@@ -86,7 +96,7 @@ export default function CromaAdvisorAssist() {
       bestFor: ['Students', 'Office Work', 'Light Browsing'],
       returnRate: 2.1,
       qualityScore: 8.4,
-      recentSales: 12, // Last 7 days
+      recentSales: 12,
       conversionRate: 18.4,
       attachRate: {
         mouse: 45,
@@ -101,7 +111,12 @@ export default function CromaAdvisorAssist() {
       category: 'Laptop',
       basePrice: 54990,
       cost: 46192,
-      margin: 16,
+      incentiveTiers: {
+        atMRP: 750,
+        at2Percent: 500,
+        at4Percent: 380,
+        atFloor: 280
+      },
       stock: 12,
       image: '💻',
       pricingRules: {
@@ -144,7 +159,12 @@ export default function CromaAdvisorAssist() {
       category: 'Laptop',
       basePrice: 64990,
       cost: 51992,
-      margin: 20,
+      incentiveTiers: {
+        atMRP: 900,
+        at2Percent: 650,
+        at4Percent: 480,
+        atFloor: 330
+      },
       stock: 6,
       image: '💻',
       pricingRules: {
@@ -217,20 +237,12 @@ export default function CromaAdvisorAssist() {
   const calculateDynamicPrice = (product, customerSegment) => {
     const { basePrice, pricingRules, competitorPrices } = product;
     
-    // Find lowest competitor price
     const lowestCompetitor = Math.min(...Object.values(competitorPrices));
-    
-    // Calculate maximum discount allowed
     const maxDiscountAmount = basePrice * (pricingRules.maxDiscount / 100);
     const minPriceByDiscount = basePrice - maxDiscountAmount;
-    
-    // Ensure we maintain minimum margin
     const minPriceByMargin = product.cost * (1 + pricingRules.minMargin / 100);
-    
-    // Pricing floor is the higher of the two minimums
     const effectiveFloor = Math.max(pricingRules.floor, minPriceByDiscount, minPriceByMargin);
     
-    // Smart pricing logic
     let recommendedPrice = basePrice;
     let reason = 'Standard pricing';
     
@@ -242,15 +254,14 @@ export default function CromaAdvisorAssist() {
       }
     }
     
-    // Premium customer discount
     if (customerSegment === 'Premium' && recommendedPrice === basePrice) {
       const premiumDiscount = Math.min(1000, maxDiscountAmount);
       recommendedPrice = Math.max(basePrice - premiumDiscount, effectiveFloor);
       reason = 'Premium customer loyalty discount';
     }
     
-    const actualMargin = ((recommendedPrice - product.cost) / recommendedPrice * 100).toFixed(1);
     const savingsFromMRP = basePrice - recommendedPrice;
+    const discountPercent = ((basePrice - recommendedPrice) / basePrice * 100).toFixed(1);
     
     return {
       recommendedPrice,
@@ -258,15 +269,25 @@ export default function CromaAdvisorAssist() {
       floor: effectiveFloor,
       ceiling: pricingRules.ceiling,
       lowestCompetitor,
-      actualMargin: parseFloat(actualMargin),
       savingsFromMRP,
+      discountPercent: parseFloat(discountPercent),
       reason,
       canDiscount: recommendedPrice > effectiveFloor,
       maxAdditionalDiscount: Math.max(0, recommendedPrice - effectiveFloor)
     };
   };
 
-  const getRecommendations = (baseProduct, profile) => {
+  const getIncentiveAtPrice = (product, sellingPrice) => {
+    const { basePrice, incentiveTiers, pricingRules } = product;
+    const discountPercent = ((basePrice - sellingPrice) / basePrice * 100);
+    
+    if (sellingPrice >= basePrice) return incentiveTiers.atMRP;
+    if (discountPercent <= 2) return incentiveTiers.at2Percent;
+    if (discountPercent <= 4) return incentiveTiers.at4Percent;
+    return incentiveTiers.atFloor;
+  };
+
+  const getRecommendations = (baseProduct) => {
     if (baseProduct.id === 'LAP001') {
       return {
         good: products['LAP001'],
@@ -282,32 +303,28 @@ export default function CromaAdvisorAssist() {
       { 
         name: 'Wireless Mouse', 
         price: 899, 
-        cost: 647,
-        margin: 28, 
+        advisorIncentive: 45,
         attachRate: product.attachRate.mouse,
         pitch: 'Includes free mousepad. Ergonomic design for all-day comfort.'
       },
       { 
         name: 'Laptop Bag', 
         price: 1499, 
-        cost: 1019,
-        margin: 32, 
+        advisorIncentive: 75,
         attachRate: product.attachRate.bag,
         pitch: 'Padded protection, water-resistant. Fits up to 15.6" laptops.'
       },
       { 
         name: 'MS Office Home & Student', 
         price: 5499, 
-        cost: 4509,
-        margin: 18, 
+        advisorIncentive: 330,
         attachRate: product.attachRate.office || 22,
         pitch: 'Lifetime license. Essential for students and professionals.'
       },
       { 
         name: 'Extended Warranty (2 Year)', 
         price: 3999, 
-        cost: 2199,
-        margin: 45, 
+        advisorIncentive: 400,
         attachRate: product.attachRate.warranty || 20,
         pitch: 'Covers accidental damage. On-site service within 48 hours.'
       }
@@ -317,8 +334,7 @@ export default function CromaAdvisorAssist() {
       attachments.push({
         name: 'Cooling Pad',
         price: 1299,
-        cost: 844,
-        margin: 35,
+        advisorIncentive: 65,
         attachRate: product.attachRate.coolingPad,
         pitch: 'Reduces temperature by 10-15°C. Extends laptop life.'
       });
@@ -330,7 +346,6 @@ export default function CromaAdvisorAssist() {
   const getTalkingPoints = (product, profile, customerData) => {
     const points = [];
     
-    // Customer history-based points
     if (customerData) {
       if (customerData.segment === 'Premium') {
         points.push({
@@ -341,7 +356,6 @@ export default function CromaAdvisorAssist() {
         });
       }
       
-      // Brand affinity
       const hasPreferredBrand = customerData.preferences.brands.some(brand => 
         product.name.toLowerCase().includes(brand.toLowerCase())
       );
@@ -352,16 +366,6 @@ export default function CromaAdvisorAssist() {
           title: 'Based on Your History',
           text: `You typically prefer ${customerData.preferences.brands.join(', ')}. This ${product.name.split(' ')[0]} offers similar premium quality at better value.`,
           type: 'recommendation'
-        });
-      }
-      
-      // Next purchase prediction
-      if (customerData.aiInsights.nextPurchase) {
-        points.push({
-          icon: '🎯',
-          title: 'AI Prediction',
-          text: customerData.aiInsights.nextPurchase,
-          type: 'prediction'
         });
       }
     }
@@ -409,6 +413,39 @@ export default function CromaAdvisorAssist() {
   const SearchView = () => (
     <div className="flex flex-col h-full">
       <div className="p-4 bg-white border-b">
+        {/* Goal Tracking Section */}
+        <div className="mb-3 p-3 rounded-lg" style={{ backgroundColor: '#F5F0E8' }}>
+          <div className="flex items-center justify-between gap-3 mb-2">
+            <div className="flex-1">
+              <div className="text-xs text-gray-600 mb-1">Today's Earnings</div>
+              <div className="text-lg font-bold" style={{ color: '#85A383' }}>₹{advisorStats.todayEarnings.toLocaleString()}</div>
+            </div>
+            <div className="flex-1 border-l pl-3" style={{ borderColor: '#E7DDCA' }}>
+              <div className="text-xs text-gray-600 mb-1">Store Rank</div>
+              <div className="text-lg font-bold text-gray-900">#{advisorStats.weeklyRank}</div>
+            </div>
+            <div className="flex-1 border-l pl-3" style={{ borderColor: '#E7DDCA' }}>
+              <div className="text-xs text-gray-600 mb-1">Next Milestone</div>
+              <div className="text-base font-bold text-orange-600">₹{advisorStats.nextMilestone.toLocaleString()}</div>
+            </div>
+          </div>
+          <div>
+            <div className="flex items-center justify-between text-xs text-gray-600 mb-1">
+              <span>Weekly Progress</span>
+              <span>₹{advisorStats.weeklyEarnings.toLocaleString()} / ₹{advisorStats.weeklyTarget.toLocaleString()}</span>
+            </div>
+            <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+              <div 
+                className="h-full rounded-full" 
+                style={{ 
+                  backgroundColor: '#85A383',
+                  width: `${(advisorStats.weeklyEarnings / advisorStats.weeklyTarget) * 100}%`
+                }}
+              />
+            </div>
+          </div>
+        </div>
+
         {/* Customer Search */}
         <div className="mb-3 p-3 rounded-lg" style={{ backgroundColor: '#85A38310' }}>
           <div className="flex items-center gap-2 mb-2">
@@ -452,7 +489,6 @@ export default function CromaAdvisorAssist() {
         </div>
       </div>
 
-      {/* Customer Insights Card */}
       {customerData && (
         <div className="mx-4 mt-4 p-4 rounded-lg border-2" style={{ borderColor: '#85A383', backgroundColor: '#85A38305' }}>
           <div className="flex items-start justify-between mb-3">
@@ -556,7 +592,7 @@ export default function CromaAdvisorAssist() {
                   </div>
                   <div className="text-right">
                     <div className="text-base font-semibold" style={{ color: '#85A383' }}>₹{product.basePrice.toLocaleString()}</div>
-                    <div className="text-xs text-gray-500">{product.margin}% margin</div>
+                    <div className="text-xs text-gray-500">You earn: ₹{product.incentiveTiers.atMRP}</div>
                   </div>
                 </div>
               </button>
@@ -571,13 +607,20 @@ export default function CromaAdvisorAssist() {
     if (!selectedProduct) return null;
 
     const pricingInfo = calculateDynamicPrice(selectedProduct, customerData?.segment);
-    const recommendations = customerProfile ? getRecommendations(selectedProduct, customerProfile) : null;
+    const recommendations = customerProfile ? getRecommendations(selectedProduct) : null;
     const attachments = getAttachments(selectedProduct);
     const talkingPoints = getTalkingPoints(selectedProduct, customerProfile, customerData);
 
+    const currentIncentive = getIncentiveAtPrice(selectedProduct, pricingInfo.recommendedPrice);
+
+    const compareOptions = recommendations ? [
+      { tier: 'Budget', product: recommendations.good, recommended: false },
+      { tier: 'Recommended', product: recommendations.better, recommended: true },
+      { tier: 'Premium', product: recommendations.best, recommended: false }
+    ] : [];
+
     return (
       <div className="flex flex-col h-full">
-        {/* Header */}
         <div className="p-4 bg-white border-b flex items-center justify-between">
           <button onClick={() => setCurrentView('search')} className="p-2 hover:bg-gray-100 rounded-lg">
             <ArrowLeft className="w-5 h-5" />
@@ -588,92 +631,89 @@ export default function CromaAdvisorAssist() {
           </button>
         </div>
 
+        <div className="p-3 border-b" style={{ backgroundColor: '#F5F0E8' }}>
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex-1">
+              <div className="text-xs text-gray-600 mb-1">Today's Earnings</div>
+              <div className="text-lg font-bold" style={{ color: '#85A383' }}>₹{advisorStats.todayEarnings.toLocaleString()}</div>
+            </div>
+            <div className="flex-1 border-l pl-3" style={{ borderColor: '#E7DDCA' }}>
+              <div className="text-xs text-gray-600 mb-1">Store Rank</div>
+              <div className="text-lg font-bold text-gray-900">#{advisorStats.weeklyRank} <span className="text-xs font-normal text-gray-500">this week</span></div>
+            </div>
+            <div className="flex-1 border-l pl-3" style={{ borderColor: '#E7DDCA' }}>
+              <div className="text-xs text-gray-600 mb-1">Next Milestone</div>
+              <div className="text-lg font-bold text-orange-600">₹{advisorStats.nextMilestone.toLocaleString()} <span className="text-xs font-normal text-gray-500">more</span></div>
+            </div>
+          </div>
+          <div className="mt-2">
+            <div className="flex items-center justify-between text-xs text-gray-600 mb-1">
+              <span>Weekly Progress</span>
+              <span>₹{advisorStats.weeklyEarnings.toLocaleString()} / ₹{advisorStats.weeklyTarget.toLocaleString()}</span>
+            </div>
+            <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+              <div 
+                className="h-full rounded-full" 
+                style={{ 
+                  backgroundColor: '#85A383',
+                  width: `${(advisorStats.weeklyEarnings / advisorStats.weeklyTarget) * 100}%`
+                }}
+              />
+            </div>
+          </div>
+        </div>
+
         <div className="flex-1 overflow-y-auto">
-          {/* AI Dynamic Pricing Card */}
           <div className="p-4 border-b" style={{ backgroundColor: '#E7F6EC' }}>
             <div className="flex items-start gap-3">
               <div className="p-2 rounded-lg" style={{ backgroundColor: '#85A383' }}>
-                <Brain className="w-5 h-5 text-white" />
+                <DollarSign className="w-5 h-5 text-white" />
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="text-sm font-semibold text-gray-900">AI Smart Pricing</span>
-                  <button 
-                    onClick={() => setShowDiscountCalculator(!showDiscountCalculator)}
-                    className="text-xs text-blue-600 hover:underline"
-                  >
-                    {showDiscountCalculator ? 'Hide' : 'Show'} calculator
-                  </button>
+                  <span className="text-sm font-semibold text-gray-900">Your Incentive at Different Prices</span>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 mb-2">
-                  <div>
-                    <div className="text-xs text-gray-600">Recommended Price</div>
-                    <div className="text-xl font-bold" style={{ color: '#85A383' }}>
-                      ₹{pricingInfo.recommendedPrice.toLocaleString()}
+                <div className="space-y-2 mb-3">
+                  <div className="p-2 rounded flex justify-between items-center" style={{ backgroundColor: 'white', border: '2px solid #85A383' }}>
+                    <div>
+                      <div className="text-xs text-gray-600">At MRP (₹{selectedProduct.basePrice.toLocaleString()})</div>
+                      <div className="text-sm font-bold text-gray-900">You earn: ₹{selectedProduct.incentiveTiers.atMRP}</div>
+                    </div>
+                    <Award className="w-5 h-5" style={{ color: '#85A383' }} />
+                  </div>
+                  
+                  <div className="p-2 rounded flex justify-between items-center" style={{ backgroundColor: 'white' }}>
+                    <div>
+                      <div className="text-xs text-gray-600">With 2% discount (₹{Math.round(selectedProduct.basePrice * 0.98).toLocaleString()})</div>
+                      <div className="text-sm font-bold text-gray-900">You earn: ₹{selectedProduct.incentiveTiers.at2Percent}</div>
                     </div>
                   </div>
-                  <div>
-                    <div className="text-xs text-gray-600">Your Margin</div>
-                    <div className="text-xl font-bold text-gray-900">
-                      {pricingInfo.actualMargin}%
+                  
+                  <div className="p-2 rounded flex justify-between items-center" style={{ backgroundColor: 'white' }}>
+                    <div>
+                      <div className="text-xs text-gray-600">With 4% discount (₹{Math.round(selectedProduct.basePrice * 0.96).toLocaleString()})</div>
+                      <div className="text-sm font-bold text-gray-900">You earn: ₹{selectedProduct.incentiveTiers.at4Percent}</div>
                     </div>
+                  </div>
+                  
+                  <div className="p-2 rounded flex justify-between items-center" style={{ backgroundColor: '#FFF3F3' }}>
+                    <div>
+                      <div className="text-xs text-red-600">At floor price (₹{pricingInfo.floor.toLocaleString()})</div>
+                      <div className="text-sm font-bold text-red-700">You earn: ₹{selectedProduct.incentiveTiers.atFloor}</div>
+                    </div>
+                    <AlertCircle className="w-4 h-4 text-red-600" />
                   </div>
                 </div>
-
-                {pricingInfo.savingsFromMRP > 0 && (
-                  <div className="flex items-center gap-2 mb-2">
-                    <TrendingDown className="w-4 h-4 text-green-600" />
-                    <span className="text-xs text-green-700 font-medium">
-                      ₹{pricingInfo.savingsFromMRP.toLocaleString()} off MRP
-                    </span>
-                  </div>
-                )}
 
                 <div className="p-2 rounded text-xs" style={{ backgroundColor: '#FFF9E6' }}>
-                  <div className="font-medium text-gray-900 mb-1">💡 Pricing Logic</div>
-                  <div className="text-gray-700">{pricingInfo.reason}</div>
+                  <div className="font-medium text-gray-900 mb-1">💡 Recommended</div>
+                  <div className="text-gray-700">Sell at ₹{pricingInfo.recommendedPrice.toLocaleString()} to earn ₹{currentIncentive}. {pricingInfo.reason}</div>
                 </div>
-
-                {showDiscountCalculator && (
-                  <div className="mt-3 p-3 rounded-lg bg-white border" style={{ borderColor: '#85A383' }}>
-                    <div className="text-xs font-medium mb-2">Price Boundaries</div>
-                    <div className="space-y-2">
-                      <div className="flex justify-between items-center">
-                        <span className="text-xs text-gray-600">Floor Price (Min)</span>
-                        <span className="text-sm font-semibold text-red-600">₹{pricingInfo.floor.toLocaleString()}</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-xs text-gray-600">Current Offer</span>
-                        <span className="text-sm font-semibold" style={{ color: '#85A383' }}>₹{pricingInfo.recommendedPrice.toLocaleString()}</span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-xs text-gray-600">Ceiling (MRP)</span>
-                        <span className="text-sm font-semibold text-gray-900">₹{pricingInfo.ceiling.toLocaleString()}</span>
-                      </div>
-                      <div className="pt-2 border-t" style={{ borderColor: '#E7DDCA' }}>
-                        <div className="flex justify-between items-center">
-                          <span className="text-xs text-gray-600">Lowest Competitor</span>
-                          <span className="text-sm font-semibold text-orange-600">₹{pricingInfo.lowestCompetitor.toLocaleString()}</span>
-                        </div>
-                      </div>
-                      {pricingInfo.canDiscount && (
-                        <div className="pt-2 border-t" style={{ borderColor: '#E7DDCA' }}>
-                          <div className="text-xs text-gray-600 mb-1">Max Additional Discount Available</div>
-                          <div className="text-sm font-semibold text-green-600">₹{pricingInfo.maxAdditionalDiscount.toLocaleString()}</div>
-                          <div className="text-xs text-gray-500 mt-1">
-                            Final floor: ₹{pricingInfo.floor.toLocaleString()} (Maintains {selectedProduct.pricingRules.minMargin}% min margin)
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
               </div>
             </div>
           </div>
 
-          {/* Customer Profile Selector */}
           {!customerProfile && !customerData && (
             <div className="p-4 bg-yellow-50 border-b border-yellow-200">
               <div className="flex items-start gap-3">
@@ -737,129 +777,101 @@ export default function CromaAdvisorAssist() {
             </div>
           )}
 
-          {/* Current Product Card */}
-          <div className="p-4 bg-white border-b">
-            <div className="flex items-start gap-4 mb-3">
-              <span className="text-4xl">{selectedProduct.image}</span>
-              <div className="flex-1">
-                <div className="text-base font-medium text-gray-900 mb-1">{selectedProduct.name}</div>
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-xl font-semibold" style={{ color: '#85A383' }}>
-                    ₹{pricingInfo.recommendedPrice.toLocaleString()}
-                  </span>
-                  {pricingInfo.savingsFromMRP > 0 && (
-                    <span className="text-sm line-through text-gray-400">₹{selectedProduct.basePrice.toLocaleString()}</span>
-                  )}
-                  <span className="px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-700">
-                    {pricingInfo.actualMargin}% margin
-                  </span>
-                  <span className="px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-700">
-                    {selectedProduct.stock} in stock
-                  </span>
-                </div>
-                <div className="flex items-center gap-2 text-xs mb-2">
-                  <span className="px-2 py-0.5 rounded bg-purple-100 text-purple-700 font-medium">
-                    {selectedProduct.conversionRate}% conversion
-                  </span>
-                  <span className="text-gray-500">{selectedProduct.recentSales} sold this week</span>
-                </div>
-                <div className="flex items-center gap-2 text-xs text-gray-500">
-                  <span>Return rate: {selectedProduct.returnRate}%</span>
-                  <span>•</span>
-                  <span>Quality: {selectedProduct.qualityScore}/10</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-2 mb-3">
-              {Object.entries(selectedProduct.specs).map(([key, value]) => (
-                <div key={key} className="p-2 rounded" style={{ backgroundColor: '#F5F0E8' }}>
-                  <div className="text-xs text-gray-500 capitalize">{key}</div>
-                  <div className="text-xs font-medium text-gray-900">{value}</div>
-                </div>
-              ))}
-            </div>
-
-            <div className="flex flex-wrap gap-2 mb-3">
-              {selectedProduct.usps.map((usp, idx) => (
-                <span key={idx} className="px-2 py-1 rounded text-xs font-medium" style={{ backgroundColor: '#85A38320', color: '#85A383' }}>
-                  {usp}
-                </span>
-              ))}
-            </div>
-
-            <div className="text-xs text-gray-600">
-              <span className="font-medium">Best for:</span> {selectedProduct.bestFor.join(', ')}
-            </div>
-          </div>
-
-          {/* Good/Better/Best Recommendations */}
           {recommendations && (
             <div className="p-4 border-b">
               <div className="flex items-center gap-2 mb-3">
                 <Target className="w-4 h-4" style={{ color: '#85A383' }} />
-                <h3 className="text-sm font-medium text-gray-900">Recommend Upgrade Path</h3>
+                <h3 className="text-sm font-medium text-gray-900">Compare Options</h3>
               </div>
               
-              <div className="space-y-2">
-                {[
-                  { tier: 'Good', product: recommendations.good, color: 'bg-gray-100 text-gray-700' },
-                  { tier: 'Better', product: recommendations.better, color: 'bg-blue-100 text-blue-700' },
-                  { tier: 'Best', product: recommendations.best, color: 'bg-green-100 text-green-700' }
-                ].map(({ tier, product, color }) => {
+              <div className="grid grid-cols-3 gap-2 mb-3">
+                {compareOptions.map(({ tier, product, recommended }) => {
                   if (!product) return null;
-                  const isCurrentProduct = product.id === selectedProduct.id;
                   const tierPricing = calculateDynamicPrice(product, customerData?.segment);
+                  const isCurrentProduct = product.id === selectedProduct.id;
+                  const tierIncentive = getIncentiveAtPrice(product, tierPricing.recommendedPrice);
                   
                   return (
                     <div
                       key={tier}
-                      className={`p-3 rounded-lg border-2 ${isCurrentProduct ? 'bg-yellow-50' : ''}`}
-                      style={{ borderColor: isCurrentProduct ? '#F59E0B' : '#E7DDCA' }}
+                      className={`p-3 rounded-lg border-2 ${isCurrentProduct ? 'bg-yellow-50' : ''} ${recommended ? 'ring-2 ring-offset-2' : ''}`}
+                      style={{ 
+                        borderColor: isCurrentProduct ? '#F59E0B' : recommended ? '#85A383' : '#E7DDCA',
+                        ringColor: recommended ? '#85A383' : 'transparent'
+                      }}
                     >
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center gap-2">
-                          <span className={`px-2 py-0.5 rounded text-xs font-medium ${color}`}>{tier}</span>
-                          {isCurrentProduct && (
-                            <span className="px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-700">
-                              Currently Viewing
-                            </span>
-                          )}
+                      <div className="mb-2">
+                        <div className={`text-xs font-medium px-2 py-0.5 rounded inline-block mb-1 ${
+                          tier === 'Budget' ? 'bg-gray-100 text-gray-700' :
+                          tier === 'Recommended' ? 'bg-green-100 text-green-700' :
+                          'bg-blue-100 text-blue-700'
+                        }`}>
+                          {tier}
                         </div>
-                        <div className="text-right">
-                          <div className="text-sm font-semibold">₹{tierPricing.recommendedPrice.toLocaleString()}</div>
-                          <div className="text-xs text-gray-500">{tierPricing.actualMargin}% margin</div>
-                        </div>
+                        {recommended && (
+                          <div className="text-xs font-medium text-green-600 mt-1">⭐ Best value</div>
+                        )}
                       </div>
-                      <div className="text-sm font-medium text-gray-900 mb-1">{product.name}</div>
-                      <div className="text-xs text-gray-600">{product.specs.processor} • {product.specs.ram} • {product.specs.storage}</div>
+                      
+                      <div className="mb-2">
+                        <div className="text-xs font-medium text-gray-900 mb-1 line-clamp-2">{product.name}</div>
+                        <div className="text-xs text-gray-600 line-clamp-1">{product.specs.processor}</div>
+                        <div className="text-xs text-gray-600">{product.specs.ram}</div>
+                      </div>
+
+                      <div className="mb-2">
+                        <div className="text-sm font-bold" style={{ color: '#85A383' }}>₹{tierPricing.recommendedPrice.toLocaleString()}</div>
+                      </div>
+
+                      <div className="p-2 rounded mb-2" style={{ backgroundColor: '#F5F0E8' }}>
+                        <div className="text-xs text-gray-600">You earn</div>
+                        <div className="text-base font-bold text-gray-900">₹{tierIncentive}</div>
+                      </div>
+
+                      <div className="text-xs text-gray-600 mb-2">
+                        {product.usps.slice(0, 2).map((usp, idx) => (
+                          <div key={idx} className="flex items-start gap-1">
+                            <span className="text-green-600">✓</span>
+                            <span className="line-clamp-1">{usp}</span>
+                          </div>
+                        ))}
+                      </div>
+
                       {!isCurrentProduct && (
                         <button
                           onClick={() => setSelectedProduct(product)}
-                          className="mt-2 w-full py-2 rounded text-xs font-medium text-white"
-                          style={{ backgroundColor: '#85A383' }}
+                          className="w-full py-1.5 rounded text-xs font-medium border"
+                          style={{ 
+                            borderColor: '#85A383', 
+                            color: '#85A383',
+                            backgroundColor: 'white'
+                          }}
                         >
-                          View This Option
+                          View Details
                         </button>
+                      )}
+                      {isCurrentProduct && (
+                        <div className="text-center py-1.5 text-xs font-medium text-yellow-700">
+                          Currently Viewing
+                        </div>
                       )}
                     </div>
                   );
                 })}
               </div>
 
-              <div className="mt-3 p-3 rounded-lg" style={{ backgroundColor: '#E7DDCA' }}>
-                <div className="text-xs font-medium text-gray-900 mb-1">💡 Sales Tip</div>
-                <div className="text-xs text-gray-700 leading-relaxed">
-                  {customerProfile === 'student' && 'Students regret buying 8GB within 6 months. Show the ₹9K difference gets them 16GB that lasts 4 years.'}
-                  {customerProfile === 'gamer' && 'Gaming laptops without dedicated GPU can\'t play modern games. RTX 3050 is minimum for 60fps 1080p gaming.'}
-                  {customerProfile === 'professional' && 'Professionals value time. Show how 16GB + SSD saves 2-3 hours/week in loading time = ₹50K+ annual value.'}
-                  {customerProfile === 'creator' && 'Creators need 16GB minimum for Adobe/DaVinci. Show render time comparison: 8GB = 45 min, 16GB = 15 min.'}
+              {recommendations.better && (
+                <div className="p-3 rounded-lg" style={{ backgroundColor: '#E7DDCA' }}>
+                  <div className="text-xs font-medium text-gray-900 mb-1">💡 Why This is Recommended</div>
+                  <ul className="space-y-1">
+                    <li className="text-xs text-gray-700">• Higher chance of meeting customer needs ({customerProfile || 'typical'} profile)</li>
+                    <li className="text-xs text-gray-700">• Better incentive for you this week (₹{getIncentiveAtPrice(recommendations.better, calculateDynamicPrice(recommendations.better, customerData?.segment).recommendedPrice)} vs ₹{getIncentiveAtPrice(recommendations.good, calculateDynamicPrice(recommendations.good, customerData?.segment).recommendedPrice)})</li>
+                  </ul>
                 </div>
-              </div>
+              )}
             </div>
           )}
 
-          {/* AI-Powered Talking Points */}
           {talkingPoints.length > 0 && (
             <div className="p-4 border-b">
               <div className="flex items-center gap-2 mb-3">
@@ -892,7 +904,6 @@ export default function CromaAdvisorAssist() {
             </div>
           )}
 
-          {/* Attachments */}
           <div className="p-4 border-b">
             <div className="flex items-center gap-2 mb-3">
               <Gift className="w-4 h-4" style={{ color: '#85A383' }} />
@@ -914,7 +925,7 @@ export default function CromaAdvisorAssist() {
                     </div>
                     <div className="text-right ml-3">
                       <div className="text-sm font-semibold">₹{item.price.toLocaleString()}</div>
-                      <div className="text-xs text-gray-500">{item.margin}% margin</div>
+                      <div className="text-xs font-medium" style={{ color: '#85A383' }}>+₹{item.advisorIncentive}</div>
                     </div>
                   </div>
                   <button className="w-full py-2 rounded text-xs font-medium border-2" style={{ borderColor: '#85A383', color: '#85A383' }}>
@@ -927,44 +938,16 @@ export default function CromaAdvisorAssist() {
 
             <div className="mt-3 p-3 rounded-lg" style={{ backgroundColor: '#85A38310' }}>
               <div className="text-xs font-medium mb-1" style={{ color: '#85A383' }}>📦 Bundle Opportunity</div>
-              <div className="text-xs text-gray-700">
-                Laptop + Mouse + Bag + Office = Save ₹1,500 vs individual. Increases your ticket by ₹7.9K with 32% blended margin.
+              <div className="text-xs text-gray-700 mb-2">
+                Laptop + Mouse + Bag + Office = Customer saves ₹1,500. You earn extra ₹850 in add-ons.
               </div>
-            </div>
-          </div>
-
-          {/* Competitor Comparison */}
-          <div className="p-4">
-            <div className="flex items-center gap-2 mb-3">
-              <TrendingUp className="w-4 h-4" style={{ color: '#85A383' }} />
-              <h3 className="text-sm font-medium text-gray-900">vs Competition</h3>
-            </div>
-            
-            <div className="space-y-2 mb-3">
-              {Object.entries(selectedProduct.competitorPrices).map(([competitor, price]) => (
-                <div key={competitor} className="flex justify-between items-center text-xs">
-                  <span className="text-gray-600 capitalize">{competitor}</span>
-                  <span className="font-medium text-gray-900">₹{price.toLocaleString()}</span>
-                </div>
-              ))}
-              <div className="flex justify-between items-center text-sm pt-2 border-t" style={{ borderColor: '#E7DDCA' }}>
-                <span className="font-medium text-gray-900">Your Price</span>
-                <span className="font-bold" style={{ color: '#85A383' }}>₹{pricingInfo.recommendedPrice.toLocaleString()}</span>
-              </div>
-            </div>
-
-            <div className="p-3 rounded-lg" style={{ backgroundColor: '#F5F0E8' }}>
-              <div className="text-xs text-gray-700 leading-relaxed">
-                ✓ Instant warranty service (no shipping waits)
-                <br />✓ Try before buy in store
-                <br />✓ Exchange old laptop today (online takes 7-10 days)
-                <br />✓ Expert setup & data transfer included
+              <div className="text-xs font-semibold text-gray-900">
+                Total earning on bundle: ₹{currentIncentive + 850}
               </div>
             </div>
           </div>
         </div>
 
-        {/* Bottom Actions */}
         <div className="p-4 bg-white border-t grid grid-cols-2 gap-3">
           <button className="py-3 rounded-lg font-medium border-2" style={{ borderColor: '#85A383', color: '#85A383' }}>
             Compare with Others
@@ -979,7 +962,6 @@ export default function CromaAdvisorAssist() {
 
   return (
     <div className="flex flex-col h-screen overflow-auto bg-gray-50 max-w-md mx-auto">
-      {/* Top Bar */}
       <div className="bg-white border-b px-4 py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -1003,7 +985,6 @@ export default function CromaAdvisorAssist() {
         </div>
       </div>
 
-      {/* Main Content */}
       {currentView === 'search' && <SearchView />}
       {currentView === 'product' && <ProductView />}
     </div>
