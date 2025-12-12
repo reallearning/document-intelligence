@@ -1031,9 +1031,534 @@ export default function Page() {
       color: "#06B6D4",
       type: "bkg",
     },
+    {
+      id: "sap_hana",
+      name: "SAP HANA",
+      description: "Core ERP: product, inventory, purchasing, finance",
+      width: 140,
+      height: 50,
+      size: 0,
+      color: "#0F172A",
+      type: "source",
+    },
+    {
+      id: "wondersoft_pos",
+      name: "Wondersoft POS",
+      description: "Store POS: bills, tenders, returns, line items",
+      width: 160,
+      height: 50,
+      size: 0,
+      color: "#0F172A",
+      type: "source",
+    },
+    {
+      id: "plm",
+      name: "PLM (Centric)",
+      description: "Product Lifecycle Management (styles, seasons, launches)",
+      width: 180,
+      height: 50,
+      size: 0,
+      color: "#0F172A",
+      type: "source",
+    },
+    {
+      id: "wms",
+      name: "WMS",
+      description: "Warehouse Management System (inbound, outbound, putaway)",
+      width: 140,
+      height: 50,
+      size: 0,
+      color: "#0F172A",
+      type: "source",
+    },
+    {
+      id: "crm",
+      name: "CRM",
+      description: "Customer 360, service tickets, store and call interactions",
+      width: 140,
+      height: 50,
+      size: 0,
+      color: "#0F172A",
+      type: "source",
+    },
+    {
+      id: "web_analytics",
+      name: "Web Analytics (GA4)",
+      description: "Site sessions, page views, product interactions, funnels",
+      width: 190,
+      height: 50,
+      size: 0,
+      color: "#0F172A",
+      type: "source",
+    },
+    {
+      id: "loyalty_engine",
+      name: "Loyalty Engine",
+      description: "Points accrual, redemptions, tier history",
+      width: 160,
+      height: 50,
+      size: 0,
+      color: "#0F172A",
+      type: "source",
+    },
+    {
+      id: "marketing_automation",
+      name: "Marketing Automation",
+      description: "Campaign sends, opens, clicks, journeys",
+      width: 190,
+      height: 50,
+      size: 0,
+      color: "#0F172A",
+      type: "source",
+    },
+    {
+      id: "hrms",
+      name: "HRMS",
+      description: "Employee master, roles, performance, training",
+      width: 130,
+      height: 50,
+      size: 0,
+      color: "#0F172A",
+      type: "source",
+    },
+    {
+      id: "external_data_lake",
+      name: "External Data Lake",
+      description: "Weather, events, macro indicators, competition feeds",
+      width: 200,
+      height: 50,
+      size: 0,
+      color: "#0F172A",
+      type: "source",
+    },
   ]);
 
   const [links, setLinks] = useState<Link[]>([
+    // --- SAP HANA → CORE ENTITIES ---
+
+    {
+      id: "ds_sap_products",
+      source: "sap_hana",
+      target: "product",
+      type: "FEEDS",
+      description: "SAP material master → Product",
+      nlQuery:
+        "List all active products with brand, category and base unit of measure",
+      dataContext:
+        "Source: SAP HANA MARA, MVKE, MVKE_T\nFields: matnr (product_code), mtart (type), matkl (category), brand_code, base_uom, status",
+      linkType: "data",
+    },
+    {
+      id: "ds_sap_inventory",
+      source: "sap_hana",
+      target: "inventory_level",
+      type: "FEEDS",
+      description: "SAP stock tables → InventoryLevel by store/DC",
+      nlQuery:
+        "Show current on-hand, in-transit and reserved inventory for a given product across all locations",
+      dataContext:
+        "Source: SAP HANA MARD, MDKP, MDVM\nFields: matnr (product_code), werks (location), lgort (storage_location), labst (unrestricted_stock), insme (stock_in_quality), umlme (in_transfer), reserv_stock",
+      linkType: "data",
+    },
+    {
+      id: "ds_sap_po",
+      source: "sap_hana",
+      target: "purchase_order",
+      type: "FEEDS",
+      description: "SAP purchase orders → PurchaseOrder",
+      nlQuery:
+        "List open purchase orders by supplier and expected delivery date for a given category or brand",
+      dataContext:
+        "Source: SAP HANA EKKO, EKPO\nFields: ebeln (po_number), bukrs (company_code), lifnr (supplier_code), matnr (product_code), menge (ordered_qty), netpr (price), eindt (delivery_date), bstyp (doc_type), loekz (deletion_flag)",
+      linkType: "data",
+    },
+    {
+      id: "ds_sap_supplier",
+      source: "sap_hana",
+      target: "supplier",
+      type: "FEEDS",
+      description: "SAP vendor master → Supplier",
+      nlQuery: "List strategic suppliers with annual PO value and lead time",
+      dataContext:
+        "Source: SAP HANA LFA1, LFB1\nFields: lifnr (supplier_code), name1 (supplier_name), land1 (country), regio (region), payment_terms, incoterms",
+      linkType: "data",
+    },
+    {
+      id: "ds_sap_store",
+      source: "sap_hana",
+      target: "store",
+      type: "FEEDS",
+      description: "SAP plant/store master → Store",
+      nlQuery:
+        "List all active stores with region, district and opening date for a given format",
+      dataContext:
+        "Source: SAP HANA T001W\nFields: werks (store_code), name1 (store_name), region, district, city, format, opening_date, closing_date",
+      linkType: "data",
+    },
+
+    // --- WONDERSOFT POS → ORDERS / RECEIPTS / RETURNS ---
+
+    {
+      id: "ds_pos_orders",
+      source: "wondersoft_pos",
+      target: "order",
+      type: "FEEDS",
+      description: "POS bills → Order",
+      nlQuery:
+        "Show yesterday's store-wise sales, average bill value and bill count from POS",
+      dataContext:
+        "Source: Wondersoft BillHeader\nFields: bill_no, bill_date, store_code, customer_id, gross_amount, discount_amount, net_amount, payment_mode, cashier_id",
+      linkType: "data",
+    },
+    {
+      id: "ds_pos_order_lines",
+      source: "wondersoft_pos",
+      target: "order_line",
+      type: "FEEDS",
+      description: "POS line items → OrderLine",
+      nlQuery:
+        "For a given product, show quantity, net sales and discount by store over the last 30 days",
+      dataContext:
+        "Source: Wondersoft BillDetail\nFields: bill_no, line_no, sku_code, qty, mrp, selling_price, discount_amount, tax_amount, net_amount",
+      linkType: "data",
+    },
+    {
+      id: "ds_pos_receipts",
+      source: "wondersoft_pos",
+      target: "receipt",
+      type: "FEEDS",
+      description: "POS receipt header → Receipt",
+      nlQuery:
+        "List all receipts for a given store and date range, including payment split by tender type",
+      dataContext:
+        "Source: Wondersoft TenderSummary\nFields: bill_no, store_code, bill_date, tender_type, tender_amount, reference_no",
+      linkType: "data",
+    },
+    {
+      id: "ds_pos_returns",
+      source: "wondersoft_pos",
+      target: "return",
+      type: "FEEDS",
+      description: "POS return documents → Return",
+      nlQuery:
+        "Show return rate (quantity and value) by product and store for last 90 days",
+      dataContext:
+        "Source: Wondersoft ReturnHeader, ReturnDetail\nFields: return_no, bill_no, store_code, return_date, sku_code, return_qty, return_amount, reason_code",
+      linkType: "data",
+    },
+    {
+      id: "ds_pos_inventory_movements",
+      source: "wondersoft_pos",
+      target: "inventory_movement",
+      type: "FEEDS",
+      description: "Store-side stock changes → InventoryMovement",
+      nlQuery:
+        "For a given store, list all stock movements from sales, returns, write-offs and transfers for last 7 days",
+      dataContext:
+        "Source: Wondersoft StockLedger\nFields: store_code, sku_code, txn_date, txn_type (SALE/RETURN/ADJ/TRANSFER), qty, reference_no",
+      linkType: "data",
+    },
+
+    // --- PLM (CENTRIC) → PRODUCT LIFECYCLE / ATTRIBUTES ---
+
+    {
+      id: "ds_plm_styles",
+      source: "plm",
+      target: "product",
+      type: "FEEDS",
+      description: "PLM style master → Product",
+      nlQuery:
+        "List all upcoming styles for next season with category, brand and planned launch date",
+      dataContext:
+        "Source: PLM StyleMaster\nFields: style_id, style_code, brand, category, season, collection, status, launch_date",
+      linkType: "data",
+    },
+    {
+      id: "ds_plm_lifecycle",
+      source: "plm",
+      target: "product_lifecycle",
+      type: "FEEDS",
+      description: "PLM lifecycle & status → ProductLifecycle",
+      nlQuery:
+        "Show products that are in end-of-life stage but still have inventory on hand",
+      dataContext:
+        "Source: PLM Lifecycle\nFields: style_id, lifecycle_stage (NEW/MATURE/EOL), stage_start_date, stage_end_date, lifecycle_owner",
+      linkType: "data",
+    },
+    {
+      id: "ds_plm_attributes",
+      source: "plm",
+      target: "product_attribute",
+      type: "FEEDS",
+      description: "Design attributes → ProductAttribute",
+      nlQuery:
+        "For a given category, list products by key PLM attributes like fabric, fit, silhouette and occasion",
+      dataContext:
+        "Source: PLM Attributes\nFields: style_id, attribute_name, attribute_value, attribute_group (FABRIC/FIT/OCCASION/etc.)",
+      linkType: "data",
+    },
+
+    // --- WMS → INVENTORY / TRANSFERS ---
+
+    {
+      id: "ds_wms_inventory",
+      source: "wms",
+      target: "inventory_level",
+      type: "FEEDS",
+      description: "DC stock by bin → InventoryLevel",
+      nlQuery:
+        "Show DC-wise stock by product, including reserved and available-to-ship quantity",
+      dataContext:
+        "Source: WMS OnHand\nFields: dc_code, sku_code, bin_id, on_hand_qty, reserved_qty, available_qty, batch_no, expiry_date",
+      linkType: "data",
+    },
+    {
+      id: "ds_wms_transfers",
+      source: "wms",
+      target: "stock_transfer",
+      type: "FEEDS",
+      description: "DC ↔ store stock transfers → StockTransfer",
+      nlQuery:
+        "List all inter-store and DC-to-store transfers for a given product in last 30 days",
+      dataContext:
+        "Source: WMS TransferHeader, TransferDetail\nFields: transfer_no, from_location, to_location, sku_code, qty, dispatch_date, receipt_date, status",
+      linkType: "data",
+    },
+    {
+      id: "ds_wms_movements",
+      source: "wms",
+      target: "inventory_movement",
+      type: "FEEDS",
+      description: "Detailed movements → InventoryMovement",
+      nlQuery:
+        "For a given DC, show inbound, outbound and adjustment quantities by day",
+      dataContext:
+        "Source: WMS Movement\nFields: dc_code, sku_code, txn_type (GRN/ISSUE/ADJ), txn_date, qty, reference_type, reference_no",
+      linkType: "data",
+    },
+
+    // --- CRM → CUSTOMER / INTERACTIONS ---
+
+    {
+      id: "ds_crm_customers",
+      source: "crm",
+      target: "customer",
+      type: "FEEDS",
+      description: "CRM customer 360 → Customer",
+      nlQuery:
+        "For a given mobile number, fetch customer profile with basic demographics and consent flags",
+      dataContext:
+        "Source: CRM Customer\nFields: customer_id, mobile, email, name, dob, gender, city, consent_sms, consent_email, consent_whatsapp",
+      linkType: "data",
+    },
+    {
+      id: "ds_crm_interactions",
+      source: "crm",
+      target: "customer_interaction",
+      type: "FEEDS",
+      description:
+        "Service tickets and store interactions → CustomerInteraction",
+      nlQuery:
+        "Show all service interactions for a customer in the last 6 months with channel and status",
+      dataContext:
+        "Source: CRM Interaction\nFields: interaction_id, customer_id, channel (CALL/STORE/EMAIL), type, created_at, closed_at, status, sentiment_score",
+      linkType: "data",
+    },
+
+    // --- WEB ANALYTICS → SESSIONS / PAGEVIEWS / PRODUCTINTERACTION ---
+
+    {
+      id: "ds_web_sessions",
+      source: "web_analytics",
+      target: "web_session",
+      type: "FEEDS",
+      description: "GA4 sessions → WebSession",
+      nlQuery:
+        "Show web sessions, new vs returning users and bounce rate for last 7 days",
+      dataContext:
+        "Source: GA4 sessions export\nFields: session_id, user_pseudo_id, session_start, device_type, os, country, source_medium",
+      linkType: "data",
+    },
+    {
+      id: "ds_web_pageviews",
+      source: "web_analytics",
+      target: "page_view",
+      type: "FEEDS",
+      description: "GA4 page views → PageView",
+      nlQuery:
+        "Show top landing pages and their conversion to product detail page",
+      dataContext:
+        "Source: GA4 page_view events\nFields: session_id, page_location, page_referrer, event_timestamp, engagement_time_msec",
+      linkType: "data",
+    },
+    {
+      id: "ds_web_product_interactions",
+      source: "web_analytics",
+      target: "product_interaction",
+      type: "FEEDS",
+      description: "Product view/click events → ProductInteraction",
+      nlQuery:
+        "For a given product, show online views, add-to-cart and checkout starts in last 30 days",
+      dataContext:
+        "Source: GA4 view_item, add_to_cart, begin_checkout\nFields: session_id, sku_code, event_name, event_timestamp, quantity, value",
+      linkType: "data",
+    },
+
+    // --- LOYALTY ENGINE → LOYALTYACCOUNT / LOYALTYTRANSACTION ---
+
+    {
+      id: "ds_loyalty_accounts",
+      source: "loyalty_engine",
+      target: "loyalty_account",
+      type: "FEEDS",
+      description: "Loyalty membership → LoyaltyAccount",
+      nlQuery:
+        "List loyalty members with their current tier, points balance and last earn/redeem date",
+      dataContext:
+        "Source: Loyalty MemberMaster\nFields: account_id, customer_id, tier, current_points, points_expiring, last_earn_date, last_redeem_date",
+      linkType: "data",
+    },
+    {
+      id: "ds_loyalty_txn",
+      source: "loyalty_engine",
+      target: "loyalty_transaction",
+      type: "FEEDS",
+      description: "Points earn/redeem → LoyaltyTransaction",
+      nlQuery:
+        "Show points earned and redeemed by a customer for a given period, split by channel",
+      dataContext:
+        "Source: Loyalty Transaction\nFields: transaction_id, account_id, txn_date, txn_type (EARN/REDEEM/ADJUST), points, channel, reference_doc",
+      linkType: "data",
+    },
+
+    // --- MARKETING AUTOMATION → CAMPAIGN / EMAIL / PUSH ---
+
+    {
+      id: "ds_mkt_campaigns",
+      source: "marketing_automation",
+      target: "campaign",
+      type: "FEEDS",
+      description: "Campaign definitions → Campaign",
+      nlQuery:
+        "List active campaigns with objective, primary channel and targeted segments",
+      dataContext:
+        "Source: Marketing Campaigns\nFields: campaign_id, name, objective, primary_channel, start_date, end_date, status, target_segment_ids",
+      linkType: "data",
+    },
+    {
+      id: "ds_mkt_email_events",
+      source: "marketing_automation",
+      target: "email_campaign",
+      type: "FEEDS",
+      description: "Email sends/opens/clicks → EmailCampaign",
+      nlQuery:
+        "For a given campaign, show email send volume, open rate and click-through rate",
+      dataContext:
+        "Source: Email Events\nFields: email_id, campaign_id, customer_id, event_type (SENT/OPEN/CLICK/BOUNCE), event_time",
+      linkType: "data",
+    },
+    {
+      id: "ds_mkt_push_events",
+      source: "marketing_automation",
+      target: "push_notification",
+      type: "FEEDS",
+      description: "App push notifications → PushNotification",
+      nlQuery:
+        "Show push notification performance (sent, delivered, clicked) by template and segment",
+      dataContext:
+        "Source: Push Events\nFields: push_id, campaign_id, customer_id, template_id, event_type (SENT/DELIVERED/CLICK), event_time",
+      linkType: "data",
+    },
+
+    // --- HRMS → EMPLOYEE / ROLE / PERFORMANCE ---
+
+    {
+      id: "ds_hrms_employees",
+      source: "hrms",
+      target: "employee",
+      type: "FEEDS",
+      description: "Employee master → Employee",
+      nlQuery:
+        "List store staff with role, joining date and current status for a given region",
+      dataContext:
+        "Source: HRMS EmployeeMaster\nFields: employee_id, name, store_code, role_code, join_date, exit_date, status",
+      linkType: "data",
+    },
+    {
+      id: "ds_hrms_roles",
+      source: "hrms",
+      target: "role",
+      type: "FEEDS",
+      description: "Role dictionary → Role",
+      nlQuery:
+        "Show standard role hierarchy (store associate, department manager, store manager, area manager etc.)",
+      dataContext:
+        "Source: HRMS RoleMaster\nFields: role_id, role_name, parent_role_id, grade, band",
+      linkType: "data",
+    },
+    {
+      id: "ds_hrms_performance",
+      source: "hrms",
+      target: "performance",
+      type: "FEEDS",
+      description: "Performance scores → Performance",
+      nlQuery:
+        "For a given store, list staff performance ratings for last appraisal cycle",
+      dataContext:
+        "Source: HRMS PerformanceReview\nFields: performance_id, employee_id, period_start, period_end, rating, reviewer_id",
+      linkType: "data",
+    },
+
+    // --- EXTERNAL DATA LAKE → WEATHER / EVENTS / ECONOMICS / COMPETITION ---
+
+    {
+      id: "ds_ext_weather",
+      source: "external_data_lake",
+      target: "weather_data",
+      type: "FEEDS",
+      description: "Hourly/daily weather feed → WeatherData",
+      nlQuery:
+        "Show temperature and rainfall for all store locations for last 14 days",
+      dataContext:
+        "Source: Weather API ingest\nFields: store_code, date, hour, temperature_c, rainfall_mm, humidity, weather_code",
+      linkType: "data",
+    },
+    {
+      id: "ds_ext_events",
+      source: "external_data_lake",
+      target: "event",
+      type: "FEEDS",
+      description: "Holidays and local events → Event",
+      nlQuery:
+        "List national holidays and key regional events impacting each store over next 60 days",
+      dataContext:
+        "Source: Events feed\nFields: event_id, event_name, event_type (HOLIDAY/FESTIVAL/LOCAL_EVENT), start_date, end_date, region_codes, impact_flag",
+      linkType: "data",
+    },
+    {
+      id: "ds_ext_econ",
+      source: "external_data_lake",
+      target: "economic_indicator",
+      type: "FEEDS",
+      description: "Macro indicators → EconomicIndicator",
+      nlQuery:
+        "Show monthly CPI or consumer sentiment index for key regions where stores are present",
+      dataContext:
+        "Source: Govt/third-party macro feeds\nFields: indicator_id, indicator_name, geo_level, geo_code, period, value",
+      linkType: "data",
+    },
+    {
+      id: "ds_ext_competitor_prices",
+      source: "external_data_lake",
+      target: "competitor_price",
+      type: "FEEDS",
+      description: "Scraped/partner competitive prices → CompetitorPrice",
+      nlQuery:
+        "Compare our current selling price vs top 3 competitors for a given SKU or brand",
+      dataContext:
+        "Source: Competition price feed\nFields: competitor_id, competitor_name, sku_code, competitor_sku, price, collected_at, channel",
+      linkType: "data",
+    },
     // ========= PRODUCT RELATIONSHIPS =========
     {
       id: "r_has_variant",
