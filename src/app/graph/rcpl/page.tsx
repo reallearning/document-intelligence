@@ -150,6 +150,38 @@ export default function Page() {
       type: "bkg",
     },
 
+    // ADDED (as per checklist)
+    {
+      id: "l1_digital",
+      name: "E-com & Q-com",
+      description:
+        "Platform-led commerce execution across e-commerce and quick-commerce with platform SLAs and availability discipline.",
+      level: 1,
+      size: 18,
+      color: "#3B82F6",
+      type: "bkg",
+    },
+    {
+      id: "l1_tax",
+      name: "Tax & Statutory",
+      description:
+        "GST compliance and state-wise tax treatment impacting pricing, invoicing, and reporting.",
+      level: 1,
+      size: 18,
+      color: "#3B82F6",
+      type: "bkg",
+    },
+    {
+      id: "l1_external",
+      name: "External Intelligence & Sustainability",
+      description:
+        "Competitor tracking, syndicated data (e.g., Nielsen/Kantar), weather/Planalytics signals, and carbon footprint analytics.",
+      level: 1,
+      size: 18,
+      color: "#3B82F6",
+      type: "bkg",
+    },
+
     // =========================
     // LEVEL 2 (SUB-DOMAINS)
     // =========================
@@ -198,6 +230,18 @@ export default function Page() {
       name: "Category Hierarchy",
       description:
         "Category → sub-category → segment mapping used for planning, pricing, and reporting.",
+      level: 2,
+      size: 14,
+      color: "#60A5FA",
+      type: "bkg",
+    },
+
+    // ADDED: Product – Price-pack
+    {
+      id: "l2_price_pack_arch",
+      name: "Price-Pack Architecture",
+      description:
+        "Design of price-points via pack sizes/tiers and net price-per-unit economics to win segments without margin leakage.",
       level: 2,
       size: 14,
       color: "#60A5FA",
@@ -255,6 +299,18 @@ export default function Page() {
       type: "bkg",
     },
 
+    // ADDED: Sales – Rep productivity
+    {
+      id: "l2_sfe",
+      name: "Sales Force Effectiveness (SFE)",
+      description:
+        "Field execution productivity: coverage efficiency, strike rate, and output per rep/beat aligned to targets.",
+      level: 2,
+      size: 14,
+      color: "#34D399",
+      type: "bkg",
+    },
+
     {
       id: "l2_rtm",
       name: "Route-to-Market",
@@ -300,6 +356,18 @@ export default function Page() {
       name: "Service Levels",
       description:
         "OTIF, fill rate, damages, and freshness adherence governing trust and expansion.",
+      level: 2,
+      size: 14,
+      color: "#FB923C",
+      type: "bkg",
+    },
+
+    // ADDED: Distribution – shelf share
+    {
+      id: "l2_retail_execution",
+      name: "Retail Execution",
+      description:
+        "In-store execution health: shelf share, on-shelf availability, display compliance and audit mechanisms.",
       level: 2,
       size: 14,
       color: "#FB923C",
@@ -402,6 +470,30 @@ export default function Page() {
       name: "Inventory Health",
       description:
         "Safety stock, aging/expiry risk, shrink/damage, and availability/OOS risk.",
+      level: 2,
+      size: 14,
+      color: "#22C55E",
+      type: "bkg",
+    },
+
+    // ADDED: Supply Chain – Forecast vs actuals
+    {
+      id: "l2_forecast_perf",
+      name: "Forecast Performance",
+      description:
+        "Forecast vs actuals tracking, bias diagnostics, and accuracy by SKU/territory/channel to drive planning corrections.",
+      level: 2,
+      size: 14,
+      color: "#22C55E",
+      type: "bkg",
+    },
+
+    // ADDED: S&OP Integration
+    {
+      id: "l2_sop",
+      name: "S&OP Integration",
+      description:
+        "Consensus forecast and constrained supply plan governance linking sales assumptions to procurement, manufacturing and deployment.",
       level: 2,
       size: 14,
       color: "#22C55E",
@@ -634,6 +726,118 @@ export default function Page() {
     },
 
     // =========================
+    // LEVEL 2 (E-com & Q-com)
+    // =========================
+    {
+      id: "l2_platforms",
+      name: "Commerce Platforms",
+      description:
+        "E-commerce and quick-commerce platforms with catalog, SLA and commercial constructs.",
+      level: 2,
+      size: 14,
+      color: "#38BDF8",
+      type: "bkg",
+    },
+    {
+      id: "l2_platform_performance",
+      name: "Platform Performance",
+      description:
+        "Platform KPIs: availability, fill rate/OTIF, cancellations/returns and content/search effectiveness by SKU/pack.",
+      level: 2,
+      size: 14,
+      color: "#38BDF8",
+      type: "bkg",
+    },
+    {
+      id: "l2_digital_fulfillment",
+      name: "Digital Fulfillment",
+      description:
+        "Fulfillment routing and service outcomes across platform warehouses/dark stores/distributor fulfillment.",
+      level: 2,
+      size: 14,
+      color: "#38BDF8",
+      type: "bkg",
+    },
+
+    // =========================
+    // LEVEL 2 (Tax & Statutory)
+    // =========================
+    {
+      id: "l2_gst_tax",
+      name: "GST & State Tax Treatment",
+      description:
+        "State-wise GST rules and tax structure impacting net realization and pricing corridors.",
+      level: 2,
+      size: 14,
+      color: "#38BDF8",
+      type: "bkg",
+    },
+    {
+      id: "l2_tax_invoice_breakup",
+      name: "Tax in Invoicing",
+      description:
+        "Tax breakup captured in invoices/credit notes to support statutory reporting and reconciliations.",
+      level: 2,
+      size: 14,
+      color: "#38BDF8",
+      type: "bkg",
+    },
+
+    // =========================
+    // LEVEL 2 (External Intelligence & Sustainability)
+    // =========================
+    {
+      id: "l2_competitor_tracking",
+      name: "Competitor Tracking",
+      description:
+        "Competitor price/promo/assortment/distribution signals to anticipate share shifts and defend corridors.",
+      level: 2,
+      size: 14,
+      color: "#38BDF8",
+      type: "bkg",
+    },
+    {
+      id: "l2_syndicated_data",
+      name: "Syndicated & Panel Data",
+      description:
+        "External measurement (e.g., Nielsen/Kantar-style): market share, distribution, price indices and category trends.",
+      level: 2,
+      size: 14,
+      color: "#38BDF8",
+      type: "bkg",
+    },
+    {
+      id: "l2_weather_planalytics",
+      name: "Weather & Planalytics Signals",
+      description:
+        "Weather forecasts and derived indices (heat/cold/rain) to model seasonality, correlate with sales and plan inventory builds.",
+      level: 2,
+      size: 14,
+      color: "#38BDF8",
+      type: "bkg",
+    },
+    {
+      id: "l2_carbon_footprint",
+      name: "Carbon Footprint",
+      description:
+        "Emissions measurement using activity data and emission factors across manufacturing, packaging and logistics.",
+      level: 2,
+      size: 14,
+      color: "#38BDF8",
+      type: "bkg",
+    },
+    {
+      id: "l2_elasticity_share",
+      name: "Elasticity & Market Share",
+      description:
+        "Price elasticity and competitive response models linking price actions to volume and market share outcomes.",
+      level: 2,
+      size: 14,
+      color: "#38BDF8",
+      type: "bkg",
+    },
+
+    // =========================
     // LEVEL 3 (LEAF NODES)
     // =========================
     {
@@ -828,6 +1032,38 @@ export default function Page() {
       type: "bkg",
     },
 
+    // ADDED: Price-pack leafs
+    {
+      id: "l3_price_point_ladder",
+      name: "Price Point Ladder",
+      description:
+        "Key price points to win (entry/core/premium) mapped to packs and corridors.",
+      level: 3,
+      size: 10,
+      color: "#93C5FD",
+      type: "bkg",
+    },
+    {
+      id: "l3_pack_tiers",
+      name: "Pack Tiers",
+      description:
+        "Pack laddering (trial/value/stock-up) aligned to occasions and channels.",
+      level: 3,
+      size: 10,
+      color: "#93C5FD",
+      type: "bkg",
+    },
+    {
+      id: "l3_affordability_index",
+      name: "Affordability Index",
+      description:
+        "Affordability proxy (e.g., price per serving/unit) by segment/territory.",
+      level: 3,
+      size: 10,
+      color: "#93C5FD",
+      type: "bkg",
+    },
+
     {
       id: "l3_order",
       name: "Sales Order",
@@ -881,6 +1117,38 @@ export default function Page() {
       id: "l3_beat_day",
       name: "Beat-day Plan",
       description: "Route-wise visitation calendar and expected order capture.",
+      level: 3,
+      size: 10,
+      color: "#86EFAC",
+      type: "bkg",
+    },
+
+    // ADDED: Rep productivity leafs
+    {
+      id: "l3_rep_productivity",
+      name: "Rep Productivity",
+      description:
+        "Output per rep (sales, lines, outlets serviced) adjusted for beat potential.",
+      level: 3,
+      size: 10,
+      color: "#86EFAC",
+      type: "bkg",
+    },
+    {
+      id: "l3_strike_rate",
+      name: "Strike Rate",
+      description:
+        "Orders captured per visit; proxy for execution quality and assortment fit.",
+      level: 3,
+      size: 10,
+      color: "#86EFAC",
+      type: "bkg",
+    },
+    {
+      id: "l3_coverage_efficiency",
+      name: "Coverage Efficiency",
+      description:
+        "Coverage achieved vs planned (visits, productive calls) by beat/day.",
       level: 3,
       size: 10,
       color: "#86EFAC",
@@ -971,6 +1239,38 @@ export default function Page() {
       name: "S&OP Inputs",
       description:
         "Sales assumptions feeding demand plan (promos, launches, seasonality).",
+      level: 3,
+      size: 10,
+      color: "#86EFAC",
+      type: "bkg",
+    },
+
+    // ADDED: S&OP leafs
+    {
+      id: "l3_consensus_forecast",
+      name: "Consensus Forecast",
+      description:
+        "Aligned forecast baseline after sales/marketing/supply reconciliation.",
+      level: 3,
+      size: 10,
+      color: "#86EFAC",
+      type: "bkg",
+    },
+    {
+      id: "l3_supply_review",
+      name: "Supply Review",
+      description:
+        "Capacity/constraints review producing a feasible supply plan.",
+      level: 3,
+      size: 10,
+      color: "#86EFAC",
+      type: "bkg",
+    },
+    {
+      id: "l3_exec_sop",
+      name: "Executive S&OP",
+      description:
+        "Final approval of trade-offs (service, inventory, cost) and plan sign-off.",
       level: 3,
       size: 10,
       color: "#86EFAC",
@@ -1140,6 +1440,38 @@ export default function Page() {
       name: "Damage Rate",
       description:
         "Breakage/leakage/damage in transit or handling; drives claims.",
+      level: 3,
+      size: 10,
+      color: "#FDBA74",
+      type: "bkg",
+    },
+
+    // ADDED: Shelf share + execution leafs
+    {
+      id: "l3_shelf_share",
+      name: "Shelf Share",
+      description:
+        "Share of shelf/space vs competitors; indicates in-store dominance and visibility.",
+      level: 3,
+      size: 10,
+      color: "#FDBA74",
+      type: "bkg",
+    },
+    {
+      id: "l3_on_shelf_availability",
+      name: "On-Shelf Availability",
+      description:
+        "Availability at shelf (vs only at DC/stock); key driver of offtake and share retention.",
+      level: 3,
+      size: 10,
+      color: "#FDBA74",
+      type: "bkg",
+    },
+    {
+      id: "l3_display_compliance",
+      name: "Display Compliance",
+      description:
+        "Compliance to display/planogram/visibility standards via audits.",
       level: 3,
       size: 10,
       color: "#FDBA74",
@@ -1337,6 +1669,38 @@ export default function Page() {
       name: "Cannibalization",
       description:
         "Substitution within portfolio when new packs/variants launch.",
+      level: 3,
+      size: 10,
+      color: "#86EFAC",
+      type: "bkg",
+    },
+
+    // ADDED: Forecast vs actuals leafs
+    {
+      id: "l3_forecast_vs_actual",
+      name: "Forecast vs Actuals",
+      description:
+        "Comparison of forecasted demand vs realized sales/offtake used to correct assumptions.",
+      level: 3,
+      size: 10,
+      color: "#86EFAC",
+      type: "bkg",
+    },
+    {
+      id: "l3_forecast_accuracy",
+      name: "Forecast Accuracy",
+      description:
+        "Accuracy metric (e.g., error) by SKU/territory/channel to quantify predictability.",
+      level: 3,
+      size: 10,
+      color: "#86EFAC",
+      type: "bkg",
+    },
+    {
+      id: "l3_forecast_bias",
+      name: "Forecast Bias",
+      description:
+        "Systematic over/under-forecasting signal used to prevent chronic OOS or excess inventory.",
       level: 3,
       size: 10,
       color: "#86EFAC",
@@ -2071,6 +2435,242 @@ export default function Page() {
       color: "#BAE6FD",
       type: "bkg",
     },
+
+    // =========================
+    // LEVEL 3 (E-com / Q-com leafs)
+    // =========================
+    {
+      id: "l3_ecom_platform",
+      name: "E-commerce Platform",
+      description:
+        "Marketplace platform construct with catalog/search rules and fulfillment SLAs.",
+      level: 3,
+      size: 10,
+      color: "#BAE6FD",
+      type: "bkg",
+    },
+    {
+      id: "l3_qcom_platform",
+      name: "Quick-commerce Platform",
+      description:
+        "Q-commerce construct with dark-store inventory and tight SLA windows.",
+      level: 3,
+      size: 10,
+      color: "#BAE6FD",
+      type: "bkg",
+    },
+    {
+      id: "l3_platform_availability",
+      name: "Platform Availability",
+      description:
+        "Availability on platform (in-stock + buyable) by SKU/pack and service area.",
+      level: 3,
+      size: 10,
+      color: "#BAE6FD",
+      type: "bkg",
+    },
+    {
+      id: "l3_platform_fill_rate",
+      name: "Platform Fill Rate / OTIF",
+      description:
+        "Fulfillment completeness and on-time performance driving ratings and repeat.",
+      level: 3,
+      size: 10,
+      color: "#BAE6FD",
+      type: "bkg",
+    },
+    {
+      id: "l3_platform_cancellations",
+      name: "Cancellations & Returns",
+      description:
+        "Order cancellations/returns that signal supply, content, or service issues.",
+      level: 3,
+      size: 10,
+      color: "#BAE6FD",
+      type: "bkg",
+    },
+
+    // =========================
+    // LEVEL 3 (Tax leafs)
+    // =========================
+    {
+      id: "l3_gst_state_treatment",
+      name: "State-wise GST",
+      description:
+        "State-wise GST treatment impacting price corridors, invoicing and net realization.",
+      level: 3,
+      size: 10,
+      color: "#BAE6FD",
+      type: "bkg",
+    },
+    {
+      id: "l3_tax_breakup",
+      name: "Tax Invoice Breakup",
+      description:
+        "Tax components captured on invoices/credit notes for reporting and audit trails.",
+      level: 3,
+      size: 10,
+      color: "#BAE6FD",
+      type: "bkg",
+    },
+
+    // =========================
+    // LEVEL 3 (External intelligence leafs)
+    // =========================
+    {
+      id: "l3_competitor_price",
+      name: "Competitor Price Tracking",
+      description:
+        "Competitor MRP/net price signals used to defend corridors and price-pack choices.",
+      level: 3,
+      size: 10,
+      color: "#BAE6FD",
+      type: "bkg",
+    },
+    {
+      id: "l3_competitor_promo",
+      name: "Competitor Promo Tracking",
+      description:
+        "Competitor scheme/promo posture affecting share and promo response planning.",
+      level: 3,
+      size: 10,
+      color: "#BAE6FD",
+      type: "bkg",
+    },
+    {
+      id: "l3_competitor_distribution",
+      name: "Competitor Distribution Tracking",
+      description:
+        "Competitor distribution depth/visibility signals affecting shelf share and availability battles.",
+      level: 3,
+      size: 10,
+      color: "#BAE6FD",
+      type: "bkg",
+    },
+
+    {
+      id: "l3_nielsen_kantar",
+      name: "Nielsen/Kantar-style Panels",
+      description:
+        "Syndicated measurement of market share, distribution and category dynamics.",
+      level: 3,
+      size: 10,
+      color: "#BAE6FD",
+      type: "bkg",
+    },
+    {
+      id: "l3_market_share",
+      name: "Market Share",
+      description:
+        "Category market share by geography/channel used to measure competitive outcomes.",
+      level: 3,
+      size: 10,
+      color: "#BAE6FD",
+      type: "bkg",
+    },
+
+    {
+      id: "l3_planalytics_feed",
+      name: "Planalytics Feed",
+      description:
+        "Derived weather indices and demand-impact features for planning and scenarioing.",
+      level: 3,
+      size: 10,
+      color: "#BAE6FD",
+      type: "bkg",
+    },
+    {
+      id: "l3_weather_signals",
+      name: "Weather Signals",
+      description:
+        "Temperature/rainfall/heatwave/coldspell signals by geography and time.",
+      level: 3,
+      size: 10,
+      color: "#BAE6FD",
+      type: "bkg",
+    },
+    {
+      id: "l3_weather_correlation",
+      name: "Weather Correlation",
+      description:
+        "Correlation of weather (e.g., summer intensity) to sales velocity and demand uplift.",
+      level: 3,
+      size: 10,
+      color: "#BAE6FD",
+      type: "bkg",
+    },
+    {
+      id: "l3_inventory_build",
+      name: "Inventory Build",
+      description:
+        "Pre-season inventory build decisions driven by forecasted demand and service goals.",
+      level: 3,
+      size: 10,
+      color: "#BAE6FD",
+      type: "bkg",
+    },
+
+    {
+      id: "l3_activity_data",
+      name: "Activity Data",
+      description:
+        "Energy/material/transport activity data used to compute emissions.",
+      level: 3,
+      size: 10,
+      color: "#BAE6FD",
+      type: "bkg",
+    },
+    {
+      id: "l3_emission_factors",
+      name: "Emission Factors",
+      description:
+        "Factors mapping activities to emissions for consistent footprint calculations.",
+      level: 3,
+      size: 10,
+      color: "#BAE6FD",
+      type: "bkg",
+    },
+    {
+      id: "l3_carbon_intensity",
+      name: "Carbon Intensity",
+      description:
+        "Emissions intensity by product/pack or lane used for sustainability analytics.",
+      level: 3,
+      size: 10,
+      color: "#BAE6FD",
+      type: "bkg",
+    },
+
+    {
+      id: "l3_price_elasticity",
+      name: "Price Elasticity",
+      description:
+        "Demand response to own-price changes by segment/geo/channel.",
+      level: 3,
+      size: 10,
+      color: "#BAE6FD",
+      type: "bkg",
+    },
+    {
+      id: "l3_cross_elasticity",
+      name: "Cross Elasticity",
+      description:
+        "Demand response due to competitor price moves/substitution.",
+      level: 3,
+      size: 10,
+      color: "#BAE6FD",
+      type: "bkg",
+    },
+    {
+      id: "l3_share_response",
+      name: "Share Response",
+      description:
+        "Market share change response to relative price/promo/distribution shifts.",
+      level: 3,
+      size: 10,
+      color: "#BAE6FD",
+      type: "bkg",
+    },
   ]);
 
   const [links, setLinks] = useState<Link[]>([
@@ -2161,6 +2761,35 @@ export default function Page() {
       linkType: "bkg",
     },
 
+    // ADDED
+    {
+      id: "r11",
+      source: "rcpl",
+      target: "l1_digital",
+      type: "HAS_DOMAIN",
+      description:
+        "RCPL manages platform-led commerce execution across e-com and q-com.",
+      linkType: "bkg",
+    },
+    {
+      id: "r12",
+      source: "rcpl",
+      target: "l1_tax",
+      type: "HAS_DOMAIN",
+      description:
+        "RCPL manages tax/statutory structures impacting pricing and invoicing.",
+      linkType: "bkg",
+    },
+    {
+      id: "r13",
+      source: "rcpl",
+      target: "l1_external",
+      type: "HAS_DOMAIN",
+      description:
+        "RCPL leverages external intelligence and sustainability signals for planning and competitiveness.",
+      linkType: "bkg",
+    },
+
     // =========================
     // LEVEL 1 -> LEVEL 2
     // =========================
@@ -2204,6 +2833,14 @@ export default function Page() {
       description: "Category hierarchy used across business.",
       linkType: "bkg",
     },
+    {
+      id: "p6",
+      source: "l1_product",
+      target: "l2_price_pack_arch",
+      type: "HAS_SUBDOMAIN",
+      description: "Price-pack architecture ties packs to price points.",
+      linkType: "bkg",
+    },
 
     {
       id: "s1",
@@ -2245,6 +2882,14 @@ export default function Page() {
       description: "Targets and S&OP linkage.",
       linkType: "bkg",
     },
+    {
+      id: "s6",
+      source: "l1_sales",
+      target: "l2_sfe",
+      type: "HAS_SUBDOMAIN",
+      description: "Field rep productivity and execution effectiveness.",
+      linkType: "bkg",
+    },
 
     {
       id: "d1",
@@ -2284,6 +2929,15 @@ export default function Page() {
       target: "l2_service_levels",
       type: "HAS_SUBDOMAIN",
       description: "OTIF/fill/damage metrics.",
+      linkType: "bkg",
+    },
+    {
+      id: "d6",
+      source: "l1_distribution",
+      target: "l2_retail_execution",
+      type: "HAS_SUBDOMAIN",
+      description:
+        "Retail execution including shelf share and on-shelf availability.",
       linkType: "bkg",
     },
 
@@ -2366,6 +3020,23 @@ export default function Page() {
       target: "l2_inventory",
       type: "HAS_SUBDOMAIN",
       description: "Inventory buffers, aging and OOS risk.",
+      linkType: "bkg",
+    },
+    {
+      id: "sc7",
+      source: "l1_supply",
+      target: "l2_forecast_perf",
+      type: "HAS_SUBDOMAIN",
+      description: "Forecast vs actuals measurement and diagnostics.",
+      linkType: "bkg",
+    },
+    {
+      id: "sc8",
+      source: "l1_supply",
+      target: "l2_sop",
+      type: "HAS_SUBDOMAIN",
+      description:
+        "S&OP integration from forecast to supply/procurement/mfg plan.",
       linkType: "bkg",
     },
 
@@ -2550,6 +3221,92 @@ export default function Page() {
       linkType: "bkg",
     },
 
+    // LEVEL 1 -> LEVEL 2 (Digital)
+    {
+      id: "ec1",
+      source: "l1_digital",
+      target: "l2_platforms",
+      type: "HAS_SUBDOMAIN",
+      description: "Platforms across e-com and q-com.",
+      linkType: "bkg",
+    },
+    {
+      id: "ec2",
+      source: "l1_digital",
+      target: "l2_platform_performance",
+      type: "HAS_SUBDOMAIN",
+      description: "Platform performance across e-com and q-com.",
+      linkType: "bkg",
+    },
+    {
+      id: "ec3",
+      source: "l1_digital",
+      target: "l2_digital_fulfillment",
+      type: "HAS_SUBDOMAIN",
+      description: "Fulfillment mechanics and SLA outcomes.",
+      linkType: "bkg",
+    },
+
+    // LEVEL 1 -> LEVEL 2 (Tax)
+    {
+      id: "tx1",
+      source: "l1_tax",
+      target: "l2_gst_tax",
+      type: "HAS_SUBDOMAIN",
+      description: "GST and state tax treatment.",
+      linkType: "bkg",
+    },
+    {
+      id: "tx2",
+      source: "l1_tax",
+      target: "l2_tax_invoice_breakup",
+      type: "HAS_SUBDOMAIN",
+      description: "Tax breakup in invoicing.",
+      linkType: "bkg",
+    },
+
+    // LEVEL 1 -> LEVEL 2 (External)
+    {
+      id: "ex1",
+      source: "l1_external",
+      target: "l2_competitor_tracking",
+      type: "HAS_SUBDOMAIN",
+      description: "Competitor tracking signals.",
+      linkType: "bkg",
+    },
+    {
+      id: "ex2",
+      source: "l1_external",
+      target: "l2_syndicated_data",
+      type: "HAS_SUBDOMAIN",
+      description: "Syndicated data (Nielsen/Kantar style).",
+      linkType: "bkg",
+    },
+    {
+      id: "ex3",
+      source: "l1_external",
+      target: "l2_weather_planalytics",
+      type: "HAS_SUBDOMAIN",
+      description: "Weather/Planalytics signals and correlation.",
+      linkType: "bkg",
+    },
+    {
+      id: "ex4",
+      source: "l1_external",
+      target: "l2_carbon_footprint",
+      type: "HAS_SUBDOMAIN",
+      description: "Carbon footprint analytics.",
+      linkType: "bkg",
+    },
+    {
+      id: "ex5",
+      source: "l1_external",
+      target: "l2_elasticity_share",
+      type: "HAS_SUBDOMAIN",
+      description: "Elasticity to market share linkage.",
+      linkType: "bkg",
+    },
+
     // =========================
     // LEVEL 2 -> LEVEL 3
     // =========================
@@ -2624,6 +3381,32 @@ export default function Page() {
       target: "l3_case_config",
       type: "LOGISTICS_UNIT",
       description: "Case configuration defines handling efficiency.",
+      linkType: "bkg",
+    },
+
+    {
+      id: "pp1",
+      source: "l2_price_pack_arch",
+      target: "l3_price_point_ladder",
+      type: "DEFINED_BY",
+      description: "Price-pack architecture is defined by price-point ladder.",
+      linkType: "bkg",
+    },
+    {
+      id: "pp2",
+      source: "l2_price_pack_arch",
+      target: "l3_pack_tiers",
+      type: "DEFINED_BY",
+      description: "Price-pack architecture defines pack tiers.",
+      linkType: "bkg",
+    },
+    {
+      id: "pp3",
+      source: "l2_price_pack_arch",
+      target: "l3_affordability_index",
+      type: "MEASURED_BY",
+      description:
+        "Price-pack effectiveness is measured via affordability index.",
       linkType: "bkg",
     },
 
@@ -2757,6 +3540,31 @@ export default function Page() {
       target: "l3_beat_day",
       type: "EXECUTED_VIA",
       description: "Secondary execution follows beat-day plans.",
+      linkType: "bkg",
+    },
+
+    {
+      id: "sfe1",
+      source: "l2_sfe",
+      target: "l3_rep_productivity",
+      type: "MEASURED_BY",
+      description: "SFE is measured by rep productivity.",
+      linkType: "bkg",
+    },
+    {
+      id: "sfe2",
+      source: "l2_sfe",
+      target: "l3_strike_rate",
+      type: "MEASURED_BY",
+      description: "SFE is measured by strike rate.",
+      linkType: "bkg",
+    },
+    {
+      id: "sfe3",
+      source: "l2_sfe",
+      target: "l3_coverage_efficiency",
+      type: "MEASURED_BY",
+      description: "SFE is measured by coverage efficiency.",
       linkType: "bkg",
     },
 
@@ -2977,6 +3785,31 @@ export default function Page() {
     },
 
     {
+      id: "rex1",
+      source: "l2_retail_execution",
+      target: "l3_shelf_share",
+      type: "MEASURED_BY",
+      description: "Retail execution includes shelf share.",
+      linkType: "bkg",
+    },
+    {
+      id: "rex2",
+      source: "l2_retail_execution",
+      target: "l3_on_shelf_availability",
+      type: "MEASURED_BY",
+      description: "Retail execution includes on-shelf availability.",
+      linkType: "bkg",
+    },
+    {
+      id: "rex3",
+      source: "l2_retail_execution",
+      target: "l3_display_compliance",
+      type: "MEASURED_BY",
+      description: "Retail execution includes display compliance.",
+      linkType: "bkg",
+    },
+
+    {
       id: "pa1",
       source: "l2_price_arch",
       target: "l3_mrp",
@@ -3138,6 +3971,56 @@ export default function Page() {
       target: "l3_cannibalization",
       type: "INCLUDES",
       description: "Demand plan includes cannibalization logic.",
+      linkType: "bkg",
+    },
+
+    {
+      id: "fp1",
+      source: "l2_forecast_perf",
+      target: "l3_forecast_vs_actual",
+      type: "MEASURED_BY",
+      description: "Forecast performance is measured by forecast vs actuals.",
+      linkType: "bkg",
+    },
+    {
+      id: "fp2",
+      source: "l2_forecast_perf",
+      target: "l3_forecast_accuracy",
+      type: "MEASURED_BY",
+      description: "Forecast performance is measured by accuracy.",
+      linkType: "bkg",
+    },
+    {
+      id: "fp3",
+      source: "l2_forecast_perf",
+      target: "l3_forecast_bias",
+      type: "MEASURED_BY",
+      description: "Forecast performance is measured by bias.",
+      linkType: "bkg",
+    },
+
+    {
+      id: "sop1",
+      source: "l2_sop",
+      target: "l3_consensus_forecast",
+      type: "INCLUDES",
+      description: "S&OP includes consensus forecast.",
+      linkType: "bkg",
+    },
+    {
+      id: "sop2",
+      source: "l2_sop",
+      target: "l3_supply_review",
+      type: "INCLUDES",
+      description: "S&OP includes supply review.",
+      linkType: "bkg",
+    },
+    {
+      id: "sop3",
+      source: "l2_sop",
+      target: "l3_exec_sop",
+      type: "INCLUDES",
+      description: "S&OP includes executive sign-off.",
       linkType: "bkg",
     },
 
@@ -3776,6 +4659,192 @@ export default function Page() {
       linkType: "bkg",
     },
 
+    // Digital L2 -> L3
+    {
+      id: "ecp1",
+      source: "l2_platforms",
+      target: "l3_ecom_platform",
+      type: "INCLUDES",
+      description: "Platforms include e-commerce platforms.",
+      linkType: "bkg",
+    },
+    {
+      id: "ecp2",
+      source: "l2_platforms",
+      target: "l3_qcom_platform",
+      type: "INCLUDES",
+      description: "Platforms include quick-commerce platforms.",
+      linkType: "bkg",
+    },
+    {
+      id: "ecp3",
+      source: "l2_platform_performance",
+      target: "l3_platform_availability",
+      type: "MEASURED_BY",
+      description: "Platform performance measured by availability.",
+      linkType: "bkg",
+    },
+    {
+      id: "ecp4",
+      source: "l2_platform_performance",
+      target: "l3_platform_fill_rate",
+      type: "MEASURED_BY",
+      description: "Platform performance measured by fill rate/OTIF.",
+      linkType: "bkg",
+    },
+    {
+      id: "ecp5",
+      source: "l2_platform_performance",
+      target: "l3_platform_cancellations",
+      type: "MEASURED_BY",
+      description: "Platform performance measured by cancellations/returns.",
+      linkType: "bkg",
+    },
+
+    // Tax L2 -> L3
+    {
+      id: "txl1",
+      source: "l2_gst_tax",
+      target: "l3_gst_state_treatment",
+      type: "INCLUDES",
+      description: "GST treatment captured state-wise.",
+      linkType: "bkg",
+    },
+    {
+      id: "txl2",
+      source: "l2_tax_invoice_breakup",
+      target: "l3_tax_breakup",
+      type: "INCLUDES",
+      description: "Invoicing includes tax breakup.",
+      linkType: "bkg",
+    },
+
+    // External L2 -> L3
+    {
+      id: "exl1",
+      source: "l2_competitor_tracking",
+      target: "l3_competitor_price",
+      type: "INCLUDES",
+      description: "Competitor tracking includes prices.",
+      linkType: "bkg",
+    },
+    {
+      id: "exl2",
+      source: "l2_competitor_tracking",
+      target: "l3_competitor_promo",
+      type: "INCLUDES",
+      description: "Competitor tracking includes promos.",
+      linkType: "bkg",
+    },
+    {
+      id: "exl3",
+      source: "l2_competitor_tracking",
+      target: "l3_competitor_distribution",
+      type: "INCLUDES",
+      description: "Competitor tracking includes distribution/visibility.",
+      linkType: "bkg",
+    },
+
+    {
+      id: "exl4",
+      source: "l2_syndicated_data",
+      target: "l3_nielsen_kantar",
+      type: "INCLUDES",
+      description: "Syndicated data includes panel measurements.",
+      linkType: "bkg",
+    },
+    {
+      id: "exl5",
+      source: "l2_syndicated_data",
+      target: "l3_market_share",
+      type: "MEASURES",
+      description: "Syndicated data measures market share.",
+      linkType: "bkg",
+    },
+
+    {
+      id: "exl6",
+      source: "l2_weather_planalytics",
+      target: "l3_planalytics_feed",
+      type: "INCLUDES",
+      description: "Weather modeling includes Planalytics feed.",
+      linkType: "bkg",
+    },
+    {
+      id: "exl7",
+      source: "l2_weather_planalytics",
+      target: "l3_weather_signals",
+      type: "INCLUDES",
+      description: "Weather modeling includes weather signals.",
+      linkType: "bkg",
+    },
+    {
+      id: "exl8",
+      source: "l2_weather_planalytics",
+      target: "l3_weather_correlation",
+      type: "DERIVES",
+      description: "Signals are used to derive weather correlation.",
+      linkType: "bkg",
+    },
+    {
+      id: "exl9",
+      source: "l2_weather_planalytics",
+      target: "l3_inventory_build",
+      type: "INFORMS",
+      description: "Weather correlation informs inventory build decisions.",
+      linkType: "bkg",
+    },
+
+    {
+      id: "exl10",
+      source: "l2_carbon_footprint",
+      target: "l3_activity_data",
+      type: "COMPUTED_FROM",
+      description: "Carbon footprint computed from activity data.",
+      linkType: "bkg",
+    },
+    {
+      id: "exl11",
+      source: "l2_carbon_footprint",
+      target: "l3_emission_factors",
+      type: "COMPUTED_USING",
+      description: "Carbon footprint computed using emission factors.",
+      linkType: "bkg",
+    },
+    {
+      id: "exl12",
+      source: "l2_carbon_footprint",
+      target: "l3_carbon_intensity",
+      type: "RESULTS_IN",
+      description: "Carbon footprint results in carbon intensity metrics.",
+      linkType: "bkg",
+    },
+
+    {
+      id: "exl13",
+      source: "l2_elasticity_share",
+      target: "l3_price_elasticity",
+      type: "INCLUDES",
+      description: "Elasticity models include own-price elasticity.",
+      linkType: "bkg",
+    },
+    {
+      id: "exl14",
+      source: "l2_elasticity_share",
+      target: "l3_cross_elasticity",
+      type: "INCLUDES",
+      description: "Elasticity models include cross elasticity.",
+      linkType: "bkg",
+    },
+    {
+      id: "exl15",
+      source: "l2_elasticity_share",
+      target: "l3_share_response",
+      type: "INCLUDES",
+      description: "Elasticity models include share response.",
+      linkType: "bkg",
+    },
+
     // =========================
     // CROSS-DOMAIN NUANCE (KEY BINDINGS)
     // =========================
@@ -3826,6 +4895,207 @@ export default function Page() {
       target: "l2_label_artwork",
       type: "CONSTRAINS",
       description: "Pack compliance rules constrain labeling and artwork.",
+      linkType: "bkg",
+    },
+
+    // ADDED: Checklist cross-bindings
+    {
+      id: "x7",
+      source: "l2_sfe",
+      target: "l2_coverage",
+      type: "EXECUTES",
+      description: "Sales force effectiveness executes coverage/beat plans.",
+      linkType: "bkg",
+    },
+    {
+      id: "x8",
+      source: "l2_sfe",
+      target: "l2_secondary_sales",
+      type: "DRIVES",
+      description: "Execution quality drives secondary sales outcomes.",
+      linkType: "bkg",
+    },
+
+    {
+      id: "x9",
+      source: "l2_price_pack_arch",
+      target: "l2_price_arch",
+      type: "CONSTRAINS",
+      description:
+        "Price-pack choices constrain feasible pricing ladders and corridors.",
+      linkType: "bkg",
+    },
+
+    {
+      id: "x10",
+      source: "l2_retail_execution",
+      target: "l2_activation",
+      type: "ENABLED_BY",
+      description:
+        "Retail execution is enabled by trade activation and visibility assets.",
+      linkType: "bkg",
+    },
+    {
+      id: "x11",
+      source: "l2_retail_execution",
+      target: "l2_schemes",
+      type: "INCENTIVIZED_BY",
+      description:
+        "Visibility and shelf share are often incentivized via schemes.",
+      linkType: "bkg",
+    },
+    {
+      id: "x12",
+      source: "l2_retail_execution",
+      target: "l2_key_accounts",
+      type: "AUDITED_IN",
+      description:
+        "Retail execution is audited heavily in modern trade contexts.",
+      linkType: "bkg",
+    },
+
+    {
+      id: "x13",
+      source: "l2_forecast_perf",
+      target: "l2_secondary_sales",
+      type: "EVALUATES_AGAINST",
+      description:
+        "Forecast performance is evaluated against observed offtake.",
+      linkType: "bkg",
+    },
+    {
+      id: "x14",
+      source: "l2_forecast_perf",
+      target: "l2_demand_plan",
+      type: "IMPROVES",
+      description: "Forecast diagnostics improve future demand plans.",
+      linkType: "bkg",
+    },
+
+    {
+      id: "x15",
+      source: "l2_sop",
+      target: "l2_demand_plan",
+      type: "GOVERNS",
+      description: "S&OP governs the consensus demand plan.",
+      linkType: "bkg",
+    },
+    {
+      id: "x16",
+      source: "l2_sop",
+      target: "l2_supply_plan",
+      type: "DRIVES",
+      description: "S&OP drives constrained supply plans.",
+      linkType: "bkg",
+    },
+    {
+      id: "x17",
+      source: "l2_sop",
+      target: "l2_manufacturing",
+      type: "ALIGNS",
+      description: "S&OP aligns manufacturing plan and capacity trade-offs.",
+      linkType: "bkg",
+    },
+    {
+      id: "x18",
+      source: "l2_sop",
+      target: "l3_procurement",
+      type: "FEEDS",
+      description:
+        "S&OP feeds procurement planning via constrained supply plan.",
+      linkType: "bkg",
+    },
+
+    {
+      id: "x19",
+      source: "l2_platform_performance",
+      target: "l2_inventory",
+      type: "IMPACTS",
+      description:
+        "Platform availability/fill performance impacts inventory positioning and OOS risk.",
+      linkType: "bkg",
+    },
+    {
+      id: "x20",
+      source: "l2_platform_performance",
+      target: "l2_rtm",
+      type: "PART_OF",
+      description:
+        "Platform performance is a specialized view within RTM for digital channels.",
+      linkType: "bkg",
+    },
+
+    {
+      id: "x21",
+      source: "l2_gst_tax",
+      target: "l3_state_corridor",
+      type: "INFORMS",
+      description: "State-wise GST informs state price corridors.",
+      linkType: "bkg",
+    },
+    {
+      id: "x22",
+      source: "l2_tax_invoice_breakup",
+      target: "l3_invoice",
+      type: "RECORDED_IN",
+      description: "Invoice records tax breakup for reporting.",
+      linkType: "bkg",
+    },
+
+    {
+      id: "x23",
+      source: "l2_syndicated_data",
+      target: "l2_competition",
+      type: "QUANTIFIES",
+      description:
+        "Syndicated data quantifies competitive context (share, distribution, pricing indices).",
+      linkType: "bkg",
+    },
+    {
+      id: "x24",
+      source: "l2_competitor_tracking",
+      target: "l2_price_arch",
+      type: "INFORMS",
+      description:
+        "Competitor tracking informs corridor defense and pricing actions.",
+      linkType: "bkg",
+    },
+
+    {
+      id: "x25",
+      source: "l2_weather_planalytics",
+      target: "l2_demand_plan",
+      type: "DRIVES",
+      description:
+        "Weather/Planalytics signals drive seasonality and uplift assumptions in demand planning.",
+      linkType: "bkg",
+    },
+    {
+      id: "x26",
+      source: "l2_weather_planalytics",
+      target: "l2_inventory",
+      type: "INFORMS",
+      description:
+        "Weather correlation informs pre-season inventory builds and safety stock.",
+      linkType: "bkg",
+    },
+
+    {
+      id: "x27",
+      source: "l2_elasticity_share",
+      target: "l2_price_arch",
+      type: "INFORMS",
+      description:
+        "Elasticity-to-share analytics informs pricing corridors and pack choices.",
+      linkType: "bkg",
+    },
+    {
+      id: "x28",
+      source: "l2_elasticity_share",
+      target: "l3_market_share",
+      type: "EXPLAINS",
+      description:
+        "Elasticity models explain market share movement due to price actions.",
       linkType: "bkg",
     },
   ]);
