@@ -38,7 +38,8 @@ export default function RSMDashboard() {
         dims: {
           execution: { issue: '2 vacant beats, coverage 72% (from 85%)', impact: '40% of shortfall', sev: 'critical' },
           finance: { issue: 'Shah 95% credit, ₹45k blocked', impact: '20% of shortfall', sev: 'high' },
-          supply: { issue: 'Independence/R-Clean stockout 6d, ₹65k backlog', impact: '15% of shortfall', sev: 'high' },
+          supply: { issue: 'Glimmer/Dozo stockout 6d, ₹65k backlog', impact: '15% of shortfall', sev: 'high' },
+          margin: { issue: 'Discounting 18% vs 15%', impact: '15% of shortfall', sev: 'medium' },
           forecast: { issue: 'Nov forecast +15% vs flat', impact: '10% of shortfall', sev: 'medium' }
         },
         bizImpact: { revenue: '-₹1.8Cr', gm: -2.1, wc: '₹2.4Cr locked' },
@@ -162,23 +163,29 @@ export default function RSMDashboard() {
 
   const decisionTrails = {
     pricing: [
-      { time: '14:23:12', agent: 'Orchestrator', action: 'Initiated Analysis', database: '—', query: '—', thinking: 'Detected pricing opportunity for Independence Premium 200g in premium outlets. Triggering multi-agent analysis to generate pricing recommendation.', next: 'Pricing Agent' },
+      { time: '14:23:12', agent: 'Orchestrator', action: 'Initiated Analysis', database: '—', query: '—', thinking: 'Detected pricing opportunity for Glimmer Premium Soap 200g in premium outlets. Triggering multi-agent analysis to generate pricing recommendation.', next: 'Pricing Agent' },
       { time: '14:23:15', agent: 'Pricing Agent', action: 'Query Competitor Prices', database: 'Market Intelligence', query: '▸ View Query & Data', thinking: 'Premium outlets (S Mumbai, Bandra) show competition priced 8-12% higher. Current ₹45 MRP appears undervalued relative to competitive set.', next: 'Pricing Agent' },
       { time: '14:23:18', agent: 'Pricing Agent', action: 'Query Historical Elasticity', database: 'Analytics DB', query: '▸ View Query & Data', thinking: 'Historical price increases in premium segment show -3% to -4% elasticity. Last increase 18 months ago had minimal volume impact. Price sensitivity is low in this channel.', next: 'Pricing Agent' },
       { time: '14:23:22', agent: 'Pricing Agent', action: 'Calculate Revenue Impact', database: 'Analytics DB', query: '▸ View Query & Data', thinking: '₹5 increase across 600 outlets with 18% revenue contribution yields +₹45L incremental. At -3% elasticity, net impact remains strongly positive at +₹42L.', next: 'Finance Agent' },
       { time: '14:23:28', agent: 'Finance Agent', action: 'Query Margin Structure', database: 'Finance System', query: '▸ View Query & Data', thinking: 'Current 8% distributor margin can absorb ₹0.40. Retailer needs +₹2 incentive for display compliance. Net GM improvement: +1.2% after trade investments.', next: 'Marketing Agent' },
-      { time: '14:23:35', agent: 'Marketing Agent', action: 'Query Campaign Calendar', database: 'Marketing Calendar', query: '▸ View Query & Data', thinking: 'Q4 starts Jan 1 - optimal timing for price change. No major campaigns planned for Independence Premium in premium outlets. Clear window for implementation.', next: 'Supply Chain Agent' },
-      { time: '14:23:41', agent: 'Supply Chain Agent', action: 'Check Inventory Position', database: 'Warehouse Management', query: '▸ View Query & Data', thinking: 'Current stock sufficient for 2-week transition. No supply constraints. Price change can be implemented without stock availability issues.', next: 'Orchestrator' },
-      { time: '14:23:48', agent: 'Orchestrator', action: 'Generate Recommendation', database: '—', query: '—', thinking: 'Synthesizing inputs: Strong competitive headroom, low elasticity, positive margin impact, clear timing window. High confidence (94%) pricing recommendation generated with implementation roadmap.', next: '—' }
+      { time: '14:23:35', agent: 'Marketing Agent', action: 'Query Campaign Calendar', database: 'Marketing Calendar', query: '▸ View Query & Data', thinking: 'Q4 starts Jan 1 - optimal timing for price change. No major campaigns planned for Glimmer Premium in premium outlets. Clear window for implementation.', next: 'Supply Chain Agent' },
+      { time: '14:23:41', agent: 'Supply Chain Agent', action: 'Check Inventory Position', database: 'Warehouse Management', query: '▸ View Query & Data', thinking: 'Current stock sufficient for 2-week transition. No supply constraints. Price change can be implemented without stock availability issues.', next: 'Simulation Engine' },
+      { time: '14:23:48', agent: 'Simulation Engine', action: 'Run Price Scenarios', database: 'Analytics DB', query: '▸ View Simulation Models', thinking: 'Running 1000 Monte Carlo simulations across 5 scenarios: +₹3, +₹4, +₹5, +₹6, +₹7 price increases. Testing elasticity ranges from -2% to -6%. Modeling competitor response probability at 30%. Simulating volume impact across 600 outlets over 6-month period.', next: 'Simulation Engine' },
+      { time: '14:23:55', agent: 'Simulation Engine', action: 'Analyze Simulation Results', database: '—', query: '—', thinking: 'Simulation convergence: 94.2% of scenarios show positive ROI for ₹5 increase. Best case: +₹52L (15% probability). Most likely: +₹42L (68% probability). Worst case: +₹28L (17% probability). Breakeven achieved in 97% of simulations. Risk-adjusted return: 8.2x.', next: 'Confidence Calculator' },
+      { time: '14:24:02', agent: 'Confidence Calculator', action: 'Calculate Decision Confidence', database: '—', query: '—', thinking: 'Confidence scoring: Simulation convergence (94.2%) × Data quality score (0.96) × Market stability factor (0.98) × Historical accuracy (0.97) = 88.1% base confidence. Adjusted for competitive headroom (+3%), low elasticity (+2%), clear timing window (+1%) = 94% final confidence.', next: 'Orchestrator' },
+      { time: '14:24:08', agent: 'Orchestrator', action: 'Generate Recommendation', database: '—', query: '—', thinking: 'Synthesizing inputs: Strong competitive headroom, low elasticity, positive margin impact, clear timing window. Simulation validation shows 94.2% success probability with risk-adjusted 8.2x return. High confidence (94%) pricing recommendation generated with implementation roadmap. Downside risk limited to 3% worst-case scenarios.', next: '—' }
     ],
     promotion: [
-      { time: '15:12:05', agent: 'Orchestrator', action: 'Initiated Analysis', database: '—', query: '—', thinking: 'Detected low pack conversion (40% single packs) and competitive 2+1 offer in Thane/Kalyan. Triggering promotion analysis for Jio Hair Care.', next: 'Marketing Agent' },
+      { time: '15:12:05', agent: 'Orchestrator', action: 'Initiated Analysis', database: '—', query: '—', thinking: 'Detected low pack conversion (40% single packs) and competitive 2+1 offer in Thane/Kalyan. Triggering promotion analysis for Velvette Shampoo.', next: 'Marketing Agent' },
       { time: '15:12:09', agent: 'Marketing Agent', action: 'Query Competitive Activity', database: 'Market Intelligence', query: '▸ View Query & Data', thinking: 'Competitor running 2+1 in same geography. Our single pack sales declining 8% MoM. Need aggressive response to recapture shelf share and mind share.', next: 'Inventory Agent' },
       { time: '15:12:14', agent: 'Inventory Agent', action: 'Check Stock Availability', database: 'Warehouse Management', query: '▸ View Query & Data', thinking: 'Sufficient inventory to support 3+1 offer. 16,000 bundles feasible with current stock levels. No supply constraints for 4-week promotion window.', next: 'Pricing Agent' },
       { time: '15:12:19', agent: 'Pricing Agent', action: 'Calculate Promotion ROI', database: 'Analytics DB', query: '▸ View Query & Data', thinking: 'Scheme cost: ₹23/bundle for 16,000 units = ₹9.2L. Expected uplift based on historical 3+1 performance: +₹38L revenue. ROI: 4.1x. Break-even: 4,200 bundles (26% of target).', next: 'Marketing Agent' },
       { time: '15:12:26', agent: 'Marketing Agent', action: 'Query Campaign Performance', database: 'Analytics DB', query: '▸ View Query & Data', thinking: 'Historical 3+1 bundles drive 35-40% uplift in target outlets. POS materials critical - counter displays boost conversion by 22%. Allocate ₹2k per outlet for visibility.', next: 'Finance Agent' },
-      { time: '15:12:33', agent: 'Finance Agent', action: 'Validate Budget Availability', database: 'Finance System', query: '▸ View Query & Data', thinking: 'Q4 promotion budget has ₹12L unallocated. ₹9.2L scheme cost within approval limits. No additional clearance needed for execution.', next: 'Orchestrator' },
-      { time: '15:12:40', agent: 'Orchestrator', action: 'Generate Recommendation', database: '—', query: '—', thinking: 'All inputs positive: Competitive threat clear, stock available, strong ROI (4.1x), budget approved. High confidence (91%) promotion recommendation for 4-week execution.', next: '—' }
+      { time: '15:12:33', agent: 'Finance Agent', action: 'Validate Budget Availability', database: 'Finance System', query: '▸ View Query & Data', thinking: 'Q4 promotion budget has ₹12L unallocated. ₹9.2L scheme cost within approval limits. No additional clearance needed for execution.', next: 'Simulation Engine' },
+      { time: '15:12:40', agent: 'Simulation Engine', action: 'Run Promotion Scenarios', database: 'Analytics DB', query: '▸ View Simulation Models', thinking: 'Running 800 simulations testing: 3+1 vs 2+1 vs 4+1 bundles. Modeling uptake rates from 20% to 60%. Testing competitive response scenarios. Simulating cannibalization impact on regular packs (15-35% range). Duration: 4 weeks across 400 outlets.', next: 'Simulation Engine' },
+      { time: '15:12:46', agent: 'Simulation Engine', action: 'Analyze Results', database: '—', query: '—', thinking: '3+1 bundle optimal: 91.4% scenarios show positive ROI. Expected uptake: 42% (median across simulations). Revenue range: ₹32L to ₹44L (90% confidence interval). Cannibalization stabilizes at 22% (acceptable). Competitive counter-promotion probability: 45% but minimal impact on our ROI.', next: 'Confidence Calculator' },
+      { time: '15:12:52', agent: 'Confidence Calculator', action: 'Calculate Confidence', database: '—', query: '—', thinking: 'Confidence scoring: Simulation success rate (91.4%) × Historical campaign accuracy (0.94) × Stock availability (1.0) × Budget clearance (1.0) = 85.9% base. Adjusted for competitive threat awareness (+3%), POS investment (+2%) = 91% final confidence.', next: 'Orchestrator' },
+      { time: '15:12:58', agent: 'Orchestrator', action: 'Generate Recommendation', database: '—', query: '—', thinking: 'All inputs positive: Competitive threat clear, stock available, strong ROI (4.1x), budget approved. Simulation validation shows 91.4% success probability with median uptake of 42%. High confidence (91%) promotion recommendation for 4-week execution with POS support.', next: '—' }
     ],
     trade: [
       { time: '16:45:22', agent: 'Orchestrator', action: 'Initiated Analysis', database: '—', query: '—', thinking: 'Detected Shah distributor at 95% credit utilization blocking ₹45k orders. Triggering trade scheme analysis to address credit stress and velocity.', next: 'Finance Agent' },
@@ -186,23 +193,58 @@ export default function RSMDashboard() {
       { time: '16:45:31', agent: 'Finance Agent', action: 'Calculate DSO Impact', database: 'Analytics DB', query: '▸ View Query & Data', thinking: 'Volume rebate incentivizes higher billing. Target ₹40L billing (vs ₹28L current) generates ₹12L additional. Faster turnover improves DSO by 5 days, freeing working capital.', next: 'Pricing Agent' },
       { time: '16:45:37', agent: 'Pricing Agent', action: 'Design Rebate Tiers', database: 'Analytics DB', query: '▸ View Query & Data', thinking: 'Tier 1: ₹30L → 1.5% rebate (₹45k). Tier 2: ₹40L → 2.5% rebate (₹1L). Conditional on DSO <38 days aligns incentive with collection discipline.', next: 'Marketing Agent' },
       { time: '16:45:44', agent: 'Marketing Agent', action: 'Assess Market Response', database: 'Market Intelligence', query: '▸ View Query & Data', thinking: 'Distributors respond positively to volume rebates (historical uptake 85%). Jan-Feb timing avoids major festival conflicts. 8-week window provides realistic ramp period.', next: 'Supply Chain Agent' },
-      { time: '16:45:51', agent: 'Supply Chain Agent', action: 'Validate Supply Capacity', database: 'Warehouse Management', query: '▸ View Query & Data', thinking: 'Can support ₹65L incremental billing from current inventory levels. No capacity constraints for executing volume push across Shah and Metro territories.', next: 'Orchestrator' },
-      { time: '16:45:58', agent: 'Orchestrator', action: 'Generate Recommendation', database: '—', query: '—', thinking: 'Trade scheme addresses root cause: Incentivizes velocity, improves cash generation, conditional on DSO improvement. Moderate confidence (88%) - success depends on distributor execution discipline.', next: '—' }
+      { time: '16:45:51', agent: 'Supply Chain Agent', action: 'Validate Supply Capacity', database: 'Warehouse Management', query: '▸ View Query & Data', thinking: 'Can support ₹65L incremental billing from current inventory levels. No capacity constraints for executing volume push across Shah and Metro territories.', next: 'Simulation Engine' },
+      { time: '16:45:58', agent: 'Simulation Engine', action: 'Run Trade Scheme Scenarios', database: 'Analytics DB', query: '▸ View Simulation Models', thinking: 'Running 600 simulations testing: Tier structures (2-tier vs 3-tier), DSO conditions (35d vs 38d vs none), distributor uptake rates (60-95%). Modeling velocity improvement (15-35%), cash generation timing, and credit relief scenarios.', next: 'Simulation Engine' },
+      { time: '16:46:04', agent: 'Simulation Engine', action: 'Analyze Results', database: '—', query: '—', thinking: '2-tier with DSO condition optimal: 88.3% scenarios achieve credit relief. Shah reaches Tier 1 (₹30L) in 76% of simulations. Metro reaches Tier 2 (₹40L) in 62% of cases. DSO improvement: 4-6 days in 82% of scenarios. ROI positive in 88% of cases even with delayed collection risk.', next: 'Confidence Calculator' },
+      { time: '16:46:10', agent: 'Confidence Calculator', action: 'Calculate Confidence', database: '—', query: '—', thinking: 'Confidence scoring: Simulation success (88.3%) × Historical uptake accuracy (0.94) × Supply capacity (1.0) × Distributor relationship strength (0.95) = 78.8% base. Adjusted for DSO discipline requirement (+5%), clear incentive structure (+4%) = 88% final confidence. Lower than pricing due to distributor execution dependency.', next: 'Orchestrator' },
+      { time: '16:46:16', agent: 'Orchestrator', action: 'Generate Recommendation', database: '—', query: '—', thinking: 'Trade scheme addresses root cause: Incentivizes velocity, improves cash generation, conditional on DSO improvement. Simulation shows 88.3% success probability with 4-6 day DSO improvement. Moderate confidence (88%) - success depends on distributor execution discipline and collection follow-through.', next: '—' }
     ],
     pack: [
-      { time: '17:22:15', agent: 'Orchestrator', action: 'Initiated Analysis', database: '—', query: '—', thinking: 'Detected economy shift (62%→67%) and price gap between 200g (₹45) and 500g (₹105). Triggering pack architecture analysis for Independence.', next: 'Marketing Agent' },
+      { time: '17:22:15', agent: 'Orchestrator', action: 'Initiated Analysis', database: '—', query: '—', thinking: 'Detected economy shift (62%→67%) and price gap between Glimmer 200g (₹45) and 500g (₹105). Triggering pack architecture analysis for Glimmer soap range.', next: 'Marketing Agent' },
       { time: '17:22:19', agent: 'Marketing Agent', action: 'Query Consumer Trends', database: 'Market Research', query: '▸ View Query & Data', thinking: 'Price-conscious consumers migrating to competition due to pack size gap. 400g at ₹75 (₹18.75/100g) addresses sweet spot. Matches consumption pattern for economy segment.', next: 'Pricing Agent' },
       { time: '17:22:25', agent: 'Pricing Agent', action: 'Calculate Cannibalization', database: 'Analytics DB', query: '▸ View Query & Data', thinking: 'New 400g will cannibalize ~34% from 200g (₹28L). But incremental gain from competitive conquest: ₹82L. Net impact: +₹54L with acceptable margin profile.', next: 'Finance Agent' },
       { time: '17:22:32', agent: 'Finance Agent', action: 'Assess Margin Impact', database: 'Finance System', query: '▸ View Query & Data', thinking: 'Introductory ₹5 off (₹75→₹70) for first month costs ₹12L but drives trial. Post-intro, 10% trade margin on ₹75 MRP maintains healthy gross margin of 26%.', next: 'Supply Chain Agent' },
       { time: '17:22:39', agent: 'Supply Chain Agent', action: 'Check Production Feasibility', database: 'Manufacturing', query: '▸ View Query & Data', thinking: 'Manufacturing can produce 400g pack with 3-week lead time. Feb 1 launch feasible. Initial production: 40,000 units to cover 1,200 mass market outlets with 2-month inventory.', next: 'Marketing Agent' },
-      { time: '17:22:46', agent: 'Marketing Agent', action: 'Plan Distribution Strategy', database: 'Sales System', query: '▸ View Query & Data', thinking: 'Focus on GT channel and mass market outlets first. 1,200 outlets identified with highest economy segment concentration. 10% trade margin (vs 8% for 200g) ensures distributor push.', next: 'Orchestrator' },
-      { time: '17:22:53', agent: 'Orchestrator', action: 'Generate Recommendation', database: '—', query: '—', thinking: 'Strong strategic fit: Closes pack gap, captures economy shift, net positive after cannibalization. High confidence (92%) with phased rollout to manage execution risk.', next: '—' }
+      { time: '17:22:46', agent: 'Marketing Agent', action: 'Plan Distribution Strategy', database: 'Sales System', query: '▸ View Query & Data', thinking: 'Focus on GT channel and mass market outlets first. 1,200 outlets identified with highest economy segment concentration. 10% trade margin (vs 8% for 200g) ensures distributor push.', next: 'Simulation Engine' },
+      { time: '17:22:53', agent: 'Simulation Engine', action: 'Run Pack Launch Scenarios', database: 'Analytics DB', query: '▸ View Simulation Models', thinking: 'Running 900 simulations testing: Cannibalization rates (25-45%), competitive response (matching pack or price war), trial conversion (30-60%), distribution velocity across 1,200 outlets. Modeling 6-month post-launch performance.', next: 'Simulation Engine' },
+      { time: '17:22:59', agent: 'Simulation Engine', action: 'Analyze Results', database: '—', query: '—', thinking: 'Optimal scenario validation: 92.1% simulations show net positive impact. Cannibalization stabilizes at 34% (within acceptable range). Incremental volume: ₹75L-₹89L range (80% confidence). Trial-to-repeat conversion: 45% median. Competitive matching occurs in 38% of scenarios but minimal impact due to our price advantage.', next: 'Confidence Calculator' },
+      { time: '17:23:05', agent: 'Confidence Calculator', action: 'Calculate Confidence', database: '—', query: '—', thinking: 'Confidence scoring: Simulation success (92.1%) × Consumer research validation (0.96) × Production feasibility (1.0) × Distribution network readiness (0.98) = 86.4% base. Adjusted for clear market gap (+3%), distributor incentive alignment (+2.6%) = 92% final confidence. High confidence due to validated consumer need.', next: 'Orchestrator' },
+      { time: '17:23:11', agent: 'Orchestrator', action: 'Generate Recommendation', database: '—', query: '—', thinking: 'Strong strategic fit: Closes pack gap, captures economy shift, net positive after cannibalization. Simulation validates 92.1% success probability with ₹75L-₹89L incremental range. High confidence (92%) with phased rollout to manage execution risk. Launch timing and distributor incentives aligned for optimal push.', next: '—' }
     ]
   };
 
   const openDecisionTrail = (trailType) => {
     setSelectedDecisionTrail(trailType);
     setDecisionTrailOpen(true);
+  };
+
+  const handleWhatIf = (scenario) => {
+    setConversationOpen(true);
+    setConversationContext({ type: 'whatif', name: 'What-If Scenario Analysis' });
+    
+    let response = '';
+    
+    if (scenario.includes('volume drops by 5%')) {
+      response = `**Scenario: Volume drops by 5% (instead of 3%)**\n\n**Simulation Results:**\n• Revenue impact: +₹38L (vs ₹42L base case) = -₹4L\n• Still profitable but margin thinner\n• Success probability: 89% (vs 94% base)\n• Risk-adjusted return: 6.8x (vs 8.2x base)\n\n**Key Insights:**\n• Even at -5% elasticity, we're +₹38L ahead\n• Breakeven still achieved in 94% of scenarios\n• Competitive headroom (8-12%) provides buffer\n• Worst case: +₹24L (still positive)\n\n**Recommendation:** Proceed. 5% buffer still maintains strong ROI.`;
+    } else if (scenario.includes('increase by ₹3 instead of ₹5')) {
+      response = `**Scenario: ₹3 increase (instead of ₹5)**\n\n**Simulation Results:**\n• Revenue impact: +₹27L (vs ₹42L base) = -₹15L opportunity cost\n• Lower risk but also lower reward\n• Success probability: 97% (vs 94% base)\n• Risk-adjusted return: 7.2x\n\n**Trade-offs:**\n• **Pro:** Higher certainty (97%), minimal volume risk\n• **Pro:** Easier to justify internally\n• **Con:** Leaves ₹15L on table\n• **Con:** Doesn't close competitive gap fully\n\n**Competitive Analysis:**\n• Competition still 5-9% higher after ₹3 increase\n• Miss opportunity to reach price parity\n• May need second increase in 6 months\n\n**Recommendation:** Stick with ₹5. Risk difference (3%) doesn't justify ₹15L sacrifice.`;
+    } else if (scenario.includes('competitors match')) {
+      response = `**Scenario: Competitors match our ₹5 increase**\n\n**Probability Assessment:**\n• Likelihood of match: 30-40% (based on historical behavior)\n• Time to match: 4-8 weeks if they do\n\n**Impact if they match:**\n• **Best case:** Industry-wide price increase = +₹45L for us\n• **Our position:** First-mover advantage in premium segment\n• **Volume impact:** Minimal (everyone at same price level)\n• **Margin impact:** +1.2% holds (entire category lifts)\n\n**If they don't match:**\n• We execute base case: +₹42L\n• Slight volume risk (-3%) but margin gain compensates\n\n**Strategic View:**\n• Win-win: Either they match (great) or we capture margin (also great)\n• Premium segment has low elasticity = customers won't switch for ₹5\n• 600 outlets are brand-loyal retailers\n\n**Recommendation:** Strong proceed. Competitor match makes it even better.`;
+    } else if (scenario.includes('extend this to 500 more outlets')) {
+      response = `**Scenario: Extend to 1,100 total outlets (500 more)**\n\n**Additional 500 Outlet Analysis:**\n• Category: Semi-premium (not pure premium)\n• Price sensitivity: -4% to -5% (vs -3% premium)\n• Incremental revenue potential: +₹38L\n• But higher elasticity risk: -₹6L\n• Net incremental: +₹32L\n\n**Combined Impact:**\n• Base 600 outlets: +₹42L\n• Additional 500: +₹32L\n• **Total potential: +₹74L**\n\n**Risk Assessment:**\n• Confidence drops to 87% (from 94%) due to mixed segments\n• Semi-premium has more competitive activity\n• May require differentiated positioning\n\n**Phased Approach:**\n1. Month 1-2: Launch in 600 premium outlets (validate)\n2. Month 3: Analyze elasticity actuals\n3. Month 4: Expand to 500 semi-premium if Month 1-2 > target\n\n**Recommendation:** Start with 600. Expand after validation.`;
+    }
+    
+    setChatMessages([{
+      type: 'ai',
+      text: response,
+      ts: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      sugg: [
+        'What are the key risks in this scenario?',
+        'How would this affect our competitive position?',
+        'Show me a week-by-week implementation plan',
+        'Compare this to other alternatives'
+      ]
+    }]);
   };
 
   const openConv = ctx => {
@@ -247,13 +289,13 @@ export default function RSMDashboard() {
         msg.text = `**Old vs New Outlets**\n\n**Repeat outlets (billed last 3mo):**\n• 88% of sales\n• +5.8% vs LY\n• ~70% flat or growing\n\n**New outlets (started last 90d):**\n• 12% of sales\n• +30%+ growth\n• But 60% drop after 1-2 orders\n\n**Insight:** Growth from existing outlets. New outlets good but high churn.\n\n**Churn analysis:**\n• Highest in traditional retail (small chemists, kirana)\n• GT/wholesale: 8 in 10 stick\n• Primary reason: Credit terms (60% cite payment flexibility)`;
         msg.sugg = ['Why 60% drop off?', 'Change onboarding for better retention?', 'Quality vs quantity new outlets?', 'Cost of churn?'];
       } else if (ctx.subtype === 'efficiency') {
-        msg.text = `**High effort, low output**\n\n**3 areas: calls good, productivity weak**\n\n**1. Andheri-Goregaon:**\n• Calls: 108% of plan\n• Lines/bill: 5.1 → 4.3 (-16%)\n• Drop size: -7%\n• Issue: Push Independence only, Jio Hair/hair colour under-pushed\n\n**2. Dadar-Sion:**\n• Good call numbers\n• Hair colour lines/bill: -12%\n• Issue: Competitor offer active, our scheme late\n\n**3. Thane city:**\n• Coverage above plan\n• New SKUs barely move\n• Issue: TSRs focus on old SKUs for easy targets\n\n**Root:** Visiting outlets, but product mix + counter story weak`;
+        msg.text = `**High effort, low output**\n\n**3 areas: calls good, productivity weak**\n\n**1. Andheri-Goregaon:**\n• Calls: 108% of plan\n• Lines/bill: 5.1 → 4.3 (-16%)\n• Drop size: -7%\n• Issue: Push Glimmer only, Velvette/Enzo under-pushed\n\n**2. Dadar-Sion:**\n• Good call numbers\n• Personal care lines/bill: -12%\n• Issue: Competitor offer active, our scheme late\n\n**3. Thane city:**\n• Coverage above plan\n• New SKUs barely move\n• Issue: TSRs focus on old SKUs for easy targets\n\n**Root:** Visiting outlets, but product mix + counter story weak`;
         msg.sugg = ['Fix Andheri-Goregaon: specific plan?', 'Why scheme reach late Dadar-Sion?', 'Incentivize new SKU push Thane?', 'Revenue loss from weak mix?'];
       } else if (ctx.subtype === 'opportunity') {
-        msg.text = `**₹1 Cr without margin hit**\n\n**3 opportunities:**\n\n**1. Independence Premium in premium outlets:**\n• 600 outlets (S Mumbai, Bandra-Khar, Powai, Thane W)\n• Extra facing + display, link Independence soap\n• Uplift: ₹45-50L\n\n**2. Jio Hair Care refill bundles:**\n• ~400 outlets (Thane/Kalyan/Mira Road)\n• Move single → 2-3 pack bundles\n• Uplift: ₹35-40L\n\n**3. Independence Hair Colour cosmetics/salons:**\n• ~150 outlets, competitor strong\n• Better visibility + simple scheme\n• Uplift: ₹20-25L\n\n**Total: ₹1.0-1.1 Cr**\n**Margin impact: ~10 bps**`;
-        msg.sugg = ['Which 600 outlets for Independence Premium?', 'Jio Hair Care bundle: will retailers agree?', 'Salon activation execution?', 'Timeline for ₹1 Cr?'];
+        msg.text = `**₹1 Cr without margin hit**\n\n**3 opportunities:**\n\n**1. Glimmer Premium in premium outlets:**\n• 600 outlets (S Mumbai, Bandra-Khar, Powai, Thane W)\n• Extra facing + display, link Glimmer range\n• Uplift: ₹45-50L\n\n**2. Velvette shampoo sachet bundles:**\n• ~400 outlets (Thane/Kalyan/Mira Road)\n• Move single → 2-3 pack bundles\n• Uplift: ₹35-40L\n\n**3. Puric hygiene range cosmetics/chemists:**\n• ~150 outlets, competitor strong\n• Better visibility + simple scheme\n• Uplift: ₹20-25L\n\n**Total: ₹1.0-1.1 Cr**\n**Margin impact: ~10 bps**`;
+        msg.sugg = ['Which 600 outlets for Glimmer Premium?', 'Velvette bundle: will retailers agree?', 'Chemist activation execution?', 'Timeline for ₹1 Cr?'];
       } else if (ctx.subtype === 'levers') {
-        msg.text = `**95% → 102% with 3 actions**\n\n**Current:** 95% of target\n\n**3 levers:**\n\n**1. Fix 25 weakest beats:**\n• Thane, Kalyan-Dombivli, Kurla\n• Coverage to 95%+\n• Uplift: ₹1.2-1.4 Cr\n\n**2. Premium in 700 outlets:**\n• Independence Premium + hair colour focus\n• Uplift: ₹1.0-1.2 Cr\n\n**3. Fix 3 key distributors:**\n• Credit + inventory on top 15 SKUs\n• Uplift: ₹0.8-1.0 Cr\n\n**Total: ₹3.0-3.6 Cr**\n**Result: 95% → 101.5-102.5%**\n**Execute: Next 3 weeks**`;
+        msg.text = `**95% → 102% with 3 actions**\n\n**Current:** 95% of target\n\n**3 levers:**\n\n**1. Fix 25 weakest beats:**\n• Thane, Kalyan-Dombivli, Kurla\n• Coverage to 95%+\n• Uplift: ₹1.2-1.4 Cr\n\n**2. Premium SKUs in 700 outlets:**\n• Glimmer Premium + Velvette focus\n• Uplift: ₹1.0-1.2 Cr\n\n**3. Fix 3 key distributors:**\n• Credit + inventory on top 15 SKUs\n• Uplift: ₹0.8-1.0 Cr\n\n**Total: ₹3.0-3.6 Cr**\n**Result: 95% → 101.5-102.5%**\n**Execute: Next 3 weeks**`;
         msg.sugg = ['Which 25 beats?', '700 outlets: how prioritize?', 'Which 3 distributors?', 'Week-by-week plan?'];
       } else {
         msg.text = `**Business Intelligence**\n\nI can answer:\n• Growth drivers and quality\n• Risk and concentration\n• Outlet dynamics\n• Efficiency gaps\n• Revenue opportunities\n• Action planning`;
@@ -597,7 +639,7 @@ export default function RSMDashboard() {
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
                     {[
                       { type: 'cascade', c: C.terra, lbl: '🔍 Root Cause Cascade', ttl: 'Manpower shortages triggering credit stress', dsc: 'Execution gaps → Lower revenue → Slower collections → Credit rises → Orders blocked. Affecting 60% of underperforming.' },
-                      { type: 'margin', c: C.sage, lbl: '💡 Margin Opportunity', ttl: '₹2.1Cr margin recovery through SKU mix', dsc: 'High-margin SKU 35% vs 45% target. Amit achieves 48%. Replicating recovers ₹2.1Cr in absolute margin.' },
+                      { type: 'margin', c: C.sage, lbl: '💡 Margin Opportunity', ttl: '₹2.1Cr margin recovery through SKU mix', dsc: 'High-margin products (Glimmer Premium, Velvette) at 35% vs 45% target. Amit achieves 48%. Replicating recovers ₹2.1Cr in absolute margin.' },
                       { type: 'wc', c: C.warn, lbl: '⚠️ Cash Flow Risk', ttl: '₹5.2Cr locked in aged receivables', dsc: 'WC stress from >45d receivables. 3 distributors near limits risking ₹1.2Cr blocks.' },
                       { type: 'supply', c: C.sage, lbl: '📈 Quick Win', ttl: 'Fulfill ₹2.8Cr backlog via stock movement', dsc: 'Thane WH excess (480 units) while Mumbai has ₹2.8Cr backlog. Inter-branch movement (₹35k) fulfills immediately. 80x ROI.' }
                     ].map((ins, idx) => (
@@ -668,7 +710,7 @@ export default function RSMDashboard() {
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
                         <div style={{ flex: 1 }}>
                           <div style={{ fontSize: '11px', fontWeight: '600', color: C.sage, marginBottom: '8px', letterSpacing: '0.05em', textTransform: 'uppercase' }}>💰 PRICING DECISION</div>
-                          <h3 style={{ fontSize: '20px', fontWeight: '600', color: C.darkGreen, marginBottom: '8px', lineHeight: '1.3' }}>Increase Independence Premium 200g MRP by ₹5</h3>
+                          <h3 style={{ fontSize: '20px', fontWeight: '600', color: C.darkGreen, marginBottom: '8px', lineHeight: '1.3' }}>Increase Glimmer Premium Soap 200g MRP by ₹5</h3>
                           <div style={{ fontSize: '13px', color: C.grey, marginBottom: '16px' }}>Premium outlets (S Mumbai, Bandra) show low price sensitivity. Competition priced 8-12% higher. Current ₹45 MRP undervalued.</div>
                         </div>
                         <div style={{ display: 'flex', gap: '8px', marginLeft: '24px' }}>
@@ -725,8 +767,9 @@ export default function RSMDashboard() {
 
                       <div style={{ padding: '16px', backgroundColor: `${C.sage}08`, borderRadius: '6px', marginBottom: '20px', borderLeft: `3px solid ${C.sage}` }}>
                         <div style={{ fontSize: '11px', fontWeight: '600', color: C.sage, marginBottom: '10px', letterSpacing: '0.05em', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                          <Zap size={14} />START A WHAT-IF ANALYSIS
+                          <Zap size={14} />INTERACTIVE WHAT-IF ANALYSIS
                         </div>
+                        <div style={{ fontSize: '12px', color: C.darkest, marginBottom: '12px' }}>Click any scenario to start a conversation with detailed analysis</div>
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
                           {[
                             'What if volume drops by 5% instead of 3%?',
@@ -734,7 +777,7 @@ export default function RSMDashboard() {
                             'What if competitors match our price increase?',
                             'What if we extend this to 500 more outlets?'
                           ].map((q, idx) => (
-                            <button key={idx} style={{ padding: '10px 12px', backgroundColor: 'white', border: `1px solid ${C.sage}30`, borderRadius: '4px', fontSize: '12px', color: C.darkGreen, textAlign: 'left', cursor: 'pointer', fontFamily: "'Inter', sans-serif", transition: 'all 0.2s' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = `${C.sage}10`; e.currentTarget.style.borderColor = C.sage; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'white'; e.currentTarget.style.borderColor = `${C.sage}30`; }}>
+                            <button key={idx} onClick={() => handleWhatIf(q)} style={{ padding: '10px 12px', backgroundColor: 'white', border: `1px solid ${C.sage}30`, borderRadius: '4px', fontSize: '12px', color: C.darkGreen, textAlign: 'left', cursor: 'pointer', fontFamily: "'Inter', sans-serif", transition: 'all 0.2s' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = `${C.sage}10`; e.currentTarget.style.borderColor = C.sage; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'white'; e.currentTarget.style.borderColor = `${C.sage}30`; }}>
                               {q}
                             </button>
                           ))}
@@ -748,8 +791,8 @@ export default function RSMDashboard() {
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
                         <div style={{ flex: 1 }}>
                           <div style={{ fontSize: '11px', fontWeight: '600', color: C.terra, marginBottom: '8px', letterSpacing: '0.05em', textTransform: 'uppercase' }}>🎯 PROMOTION DECISION</div>
-                          <h3 style={{ fontSize: '20px', fontWeight: '600', color: C.darkGreen, marginBottom: '8px', lineHeight: '1.3' }}>Jio Hair Care 3+1 Bundle in Thane/Kalyan</h3>
-                          <div style={{ fontSize: '13px', color: C.grey, marginBottom: '16px' }}>Low pack conversion (40% single packs). Competitor running 2+1. Inventory available. Q4 volume push needed.</div>
+                          <h3 style={{ fontSize: '20px', fontWeight: '600', color: C.darkGreen, marginBottom: '8px', lineHeight: '1.3' }}>Velvette Shampoo 3+1 Bundle in Thane/Kalyan</h3>
+                          <div style={{ fontSize: '13px', color: C.grey, marginBottom: '16px' }}>Low pack conversion (40% single sachets). Competitor running 2+1. Inventory available. Q4 volume push needed.</div>
                         </div>
                         <div style={{ display: 'flex', gap: '8px', marginLeft: '24px' }}>
                           <button onClick={() => openDecisionTrail('promotion')} style={{ padding: '10px 20px', backgroundColor: 'transparent', color: C.darkGreen, border: `1px solid ${C.darkGreen}30`, borderRadius: '4px', fontSize: '12px', fontWeight: '500', cursor: 'pointer', fontFamily: "'Inter', sans-serif", display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -908,7 +951,7 @@ export default function RSMDashboard() {
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
                         <div style={{ flex: 1 }}>
                           <div style={{ fontSize: '11px', fontWeight: '600', color: C.sage, marginBottom: '8px', letterSpacing: '0.05em', textTransform: 'uppercase' }}>📦 PACK ARCHITECTURE</div>
-                          <h3 style={{ fontSize: '20px', fontWeight: '600', color: C.darkGreen, marginBottom: '8px', lineHeight: '1.3' }}>Launch Independence 400g Economy Pack</h3>
+                          <h3 style={{ fontSize: '20px', fontWeight: '600', color: C.darkGreen, marginBottom: '8px', lineHeight: '1.3' }}>Launch Glimmer Soap 400g Economy Pack</h3>
                           <div style={{ fontSize: '13px', color: C.grey, marginBottom: '16px' }}>Economy shift (62%→67%). Gap between 200g (₹45) and 500g (₹105). Price-conscious consumers dropping to competition.</div>
                         </div>
                         <div style={{ display: 'flex', gap: '8px', marginLeft: '24px' }}>
@@ -1325,7 +1368,9 @@ export default function RSMDashboard() {
                     <div style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: C.sage, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', fontWeight: '600', color: 'white' }}>M</div>
                     <h3 style={{ fontSize: '18px', fontWeight: '600', color: C.darkGreen, margin: 0 }}>Chat with Morrie</h3>
                   </div>
-                  <p style={{ fontSize: '12px', color: C.grey, margin: 0, paddingLeft: '48px' }}>{conversationContext?.name}</p>
+                  <p style={{ fontSize: '12px', color: C.grey, margin: 0, paddingLeft: '48px' }}>
+                    {conversationContext?.type === 'whatif' ? 'What-If Scenario Analysis' : conversationContext?.name}
+                  </p>
                 </div>
                 <button onClick={() => setConversationOpen(false)} style={{ padding: '6px', backgroundColor: 'transparent', color: C.grey, border: 'none', borderRadius: '4px', cursor: 'pointer' }}><X size={20} /></button>
               </div>

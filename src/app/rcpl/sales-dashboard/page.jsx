@@ -61,14 +61,14 @@ const SalesmanDashboard = () => {
       actionType: "recovery",
       action: "Recovered unbilled outlet",
       orderValue: 950,
-      products: ["Campa Cola 500ml x36", "Bailey Water 1L x48", "Appy Fizz 250ml x24"],
+      products: ["Campa Cola 500ml x36", "Independence Water 1L x48", "Spinner 250ml x24"],
       scheme: "Summer Festival Scheme applied",
       impact: {
         achievement: { before: 64.0, after: 65.0, change: +1.0 },
         coverage: { before: 69, after: 70, change: +1 },
         productiveCalls: { before: 0, after: 1, change: +1 }
       },
-      notes: "Store owner mentioned cooler space available. Stocking full RCPL range with good Campa visibility."
+      notes: "Store owner mentioned cooler space available. Stocking full RCPL beverage range with good Campa visibility."
     },
     {
       id: 2,
@@ -78,7 +78,7 @@ const SalesmanDashboard = () => {
       actionType: "recovery",
       action: "Recovered unbilled outlet + Focus brand push",
       orderValue: 1680,
-      products: ["Campa Cola 1L x60", "Campa Cola 2L x24", "Appy Fizz 500ml x36", "Bailey Water 1L x24"],
+      products: ["Campa Cola 1L x60", "Campa Cola 2L x24", "Spinner 500ml x36", "Independence Water 1L x24"],
       scheme: "10% margin scheme on Campa Cola bulk purchase",
       impact: {
         achievement: { before: 65.0, after: 66.8, change: +1.8 },
@@ -86,7 +86,7 @@ const SalesmanDashboard = () => {
         focusBrand: { before: 58, after: 65.2, change: +7.2 },
         productiveCalls: { before: 1, after: 2, change: +1 }
       },
-      notes: "Patil ji agreed to prominent Campa display. Also ordered Appy Fizz and Bailey - full portfolio push working."
+      notes: "Patil ji agreed to prominent Campa display. Also ordered Spinner and Independence Water - full RCPL portfolio push working."
     },
     {
       id: 3,
@@ -96,14 +96,14 @@ const SalesmanDashboard = () => {
       actionType: "focusBrand",
       action: "Focus brand push - Campa Cola",
       orderValue: 820,
-      products: ["Campa Cola combo pack (250ml x120)", "Appy 200ml x48"],
+      products: ["Campa Cola combo pack (250ml x120)", "Raskik Juice 200ml x48"],
       scheme: "10% margin + Free chiller stickers",
       impact: {
         achievement: { before: 66.8, after: 67.7, change: +0.9 },
         focusBrand: { before: 65.2, after: 70.5, change: +5.3 },
         productiveCalls: { before: 2, after: 3, change: +1 }
       },
-      notes: "Chiller stickers for Campa installed. Added Appy juice boxes as counter display item."
+      notes: "Chiller stickers for Campa installed. Added Raskik juice boxes as counter display item."
     },
     {
       id: 4,
@@ -113,14 +113,14 @@ const SalesmanDashboard = () => {
       actionType: "recovery",
       action: "Recovered unbilled outlet",
       orderValue: 780,
-      products: ["Campa Orange 500ml x36", "Campa Lemon 500ml x24", "Bailey Water 500ml x60"],
+      products: ["Campa Orange 500ml x36", "Campa Lemon 500ml x24", "Independence Water 500ml x60"],
       scheme: null,
       impact: {
         achievement: { before: 67.7, after: 68.5, change: +0.8 },
         coverage: { before: 71, after: 73, change: +2 },
         productiveCalls: { before: 3, after: 4, change: +1 }
       },
-      notes: "Stock was low on flavored Campa and Bailey water. Good response to Campa Orange especially."
+      notes: "Stock was low on flavored Campa and Independence water. Good response to Campa Orange especially."
     },
     {
       id: 5,
@@ -128,16 +128,16 @@ const SalesmanDashboard = () => {
       status: "completed",
       store: "Modern Kirana",
       actionType: "crossSell",
-      action: "Cross-sell - Appy Fizz premium SKUs",
+      action: "Cross-sell - Spinner Sports Drink",
       orderValue: 640,
-      products: ["Appy Fizz 500ml x48", "Appy Fizz 1L x12", "Bailey Water 1L x36"],
-      scheme: "8% launch offer on Appy Fizz 1L + Free shelf talkers",
+      products: ["Spinner 500ml x48", "Spinner 1L x12", "Independence Water 1L x36"],
+      scheme: "8% launch offer on Spinner 1L + Free shelf talkers",
       impact: {
         achievement: { before: 68.5, after: 69.2, change: +0.7 },
         tlsd: { before: 78, after: 85, change: +7 },
         productiveCalls: { before: 4, after: 5, change: +1 }
       },
-      notes: "Appy Fizz 1L doing well for family consumption. Bailey water consistent performer."
+      notes: "Spinner 1L doing well for sports enthusiasts. Independence water consistent performer."
     },
     {
       id: 6,
@@ -170,7 +170,7 @@ const SalesmanDashboard = () => {
       lastOrder: {
         date: "Oct 30",
         value: 950,
-        products: "RCPL mix"
+        products: "RCPL beverages mix"
       },
       actions: [
         {
@@ -181,7 +181,7 @@ const SalesmanDashboard = () => {
           expectedValue: 950,
           talkingPoints: [
             "Remind about last month's order (₹950)",
-            "Stock check - Campa Cola, Bailey, Appy Fizz running low?",
+            "Stock check - Campa Cola, Independence Water, Spinner running low?",
             "Mention he usually orders good Campa volumes with RCPL portfolio"
           ],
           impact: {
@@ -195,12 +195,12 @@ const SalesmanDashboard = () => {
           title: "Push Active Scheme",
           description: "Summer Festival Scheme: 10% margin + Free chiller stickers",
           urgency: "medium",
-          products: ["Campa Cola 500ml", "Appy Fizz 250ml", "Bailey Water 1L"],
+          products: ["Campa Cola 500ml", "Spinner 250ml", "Independence Water 1L"],
           expectedValue: 680,
           talkingPoints: [
             "Free chiller stickers worth ₹300 with combo",
             "10% better margin on Campa Cola",
-            "Festival season - push full RCPL range"
+            "Festival season - push full RCPL beverage range"
           ],
           impact: {
             achievement: "+0.7%",
@@ -211,7 +211,7 @@ const SalesmanDashboard = () => {
       storeInsights: {
         avgOrderValue: 880,
         orderFrequency: "Monthly",
-        topCategories: ["Campa Cola", "Bailey Water"],
+        topCategories: ["Campa Cola", "Independence Water"],
         creditDays: 15
       }
     },
@@ -225,7 +225,7 @@ const SalesmanDashboard = () => {
       lastOrder: {
         date: "Oct 27",
         value: 1120,
-        products: "Campa bulk + Appy"
+        products: "Campa bulk + Spinner"
       },
       actions: [
         {
@@ -235,8 +235,8 @@ const SalesmanDashboard = () => {
           urgency: "urgent",
           expectedValue: 1120,
           talkingPoints: [
-            "Last order was ₹1,120 worth Campa + Appy Fizz",
-            "Ask about Campa Cola 1L/2L and Bailey stock levels",
+            "Last order was ₹1,120 worth Campa + Spinner",
+            "Ask about Campa Cola 1L/2L and Independence Water stock levels",
             "This is his regular monthly restock time"
           ],
           impact: {
@@ -255,7 +255,7 @@ const SalesmanDashboard = () => {
           talkingPoints: [
             "Patil ji usually stocks heavy Campa Cola",
             "10% margin scheme on bulk purchase",
-            "Mix with Appy Fizz for complete portfolio"
+            "Mix with Spinner for complete RCPL portfolio"
           ],
           impact: {
             achievement: "+1.4%",
@@ -267,7 +267,7 @@ const SalesmanDashboard = () => {
       storeInsights: {
         avgOrderValue: 1080,
         orderFrequency: "Monthly",
-        topCategories: ["Campa Cola", "Appy Fizz"],
+        topCategories: ["Campa Cola", "Spinner"],
         creditDays: 30
       }
     },
@@ -281,7 +281,7 @@ const SalesmanDashboard = () => {
       lastOrder: {
         date: "Nov 4",
         value: 720,
-        products: "Mixed RCPL"
+        products: "Mixed RCPL beverages"
       },
       actions: [
         {
@@ -295,7 +295,7 @@ const SalesmanDashboard = () => {
           talkingPoints: [
             "Free chiller branding worth ₹300",
             "10% better margin on Campa",
-            "Add Appy juice for impulse purchases"
+            "Add Raskik juice for impulse purchases"
           ],
           impact: {
             achievement: "+0.9%",
@@ -306,14 +306,14 @@ const SalesmanDashboard = () => {
         {
           type: "crossSell",
           title: "Cross-sell Opportunity",
-          description: "Add Appy Fizz and Bailey to regular Campa order",
+          description: "Add Spinner and Independence Water to regular Campa order",
           urgency: "medium",
-          products: ["Appy Fizz 500ml", "Bailey Water 1L"],
+          products: ["Spinner 500ml", "Independence Water 1L"],
           expectedValue: 420,
           talkingPoints: [
-            "Appy Fizz - premium sparkling segment",
-            "Bailey Water - high turnover product",
-            "Good combo with Campa for full portfolio"
+            "Spinner - premium sports drink segment",
+            "Independence Water - high turnover product",
+            "Good combo with Campa for full RCPL portfolio"
           ],
           impact: {
             achievement: "+0.4%",
@@ -339,21 +339,21 @@ const SalesmanDashboard = () => {
       lastOrder: {
         date: "Nov 6",
         value: 640,
-        products: "Campa + Bailey"
+        products: "Campa + Independence Water"
       },
       actions: [
         {
           type: "crossSell",
-          title: "Cross-sell - Appy Fizz Premium",
-          description: "They stock Campa Cola - perfect for Appy Fizz upsell",
+          title: "Cross-sell - Spinner Sports Drink",
+          description: "They stock Campa Cola - perfect for Spinner upsell",
           urgency: "medium",
-          products: ["Appy Fizz 500ml", "Appy Fizz 1L", "Appy 200ml juice"],
+          products: ["Spinner 500ml", "Spinner 1L", "Raskik Juice 200ml"],
           expectedValue: 640,
-          scheme: "8% launch offer on Appy Fizz 1L + Free shelf talkers",
+          scheme: "8% launch offer on Spinner 1L + Free shelf talkers",
           talkingPoints: [
-            "Already stocks Campa - natural fit for Appy Fizz",
+            "Already stocks Campa - natural fit for Spinner",
             "Launch offer: 8% margin + free branding",
-            "Appy juice boxes for kids segment"
+            "Raskik juice boxes for kids segment"
           ],
           impact: {
             achievement: "+0.7%",
@@ -379,7 +379,7 @@ const SalesmanDashboard = () => {
       lastOrder: {
         date: "Oct 24",
         value: 780,
-        products: "Campa + Bailey"
+        products: "Campa flavored + Independence Water"
       },
       actions: [
         {
@@ -389,9 +389,9 @@ const SalesmanDashboard = () => {
           urgency: "urgent",
           expectedValue: 780,
           talkingPoints: [
-            "Last order ₹780 - Campa flavored + Bailey",
+            "Last order ₹780 - Campa Orange/Lemon + Independence Water",
             "3+ weeks since last order",
-            "Check if Campa Orange/Lemon and Bailey need restock"
+            "Check if Campa flavored variants and Independence Water need restock"
           ],
           impact: {
             achievement: "+0.8%",
@@ -403,7 +403,7 @@ const SalesmanDashboard = () => {
       storeInsights: {
         avgOrderValue: 760,
         orderFrequency: "Monthly",
-        topCategories: ["Campa Flavored", "Bailey Water"],
+        topCategories: ["Campa Flavored", "Independence Water"],
         creditDays: 15
       }
     },
@@ -417,7 +417,7 @@ const SalesmanDashboard = () => {
       lastOrder: {
         date: "Oct 22",
         value: 1150,
-        products: "Full RCPL range"
+        products: "Full RCPL beverage range"
       },
       actions: [
         {
@@ -429,7 +429,7 @@ const SalesmanDashboard = () => {
           talkingPoints: [
             "Your highest order last month: ₹1,150",
             "Almost a month since last order",
-            "They stock full RCPL range - Campa, Appy, Bailey"
+            "They stock full RCPL beverage range - Campa, Spinner, Independence Water"
           ],
           impact: {
             achievement: "+1.2%",
@@ -442,12 +442,12 @@ const SalesmanDashboard = () => {
           title: "Focus Brand - Add Campa Cola",
           description: "Large order opportunity - include focus brand",
           urgency: "medium",
-          products: ["Campa Cola bulk", "Appy Fizz", "Bailey Water"],
+          products: ["Campa Cola bulk", "Spinner", "Independence Water"],
           expectedValue: 550,
           talkingPoints: [
             "Add Campa Cola bulk to their regular order",
             "10% margin scheme active",
-            "Complete RCPL portfolio push"
+            "Complete RCPL beverage portfolio push"
           ],
           impact: {
             achievement: "+0.6%",
@@ -459,7 +459,7 @@ const SalesmanDashboard = () => {
       storeInsights: {
         avgOrderValue: 1100,
         orderFrequency: "Monthly",
-        topCategories: ["Full RCPL range"],
+        topCategories: ["Full RCPL beverage range"],
         creditDays: 30
       }
     }
@@ -703,8 +703,8 @@ const SalesmanDashboard = () => {
             lineHeight: '1.6'
           }}>
             <strong>Rajesh</strong>, you're {salesmanData.performance.daysLeft} days from month-end and need ₹{(salesmanData.performance.remaining / 1000).toFixed(1)}k more. 
-            You have <strong>6 unbilled outlets</strong> who bought last month — recovering just these will add ₹{(6020 / 1000).toFixed(1)}k in RCPL portfolio sales. 
-            Your <strong>Campa Cola focus is at 58%</strong> while team average is 72% — priority push needed today across full range.
+            You have <strong>6 unbilled outlets</strong> who bought last month — recovering just these will add ₹{(6020 / 1000).toFixed(1)}k in RCPL beverage sales. 
+            Your <strong>Campa Cola focus is at 58%</strong> while team average is 72% — priority push needed on Campa, Spinner, and Independence Water.
           </div>
         </div>
       </div>
