@@ -39,7 +39,6 @@ export default function RSMDashboard() {
           execution: { issue: '2 vacant beats, coverage 72% (from 85%)', impact: '40% of shortfall', sev: 'critical' },
           finance: { issue: 'Shah 95% credit, ₹45k blocked', impact: '20% of shortfall', sev: 'high' },
           supply: { issue: 'Glimmer/Dozo stockout 6d, ₹65k backlog', impact: '15% of shortfall', sev: 'high' },
-          margin: { issue: 'Discounting 18% vs 15%', impact: '15% of shortfall', sev: 'medium' },
           forecast: { issue: 'Nov forecast +15% vs flat', impact: '10% of shortfall', sev: 'medium' }
         },
         bizImpact: { revenue: '-₹1.8Cr', gm: -2.1, wc: '₹2.4Cr locked' },
