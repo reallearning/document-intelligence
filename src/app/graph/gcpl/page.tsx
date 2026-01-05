@@ -47,162 +47,500 @@ export default function Page() {
       height: 56,
     },
 
-    /* ---------- HOW THE COMPANY WORKS (BKG) ---------- */
+    /* =========================
+       LEVEL 1 (L1): HOW GCPL WORKS
+       ========================= */
 
     {
-      id: "portfolio_strategy",
-      name: "Portfolio & Category Strategy",
+      id: "l1_portfolio",
+      name: "Portfolio & Growth Choices",
       description:
-        "Decisions on categories, brands, pack-price architecture and growth priorities by market.",
+        "Where to play and how to win: categories, brands, pack-price architecture, growth bets by market.",
       size: 22,
       color: "#3B82F6",
       type: "bkg",
     },
     {
-      id: "brands",
-      name: "Brands",
-      description:
-        "Brand-level ownership of growth, positioning, media and performance.",
-      size: 18,
-      color: "#3B82F6",
-      type: "bkg",
-    },
-    {
-      id: "skus",
-      name: "Products / SKUs",
-      description:
-        "SKU master with pack sizes, variants, lifecycle, pricing and margins.",
-      size: 16,
-      color: "#3B82F6",
-      type: "bkg",
-    },
-
-    {
-      id: "rtm",
+      id: "l1_rtm",
       name: "Route-to-Market (RTM)",
       description:
-        "Distribution design across GT/MT/eCom with distributors, coverage and service levels.",
+        "Coverage model across GT/MT/eCom; distributor design, channel roles, service levels and execution cadence.",
       size: 22,
       color: "#F59E0B",
       type: "bkg",
     },
     {
-      id: "customers",
-      name: "Customers / Distributors",
+      id: "l1_commercial",
+      name: "Commercial Engine (Sales + Trade)",
       description:
-        "Distributor and key-account hierarchy used for sales, credit and reporting.",
-      size: 16,
-      color: "#F59E0B",
-      type: "bkg",
-    },
-    {
-      id: "outlets",
-      name: "Outlet Universe",
-      description: "Retail universe and coverage potential (where available).",
-      size: 14,
-      color: "#F59E0B",
-      type: "bkg",
-    },
-
-    {
-      id: "sales_engine",
-      name: "Sales Engine",
-      description:
-        "Primary (sell-in) and secondary (sell-out/proxy) movement with lag and normalization.",
+        "Primary + secondary movement; schemes/discounts; returns/claims; targets and execution KPIs.",
       size: 22,
       color: "#06B6D4",
       type: "bkg",
     },
     {
-      id: "primary_sales",
-      name: "Primary Sales",
-      description: "Invoices/dispatches to distributors and customers.",
-      size: 16,
-      color: "#06B6D4",
-      type: "bkg",
-    },
-    {
-      id: "secondary_sales",
-      name: "Secondary Sales",
-      description: "Distributor to retail sales or proxy movement signals.",
-      size: 16,
-      color: "#06B6D4",
-      type: "bkg",
-    },
-
-    {
-      id: "trade_promotions",
-      name: "Trade Promotions & Schemes",
-      description: "Schemes, discounts, slabs, accruals and ROI measurement.",
-      size: 22,
-      color: "#EC4899",
-      type: "bkg",
-    },
-
-    {
-      id: "marketing",
+      id: "l1_marketing",
       name: "Marketing & Demand Generation",
       description:
-        "Campaigns, media spends and brand investments driving consumer demand.",
-      size: 20,
+        "Campaigns, media, consumer activations, and measurement linked to business outcomes.",
+      size: 22,
       color: "#EC4899",
       type: "bkg",
     },
     {
-      id: "market_pulse",
-      name: "Market Pulse & Competition",
+      id: "l1_supply",
+      name: "Supply Chain & Fulfillment",
       description:
-        "Category growth, market share, distribution and competitive benchmarks.",
+        "Forecast → plan → produce → stock → deliver; inventory health and service levels.",
+      size: 22,
+      color: "#8B5CF6",
+      type: "bkg",
+    },
+    {
+      id: "l1_finance",
+      name: "Finance & Performance Management",
+      description:
+        "NSV/GM, promo accruals, working capital, budgets/forecasts, and control metrics.",
+      size: 22,
+      color: "#64748B",
+      type: "bkg",
+    },
+    {
+      id: "l1_governance",
+      name: "Governance, Master Data & Controls",
+      description:
+        "Master data, KPI definitions, approvals, auditability, and standardization.",
+      size: 22,
+      color: "#84CC16",
+      type: "bkg",
+    },
+
+    /* =========================
+       LEVEL 2 (L2): KEY SUB-SYSTEMS
+       ========================= */
+
+    {
+      id: "l2_category",
+      name: "Category Strategy",
+      description:
+        "Category sizing, priorities, innovation/renovation choices, and white-space identification.",
+      size: 16,
+      color: "#3B82F6",
+      type: "bkg",
+    },
+    {
+      id: "l2_brand_mgmt",
+      name: "Brand Management",
+      description:
+        "Brand plans, positioning, portfolio roles, and brand-level scorecards.",
+      size: 16,
+      color: "#3B82F6",
+      type: "bkg",
+    },
+    {
+      id: "l2_sku_portfolio",
+      name: "SKU Portfolio",
+      description:
+        "SKU master, packs, lifecycle, profitability and assortment strategy.",
+      size: 16,
+      color: "#3B82F6",
+      type: "bkg",
+    },
+    {
+      id: "l2_price_pack",
+      name: "Price-Pack Architecture",
+      description:
+        "MRP/PTR/PTD, discount guardrails, mix management and price changes.",
+      size: 16,
+      color: "#3B82F6",
+      type: "bkg",
+    },
+
+    {
+      id: "l2_channels",
+      name: "Channel Strategy",
+      description:
+        "GT/MT/eCom roles, assortment by channel, service levels and trade terms.",
+      size: 16,
+      color: "#F59E0B",
+      type: "bkg",
+    },
+    {
+      id: "l2_distributors",
+      name: "Distributor Management",
+      description:
+        "Distributor appointment, performance, credit, claims, and compliance.",
+      size: 16,
+      color: "#F59E0B",
+      type: "bkg",
+    },
+    {
+      id: "l2_outlet_universe",
+      name: "Outlet Universe & Coverage",
+      description:
+        "Outlet master (where available), segmentation, potential and coverage planning.",
+      size: 16,
+      color: "#F59E0B",
+      type: "bkg",
+    },
+
+    {
+      id: "l2_primary",
+      name: "Primary Sales (Sell-in)",
+      description:
+        "Company → distributor/customer invoices/dispatches; channel fill and revenue view.",
+      size: 16,
+      color: "#06B6D4",
+      type: "bkg",
+    },
+    {
+      id: "l2_secondary",
+      name: "Secondary Sales (Sell-out / Proxy)",
+      description:
+        "Distributor → retail/offtake (or proxies); often lag-aligned to primary.",
+      size: 16,
+      color: "#06B6D4",
+      type: "bkg",
+    },
+    {
+      id: "l2_trade_promo",
+      name: "Trade Promotions & Schemes",
+      description:
+        "Scheme design, eligibility, claims, accruals and effectiveness measurement.",
+      size: 16,
+      color: "#EC4899",
+      type: "bkg",
+    },
+    {
+      id: "l2_returns",
+      name: "Returns & Claims",
+      description:
+        "Returns, damages/expiry, deductions and settlements impacting net sales.",
+      size: 16,
+      color: "#06B6D4",
+      type: "bkg",
+    },
+    {
+      id: "l2_field_exec",
+      name: "Field Execution",
+      description:
+        "Targets, beat plans, visibility, assortment compliance and on-ground KPIs.",
+      size: 16,
+      color: "#A855F7",
+      type: "bkg",
+    },
+
+    {
+      id: "l2_campaigns",
+      name: "Campaigns & Media",
+      description:
+        "Campaign calendar, spends, creatives, channel mix and measurement.",
+      size: 16,
+      color: "#EC4899",
+      type: "bkg",
+    },
+    {
+      id: "l2_consumer_insights",
+      name: "Consumer & Market Insights",
+      description:
+        "Insights, category trends, competitive moves and share tracking.",
       size: 16,
       color: "#10B981",
       type: "bkg",
     },
 
     {
-      id: "supply_chain",
-      name: "Supply Chain",
-      description: "Demand planning, inventory, manufacturing and fulfillment.",
-      size: 22,
-      color: "#8B5CF6",
-      type: "bkg",
-    },
-    {
-      id: "inventory",
-      name: "Inventory",
+      id: "l2_demand_plan",
+      name: "Demand Planning",
       description:
-        "On-hand, in-transit, aging, service levels and stock health.",
+        "Forecasts by SKU×geo×channel; overrides for seasonality, schemes and launches.",
       size: 16,
       color: "#8B5CF6",
       type: "bkg",
     },
+    {
+      id: "l2_inventory",
+      name: "Inventory & Deployment",
+      description:
+        "On-hand/in-transit, aging, safety stocks, redistribution and service levels.",
+      size: 16,
+      color: "#8B5CF6",
+      type: "bkg",
+    },
+    {
+      id: "l2_manufacturing",
+      name: "Manufacturing & Quality",
+      description:
+        "Production, yields, batch traceability, QA/QC and non-conformance loops.",
+      size: 16,
+      color: "#EF4444",
+      type: "bkg",
+    },
 
     {
-      id: "finance",
-      name: "Finance & Performance",
+      id: "l2_revenue_margin",
+      name: "NSV & Gross Margin",
       description:
-        "NSV, gross margin, promo accruals, working capital and planning.",
-      size: 22,
+        "Volume/price/mix, net sales, margin bridge and promo impacts.",
+      size: 16,
+      color: "#64748B",
+      type: "bkg",
+    },
+    {
+      id: "l2_working_capital",
+      name: "Working Capital",
+      description: "AR/AP + inventory; cash conversion cycle levers.",
+      size: 16,
+      color: "#64748B",
+      type: "bkg",
+    },
+    {
+      id: "l2_fpna",
+      name: "FP&A (Plans & Forecasts)",
+      description: "AOP, rolling forecasts, scenarios and variance analysis.",
+      size: 16,
       color: "#64748B",
       type: "bkg",
     },
 
     {
-      id: "governance",
-      name: "Master Data & Governance",
-      description:
-        "Product/customer/geo masters, KPI definitions and controls.",
+      id: "l2_master_data",
+      name: "Master Data (Product/Customer/Geo)",
+      description: "Hierarchies, mappings, codes and standardization rules.",
+      size: 16,
+      color: "#84CC16",
+      type: "bkg",
+    },
+    {
+      id: "l2_kpi_book",
+      name: "KPI & Metric Dictionary",
+      description: "Definitions and calculation logic used across teams.",
       size: 16,
       color: "#84CC16",
       type: "bkg",
     },
 
-    /* ---------- DATA SOURCES ---------- */
+    /* =========================
+       LEVEL 3 (L3): LEAF NODES (WHAT SHOWS UP IN DATA/REPORTING)
+       ========================= */
 
     {
-      id: "databricks",
+      id: "l3_category_hierarchy",
+      name: "Category Hierarchy",
+      description: "Category → subcategory → segment mapping used for rollups.",
+      size: 12,
+      color: "#3B82F6",
+      type: "bkg",
+    },
+    {
+      id: "l3_brand_hierarchy",
+      name: "Brand Hierarchy",
+      description: "Brand → sub-brand/range mapping for reporting.",
+      size: 12,
+      color: "#3B82F6",
+      type: "bkg",
+    },
+    {
+      id: "l3_sku_master",
+      name: "SKU Master Attributes",
+      description:
+        "Pack size, variant, launch date, status, GST/HSN (where relevant).",
+      size: 12,
+      color: "#3B82F6",
+      type: "bkg",
+    },
+    {
+      id: "l3_price_list",
+      name: "Price Lists (MRP/PTR/PTD)",
+      description: "Price lists and effective dates across channels/markets.",
+      size: 12,
+      color: "#3B82F6",
+      type: "bkg",
+    },
+
+    {
+      id: "l3_geo_hierarchy",
+      name: "Geo Hierarchy",
+      description: "Country/zone/state/city/territory mapping.",
+      size: 12,
+      color: "#F59E0B",
+      type: "bkg",
+    },
+    {
+      id: "l3_channel_master",
+      name: "Channel Master",
+      description: "GT/MT/eCom and sub-channel taxonomy.",
+      size: 12,
+      color: "#F59E0B",
+      type: "bkg",
+    },
+    {
+      id: "l3_customer_master",
+      name: "Customer/Distributor Master",
+      description: "Customer codes, hierarchy, terms, credit limits.",
+      size: 12,
+      color: "#F59E0B",
+      type: "bkg",
+    },
+    {
+      id: "l3_outlet_attributes",
+      name: "Outlet Attributes",
+      description:
+        "Outlet type, cluster, potential, and coverage status (if available).",
+      size: 12,
+      color: "#F59E0B",
+      type: "bkg",
+    },
+
+    {
+      id: "l3_primary_invoices",
+      name: "Primary Invoices/Dispatch",
+      description: "Invoice value/units, dates, customer, SKU, geo, channel.",
+      size: 12,
+      color: "#06B6D4",
+      type: "bkg",
+    },
+    {
+      id: "l3_secondary_movement",
+      name: "Secondary Movement",
+      description:
+        "Sell-out units/value by SKU, geo, channel; lag alignment metadata.",
+      size: 12,
+      color: "#06B6D4",
+      type: "bkg",
+    },
+    {
+      id: "l3_returns_txn",
+      name: "Returns Transactions",
+      description: "Returns reason codes, quantities, values, settlements.",
+      size: 12,
+      color: "#06B6D4",
+      type: "bkg",
+    },
+
+    {
+      id: "l3_scheme_calendar",
+      name: "Scheme Calendar",
+      description:
+        "Scheme start/end dates, eligibility, slabs, applicable SKUs/geos/channels.",
+      size: 12,
+      color: "#EC4899",
+      type: "bkg",
+    },
+    {
+      id: "l3_scheme_flags",
+      name: "Scheme Flags on Sales",
+      description: "Promo flags and realized discounts linked to sales lines.",
+      size: 12,
+      color: "#EC4899",
+      type: "bkg",
+    },
+    {
+      id: "l3_promo_roi",
+      name: "Promo ROI Outputs",
+      description:
+        "Uplift, incrementality, base-lift decomposition, leakage signals.",
+      size: 12,
+      color: "#EC4899",
+      type: "bkg",
+    },
+
+    {
+      id: "l3_campaign_spend",
+      name: "Campaign Spend",
+      description: "Spend by campaign, channel, period with metadata.",
+      size: 12,
+      color: "#EC4899",
+      type: "bkg",
+    },
+    {
+      id: "l3_media_flights",
+      name: "Media Flights",
+      description:
+        "Flight dates, creatives, impressions/reach (where tracked).",
+      size: 12,
+      color: "#EC4899",
+      type: "bkg",
+    },
+
+    {
+      id: "l3_forecast",
+      name: "Forecast (SKU×Geo×Channel)",
+      description: "Forecast versions, overrides, and assumptions.",
+      size: 12,
+      color: "#8B5CF6",
+      type: "bkg",
+    },
+    {
+      id: "l3_inventory_position",
+      name: "Inventory Positions",
+      description: "On-hand/in-transit by location; aging and stock health.",
+      size: 12,
+      color: "#8B5CF6",
+      type: "bkg",
+    },
+    {
+      id: "l3_production_batches",
+      name: "Production/Batches",
+      description:
+        "Production quantities, yields, batch traceability, QC status.",
+      size: 12,
+      color: "#EF4444",
+      type: "bkg",
+    },
+
+    {
+      id: "l3_nsv",
+      name: "NSV (Net Sales Value)",
+      description:
+        "Net sales after discounts/schemes; standard profitability lens.",
+      size: 12,
+      color: "#64748B",
+      type: "bkg",
+    },
+    {
+      id: "l3_gm",
+      name: "Gross Margin",
+      description: "GM and bridges by brand/category/geo/channel.",
+      size: 12,
+      color: "#64748B",
+      type: "bkg",
+    },
+    {
+      id: "l3_wc_metrics",
+      name: "Working Capital Metrics",
+      description: "AR/AP aging, inventory days, cash conversion views.",
+      size: 12,
+      color: "#64748B",
+      type: "bkg",
+    },
+
+    {
+      id: "l3_metric_defs",
+      name: "Metric Definitions",
+      description: "Calculation logic, filters, time-grain normalization.",
+      size: 12,
+      color: "#84CC16",
+      type: "bkg",
+    },
+    {
+      id: "l3_dim_mappings",
+      name: "Dimension Mappings",
+      description: "Cross-system mapping tables (SKU/customer/geo) for joins.",
+      size: 12,
+      color: "#84CC16",
+      type: "bkg",
+    },
+
+    /* =========================
+       DATA SOURCES
+       ========================= */
+
+    {
+      id: "src_databricks",
       name: "Databricks (GCPL Lakehouse)",
       description:
-        "Internal curated tables for sales, schemes, margins, inventory and hierarchies.",
+        "Internal curated tables: sales, margins, promo flags, returns, inventory, hierarchies.",
       size: 18,
       color: "#94A3B8",
       type: "source",
@@ -210,10 +548,10 @@ export default function Page() {
       height: 48,
     },
     {
-      id: "nielsen_kantar",
+      id: "src_nielsen_kantar",
       name: "Nielsen / Kantar",
       description:
-        "External market data: category size, market share, price & distribution indices.",
+        "Syndicated market data: category size, market share, distribution and price indices, competitive benchmarks.",
       size: 18,
       color: "#94A3B8",
       type: "source",
@@ -223,209 +561,577 @@ export default function Page() {
   ]);
 
   const [links, setLinks] = useState<Link[]>([
-    /* ---------- BKG RELATIONSHIPS ---------- */
-
+    /* ---------- L0 -> L1 ---------- */
     {
-      id: "bkg_gcpl_portfolio",
+      id: "b_gcpl_l1_portfolio",
       source: "gcpl",
-      target: "portfolio_strategy",
+      target: "l1_portfolio",
       type: "operates_through",
       description:
-        "Enterprise strategy is driven by portfolio and category choices.",
+        "Enterprise strategy flows through portfolio and growth choices.",
       linkType: "bkg",
     },
     {
-      id: "bkg_portfolio_brands",
-      source: "portfolio_strategy",
-      target: "brands",
-      type: "drives",
-      description: "Portfolio strategy translates into brand-level goals.",
-      linkType: "bkg",
-    },
-    {
-      id: "bkg_brands_skus",
-      source: "brands",
-      target: "skus",
-      type: "executed_via",
-      description: "Brands are executed through SKU portfolios.",
-      linkType: "bkg",
-    },
-
-    {
-      id: "bkg_gcpl_rtm",
+      id: "b_gcpl_l1_rtm",
       source: "gcpl",
-      target: "rtm",
-      type: "go_to_market",
-      description: "RTM is the backbone of market execution.",
+      target: "l1_rtm",
+      type: "executes_via",
+      description: "Go-to-market execution flows through RTM.",
       linkType: "bkg",
     },
     {
-      id: "bkg_rtm_customers",
-      source: "rtm",
-      target: "customers",
-      type: "serves",
-      description:
-        "RTM is organized around distributor and customer hierarchies.",
-      linkType: "bkg",
-    },
-    {
-      id: "bkg_customers_outlets",
-      source: "customers",
-      target: "outlets",
-      type: "supplies",
-      description: "Distributors supply and service retail outlets.",
-      linkType: "bkg",
-    },
-
-    {
-      id: "bkg_gcpl_sales",
+      id: "b_gcpl_l1_commercial",
       source: "gcpl",
-      target: "sales_engine",
-      type: "commercial_engine",
-      description: "Commercial performance is measured through sales movement.",
-      linkType: "bkg",
-    },
-    {
-      id: "bkg_sales_primary",
-      source: "sales_engine",
-      target: "primary_sales",
-      type: "includes",
-      description: "Sales engine includes primary sell-in.",
-      linkType: "bkg",
-    },
-    {
-      id: "bkg_sales_secondary",
-      source: "sales_engine",
-      target: "secondary_sales",
-      type: "includes",
-      description: "Sales engine includes secondary sell-out or proxy.",
-      linkType: "bkg",
-    },
-
-    {
-      id: "bkg_gcpl_tradepromo",
-      source: "gcpl",
-      target: "trade_promotions",
-      type: "growth_lever",
-      description: "Trade promotions are a core growth lever.",
-      linkType: "bkg",
-    },
-    {
-      id: "bkg_tradepromo_sales",
-      source: "trade_promotions",
-      target: "sales_engine",
-      type: "impacts",
-      description: "Schemes influence sales volumes and mix.",
-      linkType: "bkg",
-    },
-
-    {
-      id: "bkg_gcpl_marketing",
-      source: "gcpl",
-      target: "marketing",
-      type: "demand_generation",
-      description: "Marketing creates consumer demand.",
-      linkType: "bkg",
-    },
-    {
-      id: "bkg_marketing_marketpulse",
-      source: "marketing",
-      target: "market_pulse",
-      type: "informed_by",
-      description:
-        "Marketing decisions are guided by market and competitive signals.",
-      linkType: "bkg",
-    },
-
-    {
-      id: "bkg_gcpl_supplychain",
-      source: "gcpl",
-      target: "supply_chain",
-      type: "fulfills",
-      description:
-        "Supply chain fulfills demand generated by sales and marketing.",
-      linkType: "bkg",
-    },
-    {
-      id: "bkg_supply_inventory",
-      source: "supply_chain",
-      target: "inventory",
-      type: "manages",
-      description: "Inventory is managed as part of supply chain execution.",
-      linkType: "bkg",
-    },
-
-    {
-      id: "bkg_gcpl_finance",
-      source: "gcpl",
-      target: "finance",
+      target: "l1_commercial",
       type: "measured_by",
-      description: "Finance measures and governs performance.",
+      description: "Commercial engine measures movement and trade levers.",
       linkType: "bkg",
     },
-
     {
-      id: "bkg_gcpl_governance",
+      id: "b_gcpl_l1_marketing",
       source: "gcpl",
-      target: "governance",
+      target: "l1_marketing",
+      type: "drives",
+      description: "Marketing drives consumer demand and brand salience.",
+      linkType: "bkg",
+    },
+    {
+      id: "b_gcpl_l1_supply",
+      source: "gcpl",
+      target: "l1_supply",
+      type: "fulfills",
+      description: "Supply chain fulfills demand created by RTM/marketing.",
+      linkType: "bkg",
+    },
+    {
+      id: "b_gcpl_l1_finance",
+      source: "gcpl",
+      target: "l1_finance",
       type: "governed_by",
-      description: "Governance ensures consistent masters and KPIs.",
+      description: "Performance is consolidated and governed via finance.",
+      linkType: "bkg",
+    },
+    {
+      id: "b_gcpl_l1_governance",
+      source: "gcpl",
+      target: "l1_governance",
+      type: "standardizes",
+      description:
+        "Masters, KPIs and controls are standardized via governance.",
       linkType: "bkg",
     },
 
-    /* ---------- DATA LINKS ---------- */
+    /* ---------- L1 -> L2 ---------- */
+    {
+      id: "b_l1_portfolio_l2_category",
+      source: "l1_portfolio",
+      target: "l2_category",
+      type: "includes",
+      description: "Portfolio includes category strategy.",
+      linkType: "bkg",
+    },
+    {
+      id: "b_l1_portfolio_l2_brand",
+      source: "l1_portfolio",
+      target: "l2_brand_mgmt",
+      type: "includes",
+      description: "Portfolio includes brand management.",
+      linkType: "bkg",
+    },
+    {
+      id: "b_l1_portfolio_l2_sku",
+      source: "l1_portfolio",
+      target: "l2_sku_portfolio",
+      type: "includes",
+      description: "Portfolio includes SKU portfolio decisions.",
+      linkType: "bkg",
+    },
+    {
+      id: "b_l1_portfolio_l2_pricepack",
+      source: "l1_portfolio",
+      target: "l2_price_pack",
+      type: "governed_by",
+      description:
+        "Portfolio execution is governed by price-pack architecture.",
+      linkType: "bkg",
+    },
 
     {
-      id: "data_dbx_primary",
-      source: "databricks",
-      target: "primary_sales",
-      type: "provides_data_for",
-      description: "Primary sales tables by SKU × region × channel.",
+      id: "b_l1_rtm_l2_channels",
+      source: "l1_rtm",
+      target: "l2_channels",
+      type: "includes",
+      description: "RTM includes channel strategy.",
+      linkType: "bkg",
+    },
+    {
+      id: "b_l1_rtm_l2_dist",
+      source: "l1_rtm",
+      target: "l2_distributors",
+      type: "includes",
+      description: "RTM includes distributor management.",
+      linkType: "bkg",
+    },
+    {
+      id: "b_l1_rtm_l2_outlets",
+      source: "l1_rtm",
+      target: "l2_outlet_universe",
+      type: "includes",
+      description: "RTM includes outlet universe and coverage.",
+      linkType: "bkg",
+    },
+
+    {
+      id: "b_l1_comm_l2_primary",
+      source: "l1_commercial",
+      target: "l2_primary",
+      type: "includes",
+      description: "Commercial engine includes primary sales.",
+      linkType: "bkg",
+    },
+    {
+      id: "b_l1_comm_l2_secondary",
+      source: "l1_commercial",
+      target: "l2_secondary",
+      type: "includes",
+      description: "Commercial engine includes secondary sales.",
+      linkType: "bkg",
+    },
+    {
+      id: "b_l1_comm_l2_tradepromo",
+      source: "l1_commercial",
+      target: "l2_trade_promo",
+      type: "includes",
+      description: "Commercial engine includes trade promotions.",
+      linkType: "bkg",
+    },
+    {
+      id: "b_l1_comm_l2_returns",
+      source: "l1_commercial",
+      target: "l2_returns",
+      type: "includes",
+      description: "Commercial engine includes returns and claims.",
+      linkType: "bkg",
+    },
+    {
+      id: "b_l1_comm_l2_field",
+      source: "l1_commercial",
+      target: "l2_field_exec",
+      type: "executed_by",
+      description: "Commercial outcomes are executed by field teams.",
+      linkType: "bkg",
+    },
+
+    {
+      id: "b_l1_mkt_l2_campaigns",
+      source: "l1_marketing",
+      target: "l2_campaigns",
+      type: "runs",
+      description: "Marketing is executed through campaigns and media.",
+      linkType: "bkg",
+    },
+    {
+      id: "b_l1_mkt_l2_insights",
+      source: "l1_marketing",
+      target: "l2_consumer_insights",
+      type: "informed_by",
+      description: "Marketing is informed by consumer and market insights.",
+      linkType: "bkg",
+    },
+
+    {
+      id: "b_l1_supply_l2_demand",
+      source: "l1_supply",
+      target: "l2_demand_plan",
+      type: "includes",
+      description: "Supply chain includes demand planning.",
+      linkType: "bkg",
+    },
+    {
+      id: "b_l1_supply_l2_inventory",
+      source: "l1_supply",
+      target: "l2_inventory",
+      type: "includes",
+      description: "Supply chain includes inventory and deployment.",
+      linkType: "bkg",
+    },
+    {
+      id: "b_l1_supply_l2_mfg",
+      source: "l1_supply",
+      target: "l2_manufacturing",
+      type: "includes",
+      description: "Supply chain includes manufacturing and quality.",
+      linkType: "bkg",
+    },
+
+    {
+      id: "b_l1_fin_l2_rev",
+      source: "l1_finance",
+      target: "l2_revenue_margin",
+      type: "includes",
+      description: "Finance includes NSV and gross margin tracking.",
+      linkType: "bkg",
+    },
+    {
+      id: "b_l1_fin_l2_wc",
+      source: "l1_finance",
+      target: "l2_working_capital",
+      type: "includes",
+      description: "Finance includes working capital management.",
+      linkType: "bkg",
+    },
+    {
+      id: "b_l1_fin_l2_fpna",
+      source: "l1_finance",
+      target: "l2_fpna",
+      type: "includes",
+      description: "Finance includes planning and forecasting.",
+      linkType: "bkg",
+    },
+
+    {
+      id: "b_l1_gov_l2_master",
+      source: "l1_governance",
+      target: "l2_master_data",
+      type: "owns",
+      description: "Governance owns master data and mappings.",
+      linkType: "bkg",
+    },
+    {
+      id: "b_l1_gov_l2_kpi",
+      source: "l1_governance",
+      target: "l2_kpi_book",
+      type: "defines",
+      description: "Governance defines KPI dictionary.",
+      linkType: "bkg",
+    },
+
+    /* ---------- L2 -> L3 ---------- */
+    {
+      id: "b_l2_category_l3_hier",
+      source: "l2_category",
+      target: "l3_category_hierarchy",
+      type: "uses",
+      description: "Category strategy uses category hierarchy for rollups.",
+      linkType: "bkg",
+    },
+    {
+      id: "b_l2_brand_l3_hier",
+      source: "l2_brand_mgmt",
+      target: "l3_brand_hierarchy",
+      type: "uses",
+      description: "Brand management uses brand hierarchy.",
+      linkType: "bkg",
+    },
+    {
+      id: "b_l2_sku_l3_master",
+      source: "l2_sku_portfolio",
+      target: "l3_sku_master",
+      type: "defined_by",
+      description: "SKU portfolio is defined via SKU master attributes.",
+      linkType: "bkg",
+    },
+    {
+      id: "b_l2_price_l3_list",
+      source: "l2_price_pack",
+      target: "l3_price_list",
+      type: "maintained_as",
+      description:
+        "Price-pack is maintained as price lists with effective dates.",
+      linkType: "bkg",
+    },
+
+    {
+      id: "b_l2_channels_l3_chan",
+      source: "l2_channels",
+      target: "l3_channel_master",
+      type: "defined_by",
+      description: "Channel strategy uses channel master taxonomy.",
+      linkType: "bkg",
+    },
+    {
+      id: "b_l2_dist_l3_customer",
+      source: "l2_distributors",
+      target: "l3_customer_master",
+      type: "defined_by",
+      description:
+        "Distributor management depends on customer/distributor master.",
+      linkType: "bkg",
+    },
+    {
+      id: "b_l2_outlets_l3_outlet_attr",
+      source: "l2_outlet_universe",
+      target: "l3_outlet_attributes",
+      type: "described_by",
+      description:
+        "Outlet universe is described by outlet attributes (where available).",
+      linkType: "bkg",
+    },
+    {
+      id: "b_l2_outlets_l3_geo",
+      source: "l2_outlet_universe",
+      target: "l3_geo_hierarchy",
+      type: "mapped_by",
+      description: "Outlet universe is mapped onto geo hierarchy.",
+      linkType: "bkg",
+    },
+
+    {
+      id: "b_l2_primary_l3_inv",
+      source: "l2_primary",
+      target: "l3_primary_invoices",
+      type: "recorded_as",
+      description:
+        "Primary sales are recorded as invoice/dispatch transactions.",
+      linkType: "bkg",
+    },
+    {
+      id: "b_l2_secondary_l3_move",
+      source: "l2_secondary",
+      target: "l3_secondary_movement",
+      type: "recorded_as",
+      description:
+        "Secondary sales are recorded as movement at SKU×geo×channel.",
+      linkType: "bkg",
+    },
+    {
+      id: "b_l2_returns_l3_ret",
+      source: "l2_returns",
+      target: "l3_returns_txn",
+      type: "recorded_as",
+      description: "Returns are recorded as return transactions with reasons.",
+      linkType: "bkg",
+    },
+
+    {
+      id: "b_l2_tradepromo_l3_cal",
+      source: "l2_trade_promo",
+      target: "l3_scheme_calendar",
+      type: "planned_as",
+      description: "Trade promos are planned via scheme calendars and rules.",
+      linkType: "bkg",
+    },
+    {
+      id: "b_l2_tradepromo_l3_flags",
+      source: "l2_trade_promo",
+      target: "l3_scheme_flags",
+      type: "observed_in",
+      description:
+        "Promo realization appears as scheme flags/discounts on sales.",
+      linkType: "bkg",
+    },
+    {
+      id: "b_l2_tradepromo_l3_roi",
+      source: "l2_trade_promo",
+      target: "l3_promo_roi",
+      type: "measured_as",
+      description: "Promo effectiveness outputs are computed as ROI metrics.",
+      linkType: "bkg",
+    },
+
+    {
+      id: "b_l2_campaigns_l3_spend",
+      source: "l2_campaigns",
+      target: "l3_campaign_spend",
+      type: "recorded_as",
+      description: "Campaigns are recorded as spends.",
+      linkType: "bkg",
+    },
+    {
+      id: "b_l2_campaigns_l3_flights",
+      source: "l2_campaigns",
+      target: "l3_media_flights",
+      type: "scheduled_as",
+      description: "Campaigns are scheduled as media flights.",
+      linkType: "bkg",
+    },
+
+    {
+      id: "b_l2_demand_l3_fcst",
+      source: "l2_demand_plan",
+      target: "l3_forecast",
+      type: "produces",
+      description: "Demand planning produces forecast series and versions.",
+      linkType: "bkg",
+    },
+    {
+      id: "b_l2_inventory_l3_pos",
+      source: "l2_inventory",
+      target: "l3_inventory_position",
+      type: "measured_as",
+      description: "Inventory is measured as positions and aging by location.",
+      linkType: "bkg",
+    },
+    {
+      id: "b_l2_mfg_l3_batch",
+      source: "l2_manufacturing",
+      target: "l3_production_batches",
+      type: "tracked_as",
+      description: "Manufacturing is tracked as production/batch records.",
+      linkType: "bkg",
+    },
+
+    {
+      id: "b_l2_rev_l3_nsv",
+      source: "l2_revenue_margin",
+      target: "l3_nsv",
+      type: "computed_as",
+      description: "Revenue management produces NSV outputs.",
+      linkType: "bkg",
+    },
+    {
+      id: "b_l2_rev_l3_gm",
+      source: "l2_revenue_margin",
+      target: "l3_gm",
+      type: "computed_as",
+      description: "Revenue management produces GM outputs.",
+      linkType: "bkg",
+    },
+    {
+      id: "b_l2_wc_l3_wc",
+      source: "l2_working_capital",
+      target: "l3_wc_metrics",
+      type: "tracked_as",
+      description: "Working capital is tracked via aging and days metrics.",
+      linkType: "bkg",
+    },
+
+    {
+      id: "b_l2_master_l3_geo",
+      source: "l2_master_data",
+      target: "l3_geo_hierarchy",
+      type: "includes",
+      description: "Master data includes geo hierarchy.",
+      linkType: "bkg",
+    },
+    {
+      id: "b_l2_master_l3_dim",
+      source: "l2_master_data",
+      target: "l3_dim_mappings",
+      type: "maintains",
+      description: "Master data maintains cross-system dimension mappings.",
+      linkType: "bkg",
+    },
+    {
+      id: "b_l2_kpi_l3_defs",
+      source: "l2_kpi_book",
+      target: "l3_metric_defs",
+      type: "documents",
+      description: "KPI book documents metric definitions.",
+      linkType: "bkg",
+    },
+
+    /* ---------- DATA LINKS (SOURCES -> BKG/LEAVES) ---------- */
+
+    {
+      id: "d_dbx_primary_invoices",
+      source: "src_databricks",
+      target: "l3_primary_invoices",
+      type: "contains",
+      description:
+        "Primary invoice/dispatch facts at SKU×customer×geo×time grain (daily/monthly).",
       linkType: "data",
       nlQuery:
         "Primary sales value and units by SKU and state for last 12 months",
       dataContext:
-        "Databricks internal curated sales tables; daily/monthly grain.",
+        "Databricks internal curated sales tables; typical grain daily/monthly; dims include SKU, geo, channel/customer.",
     },
     {
-      id: "data_dbx_secondary",
-      source: "databricks",
-      target: "secondary_sales",
-      type: "provides_data_for",
-      description: "Secondary sales or sell-out proxy movement.",
+      id: "d_dbx_secondary_movement",
+      source: "src_databricks",
+      target: "l3_secondary_movement",
+      type: "contains",
+      description:
+        "Secondary sell-out/proxy movement at SKU×geo×channel with primary-to-secondary lag considerations.",
       linkType: "data",
-      nlQuery: "Secondary sales trend for top SKUs in South zone",
-      dataContext: "Databricks sell-out/proxy tables with distributor lag.",
+      nlQuery: "Secondary sales trend for top SKUs in South zone vs last year",
+      dataContext:
+        "Databricks sell-out/proxy; requires like-to-like and lag alignment vs primary.",
     },
     {
-      id: "data_dbx_tradepromo",
-      source: "databricks",
-      target: "trade_promotions",
-      type: "provides_data_for",
-      description: "Scheme flags, accruals and promo spends.",
+      id: "d_dbx_scheme_calendar",
+      source: "src_databricks",
+      target: "l3_scheme_calendar",
+      type: "contains",
+      description:
+        "Scheme definitions: dates, slabs, eligibility, applicability (SKU/geo/channel).",
       linkType: "data",
-      nlQuery: "Active schemes and accruals by brand and state",
-      dataContext: "Databricks trade promotion and finance tables.",
+      nlQuery: "List active schemes this month for Brand X in Maharashtra GT",
+      dataContext:
+        "Databricks trade-promo tables; scheme metadata + mapping tables.",
     },
     {
-      id: "data_dbx_inventory",
-      source: "databricks",
-      target: "inventory",
-      type: "provides_data_for",
-      description: "Inventory positions, aging and stock health.",
+      id: "d_dbx_scheme_flags",
+      source: "src_databricks",
+      target: "l3_scheme_flags",
+      type: "contains",
+      description:
+        "Promo/scheme flags and realized discounts tagged to sales lines.",
       linkType: "data",
-      nlQuery: "Inventory aging by SKU and warehouse",
-      dataContext: "Databricks inventory and logistics tables.",
+      nlQuery: "Sales under scheme vs without scheme for Brand X last quarter",
+      dataContext:
+        "Databricks sales fact lines joined to promo flags/discounts; used for uplift and leakage.",
     },
     {
-      id: "data_nielsen_marketpulse",
-      source: "nielsen_kantar",
-      target: "market_pulse",
-      type: "provides_data_for",
-      description: "Market share, category size and competitive benchmarks.",
+      id: "d_dbx_returns",
+      source: "src_databricks",
+      target: "l3_returns_txn",
+      type: "contains",
+      description:
+        "Returns and claims transactions with reason codes and settlements.",
       linkType: "data",
-      nlQuery: "Category market share and growth for home care in India",
-      dataContext: "Nielsen/Kantar syndicated market measurement data.",
+      nlQuery: "Returns rate by SKU and state last 6 months with top reasons",
+      dataContext:
+        "Databricks returns/claims tables; often linked to sales invoice lines.",
+    },
+    {
+      id: "d_dbx_inventory",
+      source: "src_databricks",
+      target: "l3_inventory_position",
+      type: "contains",
+      description:
+        "Inventory positions and aging by location (DC/warehouse) and SKU.",
+      linkType: "data",
+      nlQuery: "Inventory aging buckets for top 50 SKUs in West zone DCs",
+      dataContext:
+        "Databricks inventory tables; includes on-hand/in-transit and aging.",
+    },
+    {
+      id: "d_dbx_nsv_gm",
+      source: "src_databricks",
+      target: "l3_nsv",
+      type: "computes_or_stores",
+      description:
+        "Net sales value (NSV) computed/stored from gross sales less discounts/schemes/returns as per internal logic.",
+      linkType: "data",
+      nlQuery: "NSV by brand and state for FY25 YTD",
+      dataContext:
+        "Databricks sales + promo + returns joined or curated NSV tables; aligns with finance definitions.",
+    },
+    {
+      id: "d_dbx_gm",
+      source: "src_databricks",
+      target: "l3_gm",
+      type: "computes_or_stores",
+      description:
+        "Gross margin computed/stored by SKU/brand/geo/channel with cost logic and promo impacts.",
+      linkType: "data",
+      nlQuery:
+        "Gross margin % by brand for last 12 months with mix/price/volume bridge",
+      dataContext:
+        "Databricks margin tables or curated calculations combining net sales with standard/actual cost components.",
+    },
+    {
+      id: "d_nk_market_share",
+      source: "src_nielsen_kantar",
+      target: "l2_consumer_insights",
+      type: "provides",
+      description:
+        "Market share/category growth/competitive benchmarks used for market pulse and brand choices.",
+      linkType: "data",
+      nlQuery: "Market share trend for category by quarter and region",
+      dataContext:
+        "Nielsen/Kantar syndicated measurement; usually periodic (monthly/quarterly) with category/region cuts.",
     },
   ]);
 
