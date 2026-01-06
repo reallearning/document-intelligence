@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Multi-Agent Decision Intelligence Network</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: radial-gradient(ellipse at center, #0f3460 0%, #1e5799 100%);
+            min-height: 100vh;
+            padding: 10px;
+            overflow: hidden;
+        }
+        
+        .container {
+            max-width: 100vw;
+            height: 100vh;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 15px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+            display: grid;
+            grid-template-rows: auto auto 1fr auto;
+            gap: 10px;
+        }
+        
+        .header {
+            text-align: center;
+            z-index: 100;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            font-size: 1.8em;
+            margin-bottom: 5px;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            z-index: 100;
+        }
+        
+        .question-card {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            text-align: center;
+        }
+        
+        .question-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            border-color: #3498db;
+        }
+        
+        .question-card.active {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border-color: #2471a3;
+        }
+        
+        .question-card h3 {
+            font-size: 1em;
+            margin-bottom: 8px;
+            color: inherit;
+        }
+        
+        .question-card p {
+            font-size: 0.85em;
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+        
+        .question-card .pattern {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.75em;
+            font-weight: 600;
+        }
+        
+        .question-card:not(.active) .pattern {
+            background: rgba(52, 152, 219, 0.1);
+            color: #3498db;
+        }
+        
+        .network-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .network-svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .edge {
+            stroke: #bdc3c7;
+            stroke-width: 2;
+            fill: none;
+            opacity: 0.6;
+            transition: all 0.5s ease;
+        }
+        
+        .edge.active {
+            stroke: #3498db;
+            stroke-width: 4;
+            opacity: 1;
+            animation: pulseEdge 2s ease-in-out infinite;
+        }
+        
+        .edge.completed {
+            stroke: #27ae60;
+            stroke-width: 3;
+            opacity: 0.8;
+        }
+        
+        @keyframes pulseEdge {
+            0%, 100% { stroke-dasharray: 0; }
+            50% { stroke-dasharray: 10, 5; }
+        }
+        
+        .data-flow {
+            fill: #3498db;
+            r: 4;
+            opacity: 0;
+        }
+        
+        .data-flow.active {
+            opacity: 1;
+            animation: flowData 3s ease-in-out;
+        }
+        
+        @keyframes flowData {
+            0% { opacity: 1; r: 3; }
+            50% { opacity: 1; r: 6; }
+            100% { opacity: 0; r: 3; }
+        }
+        
+        .node {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .node circle {
+            fill: #f8f9fa;
+            stroke: #dee2e6;
+            stroke-width: 3;
+            transition: all 0.3s ease;
+        }
+        
+        .node.active circle {
+            fill: #3498db;
+            stroke: #2471a3;
+            stroke-width: 4;
+            animation: nodeGlow 2s ease-in-out infinite;
+        }
+        
+        .node.completed circle {
+            fill: #27ae60;
+            stroke: #1e8449;
+        }
+        
+        .node.processing circle {
+            fill: #f39c12;
+            stroke: #d68910;
+            animation: nodeProcess 1.5s ease-in-out infinite;
+        }
+        
+        .node.iteration circle {
+            fill: #e67e22;
+            stroke: #d35400;
+            animation: nodeIteration 1s ease-in-out infinite;
+        }
+        
+        @keyframes nodeGlow {
+            0%, 100% { filter: drop-shadow(0 0 5px rgba(52, 152, 219, 0.5)); }
+            50% { filter: drop-shadow(0 0 15px rgba(52, 152, 219, 0.8)); }
+        }
+        
+        @keyframes nodeProcess {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        @keyframes nodeIteration {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+        
+        .node text {
+            text-anchor: middle;
+            dominant-baseline: middle;
+            font-size: 8px;
+            font-weight: 600;
+            fill: #2c3e50;
+            pointer-events: none;
+        }
+        
+        .node.active text, .node.completed text, .node.processing text, .node.iteration text {
+            fill: #2c3e50;
+            font-weight: 700;
+        }
+        
+        .classifier circle {
+            fill: #9b59b6;
+            stroke: #8e44ad;
+        }
+        
+        .knowledge-graph circle {
+            fill: #16a085;
+            stroke: #138d75;
+        }
+        
+        .agent circle {
+            fill: #3498db;
+            stroke: #2980b9;
+        }
+        
+        .compiler circle {
+            fill: #e74c3c;
+            stroke: #c0392b;
+        }
+        
+        .decision-point {
+            fill: #f39c12;
+            stroke: #e67e22;
+            stroke-width: 3;
+        }
+        
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 12px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1000;
+            max-width: 250px;
+        }
+        
+        .tooltip.show {
+            opacity: 1;
+        }
+        
+        .side-panels {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 15px;
+            height: 120px;
+        }
+        
+        .status-panel {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+        }
+        
+        .status-panel h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+        
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 3px 0;
+            border-bottom: 1px solid #e9ecef;
+            font-size: 0.8em;
+        }
+        
+        .status-item:last-child {
+            border-bottom: none;
+        }
+        
+        .status-badge {
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 9px;
+            font-weight: 600;
+        }
+        
+        .status-badge.waiting {
+            background: #f8f9fa;
+            color: #6c757d;
+        }
+        
+        .status-badge.active {
+            background: #3498db;
+            color: white;
+        }
+        
+        .status-badge.completed {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .status-badge.iteration {
+            background: #e67e22;
+            color: white;
+        }
+        
+        .log-panel {
+            background: rgba(44, 62, 80, 0.95);
+            color: #ecf0f1;
+            border-radius: 15px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            overflow-y: auto;
+            font-size: 0.8em;
+        }
+        
+        .log-entry {
+            margin-bottom: 4px;
+            opacity: 0;
+            animation: fadeInLog 0.5s ease forwards;
+        }
+        
+        .log-entry.iteration {
+            color: #f39c12;
+        }
+        
+        .log-entry.highlight {
+            background: rgba(243, 156, 18, 0.1);
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        
+        @keyframes fadeInLog {
+            to { opacity: 1; }
+        }
+        
+        .timestamp {
+            color: #95a5a6;
+            margin-right: 8px;
+        }
+        
+        .branch-label {
+            font-size: 8px;
+            fill: #6c757d;
+            text-anchor: middle;
+        }
+        
+        .iteration-indicator {
+            position: absolute;
+            background: #f39c12;
+            color: #212529;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.7em;
+            font-weight: 600;
+            z-index: 150;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s ease;
+        }
+        
+        .iteration-indicator.show {
+            opacity: 1;
+            transform: scale(1);
+            animation: bounce 0.6s ease;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Enterprise Multi-Agent Decision Intelligence Network</h1>
+        </div>
+        
+        <div class="controls">
+            <div class="question-card" onclick="executeQuestion(1)">
+                <h3>📉 Revenue Decline Analysis</h3>
+                <p>"What's causing West region revenue drop? Analyze pricing, inventory, competitor activity, and promotional effectiveness"</p>
+                <div class="pattern">Multi-Agent Pattern</div>
+            </div>
+            
+            <div class="question-card" onclick="executeQuestion(2)">
+                <h3>🚀 Launch Decision</h3>
+                <p>"Should we launch Product Y in Q2? Evaluate demand forecast, supply readiness, marketing budget, competitive positioning, and store capacity"</p>
+                <div class="pattern">Strategic Pattern</div>
+            </div>
+            
+            <div class="question-card" onclick="executeQuestion(3)">
+                <h3>🔍 Category Underperformance</h3>
+                <p>"Why is Electronics underperforming? Compare sales trends, inventory turnover, pricing vs market, marketing spend, and profit margins"</p>
+                <div class="pattern">Diagnostic Pattern</div>
+            </div>
+        </div>
+        
+        <div class="network-container">
+            <svg class="network-svg" id="networkSvg" viewBox="0 0 1400 550"></svg>
+            <div class="iteration-indicator" id="iteration1" style="top: 200px; left: 300px;">Round 1</div>
+            <div class="iteration-indicator" id="iteration2" style="top: 250px; left: 600px;">Round 2</div>
+            <div class="iteration-indicator" id="iteration3" style="top: 300px; left: 400px;">Round 3</div>
+        </div>
+        
+        <div class="side-panels">
+            <div class="status-panel">
+                <h3>📋 Execution Status</h3>
+                <div id="statusContent">
+                    <div class="status-item">
+                        <span>Classifier</span>
+                        <span class="status-badge waiting" id="classifier-status">Waiting</span>
+                    </div>
+                    <div class="status-item">
+                        <span>Knowledge Graph</span>
+                        <span class="status-badge waiting" id="kg-status">Ready</span>
+                    </div>
+                    <div class="status-item">
+                        <span>Sales Agent</span>
+                        <span class="status-badge waiting" id="agent-sales-status">Standby</span>
+                    </div>
+                    <div class="status-item">
+                        <span>Supply Chain Agent</span>
+                        <span class="status-badge waiting" id="agent-supply-status">Standby</span>
+                    </div>
+                    <div class="status-item">
+                        <span>Marketing Agent</span>
+                        <span class="status-badge waiting" id="agent-marketing-status">Standby</span>
+                    </div>
+                    <div class="status-item">
+                        <span>External Market Agent</span>
+                        <span class="status-badge waiting" id="agent-market-status">Standby</span>
+                    </div>
+                    <div class="status-item">
+                        <span>Finance Agent</span>
+                        <span class="status-badge waiting" id="agent-finance-status">Standby</span>
+                    </div>
+                    <div class="status-item">
+                        <span>Product Agent</span>
+                        <span class="status-badge waiting" id="agent-product-status">Standby</span>
+                    </div>
+                    <div class="status-item">
+                        <span>Store Agent</span>
+                        <span class="status-badge waiting" id="agent-store-status">Standby</span>
+                    </div>
+                    <div class="status-item">
+                        <span>Response Compiler</span>
+                        <span class="status-badge waiting" id="compiler-status">Waiting</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="log-panel" id="logPanel">
+                <div style="font-weight: bold; margin-bottom: 8px;">🧠 Decision Intelligence Execution Log</div>
+                <div id="logContent"></div>
+            </div>
+        </div>
+        
+        <div class="tooltip" id="tooltip"></div>
+    </div>
+
+    <script>
+        const networkNodes = [
+            // Top layer
+            { id: 'user', x: 700, y: 30, r: 18, type: 'user', label: 'Business\nRequest', description: 'Complex business question' },
+            { id: 'classifier', x: 700, y: 100, r: 30, type: 'classifier', label: 'Classifier\nAgent', description: 'Multi-domain intent router' },
+            
+            // Knowledge Graph layer
+            { id: 'bkg', x: 250, y: 170, r: 22, type: 'knowledge-graph', label: 'Business\nKG', description: 'Semantic backbone' },
+            { id: 'bkg-entities', x: 180, y: 230, r: 14, type: 'knowledge-graph', label: 'Entity\nMap', description: 'Cross-domain entities' },
+            { id: 'bkg-vocab', x: 280, y: 230, r: 14, type: 'knowledge-graph', label: 'Vocab', description: 'Standardization' },
+            { id: 'bkg-joins', x: 230, y: 280, r: 14, type: 'knowledge-graph', label: 'Joins', description: 'Join blueprints' },
+            
+            { id: 'decision-agents', x: 700, y: 180, r: 12, type: 'decision', label: 'Route', description: 'Agent orchestration' },
+            
+            // Domain Agents - All on same horizontal line
+            { id: 'agent-sales', x: 290, y: 280, r: 20, type: 'agent', label: 'Sales\nAgent', description: 'Revenue, territory, pipeline' },
+            { id: 'agent-supply', x: 400, y: 280, r: 20, type: 'agent', label: 'Supply\nChain', description: 'Inventory, logistics, vendors' },
+            { id: 'agent-marketing', x: 550, y: 280, r: 20, type: 'agent', label: 'Marketing\nAgent', description: 'Campaigns, brand, ROI' },
+            { id: 'agent-market', x: 700, y: 280, r: 20, type: 'agent', label: 'External\nMarket', description: 'Competition, trends, pricing' },
+            { id: 'agent-finance', x: 850, y: 280, r: 20, type: 'agent', label: 'Finance\nAgent', description: 'P&L, margins, forecasts' },
+            { id: 'agent-product', x: 1000, y: 280, r: 20, type: 'agent', label: 'Product\nAgent', description: 'Portfolio, NPD, lifecycle' },
+            { id: 'agent-store', x: 1150, y: 280, r: 20, type: 'agent', label: 'Store\nAgent', description: 'Operations, footfall, assortment' },
+            
+            // Tools for each agent
+            // Sales tools
+            { id: 'tool-sales-trends', x: 220, y: 360, r: 20, type: 'agent', label: 'Sales\nTrends', description: 'Revenue analysis' },
+            { id: 'tool-territory', x: 280, y: 360, r: 20, type: 'agent', label: 'Territory\nPerf', description: 'Regional performance' },
+            
+            // Supply Chain tools
+            { id: 'tool-inventory', x: 370, y: 360, r: 20, type: 'agent', label: 'Inventory\nLevels', description: 'Stock analysis' },
+            { id: 'tool-fulfillment', x: 430, y: 360, r: 20, type: 'agent', label: 'Fulfillment\nRate', description: 'Service levels' },
+            
+            // Marketing tools
+            { id: 'tool-campaigns', x: 520, y: 360, r: 20, type: 'agent', label: 'Campaign\nROI', description: 'Marketing effectiveness' },
+            { id: 'tool-promo', x: 580, y: 360, r: 20, type: 'agent', label: 'Promo\nImpact', description: 'Promotional analysis' },
+            
+            // External Market tools
+            { id: 'tool-competitor', x: 670, y: 360, r: 20, type: 'agent', label: 'Competitor\nIntel', description: 'Competitive analysis' },
+            { id: 'tool-pricing', x: 730, y: 360, r: 20, type: 'agent', label: 'Price\nIndex', description: 'Market pricing' },
+            
+            // Finance tools
+            { id: 'tool-margins', x: 820, y: 360, r: 20, type: 'agent', label: 'Margin\nAnalysis', description: 'Profitability' },
+            { id: 'tool-forecast', x: 880, y: 360, r: 20, type: 'agent', label: 'Demand\nForecast', description: 'Financial projections' },
+            
+            // Product tools
+            { id: 'tool-portfolio', x: 970, y: 360, r: 20, type: 'agent', label: 'Portfolio\nMix', description: 'Product analysis' },
+            { id: 'tool-lifecycle', x: 1030, y: 360, r: 20, type: 'agent', label: 'Lifecycle\nStage', description: 'Product maturity' },
+            
+            // Store tools
+            { id: 'tool-footfall', x: 1120, y: 360, r: 20, type: 'agent', label: 'Footfall\nMetrics', description: 'Traffic analysis' },
+            { id: 'tool-capacity', x: 1180, y: 360, r: 20, type: 'agent', label: 'Store\nCapacity', description: 'Space utilization' },
+            
+            // Compilation layer
+            { id: 'decision-compile', x: 700, y: 420, r: 20, type: 'decision', label: 'Compile', description: 'Synthesize insights' },
+            { id: 'compiler', x: 1100, y: 150, r: 22, type: 'compiler', label: 'Response\nCompiler', description: 'Final assembly' },
+            { id: 'tool-format', x: 1150, y: 100, r: 20, type: 'compiler', label: 'Format', description: 'Report formatting' },
+            { id: 'tool-lineage', x: 1200, y: 150, r: 20, type: 'compiler', label: 'Lineage', description: 'Provenance tracking' },
+            
+            { id: 'output', x: 1100, y: 50, r: 25, type: 'user', label: 'Actionable\nInsights', description: 'Business decision output' }
+        ];
+        
+        const networkEdges = [
+            { from: 'user', to: 'classifier' },
+            { from: 'classifier', to: 'bkg' },
+            { from: 'classifier', to: 'decision-agents' },
+            
+            { from: 'bkg', to: 'bkg-entities' },
+            { from: 'bkg', to: 'bkg-vocab' },
+            { from: 'bkg', to: 'bkg-joins' },
+            { from: 'bkg-entities', to: 'classifier' },
+            { from: 'bkg-vocab', to: 'classifier' },
+            { from: 'bkg-joins', to: 'classifier' },
+            
+            { from: 'decision-agents', to: 'agent-sales' },
+            { from: 'decision-agents', to: 'agent-supply' },
+            { from: 'decision-agents', to: 'agent-marketing' },
+            { from: 'decision-agents', to: 'agent-market' },
+            { from: 'decision-agents', to: 'agent-finance' },
+            { from: 'decision-agents', to: 'agent-product' },
+            { from: 'decision-agents', to: 'agent-store' },
+            
+            { from: 'agent-sales', to: 'tool-sales-trends' },
+            { from: 'agent-sales', to: 'tool-territory' },
+            { from: 'agent-supply', to: 'tool-inventory' },
+            { from: 'agent-supply', to: 'tool-fulfillment' },
+            { from: 'agent-marketing', to: 'tool-campaigns' },
+            { from: 'agent-marketing', to: 'tool-promo' },
+            { from: 'agent-market', to: 'tool-competitor' },
+            { from: 'agent-market', to: 'tool-pricing' },
+            { from: 'agent-finance', to: 'tool-margins' },
+            { from: 'agent-finance', to: 'tool-forecast' },
+            { from: 'agent-product', to: 'tool-portfolio' },
+            { from: 'agent-product', to: 'tool-lifecycle' },
+            { from: 'agent-store', to: 'tool-footfall' },
+            { from: 'agent-store', to: 'tool-capacity' },
+            
+            { from: 'tool-sales-trends', to: 'decision-compile' },
+            { from: 'tool-territory', to: 'decision-compile' },
+            { from: 'tool-inventory', to: 'decision-compile' },
+            { from: 'tool-fulfillment', to: 'decision-compile' },
+            { from: 'tool-campaigns', to: 'decision-compile' },
+            { from: 'tool-promo', to: 'decision-compile' },
+            { from: 'tool-competitor', to: 'decision-compile' },
+            { from: 'tool-pricing', to: 'decision-compile' },
+            { from: 'tool-margins', to: 'decision-compile' },
+            { from: 'tool-forecast', to: 'decision-compile' },
+            { from: 'tool-portfolio', to: 'decision-compile' },
+            { from: 'tool-lifecycle', to: 'decision-compile' },
+            { from: 'tool-footfall', to: 'decision-compile' },
+            { from: 'tool-capacity', to: 'decision-compile' },
+            
+            { from: 'decision-compile', to: 'compiler' },
+            { from: 'compiler', to: 'tool-format' },
+            { from: 'compiler', to: 'tool-lineage' },
+            { from: 'tool-format', to: 'output' },
+            { from: 'tool-lineage', to: 'output' }
+        ];
+        
+        function initializeNetwork() {
+            const svg = document.getElementById('networkSvg');
+            svg.innerHTML = '';
+            
+            const edgesGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            edgesGroup.id = 'edges';
+            svg.appendChild(edgesGroup);
+            
+            networkEdges.forEach((edge) => {
+                const fromNode = networkNodes.find(n => n.id === edge.from);
+                const toNode = networkNodes.find(n => n.id === edge.to);
+                
+                if (fromNode && toNode) {
+                    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    line.setAttribute('x1', fromNode.x);
+                    line.setAttribute('y1', fromNode.y);
+                    line.setAttribute('x2', toNode.x);
+                    line.setAttribute('y2', toNode.y);
+                    line.classList.add('edge');
+                    line.id = `edge-${edge.from}-${edge.to}`;
+                    edgesGroup.appendChild(line);
+                    
+                    const dataFlow = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    dataFlow.setAttribute('cx', fromNode.x);
+                    dataFlow.setAttribute('cy', fromNode.y);
+                    dataFlow.setAttribute('r', 4);
+                    dataFlow.classList.add('data-flow');
+                    dataFlow.id = `flow-${edge.from}-${edge.to}`;
+                    edgesGroup.appendChild(dataFlow);
+                }
+            });
+            
+            const nodesGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            nodesGroup.id = 'nodes';
+            svg.appendChild(nodesGroup);
+            
+            networkNodes.forEach(node => {
+                const nodeGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                nodeGroup.classList.add('node');
+                nodeGroup.id = `node-${node.id}`;
+                
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', node.x);
+                circle.setAttribute('cy', node.y);
+                circle.setAttribute('r', node.r);
+                if (node.type === 'decision') {
+                    circle.classList.add('decision-point');
+                } else {
+                    circle.classList.add(node.type);
+                }
+                nodeGroup.appendChild(circle);
+                
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', node.x);
+                text.setAttribute('y', node.y);
+                
+                if (node.label.includes('\n')) {
+                    const lines = node.label.split('\n');
+                    lines.forEach((line, index) => {
+                        const tspan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+                        tspan.setAttribute('x', node.x);
+                        tspan.setAttribute('y', node.y + (index - (lines.length - 1) / 2) * 9);
+                        tspan.textContent = line;
+                        text.appendChild(tspan);
+                    });
+                } else {
+                    text.textContent = node.label;
+                }
+                
+                nodeGroup.appendChild(text);
+                nodeGroup.addEventListener('mouseenter', (e) => showTooltip(e, node));
+                nodeGroup.addEventListener('mouseleave', hideTooltip);
+                nodesGroup.appendChild(nodeGroup);
+            });
+        }
+        
+        function showTooltip(event, node) {
+            const tooltip = document.getElementById('tooltip');
+            const displayLabel = node.label.replace(/\n/g, ' ');
+            tooltip.innerHTML = `<strong>${displayLabel}</strong><br>${node.description}`;
+            tooltip.style.left = (event.pageX + 10) + 'px';
+            tooltip.style.top = (event.pageY - 10) + 'px';
+            tooltip.classList.add('show');
+        }
+        
+        function hideTooltip() {
+            document.getElementById('tooltip').classList.remove('show');
+        }
+        
+        function updateNodeStatus(nodeId, status) {
+            const node = document.getElementById(`node-${nodeId}`);
+            if (node) {
+                node.classList.remove('active', 'completed', 'processing', 'iteration');
+                if (status !== 'waiting') node.classList.add(status);
+            }
+        }
+        
+        function updateStatusPanel(nodeId, status) {
+            const statusMap = {
+                'classifier': 'classifier-status',
+                'bkg': 'kg-status',
+                'agent-sales': 'agent-sales-status',
+                'agent-supply': 'agent-supply-status',
+                'agent-marketing': 'agent-marketing-status',
+                'agent-market': 'agent-market-status',
+                'agent-finance': 'agent-finance-status',
+                'agent-product': 'agent-product-status',
+                'agent-store': 'agent-store-status',
+                'compiler': 'compiler-status'
+            };
+            
+            const statusElement = document.getElementById(statusMap[nodeId]);
+            if (statusElement) {
+                statusElement.className = `status-badge ${status}`;
+                statusElement.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+            }
+        }
+        
+        function activateEdge(fromId, toId) {
+            const edge = document.getElementById(`edge-${fromId}-${toId}`);
+            const flow = document.getElementById(`flow-${fromId}-${toId}`);
+            
+            if (edge) {
+                edge.classList.add('active');
+                setTimeout(() => {
+                    edge.classList.remove('active');
+                    edge.classList.add('completed');
+                }, 2000);
+            }
+            
+            if (flow) {
+                flow.classList.add('active');
+                setTimeout(() => flow.classList.remove('active'), 3000);
+            }
+        }
+        
+        function addLog(message, type = 'normal') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logContent = document.getElementById('logContent');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            if (type === 'iteration') entry.classList.add('highlight');
+            entry.innerHTML = `<span class="timestamp">[${timestamp}]</span>${message}`;
+            logContent.appendChild(entry);
+            logContent.scrollTop = logContent.scrollHeight;
+        }
+        
+        async function executeQuestion(questionNumber) {
+            document.querySelectorAll('.question-card').forEach(card => card.classList.remove('active'));
+            document.querySelectorAll('.question-card')[questionNumber - 1].classList.add('active');
+            
+            resetNetwork();
+            
+            const questions = [
+                null,
+                {
+                    title: "Revenue Decline Analysis",
+                    question: "What's causing West region revenue drop?",
+                    pattern: "multi-agent"
+                },
+                {
+                    title: "Launch Decision",
+                    question: "Should we launch Product Y in Q2?",
+                    pattern: "strategic"
+                },
+                {
+                    title: "Category Underperformance",
+                    question: "Why is Electronics underperforming?",
+                    pattern: "diagnostic"
+                }
+            ];
+            
+            const currentQ = questions[questionNumber];
+            addLog(`🧠 ${currentQ.title}: "${currentQ.question}"`);
+            
+            await commonInitialSteps();
+            
+            switch (currentQ.pattern) {
+                case 'multi-agent':
+                    await executeRevenueDecline();
+                    break;
+                case 'strategic':
+                    await executeLaunchDecision();
+                    break;
+                case 'diagnostic':
+                    await executeCategoryDiagnostic();
+                    break;
+            }
+        }
+        
+        async function commonInitialSteps() {
+            updateNodeStatus('user', 'active');
+            addLog('👤 User: Complex business question submitted');
+            await delay(1000);
+            
+            activateEdge('user', 'classifier');
+            updateNodeStatus('user', 'completed');
+            updateNodeStatus('classifier', 'active');
+            updateStatusPanel('classifier', 'active');
+            addLog('🎯 Classifier: Analyzing multi-domain query');
+            await delay(1500);
+            
+            activateEdge('classifier', 'bkg');
+            updateNodeStatus('bkg', 'active');
+            updateStatusPanel('bkg', 'active');
+            addLog('🧠 Knowledge Graph: Standardizing business terms');
+            await delay(1000);
+            
+            activateEdge('bkg', 'bkg-entities');
+            activateEdge('bkg', 'bkg-vocab');
+            activateEdge('bkg', 'bkg-joins');
+            updateNodeStatus('bkg-entities', 'active');
+            updateNodeStatus('bkg-vocab', 'active');
+            updateNodeStatus('bkg-joins', 'active');
+            addLog('   → Mapping entities across domains');
+            await delay(1500);
+            
+            activateEdge('bkg-entities', 'classifier');
+            activateEdge('bkg-vocab', 'classifier');
+            activateEdge('bkg-joins', 'classifier');
+            updateNodeStatus('bkg-entities', 'completed');
+            updateNodeStatus('bkg-vocab', 'completed');
+            updateNodeStatus('bkg-joins', 'completed');
+            updateNodeStatus('bkg', 'completed');
+            updateStatusPanel('bkg', 'completed');
+            addLog('✅ KG: Cross-domain semantics ready');
+            await delay(1000);
+        }
+        
+        async function executeRevenueDecline() {
+            addLog('📉 Multi-Agent: Revenue decline requires Sales, Marketing, External Market, Finance');
+            
+            activateEdge('classifier', 'decision-agents');
+            updateNodeStatus('decision-agents', 'active');
+            await delay(800);
+            
+            // Activate 4 agents in parallel
+            activateEdge('decision-agents', 'agent-sales');
+            activateEdge('decision-agents', 'agent-marketing');
+            activateEdge('decision-agents', 'agent-market');
+            activateEdge('decision-agents', 'agent-finance');
+            
+            updateNodeStatus('agent-sales', 'active');
+            updateNodeStatus('agent-marketing', 'active');
+            updateNodeStatus('agent-market', 'active');
+            updateNodeStatus('agent-finance', 'active');
+            
+            updateStatusPanel('agent-sales', 'active');
+            updateStatusPanel('agent-marketing', 'active');
+            updateStatusPanel('agent-market', 'active');
+            updateStatusPanel('agent-finance', 'active');
+            
+            addLog('💰 Sales: Analyzing West region revenue trends');
+            addLog('📢 Marketing: Checking promotional effectiveness');
+            addLog('🎯 Market Intel: Scanning competitor activity');
+            addLog('💵 Finance: Computing margin impact');
+            await delay(2000);
+            
+            // Tools execute
+            activateEdge('agent-sales', 'tool-sales-trends');
+            activateEdge('agent-sales', 'tool-territory');
+            activateEdge('agent-marketing', 'tool-promo');
+            activateEdge('agent-market', 'tool-competitor');
+            activateEdge('agent-market', 'tool-pricing');
+            activateEdge('agent-finance', 'tool-margins');
+            
+            updateNodeStatus('tool-sales-trends', 'active');
+            updateNodeStatus('tool-territory', 'active');
+            updateNodeStatus('tool-promo', 'active');
+            updateNodeStatus('tool-competitor', 'active');
+            updateNodeStatus('tool-pricing', 'active');
+            updateNodeStatus('tool-margins', 'active');
+            
+            addLog('🔧 Tools: Running cross-domain analytics');
+            await delay(2500);
+            
+            // Results flow to compilation
+            activateEdge('tool-sales-trends', 'decision-compile');
+            activateEdge('tool-territory', 'decision-compile');
+            activateEdge('tool-promo', 'decision-compile');
+            activateEdge('tool-competitor', 'decision-compile');
+            activateEdge('tool-pricing', 'decision-compile');
+            activateEdge('tool-margins', 'decision-compile');
+            
+            updateNodeStatus('tool-sales-trends', 'completed');
+            updateNodeStatus('tool-territory', 'completed');
+            updateNodeStatus('tool-promo', 'completed');
+            updateNodeStatus('tool-competitor', 'completed');
+            updateNodeStatus('tool-pricing', 'completed');
+            updateNodeStatus('tool-margins', 'completed');
+            
+            updateNodeStatus('decision-compile', 'active');
+            addLog('📊 Sales: -18% West, stable other regions');
+            addLog('📢 Marketing: Promo spend down 35% vs last year');
+            addLog('🎯 Market: 2 competitors launched aggressive pricing');
+            addLog('💵 Finance: Margin pressure from pricing');
+            await delay(2000);
+            
+            activateEdge('decision-compile', 'compiler');
+            updateNodeStatus('compiler', 'active');
+            updateStatusPanel('compiler', 'active');
+            addLog('📝 Compiler: Synthesizing root cause analysis');
+            await delay(1500);
+            
+            activateEdge('compiler', 'tool-format');
+            activateEdge('compiler', 'tool-lineage');
+            updateNodeStatus('tool-format', 'active');
+            updateNodeStatus('tool-lineage', 'active');
+            await delay(1000);
+            
+            activateEdge('tool-format', 'output');
+            activateEdge('tool-lineage', 'output');
+            updateNodeStatus('output', 'active');
+            addLog('✅ Root Cause: Competitive pressure + reduced marketing investment');
+            addLog('💡 Recommendation: Increase promo budget 25%, adjust pricing strategy');
+        }
+        
+        async function executeLaunchDecision() {
+            addLog('🚀 Strategic: Launch decision requires Product, Supply, Marketing, Market, Finance, Store');
+            
+            activateEdge('classifier', 'decision-agents');
+            updateNodeStatus('decision-agents', 'active');
+            await delay(800);
+            
+            // Activate 6 agents
+            activateEdge('decision-agents', 'agent-product');
+            activateEdge('decision-agents', 'agent-supply');
+            activateEdge('decision-agents', 'agent-marketing');
+            activateEdge('decision-agents', 'agent-market');
+            activateEdge('decision-agents', 'agent-finance');
+            activateEdge('decision-agents', 'agent-store');
+            
+            updateNodeStatus('agent-product', 'active');
+            updateNodeStatus('agent-supply', 'active');
+            updateNodeStatus('agent-marketing', 'active');
+            updateNodeStatus('agent-market', 'active');
+            updateNodeStatus('agent-finance', 'active');
+            updateNodeStatus('agent-store', 'active');
+            
+            updateStatusPanel('agent-product', 'active');
+            updateStatusPanel('agent-supply', 'active');
+            updateStatusPanel('agent-marketing', 'active');
+            updateStatusPanel('agent-market', 'active');
+            updateStatusPanel('agent-finance', 'active');
+            updateStatusPanel('agent-store', 'active');
+            
+            addLog('📦 Product: Analyzing Product Y portfolio fit');
+            addLog('🚛 Supply Chain: Assessing readiness');
+            addLog('📢 Marketing: Budget planning');
+            addLog('🎯 Market: Competitive landscape');
+            addLog('💵 Finance: Demand forecast & ROI');
+            addLog('🏪 Store: Capacity assessment');
+            await delay(2500);
+            
+            // All tools
+            activateEdge('agent-product', 'tool-portfolio');
+            activateEdge('agent-product', 'tool-lifecycle');
+            activateEdge('agent-supply', 'tool-inventory');
+            activateEdge('agent-supply', 'tool-fulfillment');
+            activateEdge('agent-marketing', 'tool-campaigns');
+            activateEdge('agent-market', 'tool-competitor');
+            activateEdge('agent-market', 'tool-pricing');
+            activateEdge('agent-finance', 'tool-forecast');
+            activateEdge('agent-finance', 'tool-margins');
+            activateEdge('agent-store', 'tool-capacity');
+            
+            addLog('🔧 Running comprehensive launch readiness analysis');
+            await delay(3000);
+            
+            updateNodeStatus('decision-compile', 'active');
+            addLog('📦 Product: Strong portfolio fit, growth phase');
+            addLog('🚛 Supply: 92% ready, minor vendor delays');
+            addLog('📢 Marketing: ₹4.2Cr budget required');
+            addLog('🎯 Market: 1 weak competitor, favorable positioning');
+            addLog('💵 Finance: 24-month breakeven, 18% ROIC projected');
+            addLog('🏪 Store: 85% capacity available');
+            await delay(2000);
+            
+            activateEdge('decision-compile', 'compiler');
+            updateNodeStatus('compiler', 'active');
+            updateStatusPanel('compiler', 'active');
+            await delay(1500);
+            
+            activateEdge('compiler', 'output');
+            updateNodeStatus('output', 'active');
+            addLog('✅ Decision: PROCEED with Q2 launch');
+            addLog('⚠️ Risk: Monitor vendor readiness closely');
+            addLog('💡 Action: Secure ₹4.2Cr marketing budget, finalize store rollout plan');
+        }
+        
+        async function executeCategoryDiagnostic() {
+            addLog('🔍 Diagnostic: Electronics underperformance needs deep analysis');
+            
+            activateEdge('classifier', 'decision-agents');
+            updateNodeStatus('decision-agents', 'active');
+            await delay(800);
+            
+            // 5 agents for diagnostic
+            activateEdge('decision-agents', 'agent-sales');
+            activateEdge('decision-agents', 'agent-supply');
+            activateEdge('decision-agents', 'agent-marketing');
+            activateEdge('decision-agents', 'agent-market');
+            activateEdge('decision-agents', 'agent-finance');
+            
+            updateNodeStatus('agent-sales', 'active');
+            updateNodeStatus('agent-supply', 'active');
+            updateNodeStatus('agent-marketing', 'active');
+            updateNodeStatus('agent-market', 'active');
+            updateNodeStatus('agent-finance', 'active');
+            
+            updateStatusPanel('agent-sales', 'active');
+            updateStatusPanel('agent-supply', 'active');
+            updateStatusPanel('agent-marketing', 'active');
+            updateStatusPanel('agent-market', 'active');
+            updateStatusPanel('agent-finance', 'active');
+            
+            addLog('💰 Sales: Electronics sales trend analysis');
+            addLog('🚛 Supply: Inventory turnover diagnostic');
+            addLog('📢 Marketing: Electronics campaign spend review');
+            addLog('🎯 Market: Category pricing vs competition');
+            addLog('💵 Finance: Electronics margin performance');
+            await delay(2000);
+            
+            activateEdge('agent-sales', 'tool-sales-trends');
+            activateEdge('agent-supply', 'tool-inventory');
+            activateEdge('agent-marketing', 'tool-campaigns');
+            activateEdge('agent-market', 'tool-pricing');
+            activateEdge('agent-finance', 'tool-margins');
+            
+            addLog('🔧 Deep-dive analytics across 5 domains');
+            await delay(2500);
+            
+            updateNodeStatus('decision-compile', 'active');
+            addLog('💰 Sales: -12% YoY, basket size declining');
+            addLog('🚛 Supply: 45-day inventory (target 30), slow turnover');
+            addLog('📢 Marketing: Electronics only 8% of total spend (15% of revenue)');
+            addLog('🎯 Market: Priced 6% above market average');
+            addLog('💵 Finance: Margins compressed from 22% to 18%');
+            await delay(2000);
+            
+            activateEdge('decision-compile', 'compiler');
+            updateNodeStatus('compiler', 'active');
+            updateStatusPanel('compiler', 'active');
+            await delay(1500);
+            
+            activateEdge('compiler', 'output');
+            updateNodeStatus('output', 'active');
+            addLog('✅ Root Cause: Overpricing + underinvestment in marketing');
+            addLog('💡 Actions: (1) Reduce prices 5%, (2) Double marketing allocation, (3) Clear excess inventory');
+        }
+        
+        function resetNetwork() {
+            networkNodes.forEach(node => updateNodeStatus(node.id, 'waiting'));
+            document.querySelectorAll('.edge').forEach(edge => edge.classList.remove('active', 'completed'));
+            document.querySelectorAll('.status-badge').forEach(badge => {
+                badge.className = 'status-badge waiting';
+                badge.textContent = badge.id.includes('kg') ? 'Ready' : 'Waiting';
+            });
+            document.getElementById('logContent').innerHTML = '';
+            addLog('🔄 Network reset');
+        }
+        
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeNetwork();
+            addLog('🧠 Enterprise Decision Intelligence initialized');
+            addLog('💡 Select a complex business question to see multi-agent orchestration');
+        });
+    </script>
+</body>
+</html>
