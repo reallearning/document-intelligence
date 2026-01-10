@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Poly:ital,wght@0,400;1,400&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Poly:ital,wght@0,400;1,400&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -21,7 +21,8 @@
   }
 }
 
-html, body{
+html,
+body {
   overflow: hidden;
 }
 
@@ -31,6 +32,7 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   scrollbar-width: none; /* For Firefox */
   -ms-overflow-style: none; /* For Internet Explorer */
+  --font-public: var(--font-public-sans);
 }
 
 body::-webkit-scrollbar {
@@ -107,52 +109,57 @@ body::-webkit-scrollbar {
     @apply bg-background text-foreground;
   }
 
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
 
-/* Hide scrollbar for IE, Edge and Firefox */
-.no-scrollbar {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-}
+  /* Global CSS */
 
-/* Global CSS */
+  /* Styles for webkit browsers (Chrome, Safari, newer versions of Edge) */
+  .scrollable::-webkit-scrollbar {
+    width: 4px;
+  }
 
-/* Styles for webkit browsers (Chrome, Safari, newer versions of Edge) */
-.scrollable::-webkit-scrollbar {
-  width: 4px;
-}
+  .scrollable::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+  }
 
-.scrollable::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 2px;
-}
+  .scrollable.hidden-scrollbar::-webkit-scrollbar {
+    width: 0;
+    display: none;
+  }
 
-.scrollable.hidden-scrollbar::-webkit-scrollbar {
-  width: 0;
-  display: none;
-}
+  /* Styles for Firefox */
+  .scrollable {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+    -ms-overflow-style: auto;
+    overflow-y: auto;
+  }
 
-/* Styles for Firefox */
-.scrollable {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
-  -ms-overflow-style: auto;
-  overflow-y: auto;
-}
-
-.scrollable.hidden-scrollbar {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  overflow-y: scroll;
-}
+  .scrollable.hidden-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    overflow-y: scroll;
+  }
 }
 
 @keyframes fadeIn {
-  0% { opacity: 0; transform: translateY(10px); }
-  100% { opacity: 1; transform: translateY(0); }
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .animate-fade-in {
@@ -160,7 +167,8 @@ body::-webkit-scrollbar {
 }
 
 @keyframes bounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {

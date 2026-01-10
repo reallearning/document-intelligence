@@ -19,6 +19,7 @@ export default {
         nunito: ["Nunito", "sans-serif"],
         poly: ["Poly", "serif"],
         poetsen: ["Poetsen One", "sans-serif"],
+        public: ["var(--font-public-sans)", "sans-serif"],
       },
       colors: {
         background: "hsl(var(--background))",
@@ -70,5 +71,6 @@ export default {
       },
     },
   },
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;
