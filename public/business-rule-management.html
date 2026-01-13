@@ -1,0 +1,3271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Rule Engine • Morrie</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #FFFFFF;
+            min-height: 100vh;
+            color: #1B2A21;
+            line-height: 1.6;
+        }
+
+        /* Morrie Brand Colors */
+        :root {
+            --green-primary: #0C2C18;
+            --green-sage: #85A383;
+            --cream: #FAFAF9;
+            --dark-grey: #1B2A21;
+            --terracotta: #DF7649;
+            --light-grey: #878B87;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 40px;
+        }
+
+        /* Header */
+        .header {
+            margin-bottom: 40px;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .header-title {
+            font-size: 42px;
+            font-weight: 300;
+            color: var(--green-primary);
+            letter-spacing: -1px;
+            line-height: 1.1;
+            margin-bottom: 8px;
+        }
+
+        .header-subtitle {
+            font-size: 16px;
+            color: var(--light-grey);
+            font-weight: 300;
+            letter-spacing: 0.3px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 16px 32px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            font-family: 'Hanken Grotesk', sans-serif;
+            background: transparent;
+        }
+
+        .btn-primary {
+            background: var(--green-primary);
+            color: var(--cream);
+        }
+
+        .btn-primary:hover {
+            background: #164435;
+        }
+
+        .btn-secondary {
+            color: var(--green-primary);
+            border: 1px solid var(--green-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--green-primary);
+            color: var(--cream);
+        }
+
+        .btn-tertiary {
+            color: var(--light-grey);
+            border: 1px solid var(--light-grey);
+        }
+
+        .btn-tertiary:hover {
+            color: var(--green-primary);
+            border-color: var(--green-primary);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--cream);
+            border: 1px solid rgba(12, 44, 24, 0.08);
+            padding: 32px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            background: #FFFFFF;
+            border-color: rgba(12, 44, 24, 0.12);
+            box-shadow: 0 2px 8px rgba(12, 44, 24, 0.04);
+        }
+
+        .card.clickable {
+            cursor: pointer;
+        }
+
+        /* Rule Card Specific */
+        .rule-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .rule-content {
+            flex: 1;
+            padding-right: 32px;
+        }
+
+        .rule-title {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        .rule-title h3 {
+            font-size: 20px;
+            font-weight: 400;
+            color: var(--green-primary);
+            letter-spacing: -0.5px;
+        }
+
+        .badge {
+            padding: 6px 16px;
+            font-size: 10px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border: 1px solid;
+        }
+
+        .badge-approved {
+            background: transparent;
+            color: var(--green-sage);
+            border-color: var(--green-sage);
+        }
+
+        .badge-testing {
+            background: transparent;
+            color: var(--terracotta);
+            border-color: var(--terracotta);
+        }
+
+        .badge-draft {
+            background: transparent;
+            color: var(--light-grey);
+            border-color: var(--light-grey);
+        }
+
+        .version {
+            font-size: 13px;
+            color: var(--light-grey);
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .description {
+            color: var(--dark-grey);
+            margin-bottom: 16px;
+            font-size: 14px;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        .meta {
+            display: flex;
+            gap: 16px;
+            font-size: 12px;
+            color: var(--light-grey);
+            font-weight: 300;
+            letter-spacing: 0.3px;
+        }
+
+        .meta-divider {
+            color: var(--light-grey);
+            opacity: 0.3;
+        }
+
+        /* Test Score */
+        .test-score {
+            text-align: right;
+            min-width: 120px;
+        }
+
+        .test-score .score {
+            font-size: 48px;
+            font-weight: 300;
+            color: var(--green-primary);
+            letter-spacing: -1px;
+        }
+
+        .test-score .label {
+            font-size: 12px;
+            color: var(--light-grey);
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        /* Form Elements */
+        .form-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 400;
+            color: var(--green-primary);
+            margin-bottom: 24px;
+            letter-spacing: -0.3px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 400;
+            color: var(--green-primary);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 16px 0;
+            border: none;
+            border-bottom: 1px solid rgba(12, 44, 24, 0.2);
+            background: transparent;
+            font-size: 16px;
+            font-family: 'Hanken Grotesk', sans-serif;
+            color: var(--dark-grey);
+            font-weight: 300;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-bottom-color: var(--green-primary);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            gap: 32px;
+            flex-wrap: wrap;
+            padding-top: 16px;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            font-weight: 300;
+            text-transform: none;
+            letter-spacing: 0.3px;
+            cursor: pointer;
+            color: var(--dark-grey);
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            border: 1px solid var(--green-primary);
+            accent-color: var(--green-primary);
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+
+        /* Logic Block */
+        .logic-block {
+            background: var(--green-primary);
+            color: var(--cream);
+            padding: 0;
+            font-family: 'Hanken Grotesk', sans-serif;
+            font-size: 13px;
+            line-height: 1.8;
+            margin-bottom: 24px;
+            border: 1px solid rgba(133, 163, 131, 0.2);
+            font-weight: 300;
+            overflow: hidden;
+        }
+
+        .breakdown-section {
+            padding: 28px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .breakdown-section:last-child {
+            border-bottom: none;
+        }
+
+        .breakdown-header {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            letter-spacing: 0.3px;
+        }
+
+        .breakdown-icon {
+            font-size: 20px;
+        }
+
+        .system-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            margin-bottom: 16px;
+            border-left: 3px solid var(--green-sage);
+        }
+
+        .system-name {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .system-detail {
+            font-size: 12px;
+            margin-bottom: 6px;
+            padding-left: 12px;
+            opacity: 0.9;
+        }
+
+        .system-detail strong {
+            color: var(--green-sage);
+            font-weight: 500;
+        }
+
+        .system-detail code {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            color: #A8E6CF;
+        }
+
+        .logic-step {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 20px;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            width: 28px;
+            height: 28px;
+            background: var(--green-sage);
+            color: var(--green-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-size: 14px;
+            font-weight: 400;
+            margin-bottom: 8px;
+            color: white;
+        }
+
+        .step-detail {
+            font-size: 12px;
+            margin-bottom: 4px;
+            padding-left: 12px;
+            opacity: 0.85;
+        }
+
+        .step-detail strong {
+            color: var(--green-sage);
+            font-weight: 500;
+        }
+
+        .logic-item {
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            opacity: 0.9;
+        }
+
+        .arrow {
+            color: var(--green-sage);
+            font-weight: 600;
+        }
+
+        /* Governance Styles */
+        .approval-item {
+            border: 1px solid rgba(12, 44, 24, 0.12);
+            margin-bottom: 20px;
+            background: white;
+        }
+
+        .approval-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            padding: 20px;
+            background: var(--cream);
+            border-bottom: 1px solid rgba(12, 44, 24, 0.08);
+        }
+
+        .approval-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--green-primary);
+            margin-bottom: 4px;
+        }
+
+        .approval-meta {
+            font-size: 13px;
+            color: var(--light-grey);
+        }
+
+        .approval-body {
+            padding: 20px;
+        }
+
+        .approval-change {
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--dark-grey);
+            margin-bottom: 16px;
+        }
+
+        .approval-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        /* Version Timeline */
+        .version-timeline {
+            position: relative;
+        }
+
+        .version-item {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .version-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .version-marker {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 40px;
+            flex-shrink: 0;
+        }
+
+        .version-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--light-grey);
+            border: 3px solid white;
+            box-shadow: 0 0 0 2px var(--light-grey);
+            position: relative;
+            z-index: 2;
+        }
+
+        .version-dot.active {
+            background: var(--green-sage);
+            box-shadow: 0 0 0 2px var(--green-sage), 0 0 0 6px rgba(133, 163, 131, 0.2);
+        }
+
+        .version-line {
+            width: 2px;
+            flex: 1;
+            background: rgba(12, 44, 24, 0.12);
+            margin-top: 8px;
+        }
+
+        .version-content {
+            flex: 1;
+            padding-bottom: 8px;
+        }
+
+        .version-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .version-tag {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--green-primary);
+            margin-right: 16px;
+        }
+
+        .version-tag.current {
+            color: var(--green-sage);
+        }
+
+        .version-date {
+            font-size: 13px;
+            color: var(--light-grey);
+        }
+
+        .version-body {
+            background: var(--cream);
+            padding: 20px;
+            border: 1px solid rgba(12, 44, 24, 0.08);
+        }
+
+        .version-change {
+            font-size: 14px;
+            line-height: 1.8;
+            margin-bottom: 16px;
+            color: var(--dark-grey);
+        }
+
+        .version-diff {
+            background: white;
+            padding: 16px;
+            border: 1px solid rgba(12, 44, 24, 0.08);
+            margin-bottom: 16px;
+        }
+
+        .diff-row {
+            display: grid;
+            grid-template-columns: 180px 1fr 40px 1fr;
+            gap: 12px;
+            align-items: center;
+            padding: 8px 0;
+            font-size: 13px;
+        }
+
+        .diff-label {
+            font-weight: 500;
+            color: var(--dark-grey);
+        }
+
+        .diff-old {
+            color: var(--terracotta);
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+
+        .diff-arrow {
+            color: var(--light-grey);
+            text-align: center;
+        }
+
+        .diff-new {
+            color: var(--green-sage);
+            font-weight: 500;
+        }
+
+        .version-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-sm {
+            padding: 6px 16px;
+            font-size: 12px;
+        }
+
+        /* Audit Log */
+        .audit-log {
+            font-size: 13px;
+        }
+
+        .audit-entry {
+            padding: 16px;
+            border-left: 3px solid var(--green-sage);
+            background: var(--cream);
+            margin-bottom: 12px;
+        }
+
+        .audit-timestamp {
+            font-size: 11px;
+            color: var(--light-grey);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .audit-action {
+            font-weight: 600;
+            color: var(--green-primary);
+            margin-bottom: 8px;
+        }
+
+        .audit-details {
+            color: var(--dark-grey);
+            margin-bottom: 6px;
+        }
+
+        .audit-metadata {
+            font-size: 11px;
+            color: var(--light-grey);
+        }
+
+        /* Governance Grid */
+        .governance-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .governance-item {
+            padding: 20px;
+            background: var(--cream);
+            border: 1px solid rgba(12, 44, 24, 0.08);
+            text-align: center;
+        }
+
+        .governance-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .governance-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--light-grey);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .governance-value {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--green-primary);
+            margin-bottom: 8px;
+        }
+
+        .governance-detail {
+            font-size: 12px;
+            color: var(--dark-grey);
+            line-height: 1.6;
+        }
+
+
+        /* Test Results */
+        .test-result {
+            padding: 24px;
+            margin-bottom: 16px;
+            border-left: 2px solid;
+            transition: all 0.3s ease;
+        }
+
+        .test-result:hover {
+            transform: translateX(4px);
+        }
+
+        .test-result.pass {
+            background: rgba(133, 163, 131, 0.06);
+            border-left-color: var(--green-sage);
+        }
+
+        .test-result.pass:hover {
+            background: rgba(133, 163, 131, 0.10);
+        }
+
+        .test-result.fail {
+            background: rgba(223, 118, 73, 0.06);
+            border-left-color: var(--terracotta);
+        }
+
+        .test-result.fail:hover {
+            background: rgba(223, 118, 73, 0.10);
+        }
+
+        .test-result-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        .test-result-header .id {
+            font-weight: 500;
+            color: var(--green-primary);
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        .test-result-header .vendor {
+            color: var(--dark-grey);
+            font-size: 14px;
+            font-weight: 300;
+        }
+
+        .test-result-badge {
+            padding: 4px 12px;
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            border: 1px solid;
+        }
+
+        .test-result-badge.pass {
+            color: var(--green-sage);
+            border-color: var(--green-sage);
+            background: transparent;
+        }
+
+        .test-result-badge.fail {
+            color: var(--terracotta);
+            border-color: var(--terracotta);
+            background: transparent;
+        }
+
+        .test-result-reason {
+            color: var(--dark-grey);
+            font-size: 13px;
+            margin-bottom: 12px;
+            font-weight: 300;
+        }
+
+        .test-result-details {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            font-size: 11px;
+            color: var(--light-grey);
+            font-weight: 300;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 32px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -41px;
+            top: 6px;
+            width: 6px;
+            height: 6px;
+            background: var(--green-primary);
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: -38px;
+            top: 18px;
+            width: 1px;
+            height: calc(100% - 12px);
+            background: rgba(12, 44, 24, 0.15);
+        }
+
+        .timeline-item:last-child::after {
+            display: none;
+        }
+
+        .timeline-version {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 8px;
+        }
+
+        .timeline-version .version {
+            font-weight: 400;
+            color: var(--green-primary);
+            font-size: 14px;
+        }
+
+        .timeline-version .date {
+            font-size: 12px;
+            color: var(--light-grey);
+            font-weight: 300;
+        }
+
+        .timeline-change {
+            color: var(--dark-grey);
+            margin-bottom: 8px;
+            font-weight: 300;
+            font-size: 14px;
+        }
+
+        .timeline-meta {
+            display: flex;
+            gap: 24px;
+            font-size: 11px;
+            color: var(--light-grey);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(12, 44, 24, 0.4);
+            backdrop-filter: blur(4px);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 40px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid rgba(12, 44, 24, 0.1);
+        }
+
+        .modal-header {
+            font-size: 28px;
+            font-weight: 300;
+            color: var(--green-primary);
+            margin-bottom: 28px;
+            letter-spacing: -0.5px;
+        }
+
+        .modal-body {
+            margin-bottom: 32px;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 12px;
+        }
+
+        .modal-footer .btn {
+            flex: 1;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: rgba(133, 163, 131, 0.06);
+            border: 1px solid rgba(133, 163, 131, 0.15);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .info-box h4 {
+            font-weight: 400;
+            color: var(--green-primary);
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .info-box p {
+            font-size: 13px;
+            color: var(--dark-grey);
+            margin-bottom: 16px;
+            font-weight: 300;
+            line-height: 1.6;
+        }
+
+        .info-box .tags {
+            display: flex;
+            gap: 24px;
+            font-size: 10px;
+            color: var(--light-grey);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 48px;
+            font-weight: 300;
+            margin-bottom: 6px;
+            letter-spacing: -1px;
+        }
+
+        .stat-value.green {
+            color: var(--green-sage);
+        }
+
+        .stat-value.red {
+            color: var(--terracotta);
+        }
+
+        .stat-label {
+            font-size: 10px;
+            color: var(--light-grey);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--cream);
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .quote-box {
+            background: rgba(255, 255, 255, 0.5);
+            padding: 24px;
+            font-style: italic;
+            color: var(--dark-grey);
+            border-left: 2px solid var(--green-sage);
+            font-weight: 300;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .divider {
+            height: 1px;
+            background: rgba(12, 44, 24, 0.08);
+            margin: 32px 0;
+        }
+
+        /* Test Score Header */
+        .test-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 32px;
+        }
+
+        /* Invoice Document Styling */
+        #invoiceDocument {
+            box-shadow: 0 4px 12px rgba(12, 44, 24, 0.08);
+            max-height: calc(100vh - 100px);
+            overflow-y: auto;
+        }
+
+        #invoiceDocument::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #invoiceDocument::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        #invoiceDocument::-webkit-scrollbar-thumb {
+            background: var(--light-grey);
+            border-radius: 3px;
+        }
+
+        #invoiceDocument::-webkit-scrollbar-thumb:hover {
+            background: var(--green-primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 24px 20px;
+            }
+
+            .header-title {
+                font-size: 32px;
+            }
+
+            .card {
+                padding: 24px 20px;
+            }
+
+            .grid-2 {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .rule-card {
+                flex-direction: column;
+            }
+
+            .rule-content {
+                padding-right: 0;
+                margin-bottom: 16px;
+            }
+
+            .test-result-details {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .modal-content {
+                padding: 32px 20px;
+            }
+
+            /* Invoice detail split screen responsive */
+            #invoiceDetailView > div:first-child {
+                flex-direction: column;
+            }
+
+            #invoiceDetailView > div:last-child {
+                grid-template-columns: 1fr !important;
+            }
+
+            #invoiceDetailView .card {
+                position: static !important;
+            }
+
+            .governance-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .diff-row {
+                grid-template-columns: 1fr !important;
+                gap: 8px !important;
+            }
+
+            .diff-old, .diff-new {
+                padding-left: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-top">
+                <div></div>
+                <button id="createRuleBtn" class="btn btn-primary">Create New Rule</button>
+                <button id="backBtn" class="btn btn-secondary hidden">Back to Library</button>
+            </div>
+            <h1 class="header-title">Invoice Rule Engine</h1>
+            <p class="header-subtitle">Natural language configuration for intelligent invoice validation</p>
+        </div>
+
+        <!-- Library View -->
+        <div id="libraryView">
+            <!-- Rules will be dynamically inserted here -->
+        </div>
+
+        <!-- Create View -->
+        <div id="createView" class="hidden">
+            <div class="card">
+                <div class="form-section">
+                    <h2 class="section-title">Configure Rule</h2>
+                    <div class="form-group">
+                        <label>Rule Name</label>
+                        <input type="text" id="ruleName" placeholder="e.g., Vendor Credit Limit Validation">
+                    </div>
+                    <div class="form-group">
+                        <label>Describe Your Rule</label>
+                        <textarea id="ruleNL" rows="5" placeholder="Type your rule in natural language..."></textarea>
+                    </div>
+                    <button id="generateBtn" class="btn btn-primary">Generate Rule Breakdown</button>
+                </div>
+            </div>
+
+            <div id="logicCard" class="card hidden">
+                <div class="form-section">
+                    <h2 class="section-title">Rule Breakdown</h2>
+                    <div id="generatedLogic" class="logic-block"></div>
+                    <div id="metaInfo" class="meta" style="margin-bottom: 24px;"></div>
+                    <div class="btn-group">
+                        <button id="testBtn" class="btn btn-primary">Test on Sample Invoices</button>
+                        <button id="regenerateBtn" class="btn btn-tertiary">Regenerate</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Test View -->
+        <div id="testView" class="hidden">
+            <div class="card">
+                <div class="test-header">
+                    <h2 class="section-title">Test Results</h2>
+                    <div class="test-score">
+                        <div class="score" id="testScore">0%</div>
+                        <div class="label" id="testLabel">0 of 0 passed</div>
+                    </div>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <button id="addInvoiceBtn" class="btn btn-secondary">+ Add Invoice to Test</button>
+                </div>
+                <div id="testResults"></div>
+                <div class="divider"></div>
+                <div class="btn-group">
+                    <button id="approveBtn" class="btn btn-primary">Submit for Approval</button>
+                    <button id="backToEditBtn" class="btn btn-tertiary">Return to Edit</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Invoice Detail View -->
+        <div id="invoiceDetailView" class="hidden">
+            <div style="display: flex; gap: 20px; margin-bottom: 20px;">
+                <button id="backToTestsBtn" class="btn btn-secondary">← Back to Test Results</button>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <!-- Left Side: Extracted Data & Validation -->
+                <div>
+                    <div class="card">
+                        <h3 class="section-title">Extracted Values</h3>
+                        <div id="extractedData"></div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 class="section-title">System Data Retrieved</h3>
+                        <div id="systemData"></div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 class="section-title">Validation Execution</h3>
+                        <div id="validationSteps"></div>
+                    </div>
+                </div>
+
+                <!-- Right Side: Invoice Document -->
+                <div style="position: sticky; top: 40px; height: fit-content;">
+                    <div class="card" style="padding: 0; overflow: hidden;">
+                        <div id="invoiceDocument"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Governance View -->
+        <div id="governanceView" class="hidden">
+            <div style="margin-bottom: 24px;">
+                <button id="backToRuleDetailBtn" class="btn btn-secondary">← Back to Rule Detail</button>
+            </div>
+
+            <!-- Governance Header -->
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: start;">
+                    <div>
+                        <h2 style="font-size: 28px; font-weight: 300; color: var(--green-primary); margin-bottom: 8px;" id="govRuleName">Rule Name</h2>
+                        <p style="color: var(--light-grey); font-size: 14px;">Version Control & Approval Governance</p>
+                    </div>
+                    <div style="display: flex; gap: 12px;">
+                        <button id="rollbackBtn" class="btn btn-secondary">↩ Rollback Version</button>
+                        <button id="viewAuditLogBtn" class="btn btn-tertiary">📋 Audit Log</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Approvals -->
+            <div class="card">
+                <h3 class="section-title">Pending Approvals (Maker-Checker)</h3>
+                <div id="pendingApprovals">
+                    <div class="approval-item">
+                        <div class="approval-header">
+                            <div>
+                                <div class="approval-title">Version 2.2 - Threshold Update</div>
+                                <div class="approval-meta">Submitted by John Smith • 2 hours ago</div>
+                            </div>
+                            <span class="badge badge-testing">Pending Review</span>
+                        </div>
+                        <div class="approval-body">
+                            <div class="approval-change">
+                                <strong>Change Type:</strong> Rule Parameter Update<br>
+                                <strong>Impact:</strong> Tolerance reduced from 2.5% → 2.0%<br>
+                                <strong>Reason:</strong> Reduce false approvals based on Q4 audit findings
+                            </div>
+                            <div style="margin-top: 16px; padding: 16px; background: rgba(133, 163, 131, 0.08); border-left: 3px solid var(--green-sage);">
+                                <div style="font-size: 12px; font-weight: 500; color: var(--green-primary); margin-bottom: 8px;">MAKER-CHECKER REQUIREMENT</div>
+                                <div style="font-size: 13px; line-height: 1.6;">
+                                    <strong>Maker:</strong> John Smith (Finance Analyst)<br>
+                                    <strong>Checker Required:</strong> Finance Manager or above<br>
+                                    <strong>Dual Authorization:</strong> Required for threshold changes affecting >$50k invoices
+                                </div>
+                            </div>
+                            <div class="approval-actions">
+                                <button class="btn btn-primary">✓ Approve & Activate</button>
+                                <button class="btn btn-tertiary">✎ Request Changes</button>
+                                <button class="btn btn-tertiary">✗ Reject</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="approval-item">
+                        <div class="approval-header">
+                            <div>
+                                <div class="approval-title">Ambiguous Invoice Resolution</div>
+                                <div class="approval-meta">Flagged by System • 15 minutes ago</div>
+                            </div>
+                            <span class="badge badge-testing">Requires Decision</span>
+                        </div>
+                        <div class="approval-body">
+                            <div class="approval-change">
+                                <strong>Invoice:</strong> INV-2024-1847<br>
+                                <strong>Vendor:</strong> Global Parts Manufacturing Ltd<br>
+                                <strong>Amount:</strong> $125,450<br>
+                                <strong>Issue:</strong> PO amount shows $125,000 but GRN notes indicate quantity adjustment
+                            </div>
+                            <div style="margin-top: 16px; padding: 16px; background: rgba(223, 118, 73, 0.08); border-left: 3px solid var(--terracotta);">
+                                <div style="font-size: 12px; font-weight: 500; color: var(--terracotta); margin-bottom: 8px;">AMBIGUITY DETECTED - HUMAN REVIEW REQUIRED</div>
+                                <div style="font-size: 13px; line-height: 1.6;">
+                                    <strong>Trigger:</strong> Variance = 0.36% (within tolerance) BUT GRN notes mention "additional units shipped"<br>
+                                    <strong>Risk Level:</strong> Medium - High-value invoice with data inconsistency<br>
+                                    <strong>Recommended Action:</strong> Verify with Procurement before approval
+                                </div>
+                            </div>
+                            <div class="approval-actions">
+                                <button class="btn btn-primary">Approve (Override)</button>
+                                <button class="btn btn-secondary">Request Procurement Review</button>
+                                <button class="btn btn-tertiary">Block & Investigate</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Version History Timeline -->
+            <div class="card">
+                <h3 class="section-title">Version Control & Change History</h3>
+                <div class="version-timeline" id="versionTimeline">
+                    <div class="version-item active">
+                        <div class="version-marker">
+                            <div class="version-dot active"></div>
+                            <div class="version-line"></div>
+                        </div>
+                        <div class="version-content">
+                            <div class="version-header">
+                                <div>
+                                    <span class="version-tag current">v2.1 (Current)</span>
+                                    <span class="version-date">January 3, 2024</span>
+                                </div>
+                                <span class="badge badge-approved">Active</span>
+                            </div>
+                            <div class="version-body">
+                                <div class="version-change">
+                                    <strong>Change:</strong> Reduced tolerance from 5% to 2%<br>
+                                    <strong>Author:</strong> John Smith (Finance Analyst)<br>
+                                    <strong>Approved by:</strong> Sarah Chen (Finance Manager)<br>
+                                    <strong>Impact:</strong> 847 invoices processed, 12 additional blocks
+                                </div>
+                                <div class="version-diff">
+                                    <div class="diff-row">
+                                        <div class="diff-label">Tolerance Threshold:</div>
+                                        <div class="diff-old">5.0%</div>
+                                        <div class="diff-arrow">→</div>
+                                        <div class="diff-new">2.0%</div>
+                                    </div>
+                                    <div class="diff-row">
+                                        <div class="diff-label">Approval Required:</div>
+                                        <div class="diff-old">-</div>
+                                        <div class="diff-arrow">→</div>
+                                        <div class="diff-new">Dual Authorization for >$50k</div>
+                                    </div>
+                                </div>
+                                <div class="version-actions">
+                                    <button class="btn btn-tertiary btn-sm">View Full Diff</button>
+                                    <button class="btn btn-tertiary btn-sm">Export Version</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="version-item">
+                        <div class="version-marker">
+                            <div class="version-dot"></div>
+                            <div class="version-line"></div>
+                        </div>
+                        <div class="version-content">
+                            <div class="version-header">
+                                <div>
+                                    <span class="version-tag">v2.0</span>
+                                    <span class="version-date">December 15, 2023</span>
+                                </div>
+                                <button class="btn btn-tertiary btn-sm">Rollback to v2.0</button>
+                            </div>
+                            <div class="version-body">
+                                <div class="version-change">
+                                    <strong>Change:</strong> Added quantity matching logic<br>
+                                    <strong>Author:</strong> John Smith<br>
+                                    <strong>Approved by:</strong> Sarah Chen
+                                </div>
+                                <div class="version-diff">
+                                    <div class="diff-row">
+                                        <div class="diff-label">Validation Steps:</div>
+                                        <div class="diff-old">Amount check only</div>
+                                        <div class="diff-arrow">→</div>
+                                        <div class="diff-new">Amount + Quantity matching</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="version-item">
+                        <div class="version-marker">
+                            <div class="version-dot"></div>
+                        </div>
+                        <div class="version-content">
+                            <div class="version-header">
+                                <div>
+                                    <span class="version-tag">v1.0</span>
+                                    <span class="version-date">November 8, 2023</span>
+                                </div>
+                                <button class="btn btn-tertiary btn-sm">Rollback to v1.0</button>
+                            </div>
+                            <div class="version-body">
+                                <div class="version-change">
+                                    <strong>Change:</strong> Initial rule creation<br>
+                                    <strong>Author:</strong> John Smith<br>
+                                    <strong>Approved by:</strong> Sarah Chen
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Audit Trail -->
+            <div class="card">
+                <h3 class="section-title">Audit Trail & Compliance Log</h3>
+                <div class="audit-log">
+                    <div class="audit-entry">
+                        <div class="audit-timestamp">2024-01-03 14:23:45 UTC</div>
+                        <div class="audit-action">VERSION_ACTIVATED</div>
+                        <div class="audit-details">Version 2.1 activated by Sarah Chen (checker) after maker-checker approval</div>
+                        <div class="audit-metadata">IP: 10.52.3.14 • Session: a8f3d2c1</div>
+                    </div>
+                    <div class="audit-entry">
+                        <div class="audit-timestamp">2024-01-03 14:18:32 UTC</div>
+                        <div class="audit-action">APPROVAL_GRANTED</div>
+                        <div class="audit-details">Sarah Chen (Finance Manager) approved version 2.1 changes</div>
+                        <div class="audit-metadata">Approval Level: L2 • Authority: Manager+</div>
+                    </div>
+                    <div class="audit-entry">
+                        <div class="audit-timestamp">2024-01-03 11:45:12 UTC</div>
+                        <div class="audit-action">VERSION_SUBMITTED</div>
+                        <div class="audit-details">John Smith submitted version 2.1 for approval (maker)</div>
+                        <div class="audit-metadata">Change Type: Parameter Update • Risk: Medium</div>
+                    </div>
+                    <div class="audit-entry">
+                        <div class="audit-timestamp">2024-01-03 11:42:08 UTC</div>
+                        <div class="audit-action">VERSION_CREATED</div>
+                        <div class="audit-details">John Smith created draft version 2.1</div>
+                        <div class="audit-metadata">Parent Version: v2.0</div>
+                    </div>
+                </div>
+                <div style="margin-top: 16px;">
+                    <button class="btn btn-tertiary">Export Full Audit Log (CSV)</button>
+                    <button class="btn btn-tertiary">Generate Compliance Report</button>
+                </div>
+            </div>
+
+            <!-- Governance Controls -->
+            <div class="card">
+                <h3 class="section-title">Governance Controls & Policies</h3>
+                <div class="governance-grid">
+                    <div class="governance-item">
+                        <div class="governance-icon">🔒</div>
+                        <div class="governance-label">Maker-Checker</div>
+                        <div class="governance-value">Enabled</div>
+                        <div class="governance-detail">Required for threshold changes, system integrations, and high-risk modifications</div>
+                    </div>
+                    <div class="governance-item">
+                        <div class="governance-icon">⏱️</div>
+                        <div class="governance-label">Version Retention</div>
+                        <div class="governance-value">Unlimited</div>
+                        <div class="governance-detail">All versions preserved with immutable audit trail</div>
+                    </div>
+                    <div class="governance-item">
+                        <div class="governance-icon">🎯</div>
+                        <div class="governance-label">Rollback Policy</div>
+                        <div class="governance-value">Manager+ Only</div>
+                        <div class="governance-detail">Finance Manager approval required for rollback to previous versions</div>
+                    </div>
+                    <div class="governance-item">
+                        <div class="governance-icon">🚨</div>
+                        <div class="governance-label">Ambiguity Handling</div>
+                        <div class="governance-value">Human Review</div>
+                        <div class="governance-detail">Auto-escalate ambiguous cases to checker for manual resolution</div>
+                    </div>
+                    <div class="governance-item">
+                        <div class="governance-icon">📊</div>
+                        <div class="governance-label">Risk Threshold</div>
+                        <div class="governance-value">$50,000</div>
+                        <div class="governance-detail">Dual authorization required for invoices above this amount</div>
+                    </div>
+                    <div class="governance-item">
+                        <div class="governance-icon">🔐</div>
+                        <div class="governance-label">Compliance Mode</div>
+                        <div class="governance-value">SOX Compliant</div>
+                        <div class="governance-detail">Meets Sarbanes-Oxley internal controls requirements</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Detail View -->
+        <div id="detailView" class="hidden">
+            <!-- Rule details will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <!-- Approval Modal -->
+    <div id="approvalModal" class="modal">
+        <div class="modal-content">
+            <h2 class="modal-header">Approve Rule</h2>
+            <div class="modal-body">
+                <div id="approvalInfo" class="info-box"></div>
+                <div class="form-group">
+                    <label>Approval Comments</label>
+                    <textarea id="approvalComments" rows="3" placeholder="Optional comments regarding this approval"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="confirmApprovalBtn" class="btn btn-primary">Approve & Activate</button>
+                <button id="cancelApprovalBtn" class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Invoice Modal -->
+    <div id="addInvoiceModal" class="modal">
+        <div class="modal-content">
+            <h2 class="modal-header">Add Test Invoice</h2>
+            <div class="modal-body">
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Invoice ID</label>
+                        <input type="text" id="newInvoiceId" placeholder="INV-2024-005">
+                    </div>
+                    <div class="form-group">
+                        <label>Vendor Name</label>
+                        <input type="text" id="newVendor" placeholder="ABC Suppliers Ltd">
+                    </div>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Invoice Amount (₹)</label>
+                        <input type="number" id="newAmount" placeholder="100000">
+                    </div>
+                    <div class="form-group">
+                        <label>PO Amount (₹)</label>
+                        <input type="number" id="newPoAmount" placeholder="100000">
+                    </div>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Invoice Quantity</label>
+                        <input type="number" id="newInvoiceQty" placeholder="100">
+                    </div>
+                    <div class="form-group">
+                        <label>GRN Quantity</label>
+                        <input type="number" id="newGrnQty" placeholder="100">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>System</label>
+                    <select id="newSystem">
+                        <option value="SAP">SAP</option>
+                        <option value="Oracle">Oracle</option>
+                        <option value="NetSuite">NetSuite</option>
+                        <option value="Dynamics">Dynamics</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="confirmAddInvoiceBtn" class="btn btn-primary">Add & Test</button>
+                <button id="cancelAddInvoiceBtn" class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data
+        const SAMPLE_INVOICES = [
+            {
+                id: "INV-2024-001",
+                vendor: "Acme Supplies Ltd",
+                amount: 125000,
+                poAmount: 125000,
+                invoiceQuantity: 100,
+                grnQuantity: 100,
+                system: "SAP"
+            },
+            {
+                id: "INV-2024-002",
+                vendor: "Tech Components Inc",
+                amount: 87500,
+                poAmount: 90000,
+                invoiceQuantity: 95,
+                grnQuantity: 95,
+                system: "Oracle"
+            },
+            {
+                id: "INV-2024-003",
+                vendor: "Office World",
+                amount: 45000,
+                poAmount: 45000,
+                invoiceQuantity: 140,
+                grnQuantity: 150,
+                system: "SAP"
+            },
+            {
+                id: "INV-2024-004",
+                vendor: "Industrial Parts Co",
+                amount: 156000,
+                poAmount: 150000,
+                invoiceQuantity: 200,
+                grnQuantity: 200,
+                system: "SAP"
+            },
+            {
+                id: "INV-2024-005",
+                vendor: "Global Manufacturing Ltd",
+                amount: 285000,
+                poAmount: 270000,
+                invoiceQuantity: 350,
+                grnQuantity: 350,
+                system: "Oracle"
+            }
+        ];
+
+        let rules = [
+            {
+                id: "rule-001",
+                name: "Vendor Name Validation",
+                description: "Vendor name on invoice must align with vendor master data in VIM",
+                nlInput: "Extract vendor name from invoice PDF, fetch vendor details from VIM using invoice number, normalize formatting and compare. If missing on either side or mismatch, fail the invoice.",
+                logic: `📋 Business Logic Steps:
+1. Extract vendor name from invoice PDF using OCR
+   → System: Questt OCR Engine
+   → Condition: vendor_name field present on invoice
+   → Action: Normalize text (remove extra spaces, convert to uppercase, trim)
+
+2. Fetch vendor record from VIM using invoice number
+   → System: VIM (Vendor Invoice Management)
+   → Condition: VIM record exists for invoice_number
+   → Action: Retrieve registered_name and vendor_code
+
+3. Cross-reference with SAP vendor master via Hive
+   → System: Hive DB (LFA1 table - synced every 4 hours from SAP)
+   → Condition: Query Hive DB for SAP LFA1 vendor data
+   → Action: Retrieve canonical vendor name from SAP master
+
+4. Normalize all vendor names for comparison
+   → System: Internal validation logic
+   → Condition: Apply same normalization (uppercase, trim, remove special chars)
+   → Action: Create comparable strings from all three sources
+
+5. Compare normalized vendor names
+   → System: Internal validation logic
+   → Condition: Exact match after normalization across PDF, VIM, and SAP
+   → Action: If match → PASS | If mismatch → FAIL with details | If missing → FAIL
+
+⚡ Actions & Notifications:
+• If APPROVED: Proceed to next validation rule
+• If BLOCKED: Return to vendor with note "Vendor name mismatch: Invoice shows '[PDF_NAME]' but VIM shows '[VIM_NAME]' and SAP shows '[SAP_NAME]'"
+• Notifications: Email to vendor contact, create ticket in vendor portal`,
+                status: "approved",
+                version: "v2.3",
+                approvedBy: "Priya Sharma",
+                approvedDate: "2024-01-08",
+                systems: ["Questt OCR", "VIM", "Hive DB"],
+                category: "Validation",
+                createdBy: "Rahul Mehta",
+                testResults: { passed: 4, failed: 1, total: 5 },
+                history: [
+                    {
+                        version: "v2.3",
+                        date: "2024-01-08",
+                        author: "Rahul Mehta",
+                        change: "Added SAP LFA1 cross-reference for vendor master",
+                        approvedBy: "Priya Sharma"
+                    },
+                    {
+                        version: "v2.2",
+                        date: "2023-12-22",
+                        author: "Rahul Mehta",
+                        change: "Improved normalization logic for special characters",
+                        approvedBy: "Priya Sharma"
+                    }
+                ]
+            },
+            {
+                id: "rule-002",
+                name: "BPCL GSTIN Validation",
+                description: "Customer GSTIN must match one of BPCL's registered GSTINs based on destination",
+                nlInput: "Extract customer GSTIN from invoice PDF. For each line item, map PO to destination region and validate against BPCL's registered GSTINs in gstn_mapping table. Match → pass, mismatch → vendor correction, missing data → buyer review.",
+                logic: `📋 Business Logic Steps:
+1. Extract customer GSTIN from invoice PDF
+   → System: Questt OCR Engine
+   → Condition: GSTIN field present in tax section
+   → Action: Parse and normalize GSTIN (15-character alphanumeric)
+
+2. Retrieve PO details for invoice line items from Hive
+   → System: Hive DB (EKKO table - real-time CDC from SAP)
+   → Condition: Each line item has valid po_number and po_item
+   → Action: Query Hive (synced EKKO data) for delivery_location and plant_code
+
+3. Map destination to valid BPCL GSTINs
+   → System: GSTN Mapping Database
+   → Condition: destination_state extracted from PO
+   → Action: Query gstn_mapping table for list of valid BPCL GSTINs for that state
+
+4. Validate extracted GSTIN against valid list
+   → System: Internal validation logic
+   → Condition: customer_gstin IN (valid_gstin_list)
+   → Action: If match → PASS | If mismatch → FAIL | If mapping missing → ESCALATE
+
+⚡ Actions & Notifications:
+• If APPROVED: GSTIN validated, proceed to tax calculation checks
+• If BLOCKED: Return to vendor with note "Invalid GSTIN for destination state. Expected one of: [VALID_LIST]"
+• If ESCALATED: Route to buyer team for manual GSTIN mapping review
+• Notifications: Email to procurement team if mapping data missing`,
+                status: "approved",
+                version: "v1.5",
+                approvedBy: "Ankit Desai",
+                approvedDate: "2024-01-05",
+                systems: ["Questt OCR", "GSTN Mapping DB", "Hive DB"],
+                category: "Compliance",
+                createdBy: "Sneha Iyer",
+                testResults: { passed: 4, failed: 1, total: 5 },
+                history: [
+                    {
+                        version: "v1.5",
+                        date: "2024-01-05",
+                        author: "Sneha Iyer",
+                        change: "Added escalation path for missing GSTN mappings",
+                        approvedBy: "Ankit Desai"
+                    }
+                ]
+            },
+            {
+                id: "rule-003",
+                name: "Correct GRN Selection Validation",
+                description: "Align invoice with GR/IR records from EKBE and EKBZ tables",
+                nlInput: "Extract PO number, PO item, invoice date, and line item details from invoice. Compare against EKBE (base) and EKBZ (freight) tables. If matching values within ±10 tolerance and dates within ±60 days, pass. Otherwise route to vendor or buyer based on discrepancy type.",
+                logic: `📋 Business Logic Steps:
+1. Extract invoice line item details from PDF
+   → System: Questt OCR Engine
+   → Condition: All required fields present (po_number, po_item, quantity, amount, date)
+   → Action: Parse and validate data types
+
+2. Query Hive for base amount and GR records (EKBE data)
+   → System: Hive DB (EKBE table - real-time CDC from SAP)
+   → Condition: Match on po_number AND po_item
+   → Action: Retrieve all GR/IR records with amounts and posting dates from synced EKBE table
+
+3. Query Hive for freight components (EKBZ data)
+   → System: Hive DB (EKBZ table - real-time CDC from SAP)
+   → Condition: Same po_number and po_item
+   → Action: Get freight_amount and tax_amount from synced EKBZ table
+
+4. Calculate total expected amount
+   → System: Internal validation logic
+   → Condition: total = EKBE.amount + EKBZ.freight_amount + EKBZ.tax_amount
+   → Action: Compare against invoice amount with ±10 tolerance
+
+5. Validate date proximity
+   → System: Internal validation logic
+   → Condition: abs(invoice_date - posting_date) <= 60 days
+   → Action: Check if GR/IR happened within acceptable timeframe
+
+6. Final decision logic
+   → System: Internal validation logic
+   → Condition: Amount within tolerance AND date within range
+   → Action: PASS | Amount variance > ±10 → FAIL (vendor) | Date > 60 days → FAIL (buyer review) | Missing GR/IR → ESCALATE (buyer)
+
+⚡ Actions & Notifications:
+• If APPROVED: GR/IR matching successful, proceed to payment processing
+• If BLOCKED (Vendor): Return with note "Invoice amount ₹[INVOICE] does not match GR/IR amount ₹[EXPECTED]. Variance: ₹[DIFF]"
+• If BLOCKED (Buyer): Route to procurement for GR/IR date mismatch or missing records
+• Notifications: Email to vendor for amount issues, Slack #procurement-alerts for missing GR/IR`,
+                status: "approved",
+                version: "v3.1",
+                approvedBy: "Rajesh Kumar",
+                approvedDate: "2024-01-10",
+                systems: ["Questt OCR", "Hive DB"],
+                category: "Reconciliation",
+                createdBy: "Amit Patel",
+                testResults: { passed: 3, failed: 2, total: 5 },
+                history: [
+                    {
+                        version: "v3.1",
+                        date: "2024-01-10",
+                        author: "Amit Patel",
+                        change: "Increased tolerance from ±5 to ±10 based on freight variance analysis",
+                        approvedBy: "Rajesh Kumar"
+                    },
+                    {
+                        version: "v3.0",
+                        date: "2023-12-28",
+                        author: "Amit Patel",
+                        change: "Added EKBZ freight component validation",
+                        approvedBy: "Rajesh Kumar"
+                    }
+                ]
+            },
+            {
+                id: "rule-004",
+                name: "Tax Rate Calculation Validation",
+                description: "Tax amounts must calculate correctly from taxable values and rates",
+                nlInput: "For each invoice line item, calculate taxable_value × tax_percentage and compare against stated IGST, CGST, SGST, and CESS amounts. Allow tolerance of ±1.00. If mismatch beyond tolerance, fail with calculation details.",
+                logic: `🔌 System Integrations:
+• Questt OCR Engine
+  → API Endpoint: /api/ocr/extract/tax-breakdown
+  → Data Retrieved: taxable_value, tax_rate, igst_amount, cgst_amount, sgst_amount, cess_amount
+  → Authentication: API Key
+
+• GST Master Data
+  → API Endpoint: /api/db/gst_rates/lookup
+  → Data Retrieved: hsn_code, applicable_gst_rate, cess_rate, category
+  → Authentication: PostgreSQL Connection
+
+📋 Business Logic Steps:
+1. Extract tax details from each invoice line item
+   → System: Questt OCR Engine
+   → Condition: Tax section properly structured with line-level breakdown
+   → Action: Parse taxable_value, igst, cgst, sgst, cess, tax_percentage
+
+2. Calculate expected tax amounts
+   → System: Internal validation logic
+   → Condition: For each line: expected_tax = taxable_value × (tax_percentage / 100)
+   → Action: Compute expected IGST (if inter-state) or expected CGST+SGST (if intra-state)
+
+3. Calculate CESS if applicable
+   → System: GST Master Data
+   → Condition: If cess_rate > 0
+   → Action: expected_cess = taxable_value × (cess_rate / 100)
+
+4. Compare stated vs calculated amounts
+   → System: Internal validation logic
+   → Condition: For each tax component (IGST/CGST/SGST/CESS)
+   → Action: variance = abs(stated_amount - expected_amount)
+
+5. Apply tolerance check
+   → System: Internal validation logic
+   → Condition: variance <= 1.00 for each component
+   → Action: If all within tolerance → PASS | If any variance > 1.00 → FAIL with breakdown
+
+⚡ Actions & Notifications:
+• If APPROVED: Tax calculations verified, proceed to final approval
+• If BLOCKED: Return to vendor with detailed note "Tax calculation error on Line [X]: Taxable ₹[VALUE] × [RATE]% = ₹[EXPECTED] but invoice shows ₹[STATED]. Variance: ₹[DIFF]"
+• Notifications: Email to vendor with line-by-line tax breakdown, flag for audit if repeated errors`,
+                status: "approved",
+                version: "v2.0",
+                approvedBy: "Kavita Nair",
+                approvedDate: "2024-01-07",
+                systems: ["Questt OCR", "GST Master Data"],
+                category: "Compliance",
+                createdBy: "Deepak Singh",
+                testResults: { passed: 4, failed: 1, total: 5 },
+                history: [
+                    {
+                        version: "v2.0",
+                        date: "2024-01-07",
+                        author: "Deepak Singh",
+                        change: "Added CESS validation for applicable line items",
+                        approvedBy: "Kavita Nair"
+                    }
+                ]
+            },
+            {
+                id: "rule-005",
+                name: "Bank Guarantee Validator",
+                description: "If PO requires Performance Bank Guarantee (PBG), validate it exists and is currently valid",
+                nlInput: "Check EKKO table for PBG requirement flag (X/Z). If yes, validate existence and validity in zbank_guarantee table using latest validity date. Valid → pass, expired/missing → fail and route to buyer.",
+                logic: `🔌 System Integrations:
+• Hive DB (SAP Data Sync Layer)
+  → API Endpoint: /api/hive/ekko_po_header/query
+  → Data Retrieved: po_number, pbg_indicator, vendor_code, po_value (synced from SAP EKKO)
+  → Authentication: Kerberos + JDBC Connection
+  → Sync Frequency: Real-time CDC from SAP EKKO
+
+• Hive DB (SAP Data Sync Layer)
+  → API Endpoint: /api/hive/zbank_guarantee/lookup
+  → Data Retrieved: guarantee_number, validity_start, validity_end, guarantee_amount, status (synced from SAP Z_BANK_GUARANTEE)
+  → Authentication: Kerberos + JDBC Connection
+  → Sync Frequency: Daily batch sync from SAP custom tables
+
+• VIM (Vendor Invoice Management)
+  → API Endpoint: /api/vim/invoice/po-mapping
+  → Data Retrieved: invoice_number, po_number, invoice_date
+  → Authentication: OAuth 2.0
+
+📋 Business Logic Steps:
+1. Retrieve PO header details from Hive (EKKO data)
+   → Condition: Valid po_number from invoice
+   → Action: Query Hive for pbg_indicator field (values: X = Required, Z = Required, blank = Not Required)
+
+2. Check if PBG is required for this PO
+   → System: Internal validation logic
+   → Condition: pbg_indicator IN ('X', 'Z')
+   → Action: If not required → SKIP validation and PASS | If required → proceed to step 3
+
+3. Query bank guarantee records from Hive (Z_BANK_GUARANTEE data)
+   → Condition: Match on po_number AND vendor_code
+   → Action: Retrieve all active guarantee records with validity dates
+
+4. Validate guarantee exists and is current
+   → System: Internal validation logic
+   → Condition: guarantee record found WHERE validity_end >= current_date
+   → Action: Check if guarantee_amount >= po_value (or invoice value threshold)
+
+5. Final validation decision
+   → System: Internal validation logic
+   → Condition: Valid guarantee found with sufficient amount and future validity
+   → Action: PASS | Guarantee expired → FAIL (buyer) | Guarantee missing → FAIL (buyer) | Insufficient amount → ESCALATE (buyer)
+
+⚡ Actions & Notifications:
+• If APPROVED: PBG validated, proceed with invoice processing
+• If BLOCKED: Route to buyer/procurement with note "PO requires Performance Bank Guarantee. Status: [EXPIRED/MISSING/INSUFFICIENT]. PO Value: ₹[VALUE], Guarantee: ₹[AMOUNT], Valid Until: [DATE]"
+• If ESCALATED: Buyer review required for guarantee amount insufficiency
+• Notifications: Email to procurement lead, create ServiceNow ticket for PBG follow-up`,
+                status: "approved",
+                version: "v1.2",
+                approvedBy: "Suresh Menon",
+                approvedDate: "2024-01-09",
+                systems: ["Hive DB", "VIM"],
+                category: "Compliance",
+                createdBy: "Pooja Reddy",
+                testResults: { passed: 3, failed: 2, total: 5 },
+                history: [
+                    {
+                        version: "v1.2",
+                        date: "2024-01-09",
+                        author: "Pooja Reddy",
+                        change: "Added guarantee amount vs PO value validation",
+                        approvedBy: "Suresh Menon"
+                    }
+                ]
+            },
+            {
+                id: "rule-006",
+                name: "Signature & e-Invoice Validation",
+                description: "Ensure regulatory compliance through e-invoice or authorized signatures",
+                nlInput: "Check invoice metadata for e_invoice flag, IRN, qr_code_present, customer_signature, and authorized_signatory fields. If e-invoice/IRN/QR present → pass. If no e-invoice but valid signatures → pass. If neither → fail.",
+                logic: `🔌 System Integrations:
+• Questt OCR Engine
+  → API Endpoint: /api/ocr/extract/metadata
+  → Data Retrieved: e_invoice_flag, irn_number, qr_code_present, signature_detected
+  → Authentication: API Key
+
+• e-Invoice Portal (NIC)
+  → API Endpoint: /api/einvoice/irn/validate
+  → Data Retrieved: irn_status, generation_date, ack_number
+  → Authentication: API Key + GSP Credentials
+
+📋 Business Logic Steps:
+1. Extract signature and e-invoice metadata from PDF
+   → System: Questt OCR Engine
+   → Condition: Metadata section parsed successfully
+   → Action: Read e_invoice flag, IRN, QR code presence, signature fields
+
+2. Check for e-invoice compliance
+   → System: Internal validation logic
+   → Condition: e_invoice_flag = true OR irn_number exists OR qr_code_present = true
+   → Action: If any e-invoice indicator found → PASS and skip to step 5
+
+3. Validate IRN with NIC portal (if present)
+   → Condition: irn_number exists and not empty
+   → Action: Query e-Invoice portal to confirm IRN is valid and not cancelled
+
+4. Check for manual signatures (fallback)
+   → Condition: customer_signature = true OR authorized_signatory = true
+   → Action: If valid signature detected → PASS | If no signature → FAIL
+
+5. Final compliance decision
+   → System: Internal validation logic
+   → Condition: (e-invoice valid) OR (signatures present)
+   → Action: PASS | Neither present → FAIL with regulatory note
+
+⚡ Actions & Notifications:
+• If APPROVED: Regulatory compliance met, proceed to processing
+• If BLOCKED: Return to vendor with note "Invoice lacks required authentication: No valid e-invoice (IRN/QR) AND no authorized signatures detected. Please provide compliant invoice as per GST regulations."
+• Notifications: Email to vendor compliance team, log regulatory violation for audit`,
+                status: "approved",
+                version: "v1.8",
+                approvedBy: "Lakshmi Krishnan",
+                approvedDate: "2024-01-06",
+                systems: ["Questt OCR", "e-Invoice Portal (NIC)"],
+                category: "Compliance",
+                createdBy: "Vikram Joshi",
+                testResults: { passed: 5, failed: 0, total: 5 },
+                history: [
+                    {
+                        version: "v1.8",
+                        date: "2024-01-06",
+                        author: "Vikram Joshi",
+                        change: "Added NIC portal IRN validation for enhanced compliance",
+                        approvedBy: "Lakshmi Krishnan"
+                    }
+                ]
+            },
+            {
+                id: "rule-007",
+                name: "Quantity vs Outstanding PO Validation",
+                description: "Prevent billing beyond outstanding PO quantity using normalized calculations",
+                nlInput: "Compare invoice quantity and unit price against PO outstanding quantity. Normalize quantity using unit price differences. If normalized quantity ≤ outstanding → pass and update DB. If > outstanding → fail and route to vendor. Missing PO/item → fail.",
+                logic: `🔌 System Integrations:
+• Questt OCR Engine
+  → API Endpoint: /api/ocr/extract/line-items
+  → Data Retrieved: po_number, po_item, quantity, unit_price, amount
+  → Authentication: API Key
+
+• Hive DB (SAP Data Sync Layer)
+  → API Endpoint: /api/hive/ekpo_po_items/query
+  → Data Retrieved: po_number, po_item, order_quantity, delivered_quantity, net_price, uom (synced from SAP EKPO)
+  → Authentication: Kerberos + JDBC Connection
+  → Sync Frequency: Real-time CDC from SAP EKPO
+
+• Questt Invoice DB
+  → API Endpoint: /api/db/invoice_items/update
+  → Data Retrieved: outstanding_quantity (calculated field)
+  → Authentication: PostgreSQL Connection
+
+📋 Business Logic Steps:
+1. Extract invoice line item details
+   → System: Questt OCR Engine
+   → Condition: po_number, po_item, quantity, unit_price present
+   → Action: Parse and validate numeric fields
+
+2. Retrieve PO item details from Hive (EKPO data)
+   → Condition: Valid po_number AND po_item in Hive EKPO table
+   → Action: Get order_quantity, delivered_quantity, net_price, uom from synced SAP data
+
+3. Calculate outstanding PO quantity
+   → System: Internal validation logic
+   → Condition: outstanding_qty = order_quantity - delivered_quantity
+   → Action: If outstanding_qty <= 0 → FAIL (PO fully delivered)
+
+4. Normalize invoice quantity for price variance
+   → System: Internal validation logic
+   → Condition: If invoice.unit_price != po.net_price
+   → Action: normalized_qty = (invoice.quantity × invoice.unit_price) / po.net_price
+
+5. Compare normalized quantity vs outstanding
+   → System: Internal validation logic
+   → Condition: normalized_qty <= outstanding_qty
+   → Action: If within limit → PASS and update delivered_quantity | If exceeds → FAIL
+
+6. Update delivered quantity in database
+   → System: Questt Invoice DB
+   → Condition: Validation passed
+   → Action: delivered_quantity = delivered_quantity + normalized_qty (commit to DB)
+
+⚡ Actions & Notifications:
+• If APPROVED: Quantity validated, PO outstanding updated, proceed to payment
+• If BLOCKED: Return to vendor with note "Invoice quantity exceeds PO outstanding. PO: [PO_NUM] Item: [ITEM] | Outstanding: [OUTSTANDING] units | Invoice: [NORMALIZED] units (normalized) | Excess: [DIFF] units"
+• If ESCALATED: Route to buyer if PO data missing or inconsistent
+• Notifications: Email to vendor for over-billing, alert procurement if PO data issues`,
+                status: "approved",
+                version: "v2.5",
+                approvedBy: "Manoj Agarwal",
+                approvedDate: "2024-01-11",
+                systems: ["Questt OCR", "Hive DB", "Questt Invoice DB"],
+                category: "Reconciliation",
+                createdBy: "Arjun Kapoor",
+                testResults: { passed: 3, failed: 2, total: 5 },
+                history: [
+                    {
+                        version: "v2.5",
+                        date: "2024-01-11",
+                        author: "Arjun Kapoor",
+                        change: "Added normalized quantity calculation for price variance scenarios",
+                        approvedBy: "Manoj Agarwal"
+                    },
+                    {
+                        version: "v2.4",
+                        date: "2024-01-03",
+                        author: "Arjun Kapoor",
+                        change: "Automated DB update for delivered quantities",
+                        approvedBy: "Manoj Agarwal"
+                    }
+                ]
+            }
+        ];
+
+        let currentView = 'library';
+        let currentRule = {};
+        let testResults = [];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderLibrary();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            document.getElementById('createRuleBtn').addEventListener('click', () => showView('create'));
+            document.getElementById('backBtn').addEventListener('click', () => showView('library'));
+            document.getElementById('generateBtn').addEventListener('click', generateLogic);
+            document.getElementById('regenerateBtn').addEventListener('click', generateLogic);
+            document.getElementById('testBtn').addEventListener('click', runTests);
+            document.getElementById('approveBtn').addEventListener('click', () => showApprovalModal());
+            document.getElementById('backToEditBtn').addEventListener('click', () => showView('create'));
+            document.getElementById('confirmApprovalBtn').addEventListener('click', approveRule);
+            document.getElementById('cancelApprovalBtn').addEventListener('click', () => {
+                document.getElementById('approvalModal').classList.remove('active');
+            });
+            
+            // Invoice detail view back button
+            document.getElementById('backToTestsBtn').addEventListener('click', () => showView('test'));
+            
+            // Governance view back button
+            document.getElementById('backToRuleDetailBtn').addEventListener('click', () => {
+                if (currentRuleId) {
+                    showRuleDetail(currentRuleId);
+                } else {
+                    showView('library');
+                }
+            });
+            
+            // Add invoice modal
+            document.getElementById('addInvoiceBtn').addEventListener('click', () => {
+                document.getElementById('addInvoiceModal').classList.add('active');
+            });
+            document.getElementById('confirmAddInvoiceBtn').addEventListener('click', addInvoice);
+            document.getElementById('cancelAddInvoiceBtn').addEventListener('click', () => {
+                document.getElementById('addInvoiceModal').classList.remove('active');
+            });
+        }
+
+        function showView(view) {
+            currentView = view;
+            
+            document.getElementById('libraryView').classList.toggle('hidden', view !== 'library');
+            document.getElementById('createView').classList.toggle('hidden', view !== 'create');
+            document.getElementById('testView').classList.toggle('hidden', view !== 'test');
+            document.getElementById('detailView').classList.toggle('hidden', view !== 'detail');
+            document.getElementById('invoiceDetailView').classList.toggle('hidden', view !== 'invoiceDetail');
+            document.getElementById('governanceView').classList.toggle('hidden', view !== 'governance');
+            
+            document.getElementById('createRuleBtn').classList.toggle('hidden', view !== 'library');
+            document.getElementById('backBtn').classList.toggle('hidden', view === 'library' || view === 'invoiceDetail' || view === 'governance');
+        }
+
+
+        function renderLibrary() {
+            const container = document.getElementById('libraryView');
+            container.innerHTML = rules.map(rule => `
+                <div class="card clickable" onclick="showRuleDetail('${rule.id}')">
+                    <div class="rule-card">
+                        <div class="rule-content">
+                            <div class="rule-title">
+                                <h3>${rule.name}</h3>
+                                <span class="badge badge-${rule.status}">${rule.status}</span>
+                                <span class="version">${rule.version}</span>
+                            </div>
+                            <p class="description">${rule.description}</p>
+                            <div class="meta">
+                                <span>${rule.category}</span>
+                                ${rule.approvedBy ? `<span class="meta-divider">•</span><span>Approved by ${rule.approvedBy}</span>` : ''}
+                            </div>
+                        </div>
+                        ${rule.testResults ? `
+                            <div class="test-score">
+                                <div class="score">${Math.round((rule.testResults.passed / rule.testResults.total) * 100)}%</div>
+                                <div class="label">${rule.testResults.passed} of ${rule.testResults.total} passed</div>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showRuleDetail(ruleId) {
+            const rule = rules.find(r => r.id === ruleId);
+            if (!rule) return;
+
+            const container = document.getElementById('detailView');
+            container.innerHTML = `
+                <div class="card">
+                    <div class="rule-card">
+                        <div class="rule-content">
+                            <div class="rule-title">
+                                <h2 style="font-size: 32px; font-weight: 300; letter-spacing: -0.5px;">${rule.name}</h2>
+                                <span class="badge badge-${rule.status}">${rule.status}</span>
+                                <span class="version">${rule.version}</span>
+                            </div>
+                            <p class="description">${rule.description}</p>
+                            <div class="meta">
+                                <span>${rule.category}</span>
+                                <span class="meta-divider">•</span>
+                                <span>Created by ${rule.createdBy}</span>
+                                ${rule.approvedBy ? `<span class="meta-divider">•</span><span>Approved by ${rule.approvedBy}</span>` : ''}
+                            </div>
+                        </div>
+                        <div>
+                            <button onclick="showGovernance('${rule.id}')" class="btn btn-secondary">🔒 View Governance</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 class="section-title">Natural Language Rule</h3>
+                    <div class="quote-box">${rule.nlInput}</div>
+                </div>
+
+                <div class="card">
+                    <h3 class="section-title">Rule Breakdown</h3>
+                    <div class="logic-block">${formatBreakdown(rule.logic)}</div>
+                </div>
+
+                ${rule.testResults ? `
+                    <div class="card">
+                        <h3 class="section-title">Test Results</h3>
+                        <div class="stats-grid">
+                            <div>
+                                <div class="stat-value green">${rule.testResults.passed}</div>
+                                <div class="stat-label">Passed</div>
+                            </div>
+                            <div>
+                                <div class="stat-value red">${rule.testResults.failed}</div>
+                                <div class="stat-label">Failed</div>
+                            </div>
+                            <div>
+                                <div class="stat-value">${Math.round((rule.testResults.passed / rule.testResults.total) * 100)}%</div>
+                                <div class="stat-label">Success Rate</div>
+                            </div>
+                        </div>
+                    </div>
+                ` : ''}
+
+                <div class="card">
+                    <h3 class="section-title">Version History</h3>
+                    <div class="timeline">
+                        ${rule.history.map(item => `
+                            <div class="timeline-item">
+                                <div class="timeline-version">
+                                    <span class="version">${item.version}</span>
+                                    <span class="date">${item.date}</span>
+                                </div>
+                                <p class="timeline-change">${item.change}</p>
+                                <div class="timeline-meta">
+                                    <span>Author: ${item.author}</span>
+                                    ${item.approvedBy ? `<span>Approved by: ${item.approvedBy}</span>` : ''}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            showView('detail');
+        }
+
+        function showGovernance(ruleId) {
+            const rule = rules.find(r => r.id === ruleId);
+            if (!rule) return;
+            
+            document.getElementById('govRuleName').textContent = rule.name;
+            currentRuleId = ruleId;
+            showView('governance');
+        }
+
+        let currentRuleId = null;
+
+        async function generateLogic() {
+            const nlInput = document.getElementById('ruleNL').value.trim();
+            if (!nlInput) {
+                alert('Please describe your rule first');
+                return;
+            }
+
+            const btn = document.getElementById('generateBtn');
+            btn.innerHTML = '<span class="loading"></span> Generating Breakdown';
+            btn.disabled = true;
+
+            // Simulate brief processing delay
+            await new Promise(resolve => setTimeout(resolve, 800));
+
+            try {
+                // Hardcoded rule generation based on keywords
+                const lowerInput = nlInput.toLowerCase();
+                
+                // Detect rule type and generate appropriate breakdown
+                if (lowerInput.includes('gstin') || lowerInput.includes('gst')) {
+                    generateGSTINRule(nlInput);
+                } else if (lowerInput.includes('amount') && (lowerInput.includes('tolerance') || lowerInput.includes('differ') || lowerInput.includes('%'))) {
+                    generateAmountToleranceRule(nlInput);
+                } else if (lowerInput.includes('quantity') || lowerInput.includes('qty')) {
+                    generateQuantityRule(nlInput);
+                } else if (lowerInput.includes('duplicate') || lowerInput.includes('already')) {
+                    generateDuplicateRule(nlInput);
+                } else if (lowerInput.includes('tax') || lowerInput.includes('igst') || lowerInput.includes('cgst')) {
+                    generateTaxRule(nlInput);
+                } else if (lowerInput.includes('vendor') || lowerInput.includes('supplier')) {
+                    generateVendorRule(nlInput);
+                } else if (lowerInput.includes('po') || lowerInput.includes('purchase order')) {
+                    generatePORule(nlInput);
+                } else {
+                    generateGenericRule(nlInput);
+                }
+
+                document.getElementById('logicCard').classList.remove('hidden');
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error generating rule. Please try again.');
+            }
+
+            btn.innerHTML = 'Generate Rule Breakdown';
+            btn.disabled = false;
+        }
+
+        function generateGSTINRule(nlInput) {
+            currentRule.category = 'Compliance';
+            currentRule.systems = ['Questt OCR Engine', 'VIM', 'Hive DB'];
+            currentRule.description = 'Validates vendor GSTIN against vendor master records';
+            currentRule.logic = `📋 Business Logic Steps:
+1. Extract vendor GSTIN from invoice PDF
+   → System: Questt OCR Engine
+   → Condition: GSTIN field present in vendor section (15-character alphanumeric)
+   → Action: Parse and normalize GSTIN (remove spaces, convert to uppercase)
+
+2. Retrieve vendor master record from VIM
+   → System: VIM (Vendor Invoice Management)
+   → Condition: Vendor exists in system for given vendor_code
+   → Action: Fetch registered GSTIN from vendor master database
+
+3. Cross-check with SAP vendor data
+   → System: Hive DB (LFA1 table - synced every 4 hours from SAP)
+   → Condition: Vendor record exists in Hive
+   → Action: Retrieve canonical GSTIN from SAP master data
+
+4. Compare extracted GSTIN with master records
+   → System: Internal validation logic
+   → Condition: PDF GSTIN matches VIM GSTIN AND SAP GSTIN
+   → Action: If exact match → PASS | If mismatch → FAIL | If missing in VIM → ESCALATE
+
+⚡ Actions & Notifications:
+• If APPROVED: GSTIN validated, proceed to next validation rule
+• If BLOCKED: Return to vendor with note "GSTIN mismatch: Invoice shows '[PDF_GSTIN]' but system shows '[MASTER_GSTIN]'"
+• If ESCALATED: Route to procurement team for vendor master data update
+• Notifications: Email to vendor contact, create ticket in vendor portal, Slack #vendor-compliance`;
+            
+            displayGeneratedRule();
+        }
+
+        function generateAmountToleranceRule(nlInput) {
+            // Extract tolerance percentage if mentioned
+            const toleranceMatch = nlInput.match(/(\d+)%/);
+            const tolerance = toleranceMatch ? toleranceMatch[1] : '5';
+            
+            currentRule.category = 'Reconciliation';
+            currentRule.systems = ['Questt OCR Engine', 'Hive DB'];
+            currentRule.description = `Block invoices where amount differs from PO by more than ${tolerance}% tolerance`;
+            currentRule.logic = `📋 Business Logic Steps:
+1. Extract invoice amount from PDF
+   → System: Questt OCR Engine
+   → Condition: Invoice total amount field present
+   → Action: Parse amount value in ₹
+
+2. Retrieve PO amount from Hive
+   → System: Hive DB (EKKO table - real-time CDC from SAP)
+   → Condition: Valid po_number matches invoice
+   → Action: Fetch po_amount from purchase order header
+
+3. Calculate variance percentage
+   → System: Internal validation logic
+   → Condition: variance = abs((invoice_amount - po_amount) / po_amount × 100)
+   → Action: Compute percentage difference
+
+4. Apply tolerance threshold
+   → System: Internal validation logic
+   → Condition: variance <= ${tolerance}%
+   → Action: If within tolerance → PASS | If exceeds → FAIL | If PO missing → ESCALATE
+
+5. Check quantity matching (if within amount tolerance)
+   → System: Hive DB (EKBE table - GRN data)
+   → Condition: Invoice quantity matches GRN received quantity
+   → Action: If quantities match → PASS | If mismatch → Route for manual review
+
+⚡ Actions & Notifications:
+• If APPROVED: Invoice amount validated, proceed to payment processing
+• If BLOCKED: Return to vendor with note "Amount variance ${tolerance}% tolerance exceeded: Invoice ₹[INV_AMT] vs PO ₹[PO_AMT] (Variance: [VARIANCE]%)"
+• If ESCALATED: Route to procurement team for PO verification or buyer approval for over-tolerance invoices
+• Notifications: Email to vendor for corrections, Slack #ap-team for escalations, alert procurement lead if >₹50,000`;
+            
+            displayGeneratedRule();
+        }
+
+        function generateQuantityRule(nlInput) {
+            currentRule.category = 'Reconciliation';
+            currentRule.systems = ['Questt OCR Engine', 'Hive DB', 'Questt Invoice DB'];
+            currentRule.description = 'Prevent billing beyond outstanding PO quantity';
+            currentRule.logic = `📋 Business Logic Steps:
+1. Extract invoice line item details
+   → System: Questt OCR Engine
+   → Condition: po_number, po_item, quantity, unit_price present
+   → Action: Parse line-level data from invoice
+
+2. Retrieve PO item details from Hive
+   → System: Hive DB (EKPO table - real-time CDC from SAP)
+   → Condition: Valid po_number AND po_item exists
+   → Action: Get order_quantity, delivered_quantity, net_price, uom
+
+3. Calculate outstanding PO quantity
+   → System: Internal validation logic
+   → Condition: outstanding_qty = order_quantity - delivered_quantity
+   → Action: If outstanding_qty <= 0 → FAIL (PO fully delivered)
+
+4. Normalize invoice quantity for price variance
+   → System: Internal validation logic
+   → Condition: If invoice.unit_price != po.net_price
+   → Action: normalized_qty = (invoice.quantity × invoice.unit_price) / po.net_price
+
+5. Validate against outstanding quantity
+   → System: Internal validation logic
+   → Condition: normalized_qty <= outstanding_qty
+   → Action: If within limit → PASS | If exceeds → FAIL
+
+6. Update delivered quantity in database
+   → System: Questt Invoice DB
+   → Condition: Validation passed
+   → Action: delivered_quantity = delivered_quantity + normalized_qty (commit to DB)
+
+⚡ Actions & Notifications:
+• If APPROVED: Quantity validated, PO outstanding updated, proceed to payment
+• If BLOCKED: Return to vendor with note "Invoice quantity exceeds PO outstanding. PO: [PO_NUM] Item: [ITEM] | Outstanding: [OUT] units | Invoice: [INV] units | Excess: [DIFF] units"
+• If ESCALATED: Route to buyer if PO data missing or inconsistent
+• Notifications: Email to vendor for over-billing, alert procurement if PO data issues`;
+            
+            displayGeneratedRule();
+        }
+
+        function generateDuplicateRule(nlInput) {
+            currentRule.category = 'Fraud Detection';
+            currentRule.systems = ['Questt OCR Engine', 'Questt Invoice DB'];
+            currentRule.description = 'Detect and block duplicate invoice submissions';
+            currentRule.logic = `📋 Business Logic Steps:
+1. Extract invoice unique identifiers
+   → System: Questt OCR Engine
+   → Condition: invoice_number, invoice_date, vendor_code, amount present
+   → Action: Parse key identifying fields
+
+2. Search historical invoice records
+   → System: Questt Invoice DB
+   → Condition: Query past 90 days for same vendor
+   → Action: Retrieve all invoices for vendor_code in date range
+
+3. Check for exact invoice number match
+   → System: Internal validation logic
+   → Condition: Same invoice_number exists in database
+   → Action: If exact match → FAIL immediately
+
+4. Perform fuzzy matching on invoice details
+   → System: Internal validation logic
+   → Condition: Calculate similarity score based on amount, date, line items
+   → Action: If similarity > 95% → Flag as potential duplicate
+
+5. Generate document hash for comparison
+   → System: Internal validation logic
+   → Condition: Create hash from invoice content
+   → Action: If hash matches existing record → FAIL
+
+⚡ Actions & Notifications:
+• If APPROVED: Invoice is unique, proceed to next validation
+• If BLOCKED: Return to vendor with note "Duplicate invoice detected. Original invoice: [ORIG_INV_NUM] dated [DATE] already processed"
+• If ESCALATED: Route to fraud detection team for near-duplicate review (similarity 90-95%)
+• Notifications: Email to fraud-detection@company.com, SMS to AP Manager, Slack #fraud-alerts, create audit log entry`;
+            
+            displayGeneratedRule();
+        }
+
+        function generateTaxRule(nlInput) {
+            currentRule.category = 'Compliance';
+            currentRule.systems = ['Questt OCR Engine', 'GST Master Data'];
+            currentRule.description = 'Validate tax calculations are mathematically correct';
+            currentRule.logic = `📋 Business Logic Steps:
+1. Extract tax details from invoice line items
+   → System: Questt OCR Engine
+   → Condition: Tax section with line-level breakdown present
+   → Action: Parse taxable_value, tax_rate, igst, cgst, sgst, cess for each line
+
+2. Fetch applicable GST rates for HSN/SAC codes
+   → System: GST Master Data
+   → Condition: HSN/SAC code present on invoice
+   → Action: Query gst_rates table for correct tax percentage
+
+3. Calculate expected tax amounts
+   → System: Internal validation logic
+   → Condition: For each line: expected_tax = taxable_value × (tax_percentage / 100)
+   → Action: Compute expected IGST (inter-state) or CGST+SGST (intra-state)
+
+4. Calculate CESS if applicable
+   → System: Internal validation logic
+   → Condition: If cess_rate > 0 for HSN code
+   → Action: expected_cess = taxable_value × (cess_rate / 100)
+
+5. Compare stated vs calculated amounts
+   → System: Internal validation logic
+   → Condition: For each tax component: variance = abs(stated - expected)
+   → Action: If variance <= ₹1.00 for each component → PASS | If any variance > ₹1.00 → FAIL
+
+⚡ Actions & Notifications:
+• If APPROVED: Tax calculations verified, proceed to final approval
+• If BLOCKED: Return to vendor with note "Tax calculation error on Line [X]: Taxable ₹[VALUE] × [RATE]% = ₹[EXPECTED] but invoice shows ₹[STATED]. Variance: ₹[DIFF]"
+• If ESCALATED: Route to tax compliance team for GST rate verification if HSN code missing
+• Notifications: Email to vendor with line-by-line breakdown, flag for audit if repeated errors from same vendor`;
+            
+            displayGeneratedRule();
+        }
+
+        function generateVendorRule(nlInput) {
+            currentRule.category = 'Validation';
+            currentRule.systems = ['Questt OCR Engine', 'VIM', 'Hive DB'];
+            currentRule.description = 'Validate vendor details match master records';
+            currentRule.logic = `📋 Business Logic Steps:
+1. Extract vendor information from invoice
+   → System: Questt OCR Engine
+   → Condition: Vendor name, address, and contact details present
+   → Action: Parse vendor_name, vendor_address, vendor_gstin, pan
+
+2. Fetch vendor master record
+   → System: VIM (Vendor Invoice Management)
+   → Condition: Vendor exists in VIM for given invoice_number
+   → Action: Retrieve registered_name, vendor_code, status
+
+3. Cross-reference with SAP vendor master
+   → System: Hive DB (LFA1 table - synced every 4 hours from SAP)
+   → Condition: Query Hive for SAP vendor data
+   → Action: Retrieve canonical vendor details from SAP
+
+4. Normalize and compare vendor names
+   → System: Internal validation logic
+   → Condition: Apply normalization (uppercase, trim, remove special chars)
+   → Action: Compare PDF name with VIM and SAP names
+
+5. Validate vendor is active and approved
+   → System: VIM (Vendor Invoice Management)
+   → Condition: vendor_status = 'ACTIVE' AND approval_status = 'APPROVED'
+   → Action: If active → PASS | If inactive → FAIL | If pending → ESCALATE
+
+⚡ Actions & Notifications:
+• If APPROVED: Vendor validated, proceed to next validation rule
+• If BLOCKED: Return to vendor with note "Vendor validation failed: [REASON]. Please contact procurement."
+• If ESCALATED: Route to procurement for vendor master update or vendor activation
+• Notifications: Email to vendor contact, create ticket in vendor portal`;
+            
+            displayGeneratedRule();
+        }
+
+        function generatePORule(nlInput) {
+            currentRule.category = 'Validation';
+            currentRule.systems = ['Questt OCR Engine', 'Hive DB'];
+            currentRule.description = 'Validate PO number exists and matches invoice details';
+            currentRule.logic = `📋 Business Logic Steps:
+1. Extract PO number from invoice
+   → System: Questt OCR Engine
+   → Condition: po_number field present on invoice
+   → Action: Parse PO number (format validation: alphanumeric, max 10 chars)
+
+2. Retrieve PO header from Hive
+   → System: Hive DB (EKKO table - real-time CDC from SAP)
+   → Condition: po_number exists in EKKO table
+   → Action: Fetch po_header details (vendor, amount, status, date)
+
+3. Validate PO is not closed or cancelled
+   → System: Internal validation logic
+   → Condition: po_status NOT IN ('CLOSED', 'CANCELLED', 'REJECTED')
+   → Action: If open → PASS | If closed → FAIL
+
+4. Verify vendor matches PO
+   → System: Internal validation logic
+   → Condition: invoice.vendor_code = po.vendor_code
+   → Action: If match → PASS | If mismatch → FAIL
+
+5. Check PO date vs invoice date
+   → System: Internal validation logic
+   → Condition: invoice_date >= po_date AND invoice_date <= po_date + 365 days
+   → Action: If within valid period → PASS | If too old/future → ESCALATE
+
+⚡ Actions & Notifications:
+• If APPROVED: PO validated, proceed to amount/quantity checks
+• If BLOCKED: Return to vendor with note "PO validation failed: [REASON]. PO: [PO_NUM] Status: [STATUS]"
+• If ESCALATED: Route to buyer for PO date exception approval or closed PO review
+• Notifications: Email to vendor, alert procurement if PO data inconsistent`;
+            
+            displayGeneratedRule();
+        }
+
+        function generateGenericRule(nlInput) {
+            currentRule.category = 'Validation';
+            currentRule.systems = ['Questt OCR Engine', 'VIM', 'Hive DB'];
+            currentRule.description = 'Custom validation rule for invoice processing';
+            currentRule.logic = `📋 Business Logic Steps:
+1. Extract required fields from invoice
+   → System: Questt OCR Engine
+   → Condition: All mandatory fields present on invoice
+   → Action: Parse invoice_number, amount, date, vendor details, line items
+
+2. Retrieve reference data from systems
+   → System: Hive DB (SAP Data Sync Layer)
+   → Condition: Reference data exists for invoice
+   → Action: Fetch PO, GRN, vendor master data
+
+3. Apply validation logic
+   → System: Internal validation logic
+   → Condition: Invoice data meets business rule criteria
+   → Action: Compare invoice values against reference data and thresholds
+
+4. Determine validation outcome
+   → System: Internal validation logic
+   → Condition: All checks passed successfully
+   → Action: If all pass → PASS | If any fail → FAIL | If data missing → ESCALATE
+
+⚡ Actions & Notifications:
+• If APPROVED: Validation successful, proceed to next rule
+• If BLOCKED: Return to vendor with detailed validation failure notes
+• If ESCALATED: Route to appropriate team (buyer/AP/procurement) for manual review
+• Notifications: Email notifications sent to relevant stakeholders`;
+            
+            displayGeneratedRule();
+        }
+
+        function displayGeneratedRule() {
+            document.getElementById('generatedLogic').innerHTML = formatBreakdown(currentRule.logic);
+            document.getElementById('metaInfo').innerHTML = `
+                <span>${currentRule.category}</span>
+                <span class="meta-divider">•</span>
+                <span>${currentRule.systems.join(', ')}</span>
+            `;
+        }
+
+        function formatBreakdown(text) {
+            // Remove System Integrations section entirely - simple approach
+            let cleanedText = text;
+            
+            // Find and remove everything from "System Integrations:" to "Business Logic Steps:"
+            const systemIntegrationsStart = text.indexOf('🔌 System Integrations:');
+            const businessLogicStart = text.indexOf('📋 Business Logic Steps:');
+            
+            if (systemIntegrationsStart !== -1 && businessLogicStart !== -1) {
+                cleanedText = text.substring(0, systemIntegrationsStart) + text.substring(businessLogicStart);
+            }
+            
+            // Replace emoji headers with styled sections
+            let formatted = cleanedText
+                .replace(/📋 Business Logic Steps:/g, '<div class="breakdown-section"><div class="breakdown-header"><span class="breakdown-icon">📋</span>Business Logic Steps</div>')
+                .replace(/⚡ Actions & Notifications:/g, '</div><div class="breakdown-section"><div class="breakdown-header"><span class="breakdown-icon">⚡</span>Actions & Notifications</div>')
+                + '</div>';
+            
+            // Format bullet points and arrows
+            formatted = formatted
+                .replace(/• ([^\n]+)/g, '<div class="logic-item">• $1</div>')
+                // Pattern with System reference
+                .replace(/(\d+)\. ([^\n]+)\n   → System: ([^\n]+)\n   → Condition: ([^\n]+)\n   → Action: ([^\n]+)/g,
+                    '<div class="logic-step"><div class="step-number">$1</div><div class="step-content"><div class="step-title">$2</div><div class="step-detail"><strong>System:</strong> <span style="color: var(--green-sage); font-weight: 600;">$3</span></div><div class="step-detail"><strong>Condition:</strong> $4</div><div class="step-detail"><strong>Action:</strong> $5</div></div></div>')
+                // Fallback pattern without System reference (for backwards compatibility)
+                .replace(/(\d+)\. ([^\n]+)\n   → Condition: ([^\n]+)\n   → Action: ([^\n]+)/g,
+                    '<div class="logic-step"><div class="step-number">$1</div><div class="step-content"><div class="step-title">$2</div><div class="step-detail"><strong>Condition:</strong> $3</div><div class="step-detail"><strong>Action:</strong> $4</div></div></div>')
+                .replace(/→/g, '<span class="arrow">→</span>');
+            
+            return formatted;
+        }
+
+        function runTests() {
+            currentRule.name = document.getElementById('ruleName').value;
+            currentRule.nlInput = document.getElementById('ruleNL').value;
+
+            testResults = SAMPLE_INVOICES.map(invoice => {
+                const variance = Math.abs((invoice.amount - invoice.poAmount) / invoice.poAmount * 100);
+                const qtyMatch = invoice.invoiceQuantity === invoice.grnQuantity;
+                
+                let passed = true;
+                let reason = "All validations passed";
+                
+                if (currentRule.logic.includes("2%") || currentRule.logic.includes("2.0")) {
+                    if (variance > 2.0) {
+                        passed = false;
+                        reason = `Amount variance ${variance.toFixed(2)}% exceeds tolerance`;
+                    } else if (!qtyMatch) {
+                        passed = false;
+                        reason = `Quantity mismatch: Invoice(${invoice.invoiceQuantity}) vs GRN(${invoice.grnQuantity})`;
+                    }
+                }
+                
+                return { invoice, passed, reason, variance: variance.toFixed(2) };
+            });
+
+            renderTestResults();
+            showView('test');
+        }
+
+        function renderTestResults() {
+            const passed = testResults.filter(r => r.passed).length;
+            const total = testResults.length;
+            const percentage = Math.round((passed / total) * 100);
+
+            document.getElementById('testScore').textContent = `${percentage}%`;
+            document.getElementById('testLabel').textContent = `${passed} of ${total} passed`;
+
+            const container = document.getElementById('testResults');
+            container.innerHTML = testResults.map((result, idx) => `
+                <div class="test-result ${result.passed ? 'pass' : 'fail'}" onclick="showInvoiceDetail(${idx})" style="cursor: pointer;">
+                    <div class="test-result-header">
+                        <span class="id">${result.invoice.id}</span>
+                        <span class="vendor">${result.invoice.vendor}</span>
+                        <span class="test-result-badge ${result.passed ? 'pass' : 'fail'}">
+                            ${result.passed ? 'PASS' : 'FAIL'}
+                        </span>
+                    </div>
+                    <div class="test-result-reason">${result.reason}</div>
+                    <div class="test-result-details">
+                        <div>Amount: ₹${result.invoice.amount.toLocaleString()}</div>
+                        <div>PO: ₹${result.invoice.poAmount.toLocaleString()}</div>
+                        <div>Variance: ${result.variance}%</div>
+                        <div>Qty: Inv(${result.invoice.invoiceQuantity}) / GRN(${result.invoice.grnQuantity})</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showInvoiceDetail(index) {
+            const result = testResults[index];
+            const invoice = result.invoice;
+            
+            // Extracted Data Section
+            document.getElementById('extractedData').innerHTML = `
+                <div style="display: grid; gap: 20px;">
+                    <div>
+                        <div style="font-size: 10px; color: var(--light-grey); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">Invoice Number</div>
+                        <div style="font-size: 16px; font-weight: 400; color: var(--green-primary);">${invoice.id}</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 10px; color: var(--light-grey); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">Vendor Name</div>
+                        <div style="font-size: 16px; font-weight: 400; color: var(--green-primary);">${invoice.vendor}</div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div>
+                            <div style="font-size: 10px; color: var(--light-grey); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">Invoice Amount</div>
+                            <div style="font-size: 18px; font-weight: 400; color: var(--green-primary);">₹${invoice.amount.toLocaleString()}</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 10px; color: var(--light-grey); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">Invoice Quantity</div>
+                            <div style="font-size: 18px; font-weight: 400; color: var(--green-primary);">${invoice.invoiceQuantity} units</div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="font-size: 10px; color: var(--light-grey); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;">Invoice Date</div>
+                        <div style="font-size: 16px; font-weight: 400; color: var(--green-primary);">January 5, 2024</div>
+                    </div>
+                </div>
+            `;
+            
+            // System Data Section
+            document.getElementById('systemData').innerHTML = `
+                <div style="margin-bottom: 24px;">
+                    <div style="font-size: 12px; font-weight: 500; color: var(--green-primary); margin-bottom: 12px; letter-spacing: 0.5px;">Purchase Order System (${invoice.system})</div>
+                    <div style="display: grid; gap: 12px; padding-left: 16px; border-left: 2px solid var(--green-sage);">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="font-size: 12px; color: var(--light-grey);">PO Number</span>
+                            <span style="font-size: 12px; font-weight: 400; color: var(--dark-grey);">PO-2024-${invoice.id.split('-')[2]}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="font-size: 12px; color: var(--light-grey);">PO Amount</span>
+                            <span style="font-size: 12px; font-weight: 400; color: var(--dark-grey);">₹${invoice.poAmount.toLocaleString()}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="font-size: 12px; color: var(--light-grey);">PO Status</span>
+                            <span style="font-size: 12px; font-weight: 400; color: var(--green-sage);">Approved</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 24px;">
+                    <div style="font-size: 12px; font-weight: 500; color: var(--green-primary); margin-bottom: 12px; letter-spacing: 0.5px;">Goods Receipt System</div>
+                    <div style="display: grid; gap: 12px; padding-left: 16px; border-left: 2px solid var(--green-sage);">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="font-size: 12px; color: var(--light-grey);">GRN Number</span>
+                            <span style="font-size: 12px; font-weight: 400; color: var(--dark-grey);">GRN-2024-${invoice.id.split('-')[2]}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="font-size: 12px; color: var(--light-grey);">Received Quantity</span>
+                            <span style="font-size: 12px; font-weight: 400; color: var(--dark-grey);">${invoice.grnQuantity} units</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="font-size: 12px; color: var(--light-grey);">Receipt Date</span>
+                            <span style="font-size: 12px; font-weight: 400; color: var(--dark-grey);">January 4, 2024</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <div style="font-size: 12px; font-weight: 500; color: var(--green-primary); margin-bottom: 12px; letter-spacing: 0.5px;">Vendor Master Data</div>
+                    <div style="display: grid; gap: 12px; padding-left: 16px; border-left: 2px solid var(--green-sage);">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="font-size: 12px; color: var(--light-grey);">Vendor Code</span>
+                            <span style="font-size: 12px; font-weight: 400; color: var(--dark-grey);">VEND-${Math.floor(Math.random() * 9000) + 1000}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="font-size: 12px; color: var(--light-grey);">Credit Status</span>
+                            <span style="font-size: 12px; font-weight: 400; color: var(--green-sage);">Approved</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="font-size: 12px; color: var(--light-grey);">Payment Terms</span>
+                            <span style="font-size: 12px; font-weight: 400; color: var(--dark-grey);">NET 30</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Validation Steps Section
+            const variance = parseFloat(result.variance);
+            const qtyMatch = invoice.invoiceQuantity === invoice.grnQuantity;
+            
+            let steps = [
+                {
+                    step: 1,
+                    description: 'Calculate variance between invoice and PO amount',
+                    result: `Variance: ${variance.toFixed(2)}%`,
+                    status: variance <= 2.0 ? 'pass' : 'fail'
+                },
+                {
+                    step: 2,
+                    description: 'Check if variance exceeds 2% tolerance',
+                    result: variance > 2.0 ? 'Variance exceeds threshold' : 'Within tolerance',
+                    status: variance <= 2.0 ? 'pass' : 'fail'
+                },
+                {
+                    step: 3,
+                    description: 'Compare invoice quantity with GRN quantity',
+                    result: `Invoice: ${invoice.invoiceQuantity} vs GRN: ${invoice.grnQuantity}`,
+                    status: qtyMatch ? 'pass' : 'fail'
+                },
+                {
+                    step: 4,
+                    description: 'Final decision',
+                    result: result.passed ? 'APPROVE invoice for payment' : 'BLOCK invoice for review',
+                    status: result.passed ? 'pass' : 'fail'
+                }
+            ];
+            
+            document.getElementById('validationSteps').innerHTML = steps.map(step => `
+                <div style="margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid rgba(12, 44, 24, 0.08);">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+                        <div style="width: 24px; height: 24px; border-radius: 50%; background: ${step.status === 'pass' ? 'var(--green-sage)' : 'var(--terracotta)'}; display: flex; align-items: center; justify-content: center; color: white; font-size: 11px; font-weight: 500;">${step.step}</div>
+                        <div style="font-size: 13px; font-weight: 400; color: var(--green-primary);">${step.description}</div>
+                    </div>
+                    <div style="margin-left: 36px; font-size: 12px; color: var(--dark-grey); font-weight: 300;">${step.result}</div>
+                </div>
+            `).join('');
+            
+            // Invoice Document Section (Realistic Invoice Templates)
+            const invoiceTemplates = {
+                'Acme Supplies Ltd': () => `
+                    <div style="background: white; padding: 48px; font-family: 'Hanken Grotesk', sans-serif; max-width: 800px;">
+                        <!-- Letterhead -->
+                        <div style="background: var(--green-primary); color: white; padding: 24px; margin: -48px -48px 32px -48px;">
+                            <div style="font-size: 24px; font-weight: 500; letter-spacing: 2px; margin-bottom: 4px;">ACME SUPPLIES LTD</div>
+                            <div style="font-size: 11px; opacity: 0.9; letter-spacing: 0.5px;">Manufacturing Excellence Since 1985</div>
+                        </div>
+                        
+                        <!-- Company Details -->
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 32px; font-size: 11px; line-height: 1.8;">
+                            <div>
+                                <div style="font-weight: 500; margin-bottom: 8px; color: var(--green-primary);">Registered Office:</div>
+                                Plot No. 45, MIDC Industrial Area<br>
+                                Andheri (East), Mumbai - 400093<br>
+                                Maharashtra, India<br>
+                                <br>
+                                <strong>GSTIN:</strong> 27AABCA1234E1Z5<br>
+                                <strong>PAN:</strong> AABCA1234E<br>
+                                <strong>CIN:</strong> U51909MH2005PTC156341
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-size: 28px; font-weight: 300; color: var(--green-primary); margin-bottom: 12px;">TAX INVOICE</div>
+                                <div><strong>Invoice No:</strong> ${invoice.id}</div>
+                                <div><strong>Date:</strong> 05-Jan-2024</div>
+                                <div><strong>Due Date:</strong> 04-Feb-2024</div>
+                                <div style="margin-top: 8px;"><strong>PO Ref:</strong> PO-2024-${invoice.id.split('-')[2]}</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Bill To -->
+                        <div style="background: #f9f9f9; padding: 20px; margin-bottom: 24px;">
+                            <div style="font-size: 11px; font-weight: 500; color: var(--green-primary); margin-bottom: 8px;">BILL TO:</div>
+                            <div style="font-size: 13px; line-height: 1.8;">
+                                <strong style="font-size: 15px;">Your Company Pvt Ltd</strong><br>
+                                456 Corporate Boulevard, Business Park<br>
+                                Whitefield, Bangalore - 560066<br>
+                                Karnataka, India<br>
+                                <strong>GSTIN:</strong> 29AACCY1234F1Z9
+                            </div>
+                        </div>
+                        
+                        <!-- Line Items -->
+                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 12px;">
+                            <thead>
+                                <tr style="background: var(--green-primary); color: white;">
+                                    <th style="text-align: left; padding: 10px; font-weight: 500;">HSN/SAC</th>
+                                    <th style="text-align: left; padding: 10px; font-weight: 500;">Description</th>
+                                    <th style="text-align: center; padding: 10px; font-weight: 500;">Qty</th>
+                                    <th style="text-align: center; padding: 10px; font-weight: 500;">UOM</th>
+                                    <th style="text-align: right; padding: 10px; font-weight: 500;">Rate</th>
+                                    <th style="text-align: right; padding: 10px; font-weight: 500;">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="border-bottom: 1px solid #e0e0e0;">
+                                    <td style="padding: 12px;">84212190</td>
+                                    <td style="padding: 12px;">
+                                        <strong>Industrial Air Filtration Units</strong><br>
+                                        <span style="font-size: 11px; color: #666;">Model: XR-450-PRO | Grade: Premium</span>
+                                    </td>
+                                    <td style="text-align: center; padding: 12px;">${invoice.invoiceQuantity}</td>
+                                    <td style="text-align: center; padding: 12px;">Pcs</td>
+                                    <td style="text-align: right; padding: 12px;">₹${Math.floor((invoice.amount / 1.18) / invoice.invoiceQuantity).toLocaleString()}</td>
+                                    <td style="text-align: right; padding: 12px;">₹${Math.floor(invoice.amount / 1.18).toLocaleString()}</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid #e0e0e0;">
+                                    <td style="padding: 12px;">996511</td>
+                                    <td style="padding: 12px;">Freight & Handling Charges</td>
+                                    <td style="text-align: center; padding: 12px;">-</td>
+                                    <td style="text-align: center; padding: 12px;">-</td>
+                                    <td style="text-align: right; padding: 12px;">-</td>
+                                    <td style="text-align: right; padding: 12px;">₹0</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <!-- Tax Summary -->
+                        <div style="display: flex; justify-content: space-between;">
+                            <div style="flex: 1;">
+                                <div style="background: #f9f9f9; padding: 16px; margin-right: 20px;">
+                                    <div style="font-size: 11px; font-weight: 500; margin-bottom: 12px; color: var(--green-primary);">TAX BREAKDOWN:</div>
+                                    <table style="width: 100%; font-size: 12px;">
+                                        <tr>
+                                            <td style="padding: 4px 0;">CGST @ 9%</td>
+                                            <td style="text-align: right;">₹${Math.floor((invoice.amount - invoice.amount / 1.18) / 2).toLocaleString()}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 4px 0;">SGST @ 9%</td>
+                                            <td style="text-align: right;">₹${Math.floor((invoice.amount - invoice.amount / 1.18) / 2).toLocaleString()}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <div style="min-width: 280px;">
+                                <table style="width: 100%; font-size: 13px;">
+                                    <tr>
+                                        <td style="padding: 8px 0; border-bottom: 1px solid #e0e0e0;">Subtotal</td>
+                                        <td style="text-align: right; padding: 8px 0; border-bottom: 1px solid #e0e0e0;">₹${Math.floor(invoice.amount / 1.18).toLocaleString()}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px 0; border-bottom: 1px solid #e0e0e0;">GST (18%)</td>
+                                        <td style="text-align: right; padding: 8px 0; border-bottom: 1px solid #e0e0e0;">₹${Math.floor(invoice.amount - invoice.amount / 1.18).toLocaleString()}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 12px 0; font-size: 16px; font-weight: 500; color: var(--green-primary);">Total Amount</td>
+                                        <td style="text-align: right; padding: 12px 0; font-size: 16px; font-weight: 500; color: var(--green-primary);">₹${invoice.amount.toLocaleString()}</td>
+                                    </tr>
+                                </table>
+                                <div style="background: #f0f0f0; padding: 8px; text-align: right; margin-top: 8px; font-size: 11px; font-weight: 500;">
+                                    Amount in Words: ${convertToWords(invoice.amount)} Only
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Bank Details -->
+                        <div style="border: 1px solid #e0e0e0; padding: 16px; margin: 24px 0; font-size: 11px;">
+                            <div style="font-weight: 500; margin-bottom: 8px; color: var(--green-primary);">BANK DETAILS FOR PAYMENT:</div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                                <div><strong>Bank Name:</strong> HDFC Bank Ltd</div>
+                                <div><strong>Branch:</strong> Andheri East</div>
+                                <div><strong>Account No:</strong> 50200012345678</div>
+                                <div><strong>IFSC Code:</strong> HDFC0001234</div>
+                                <div><strong>Account Type:</strong> Current Account</div>
+                                <div><strong>SWIFT Code:</strong> HDFCINBB</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Terms -->
+                        <div style="font-size: 10px; line-height: 1.6; margin-bottom: 24px; color: #666;">
+                            <div style="font-weight: 500; margin-bottom: 6px; color: var(--dark-grey);">TERMS & CONDITIONS:</div>
+                            1. Payment due within 30 days of invoice date<br>
+                            2. Interest @ 18% p.a. will be charged on overdue payments<br>
+                            3. All disputes subject to Mumbai jurisdiction only<br>
+                            4. Goods once sold will not be taken back
+                        </div>
+                        
+                        <!-- Declaration -->
+                        <div style="border-top: 1px solid #e0e0e0; padding-top: 16px; margin-top: 24px;">
+                            <div style="font-size: 11px; margin-bottom: 32px;">
+                                <strong>Declaration:</strong> We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct. This is a computer generated invoice and does not require signature.
+                            </div>
+                            <div style="text-align: right; font-size: 11px;">
+                                <div style="font-weight: 500; color: var(--green-primary);">For ACME SUPPLIES LTD</div>
+                                <div style="margin-top: 40px; border-top: 1px solid #000; display: inline-block; padding-top: 4px; min-width: 150px;">Authorized Signatory</div>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                
+                'Tech Components Inc': () => `
+                    <div style="background: white; padding: 40px; font-family: 'Hanken Grotesk', sans-serif; border: 2px solid #0066cc;">
+                        <!-- Header -->
+                        <div style="border-bottom: 3px solid #0066cc; padding-bottom: 20px; margin-bottom: 24px;">
+                            <div style="display: flex; justify-content: space-between; align-items: start;">
+                                <div>
+                                    <div style="font-size: 32px; font-weight: 600; color: #0066cc; margin-bottom: 4px;">TECH COMPONENTS</div>
+                                    <div style="font-size: 14px; color: #666;">Technology Solutions Provider</div>
+                                </div>
+                                <div style="text-align: right; font-size: 11px; color: #666;">
+                                    <div style="font-weight: 600; color: #000; margin-bottom: 4px;">Head Office</div>
+                                    IT Park, Cyber City Phase 2<br>
+                                    Gurgaon, Haryana - 122002<br>
+                                    Email: accounts@techcomp.in<br>
+                                    Phone: +91-124-4567890
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Invoice Info Bar -->
+                        <div style="background: #0066cc; color: white; padding: 16px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-size: 20px; font-weight: 500;">INVOICE</div>
+                            </div>
+                            <div style="text-align: right; font-size: 13px;">
+                                <div><strong>Invoice #:</strong> ${invoice.id}</div>
+                                <div><strong>Date:</strong> January 05, 2024</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Customer & Tax Info -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; font-size: 12px;">
+                            <div style="border: 1px solid #ddd; padding: 16px;">
+                                <div style="font-weight: 600; color: #0066cc; margin-bottom: 8px; font-size: 13px;">BILL TO:</div>
+                                <div style="line-height: 1.8;">
+                                    <strong>Your Company Pvt Ltd</strong><br>
+                                    456 Corporate Boulevard<br>
+                                    Business Park, Whitefield<br>
+                                    Bangalore - 560066, Karnataka<br>
+                                    <div style="margin-top: 8px;">
+                                        <strong>GSTIN:</strong> 29AACCY1234F1Z9<br>
+                                        <strong>PAN:</strong> AACCY1234F<br>
+                                        <strong>State Code:</strong> 29
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="border: 1px solid #ddd; padding: 16px;">
+                                <div style="font-weight: 600; color: #0066cc; margin-bottom: 8px; font-size: 13px;">VENDOR DETAILS:</div>
+                                <div style="line-height: 1.8;">
+                                    <strong>Tech Components Inc.</strong><br>
+                                    IT Park, Cyber City Phase 2<br>
+                                    Gurgaon, Haryana - 122002<br>
+                                    <div style="margin-top: 8px;">
+                                        <strong>GSTIN:</strong> 06AADCT5678M1Z2<br>
+                                        <strong>PAN:</strong> AADCT5678M<br>
+                                        <strong>State Code:</strong> 06
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Additional Info -->
+                        <div style="display: flex; gap: 40px; margin-bottom: 20px; font-size: 12px; background: #f5f5f5; padding: 12px;">
+                            <div><strong>PO Number:</strong> PO-2024-${invoice.id.split('-')[2]}</div>
+                            <div><strong>PO Date:</strong> December 28, 2023</div>
+                            <div><strong>Payment Terms:</strong> Net 30 Days</div>
+                            <div><strong>Delivery:</strong> Ex-Works</div>
+                        </div>
+                        
+                        <!-- Items Table -->
+                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 11px;">
+                            <thead>
+                                <tr style="background: #f0f0f0; border-top: 2px solid #0066cc; border-bottom: 2px solid #0066cc;">
+                                    <th style="text-align: left; padding: 10px; font-weight: 600;">#</th>
+                                    <th style="text-align: left; padding: 10px; font-weight: 600;">Item Description</th>
+                                    <th style="text-align: center; padding: 10px; font-weight: 600;">HSN Code</th>
+                                    <th style="text-align: center; padding: 10px; font-weight: 600;">Qty</th>
+                                    <th style="text-align: right; padding: 10px; font-weight: 600;">Unit Price</th>
+                                    <th style="text-align: right; padding: 10px; font-weight: 600;">GST%</th>
+                                    <th style="text-align: right; padding: 10px; font-weight: 600;">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="border-bottom: 1px solid #ddd;">
+                                    <td style="padding: 12px;">1</td>
+                                    <td style="padding: 12px;">
+                                        <strong>Microcontroller Units - ARM Cortex-M4</strong><br>
+                                        <span style="font-size: 10px; color: #666;">Part No: MCU-STM32F407 | Batch: Q124-A45</span>
+                                    </td>
+                                    <td style="text-align: center; padding: 12px;">85423190</td>
+                                    <td style="text-align: center; padding: 12px;">${invoice.invoiceQuantity}</td>
+                                    <td style="text-align: right; padding: 12px;">₹${Math.floor((invoice.amount / 1.18) / invoice.invoiceQuantity).toLocaleString()}</td>
+                                    <td style="text-align: right; padding: 12px;">18%</td>
+                                    <td style="text-align: right; padding: 12px;">₹${Math.floor(invoice.amount / 1.18).toLocaleString()}</td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid #ddd;">
+                                    <td style="padding: 12px;">2</td>
+                                    <td style="padding: 12px;">Packaging & Forwarding Charges</td>
+                                    <td style="text-align: center; padding: 12px;">996511</td>
+                                    <td style="text-align: center; padding: 12px;">1</td>
+                                    <td style="text-align: right; padding: 12px;">₹0</td>
+                                    <td style="text-align: right; padding: 12px;">18%</td>
+                                    <td style="text-align: right; padding: 12px;">₹0</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <!-- Totals Section -->
+                        <div style="display: flex; justify-content: space-between; margin-top: 24px;">
+                            <div style="flex: 1; max-width: 400px;">
+                                <div style="border: 1px solid #ddd; padding: 12px; font-size: 11px;">
+                                    <div style="font-weight: 600; margin-bottom: 8px; color: #0066cc;">TAX COMPUTATION:</div>
+                                    <table style="width: 100%;">
+                                        <tr>
+                                            <td>Taxable Amount</td>
+                                            <td style="text-align: right;">₹${Math.floor(invoice.amount / 1.18).toLocaleString()}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>IGST @ 18%</td>
+                                            <td style="text-align: right;">₹${Math.floor(invoice.amount - invoice.amount / 1.18).toLocaleString()}</td>
+                                        </tr>
+                                    </table>
+                                    <div style="font-size: 9px; color: #666; margin-top: 8px; font-style: italic;">
+                                        *Inter-state supply - IGST applicable
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div style="min-width: 300px; border: 2px solid #0066cc; padding: 16px;">
+                                <table style="width: 100%; font-size: 13px;">
+                                    <tr>
+                                        <td style="padding: 6px 0;">Subtotal</td>
+                                        <td style="text-align: right; padding: 6px 0;">₹${Math.floor(invoice.amount / 1.18).toLocaleString()}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 6px 0;">Total Tax</td>
+                                        <td style="text-align: right; padding: 6px 0;">₹${Math.floor(invoice.amount - invoice.amount / 1.18).toLocaleString()}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 6px 0;">Discount</td>
+                                        <td style="text-align: right; padding: 6px 0;">₹0</td>
+                                    </tr>
+                                    <tr style="border-top: 2px solid #0066cc;">
+                                        <td style="padding: 10px 0; font-size: 16px; font-weight: 600; color: #0066cc;">TOTAL</td>
+                                        <td style="text-align: right; padding: 10px 0; font-size: 16px; font-weight: 600; color: #0066cc;">₹${invoice.amount.toLocaleString()}</td>
+                                    </tr>
+                                </table>
+                                <div style="background: #f0f8ff; padding: 8px; margin-top: 8px; font-size: 10px; text-align: center; font-weight: 500;">
+                                    ${convertToWords(invoice.amount)} Rupees Only
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Payment Instructions -->
+                        <div style="margin-top: 24px; border: 1px solid #0066cc; padding: 16px; font-size: 11px; background: #f0f8ff;">
+                            <div style="font-weight: 600; color: #0066cc; margin-bottom: 8px;">PAYMENT INSTRUCTIONS:</div>
+                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+                                <div><strong>Beneficiary Name:</strong> Tech Components Inc</div>
+                                <div><strong>Bank:</strong> ICICI Bank Limited</div>
+                                <div><strong>Branch:</strong> Cyber City, Gurgaon</div>
+                                <div><strong>Account Number:</strong> 623405000789</div>
+                                <div><strong>IFSC Code:</strong> ICIC0006234</div>
+                                <div><strong>Account Type:</strong> Current</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Footer -->
+                        <div style="margin-top: 32px; padding-top: 16px; border-top: 1px solid #ddd; font-size: 10px; color: #666;">
+                            <div style="margin-bottom: 16px;">
+                                <strong>Note:</strong> This is a computer-generated invoice. Subject to Gurgaon jurisdiction. E&OE.
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: end;">
+                                <div>
+                                    <div><strong>Prepared by:</strong> Accounts Department</div>
+                                    <div><strong>Date:</strong> 05-Jan-2024</div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-weight: 600; color: #0066cc; margin-bottom: 36px;">For Tech Components Inc</div>
+                                    <div style="border-top: 1px solid #000; padding-top: 4px;">Authorized Signatory</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            };
+            
+            // Helper function to convert numbers to words (simplified)
+            function convertToWords(num) {
+                const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
+                const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+                const teens = ['Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+                
+                if (num < 10) return ones[num];
+                if (num < 20) return teens[num - 10];
+                if (num < 100) return tens[Math.floor(num / 10)] + ' ' + ones[num % 10];
+                if (num < 1000) return ones[Math.floor(num / 100)] + ' Hundred ' + convertToWords(num % 100);
+                if (num < 100000) return convertToWords(Math.floor(num / 1000)) + ' Thousand ' + convertToWords(num % 1000);
+                return convertToWords(Math.floor(num / 100000)) + ' Lakh ' + convertToWords(num % 100000);
+            }
+            
+            // Select appropriate template or use default
+            const template = invoiceTemplates[invoice.vendor] || invoiceTemplates['Acme Supplies Ltd'];
+            document.getElementById('invoiceDocument').innerHTML = template();
+            
+            showView('invoiceDetail');
+        }
+
+        function addInvoice() {
+            const newInvoice = {
+                id: document.getElementById('newInvoiceId').value,
+                vendor: document.getElementById('newVendor').value,
+                amount: parseInt(document.getElementById('newAmount').value),
+                poAmount: parseInt(document.getElementById('newPoAmount').value),
+                invoiceQuantity: parseInt(document.getElementById('newInvoiceQty').value),
+                grnQuantity: parseInt(document.getElementById('newGrnQty').value),
+                system: document.getElementById('newSystem').value
+            };
+            
+            SAMPLE_INVOICES.push(newInvoice);
+            
+            // Clear form
+            document.getElementById('newInvoiceId').value = '';
+            document.getElementById('newVendor').value = '';
+            document.getElementById('newAmount').value = '';
+            document.getElementById('newPoAmount').value = '';
+            document.getElementById('newInvoiceQty').value = '';
+            document.getElementById('newGrnQty').value = '';
+            
+            document.getElementById('addInvoiceModal').classList.remove('active');
+            
+            // Re-run tests with new invoice
+            runTests();
+        }
+
+        function showApprovalModal() {
+            const passed = testResults.filter(r => r.passed).length;
+            const total = testResults.length;
+            const percentage = Math.round((passed / total) * 100);
+
+            document.getElementById('approvalInfo').innerHTML = `
+                <h4>${currentRule.name}</h4>
+                <p>${currentRule.description}</p>
+                <div class="tags">
+                    <span>Category: ${currentRule.category}</span>
+                    <span>Systems: ${currentRule.systems.join(', ')}</span>
+                    <span>Success: ${percentage}%</span>
+                </div>
+            `;
+
+            document.getElementById('approvalModal').classList.add('active');
+        }
+
+        function approveRule() {
+            const newRule = {
+                id: `rule-${Date.now()}`,
+                ...currentRule,
+                status: 'approved',
+                version: 'v1.0',
+                approvedBy: 'Current User',
+                approvedDate: new Date().toISOString().split('T')[0],
+                createdBy: 'Current User',
+                testResults: {
+                    passed: testResults.filter(r => r.passed).length,
+                    failed: testResults.filter(r => !r.passed).length,
+                    total: testResults.length
+                },
+                history: [{
+                    version: 'v1.0',
+                    date: new Date().toISOString().split('T')[0],
+                    author: 'Current User',
+                    change: 'Initial rule creation',
+                    approvedBy: 'Current User'
+                }]
+            };
+
+            rules.unshift(newRule);
+            
+            // Reset form
+            document.getElementById('ruleName').value = '';
+            document.getElementById('ruleNL').value = '';
+            document.getElementById('logicCard').classList.add('hidden');
+            
+            currentRule = {};
+            testResults = [];
+            
+            document.getElementById('approvalModal').classList.remove('active');
+            renderLibrary();
+            showView('library');
+        }
+    </script>
+</body>
+</html>
