@@ -176,7 +176,7 @@ const WorkspaceSetup = () => {
           <button
             onClick={handleContinue}
             disabled={!selectedIndustry}
-            className={`px-6 py-3 rounded-lg font-medium transition-colors ${
+            className={`px-6 py-3 rounded-lg font-medium transition-colors w-full ${
               selectedIndustry
                 ? "bg-teal-700 hover:bg-teal-800 text-white"
                 : "bg-gray-200 text-gray-400 cursor-not-allowed"
