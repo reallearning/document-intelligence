@@ -1,10 +1,4 @@
-import { Storage } from "@google-cloud/storage";
 import { NextRequest, NextResponse } from "next/server";
-
-const storage = new Storage({
-  keyFilename: "config/klarity-demo.json",
-  projectId: "questt-frida",
-});
 
 const bucketName = "morrie-resources";
 const folderPath = "oto/";
@@ -24,6 +18,12 @@ export async function POST(req: NextRequest) {
     const fileName = `${folderPath}${file.name}`;
 
     // Get Google Cloud Storage bucket
+    const { Storage } = await import("@google-cloud/storage");
+    const storage = new Storage({
+      keyFilename: "config/klarity-demo.json",
+      projectId: "questt-frida",
+    });
+
     const bucket = storage.bucket(bucketName);
     const blob = bucket.file(fileName);
 
@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(
       { error: "An unknown error occurred" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

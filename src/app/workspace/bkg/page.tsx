@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
-import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 // Type definitions
 interface UploadedFile {
@@ -33,9 +34,31 @@ interface Question {
 }
 
 const CompanyFunctionsForm = () => {
+  const router = useRouter();
   const [answers, setAnswers] = useState<Answers>({});
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFiles>({});
   const [isPrefilling, setIsPrefilling] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadingMessageIndex, setLoadingMessageIndex] = useState(0);
+
+  const loadingMessages = [
+    {
+      title: "Analyzing your business context",
+      subtitle: "Processing industry-specific insights...",
+    },
+    {
+      title: "Building knowledge graph",
+      subtitle: "Mapping relationships and connections...",
+    },
+    {
+      title: "Configuring decision nodes",
+      subtitle: "Setting up intelligent workflows...",
+    },
+    {
+      title: "Initializing",
+      subtitle: "Almost there...",
+    },
+  ];
 
   const sampleData: SampleData = {
     products: {
@@ -117,10 +140,10 @@ const CompanyFunctionsForm = () => {
               type: filename.endsWith(".pdf")
                 ? "application/pdf"
                 : filename.endsWith(".xlsx")
-                ? "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                : filename.endsWith(".pptx")
-                ? "application/vnd.openxmlformats-officedocument.presentationml.presentation"
-                : "application/octet-stream",
+                  ? "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                  : filename.endsWith(".pptx")
+                    ? "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+                    : "application/octet-stream",
             })),
           }));
         }
@@ -141,7 +164,7 @@ const CompanyFunctionsForm = () => {
 
   const handleFileUpload = (
     id: string,
-    e: React.ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const files = e.target.files;
     if (files && files.length > 0) {
@@ -245,6 +268,71 @@ const CompanyFunctionsForm = () => {
       question: "Add any other information that you think is required",
     },
   ];
+
+  const handleContinue = () => {
+    setIsLoading(true);
+    setLoadingMessageIndex(0); // Reset to first message
+
+    // Navigate after showing all messages (adjust timing as needed)
+    setTimeout(() => {
+      router.push("/workspace/edit-bkg");
+    }, 6000); // 4 messages × 1.5 seconds = 6 seconds
+  };
+
+  useEffect(() => {
+    if (isLoading) {
+      const interval = setInterval(() => {
+        setLoadingMessageIndex((prevIndex) => {
+          if (prevIndex < loadingMessages.length - 1) {
+            return prevIndex + 1;
+          }
+          return prevIndex;
+        });
+      }, 1500); // Change message every 1.5 seconds
+
+      return () => clearInterval(interval);
+    }
+  }, [isLoading, loadingMessages.length]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center">
+        <div className="text-center">
+          {/* Spinner */}
+          <div className="relative w-20 h-20 mx-auto mb-6">
+            <div className="absolute inset-0 border-4 border-gray-200 rounded-full"></div>
+            <div className="absolute inset-0 border-4 border-teal-700 rounded-full border-t-transparent animate-spin"></div>
+          </div>
+
+          {/* Loading text with fade animation */}
+          <div className="min-h-[80px]">
+            <h2 className="text-2xl font-semibold text-gray-900 mb-2 transition-opacity duration-300">
+              {loadingMessages[loadingMessageIndex].title}
+            </h2>
+            <p className="text-gray-600 transition-opacity duration-300">
+              {loadingMessages[loadingMessageIndex].subtitle}
+            </p>
+          </div>
+
+          {/* Progress indicator dots */}
+          <div className="flex gap-2 justify-center mt-6">
+            {loadingMessages.map((_, index) => (
+              <div
+                key={index}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  index === loadingMessageIndex
+                    ? "w-8 bg-teal-700"
+                    : index < loadingMessageIndex
+                      ? "w-2 bg-gray-400"
+                      : "w-2 bg-gray-200"
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-screen overflow-auto bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -408,21 +496,21 @@ const CompanyFunctionsForm = () => {
 
         {/* Footer */}
         <div className="bg-white rounded-3xl shadow-sm p-8 mt-6">
-          <Link href={"/workspace/edit-bkg"}>
+          <div className="mt-8">
             <button
+              onClick={handleContinue}
               disabled={isPrefilling}
-              type="button"
               className={`w-full py-4 rounded-xl font-semibold text-lg transition-all ${
                 isPrefilling
                   ? "bg-gray-300 text-gray-500 cursor-wait"
                   : hasContent
-                  ? "bg-teal-700 hover:bg-teal-800 text-white hover:shadow-lg cursor-pointer"
-                  : "bg-gray-200 text-gray-400 cursor-pointer hover:bg-gray-300"
+                    ? "bg-teal-700 hover:bg-teal-800 text-white hover:shadow-lg cursor-pointer"
+                    : "bg-gray-200 text-gray-400 cursor-pointer hover:bg-gray-300"
               }`}
             >
-              {isPrefilling ? "Filling with sample data..." : "Continue"}
+              Continue
             </button>
-          </Link>
+          </div>
           <p className="text-center text-sm text-gray-400 mt-4">
             {hasContent
               ? "You can skip questions and come back to them later"
