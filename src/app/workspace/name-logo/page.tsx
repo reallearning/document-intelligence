@@ -1,11 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 const WorkspaceSetup = () => {
+  const router = useRouter();
   const [selectedIndustry, setSelectedIndustry] = useState("");
   const [logo, setLogo] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -19,6 +21,40 @@ const WorkspaceSetup = () => {
       reader.readAsDataURL(file);
     }
   };
+
+  const handleContinue = () => {
+    if (!selectedIndustry) {
+      // Optional: show error toast or message
+      return;
+    }
+
+    setIsLoading(true);
+
+    // Show loader for 2 seconds before navigating
+    setTimeout(() => {
+      router.push("/workspace/bkg");
+    }, 2000);
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center">
+        <div className="text-center">
+          {/* Spinner */}
+          <div className="relative w-20 h-20 mx-auto mb-6">
+            <div className="absolute inset-0 border-4 border-gray-200 rounded-full"></div>
+            <div className="absolute inset-0 border-4 border-teal-700 rounded-full border-t-transparent animate-spin"></div>
+          </div>
+
+          {/* Loading text */}
+          <h2 className="text-2xl font-semibold text-gray-900 mb-2">
+            Setting up your workspace
+          </h2>
+          <p className="text-gray-600">This will only take a moment...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-screen overflow-auto bg-gray-200 flex items-center justify-center p-4">
@@ -50,7 +86,7 @@ const WorkspaceSetup = () => {
             />
             <label
               htmlFor="logo-upload"
-              className="block w-32 h-32 border-2 border-dashed border-gray-300 rounded-lg hover:border-gray-400 transition-colors cursor-pointer flex items-center justify-center"
+              className="block w-32 h-32 border-2 border-dashed border-gray-300 rounded-lg hover:border-gray-400 transition-colors cursor-pointer items-center justify-center"
             >
               {logo ? (
                 <img
@@ -136,15 +172,19 @@ const WorkspaceSetup = () => {
           </div>
         </div>
 
-        <Link href={"/workspace/bkg"}>
+        <div className="mt-8">
           <button
-            className="w-full bg-teal-700 hover:bg-teal-800 text-white py-4 rounded-xl font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={handleContinue}
             disabled={!selectedIndustry}
-            type="button"
+            className={`px-6 py-3 rounded-lg font-medium transition-colors ${
+              selectedIndustry
+                ? "bg-teal-700 hover:bg-teal-800 text-white"
+                : "bg-gray-200 text-gray-400 cursor-not-allowed"
+            }`}
           >
             Continue
           </button>
-        </Link>
+        </div>
       </div>
 
       <div className="fixed bottom-8 left-8 text-gray-400">
