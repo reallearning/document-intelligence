@@ -1,5 +1,4 @@
-
-"use client"
+"use client";
 import React, { useState, useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 
@@ -7,6 +6,288 @@ const FMCGKnowledgeGraph = () => {
   const svgRef = useRef();
   const [selectedNode, setSelectedNode] = useState(null);
   const [showAddMenu, setShowAddMenu] = useState(false);
+  const [showTraversal, setShowTraversal] = useState(false);
+  const [selectedQuestion, setSelectedQuestion] = useState(0);
+  const [traversalStep, setTraversalStep] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [highlightedNodes, setHighlightedNodes] = useState(new Set());
+  const [highlightedLinks, setHighlightedLinks] = useState(new Set());
+  const traversalTimerRef = useRef(null);
+  
+  const questions = [
+    {
+      id: 1,
+      title: "Sales Trend Analysis",
+      question: "Average sales trend in cases for past 3 months for Lay's 48g Spanish Tomato, month-wise across Delhi and Mumbai in General Trade. Show stacked columns + 3-month average overlay for both cities.",
+      steps: [
+        {
+          title: "Resolve SKU",
+          nodes: ['sku'],
+          data: "sku_id=SKU_104812, sku_name='Lay's Spanish Tomato 48g', units_per_case=48"
+        },
+        {
+          title: "Resolve Cities",
+          nodes: ['geography'],
+          data: "Delhi → geo_id=GEO_DEL_CITY, Mumbai → geo_id=GEO_MUM_CITY"
+        },
+        {
+          title: "Resolve Channel",
+          nodes: ['channel'],
+          data: "General Trade → channel_id=CH_GT"
+        },
+        {
+          title: "Pull Transactions",
+          nodes: ['salestxn', 'salesline', 'outlet', 'timemonth'],
+          data: "Filter: sku_id=SKU_104812 AND channel_id=CH_GT AND Oct-Dec 2025\nSample rows: Delhi (320 cases), Mumbai (290 cases)..."
+        },
+        {
+          title: "Aggregate by City & Month",
+          nodes: ['salesline', 'geography', 'timemonth'],
+          data: "Oct: Delhi=1,240, Mumbai=1,110\nNov: Delhi=1,520, Mumbai=1,340\nDec: Delhi=1,380, Mumbai=1,560"
+        },
+        {
+          title: "Compute 3-Month Averages",
+          nodes: ['salesline'],
+          data: "Delhi avg = 1,380 cases/month\nMumbai avg = 1,337 cases/month"
+        }
+      ],
+      finalResponse: {
+        type: "chart",
+        description: "Here's the sales trend analysis for Lay's Spanish Tomato 48g across Delhi and Mumbai in General Trade over the last 3 months:",
+        chartData: {
+          title: "Monthly Sales Volume (Cases)",
+          months: ["Oct 2025", "Nov 2025", "Dec 2025"],
+          delhi: [1240, 1520, 1380],
+          mumbai: [1110, 1340, 1560]
+        },
+        insights: [
+          "Delhi averaged 1,380 cases per month across the period",
+          "Mumbai averaged 1,337 cases per month",
+          "Delhi showed stronger performance in October and November",
+          "Mumbai had the highest single month in December with 1,560 cases"
+        ]
+      }
+    },
+    {
+      id: 2,
+      title: "Order Loss Analysis",
+      question: "What was overall sales order loss in last 2 weeks of Dec 2025 across Bangalore city? Show brand-wise chart + overall overlay. Then explain what's driving it.",
+      steps: [
+        {
+          title: "Resolve City & Time",
+          nodes: ['geography', 'timeday'],
+          data: "Bangalore → geo_id=GEO_BLR_CITY, Window: 2025-12-18 to 2025-12-31"
+        },
+        {
+          title: "Pull Orders to Bangalore",
+          nodes: ['salesorder', 'orderline', 'customer'],
+          data: "Sample: OL_9001 (120 cases), OL_9002 (90 cases), OL_9003 (60 cases)"
+        },
+        {
+          title: "Pull Fulfillment Data",
+          nodes: ['fulfillment', 'fulfillmentline'],
+          data: "OL_9001: fulfilled 80 (shortfall 40)\nOL_9002: fulfilled 90 (shortfall 0)\nOL_9003: fulfilled 30 (shortfall 30)"
+        },
+        {
+          title: "Aggregate by Brand",
+          nodes: ['sku', 'brand', 'orderline'],
+          data: "Lay's: 1,420 cases loss\nKurkure: 980\nCheetos: 260\nDoritos: 340\nTotal: 3,500 cases"
+        },
+        {
+          title: "Check: Depot ATP Shortage",
+          nodes: ['supplynode', 'invposition', 'm201', 'm202'],
+          data: "1,785 cases shortage when ATP insufficient at Bangalore depot"
+        },
+        {
+          title: "Check: Inbound Delays",
+          nodes: ['shipment', 'shipmentline'],
+          data: "1,120 cases linked to late inbound shipments to depot"
+        },
+        {
+          title: "Check: Production Shortfall",
+          nodes: ['prodorder', 'm401'],
+          data: "540 cases due to low production attainment upstream"
+        },
+        {
+          title: "Check: Service Execution Issues",
+          nodes: ['serviceattempt', 'invposition'],
+          data: "1,175 cases had ATP available but dispatch failed"
+        }
+      ],
+      finalResponse: {
+        type: "breakdown",
+        description: "I've analyzed the order loss across Bangalore city for the last 2 weeks of December 2025. Here's what I found:",
+        summary: "Total order loss: 3,500 cases",
+        brandBreakdown: [
+          { brand: "Lay's", loss: 1420, percent: 41 },
+          { brand: "Kurkure", loss: 980, percent: 28 },
+          { brand: "Doritos", loss: 340, percent: 10 },
+          { brand: "Cheetos", loss: 260, percent: 7 },
+          { brand: "Uncle Chips", loss: 310, percent: 9 },
+          { brand: "Quaker", loss: 190, percent: 5 }
+        ],
+        rootCauses: [
+          { cause: "Warehouse service/execution issues despite stock", cases: 1175, percent: 34 },
+          { cause: "Inbound logistics delay to depot", cases: 1120, percent: 32 },
+          { cause: "Production shortfall upstream", cases: 540, percent: 15 },
+          { cause: "Other depot availability constraints", cases: 665, percent: 19 }
+        ],
+        insights: [
+          "Lay's products account for the largest share of order loss at 41%",
+          "Service execution issues are the primary driver (34%), indicating operational challenges even when stock is available",
+          "Logistics delays contributed significantly to 32% of the losses"
+        ]
+      }
+    },
+    {
+      id: 3,
+      title: "Fulfillment Rate - Depot Performance",
+      question: "What has been distributor order fulfillment rate against pristine order for Bangalore depot in last 3 months (month-wise)? Show SKU-wise fill rate for top 5 SKUs by volume.",
+      steps: [
+        {
+          title: "Resolve Ship-From Node",
+          nodes: ['supplynode'],
+          data: "Bangalore Depot → node_id=NODE_BLR_DEPOT"
+        },
+        {
+          title: "Pull Order Lines (3 months)",
+          nodes: ['salesorder', 'orderline', 'timemonth'],
+          data: "Oct: 48,000 cases requested\nNov: 52,500 cases\nDec: 50,000 cases"
+        },
+        {
+          title: "Pull Fulfilled Cases",
+          nodes: ['fulfillment', 'fulfillmentline'],
+          data: "Oct: 41,280 fulfilled\nNov: 46,200 fulfilled\nDec: 44,000 fulfilled"
+        },
+        {
+          title: "Compute Fill Rate by Month",
+          nodes: ['orderline', 'fulfillmentline', 'm104'],
+          data: "Oct: 86.0%, Nov: 88.0%, Dec: 88.0%"
+        },
+        {
+          title: "Identify Top 5 SKUs",
+          nodes: ['sku', 'orderline'],
+          data: "1. Lay's Magic Masala 48g: 9,400 cases\n2. Lay's Spanish Tomato: 8,700\n3. Quaker Oats: 6,200\n4. Kurkure 50g: 5,900\n5. Doritos: 5,100"
+        },
+        {
+          title: "Compute Fill Rate per SKU",
+          nodes: ['sku', 'fulfillmentline'],
+          data: "Magic Masala: 82%\nSpanish Tomato: 74%\nQuaker: 91%\nKurkure: 87%\nDoritos: 77%"
+        }
+      ],
+      finalResponse: {
+        type: "performance",
+        description: "Here's the fulfillment performance analysis for Bangalore Depot over the last 3 months:",
+        monthlyRate: [
+          { month: "Oct 2025", rate: 86.0, requested: 48000, fulfilled: 41280 },
+          { month: "Nov 2025", rate: 88.0, requested: 52500, fulfilled: 46200 },
+          { month: "Dec 2025", rate: 88.0, requested: 50000, fulfilled: 44000 }
+        ],
+        topSKUs: [
+          { sku: "Quaker Rolled Oats 500g", fillRate: 91, requested: 6200, fulfilled: 5642, status: "good" },
+          { sku: "Kurkure 50g", fillRate: 87, requested: 5900, fulfilled: 5133, status: "good" },
+          { sku: "Lay's 48g Magic Masala", fillRate: 82, requested: 9400, fulfilled: 7708, status: "moderate" },
+          { sku: "Doritos Nacho Cheese 60g", fillRate: 77, requested: 5100, fulfilled: 3927, status: "attention" },
+          { sku: "Lay's 48g Spanish Tomato", fillRate: 74, requested: 8700, fulfilled: 6438, status: "attention" }
+        ],
+        insights: [
+          "Overall fulfillment improved from 86% to 88% over the period",
+          "Quaker Oats leads with 91% fill rate - best in class performance",
+          "Lay's Spanish Tomato needs attention at 74% - lowest among top SKUs",
+          "Magic Masala, despite highest volume (9,400 cases), maintains 82% fill rate"
+        ]
+      }
+    },
+    {
+      id: 4,
+      title: "SKU-Level Root Cause",
+      question: "What are the reasons for low order fulfillment for Lay's 82g Magic Masala? Show breakdown with % contribution.",
+      steps: [
+        {
+          title: "Resolve SKU + Scope",
+          nodes: ['sku', 'supplynode', 'timeday'],
+          data: "SKU_118299 (Lay's 82g Magic Masala), Bangalore Depot, Last 30 days"
+        },
+        {
+          title: "Get Shortfall Lines",
+          nodes: ['salesorder', 'orderline', 'fulfillmentline'],
+          data: "Requested: 3,200 cases, Fulfilled: 2,240 cases\nShortfall: 960 cases"
+        },
+        {
+          title: "Check: Demand vs Plan",
+          nodes: ['demandplan', 'salesproj'],
+          data: "Plan: 2,400 cases, Actual: 3,200 (33% excess)\nAttributed: 355 cases (37%)"
+        },
+        {
+          title: "Check: Production Issues",
+          nodes: ['prodorder', 'm401'],
+          data: "Planned: 1,000, Produced: 730\nAttributed: 260 cases (27%)"
+        },
+        {
+          title: "Check: Logistics Delay",
+          nodes: ['shipment', 'shipmentline', 'm502'],
+          data: "4 late shipments to depot\nAttributed: 220 cases (23%)"
+        },
+        {
+          title: "Check: Warehouse Issues",
+          nodes: ['serviceattempt', 'invposition'],
+          data: "ATP adequate but dispatch failed\nAttributed: 125 cases (13%)"
+        }
+      ],
+      finalResponse: {
+        type: "breakdown",
+        description: "Root cause breakdown for 960 cases shortfall",
+        data: "Excess demand (37%), Production (27%), Logistics (23%), Warehouse (13%)"
+      }
+    },
+    {
+      id: 5,
+      title: "Distributor Stock Risk",
+      question: "Which distributors currently have <7 days of stock for Kurkure 48g against current sales projections? Show tabular list with current inventory, month balance to go on plan, ADS 30, stock in transit, estimated DOS; sort by earliest stockout.",
+      steps: [
+        {
+          title: "Resolve SKU",
+          nodes: ['sku'],
+          data: "Kurkure 48g → sku_id=SKU_220114"
+        },
+        {
+          title: "Pull Distributor Inventories",
+          nodes: ['supplynode', 'customer', 'invposition'],
+          data: "Dist A: 85 cases, Dist B: 40, Dist C: 120, Dist D: 30"
+        },
+        {
+          title: "Pull In-Transit Stock",
+          nodes: ['shipment', 'shipmentline'],
+          data: "Dist A: 20 cases in-transit, Dist B: 0, Dist C: 35, Dist D: 10"
+        },
+        {
+          title: "Compute ADS_30",
+          nodes: ['salesline', 'timeday'],
+          data: "Dist A: 18/day, Dist B: 9/day, Dist C: 22/day, Dist D: 7/day"
+        },
+        {
+          title: "Get Sales Projections",
+          nodes: ['salesproj'],
+          data: "Dist A: 20/day, Dist B: 10/day, Dist C: 24/day, Dist D: 8/day"
+        },
+        {
+          title: "Pull Month Balance",
+          nodes: ['demandplan', 'salesline', 'timemonth'],
+          data: "Dist A: 240 to go, Dist B: 120, Dist C: 310, Dist D: 85"
+        },
+        {
+          title: "Compute DOS & Filter <7",
+          nodes: ['invposition', 'salesproj', 'm205'],
+          data: "Dist B: 4.0 days, Dist D: 5.0, Dist A: 5.25, Dist C: 6.46\nAll <7 days, sorted by earliest stockout"
+        }
+      ],
+      finalResponse: {
+        type: "table",
+        description: "Priority list of at-risk distributors",
+        data: "4 distributors at risk\nMost urgent: Dist B (Yeshwanthpur) - 4.0 days DOS"
+      }
+    }
+  ];
   
   const initialNodes = [
     // A) Product, Packaging, and Master Data
@@ -653,24 +934,100 @@ const FMCGKnowledgeGraph = () => {
   const [links, setLinks] = useState(initialLinks);
   const simulationRef = useRef(null);
   
+  const handleTraversalQuestion = (questionIndex) => {
+    setShowTraversal(true);
+    setSelectedQuestion(questionIndex);
+    setTraversalStep(0);
+    setSelectedNode(null);
+    setIsPlaying(true);
+    updateTraversalHighlight(questionIndex, 0);
+    startAutoPlay(questionIndex);
+  };
+  
+  const startAutoPlay = (questionIndex) => {
+    if (traversalTimerRef.current) {
+      clearInterval(traversalTimerRef.current);
+    }
+    
+    let currentStep = 0;
+    const question = questions[questionIndex];
+    const totalSteps = question.steps.length + 1; // +1 for final response
+    
+    traversalTimerRef.current = setInterval(() => {
+      currentStep++;
+      if (currentStep >= totalSteps) {
+        clearInterval(traversalTimerRef.current);
+        setIsPlaying(false);
+        return;
+      }
+      setTraversalStep(currentStep);
+      updateTraversalHighlight(questionIndex, currentStep);
+    }, 2500); // 2.5 seconds per step
+  };
+  
+  const stopAutoPlay = () => {
+    if (traversalTimerRef.current) {
+      clearInterval(traversalTimerRef.current);
+    }
+    setIsPlaying(false);
+  };
+  
+  const updateTraversalHighlight = (questionIndex, step) => {
+    const question = questions[questionIndex];
+    if (step >= question.steps.length) {
+      // Show final response - highlight all nodes used
+      const allNodes = new Set();
+      question.steps.forEach(s => s.nodes.forEach(n => allNodes.add(n)));
+      setHighlightedNodes(allNodes);
+      setHighlightedLinks(new Set());
+      return;
+    }
+    
+    const currentStep = question.steps[step];
+    const nodes = new Set(currentStep.nodes);
+    setHighlightedNodes(nodes);
+    setHighlightedLinks(new Set());
+  };
+  
+  const clearTraversal = () => {
+    stopAutoPlay();
+    setShowTraversal(false);
+    setTraversalStep(0);
+    setSelectedQuestion(0);
+    setHighlightedNodes(new Set());
+    setHighlightedLinks(new Set());
+  };
+  
   useEffect(() => {
     createVisualization();
-  }, [nodes, links]);
+  }, [nodes, links, highlightedNodes, highlightedLinks]);
   
   useEffect(() => {
-    updateSelection();
-  }, [selectedNode]);
+    return () => {
+      if (traversalTimerRef.current) {
+        clearInterval(traversalTimerRef.current);
+      }
+    };
+  }, []);
   
-  const updateSelection = () => {
-    const svg = d3.select(svgRef.current);
-    
-    svg.selectAll('.node').each(function(d) {
-      const node = d3.select(this);
-      const isSelected = selectedNode && selectedNode.id === d.id;
-      
-      node.selectAll('.node-glow').remove();
-      
-      if (isSelected) {
+ useEffect(() => {
+  updateSelection();
+}, [selectedNode, showTraversal, highlightedNodes, highlightedLinks])
+  
+const updateSelection = () => {
+  const svg = d3.select(svgRef.current);
+  const hasSelection = selectedNode !== null;
+  const shouldGrayOut = showTraversal && highlightedNodes.size > 0; // Only gray out during traversal
+
+  svg.selectAll(".node").each(function (d) {
+    const node = d3.select(this);
+    const isSelected = selectedNode && selectedNode.id === d.id;
+    const isHighlighted = highlightedNodes.has(d.id);
+
+    node.selectAll(".node-glow").remove();
+    node.selectAll(".highlight-glow").remove();
+
+    if (isSelected) {
         const glowSize = d.type === 'hexagon' ? d.size + 6 : d.type === 'triangle' ? d.size + 7 : d.size + 8;
         
         if (d.type === 'hexagon') {
@@ -713,13 +1070,98 @@ const FMCGKnowledgeGraph = () => {
             .attr('opacity', 0.6);
         }
       }
-      
-      const mainShape = node.select(d.type === 'hexagon' ? 'path:not(.node-glow)' : d.type === 'triangle' ? 'path:not(.node-glow)' : 'circle:not(.node-glow)');
+
+    const mainShape = node.select(
+      d.type === "hexagon"
+        ? "path:not(.node-glow)"
+        : d.type === "triangle"
+        ? "path:not(.node-glow)"
+        : "circle:not(.node-glow)"
+    );
+
+    // Keep original color for highlighted nodes OR when not in traversal mode
+    if (!shouldGrayOut || isHighlighted) {
       mainShape
-        .attr('stroke', isSelected ? (d.type === 'hexagon' ? '#85A383' : d.type === 'triangle' ? '#02220E' : '#3B82F6') : '#fff')
-        .attr('stroke-width', isSelected ? 3 : 2);
+        .attr(
+          "stroke",
+          isSelected
+            ? d.type === "hexagon"
+              ? "#85A383"
+              : d.type === "triangle"
+              ? "#02220E"
+              : "#3B82F6"
+            : "#fff"
+        )
+        .attr("stroke-width", isSelected ? 3 : 2)
+        .attr("fill", d.color)
+        .attr("opacity", 1);
+
+      node
+        .select("text")
+        .attr("opacity", 1)
+        .attr("font-weight", isSelected ? "700" : "600")
+        .attr("fill", "#1F2937");
+    } 
+    // Gray out non-highlighted nodes (only during traversal)
+    else {
+      mainShape
+        .attr("stroke", "#E5E7EB")
+        .attr("stroke-width", 2)
+        .attr("fill", "#D1D5DB")
+        .attr("opacity", 0.3);
+
+      node
+        .select("text")
+        .attr("opacity", 0.3)
+        .attr("font-weight", "600")
+        .attr("fill", "#9CA3AF");
+    }
+  });
+
+  // Update links
+  svg
+    .selectAll(".link")
+    .attr("opacity", (d) => {
+      if (!shouldGrayOut) {
+        return d.type === "metric" || d.type === "decision" ? 0.7 : 0.6;
+      }
+      return highlightedLinks.has(d) ? 0.8 : 0.1;
+    })
+    .attr("stroke", (d) => {
+      if (!shouldGrayOut || highlightedLinks.has(d)) {
+        return d.type === "metric"
+          ? "#B8CDB6"
+          : d.type === "decision"
+          ? "#4A5F49"
+          : "#D1D5DB";
+      }
+      return "#E5E7EB";
+    })
+    .attr("stroke-width", (d) => {
+      if (!shouldGrayOut || highlightedLinks.has(d)) {
+        return d.type === "metric" || d.type === "decision" ? 2 : 1.5;
+      }
+      return 1;
     });
-  };
+
+  // Update link labels
+  svg
+    .selectAll(".link-label")
+    .attr("opacity", (d) => {
+      if (!shouldGrayOut) return 1;
+      return highlightedLinks.has(d) ? 1 : 0.15;
+    })
+    .attr("fill", (d) => {
+      if (!shouldGrayOut || highlightedLinks.has(d)) {
+        return d.type === "metric"
+          ? "#85A383"
+          : d.type === "decision"
+          ? "#02220E"
+          : "#6B7280";
+      }
+      return "#9CA3AF";
+    });
+};
   
   const createVisualization = () => {
     d3.select(svgRef.current).selectAll("*").remove();
@@ -744,6 +1186,14 @@ const FMCGKnowledgeGraph = () => {
     
     // Set initial zoom to fit content better
     svg.call(zoom.transform, d3.zoomIdentity.translate(0, 0).scale(0.8));
+
+    svg.on("click", (event) => {
+    if (event.target === event.currentTarget || event.target.tagName === "svg") {
+      setSelectedNode(null);
+      setHighlightedNodes(new Set());
+      setHighlightedLinks(new Set());
+    }
+  });
     
     const defs = g.append('defs');
     
@@ -826,6 +1276,24 @@ const FMCGKnowledgeGraph = () => {
       .on('click', (event, d) => {
         event.stopPropagation();
         setSelectedNode({...d});
+
+        // Calculate connected nodes and links
+  const connectedNodes = new Set([d.id]);
+  const connectedLinks = new Set();
+  
+  links.forEach(link => {
+    const sourceId = typeof link.source === 'object' ? link.source.id : link.source;
+    const targetId = typeof link.target === 'object' ? link.target.id : link.target;
+    
+    if (sourceId === d.id || targetId === d.id) {
+      connectedLinks.add(link);
+      connectedNodes.add(sourceId);
+      connectedNodes.add(targetId);
+    }
+  });
+  
+  setHighlightedNodes(connectedNodes);
+  setHighlightedLinks(connectedLinks);
       });
     
     // Draw circles for regular nodes
@@ -928,8 +1396,27 @@ const FMCGKnowledgeGraph = () => {
   return (
     <div className="flex flex-col h-screen bg-white">
       <div className="px-8 pt-8 pb-4">
-        <h1 className="text-3xl font-serif text-gray-900 mb-2">PepsiCo Business Knowledge Graph</h1>
-        <p className="text-gray-500 mb-4">Consolidated node catalog covering product, supply chain, sales, and operations</p>
+        <div className="flex justify-between items-start mb-4">
+          <h1 className="text-3xl font-serif text-gray-900">PepsiCo Business Knowledge Graph</h1>
+        </div>
+        
+        {!showTraversal && (
+          <div className="mb-4">
+            <h3 className="text-sm font-semibold text-gray-600 mb-3">Example Questions - Click to see graph traversal:</h3>
+            <div className="grid grid-cols-5 gap-3">
+              {questions.map((q, idx) => (
+                <button
+                  key={q.id}
+                  onClick={() => handleTraversalQuestion(idx)}
+                  className="text-left p-3 border border-gray-200 rounded-lg hover:border-teal-600 hover:bg-teal-50 transition-all"
+                >
+                  <div className="text-xs font-semibold text-teal-700 mb-1">Q{q.id}</div>
+                  <div className="text-sm font-medium text-gray-900">{q.title}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
         
         <div className="flex gap-3 flex-wrap text-xs">
           {Object.entries(groupColors).map(([group, color]) => (
@@ -952,13 +1439,103 @@ const FMCGKnowledgeGraph = () => {
       </div>
       
       <div className="flex flex-1 overflow-hidden px-8 pb-8">
-        <div className="flex-1 overflow-hidden mr-6">
+        <div className={`flex-1 overflow-hidden ${showTraversal ? 'mr-6' : ''}`}>
           <div className="bg-gray-50 rounded-2xl h-full overflow-hidden border border-gray-200">
             <svg ref={svgRef} className="w-full h-full"></svg>
           </div>
         </div>
         
-        {selectedNode ? (
+        {showTraversal && (
+          <div className="w-96 overflow-y-auto flex-shrink-0 bg-white rounded-xl shadow-lg border border-gray-200">
+            <div className="sticky top-0 bg-gradient-to-r from-teal-600 to-blue-600 p-4 border-b border-teal-700">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <span className="bg-white text-teal-700 text-xs font-bold px-2 py-1 rounded">Q{questions[selectedQuestion].id}</span>
+                  <h3 className="font-semibold text-white text-sm">{questions[selectedQuestion].title}</h3>
+                </div>
+                <button
+                  onClick={clearTraversal}
+                  className="text-white hover:text-teal-100 transition-colors"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <p className="text-xs text-teal-50">{questions[selectedQuestion].question}</p>
+            </div>
+            
+            <div className="p-4">
+              {traversalStep < questions[selectedQuestion].steps.length ? (
+                <>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      <span className="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded">
+                        Step {traversalStep + 1} / {questions[selectedQuestion].steps.length}
+                      </span>
+                      {isPlaying && (
+                        <div className="flex items-center gap-1 text-xs text-green-600">
+                          <div className="w-2 h-2 bg-green-600 rounded-full animate-pulse"></div>
+                          Auto-playing
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  
+                  <h4 className="font-semibold text-gray-900 mb-3">{questions[selectedQuestion].steps[traversalStep].title}</h4>
+                  
+                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-3">
+                    <div className="text-xs font-semibold text-amber-900 mb-2">Nodes Accessed:</div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {questions[selectedQuestion].steps[traversalStep].nodes.map(nodeId => {
+                        const node = nodes.find(n => n.id === nodeId);
+                        return node ? (
+                          <span key={nodeId} className="inline-flex items-center gap-1 px-2 py-1 text-xs rounded font-medium" style={{ backgroundColor: node.color + '20', color: node.color }}>
+                            {node.type === 'hexagon' ? '⬡' : node.type === 'triangle' ? '▲' : '●'} {node.name}
+                          </span>
+                        ) : null;
+                      })}
+                    </div>
+                  </div>
+                  
+                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
+                    <div className="text-xs font-semibold text-gray-700 mb-2">Data Retrieved:</div>
+                    <pre className="text-xs text-gray-800 font-mono whitespace-pre-wrap leading-relaxed">{questions[selectedQuestion].steps[traversalStep].data}</pre>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className="bg-green-600 text-white text-xs font-bold px-2 py-1 rounded">
+                      Final Response
+                    </span>
+                  </div>
+                  
+                  <h4 className="font-semibold text-gray-900 mb-1">{questions[selectedQuestion].finalResponse.type.toUpperCase()}</h4>
+                  <p className="text-sm text-gray-600 mb-3">{questions[selectedQuestion].finalResponse.description}</p>
+                  
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <pre className="text-sm text-green-900 font-mono whitespace-pre-wrap leading-relaxed">{questions[selectedQuestion].finalResponse.data}</pre>
+                  </div>
+                </>
+              )}
+            </div>
+            
+            <div className="sticky bottom-0 bg-white border-t border-gray-200 p-4">
+              <div className="text-xs text-gray-500 mb-2 text-center">
+                {highlightedNodes.size} nodes highlighted on graph
+              </div>
+              <button
+                onClick={clearTraversal}
+                className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 rounded-lg text-sm font-medium transition-colors"
+              >
+                Close & Select Another Question
+              </button>
+            </div>
+          </div>
+        )}
+        
+        {selectedNode && !showTraversal && (
           selectedNode.type === 'hexagon' ? (
             <MetricNodePanel node={selectedNode} links={links} nodes={nodes} onClose={() => setSelectedNode(null)} />
           ) : selectedNode.type === 'triangle' ? (
@@ -966,21 +1543,6 @@ const FMCGKnowledgeGraph = () => {
           ) : (
             <BusinessNodePanel node={selectedNode} links={links} nodes={nodes} onClose={() => setSelectedNode(null)} />
           )
-        ) : (
-          <div className="w-96 flex items-center justify-center flex-shrink-0">
-            <div className="text-center text-gray-400">
-              <div className="flex justify-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-full bg-gray-200 opacity-50"></div>
-                <svg className="w-10 h-10 opacity-50" viewBox="-1 -1 2 2">
-                  <path d="M0,-0.866 L0.75,-0.433 L0.75,0.433 L0,0.866 L-0.75,0.433 L-0.75,-0.433Z" fill="#D1D5DB" />
-                </svg>
-                <svg className="w-10 h-10 opacity-50" viewBox="-1 -1 2 2">
-                  <path d="M0,-0.9 L0.8,0.45 L-0.8,0.45Z" fill="#D1D5DB" />
-                </svg>
-              </div>
-              <p className="text-sm">Click on any node to view<br />its details and relationships</p>
-            </div>
-          </div>
         )}
       </div>
     </div>
