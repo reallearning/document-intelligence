@@ -972,22 +972,48 @@ const FMCGKnowledgeGraph = () => {
     setIsPlaying(false);
   };
   
-  const updateTraversalHighlight = (questionIndex, step) => {
-    const question = questions[questionIndex];
-    if (step >= question.steps.length) {
-      // Show final response - highlight all nodes used
-      const allNodes = new Set();
-      question.steps.forEach(s => s.nodes.forEach(n => allNodes.add(n)));
-      setHighlightedNodes(allNodes);
-      setHighlightedLinks(new Set());
-      return;
-    }
+ const updateTraversalHighlight = (questionIndex, step) => {
+  const question = questions[questionIndex];
+  
+  if (step >= question.steps.length) {
+    // Show final response - highlight all nodes used
+    const allNodes = new Set();
+    question.steps.forEach(s => s.nodes.forEach(n => allNodes.add(n)));
     
-    const currentStep = question.steps[step];
-    const nodes = new Set(currentStep.nodes);
-    setHighlightedNodes(nodes);
-    setHighlightedLinks(new Set());
-  };
+    // Find all links between these nodes
+    const connectedLinks = new Set();
+    links.forEach(link => {
+      const sourceId = typeof link.source === 'object' ? link.source.id : link.source;
+      const targetId = typeof link.target === 'object' ? link.target.id : link.target;
+      if (allNodes.has(sourceId) && allNodes.has(targetId)) {
+        connectedLinks.add(link);
+      }
+    });
+    
+    setHighlightedNodes(allNodes);
+    setHighlightedLinks(connectedLinks);
+    return;
+  }
+  
+  // Accumulate all nodes from step 0 to current step (progressive path)
+  const accumulatedNodes = new Set();
+  for (let i = 0; i <= step; i++) {
+    question.steps[i].nodes.forEach(n => accumulatedNodes.add(n));
+  }
+  
+  // Find all links between the accumulated nodes
+  const connectedLinks = new Set();
+  links.forEach(link => {
+    const sourceId = typeof link.source === 'object' ? link.source.id : link.source;
+    const targetId = typeof link.target === 'object' ? link.target.id : link.target;
+    if (accumulatedNodes.has(sourceId) && accumulatedNodes.has(targetId)) {
+      connectedLinks.add(link);
+    }
+  });
+  
+  setHighlightedNodes(accumulatedNodes);
+  setHighlightedLinks(connectedLinks);
+};
   
   const clearTraversal = () => {
     stopAutoPlay();
@@ -1125,7 +1151,7 @@ const updateSelection = () => {
       if (!shouldGrayOut) {
         return d.type === "metric" || d.type === "decision" ? 0.7 : 0.6;
       }
-      return highlightedLinks.has(d) ? 0.8 : 0.1;
+      return highlightedLinks.has(d) ? 0.9 : 0.1;
     })
     .attr("stroke", (d) => {
       if (!shouldGrayOut || highlightedLinks.has(d)) {

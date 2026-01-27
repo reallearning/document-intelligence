@@ -1,12 +1,12 @@
 "use client"
 import * as d3 from 'd3';
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 export default function Page() {
   const svgRef = useRef();
     const simulationRef = useRef(null);
   const [selectedNode, setSelectedNode] = useState(null);
-  const nodes = [
+  const nodes = useMemo(() => [
     // A) Product, Packaging, and Master Data
     {
       id: "sku",
@@ -1402,9 +1402,9 @@ export default function Page() {
         optimizes: "Reduce inbound delays that drive stockouts",
       },
     },
-  ];
+  ], [])
 
-  const links = [
+  const links = useMemo(() =>[
     // Product hierarchy
     { source: "brand", target: "sku", label: "HAS_SKU", type: "solid" },
     { source: "variant", target: "sku", label: "VARIANT_OF", type: "solid" },
@@ -2417,7 +2417,7 @@ export default function Page() {
       label: "USES_INPUT",
       type: "decision",
     },
-  ];
+  ] , []);
 
   const createVisualization = () => {
     d3.select(svgRef.current).selectAll("*").remove();
@@ -2671,13 +2671,19 @@ export default function Page() {
     }
   };
 
-  useEffect(() => {
-    createVisualization();
-  }, [nodes, links]);
+useEffect(() => {
+  createVisualization();
+  
+  return () => {
+    if (simulationRef.current) {
+      simulationRef.current.stop();
+    }
+  };
+}, []);
 
-  useEffect(() => {
-    updateSelection();
-  }, [selectedNode]);
+useEffect(() => {
+  updateSelection();
+}, [selectedNode]);
 
   const updateSelection = () => {
     const svg = d3.select(svgRef.current);
