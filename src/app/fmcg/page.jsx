@@ -1297,16 +1297,14 @@ const startAutoPlay = (questionIndex) => {
       // Show final response
       setVisibleSections(new Set(['final']));
     }
-  }, 4500); // Total time: 1000 (think) + 1000 (fetch delay) + 500 (analyse delay) + 1000 (buffer)
+  }, 6500); // Total time: 1000 (think) + 1000 (fetch delay) + 500 (analyse delay) + 1000 (buffer)
 };
 
 const revealSectionsProgressively = (questionIndex, step) => {
   const question = questions[questionIndex];
 
   // clear old timers
-  if (revealTimerRef.current) {
-    clearTimeout(revealTimerRef.current);
-  }
+  if (revealTimerRef.current) clearTimeout(revealTimerRef.current);
 
   if (step >= question.iterations.length) {
     setVisibleSections(new Set(["final"]));
@@ -1316,21 +1314,22 @@ const revealSectionsProgressively = (questionIndex, step) => {
   // 0s → Think
   setVisibleSections(new Set(["think"]));
 
-  // 1s → Nodes
+  // 1.5s → Nodes
   setTimeout(() => {
     setVisibleSections(new Set(["think", "nodes"]));
-  }, 1000);
+  }, 1500);
 
-  // 2s → Fetch
+  // 3.0s → Fetch
   setTimeout(() => {
     setVisibleSections(new Set(["think", "nodes", "fetch"]));
-  }, 2000);
+  }, 3000);
 
-  // 3s → Analyse
+  // 4.5s → Analyse
   setTimeout(() => {
     setVisibleSections(new Set(["think", "nodes", "fetch", "analyse"]));
-  }, 3000);
+  }, 4500);
 };
+
 
 
 const stopAutoPlay = () => {
@@ -1955,16 +1954,11 @@ const createVisualization = () => {
         : "opacity-0 -translate-y-4"
     }`}
   >
-    <div className="bg-purple-50 border-2 border-purple-300 rounded-lg overflow-hidden shadow-sm">
+    <div className="relative bg-purple-50 border-2 border-purple-300 rounded-lg overflow-hidden shadow-sm pt-2">
       <button
         onClick={() => setShowThinkingHistory((prev) => !prev)}
-        className="w-full flex items-center justify-between p-3 hover:bg-purple-100 transition-colors"
+        className="flex items-center justify-end p-3 hover:bg-purple-100 transition-colors absolute z-50 top-0 right-0"
       >
-        <div className="flex items-center gap-2">
-          <div className="text-xs font-semibold text-purple-900 animate-pulse">
-            Think
-          </div>
-        </div>
 
         <svg
           className={`w-4 h-4 text-purple-600 transition-transform ${
