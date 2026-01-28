@@ -1,844 +1,1197 @@
-"use client"
-import React, { useState } from 'react';
-import { TrendingUp, TrendingDown, MapPin, MessageSquare, Zap, Target, AlertCircle, Send, X, ChevronDown, ChevronRight, BarChart3, Activity, Users, Package } from 'lucide-react';
+"use client";
+import React, { useState, useRef, useEffect, act } from 'react';
+import { MessageSquare, TrendingUp, TrendingDown, AlertCircle, ChevronRight, Users, Package, MapPin, Activity, Send, X, Target, Sparkles, Clock, ChevronDown, BarChart3, Eye, Layers, Database, Brain } from 'lucide-react';
 
 export default function RSMDashboard() {
-  const [activeTab, setActiveTab] = useState('dashboard');
-  const [conversationOpen, setConversationOpen] = useState(false);
-  const [conversationContext, setConversationContext] = useState(null);
-  const [expandedASM, setExpandedASM] = useState(null);
-  const [expandedDist, setExpandedDist] = useState(null);
-  const [selectedReport, setSelectedReport] = useState(null);
+  const [activeTab, setActiveTab] = useState('briefing');
+  const [selectedInsight, setSelectedInsight] = useState(null);
+  const [chatOpen, setChatOpen] = useState(false);
   const [chatMessages, setChatMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
-  const chatMessagesEndRef = React.useRef(null);
+  const [expandedTerritory, setExpandedTerritory] = useState(null);
+  const [trailOpen, setTrailOpen] = useState(false);
+  const [selectedTrail, setSelectedTrail] = useState(null);
+  const chatMessagesEndRef = useRef(null);
 
-  React.useEffect(() => {
+    const territories = [
+    {
+      name: 'Rahul Verma',
+      territory: 'Mumbai GT',
+      achievement: 76,
+      outlets: { total: 890, active: 605, productive: 485 },
+      coverage: 68,
+      premiumMix: 28,
+      status: 'critical',
+      trend: [82, 79, 73, 68],
+      topIssue: 'Distribution gap and premium mix below potential',
+      distributors: [
+        {
+          name: 'Sagar Distributors',
+          territory: 'Andheri West & Bandra',
+          monthlyVolume: '₹1.4Cr',
+          outlets: { total: 285, active: 178, productive: 142 },
+          orderFrequency: '2.2x weekly',
+          achievement: 62,
+          status: 'critical',
+          metrics: {
+            onTimeDelivery: '72%',
+            stockRotation: '19 days',
+            returns: '3.1%',
+            creditDays: 22
+          }
+        },
+        {
+          name: 'Metro Distributors',
+          territory: 'Borivali & Kandivali',
+          monthlyVolume: '₹1.4Cr',
+          outlets: { total: 320, active: 245, productive: 198 },
+          orderFrequency: '2.6x weekly',
+          achievement: 74,
+          status: 'warning',
+          metrics: {
+            onTimeDelivery: '81%',
+            stockRotation: '16 days',
+            returns: '2.2%',
+            creditDays: 20
+          }
+        },
+        {
+          name: 'Reliable Traders',
+          territory: 'Malad & Goregaon',
+          monthlyVolume: '₹1.0Cr',
+          outlets: { total: 285, active: 182, productive: 145 },
+          orderFrequency: '2.5x weekly',
+          achievement: 68,
+          status: 'warning',
+          metrics: {
+            onTimeDelivery: '78%',
+            stockRotation: '18 days',
+            returns: '2.6%',
+            creditDays: 21
+          }
+        }
+      ]
+    },
+    {
+      name: 'Anjali Deshmukh',
+      territory: 'Pune GT',
+      achievement: 88,
+      outlets: { total: 950, active: 865, productive: 720 },
+      coverage: 91,
+      premiumMix: 35,
+      status: 'warning',
+      trend: [92, 91, 89, 88],
+      topIssue: 'Hadapsar wholesale cluster down 12%',
+      distributors: [
+        {
+          name: 'Apex Trading Co',
+          territory: 'Pune Central & Deccan',
+          monthlyVolume: '₹1.8Cr',
+          outlets: { total: 380, active: 342, productive: 298 },
+          orderFrequency: '3.2x weekly',
+          achievement: 92,
+          status: 'healthy',
+          metrics: {
+            onTimeDelivery: '91%',
+            stockRotation: '11 days',
+            returns: '1.3%',
+            creditDays: 17
+          }
+        },
+        {
+          name: 'Shivaji Distributors',
+          territory: 'Hadapsar & Kharadi',
+          monthlyVolume: '₹1.4Cr',
+          outlets: { total: 295, active: 268, productive: 218 },
+          orderFrequency: '2.8x weekly',
+          achievement: 78,
+          status: 'warning',
+          metrics: {
+            onTimeDelivery: '86%',
+            stockRotation: '14 days',
+            returns: '1.8%',
+            creditDays: 19
+          }
+        },
+        {
+          name: 'Ganesh Enterprises',
+          territory: 'Wakad & Hinjewadi',
+          monthlyVolume: '₹1.0Cr',
+          outlets: { total: 275, active: 255, productive: 204 },
+          orderFrequency: '3.1x weekly',
+          achievement: 89,
+          status: 'healthy',
+          metrics: {
+            onTimeDelivery: '89%',
+            stockRotation: '12 days',
+            returns: '1.4%',
+            creditDays: 18
+          }
+        }
+      ]
+    },
+    {
+      name: 'Sandeep Kumar',
+      territory: 'Thane GT',
+      achievement: 105,
+      outlets: { total: 780, active: 780, productive: 685 },
+      coverage: 100,
+      premiumMix: 52,
+      status: 'healthy',
+      trend: [99, 102, 104, 105],
+      topIssue: 'Benchmark performance - replicate practices',
+      distributors: [
+        {
+          name: 'Premier Supplies',
+          territory: 'Thane West',
+          monthlyVolume: '₹1.5Cr',
+          outlets: { total: 410, active: 410, productive: 362 },
+          orderFrequency: '3.5x weekly',
+          achievement: 108,
+          status: 'healthy',
+          metrics: {
+            onTimeDelivery: '97%',
+            stockRotation: '9 days',
+            returns: '0.7%',
+            creditDays: 15
+          }
+        },
+        {
+          name: 'Lokhandwala Trading',
+          territory: 'Thane East',
+          monthlyVolume: '₹1.1Cr',
+          outlets: { total: 370, active: 370, productive: 323 },
+          orderFrequency: '3.3x weekly',
+          achievement: 102,
+          status: 'healthy',
+          metrics: {
+            onTimeDelivery: '95%',
+            stockRotation: '10 days',
+            returns: '0.9%',
+            creditDays: 16
+          }
+        }
+      ]
+    },
+    {
+      name: 'Meera Iyer',
+      territory: 'Navi Mumbai GT',
+      achievement: 90,
+      outlets: { total: 620, active: 595, productive: 510 },
+      coverage: 96,
+      premiumMix: 33,
+      status: 'healthy',
+      trend: [89, 90, 90, 90],
+      topIssue: 'Stable performance, no critical issues',
+      distributors: [
+        {
+          name: 'Coastal Distributors',
+          territory: 'Vashi & Nerul',
+          monthlyVolume: '₹1.3Cr',
+          outlets: { total: 345, active: 332, productive: 285 },
+          orderFrequency: '3.1x weekly',
+          achievement: 91,
+          status: 'healthy',
+          metrics: {
+            onTimeDelivery: '90%',
+            stockRotation: '11 days',
+            returns: '1.1%',
+            creditDays: 17
+          }
+        },
+        {
+          name: 'Panvel Trading Co',
+          territory: 'Panvel & Kharghar',
+          monthlyVolume: '₹0.8Cr',
+          outlets: { total: 275, active: 263, productive: 225 },
+          orderFrequency: '3.3x weekly',
+          achievement: 89,
+          status: 'healthy',
+          metrics: {
+            onTimeDelivery: '92%',
+            stockRotation: '10 days',
+            returns: '1.3%',
+            creditDays: 16
+          }
+        }
+      ]
+    }
+  ];
+
+  useEffect(() => {
     if (chatMessagesEndRef.current) {
       chatMessagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [chatMessages]);
 
-  const C = {
-    darkGreen: '#0C2C18', sage: '#85A383', cream: '#E7DDCA',
-    darkest: '#1B2A21', terra: '#DF7649', grey: '#878B87',
-    off: '#FDFCFA', warn: '#D4A574'
+ const C = {
+    green: '#0C2C18',
+    sage: '#85A383',
+    cream: '#E7DDCA',
+    darkGrey: '#1B2A21',
+    lightGrey: '#878B87',
+    white: '#FFFFFF',
+    offWhite: '#FDFCFA',
+    lightSage: '#C8D5C7'
   };
 
-  const data = {
-    rsmName: "Priya Sharma", region: "Mumbai & Pune Region",
-    achievement: 89, gm: 38.5, targetGM: 40.0, wc: 12.5, team: 4,
-    
-    issues: [
-      {
-        id: 'I1', title: 'Mumbai Metro Revenue Shortfall', sev: 'critical',
-        impact: { metric: 'Revenue', val: '-₹2.8Cr', pct: -24 },
-        dims: {
-          execution: { issue: '3 vacant routes, coverage 68% (from 82%)', impact: '45% of shortfall', sev: 'critical' },
-          finance: { issue: 'Modern Trade 92% credit, ₹65k blocked', impact: '22% of shortfall', sev: 'high' },
-          supply: { issue: 'Kurkure/Doritos stockout 8d, ₹85k backlog', impact: '18% of shortfall', sev: 'high' },
-          forecast: { issue: 'Diwali forecast +18% vs flat', impact: '15% of shortfall', sev: 'medium' }
-        },
-        bizImpact: { revenue: '-₹2.8Cr', gm: -2.5, wc: '₹3.2Cr locked' },
-        actions: [
-          { act: 'Deploy 3 merchandisers to Andheri/Bandra (7d)', impact: '+₹125k', cost: '₹22k' },
-          { act: 'Extend MT credit ₹4L', impact: 'Unblock ₹65k', cost: '₹4L WC' },
-          { act: 'Move stock from Pune DC', impact: 'Fulfill ₹85k', cost: '₹12k' }
-        ],
-        outcome: { revenue: '+₹275k', ach: '+6.5%', gm: '+1.2%' },
-        owner: 'Rahul Verma'
-      },
-      {
-        id: 'I2', title: 'Margin Erosion Across Territory', sev: 'high',
-        impact: { metric: 'Gross Margin', val: '-1.5%', pct: -3.8 },
-        dims: {
-          margin: { issue: 'GM% 40.0% → 38.5%', impact: 'Primary issue', sev: 'critical' },
-          execution: { issue: 'Premium SKU 32% vs 42% target', impact: '38% of GM loss', sev: 'high' },
-          finance: { issue: 'Trade discount 4.5% over budget', impact: '₹3.5L monthly', sev: 'medium' },
-          forecast: { issue: 'Promotional costs 3.2% over plan', impact: 'Budget overrun', sev: 'medium' }
-        },
-        bizImpact: { gm: -1.5, absMargin: '-₹2.8Cr' },
-        actions: [
-          { act: 'Push premium pack focus (Doritos, Party pack)', impact: 'Recover 1.0% GM', cost: 'None' },
-          { act: 'Tighten promotional approval', impact: 'Save ₹3.5L/mo', cost: 'None' }
-        ],
-        outcome: { gm: '+1.4%', absMargin: '+₹2.2Cr/mo' },
-        owner: 'Multiple'
-      },
-      {
-        id: 'I3', title: 'Working Capital Stress', sev: 'high',
-        impact: { metric: 'Working Capital', val: '₹7.5Cr locked', pct: null },
-        dims: {
-          finance: { issue: '₹7.5Cr in receivables >50d', impact: 'Primary', sev: 'critical' },
-          execution: { issue: '4 distributors near limit', impact: '₹1.8Cr blocking', sev: 'high' }
-        },
-        bizImpact: { revenue: '₹1.8Cr at risk', wc: '₹7.5Cr locked', dso: '48d vs 35' },
-        actions: [
-          { act: 'Collection drive >50d', impact: 'Free ₹7.5Cr', cost: 'None' },
-          { act: 'Extend credit 4 distributors', impact: 'Protect ₹1.8Cr', cost: '₹12L WC' }
-        ],
-        outcome: { wc: 'Free ₹7.5Cr', dso: '→ 38d' },
-        owner: 'Multiple + Finance'
-      }
-    ],
+  const briefingPoints = [
+    {
+      type: 'critical',
+      title: 'Mumbai Central premium portfolio underperforming',
+      detail: 'ASM Rajesh\'s territory at 76% achievement on premium SKUs. Distributor stockout pattern identified - 4 distributors showing recurring gaps in Doritos & Cheetos. Immediate intervention required.',
+      action: 'Review distributor capability with Rajesh today'
+    },
+    {
+      type: 'opportunity',
+      title: 'Thane West replication blueprint ready',
+      detail: 'ASM Meera\'s territory at 112% - TSM network executing 94% numeric distribution vs 78% region average. Distribution strategy document ready for rollout to other ASMs.',
+      action: 'Territory deep dive meeting scheduled 11 AM'
+    },
+    {
+      type: 'alert',
+      title: 'Festival pre-positioning behind schedule',
+      detail: '18 days to Holi. Only 62% of target outlets have festival SKU displays vs 85% target. Western suburbs lagging at 54%. ASM Pradeep needs merchandising support.',
+      action: 'Deploy additional merchandisers to Western territory'
+    },
+    {
+      type: 'performance',
+      title: 'Monthly run-rate tracking to 89% achievement',
+      detail: 'Need Rs 2.4Cr in next 18 days to hit target. Eastern suburbs momentum strong at 96%. Central & Western need Rs 1.8Cr recovery between them.',
+      action: 'Focus ASM meetings on Central/Western acceleration'
+    },
+    {
+      type: 'highlight',
+      title: 'New distributor onboarding impacting Malad',
+      detail: 'Transition from Gupta Distributors to Shah Enterprises causing 12% dip in Malad pocket. TSM team reporting teething issues with order systems.',
+      action: 'Direct intervention on distributor systems & TSM training'
+    }
+  ];
 
-    asms: [
-      {
-        id: 'A1', name: 'Rahul Verma', territory: 'Mumbai Metro', health: 'critical',
-        m: { ach: 76, gm: 37.2, credit: 'At Risk', stock: 4, wc: '₹3.2Cr' },
-        trend: [70, 73, 75, 76],
-        alerts: 3,
-        insight: 'Multi-dimensional crisis: Route gaps (3 vacant) → credit stress (MT 92%) → margin pressure (22% promo vs 18%). Stockouts add ₹85k backlog.',
-        dists: [
-          {
-            id: 'D1', name: 'Modern Trade Solutions', health: 'critical',
-            m: { ach: 70, gm: 36.8, creditUtil: 92, dso: 48, fulfill: 85 },
-            trend: [65, 68, 69, 70],
-            gap: 3, 
-            insight: 'Severe stress. 3 vacant routes → Vikram covers 1.8x, lost 12 outlets. 92% credit blocks ₹65k. Key SKU stockouts = ₹85k backlog.',
-            rootCauseBreakdown: { execution: 45, credit: 22, supply: 18, margin: 12, forecast: 3 },
-            sales: [
-              { id: 'S1', name: 'Vikram Joshi', beat: 'Andheri W', ach: 65, health: 'critical', 
-                rc: { dist: -28, days: -42, drop: -12 }, 
-                outlets: { active: 38, lost: 12, target: 55 },
-                productivity: { calls: 10, orders: 5, lines: 15 }
-              },
-              { id: 'S2', name: 'Neha Singh', beat: 'Bandra', ach: 72, health: 'warning', 
-                rc: { dist: -8, days: -18, drop: -15 },
-                outlets: { active: 48, lost: 3, target: 58 },
-                productivity: { calls: 13, orders: 8, lines: 19 }
-              }
-            ]
-          },
-          {
-            id: 'D2', name: 'Metro Snacks Distributors', health: 'warning',
-            m: { ach: 80, gm: 37.5, creditUtil: 75, dso: 42, fulfill: 90 },
-            trend: [78, 79, 80, 80],
-            gap: 1,
-            insight: 'Moderate underperformance. 1 vacant route affecting Powai coverage. Credit stable but DSO elevated.',
-            rootCauseBreakdown: { execution: 55, credit: 18, supply: 12, margin: 10, forecast: 5 },
-            sales: [
-              { id: 'S3', name: 'Amit Patel', beat: 'Powai', ach: 80, health: 'warning',
-                rc: { dist: -12, days: -22, drop: -8 },
-                outlets: { active: 52, lost: 4, target: 62 },
-                productivity: { calls: 12, orders: 7, lines: 18 }
-              }
-            ]
-          }
+  const insights = [
+    {
+      id: 1,
+      priority: 'critical',
+      title: 'Premium SKU distribution gap costing Rs 2.2Cr quarterly across Mumbai region',
+      summary: 'Doritos & Cheetos achieving only 68% numeric distribution vs 92% for core Lays portfolio',
+      keyNumbers: {
+        revenueLoss: 'Rs 2.2Cr quarterly',
+        distributionGap: '68% vs 92% target',
+        affectedOutlets: '1,240 of 3,850 outlets',
+        topASMgap: 'Central territory 24 pts below'
+      },
+      narrative: "Internal DMS data shows premium portfolio (Doritos, Cheetos, Kurkure premium variants) achieving 68% numeric distribution vs 92% for core Lays across Mumbai region's 3,850 outlets. Gap acute in Central territory (ASM Rajesh) at 61% vs Eastern at 79% (ASM Meera). Secondary sales analysis reveals 4 of 18 distributors consistently failing to stock premium SKUs.",
+      deepDive: {
+        asmLevel: [
+          { asm: 'Rajesh Kumar', territory: 'Central Mumbai', achievement: '76%', premiumDist: '61%', distributors: 6, gap: 'Rs 85L quarterly', issue: '2 distributors with WC constraints, TSM training gap' },
+          { asm: 'Meera Patil', territory: 'Eastern Suburbs', achievement: '112%', premiumDist: '79%', distributors: 5, gap: 'Rs 42L opportunity', issue: 'Minor - outlet coverage in new areas' },
+          { asm: 'Pradeep Shah', territory: 'Western Suburbs', achievement: '88%', premiumDist: '64%', distributors: 4, gap: 'Rs 68L quarterly', issue: '1 distributor transition, TSM prioritization' },
+          { asm: 'Amit Desai', territory: 'Thane', achievement: '103%', premiumDist: '74%', distributors: 3, gap: 'Rs 27L opportunity', issue: 'Outlet expansion catching up' }
+        ],
+        distributorLevel: [
+          { distributor: 'Gupta Enterprises', asm: 'Rajesh Kumar', coverage: '420 outlets', premiumDist: '48%', issue: 'Working capital constraints - taking only fast movers', monthlyPotential: 'Rs 18L', action: 'WC support discussion' },
+          { distributor: 'Shah Trading Co', asm: 'Pradeep Shah', coverage: '380 outlets', premiumDist: '52%', issue: 'New distributor - system issues', monthlyPotential: 'Rs 16L', action: 'Intensive onboarding' },
+          { distributor: 'Mumbai Suppliers', asm: 'Rajesh Kumar', coverage: '285 outlets', premiumDist: '58%', issue: 'TSM preferring core SKUs', monthlyPotential: 'Rs 12L', action: 'TSM incentive restructure' },
+          { distributor: 'Sai Distributors', asm: 'Pradeep Shah', coverage: '155 outlets', premiumDist: '61%', issue: 'Limited van capacity', monthlyPotential: 'Rs 8L', action: 'Route optimization' }
+        ],
+        tsmLevel: [
+          { tsm: 'Vikram Joshi', distributor: 'Gupta Enterprises', outlets: 142, premiumCall: '41%', coreCall: '89%', issue: 'Avoiding premium SKUs due to returns history', solution: 'Premium SKU training' },
+          { tsm: 'Rahul Patil', distributor: 'Shah Trading Co', outlets: 128, premiumCall: '38%', coreCall: '86%', issue: 'New distributor - unfamiliar with premium', solution: 'Premium familiarization' },
+          { tsm: 'Suresh Kamble', distributor: 'Mumbai Suppliers', outlets: 96, premiumCall: '52%', coreCall: '91%', issue: 'Margin pressure on premium', solution: 'Incentive restructure' },
+          { tsm: 'Anil Sharma', distributor: 'Gupta Enterprises', outlets: 86, premiumCall: '45%', coreCall: '87%', issue: 'Limited beat time', solution: 'Beat restructuring' }
         ]
       },
-      {
-        id: 'A2', name: 'Anjali Deshmukh', territory: 'Pune', health: 'warning',
-        m: { ach: 88, gm: 39.2, credit: 'Stable', stock: 2, wc: '₹1.8Cr' },
-        trend: [85, 87, 88, 88],
-        alerts: 1,
-        insight: 'Mixed. Pune city good but Hadapsar wholesale -12%. Premium packs 28pts below target.',
-        dists: []
+      recommendation: {
+        action: "Phase 1 (Week 1-2): WC support to 2 distributors, intensive TSM training. Phase 2 (Week 3-4): Incentive restructure, beat optimization.",
+        cost: "WC support: Rs 8L, TSM training: Rs 2L, incentive adjustment: Rs 3L monthly",
+        return: "Distribution improvement to 84% unlocks Rs 1.6Cr quarterly",
+        roi: "4-week payback"
       },
-      {
-        id: 'A3', name: 'Sandeep Kumar', territory: 'Thane', health: 'healthy',
-        m: { ach: 105, gm: 40.8, credit: 'Healthy', stock: 0, wc: 'Optimal' },
-        trend: [99, 102, 104, 105],
-        alerts: 0,
-        insight: 'Outstanding. 105% via full merchandiser coverage + new pack excellence (82% vs 58% avg). Benchmark territory.',
-        dists: []
-      },
-      {
-        id: 'A4', name: 'Meera Iyer', territory: 'Navi Mumbai', health: 'warning',
-        m: { ach: 90, gm: 38.8, credit: 'Stable', stock: 1, wc: '₹1.2Cr' },
-        trend: [89, 90, 90, 90],
-        alerts: 1,
-        insight: 'Modern Trade channel -9.5% while GT/Wholesale stable. Competitive launches aggressive.',
-        dists: []
-      }
-    ]
-  };
-
-  const hColor = h => ({ critical: C.terra, warning: C.warn, healthy: C.sage }[h] || C.grey);
-  const hLabel = h => ({ critical: 'CRITICAL', warning: 'NEEDS ATTENTION', healthy: 'HEALTHY' }[h] || 'UNKNOWN');
-  const sColor = s => ({ critical: C.terra, high: C.warn, medium: C.sage, low: C.grey }[s] || C.grey);
-
-  const openConv = ctx => {
-    setConversationContext(ctx);
-    if (activeTab !== 'askmorrie') {
-      setConversationOpen(true);
-    }
-    
-    let msg = { type: 'ai', text: '', ts: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), sugg: [] };
-
-    if (ctx.type === 'issue') {
-      const i = ctx.data;
-      msg.text = `**${i.title} Root Cause**\n\n**Situation:** ₹2.8Cr monthly revenue gap across 5 dimensions\n\n**Core issue:** Negative feedback loop, not separate problems\n• Route gap → ₹85k weekly loss\n• Revenue pressure → panic promotions → +₹18k weekly margin loss  \n• Cash generation slows → DSO +8 days → credit hits 92%\n• Orders blocked → stockouts → +₹22k weekly backlog\n• Now at ₹125k weekly total loss (accelerating 4% monthly)\n\n**Key insight:** Fixing execution breaks entire loop\n• Direct recovery: ₹125k/week\n• Indirect recovery: ₹150k/week (credit eases, margin improves, supply stabilizes)\n• Total impact: ₹275k/week, not ₹125k\n\n**Recommendation:** Deploy 3 merchandisers (₹132k) → ₹1.58Cr return over 3 months (12.0x ROI)`;
-      msg.sugg = ['Why does loop accelerate vs stabilize?', 'Tipping point for unrecoverable damage?', 'What if I break loop at credit vs execution?', 'Calculate hidden costs in other metrics'];
-    } else if (ctx.type === 'business') {
-      if (ctx.subtype === 'growth') {
-        msg.text = `**Where is growth coming from?**\n\n**MTD Mumbai + Pune: +8.2% vs LY**\n\n**Growth breakdown:**\n• +3.5% from more active outlets (~5% more outlets buying)\n• +4.2% from higher drop size per bill\n• +0.5% from bulk/one-time deals in Thane\n\n**Insight:** ~95% of growth is steady (outlets + order size), not one-off\n\n**Quality check:**\n• Drop size driven by party packs (multi-packs) not price inflation\n• Outlet growth concentrated in Modern Trade\n• Traditional retail flat at +1.5%`;
-        msg.sugg = ['Which outlets drive drop size increase?', 'Is MT growth sustainable or promotion-driven?', 'Traditional retail: why flat despite more coverage?', 'Break down by ASM territory'];
-      } else {
-        msg.text = `**Analysis Capabilities**\n\n**Root cause forensics:** Causal chains, correlation vs causation, symptoms vs diseases\n\n**Intervention design:** ROI with second-order effects, recovery timelines, risk scenarios\n\n**Comparative intelligence:** Why similar inputs yield different outputs, capability gaps, replicability\n\nWhat do you need?`;
-        msg.sugg = ['Biggest risk not visible in dashboard?', 'Success pattern worth replicating?', 'Which problem to solve first?', 'Highest ROI intervention across dimensions?'];
-      }
-    } else {
-      msg.text = `**Analysis Capabilities**\n\n**Root cause forensics:** Causal chains, correlation vs causation, symptoms vs diseases\n\n**Intervention design:** ROI with second-order effects, recovery timelines, risk scenarios\n\n**Comparative intelligence:** Why similar inputs yield different outputs, capability gaps, replicability\n\nWhat do you need?`;
-      msg.sugg = ['Biggest risk not visible in dashboard?', 'Success pattern worth replicating?', 'Which problem to solve first?', 'Highest ROI intervention across dimensions?'];
-    }
-    
-    setChatMessages([msg]);
-  };
-
-  const sendMsg = msg => {
-    if (!msg.trim()) return;
-
-    const uMsg = { type: 'user', text: msg, ts: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) };
-    let aMsg = { type: 'ai', text: '', ts: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), sugg: [] };
-
-    const lowerMsg = msg.toLowerCase();
-
-    if (lowerMsg.includes('growth')) {
-      aMsg.text = `**Growth Driver Analysis**\n\n**MTD Growth: +8.2% vs LY**\n\n**Primary drivers:**\n• Party pack adoption: +12% penetration\n• Modern Trade expansion: +18 new stores\n• Premium SKU mix: Doritos +22%, Lays Magic Masala +15%\n\n**Geographic mix:**\n• Mumbai: +6.5% (urban snacking occasions)\n• Pune: +11.2% (new outlet acquisition)\n• Thane: +9.8% (merchandising excellence)\n\n**Quality indicators:**\n• 85% from volume, 15% from price/mix\n• Repeat purchase rate: 78% (healthy)\n• New product contribution: 8% of growth`;
-      aMsg.sugg = ['Which SKUs driving premium mix?', 'MT expansion sustainable?', 'Geographic concentration risk?', 'Forecast next quarter growth'];
-    } else {
-      aMsg.text = `I can help analyze this question. Based on your query, I can provide insights on:\n\n**Available analysis:**\n• Root cause diagnostics across all dimensions\n• Performance comparisons (ASMs, distributors, territories)\n• ROI calculations for interventions\n• Recovery timelines and action plans\n• Risk assessment and opportunity identification\n• Growth driver analysis\n• Efficiency and productivity gaps\n\nCould you rephrase or ask about a specific aspect you'd like me to analyze?`;
-      aMsg.sugg = ['Where is growth coming from?', 'What are my biggest risks?', 'Which problems to solve first?', 'Calculate ROI for top interventions'];
-    }
-
-    setChatMessages([...chatMessages, uMsg, aMsg]);
-    setInputMessage('');
-  };
-
-  const fmt = txt => {
-    return txt.split('\n').map((line, i) => {
-      const num = line.match(/^(\d+)\.\s*\*\*(.+?)\*\*\s*(.*)$/);
-      if (num) {
-        return (
-          <div key={i} style={{ marginBottom: '12px', display: 'flex', gap: '12px' }}>
-            <div style={{ width: '24px', height: '24px', borderRadius: '50%', backgroundColor: C.sage, color: 'white', fontSize: '12px', fontWeight: '600', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{num[1]}</div>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontWeight: '600', color: C.darkGreen, marginBottom: '4px' }}>{num[2]}</div>
-              <div style={{ color: C.darkest }}>{num[3]}</div>
-            </div>
-          </div>
-        );
-      }
-      
-      if (line.includes('**')) {
-        const parts = [];
-        let t = line, j = 0;
-        while (t.includes('**')) {
-          const s = t.indexOf('**'), e = t.indexOf('**', s + 2);
-          if (e === -1) break;
-          if (s > 0) parts.push(<span key={`t${j++}`}>{t.substring(0, s)}</span>);
-          parts.push(<strong key={`b${j++}`} style={{ fontWeight: '600', color: C.darkGreen }}>{t.substring(s + 2, e)}</strong>);
-          t = t.substring(e + 2);
+      agentTrail: [
+        { 
+          time: '08:23:14',
+          agent: 'Orchestrator',
+          action: 'Initiated Analysis',
+          database: null,
+          query: null,
+          thinking: 'Detected SKU-level achievement variance alert for Mumbai region. Premium SKUs showing 24-point distribution gap vs core portfolio. Triggering multi-agent analysis.',
+          nextAgent: 'Distribution Agent'
+        },
+        { 
+          time: '08:23:18',
+          agent: 'Distribution Agent',
+          action: 'Query Numeric Distribution',
+          database: 'DMS System',
+          query: "SELECT sku_category, territory, numeric_distribution FROM distribution_data WHERE region='Mumbai' AND period='L90D'",
+          thinking: 'Premium SKUs at 68% vs 92% for core. Gap in Central (61%) and Western (64%) territories. Need distributor-level drill.',
+          nextAgent: 'Distribution Agent'
+        },
+        { 
+          time: '08:23:24',
+          agent: 'Distribution Agent',
+          action: 'Query Distributor Performance',
+          database: 'DMS System',
+          query: "SELECT distributor_name, premium_sku_distribution FROM distributor_metrics WHERE premium_sku_distribution < 70",
+          thinking: '4 distributors with sub-70% premium distribution. Covering 1,240 outlets. Selective stocking behavior detected.',
+          nextAgent: 'Sales Agent'
+        },
+        { 
+          time: '08:23:31',
+          agent: 'Sales Agent',
+          action: 'Query Secondary Sales',
+          database: 'Sales Analytics DB',
+          query: "SELECT distributor, sku_category, order_frequency FROM secondary_sales WHERE period='L90D'",
+          thinking: 'Premium SKUs have 18% lower order frequency at these 4 distributors. Points to working capital or portfolio management issues.',
+          nextAgent: 'Finance Agent'
+        },
+        { 
+          time: '08:23:37',
+          agent: 'Finance Agent',
+          action: 'Query Distributor Credit',
+          database: 'Finance System',
+          query: "SELECT distributor_name, credit_utilized_pct FROM distributor_financials",
+          thinking: 'Gupta at 94% credit utilization, Mumbai Suppliers at 89%. Working capital stress confirmed. Premium SKUs need higher upfront investment.',
+          nextAgent: 'Field Intelligence Agent'
+        },
+        { 
+          time: '08:23:44',
+          agent: 'Field Intelligence Agent',
+          action: 'Query TSM Beat Patterns',
+          database: 'Field Activity System',
+          query: "SELECT tsm_name, premium_sku_calls_pct FROM beat_tracking WHERE period='L30D'",
+          thinking: 'TSM network showing 41-52% premium call rate vs 86-91% core rate. Combined with distributor WC constraints creates compound effect.',
+          nextAgent: 'Recommendation Engine'
+        },
+        { 
+          time: '08:23:51',
+          agent: 'Recommendation Engine',
+          action: 'Generate Action Plan',
+          database: 'Analytics DB',
+          query: "CALCULATE revenue_opportunity FROM distribution_gap_analysis WHERE region='Mumbai'",
+          thinking: '1,240 outlets at Rs 5,800/month = Rs 2.2Cr quarterly opportunity. Root causes: WC constraints + TSM behavior. Multi-pronged intervention needed.',
+          nextAgent: null
         }
-        if (t) parts.push(<span key={`t${j++}`}>{t}</span>);
-        return <div key={i} style={{ marginBottom: line.trim() ? '8px' : '4px' }}>{parts}</div>;
-      }
-      
-      return line.trim() ? <div key={i} style={{ marginBottom: '8px' }}>{line}</div> : <div key={i} style={{ height: '8px' }}></div>;
-    });
+      ]
+    },
+    {
+      id: 2,
+      priority: 'high',
+      title: 'Eastern suburbs outperformance - Thane West model worth Rs 1.4Cr if replicated',
+      summary: 'ASM Meera Patil achieving 112% through superior TSM network execution and distributor management',
+      keyNumbers: {
+        achievement: '112% vs 89% region',
+        numericDist: '94% vs 78% average',
+        potentialValue: 'Rs 1.4Cr if replicated',
+        tsmProductivity: '38% higher than region'
+      },
+      narrative: "Thane West (ASM Meera Patil) consistently outperforming at 112% achievement vs 89% regional average. Deep dive reveals systematic approach: 94% numeric distribution vs 78% region, TSM productivity 38% higher, distributor loading patterns optimal. Her management practices include weekly distributor meets with SKU-level planning, TSM daily briefings on priority outlets, and real-time issue escalation system.",
+      deepDive: {
+        asmLevel: [
+          { asm: 'Meera Patil', territory: 'Thane West', achievement: '112%', numericDist: '94%', distributors: 5, practices: 'Weekly distributor reviews, daily TSM briefings', replicability: 'High - documented' },
+          { asm: 'Rajesh Kumar', territory: 'Central Mumbai', achievement: '76%', numericDist: '78%', distributors: 6, gap: 'Reactive management', opportunity: 'Rs 52L if Thane model applied' },
+          { asm: 'Pradeep Shah', territory: 'Western Suburbs', achievement: '88%', numericDist: '81%', distributors: 4, gap: 'Good execution but distributor issues', opportunity: 'Rs 38L' },
+          { asm: 'Amit Desai', territory: 'Thane East', achievement: '103%', numericDist: '88%', distributors: 3, gap: 'Strong but not systematic', opportunity: 'Rs 18L' }
+        ],
+        distributorLevel: [
+          { distributor: 'Thane Suppliers (Meera)', coverage: '485 outlets', numericDist: '96%', vanMix: '63-27-10', practice: 'Daily loading discipline', benchmark: 'Best in region' },
+          { distributor: 'Excel Distributors (Meera)', coverage: '420 outlets', numericDist: '94%', vanMix: '66-24-10', practice: 'Strong TSM coordination', benchmark: 'Top quartile' },
+          { distributor: 'Gupta Enterprises (Rajesh)', coverage: '420 outlets', numericDist: '73%', vanMix: '82-9-9', practice: 'Opportunistic loading', gap: 'Needs Thane model' },
+          { distributor: 'Shah Trading (Pradeep)', coverage: '380 outlets', numericDist: '68%', vanMix: '79-11-10', practice: 'New distributor', gap: 'Apply Meera onboarding playbook' }
+        ],
+        tsmLevel: [
+          { tsm: 'Ravi Naik (Meera)', distributor: 'Thane Suppliers', outlets: 163, callRate: '96%', premiumCalls: '84%', practice: 'Structured beat, daily ASM sync', benchmark: 'Regional best practice' },
+          { tsm: 'Kavita Jadhav (Meera)', distributor: 'Excel Distributors', outlets: 142, callRate: '94%', premiumCalls: '81%', practice: 'Systematic coverage', benchmark: 'Strong execution' },
+          { tsm: 'Vikram Joshi (Rajesh)', distributor: 'Gupta Enterprises', outlets: 142, callRate: '78%', premiumCalls: '41%', gap: 'Reactive approach', opportunity: 'Training on Meera methodology' },
+          { tsm: 'Rahul Patil (Pradeep)', distributor: 'Shah Trading', outlets: 128, callRate: '72%', premiumCalls: '38%', gap: 'New distributor', opportunity: 'Shadow Meera TSM for 2 weeks' }
+        ]
+      },
+      recommendation: {
+        action: "Week 1-2: Document Meera's playbook. Week 3-4: Rajesh and Pradeep shadow Meera. Week 5-8: Implement with weekly check-ins.",
+        cost: "Training time: Rs 1.2L, documentation: Rs 0.8L",
+        return: "Central territory gap closure: Rs 52L quarterly, Western recovery: Rs 28L. Total Rs 1.08Cr annually.",
+        roi: "5.4x return, practices become permanent capability"
+      },
+      owner: 'RSM Mumbai - ASM capability building',
+      agentTrail: [
+        { 
+          time: '09:15:22',
+          agent: 'Orchestrator',
+          action: 'Initiated Performance Analysis',
+          database: null,
+          query: null,
+          thinking: 'Detected significant positive variance in Thane West territory. ASM Meera Patil at 112% achievement vs 89% regional average for 3 consecutive months. High-confidence pattern suggests replicable practices.',
+          nextAgent: 'Sales Agent'
+        },
+        { 
+          time: '09:15:28',
+          agent: 'Sales Agent',
+          action: 'Query Territory Performance',
+          database: 'Sales Analytics DB',
+          query: "SELECT asm_name, territory, monthly_achievement_pct FROM territory_performance WHERE region='Mumbai' ORDER BY achievement DESC",
+          thinking: 'Meera territory consistently top performer: 112% achievement, 94% numeric distribution (16 pts above region), premium mix at 27% vs 19% region. Sustained over quarter.',
+          nextAgent: 'Distribution Agent'
+        },
+        { 
+          time: '09:15:35',
+          agent: 'Distribution Agent',
+          action: 'Query Distributor Practices',
+          database: 'DMS System',
+          query: "SELECT distributor_name, loading_mix, fill_rate FROM distributor_operations WHERE asm IN ('Meera Patil', 'Rajesh Kumar') AND period='L30D'",
+          thinking: 'Meera distributors show consistent 65-25-10 core-premium-seasonal mix vs others at 78-12-10. Fill rates at 96% vs 84% regional average. This is systematic.',
+          nextAgent: 'Field Intelligence Agent'
+        },
+        { 
+          time: '09:15:42',
+          agent: 'Field Intelligence Agent',
+          action: 'Query TSM Activity Patterns',
+          database: 'Field Activity System',
+          query: "SELECT tsm_name, call_success_rate, premium_calls_pct FROM tsm_performance WHERE asm IN ('Meera Patil', 'Rajesh Kumar') AND period='L30D'",
+          thinking: 'Meera TSM network: 96% call rate vs 78% region, 84% premium calls vs 52% region. TSM productivity 38% higher. Management system creating consistent high performance.',
+          nextAgent: 'Recommendation Engine'
+        },
+        { 
+          time: '09:15:56',
+          agent: 'Recommendation Engine',
+          action: 'Calculate Replication Opportunity',
+          database: 'Analytics DB',
+          query: "CALCULATE revenue_uplift WHERE apply_best_practices FROM territory='Thane West'",
+          thinking: 'Central Mumbai gap closure: Rs 52L quarterly. Western: Rs 38L. Thane East: Rs 18L. Total opportunity Rs 1.08Cr annually. Meera practices are documented - high replicability.',
+          nextAgent: null
+        }
+      ]
+    },
+    {
+      id: 3,
+      priority: 'high',
+      title: 'Festival pre-positioning 18 days to Holi - execution behind target by 23 points',
+      summary: 'Only 62% of outlets have festival displays vs 85% target. Western suburbs most critical at 54%.',
+      keyNumbers: {
+        currentCoverage: '62% of 3,850 outlets',
+        targetCoverage: '85% by Mar 8',
+        gap: '885 outlets pending',
+        westernLag: '54% vs 62% region'
+      },
+      narrative: "Holi festival on March 14 (18 days away). Internal merchandising tracker shows only 2,385 of 3,850 outlets (62%) have festival SKU displays vs 85% target. Western suburbs (ASM Pradeep) most critical at 54%. Historical data shows festival displays drive 34% volume uplift. At current pace, missing Rs 88L festival opportunity. Root cause: merchandising team capacity stretched, ASM Pradeep territory got lower priority due to distributor transition focus.",
+      deepDive: {
+        asmLevel: [
+          { asm: 'Pradeep Shah', territory: 'Western Suburbs', outlets: 800, festivalReady: '432 (54%)', pending: 368, issue: 'Lowest coverage - merchandiser shortage', urgency: 'Critical - highest festival potential' },
+          { asm: 'Rajesh Kumar', territory: 'Central Mumbai', outlets: 1100, festivalReady: '704 (64%)', pending: 336, issue: 'Moderate pace, merchandiser allocation okay', urgency: 'High - need acceleration' },
+          { asm: 'Amit Desai', territory: 'Thane', outlets: 950, festivalReady: '646 (68%)', pending: 304, issue: 'Steady progress but below target', urgency: 'Medium - on track with push' },
+          { asm: 'Meera Patil', territory: 'Eastern Suburbs', outlets: 1000, festivalReady: '720 (72%)', pending: 280, issue: 'Best progress, systematic execution', urgency: 'Low - likely to hit target' }
+        ],
+        distributorLevel: [
+          { distributor: 'Shah Trading (Pradeep)', outlets: 380, festivalReady: '186 (49%)', pending: 194, issue: 'New distributor - TSM network not aligned on festival priority', action: 'Urgent distributor meet' },
+          { distributor: 'Sai Distributors (Pradeep)', outlets: 155, festivalReady: '78 (50%)', pending: 77, issue: 'Small distributor, lower priority in queue', action: 'Fast-track merchandising' },
+          { distributor: 'Gupta Enterprises (Rajesh)', outlets: 420, festivalReady: '252 (60%)', pending: 168, issue: 'Decent progress but needs push', action: 'Weekend merchandising blitz' },
+          { distributor: 'Thane Suppliers (Meera)', outlets: 485, festivalReady: '359 (74%)', pending: 126, issue: 'Systematic rollout, on track', action: 'Continue current pace' }
+        ],
+        tsmLevel: [
+          { tsm: 'Rahul Patil (Pradeep)', distributor: 'Shah Trading', outlets: 128, festivalReady: 58, pending: 70, issue: 'New to distributor, learning festival process', action: 'Pair with experienced TSM' },
+          { tsm: 'Sunil Yadav (Pradeep)', distributor: 'Sai Distributors', outlets: 52, festivalReady: 24, pending: 28, issue: 'Small beat, got deprioritized', action: 'Fast-track with merchandiser' },
+          { tsm: 'Vikram Joshi (Rajesh)', distributor: 'Gupta Enterprises', outlets: 142, festivalReady: 82, pending: 60, issue: 'Moderate pace, can accelerate', action: 'Weekend support' },
+          { tsm: 'Ravi Naik (Meera)', distributor: 'Thane Suppliers', outlets: 163, festivalReady: 124, pending: 39, issue: 'Excellent execution', action: 'Continue + share learnings' }
+        ]
+      },
+      recommendation: {
+        action: "Emergency action: Deploy 8 additional merchandisers to Western suburbs for 10 days. Pradeep and merchandising lead to personally oversee Shah Trading. Weekend blitz across all territories. Daily ASM check-ins till March 8.",
+        cost: "Additional merchandiser deployment: Rs 3.2L for 10 days, weekend overtime: Rs 1.8L",
+        return: "Festival window protection: Rs 88L potential revenue. Display completion drives 34% uplift vs non-display outlets.",
+        roi: "17.6x return on merchandising investment"
+      },
+      owner: 'RSM Mumbai - Direct oversight with Trade Marketing',
+      agentTrail: [
+        { 
+          time: '10:42:15',
+          agent: 'Orchestrator',
+          action: 'Initiated Festival Readiness Check',
+          database: null,
+          query: null,
+          thinking: 'Calendar trigger: 18 days to Holi festival. Target: 85% outlet coverage with festival displays by March 8. Need current status and gap analysis.',
+          nextAgent: 'Merchandising Agent'
+        },
+        { 
+          time: '10:42:21',
+          agent: 'Merchandising Agent',
+          action: 'Query Display Installation Status',
+          database: 'Merchandising System',
+          query: "SELECT asm_territory, total_outlets, festival_displays_installed FROM festival_merchandising WHERE festival='Holi_2026' AND region='Mumbai'",
+          thinking: 'Current status: 2,385 of 3,850 outlets (62%) have displays vs 85% target. Gap of 885 outlets with 18 days. Western suburbs at only 54%. Need to identify constraints.',
+          nextAgent: 'Field Intelligence Agent'
+        },
+        { 
+          time: '10:42:28',
+          agent: 'Field Intelligence Agent',
+          action: 'Query Merchandiser Capacity',
+          database: 'Field Activity System',
+          query: "SELECT territory, merchandiser_count, avg_installations_per_day FROM merchandising_capacity WHERE region='Mumbai'",
+          thinking: '18 merchandisers covering 3,850 outlets. Current capacity: 48 installations/day at 92% utilization. Western suburbs allocated 4 merchandisers but has 800 outlets - lowest ratio.',
+          nextAgent: 'Sales Agent'
+        },
+        { 
+          time: '10:42:34',
+          agent: 'Sales Agent',
+          action: 'Query Festival Impact History',
+          database: 'Sales Analytics DB',
+          query: "SELECT display_status, sales_uplift_pct FROM festival_performance_history WHERE region='Mumbai' AND period='L3Y'",
+          thinking: 'Historical data: Outlets with festival displays show 34% sales uplift during 2-week festival window. Last Holi: outlets without displays lost Rs 92L potential revenue.',
+          nextAgent: 'Recommendation Engine'
+        },
+        { 
+          time: '10:42:48',
+          agent: 'Recommendation Engine',
+          action: 'Generate Recovery Plan',
+          database: 'Analytics DB',
+          query: "CALCULATE resource_reallocation WHERE gap=885_outlets AND days_remaining=18",
+          thinking: 'Need 885 displays in 18 days = 49/day. Requires 8 additional merchandisers for 10 days, focused on Western suburbs. Cost Rs 5L vs Rs 88L revenue protection = 17.6x ROI.',
+          nextAgent: null
+        }
+      ]
+    }
+  ];
+
+  const getBriefingIcon = (type) => {
+    switch(type) {
+      case 'critical': return <AlertCircle size={18} />;
+      case 'opportunity': return <TrendingUp size={18} />;
+      case 'alert': return <Clock size={18} />;
+      case 'performance': return <BarChart3 size={18} />;
+      case 'highlight': return <Sparkles size={18} />;
+      default: return <Activity size={18} />;
+    }
   };
 
-  const Sparkline = ({ data, color, height = 40 }) => {
+  const getBriefingColor = (type) => {
+    switch(type) {
+      case 'critical': return '#DC2626';
+      case 'opportunity': return '#059669';
+      case 'alert': return '#D97706';
+      case 'performance': return C.sage;
+      case 'highlight': return '#6366F1';
+      default: return C.lightGrey;
+    }
+  };
+
+  const getPriorityColor = (priority) => {
+    if (priority === 'critical') return '#DC2626';
+    if (priority === 'high') return '#EA580C';
+    return C.sage;
+  };
+
+  const getPriorityLabel = (priority) => {
+    if (priority === 'critical') return 'CRITICAL';
+    if (priority === 'high') return 'HIGH PRIORITY';
+    return 'MONITOR';
+  };
+
+  const handleInsightClick = (insight) => {
+    setSelectedInsight(insight);
+    setChatOpen(false);
+    setTrailOpen(false);
+  };
+
+  const openTrail = (insight) => {
+    setSelectedTrail(insight);
+    setTrailOpen(true);
+  };
+
+  const StatusBadge = ({ status }) => {
+    const config = {
+      critical: { bg: `${C.sage}20`, text: C.sage, label: 'Critical' },
+      warning: { bg: `${C.sage}15`, text: C.sage, label: 'Needs Attention' },
+      healthy: { bg: C.lightSage, text: C.sage, label: 'Healthy' },
+      high: { bg: `${C.sage}20`, text: C.sage, label: 'High Priority' },
+      opportunity: { bg: C.lightSage, text: C.sage, label: 'Opportunity' },
+      medium: { bg: C.cream, text: C.darkGrey, label: 'Monitor' }
+    }[status];
+    
+    return (
+      <span style={{ 
+        fontSize: '10px', 
+        fontWeight: '600', 
+        letterSpacing: '0.05em', 
+        color: config.text, 
+        backgroundColor: config.bg, 
+        padding: '4px 10px', 
+        borderRadius: '12px', 
+        textTransform: 'uppercase' 
+      }}>
+        {config.label}
+      </span>
+    );
+  };
+
+    const Sparkline = ({ data, color }) => {
     const max = Math.max(...data);
     const min = Math.min(...data);
     const range = max - min || 1;
+    const width = 80;
+    const height = 30;
+    
     const points = data.map((val, i) => {
-      const x = (i / (data.length - 1)) * 100;
+      const x = (i / (data.length - 1)) * width;
       const y = height - ((val - min) / range) * height;
       return `${x},${y}`;
     }).join(' ');
     
     return (
-      <svg width="100" height={height} style={{ display: 'block' }}>
+      <svg width={width} height={height} style={{ display: 'block' }}>
         <polyline points={points} fill="none" stroke={color} strokeWidth="2" />
       </svg>
     );
   };
 
+  const openChat = (insight) => {
+    setSelectedInsight(insight);
+    setChatOpen(true);
+    setTrailOpen(false);
+    setChatMessages([{
+      type: 'ai',
+      text: `I can help you explore this insight about ${insight.title.toLowerCase()}. What would you like to know?`,
+      suggestions: ['What are the root causes?', 'Show me detailed numbers', 'What actions should I take first?', 'How confident are we in this analysis?']
+    }]);
+  };
+
+  const sendMessage = (message) => {
+    if (!message.trim()) return;
+    setChatMessages(prev => [...prev, { type: 'user', text: message }]);
+    setInputMessage('');
+    setTimeout(() => {
+      setChatMessages(prev => [...prev, {
+        type: 'ai',
+        text: `Based on the analysis, I can provide specific insights about ${message.toLowerCase()}. The data shows clear patterns we can explore further.`,
+        suggestions: ['Tell me more', 'Show me the numbers', 'What should I do?']
+      }]);
+    }, 800);
+  };
+
   return (
-    <div className='overflow-auto h-screen' style={{ backgroundColor: C.cream, fontFamily: "'Inter', -apple-system, sans-serif" }}>
+    <div className='overflow-auto' style={{ height: '100vh', backgroundColor: C.offWhite, fontFamily: 'system-ui, sans-serif' }}>
       {/* Header */}
-      <div style={{ backgroundColor: C.darkGreen, padding: '32px', borderBottom: `1px solid ${C.sage}40` }}>
-        <div style={{ maxWidth: conversationOpen ? 'none' : '1400px', margin: '0 auto' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <div>
-              <div style={{ fontSize: '11px', color: C.sage, marginBottom: '8px', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Regional Sales Manager • PepsiCo Frito-Lay India</div>
-              <h1 style={{ fontSize: '32px', fontWeight: '300', color: C.cream, marginBottom: '8px', letterSpacing: '-0.02em' }}>{data.rsmName}</h1>
-              <div style={{ fontSize: '14px', color: C.sage, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <MapPin size={14} strokeWidth={1.5} />
-                <span>{data.region}</span>
-                <span style={{ margin: '0 8px', opacity: 0.4 }}>•</span>
-                <span>{data.team} ASMs</span>
-              </div>
-            </div>
-            <div style={{ display: 'flex', gap: '32px' }}>
-              {[
-                ['Achievement', `${data.achievement}%`],
-                ['Gross Margin', `${data.gm}%`],
-                ['Working Capital', `₹${data.wc}Cr`]
-              ].map(([l, v]) => (
-                <div key={l}>
-                  <div style={{ fontSize: '11px', color: C.sage, marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{l}</div>
-                  <div style={{ fontSize: '28px', fontWeight: '300', color: C.cream }}>{v}</div>
-                </div>
-              ))}
-            </div>
+      <div style={{ backgroundColor: C.white, borderBottom: `1px solid ${C.cream}`, padding: '20px 40px', position: 'sticky', top: 0, zIndex: 100 }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>
+            <div style={{ fontSize: '24px', fontWeight: '600', color: C.green }}>Mumbai RSM Dashboard</div>
+            <div style={{ fontSize: '13px', color: C.lightGrey }}>Regional Sales Manager - Priya Sharma</div>
+          </div>
+          <div style={{ textAlign: 'right' }}>
+            <div style={{ fontSize: '13px', color: C.lightGrey }}>Wednesday, January 28, 2026</div>
+            <div style={{ fontSize: '12px', color: C.sage }}>Monthly Achievement: 89%</div>
           </div>
         </div>
       </div>
 
-      {/* Tabs */}
-      <div style={{ backgroundColor: C.off, borderBottom: `1px solid ${C.darkGreen}15`, padding: '0 32px' }}>
-        <div style={{ maxWidth: conversationOpen ? 'none' : '1400px', margin: '0 auto', display: 'flex', gap: '8px' }}>
-          {['dashboard', 'deepdive', 'askmorrie'].map(tab => (
+        <div style={{ backgroundColor: C.white, borderBottom: `1px solid ${C.cream}`, padding: '0 48px' }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto', display: 'flex', gap: '8px' }}>
+          {['briefing', 'deepdive'].map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
               style={{
-                padding: '16px 24px',
-                fontSize: '14px',
+                padding: '20px 28px',
+                fontSize: '13px',
                 fontWeight: activeTab === tab ? '600' : '400',
-                color: activeTab === tab ? C.darkGreen : C.grey,
+                color: activeTab === tab ? C.green : C.lightGrey,
                 backgroundColor: 'transparent',
                 border: 'none',
-                borderBottom: activeTab === tab ? `2px solid ${C.darkGreen}` : '2px solid transparent',
+                borderBottom: activeTab === tab ? `2px solid ${C.green}` : '2px solid transparent',
                 cursor: 'pointer',
-                fontFamily: "'Inter', sans-serif",
-                textTransform: 'capitalize'
+                textTransform: 'capitalize',
+                letterSpacing: '0.03em'
               }}
             >
-              {tab === 'deepdive' ? 'ASM Performance' : tab === 'askmorrie' ? 'Ask Morrie' : 'Dashboard'}
+              {tab === 'deepdive' ? 'Territory Deep Dive' : 'Morning Briefing'}
             </button>
           ))}
         </div>
       </div>
 
       {/* Main Content */}
-      <div style={{ display: 'flex', overflow: 'hidden', minHeight: 'calc(100vh - 190px)' }}>
-        <div style={{ flex: conversationOpen ? '1 1 60%' : '1 1 100%', overflowY: 'auto', padding: '32px' }}>
-          <div style={{ maxWidth: conversationOpen ? 'none' : '1400px', margin: '0 auto' }}>
-            
-            {activeTab === 'dashboard' && (
-              <>
-                {/* Critical Issues */}
-                <div style={{ marginBottom: '40px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
-                    <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: `${C.terra}20`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <AlertCircle size={20} color={C.terra} />
+      <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '32px 40px' }}>
+       {activeTab === 'briefing' && <>   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '32px' }}>
+                      {[
+                        { label: 'Mumbai Achievement', value: '89%', change: '-11%', trend: 'down', icon: Target, color: C.sage },
+                        { label: 'Mumbai Active Outlets', value: '1,850', sub: 'of 2,055 total', icon: MapPin, color: C.sage },
+                        { label: 'Mumbai Avg Coverage', value: '88%', change: '-6%', trend: 'down', icon: Activity, color: C.lightGrey },
+                        { label: 'Mumbai Premium Mix', value: '32%', sub: 'vs 52% Thane', icon: Package, color: C.sage }
+                      ].map((metric, i) => (
+                        <div key={i} style={{ padding: '20px', border: `1px solid ${C.cream}`, borderRadius: '4px', backgroundColor: C.white }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+                            <div style={{ fontSize: '11px', fontWeight: '500', color: C.lightGrey, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                              {metric.label}
+                            </div>
+                            <metric.icon size={16} strokeWidth={1.5} color={metric.color} />
+                          </div>
+                          <div style={{ fontSize: '28px', fontWeight: '300', color: C.green, marginBottom: '4px' }}>
+                            {metric.value}
+                          </div>
+                          {metric.change && (
+                            <div style={{ fontSize: '12px', color: metric.trend === 'down' ? C.sage : C.sage, fontWeight: '500' }}>
+                              {metric.change}
+                            </div>
+                          )}
+                          {metric.sub && (
+                            <div style={{ fontSize: '12px', color: C.lightGrey }}>{metric.sub}</div>
+                          )}
+                        </div>
+                      ))}
                     </div>
-                    <div>
-                      <h2 style={{ fontSize: '22px', fontWeight: '500', color: C.darkGreen, margin: 0 }}>Critical Business Issues</h2>
-                      <p style={{ fontSize: '13px', color: C.grey, margin: 0 }}>{data.issues.length} multi-dimensional issues requiring immediate action</p>
-                    </div>
+        
+        {/* Morning Briefing */}
+        <div style={{ marginBottom: '32px' }}>
+          <h2 style={{ fontSize: '18px', fontWeight: '600', color: C.green, margin: '0 0 24px 0' }}>Morning Briefing</h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {briefingPoints.map((point, i) => (
+              <div key={i} style={{ backgroundColor: C.white, border: `1px solid ${C.cream}`, borderRadius: '8px', padding: '20px 24px', display: 'flex', gap: '16px' }}>
+                <div style={{ color: getBriefingColor(point.type), marginTop: '2px', flexShrink: 0 }}>
+                  {getBriefingIcon(point.type)}
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: '14px', fontWeight: '600', color: C.green, marginBottom: '6px' }}>{point.title}</div>
+                  <div style={{ fontSize: '13px', color: C.darkGrey, lineHeight: '1.6', marginBottom: '8px' }}>{point.detail}</div>
+                  <div style={{ fontSize: '12px', color: getBriefingColor(point.type), fontWeight: '500', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <Target size={14} />
+                    {point.action}
                   </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
 
-                  {data.issues.map(i => (
-                    <div key={i.id} style={{ backgroundColor: 'white', borderRadius: '4px', border: `2px solid ${sColor(i.sev)}40`, overflow: 'hidden', marginBottom: '16px' }}>
-                      <div style={{ padding: '24px', borderBottom: `1px solid ${C.darkGreen}10` }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-                          <span style={{ fontSize: '10px', fontWeight: '600', letterSpacing: '0.05em', color: sColor(i.sev), backgroundColor: `${sColor(i.sev)}20`, padding: '4px 8px', borderRadius: '2px', textTransform: 'uppercase' }}>{i.sev}</span>
-                          <span style={{ fontSize: '12px', color: C.grey }}>Owner: {i.owner}</span>
-                        </div>
-                        <h3 style={{ fontSize: '20px', fontWeight: '600', color: C.darkGreen, marginBottom: '8px' }}>{i.title}</h3>
-                        <div style={{ fontSize: '14px' }}>
-                          <span style={{ color: C.grey }}>Primary Impact: </span>
-                          <strong style={{ color: C.terra, fontSize: '16px' }}>{i.impact.val}</strong>
-                          {i.impact.pct && <span style={{ color: C.terra, marginLeft: '6px' }}>({i.impact.pct}%)</span>}
-                        </div>
+        <div style={{ height: '1px', backgroundColor: C.cream, margin: '40px 0' }} />
 
-                        <div style={{ padding: '16px', backgroundColor: C.off, borderRadius: '4px', marginTop: '16px', marginBottom: '16px' }}>
-                          <div style={{ fontSize: '11px', fontWeight: '600', color: C.grey, marginBottom: '12px', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Integrated Diagnosis Across Dimensions</div>
-                          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                            {Object.entries(i.dims).map(([d, dt]) => (
-                              <div key={d} style={{ padding: '12px', backgroundColor: 'white', borderRadius: '4px', borderLeft: `3px solid ${sColor(dt.sev)}` }}>
-                                <div style={{ fontSize: '10px', fontWeight: '600', color: sColor(dt.sev), marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                                  {d === 'execution' && '🎯 '}{d === 'finance' && '💰 '}{d === 'supply' && '📦 '}{d === 'margin' && '💹 '}{d === 'forecast' && '📊 '}{d}
+        {/* Key Insights */}
+        <div>
+          <h2 style={{ fontSize: '18px', fontWeight: '600', color: C.green, margin: '0 0 20px 0' }}>Key Insights</h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {insights.map(insight => (
+              <div key={insight.id} style={{ backgroundColor: C.white, border: `1px solid ${C.cream}`, borderRadius: '8px', overflow: 'hidden', cursor: 'pointer', transition: 'all 0.2s' }}
+                onClick={() => handleInsightClick(insight)}
+                onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'translateY(0)'; }}>
+                <div style={{ padding: '24px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: '11px', fontWeight: '600', color: getPriorityColor(insight.priority), marginBottom: '8px', letterSpacing: '0.05em' }}>
+                        {getPriorityLabel(insight.priority)}
+                      </div>
+                      <h3 style={{ fontSize: '15px', fontWeight: '600', color: C.green, margin: '0 0 8px 0', lineHeight: '1.4' }}>{insight.title}</h3>
+                      <p style={{ fontSize: '13px', color: C.lightGrey, margin: 0 }}>{insight.summary}</p>
+                    </div>
+                    <ChevronRight size={20} color={C.sage} style={{ flexShrink: 0, marginLeft: '16px' }} />
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px', marginTop: '16px', paddingTop: '16px', borderTop: `1px solid ${C.cream}` }}>
+                    {Object.entries(insight.keyNumbers).map(([key, value]) => (
+                      <div key={key}>
+                        <div style={{ fontSize: '11px', color: C.lightGrey, marginBottom: '4px', textTransform: 'uppercase' }}>
+                          {key.replace(/([A-Z])/g, ' $1').trim()}
+                        </div>
+                        <div style={{ fontSize: '14px', fontWeight: '600', color: C.green }}>{value}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div></>}
+
+        {activeTab === 'deepdive' && (<>
+         {activeTab === 'deepdive' && (
+                  <div>
+                    <div style={{ marginBottom: '32px' }}>
+                      <h3 style={{ fontSize: '18px', fontWeight: '500', color: C.green, marginBottom: '8px' }}>
+                        Mumbai ASM Territory Performance
+                      </h3>
+                      <p style={{ fontSize: '14px', color: C.lightGrey, margin: 0 }}>
+                        Deep dive into Mumbai region ASM territories and their distributor networks
+                      </p>
+                    </div>
+        
+                    {territories.map((territory) => (
+                      <div key={territory.name} style={{ marginBottom: '24px', border: `1px solid ${C.cream}`, borderRadius: '6px', overflow: 'hidden', backgroundColor: C.white }}>
+                        <div 
+                          onClick={() => setExpandedTerritory(expandedTerritory === territory.name ? null : territory.name)}
+                          style={{ padding: '24px', cursor: 'pointer', backgroundColor: C.offWhite }}
+                        >
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                            <div style={{ flex: 1 }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                                <h4 style={{ fontSize: '18px', fontWeight: '600', color: C.green, margin: 0 }}>
+                                  {territory.name}
+                                </h4>
+                                <span style={{ fontSize: '13px', color: C.lightGrey }}>{territory.territory}</span>
+                                <StatusBadge status={territory.status} />
+                              </div>
+                              <p style={{ fontSize: '13px', color: C.darkGrey, margin: 0, fontStyle: 'italic' }}>
+                                {territory.topIssue}
+                              </p>
+                            </div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+                              <Sparkline data={territory.trend} color={territory.status === 'critical' ? C.sage : territory.status === 'warning' ? C.sage : C.sage} />
+                              {expandedTerritory === territory.name ? <ChevronDown size={20} color={C.green} /> : <ChevronRight size={20} color={C.green} />}
+                            </div>
+                          </div>
+        
+                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginTop: '20px' }}>
+                            {[
+                              { label: 'Achievement', value: `${territory.achievement}%`, good: territory.achievement >= 85 },
+                              { label: 'Coverage', value: `${territory.coverage}%`, good: territory.coverage >= 90 },
+                              { label: 'Premium Mix', value: `${territory.premiumMix}%`, good: territory.premiumMix >= 42 },
+                              { label: 'Active Outlets', value: `${territory.outlets.active} of ${territory.outlets.total}`, good: true }
+                            ].map((metric, i) => (
+                              <div key={i} style={{ padding: '12px', backgroundColor: C.white, borderRadius: '4px' }}>
+                                <div style={{ fontSize: '10px', fontWeight: '500', color: C.lightGrey, marginBottom: '6px', textTransform: 'uppercase' }}>
+                                  {metric.label}
                                 </div>
-                                <div style={{ fontSize: '12px', color: C.darkest, marginBottom: '4px', lineHeight: '1.4' }}>{dt.issue}</div>
-                                <div style={{ fontSize: '11px', color: C.grey }}>{dt.impact}</div>
+                                <div style={{ fontSize: '20px', fontWeight: '600', color: metric.good ? C.sage : C.sage }}>
+                                  {metric.value}
+                                </div>
                               </div>
                             ))}
                           </div>
                         </div>
-
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '12px', marginBottom: '16px' }}>
-                          {Object.entries(i.bizImpact).map(([k, v]) => (
-                            <div key={k} style={{ padding: '12px', backgroundColor: `${C.terra}08`, borderRadius: '4px' }}>
-                              <div style={{ fontSize: '10px', color: C.grey, marginBottom: '4px', textTransform: 'uppercase' }}>
-                                {k === 'gm' ? 'GM Impact' : k === 'wc' ? 'Working Capital' : k}
-                              </div>
-                              <div style={{ fontSize: '16px', fontWeight: '600', color: C.terra }}>
-                                {typeof v === 'number' ? (v > 0 ? '+' : '') + v + (k === 'gm' ? '%' : '') : v}
-                              </div>
+        
+                        {expandedTerritory === territory.name && (
+                          <div style={{ padding: '24px', backgroundColor: C.white, borderTop: `1px solid ${C.cream}` }}>
+                            <div style={{ fontSize: '14px', fontWeight: '600', color: C.darkGrey, marginBottom: '20px', letterSpacing: '0.02em' }}>
+                              Distributor Network ({territory.distributors.length})
                             </div>
-                          ))}
-                        </div>
-
-                        <div style={{ padding: '16px', backgroundColor: `${C.sage}10`, borderRadius: '4px' }}>
-                          <div style={{ fontSize: '11px', fontWeight: '600', color: C.sage, marginBottom: '12px', letterSpacing: '0.05em', textTransform: 'uppercase' }}>⚡ Recommended Actions</div>
-                          {i.actions.map((a, j) => (
-                            <div key={j} style={{ padding: '10px 12px', backgroundColor: 'white', borderRadius: '4px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: j < i.actions.length - 1 ? '8px' : 0 }}>
-                              <div style={{ flex: 1 }}>
-                                <div style={{ fontSize: '13px', fontWeight: '500', color: C.darkGreen, marginBottom: '2px' }}>{j + 1}. {a.act}</div>
-                                <div style={{ fontSize: '11px', color: C.grey }}>Cost: {a.cost}</div>
-                              </div>
-                              <div style={{ fontSize: '12px', fontWeight: '600', color: C.sage }}>{a.impact}</div>
+                            
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                              {territory.distributors.map((distributor, idx) => (
+                                <div key={idx} style={{ padding: '20px', backgroundColor: C.offWhite, border: `1px solid ${C.cream}`, borderRadius: '4px' }}>
+                                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+                                    <div style={{ flex: 1 }}>
+                                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
+                                        <h5 style={{ fontSize: '15px', fontWeight: '600', color: C.green, margin: 0 }}>
+                                          {distributor.name}
+                                        </h5>
+                                        <StatusBadge status={distributor.status} />
+                                      </div>
+                                      <div style={{ fontSize: '12px', color: C.lightGrey, marginBottom: '4px' }}>
+                                        {distributor.territory}
+                                      </div>
+                                      <div style={{ fontSize: '13px', fontWeight: '600', color: C.sage }}>
+                                        {distributor.monthlyVolume} monthly volume
+                                      </div>
+                                    </div>
+                                    <div style={{ fontSize: '24px', fontWeight: '600', color: distributor.achievement >= 85 ? C.sage : C.sage }}>
+                                      {distributor.achievement}%
+                                    </div>
+                                  </div>
+        
+                                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginBottom: '16px' }}>
+                                    {[
+                                      { label: 'Order Frequency', value: distributor.orderFrequency },
+                                      { label: 'Active Outlets', value: `${distributor.outlets.active} of ${distributor.outlets.total}` },
+                                      { label: 'Productive', value: `${distributor.outlets.productive} outlets` }
+                                    ].map((metric, i) => (
+                                      <div key={i} style={{ padding: '12px', backgroundColor: C.white, borderRadius: '4px', border: `1px solid ${C.cream}` }}>
+                                        <div style={{ fontSize: '10px', fontWeight: '500', color: C.lightGrey, marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                          {metric.label}
+                                        </div>
+                                        <div style={{ fontSize: '14px', fontWeight: '600', color: C.darkGrey }}>
+                                          {metric.value}
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
+        
+                                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' }}>
+                                    {[
+                                      { label: 'On-time Delivery', value: distributor.metrics.onTimeDelivery },
+                                      { label: 'Stock Rotation', value: distributor.metrics.stockRotation },
+                                      { label: 'Returns', value: distributor.metrics.returns },
+                                      { label: 'Credit Days', value: `${distributor.metrics.creditDays} days` }
+                                    ].map((metric, i) => (
+                                      <div key={i} style={{ padding: '10px', backgroundColor: `${C.sage}08`, borderRadius: '4px' }}>
+                                        <div style={{ fontSize: '9px', fontWeight: '500', color: C.lightGrey, marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                          {metric.label}
+                                        </div>
+                                        <div style={{ fontSize: '13px', fontWeight: '600', color: C.green }}>
+                                          {metric.value}
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              ))}
                             </div>
-                          ))}
-                          {i.outcome && (
-                            <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: `1px solid ${C.sage}30`, fontSize: '13px' }}>
-                              <strong style={{ color: C.darkGreen }}>Expected Outcome: </strong>
-                              <span style={{ color: C.darkest }}>
-                                {Object.entries(i.outcome).map(([k, v], idx) => `${k}: ${v}${idx < Object.entries(i.outcome).length - 1 ? ', ' : ''}`)}
-                              </span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-
-                      <div style={{ padding: '16px 24px', backgroundColor: C.off, display: 'flex', gap: '12px' }}>
-                        <button onClick={() => openConv({ type: 'issue', name: i.title, data: i })} style={{ flex: 1, padding: '12px', backgroundColor: C.darkGreen, color: 'white', border: 'none', borderRadius: '4px', fontSize: '13px', fontWeight: '500', cursor: 'pointer', fontFamily: "'Inter', sans-serif", display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-                          <MessageSquare size={14} />Analyze with AI
-                        </button>
-                        <button style={{ flex: 1, padding: '12px', backgroundColor: C.sage, color: 'white', border: 'none', borderRadius: '4px', fontSize: '13px', fontWeight: '500', cursor: 'pointer', fontFamily: "'Inter', sans-serif", display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-                          <Zap size={14} />Build Plan
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* AI Insights */}
-                <div style={{ marginBottom: '40px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: `${C.sage}20`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <Target size={20} color={C.sage} />
-                      </div>
-                      <div>
-                        <h2 style={{ fontSize: '22px', fontWeight: '500', color: C.darkGreen, margin: 0 }}>AI Insights & Cross-Dimensional Patterns</h2>
-                        <p style={{ fontSize: '13px', color: C.grey, margin: 0 }}>Patterns detected across all dimensions</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
-                    {[
-                      { type: 'cascade', c: C.terra, lbl: '🔍 Root Cause Cascade', ttl: 'Route shortages triggering credit stress', dsc: 'Execution gaps → Lower revenue → Slower collections → Credit rises → Orders blocked. Affecting 55% of underperforming territories.' },
-                      { type: 'margin', c: C.sage, lbl: '💡 Margin Opportunity', ttl: '₹2.8Cr margin recovery through pack mix', dsc: 'Premium packs (Doritos, Party Size) at 32% vs 42% target. Sandeep achieves 52%. Replicating recovers ₹2.8Cr in absolute margin.' },
-                      { type: 'wc', c: C.warn, lbl: '⚠️ Cash Flow Risk', ttl: '₹7.5Cr locked in aged receivables', dsc: 'WC stress from >50d receivables. 4 distributors near limits risking ₹1.8Cr blocks.' },
-                      { type: 'supply', c: C.sage, lbl: '📈 Quick Win', ttl: 'Fulfill ₹3.5Cr backlog via stock movement', dsc: 'Pune DC excess (680 cases) while Mumbai has ₹3.5Cr backlog. Inter-DC movement (₹48k) fulfills immediately. 73x ROI.' }
-                    ].map((ins, idx) => (
-                      <div key={idx} onClick={() => openConv({ type: ins.type, name: ins.ttl })} style={{ padding: '20px', backgroundColor: `${ins.c}08`, borderRadius: '4px', border: `1.5px solid ${ins.c}30`, cursor: 'pointer', transition: 'all 0.2s' }} onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)'; }} onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; }}>
-                        <div style={{ fontSize: '11px', fontWeight: '600', color: ins.c, marginBottom: '10px', letterSpacing: '0.05em', textTransform: 'uppercase' }}>{ins.lbl}</div>
-                        <h3 style={{ fontSize: '16px', fontWeight: '600', color: C.darkGreen, marginBottom: '10px', lineHeight: '1.3' }}>{ins.ttl}</h3>
-                        <p style={{ fontSize: '13px', color: C.darkest, lineHeight: '1.6', margin: 0 }}>{ins.dsc}</p>
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
+                )}</>)}
+      </div>
+
+      {/* Insight Detail Panel */}
+      {selectedInsight && !chatOpen && !trailOpen && (
+        <div style={{ position: 'fixed', top: 0, right: 0, bottom: 0, width: '65%', backgroundColor: C.white, borderLeft: `1px solid ${C.cream}`, overflowY: 'auto', zIndex: 999, boxShadow: '-4px 0 24px rgba(0,0,0,0.12)' }}>
+          <div style={{ position: 'sticky', top: 0, backgroundColor: C.offWhite, borderBottom: `1px solid ${C.cream}`, padding: '24px 32px', zIndex: 10 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: '11px', fontWeight: '600', color: getPriorityColor(selectedInsight.priority), marginBottom: '8px' }}>
+                  {getPriorityLabel(selectedInsight.priority)}
                 </div>
+                <h2 style={{ fontSize: '18px', fontWeight: '600', color: C.green, margin: '0 0 8px 0' }}>{selectedInsight.title}</h2>
+                <p style={{ fontSize: '13px', color: C.lightGrey, margin: 0 }}>{selectedInsight.summary}</p>
+              </div>
+              <button onClick={() => setSelectedInsight(null)} style={{ padding: '8px', backgroundColor: 'transparent', border: 'none', cursor: 'pointer', marginLeft: '16px' }}>
+                <X size={20} color={C.lightGrey} />
+              </button>
+            </div>
+            <div style={{ display: 'flex', gap: '8px', marginTop: '16px' }}>
+              <button onClick={() => openChat(selectedInsight)} style={{ padding: '10px 16px', backgroundColor: C.green, color: C.white, border: 'none', borderRadius: '4px', fontSize: '13px', fontWeight: '500', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <MessageSquare size={16} />
+                Discuss with Morrie
+              </button>
+              <button onClick={() => openTrail(selectedInsight)} style={{ padding: '10px 16px', backgroundColor: C.white, color: C.green, border: `1px solid ${C.cream}`, borderRadius: '4px', fontSize: '13px', fontWeight: '500', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <Layers size={16} />
+                View Insight Trace
+              </button>
+            </div>
+          </div>
 
-                {/* Performance Snapshot */}
-                <div>
-                  <h2 style={{ fontSize: '22px', fontWeight: '500', color: C.darkGreen, marginBottom: '20px' }}>Team Performance Snapshot</h2>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
-                    {data.asms.map(a => (
-                      <div key={a.id} style={{ backgroundColor: 'white', borderRadius: '4px', border: `2px solid ${hColor(a.health)}40`, padding: '20px', cursor: 'pointer', transition: 'all 0.2s', position: 'relative', overflow: 'hidden' }} onClick={() => openConv({ type: 'asm', name: a.name, data: a })} onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)'; }} onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; }}>
-                        <div style={{ position: 'absolute', top: 0, left: 0, width: '4px', height: '100%', backgroundColor: hColor(a.health) }}></div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-                          <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: hColor(a.health) }}></div>
-                          <span style={{ fontSize: '10px', fontWeight: '600', color: hColor(a.health), letterSpacing: '0.05em', textTransform: 'uppercase' }}>{hLabel(a.health)}</span>
-                        </div>
-                        <h3 style={{ fontSize: '15px', fontWeight: '600', color: C.darkGreen, marginBottom: '4px' }}>{a.name}</h3>
-                        <div style={{ fontSize: '12px', color: C.grey, marginBottom: '16px' }}>{a.territory}</div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '16px' }}>
-                          {[
-                            ['Achievement', a.m.ach + '%', a.m.ach >= 85],
-                            ['GM%', a.m.gm + '%', a.m.gm >= data.targetGM],
-                            ['Credit', a.m.credit, a.m.credit !== 'At Risk'],
-                            ['Stock Issues', a.m.stock + ' SKUs', a.m.stock === 0]
-                          ].map(([l, v, ok]) => (
-                            <div key={l} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px' }}>
-                              <span style={{ color: C.grey }}>{l}:</span>
-                              <strong style={{ color: ok ? C.sage : C.terra }}>{v}</strong>
-                            </div>
-                          ))}
-                        </div>
-                        {a.alerts > 0 && <div style={{ padding: '8px', backgroundColor: `${C.terra}15`, borderRadius: '4px', fontSize: '11px', fontWeight: '600', color: C.terra, textAlign: 'center' }}>{a.alerts} alert{a.alerts > 1 ? 's' : ''}</div>}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </>
-            )}
-
-            {activeTab === 'deepdive' && (
-              <div>
-                {data.asms.map(asm => (
-                  <div key={asm.id} style={{ marginBottom: '24px', backgroundColor: 'white', borderRadius: '8px', border: `2px solid ${hColor(asm.health)}40`, overflow: 'hidden' }}>
-                    {/* Rich ASM Header */}
-                    <div onClick={() => setExpandedASM(expandedASM === asm.id ? null : asm.id)} style={{ padding: '24px', cursor: 'pointer', backgroundColor: C.off }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
-                        <div style={{ flex: 1 }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-                            <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: hColor(asm.health) }}></div>
-                            <h3 style={{ fontSize: '20px', fontWeight: '600', color: C.darkGreen, margin: 0 }}>{asm.name}</h3>
-                            <span style={{ fontSize: '12px', color: C.grey }}>{asm.territory}</span>
-                            <span style={{ fontSize: '10px', fontWeight: '600', letterSpacing: '0.05em', color: hColor(asm.health), backgroundColor: `${hColor(asm.health)}20`, padding: '4px 8px', borderRadius: '12px', textTransform: 'uppercase' }}>{hLabel(asm.health)}</span>
-                          </div>
-                          <p style={{ fontSize: '13px', color: C.darkest, lineHeight: '1.6', margin: 0 }}>{asm.insight}</p>
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginLeft: '24px' }}>
-                          <button onClick={(e) => { e.stopPropagation(); openConv({ type: 'asm', name: asm.name, data: asm }); }} style={{ padding: '10px 16px', backgroundColor: C.darkGreen, color: 'white', border: 'none', borderRadius: '4px', fontSize: '13px', fontWeight: '500', cursor: 'pointer', fontFamily: "'Inter', sans-serif", display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <MessageSquare size={14} />Analyze
-                          </button>
-                          {expandedASM === asm.id ? <ChevronDown size={20} color={C.darkGreen} /> : <ChevronRight size={20} color={C.darkGreen} />}
-                        </div>
-                      </div>
-
-                      {/* Mini Performance Dashboard */}
-                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
-                        {[
-                          { label: 'Achievement', value: asm.m.ach + '%', ok: asm.m.ach >= 85, icon: Target },
-                          { label: 'GM%', value: asm.m.gm + '%', ok: asm.m.gm >= data.targetGM, icon: TrendingUp },
-                          { label: 'Credit Health', value: asm.m.credit, ok: asm.m.credit !== 'At Risk', icon: Activity },
-                          { label: 'Distributors', value: asm.dists.length + ' active', ok: true, icon: Users }
-                        ].map((metric, i) => (
-                          <div key={i} style={{ padding: '16px', backgroundColor: 'white', borderRadius: '4px', border: `1px solid ${C.darkGreen}15` }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                              <div style={{ fontSize: '11px', color: C.grey, textTransform: 'uppercase' }}>{metric.label}</div>
-                              <metric.icon size={14} color={C.grey} />
-                            </div>
-                            <div style={{ fontSize: '24px', fontWeight: '600', color: metric.ok ? C.sage : C.terra, marginBottom: '8px' }}>{metric.value}</div>
-                            <Sparkline data={asm.trend} color={metric.ok ? C.sage : C.terra} height={30} />
-                          </div>
-                        ))}
-                      </div>
+          <div style={{ padding: '32px' }}>
+            {/* Key Numbers */}
+            <div style={{ marginBottom: '32px' }}>
+              <h3 style={{ fontSize: '14px', fontWeight: '600', color: C.green, marginBottom: '16px' }}>Key Numbers</h3>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
+                {Object.entries(selectedInsight.keyNumbers).map(([key, value]) => (
+                  <div key={key} style={{ padding: '16px', backgroundColor: C.offWhite, border: `1px solid ${C.cream}`, borderRadius: '6px' }}>
+                    <div style={{ fontSize: '11px', color: C.lightGrey, marginBottom: '6px', textTransform: 'uppercase' }}>
+                      {key.replace(/([A-Z])/g, ' $1').trim()}
                     </div>
-
-                    {/* Expanded Distributors */}
-                    {expandedASM === asm.id && asm.dists.length > 0 && (
-                      <div style={{ padding: '24px', borderTop: `2px solid ${C.darkGreen}15` }}>
-                        {asm.dists.map(dist => (
-                          <div key={dist.id} style={{ marginBottom: '24px', padding: '20px', backgroundColor: C.off, borderRadius: '8px', border: `2px solid ${hColor(dist.health)}40` }}>
-                            {/* Rich Distributor Header */}
-                            <div onClick={() => setExpandedDist(expandedDist === dist.id ? null : dist.id)} style={{ cursor: 'pointer' }}>
-                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
-                                <div style={{ flex: 1 }}>
-                                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-                                    <h4 style={{ fontSize: '18px', fontWeight: '600', color: C.darkGreen, margin: 0 }}>{dist.name}</h4>
-                                    <span style={{ fontSize: '10px', fontWeight: '600', color: hColor(dist.health), backgroundColor: `${hColor(dist.health)}20`, padding: '3px 8px', borderRadius: '8px', textTransform: 'uppercase' }}>{hLabel(dist.health)}</span>
-                                    {dist.gap > 0 && <span style={{ fontSize: '11px', color: C.terra, backgroundColor: `${C.terra}15`, padding: '3px 8px', borderRadius: '8px' }}>{dist.gap} vacant route{dist.gap > 1 ? 's' : ''}</span>}
-                                  </div>
-                                  <p style={{ fontSize: '13px', color: C.darkest, lineHeight: '1.5', margin: 0 }}>{dist.insight}</p>
-                                </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginLeft: '16px' }}>
-                                  <button onClick={(e) => { e.stopPropagation(); openConv({ type: 'distributor', name: dist.name, data: dist }); }} style={{ padding: '8px 14px', backgroundColor: C.sage, color: 'white', border: 'none', borderRadius: '4px', fontSize: '12px', fontWeight: '500', cursor: 'pointer', fontFamily: "'Inter', sans-serif", display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                    <MessageSquare size={12} />Analyze
-                                  </button>
-                                  {expandedDist === dist.id ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
-                                </div>
-                              </div>
-
-                              {/* Distributor Performance Cards */}
-                              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '12px', marginBottom: '16px' }}>
-                                {[
-                                  { label: 'Achievement', value: dist.m.ach + '%', ok: dist.m.ach >= 85 },
-                                  { label: 'GM%', value: dist.m.gm + '%', ok: dist.m.gm >= 25 },
-                                  { label: 'Credit Util', value: dist.m.creditUtil + '%', ok: dist.m.creditUtil < 90 },
-                                  { label: 'DSO', value: dist.m.dso + 'd', ok: dist.m.dso <= 35 },
-                                  { label: 'Fulfillment', value: dist.m.fulfill + '%', ok: dist.m.fulfill >= 95 }
-                                ].map((m, i) => (
-                                  <div key={i} style={{ padding: '12px', backgroundColor: 'white', borderRadius: '4px' }}>
-                                    <div style={{ fontSize: '10px', color: C.grey, marginBottom: '6px', textTransform: 'uppercase' }}>{m.label}</div>
-                                    <div style={{ fontSize: '20px', fontWeight: '600', color: m.ok ? C.sage : C.terra }}>{m.value}</div>
-                                  </div>
-                                ))}
-                              </div>
-
-                              {/* Root Cause Breakdown Chart */}
-                              <div style={{ padding: '16px', backgroundColor: 'white', borderRadius: '4px' }}>
-                                <div style={{ fontSize: '11px', fontWeight: '600', color: C.grey, marginBottom: '12px', textTransform: 'uppercase' }}>Root Cause Breakdown</div>
-                                <div style={{ display: 'flex', gap: '4px', marginBottom: '12px', height: '24px' }}>
-                                  {Object.entries(dist.rootCauseBreakdown).map(([cause, pct]) => (
-                                    <div key={cause} style={{ width: `${pct}%`, backgroundColor: { execution: C.terra, credit: C.warn, supply: C.sage, margin: '#9CA3AF', forecast: '#D1D5DB' }[cause], borderRadius: '2px' }} title={`${cause}: ${pct}%`}></div>
-                                  ))}
-                                </div>
-                                <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-                                  {Object.entries(dist.rootCauseBreakdown).map(([cause, pct]) => (
-                                    <div key={cause} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                      <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: { execution: C.terra, credit: C.warn, supply: C.sage, margin: '#9CA3AF', forecast: '#D1D5DB' }[cause] }}></div>
-                                      <span style={{ fontSize: '12px', color: C.darkest, textTransform: 'capitalize' }}>{cause}: {pct}%</span>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            </div>
-
-                            {/* Expanded Merchandiser Details */}
-                            {expandedDist === dist.id && dist.sales && dist.sales.length > 0 && (
-                              <div style={{ marginTop: '20px', paddingTop: '20px', borderTop: `1px solid ${C.darkGreen}15` }}>
-                                <h5 style={{ fontSize: '16px', fontWeight: '600', color: C.darkGreen, marginBottom: '16px' }}>Merchandiser Performance Details</h5>
-                                
-                                {/* Merchandiser Comparison Bars */}
-                                <div style={{ marginBottom: '24px', padding: '16px', backgroundColor: 'white', borderRadius: '4px' }}>
-                                  {dist.sales.map((tsr, i) => (
-                                    <div key={tsr.id} style={{ marginBottom: i < dist.sales.length - 1 ? '16px' : 0 }}>
-                                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                                        <div>
-                                          <span style={{ fontSize: '14px', fontWeight: '600', color: C.darkGreen }}>{tsr.name}</span>
-                                          <span style={{ fontSize: '12px', color: C.grey, marginLeft: '8px' }}>• {tsr.beat}</span>
-                                        </div>
-                                        <span style={{ fontSize: '18px', fontWeight: '600', color: tsr.ach >= 85 ? C.sage : C.terra }}>{tsr.ach}%</span>
-                                      </div>
-                                      <div style={{ height: '32px', backgroundColor: C.cream, borderRadius: '4px', overflow: 'hidden', position: 'relative' }}>
-                                        <div style={{ height: '100%', width: `${tsr.ach}%`, backgroundColor: tsr.ach >= 85 ? C.sage : C.terra, transition: 'width 0.3s' }}></div>
-                                        <div style={{ position: 'absolute', left: '85%', top: 0, bottom: 0, width: '2px', backgroundColor: C.darkGreen, opacity: 0.3 }}></div>
-                                      </div>
-                                    </div>
-                                  ))}
-                                </div>
-
-                                {/* Detailed Merchandiser Cards */}
-                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px' }}>
-                                  {dist.sales.map(tsr => (
-                                    <div key={tsr.id} style={{ padding: '16px', backgroundColor: 'white', borderRadius: '4px', border: `1px solid ${hColor(tsr.health)}40` }}>
-                                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                                        <div>
-                                          <div style={{ fontSize: '15px', fontWeight: '600', color: C.darkGreen, marginBottom: '2px' }}>{tsr.name}</div>
-                                          <div style={{ fontSize: '12px', color: C.grey }}>{tsr.beat}</div>
-                                        </div>
-                                        <div style={{ fontSize: '24px', fontWeight: '600', color: tsr.ach >= 85 ? C.sage : C.terra }}>{tsr.ach}%</div>
-                                      </div>
-
-                                      {/* Outlet Coverage */}
-                                      <div style={{ padding: '12px', backgroundColor: C.off, borderRadius: '4px', marginBottom: '12px' }}>
-                                        <div style={{ fontSize: '11px', color: C.grey, marginBottom: '6px', textTransform: 'uppercase' }}>Outlet Coverage</div>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', marginBottom: '4px' }}>
-                                          <span>Active: {tsr.outlets.active}</span>
-                                          <span>Target: {tsr.outlets.target}</span>
-                                        </div>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
-                                          <span style={{ color: C.terra }}>Lost: {tsr.outlets.lost}</span>
-                                          <span>{Math.round((tsr.outlets.active / tsr.outlets.target) * 100)}% coverage</span>
-                                        </div>
-                                      </div>
-
-                                      {/* Productivity Metrics */}
-                                      <div style={{ padding: '12px', backgroundColor: C.off, borderRadius: '4px', marginBottom: '12px' }}>
-                                        <div style={{ fontSize: '11px', color: C.grey, marginBottom: '8px', textTransform: 'uppercase' }}>Productivity</div>
-                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
-                                          {[
-                                            ['Calls/Day', tsr.productivity.calls],
-                                            ['Orders/Day', tsr.productivity.orders],
-                                            ['Lines/Order', tsr.productivity.lines]
-                                          ].map(([l, v]) => (
-                                            <div key={l}>
-                                              <div style={{ fontSize: '9px', color: C.grey }}>{l}</div>
-                                              <div style={{ fontSize: '16px', fontWeight: '600', color: C.darkGreen }}>{v}</div>
-                                            </div>
-                                          ))}
-                                        </div>
-                                      </div>
-
-                                      {/* Root Causes */}
-                                      <div style={{ fontSize: '11px', color: C.grey, marginBottom: '8px', textTransform: 'uppercase' }}>Performance Drivers</div>
-                                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
-                                        {Object.entries(tsr.rc).map(([k, v]) => (
-                                          <div key={k} style={{ padding: '8px', backgroundColor: v < -10 ? `${C.terra}10` : C.off, borderRadius: '4px' }}>
-                                            <div style={{ fontSize: '9px', color: C.grey, fontWeight: '600', marginBottom: '4px', textTransform: 'uppercase' }}>{k === 'dist' ? 'Distribution' : k === 'days' ? 'Mandays' : 'Drop Size'}</div>
-                                            <div style={{ fontSize: '16px', fontWeight: '700', color: v < 0 ? C.terra : C.sage }}>{v > 0 ? '+' : ''}{v}%</div>
-                                          </div>
-                                        ))}
-                                      </div>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                    <div style={{ fontSize: '16px', fontWeight: '600', color: C.green }}>{value}</div>
                   </div>
                 ))}
               </div>
-            )}
+            </div>
 
-            {activeTab === 'askmorrie' && (
-              <div style={{ height: 'calc(100vh - 240px)', display: 'flex', flexDirection: 'column' }}>
-                <div style={{ flex: 1, overflowY: 'auto', padding: '32px', backgroundColor: C.cream }}>
-                  {chatMessages.length === 0 ? (
-                    <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-                      <div style={{ marginBottom: '24px' }}>
-                        <h3 style={{ fontSize: '15px', fontWeight: '600', color: C.darkGreen, marginBottom: '12px' }}>Popular questions:</h3>
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
-                          {[
-                            'Where is growth really coming from?',
-                            'Is the business getting stronger or more risky?',
-                            'Premium vs economy mix shift analysis?',
-                            'Where are we working hard but not getting results?',
-                            'Get extra ₹1.5 Cr without hurting margin?',
-                            'Minimum levers to go from 89% → 98%?'
-                          ].map((q, idx) => (
-                            <button 
-                              key={idx}
-                              onClick={() => {
-                                const typeMap = {
-                                  'Where is growth really coming from?': 'growth',
-                                  'Is the business getting stronger or more risky?': 'risk'
-                                };
-                                openConv({ type: 'business', subtype: typeMap[q] || 'general', name: q });
-                              }}
-                              style={{ 
-                                padding: '12px 14px', 
-                                backgroundColor: 'white', 
-                                border: `1.5px solid ${C.darkGreen}20`, 
-                                borderRadius: '6px', 
-                                fontSize: '13px', 
-                                color: C.darkGreen, 
-                                textAlign: 'left', 
-                                cursor: 'pointer', 
-                                fontFamily: "'Inter', sans-serif", 
-                                transition: 'all 0.2s',
-                                fontWeight: '500',
-                                lineHeight: '1.3'
-                              }}
-                              onMouseEnter={e => { 
-                                e.currentTarget.style.backgroundColor = `${C.sage}08`; 
-                                e.currentTarget.style.borderColor = C.sage;
-                                e.currentTarget.style.transform = 'translateX(4px)';
-                              }}
-                              onMouseLeave={e => { 
-                                e.currentTarget.style.backgroundColor = 'white'; 
-                                e.currentTarget.style.borderColor = `${C.darkGreen}20`;
-                                e.currentTarget.style.transform = 'translateX(0)';
-                              }}
-                            >
-                              {q}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-                      {chatMessages.map((m, i) => (
-                        <div key={i} style={{ marginBottom: '24px' }}>
-                          <div style={{ padding: '16px 20px', backgroundColor: m.type === 'user' ? C.darkGreen : 'white', color: m.type === 'user' ? C.cream : C.darkest, borderRadius: m.type === 'user' ? '12px 12px 4px 12px' : '12px 12px 12px 4px', fontSize: '14px', lineHeight: '1.6', boxShadow: m.type === 'user' ? '0 2px 8px rgba(0,0,0,0.1)' : '0 1px 3px rgba(0,0,0,0.08)', border: m.type === 'user' ? 'none' : `1px solid ${C.darkGreen}10` }}>
-                            {m.type === 'user' ? m.text : fmt(m.text)}
-                          </div>
-                          <div style={{ fontSize: '11px', color: C.grey, marginTop: '6px', paddingLeft: m.type === 'user' ? '0' : '4px', textAlign: m.type === 'user' ? 'right' : 'left' }}>{m.ts}</div>
-                          {m.sugg && (
-                            <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                              <div style={{ fontSize: '11px', color: C.grey, fontWeight: '500', paddingLeft: '4px' }}>Suggested follow-ups:</div>
-                              {m.sugg.map((s, j) => (
-                                <button key={j} onClick={() => sendMsg(s)} style={{ padding: '12px 16px', backgroundColor: 'white', border: `1.5px solid ${C.darkGreen}25`, borderRadius: '8px', fontSize: '13px', color: C.darkGreen, textAlign: 'left', cursor: 'pointer', fontFamily: "'Inter', sans-serif", transition: 'all 0.2s', fontWeight: '500' }} onMouseEnter={e => { e.currentTarget.style.backgroundColor = `${C.sage}10`; e.currentTarget.style.borderColor = C.sage; e.currentTarget.style.transform = 'translateX(4px)'; }} onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'white'; e.currentTarget.style.borderColor = `${C.darkGreen}25`; e.currentTarget.style.transform = 'translateX(0)'; }}>
-                                  {s}
-                                </button>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                      <div ref={chatMessagesEndRef} />
-                    </div>
-                  )}
-                </div>
+            {/* Narrative */}
+            <div style={{ marginBottom: '32px' }}>
+              <h3 style={{ fontSize: '14px', fontWeight: '600', color: C.green, marginBottom: '12px' }}>Situation Analysis</h3>
+              <p style={{ fontSize: '13px', color: C.darkGrey, lineHeight: '1.7', margin: 0 }}>{selectedInsight.narrative}</p>
+            </div>
 
-                <div style={{ padding: '20px 32px', borderTop: `1px solid ${C.darkGreen}15`, backgroundColor: 'white' }}>
-                  <div style={{ maxWidth: '900px', margin: '0 auto', display: 'flex', gap: '12px' }}>
-                    <input
-                      type="text"
-                      value={inputMessage}
-                      onChange={e => setInputMessage(e.target.value)}
-                      onKeyPress={e => e.key === 'Enter' && sendMsg(inputMessage)}
-                      placeholder="Ask anything about your territory..."
-                      style={{
-                        flex: 1,
-                        padding: '14px 18px',
-                        fontSize: '14px',
-                        border: `1.5px solid ${C.darkGreen}30`,
-                        borderRadius: '8px',
-                        fontFamily: "'Inter', sans-serif",
-                        outline: 'none',
-                        backgroundColor: C.cream
-                      }}
-                    />
-                    <button
-                      onClick={() => sendMsg(inputMessage)}
-                      disabled={!inputMessage.trim()}
-                      style={{
-                        padding: '14px 28px',
-                        backgroundColor: inputMessage.trim() ? C.darkGreen : C.grey,
-                        color: C.cream,
-                        border: 'none',
-                        borderRadius: '8px',
-                        fontSize: '14px',
-                        fontWeight: '600',
-                        cursor: inputMessage.trim() ? 'pointer' : 'not-allowed',
-                        fontFamily: "'Inter', sans-serif"
-                      }}
-                    >
-                      Ask
-                    </button>
+            {/* Deep Dive */}
+            <div style={{ marginBottom: '32px' }}>
+              <h3 style={{ fontSize: '14px', fontWeight: '600', color: C.green, marginBottom: '16px' }}>Deep Dive: ASM → Distributor → TSM</h3>
+              
+              {/* ASM Level */}
+              <div style={{ marginBottom: '24px' }}>
+                <div style={{ fontSize: '12px', fontWeight: '600', color: C.sage, marginBottom: '12px', textTransform: 'uppercase' }}>ASM Level Performance</div>
+                <div style={{ backgroundColor: C.offWhite, border: `1px solid ${C.cream}`, borderRadius: '6px', overflow: 'hidden' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr 1fr 1.5fr', gap: '12px', padding: '12px 16px', backgroundColor: C.cream, fontSize: '11px', fontWeight: '600', color: C.green, textTransform: 'uppercase' }}>
+                    <div>ASM Name</div>
+                    <div>Territory</div>
+                    <div>Achievement</div>
+                    <div>Distributors</div>
+                    <div>Key Issue</div>
                   </div>
+                  {selectedInsight.deepDive.asmLevel.map((asm, i) => (
+                    <div key={i} style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr 1fr 1.5fr', gap: '12px', padding: '14px 16px', borderBottom: i < selectedInsight.deepDive.asmLevel.length - 1 ? `1px solid ${C.cream}` : 'none', fontSize: '13px', cursor: 'pointer' }}
+                      onClick={() => setExpandedTerritory(expandedTerritory === asm.asm ? null : asm.asm)}
+                      onMouseEnter={e => e.currentTarget.style.backgroundColor = `${C.sage}08`}
+                      onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}>
+                      <div style={{ fontWeight: '600', color: C.green }}>{asm.asm}</div>
+                      <div>{asm.territory}</div>
+                      <div style={{ fontWeight: '600', color: parseFloat(asm.achievement) >= 100 ? '#059669' : parseFloat(asm.achievement) >= 90 ? C.sage : '#DC2626' }}>{asm.achievement}</div>
+                      <div>{asm.distributors}</div>
+                      <div style={{ fontSize: '12px', color: C.lightGrey }}>{asm.issue}</div>
+                    </div>
+                  ))}
                 </div>
               </div>
-            )}
 
+              {/* Distributor & TSM Levels when expanded */}
+              {expandedTerritory && (
+                <>
+                  <div style={{ marginBottom: '24px' }}>
+                    <div style={{ fontSize: '12px', fontWeight: '600', color: C.sage, marginBottom: '12px', textTransform: 'uppercase' }}>Distributor Level - {expandedTerritory}</div>
+                    <div style={{ backgroundColor: C.offWhite, border: `1px solid ${C.cream}`, borderRadius: '6px', overflow: 'hidden' }}>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr 1fr 1.5fr', gap: '12px', padding: '12px 16px', backgroundColor: C.cream, fontSize: '11px', fontWeight: '600', color: C.green, textTransform: 'uppercase' }}>
+                        <div>Distributor</div>
+                        <div>Coverage</div>
+                        <div>Premium Dist</div>
+                        <div>Issue</div>
+                      </div>
+                      {selectedInsight.deepDive.distributorLevel.filter(d => d.asm === expandedTerritory).map((dist, i) => (
+                        <div key={i} style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr 1fr 1.5fr', gap: '12px', padding: '14px 16px', borderBottom: `1px solid ${C.cream}`, fontSize: '13px' }}>
+                          <div style={{ fontWeight: '600', color: C.green }}>{dist.distributor}</div>
+                          <div>{dist.coverage}</div>
+                          <div>{dist.premiumDist}</div>
+                          <div style={{ fontSize: '12px', color: C.lightGrey }}>{dist.issue}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div style={{ marginBottom: '24px' }}>
+                    <div style={{ fontSize: '12px', fontWeight: '600', color: C.sage, marginBottom: '12px', textTransform: 'uppercase' }}>TSM Level - {expandedTerritory}</div>
+                    <div style={{ backgroundColor: C.offWhite, border: `1px solid ${C.cream}`, borderRadius: '6px', overflow: 'hidden' }}>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr 0.7fr 1.5fr', gap: '12px', padding: '12px 16px', backgroundColor: C.cream, fontSize: '11px', fontWeight: '600', color: C.green, textTransform: 'uppercase' }}>
+                        <div>TSM Name</div>
+                        <div>Distributor</div>
+                        <div>Outlets</div>
+                        <div>Issue</div>
+                      </div>
+                      {selectedInsight.deepDive.tsmLevel.filter(t => t.distributor.includes(expandedTerritory.split(' ')[0])).map((tsm, i) => (
+                        <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr 0.7fr 1.5fr', gap: '12px', padding: '14px 16px', fontSize: '13px' }}>
+                          <div style={{ fontWeight: '600', color: C.green }}>{tsm.tsm}</div>
+                          <div>{tsm.distributor}</div>
+                          <div>{tsm.outlets}</div>
+                          <div style={{ fontSize: '12px', color: C.lightGrey }}>{tsm.issue}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Recommendation */}
+            <div style={{ padding: '20px', backgroundColor: `${C.sage}12`, borderRadius: '6px', borderLeft: `4px solid ${C.sage}` }}>
+              <h3 style={{ fontSize: '14px', fontWeight: '600', color: C.green, marginBottom: '12px' }}>Recommended Action</h3>
+              <p style={{ fontSize: '13px', color: C.darkGrey, lineHeight: '1.7', marginBottom: '16px' }}>{selectedInsight.recommendation.action}</p>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', fontSize: '12px' }}>
+                <div>
+                  <div style={{ color: C.lightGrey, marginBottom: '4px' }}>Investment</div>
+                  <div style={{ fontWeight: '600', color: C.green }}>{selectedInsight.recommendation.cost}</div>
+                </div>
+                <div>
+                  <div style={{ color: C.lightGrey, marginBottom: '4px' }}>Expected Return</div>
+                  <div style={{ fontWeight: '600', color: C.green }}>{selectedInsight.recommendation.return}</div>
+                </div>
+                <div>
+                  <div style={{ color: C.lightGrey, marginBottom: '4px' }}>ROI</div>
+                  <div style={{ fontWeight: '600', color: C.sage }}>{selectedInsight.recommendation.roi}</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+      )}
 
-        {conversationOpen && (
-          <div style={{ flex: '0 0 40%', borderLeft: `1px solid ${C.darkGreen}15`, backgroundColor: 'white', display: 'flex', flexDirection: 'column', maxHeight: '100%' }}>
-            <div style={{ padding: '20px', borderBottom: `1px solid ${C.darkGreen}15`, backgroundColor: C.off }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div style={{ flex: 1 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '4px' }}>
-                    <div style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: C.sage, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', fontWeight: '600', color: 'white' }}>M</div>
-                    <h3 style={{ fontSize: '18px', fontWeight: '600', color: C.darkGreen, margin: 0 }}>Chat with Morrie</h3>
-                  </div>
-                  <p style={{ fontSize: '12px', color: C.grey, margin: 0, paddingLeft: '48px' }}>
-                    {conversationContext?.name}
-                  </p>
+      {/* Agent Trail Modal */}
+      {trailOpen && selectedTrail && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px' }}>
+          <div style={{ backgroundColor: C.white, borderRadius: '8px', width: '100%', maxWidth: '1200px', maxHeight: '90vh', display: 'flex', flexDirection: 'column', boxShadow: '0 20px 60px rgba(0,0,0,0.3)' }}>
+            <div style={{ padding: '24px 32px', borderBottom: `1px solid ${C.cream}`, backgroundColor: C.offWhite }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div>
+                  <div style={{ fontSize: '11px', fontWeight: '600', color: C.sage, marginBottom: '8px', textTransform: 'uppercase' }}>Insight Trace</div>
+                  <h3 style={{ fontSize: '16px', fontWeight: '600', color: C.green, margin: 0 }}>Multi-agent analysis: {selectedTrail.title}</h3>
                 </div>
-                <button onClick={() => setConversationOpen(false)} style={{ padding: '6px', backgroundColor: 'transparent', color: C.grey, border: 'none', borderRadius: '4px', cursor: 'pointer' }}><X size={20} /></button>
+                <button onClick={() => setTrailOpen(false)} style={{ padding: '8px', backgroundColor: 'transparent', border: 'none', cursor: 'pointer' }}>
+                  <X size={20} color={C.lightGrey} />
+                </button>
               </div>
             </div>
 
-            <div style={{ flex: 1, overflowY: 'auto', padding: '20px' }}>
-              {chatMessages.map((m, i) => (
-                <div key={i} style={{ marginBottom: '16px' }}>
-                  <div style={{ padding: '16px 18px', backgroundColor: m.type === 'user' ? C.darkGreen : C.off, color: m.type === 'user' ? C.cream : C.darkest, borderRadius: m.type === 'user' ? '12px 12px 4px 12px' : '12px 12px 12px 4px', fontSize: '14px', lineHeight: '1.6', boxShadow: m.type === 'user' ? '0 2px 4px rgba(0,0,0,0.1)' : '0 1px 2px rgba(0,0,0,0.05)' }}>
-                    {m.type === 'user' ? m.text : fmt(m.text)}
-                  </div>
-                  <div style={{ fontSize: '11px', color: C.grey, marginTop: '6px', paddingLeft: m.type === 'user' ? '0' : '4px', textAlign: m.type === 'user' ? 'right' : 'left' }}>{m.ts}</div>
-                  {m.sugg && (
-                    <div style={{ marginTop: '14px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                      <div style={{ fontSize: '11px', color: C.grey, fontWeight: '500', paddingLeft: '4px' }}>Suggested questions:</div>
-                      {m.sugg.map((s, j) => (
-                        <button key={j} onClick={() => sendMsg(s)} style={{ padding: '12px 16px', backgroundColor: 'white', border: `1.5px solid ${C.darkGreen}25`, borderRadius: '8px', fontSize: '13px', color: C.darkGreen, textAlign: 'left', cursor: 'pointer', fontFamily: "'Inter', sans-serif", transition: 'all 0.2s', fontWeight: '500' }}>
-                          {s}
-                        </button>
-                      ))}
+            <div style={{ flex: 1, overflowY: 'auto', padding: '32px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                {selectedTrail.agentTrail.map((step, i) => (
+                  <div key={i} style={{ display: 'flex', gap: '20px', position: 'relative' }}>
+                    {i < selectedTrail.agentTrail.length - 1 && (
+                      <div style={{ position: 'absolute', left: '19px', top: '48px', bottom: '-24px', width: '2px', backgroundColor: C.cream }} />
+                    )}
+                    <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: C.sage, color: C.white, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: '600', flexShrink: 0, zIndex: 1 }}>
+                      {i + 1}
                     </div>
-                  )}
-                </div>
-              ))}
-              <div ref={chatMessagesEndRef} />
-            </div>
-
-            <div style={{ padding: '16px', borderTop: `1px solid ${C.darkGreen}15`, backgroundColor: C.off }}>
-              <div style={{ display: 'flex', gap: '8px' }}>
-                <input type="text" value={inputMessage} onChange={e => setInputMessage(e.target.value)} onKeyPress={e => { if (e.key === 'Enter') sendMsg(inputMessage); }} placeholder="Ask about any dimension..." style={{ flex: 1, padding: '12px 16px', border: `1px solid ${C.darkGreen}20`, borderRadius: '8px', fontSize: '13px', fontFamily: "'Inter', sans-serif", outline: 'none' }} />
-                <button onClick={() => sendMsg(inputMessage)} style={{ padding: '12px 18px', backgroundColor: C.darkGreen, color: C.cream, border: 'none', borderRadius: '8px', cursor: 'pointer' }}><Send size={16} /></button>
+                    <div style={{ flex: 1, backgroundColor: C.offWhite, border: `1px solid ${C.cream}`, borderRadius: '8px', padding: '20px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
+                        <div>
+                          <div style={{ display: 'inline-block', padding: '4px 10px', backgroundColor: `${C.sage}20`, borderRadius: '4px', fontSize: '11px', fontWeight: '600', color: C.sage, marginBottom: '8px' }}>
+                            {step.agent}
+                          </div>
+                          <div style={{ fontSize: '14px', fontWeight: '600', color: C.green }}>{step.action}</div>
+                        </div>
+                        <div style={{ fontSize: '11px', color: C.lightGrey, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <Clock size={12} />
+                          {step.time}
+                        </div>
+                      </div>
+                      {step.database && (
+                        <div style={{ display: 'flex', gap: '6px', marginBottom: '12px', fontSize: '12px', color: C.lightGrey }}>
+                          <Database size={14} />
+                          <span><strong>Database:</strong> {step.database}</span>
+                        </div>
+                      )}
+                      {step.query && (
+                        <div style={{ backgroundColor: `${C.green}08`, border: `1px solid ${C.cream}`, borderRadius: '4px', padding: '12px', marginBottom: '12px', fontSize: '11px', fontFamily: 'monospace', color: C.darkGrey, overflowX: 'auto' }}>
+                          {step.query}
+                        </div>
+                      )}
+                      <div style={{ padding: '14px', backgroundColor: `${C.sage}12`, borderRadius: '4px', borderLeft: `3px solid ${C.sage}`, marginBottom: step.nextAgent ? '12px' : 0 }}>
+                        <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+                          <Brain size={16} color={C.sage} style={{ marginTop: '2px' }} />
+                          <div style={{ fontSize: '11px', fontWeight: '600', color: C.sage, textTransform: 'uppercase' }}>Agent Thinking</div>
+                        </div>
+                        <div style={{ fontSize: '13px', color: C.darkGrey, lineHeight: '1.6', fontStyle: 'italic' }}>{step.thinking}</div>
+                      </div>
+                      {step.nextAgent && (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: C.sage, fontWeight: '500' }}>
+                          <ChevronRight size={16} />
+                          Routing to: {step.nextAgent}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
+
+      {/* Chat Panel */}
+      {chatOpen && (
+        <div style={{ position: 'fixed', top: 0, right: 0, bottom: 0, width: '450px', backgroundColor: C.white, borderLeft: `1px solid ${C.cream}`, display: 'flex', flexDirection: 'column', zIndex: 999, boxShadow: '-4px 0 12px rgba(0,0,0,0.08)' }}>
+          <div style={{ padding: '24px', borderBottom: `1px solid ${C.cream}`, backgroundColor: C.offWhite }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <div>
+                <div style={{ fontSize: '11px', fontWeight: '600', color: C.sage, marginBottom: '8px', textTransform: 'uppercase' }}>Conversation with Morrie</div>
+                <h3 style={{ fontSize: '15px', fontWeight: '600', color: C.green, margin: 0 }}>{selectedInsight?.title}</h3>
+              </div>
+              <button onClick={() => setChatOpen(false)} style={{ padding: '4px', backgroundColor: 'transparent', border: 'none', cursor: 'pointer' }}>
+                <X size={20} color={C.lightGrey} />
+              </button>
+            </div>
+          </div>
+          <div style={{ flex: 1, overflowY: 'auto', padding: '24px' }}>
+            {chatMessages.map((msg, i) => (
+              <div key={i} style={{ marginBottom: '20px' }}>
+                <div style={{ padding: '14px 16px', backgroundColor: msg.type === 'user' ? `${C.green}15` : C.offWhite, border: msg.type === 'ai' ? `1px solid ${C.cream}` : 'none', borderRadius: '6px', marginBottom: '8px' }}>
+                  <div style={{ fontSize: '14px', lineHeight: '1.6', color: C.darkGrey }}>{msg.text}</div>
+                </div>
+                {msg.suggestions && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '12px' }}>
+                    {msg.suggestions.map((sug, j) => (
+                      <button key={j} onClick={() => sendMessage(sug)} style={{ padding: '10px 14px', backgroundColor: C.white, border: `1px solid ${C.cream}`, borderRadius: '4px', fontSize: '13px', color: C.green, textAlign: 'left', cursor: 'pointer', transition: 'all 0.2s' }}
+                        onMouseEnter={e => { e.currentTarget.style.borderColor = C.sage; e.currentTarget.style.backgroundColor = `${C.sage}10`; }}
+                        onMouseLeave={e => { e.currentTarget.style.borderColor = C.cream; e.currentTarget.style.backgroundColor = C.white; }}>
+                        {sug}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+            <div ref={chatMessagesEndRef} />
+          </div>
+          <div style={{ padding: '20px', borderTop: `1px solid ${C.cream}`, backgroundColor: C.offWhite }}>
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <input type="text" value={inputMessage} onChange={e => setInputMessage(e.target.value)} onKeyPress={e => e.key === 'Enter' && sendMessage(inputMessage)} placeholder="Ask anything..." style={{ flex: 1, padding: '12px 16px', border: `1px solid ${C.cream}`, borderRadius: '4px', fontSize: '14px', outline: 'none', backgroundColor: C.white }} />
+              <button onClick={() => sendMessage(inputMessage)} style={{ padding: '12px 20px', backgroundColor: C.green, color: C.white, border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
+                <Send size={16} />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

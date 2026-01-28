@@ -13,6 +13,11 @@ const FMCGKnowledgeGraph = () => {
   const [highlightedNodes, setHighlightedNodes] = useState(new Set());
   const [highlightedLinks, setHighlightedLinks] = useState(new Set());
   const traversalTimerRef = useRef(null);
+  const [visibleSections, setVisibleSections] = useState(new Set());
+const [expandedThinking, setExpandedThinking] = useState(new Set());
+const revealTimerRef = useRef(null);
+const [showThinkingHistory, setShowThinkingHistory] = useState(false);
+
   
   const questions = [
     {
@@ -1253,16 +1258,26 @@ const FMCGKnowledgeGraph = () => {
   setIsPlaying(true);
   updateTraversalHighlight(questionIndex, 0);
   startAutoPlay(questionIndex);
+  setShowThinkingHistory(false);
 };
 
 const startAutoPlay = (questionIndex) => {
   if (traversalTimerRef.current) {
     clearInterval(traversalTimerRef.current);
   }
+  if (revealTimerRef.current) {
+    clearTimeout(revealTimerRef.current);
+  }
+  
+  setVisibleSections(new Set());
+  setExpandedThinking(new Set([0])); // Expand first thinking by default
   
   let currentStep = 0;
   const question = questions[questionIndex];
-  const totalIterations = question.iterations.length + 1; // +1 for final response
+  const totalIterations = question.iterations.length + 1;
+  
+  // Start revealing sections for first iteration
+  revealSectionsProgressively(questionIndex, 0);
   
   traversalTimerRef.current = setInterval(() => {
     currentStep++;
@@ -1272,16 +1287,62 @@ const startAutoPlay = (questionIndex) => {
       return;
     }
     setTraversalStep(currentStep);
+    setVisibleSections(new Set());
+    setExpandedThinking(prev => new Set([...prev, currentStep])); // Auto-expand new thinking
     updateTraversalHighlight(questionIndex, currentStep);
-  }, 3000); // 3 seconds per step (increased from 2.5s due to more content)
+    
+    if (currentStep < question.iterations.length) {
+      revealSectionsProgressively(questionIndex, currentStep);
+    } else {
+      // Show final response
+      setVisibleSections(new Set(['final']));
+    }
+  }, 4500); // Total time: 1000 (think) + 1000 (fetch delay) + 500 (analyse delay) + 1000 (buffer)
 };
+
+const revealSectionsProgressively = (questionIndex, step) => {
+  const question = questions[questionIndex];
+
+  // clear old timers
+  if (revealTimerRef.current) {
+    clearTimeout(revealTimerRef.current);
+  }
+
+  if (step >= question.iterations.length) {
+    setVisibleSections(new Set(["final"]));
+    return;
+  }
+
+  // 0s → Think
+  setVisibleSections(new Set(["think"]));
+
+  // 1s → Nodes
+  setTimeout(() => {
+    setVisibleSections(new Set(["think", "nodes"]));
+  }, 1000);
+
+  // 2s → Fetch
+  setTimeout(() => {
+    setVisibleSections(new Set(["think", "nodes", "fetch"]));
+  }, 2000);
+
+  // 3s → Analyse
+  setTimeout(() => {
+    setVisibleSections(new Set(["think", "nodes", "fetch", "analyse"]));
+  }, 3000);
+};
+
 
 const stopAutoPlay = () => {
   if (traversalTimerRef.current) {
     clearInterval(traversalTimerRef.current);
   }
+  if (revealTimerRef.current) {
+    clearTimeout(revealTimerRef.current);
+  }
   setIsPlaying(false);
 };
+
 
 const updateTraversalHighlight = (questionIndex, step) => {
   const question = questions[questionIndex];
@@ -1356,7 +1417,35 @@ const clearTraversal = () => {
   setSelectedQuestion(0);
   setHighlightedNodes(new Set());
   setHighlightedLinks(new Set());
+  setVisibleSections(new Set());
+  setExpandedThinking(new Set());
 };
+
+
+const toggleThinking = (step) => {
+  setExpandedThinking(prev => {
+    const newSet = new Set(prev);
+    if (newSet.has(step)) {
+      newSet.delete(step);
+    } else {
+      newSet.add(step);
+    }
+    return newSet;
+  });
+};
+
+
+useEffect(() => {
+  return () => {
+    if (traversalTimerRef.current) {
+      clearInterval(traversalTimerRef.current);
+    }
+    if (revealTimerRef.current) {
+      clearTimeout(revealTimerRef.current);
+    }
+  };
+}, []);
+
 
 useEffect(() => {
   createVisualization();
@@ -1806,8 +1895,8 @@ const createVisualization = () => {
         </div>
         
         {showTraversal && (
-       <div className="w-96 overflow-y-auto flex-shrink-0 bg-white rounded-xl shadow-lg border border-gray-200">
-  <div className="sticky top-0 bg-gradient-to-r from-teal-600 to-blue-600 p-4 border-b border-teal-700">
+          <div className="w-96 overflow-y-auto flex-shrink-0 bg-white rounded-xl shadow-lg border border-gray-200">
+  <div className="sticky top-0 bg-gradient-to-r from-teal-600 to-blue-600 p-4 border-b border-teal-700 z-10">
     <div className="flex items-center justify-between mb-2">
       <div className="flex items-center gap-2">
         <span className="bg-white text-teal-700 text-xs font-bold px-2 py-1 rounded">Q{questions[selectedQuestion].id}</span>
@@ -1823,12 +1912,9 @@ const createVisualization = () => {
       </button>
     </div>
     <p className="text-xs text-teal-50">{questions[selectedQuestion].question}</p>
-    <div className="mt-2 text-xs text-teal-100 bg-teal-700 bg-opacity-30 rounded px-2 py-1">
-      Expected: {questions[selectedQuestion].outputExpectation}
-    </div>
   </div>
   
-  <div className="p-4">
+  <div className="p-4 space-y-3">
     {traversalStep < questions[selectedQuestion].iterations.length ? (
       <>
         <div className="flex items-center justify-between mb-4">
@@ -1845,136 +1931,265 @@ const createVisualization = () => {
           </div>
         </div>
         
-        {/* Iteration Number and Phase */}
-        <div className="flex items-center gap-2 mb-3">
-          <span className="text-xs font-mono text-gray-500">
-            #{questions[selectedQuestion].iterations[traversalStep].iteration}
-          </span>
-          <h4 className="font-semibold text-gray-900">
-            {questions[selectedQuestion].iterations[traversalStep].phase}
-          </h4>
-        </div>
+        {/* Previous Steps - Collapsed with only thinking expandable */}
+
         
-        {/* Think Section */}
-        {questions[selectedQuestion].iterations[traversalStep].think && (
-          <div className="bg-purple-50 border border-purple-200 rounded-lg p-3 mb-3">
-            <div className="flex items-center gap-1.5 mb-2">
-              <svg className="w-4 h-4 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+        {/* Current Iteration */}
+       <div className="flex items-center gap-2 mb-3">
+  <span className="text-xs font-mono text-blue-600 font-bold">
+    #{questions[selectedQuestion].iterations[traversalStep].iteration}
+  </span>
+  <h4 className="font-semibold text-gray-900">
+    {questions[selectedQuestion].iterations[traversalStep].phase}
+  </h4>
+</div>
+
+        
+        {/* Think Section - Expandable */}
+        {/* Thinking Container (Current step always visible, history on click) */}
+{questions[selectedQuestion].iterations[traversalStep].think && (
+  <div
+    className={`transition-all duration-[1500ms] ${
+      visibleSections.has("think")
+        ? "opacity-100 translate-y-0"
+        : "opacity-0 -translate-y-4"
+    }`}
+  >
+    <div className="bg-purple-50 border-2 border-purple-300 rounded-lg overflow-hidden shadow-sm">
+      <button
+        onClick={() => setShowThinkingHistory((prev) => !prev)}
+        className="w-full flex items-center justify-between p-3 hover:bg-purple-100 transition-colors"
+      >
+        <div className="flex items-center gap-2">
+          <div className="text-xs font-semibold text-purple-900 animate-pulse">
+            Think
+          </div>
+        </div>
+
+        <svg
+          className={`w-4 h-4 text-purple-600 transition-transform ${
+            showThinkingHistory ? "rotate-180" : ""
+          }`}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M19 9l-7 7-7-7"
+          />
+        </svg>
+      </button>
+
+      {/* ✅ Current thinking (always visible) */}
+      <div className="px-3 pb-3 pt-1">
+  <div
+    className={`transition-all duration-[1500ms] ${
+      visibleSections.has("think")
+        ? "opacity-100 translate-y-0"
+        : "opacity-0 translate-y-2"
+    }`}
+  >
+    <p className="text-xs text-purple-900 leading-relaxed italic">
+      "{questions[selectedQuestion].iterations[traversalStep].think}"
+    </p>
+  </div>
+</div>
+
+      {/* ✅ Previous completed thinking steps (only on expand) */}
+      {showThinkingHistory && (
+  <div className="border-t border-purple-200 bg-white px-3 py-3 space-y-2">
+    <div className="text-[11px] font-semibold text-gray-500">
+      Thinking steps
+    </div>
+
+    {/* ✅ Completed (previous steps) */}
+    {traversalStep > 0 &&
+      Array.from({ length: traversalStep }, (_, i) => (
+        <div
+          key={i}
+          className="bg-gray-50 border border-gray-200 rounded-lg p-2"
+        >
+          <div className="flex items-start gap-2">
+            {/* ✅ Checkmark */}
+            <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg
+                className="w-3 h-3 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={3}
+                  d="M5 13l4 4L19 7"
+                />
               </svg>
-              <div className="text-xs font-semibold text-purple-900">Think:</div>
             </div>
-            <p className="text-xs text-purple-900 leading-relaxed italic">
+
+            <div className="flex-1">
+              <div className="text-[11px] font-mono text-gray-500">
+                #{questions[selectedQuestion].iterations[i].iteration} •{" "}
+                {questions[selectedQuestion].iterations[i].phase}
+              </div>
+
+              {questions[selectedQuestion].iterations[i].think && (
+                <p className="text-xs text-gray-700 leading-relaxed italic mt-1">
+                  "{questions[selectedQuestion].iterations[i].think}"
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+      ))}
+
+    {/* ✅ Active (current step) — last */}
+    <div className="bg-purple-50 border-2 border-purple-300 rounded-lg p-2">
+      <div className="flex items-start gap-2">
+        {/* 🔥 Active indicator instead of check */}
+        <div className="w-5 h-5 rounded-full bg-purple-500 flex items-center justify-center flex-shrink-0 mt-0.5">
+          <div className="w-2 h-2 rounded-full bg-white animate-pulse" />
+        </div>
+
+        <div className="flex-1">
+          <div className="text-[11px] font-mono text-purple-800">
+            #{questions[selectedQuestion].iterations[traversalStep].iteration} •{" "}
+            {questions[selectedQuestion].iterations[traversalStep].phase} (active)
+          </div>
+
+          {questions[selectedQuestion].iterations[traversalStep].think && (
+            <p className="text-xs text-purple-900 leading-relaxed italic mt-1">
               "{questions[selectedQuestion].iterations[traversalStep].think}"
             </p>
-          </div>
-        )}
-        
-        {/* Nodes Accessed */}
-        {questions[selectedQuestion].iterations[traversalStep].nodesInvolved.length > 0 && (
-  <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-3">
-    <div className="text-xs font-semibold text-amber-900 mb-2">Nodes Accessed:</div>
-    <div className="flex flex-wrap gap-1.5">
-      {questions[selectedQuestion].iterations[traversalStep].nodesInvolved.map((nodeId, idx) => {
-        // Try to find node by matching ID case-insensitively
-        const node = nodes.find(n => 
-          n.id.toLowerCase() === nodeId.toLowerCase() || 
-          n.name.toLowerCase() === nodeId.toLowerCase()
-        );
-        
-        return node ? (
-          <span 
-            key={`${nodeId}-${idx}`} 
-            className="inline-flex items-center gap-1 px-2 py-1 text-xs rounded font-medium" 
-            style={{ backgroundColor: node.color + '20', color: node.color }}
-          >
-            {node.type === 'hexagon' ? '⬡' : node.type === 'triangle' ? '▲' : '●'} {node.name}
-          </span>
-        ) : (
-          <span 
-            key={`${nodeId}-${idx}`} 
-            className="inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded font-medium bg-gray-100 text-gray-600"
-          >
-            ⚠ {nodeId}
-          </span>
-        );
-      })}
+          )}
+        </div>
+      </div>
     </div>
   </div>
 )}
+
+    </div>
+  </div>
+)}
+
         
-        {/* Fetch Section */}
-        {questions[selectedQuestion].iterations[traversalStep].fetch && (
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-3">
-            <div className="flex items-center gap-1.5 mb-2">
-              <svg className="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
-              </svg>
-              <div className="text-xs font-semibold text-blue-900">Fetch:</div>
-            </div>
-            <div className="text-xs text-blue-900 space-y-2">
-              {questions[selectedQuestion].iterations[traversalStep].fetch.nodes && (
-                <div>
-                  <span className="font-semibold">Nodes: </span>
-                  <span className="font-mono">{questions[selectedQuestion].iterations[traversalStep].fetch.nodes.join(', ')}</span>
-                </div>
-              )}
-              {questions[selectedQuestion].iterations[traversalStep].fetch.fields && (
-                <div>
-                  <span className="font-semibold">Fields: </span>
-                  <div className="mt-1 font-mono text-xs bg-blue-100 rounded p-2">
-                    {Array.isArray(questions[selectedQuestion].iterations[traversalStep].fetch.fields) 
-                      ? questions[selectedQuestion].iterations[traversalStep].fetch.fields.join(', ')
-                      : questions[selectedQuestion].iterations[traversalStep].fetch.fields}
-                  </div>
-                </div>
-              )}
-              {questions[selectedQuestion].iterations[traversalStep].fetch.filters && (
-                <div>
-                  <span className="font-semibold">Filters: </span>
-                  <div className="mt-1 font-mono text-xs bg-blue-100 rounded p-2">
-                    {questions[selectedQuestion].iterations[traversalStep].fetch.filters}
-                  </div>
-                </div>
-              )}
-              {questions[selectedQuestion].iterations[traversalStep].fetch.result && (
-                <div>
-                  <span className="font-semibold">Result: </span>
-                  <pre className="mt-1 font-mono text-xs bg-blue-100 rounded p-2 whitespace-pre-wrap">
-                    {JSON.stringify(questions[selectedQuestion].iterations[traversalStep].fetch.result, null, 2)}
-                  </pre>
-                </div>
-              )}
+        {/* Nodes Accessed - Appears after 1s */}
+        {questions[selectedQuestion].iterations[traversalStep].nodesInvolved?.length > 0 && (
+          <div className={`transition-all duration-[1500ms] ${visibleSections.has('nodes') ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
+            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+              <div className="text-xs font-semibold text-amber-900 mb-2">Nodes Accessed:</div>
+              <div className="flex flex-wrap gap-1.5">
+                {questions[selectedQuestion].iterations[traversalStep].nodesInvolved.map((nodeId, idx) => {
+                  const node = nodes.find(n => 
+                    n.id.toLowerCase() === nodeId.toLowerCase() || 
+                    n.name.toLowerCase() === nodeId.toLowerCase()
+                  );
+                  
+                  return node ? (
+                    <span 
+                      key={`${nodeId}-${idx}`} 
+                      className="inline-flex items-center gap-1 px-2 py-1 text-xs rounded font-medium" 
+                      style={{ backgroundColor: node.color + '20', color: node.color }}
+                    >
+                      {node.type === 'hexagon' ? '⬡' : node.type === 'triangle' ? '▲' : '●'} {node.name}
+                    </span>
+                  ) : (
+                    <span 
+                      key={`${nodeId}-${idx}`} 
+                      className="inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded font-medium bg-gray-100 text-gray-600"
+                    >
+                      ⚠ {nodeId}
+                    </span>
+                  );
+                })}
+              </div>
             </div>
           </div>
         )}
         
-        {/* Analyse Section */}
-        {questions[selectedQuestion].iterations[traversalStep].analyse && (
-          <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-            <div className="flex items-center gap-1.5 mb-2">
-              <svg className="w-4 h-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-              </svg>
-              <div className="text-xs font-semibold text-green-900">Analyse:</div>
+        {/* Fetch Section - Appears after 1s */}
+        {questions[selectedQuestion].iterations[traversalStep].fetch && (
+          <div className={`transition-all duration-[1500ms] ${visibleSections.has('fetch') ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+              <div className="flex items-center gap-1.5 mb-2">
+                <svg className="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                </svg>
+                <div className="text-xs font-semibold text-blue-900">Fetch</div>
+              </div>
+              <div className="text-xs text-blue-900 space-y-2">
+                {questions[selectedQuestion].iterations[traversalStep].fetch.nodes && (
+                  <div>
+                    <span className="font-semibold">Nodes: </span>
+                    <span className="font-mono">{questions[selectedQuestion].iterations[traversalStep].fetch.nodes.join(', ')}</span>
+                  </div>
+                )}
+                {questions[selectedQuestion].iterations[traversalStep].fetch.fields && (
+                  <div>
+                    <span className="font-semibold">Fields: </span>
+                    <div className="mt-1 font-mono text-xs bg-blue-100 rounded p-2">
+                      {Array.isArray(questions[selectedQuestion].iterations[traversalStep].fetch.fields) 
+                        ? questions[selectedQuestion].iterations[traversalStep].fetch.fields.join(', ')
+                        : questions[selectedQuestion].iterations[traversalStep].fetch.fields}
+                    </div>
+                  </div>
+                )}
+                {questions[selectedQuestion].iterations[traversalStep].fetch.filters && (
+                  <div>
+                    <span className="font-semibold">Filters: </span>
+                    <div className="mt-1 font-mono text-xs bg-blue-100 rounded p-2">
+                      {questions[selectedQuestion].iterations[traversalStep].fetch.filters}
+                    </div>
+                  </div>
+                )}
+                {questions[selectedQuestion].iterations[traversalStep].fetch.result && (
+                  <div>
+                    <span className="font-semibold">Result: </span>
+                    <pre className="mt-1 font-mono text-xs bg-blue-100 rounded p-2 whitespace-pre-wrap max-h-40 overflow-y-auto">
+                      {JSON.stringify(questions[selectedQuestion].iterations[traversalStep].fetch.result, null, 2)}
+                    </pre>
+                  </div>
+                )}
+              </div>
             </div>
-            <div className="text-xs text-green-900">
-              {typeof questions[selectedQuestion].iterations[traversalStep].analyse === 'string' ? (
-                <p className="leading-relaxed">{questions[selectedQuestion].iterations[traversalStep].analyse}</p>
-              ) : (
-                <pre className="font-mono whitespace-pre-wrap leading-relaxed bg-green-100 rounded p-2">
-                  {JSON.stringify(questions[selectedQuestion].iterations[traversalStep].analyse, null, 2)}
-                </pre>
-              )}
+          </div>
+        )}
+        
+        {/* Analyse Section - Appears after 1.5s */}
+        {questions[selectedQuestion].iterations[traversalStep].analyse && (
+          <div className={`transition-all duration-[1500ms] ${visibleSections.has('analyse') ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
+            <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+              <div className="flex items-center gap-1.5 mb-2">
+                <svg className="w-4 h-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+                <div className="text-xs font-semibold text-green-900">Analyse</div>
+              </div>
+              <div className="text-xs text-green-900">
+                {typeof questions[selectedQuestion].iterations[traversalStep].analyse === 'string' ? (
+                  <p className="leading-relaxed">{questions[selectedQuestion].iterations[traversalStep].analyse}</p>
+                ) : (
+                  <pre className="font-mono whitespace-pre-wrap leading-relaxed bg-green-100 rounded p-2 max-h-40 overflow-y-auto">
+                    {JSON.stringify(questions[selectedQuestion].iterations[traversalStep].analyse, null, 2)}
+                  </pre>
+                )}
+              </div>
             </div>
           </div>
         )}
       </>
     ) : (
-      <>
+      /* Final Response */
+      <div className={`transition-all duration-[1500ms] ${visibleSections.has('final') ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
         <div className="flex items-center gap-2 mb-4">
-          <span className="bg-green-600 text-white text-xs font-bold px-2 py-1 rounded">
-            ✓ Final Response
+          <span className="bg-green-600 text-white text-xs font-bold px-2 py-1 rounded flex items-center gap-1">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+            Final Response
           </span>
         </div>
         
@@ -2072,7 +2287,10 @@ const createVisualization = () => {
             <div className="text-xs font-semibold text-green-900 mb-2">Nodes Used:</div>
             <div className="flex flex-wrap gap-1">
               {questions[selectedQuestion].finalResponse.nodesUsed.map((nodeId, idx) => {
-                const node = nodes.find(n => n.id === nodeId);
+                const node = nodes.find(n => 
+                  n.id.toLowerCase() === nodeId.toLowerCase() || 
+                  n.name.toLowerCase() === nodeId.toLowerCase()
+                );
                 return node ? (
                   <span key={idx} className="inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded font-medium bg-white" style={{ color: node.color }}>
                     {nodeId}
@@ -2086,23 +2304,11 @@ const createVisualization = () => {
             </div>
           </div>
         </div>
-      </>
+      </div>
     )}
   </div>
-  
-  <div className="sticky bottom-0 bg-white border-t border-gray-200 p-4">
-    <div className="text-xs text-gray-500 mb-2 text-center">
-      {highlightedNodes.size} nodes highlighted on graph
-    </div>
-    <button
-      onClick={clearTraversal}
-      className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 rounded-lg text-sm font-medium transition-colors"
-    >
-      Close & Select Another Question
-    </button>
-  </div>
 </div>
-        )}
+                )}
         
         {selectedNode && !showTraversal && (
           selectedNode.type === 'hexagon' ? (
