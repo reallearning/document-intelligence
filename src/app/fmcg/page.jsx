@@ -16,275 +16,586 @@ const FMCGKnowledgeGraph = () => {
   
   const questions = [
     {
-      id: 1,
-      title: "Sales Trend Analysis",
-      question: "Average sales trend in cases for past 3 months for Lay's 48g Spanish Tomato, month-wise across Delhi and Mumbai in General Trade. Show stacked columns + 3-month average overlay for both cities.",
-      steps: [
+      "id": 1,
+      "title": "Sales Trend Analysis",
+      "question": "What is the average sales trend in cases for the past 3 months for Lay's 48g Spanish Tomato SKU per month across Delhi and Mumbai in General Trade?",
+      "outputExpectation": "Stacked column chart (Delhi vs Mumbai month-wise for last 3 months) + text overlay with 3-month average for both cities",
+      "iterations": [
         {
-          title: "Resolve SKU",
-          nodes: ['sku'],
-          data: "sku_id=SKU_104812, sku_name='Lay's Spanish Tomato 48g', units_per_case=48"
+          "iteration": 0,
+          "phase": "Interpret Business Meaning",
+          "think": "'Sales trend in cases' could be primary (company → distributor) or secondary (distributor → market). Since the view is city-level (Delhi/Mumbai) and GT, this usually means secondary sales tied to outlet/customer city. I'll proceed with secondary sales and sanity-check magnitude so I don't accidentally pull primary dispatches.",
+          "fetch": null,
+          "analyse": null,
+          "nodesInvolved": []
         },
         {
-          title: "Resolve Cities",
-          nodes: ['geography'],
-          data: "Delhi → geo_id=GEO_DEL_CITY, Mumbai → geo_id=GEO_MUM_CITY"
+          "iteration": 1,
+          "phase": "Resolve SKU and Scope Entities",
+          "think": "SKU ambiguity is the most common failure. I'll resolve the SKU using brand + flavour + pack size and confirm UoM is cases.",
+          "fetch": {
+            "nodes": ["SKU", "Brand", "Variant", "UoM", "UoMConversion"],
+            "result": {
+              "sku_id": "SKU_104812",
+              "sku_name": "Lay's Spanish Tomato 48g",
+              "uom": "CASE",
+              "note": "Already stored in cases; no conversion needed"
+            }
+          },
+          "analyse": "SKU resolved successfully. UoM is already in cases, no conversion required.",
+          "nodesInvolved": ["SKU", "Brand", "Variant", "UoM", "UoMConversion"]
         },
         {
-          title: "Resolve Channel",
-          nodes: ['channel'],
-          data: "General Trade → channel_id=CH_GT"
+          "iteration": 1.1,
+          "phase": "Resolve Geography and Channel",
+          "think": "Now lock cities and channel. GT can have aliases (Traditional Trade/TT). I'll resolve canonical IDs.",
+          "fetch": {
+            "nodes": ["GeographyNode", "Channel"],
+            "result": {
+              "delhi": "GEO_DEL_CITY",
+              "mumbai": "GEO_MUM_CITY",
+              "channel": "CH_GT"
+            }
+          },
+          "analyse": "Geography and channel resolved to canonical IDs.",
+          "nodesInvolved": ["GeographyNode", "Channel"]
         },
         {
-          title: "Pull Transactions",
-          nodes: ['salestxn', 'salesline', 'outlet', 'timemonth'],
-          data: "Filter: sku_id=SKU_104812 AND channel_id=CH_GT AND Oct-Dec 2025\nSample rows: Delhi (320 cases), Mumbai (290 cases)..."
+          "iteration": 2,
+          "phase": "Choose City Mapping Method",
+          "think": "To classify sales as Delhi vs Mumbai, mapping should come from buyer outlet (best). If outlet mapping is incomplete, fallback to customer territory. I'll try outlet first and check coverage.",
+          "fetch": {
+            "nodes": ["SalesTransaction", "SalesLine", "Outlet", "Customer", "GeographyNode", "TimeMonth"],
+            "fields": [
+              "SalesLine.sku_id",
+              "SalesLine.qty_cases",
+              "SalesTransaction.txn_datetime",
+              "SalesTransaction.channel_id",
+              "SalesTransaction.buyer_outlet_id",
+              "Outlet.geo_id"
+            ]
+          },
+          "analyse": "Coverage check: If less than 90% of volume maps to an outlet city, I'll switch to territory-based mapping. (Assume coverage is good in this hypothetical.)",
+          "nodesInvolved": ["SalesTransaction", "SalesLine", "Outlet", "Customer", "GeographyNode", "TimeMonth"]
         },
         {
-          title: "Aggregate by City & Month",
-          nodes: ['salesline', 'geography', 'timemonth'],
-          data: "Oct: Delhi=1,240, Mumbai=1,110\nNov: Delhi=1,520, Mumbai=1,340\nDec: Delhi=1,380, Mumbai=1,560"
+          "iteration": 3,
+          "phase": "Aggregate and Sanity Check",
+          "think": "Filter to: sku_id=SKU_104812 AND channel_id=CH_GT AND buyer_city in {Delhi,Mumbai} AND month in last 3 months. Then aggregate SUM(qty_cases) by (month, city).",
+          "fetch": null,
+          "analyse": {
+            "filters_applied": "sku_id=SKU_104812 AND channel_id=CH_GT AND buyer_city in {Delhi,Mumbai} AND month in last 3 months",
+            "aggregation": "SUM(qty_cases) GROUP BY (month, city)",
+            "intermediateResults": {
+              "Oct 2025": {
+                "Delhi": 1240,
+                "Mumbai": 1110
+              },
+              "Nov 2025": {
+                "Delhi": 1520,
+                "Mumbai": 1340
+              },
+              "Dec 2025": {
+                "Delhi": 1380,
+                "Mumbai": 1560
+              }
+            },
+            "sanityChecks": [
+              "Ensure returns/negative invoices aren't inflating/deflating trend",
+              "Ensure no MT/Ecom slipped in"
+            ],
+            "sanityCheckResult": "All checks passed"
+          },
+          "nodesInvolved": ["SalesLine", "SalesTransaction", "TimeMonth", "GeographyNode"]
         },
         {
-          title: "Compute 3-Month Averages",
-          nodes: ['salesline'],
-          data: "Delhi avg = 1,380 cases/month\nMumbai avg = 1,337 cases/month"
+          "iteration": 4,
+          "phase": "Compute Overlay Averages",
+          "think": "Calculate 3-month average for each city to provide overlay metrics.",
+          "fetch": null,
+          "analyse": {
+            "delhi_avg": {
+              "calculation": "(1240+1520+1380)/3",
+              "result": 1380,
+              "unit": "cases/month"
+            },
+            "mumbai_avg": {
+              "calculation": "(1110+1340+1560)/3",
+              "result": 1337,
+              "unit": "cases/month"
+            }
+          },
+          "nodesInvolved": []
         }
       ],
-      finalResponse: {
-        type: "chart",
-        description: "Here's the sales trend analysis for Lay's Spanish Tomato 48g across Delhi and Mumbai in General Trade over the last 3 months:",
-        chartData: {
-          title: "Monthly Sales Volume (Cases)",
-          months: ["Oct 2025", "Nov 2025", "Dec 2025"],
-          delhi: [1240, 1520, 1380],
-          mumbai: [1110, 1340, 1560]
+      "finalResponse": {
+        "type": "text_with_chart",
+        "summary": "For Lay's Spanish Tomato 48g (General Trade) across Delhi vs Mumbai (Oct–Dec 2025):",
+        "monthWiseData": {
+          "Oct 2025": {
+            "Delhi": 1240,
+            "Mumbai": 1110
+          },
+          "Nov 2025": {
+            "Delhi": 1520,
+            "Mumbai": 1340
+          },
+          "Dec 2025": {
+            "Delhi": 1380,
+            "Mumbai": 1560
+          }
         },
-        insights: [
-          "Delhi averaged 1,380 cases per month across the period",
-          "Mumbai averaged 1,337 cases per month",
-          "Delhi showed stronger performance in October and November",
-          "Mumbai had the highest single month in December with 1,560 cases"
-        ]
+        "threeMonthAverage": {
+          "Delhi": "1,380 cases/month",
+          "Mumbai": "1,337 cases/month"
+        },
+        "nodesUsed": ["SKU", "Brand", "Variant", "Channel", "GeographyNode", "SalesTransaction", "SalesLine", "Outlet", "Customer", "TimeMonth", "UoM", "UoMConversion"]
       }
     },
     {
-      id: 2,
-      title: "Order Loss Analysis",
-      question: "What was overall sales order loss in last 2 weeks of Dec 2025 across Bangalore city? Show brand-wise chart + overall overlay. Then explain what's driving it.",
-      steps: [
+      "id": 2,
+      "title": "Overall Sales Order Loss",
+      "question": "What was the overall sales order loss in the last 2 weeks of December 2025 across Bangalore city?",
+      "outputExpectation": "Stacked column chart at brand level (Lay's, Kurkure, Cheetos, Doritos, Quaker, Uncle Chips) showing total order loss in cases; overlay with overall loss",
+      "iterations": [
         {
-          title: "Resolve City & Time",
-          nodes: ['geography', 'timeday'],
-          data: "Bangalore → geo_id=GEO_BLR_CITY, Window: 2025-12-18 to 2025-12-31"
+          "iteration": 0,
+          "phase": "Confirm Definition",
+          "think": "In this context 'order loss' should be short-fulfillment: requested − fulfilled (cases). I'll compute it at order-line level.",
+          "fetch": null,
+          "analyse": "Definition confirmed: order_loss = requested_cases - fulfilled_cases (per order line)",
+          "nodesInvolved": []
         },
         {
-          title: "Pull Orders to Bangalore",
-          nodes: ['salesorder', 'orderline', 'customer'],
-          data: "Sample: OL_9001 (120 cases), OL_9002 (90 cases), OL_9003 (60 cases)"
+          "iteration": 1,
+          "phase": "Lock Geography and Time Window",
+          "think": "Need to establish the exact geography ID for Bangalore and the specific date range for 'last 2 weeks of December 2025'.",
+          "fetch": {
+            "nodes": ["GeographyNode", "TimeDay"],
+            "result": {
+              "bangalore": "GEO_BLR_CITY",
+              "timeWindow": "2025-12-18 to 2025-12-31"
+            }
+          },
+          "analyse": "Geography and time scope locked: Bangalore city for Dec 18-31, 2025",
+          "nodesInvolved": ["GeographyNode", "TimeDay"]
         },
         {
-          title: "Pull Fulfillment Data",
-          nodes: ['fulfillment', 'fulfillmentline'],
-          data: "OL_9001: fulfilled 80 (shortfall 40)\nOL_9002: fulfilled 90 (shortfall 0)\nOL_9003: fulfilled 30 (shortfall 30)"
+          "iteration": 2,
+          "phase": "Build Pristine Order Population",
+          "think": "'Across Bangalore city' should be based on deliver-to location. I'll filter orders whose deliver-to outlet/customer is in Bangalore and order date is in-window.",
+          "fetch": {
+            "nodes": ["SalesOrder", "SalesOrderLine", "Customer", "Outlet", "GeographyNode"],
+            "fields": [
+              "SalesOrder.order_id",
+              "SalesOrder.order_datetime",
+              "SalesOrder.deliver_to_id",
+              "SalesOrderLine.order_line_id",
+              "SalesOrderLine.sku_id",
+              "SalesOrderLine.requested_qty_cases"
+            ],
+            "filters": "deliver_to location in Bangalore AND order_datetime between 2025-12-18 and 2025-12-31"
+          },
+          "analyse": "Pristine order population built based on deliver-to location in Bangalore city within specified date range.",
+          "nodesInvolved": ["SalesOrder", "SalesOrderLine", "Customer", "Outlet", "GeographyNode"]
         },
         {
-          title: "Aggregate by Brand",
-          nodes: ['sku', 'brand', 'orderline'],
-          data: "Lay's: 1,420 cases loss\nKurkure: 980\nCheetos: 260\nDoritos: 340\nTotal: 3,500 cases"
+          "iteration": 3,
+          "phase": "Attach Fulfillment Carefully",
+          "think": "Fulfillment can be split across multiple documents. I'll sum fulfilled cases per order line to avoid partial/double counting.",
+          "fetch": {
+            "nodes": ["FulfillmentEvent", "FulfillmentLine"],
+            "fields": [
+              "FulfillmentLine.order_line_id",
+              "FulfillmentLine.fulfilled_qty_cases",
+              "FulfillmentEvent.event_type",
+              "FulfillmentEvent.event_datetime"
+            ]
+          },
+          "analyse": {
+            "calculation": "For each order line: fulfilled_cases = SUM(fulfilled_qty_cases); loss_cases = MAX(requested_cases − fulfilled_cases, 0)",
+            "note": "Ensuring no negative loss values by using MAX with 0"
+          },
+          "nodesInvolved": ["FulfillmentEvent", "FulfillmentLine"]
         },
         {
-          title: "Check: Depot ATP Shortage",
-          nodes: ['supplynode', 'invposition', 'm201', 'm202'],
-          data: "1,785 cases shortage when ATP insufficient at Bangalore depot"
-        },
-        {
-          title: "Check: Inbound Delays",
-          nodes: ['shipment', 'shipmentline'],
-          data: "1,120 cases linked to late inbound shipments to depot"
-        },
-        {
-          title: "Check: Production Shortfall",
-          nodes: ['prodorder', 'm401'],
-          data: "540 cases due to low production attainment upstream"
-        },
-        {
-          title: "Check: Service Execution Issues",
-          nodes: ['serviceattempt', 'invposition'],
-          data: "1,175 cases had ATP available but dispatch failed"
+          "iteration": 4,
+          "phase": "Roll Up to Brand Level",
+          "think": "Need to aggregate order loss by brand to show brand-wise breakdown. Join SKU to Brand for classification.",
+          "fetch": {
+            "nodes": ["SKU", "Brand"]
+          },
+          "analyse": {
+            "brandTotals": {
+              "Lay's": 1420,
+              "Kurkure": 980,
+              "Cheetos": 260,
+              "Doritos": 340,
+              "Quaker": 190,
+              "Uncle Chips": 310
+            },
+            "overallLoss": 3500,
+            "unit": "cases"
+          },
+          "nodesInvolved": ["SKU", "Brand"]
         }
       ],
-      finalResponse: {
-        type: "breakdown",
-        description: "I've analyzed the order loss across Bangalore city for the last 2 weeks of December 2025. Here's what I found:",
-        summary: "Total order loss: 3,500 cases",
-        brandBreakdown: [
-          { brand: "Lay's", loss: 1420, percent: 41 },
-          { brand: "Kurkure", loss: 980, percent: 28 },
-          { brand: "Doritos", loss: 340, percent: 10 },
-          { brand: "Cheetos", loss: 260, percent: 7 },
-          { brand: "Uncle Chips", loss: 310, percent: 9 },
-          { brand: "Quaker", loss: 190, percent: 5 }
+      "finalResponse": {
+        "type": "text_with_breakdown",
+        "summary": "Bangalore city — Sales order loss (18–31 Dec 2025): 3,500 cases",
+        "brandWiseBreakdown": [
+          {
+            "brand": "Lay's",
+            "loss": 1420
+          },
+          {
+            "brand": "Kurkure",
+            "loss": 980
+          },
+          {
+            "brand": "Doritos",
+            "loss": 340
+          },
+          {
+            "brand": "Uncle Chips",
+            "loss": 310
+          },
+          {
+            "brand": "Cheetos",
+            "loss": 260
+          },
+          {
+            "brand": "Quaker",
+            "loss": 190
+          }
         ],
-        rootCauses: [
-          { cause: "Warehouse service/execution issues despite stock", cases: 1175, percent: 34 },
-          { cause: "Inbound logistics delay to depot", cases: 1120, percent: 32 },
-          { cause: "Production shortfall upstream", cases: 540, percent: 15 },
-          { cause: "Other depot availability constraints", cases: 665, percent: 19 }
-        ],
-        insights: [
-          "Lay's products account for the largest share of order loss at 41%",
-          "Service execution issues are the primary driver (34%), indicating operational challenges even when stock is available",
-          "Logistics delays contributed significantly to 32% of the losses"
-        ]
+        "nodesUsed": ["GeographyNode", "TimeDay", "SalesOrder", "SalesOrderLine", "Customer", "Outlet", "FulfillmentEvent", "FulfillmentLine", "SKU", "Brand"]
       }
     },
     {
-      id: 3,
-      title: "Fulfillment Rate - Depot Performance",
-      question: "What has been distributor order fulfillment rate against pristine order for Bangalore depot in last 3 months (month-wise)? Show SKU-wise fill rate for top 5 SKUs by volume.",
-      steps: [
+      "id": 3,
+      "title": "Root Cause Analysis - Why Did Order Loss Happen",
+      "question": "What was the reason for this sales order loss?",
+      "outputExpectation": "Bar graph or paragraph breaking down overall loss into % and cases for: Stock unavailability at distributor, Stock unavailability at warehouse, Order not serviced by distributor despite stock availability",
+      "iterations": [
         {
-          title: "Resolve Ship-From Node",
-          nodes: ['supplynode'],
-          data: "Bangalore Depot → node_id=NODE_BLR_DEPOT"
+          "iteration": 0,
+          "phase": "Decide Approach Without Reason Codes",
+          "think": "We're explicitly not using a reason taxonomy node. I'll derive drivers using evidence checks on inventory positions and service attempts. To avoid mis-blame, I'll check 'not serviced despite stock' first.",
+          "fetch": null,
+          "analyse": {
+            "input": "Shortfall lines from Q2 (total loss = 3,500 cases)",
+            "approach": "Evidence-based bucketing using inventory and service attempt data"
+          },
+          "nodesInvolved": []
         },
         {
-          title: "Pull Order Lines (3 months)",
-          nodes: ['salesorder', 'orderline', 'timemonth'],
-          data: "Oct: 48,000 cases requested\nNov: 52,500 cases\nDec: 50,000 cases"
+          "iteration": 1,
+          "phase": "Bucket: Not Serviced Despite Stock",
+          "think": "If ATP was adequate but service failed, it's an execution issue. This should be checked first to avoid misattributing to stock issues.",
+          "fetch": {
+            "nodes": ["ServiceAttempt", "InventoryPosition", "SupplyNode"],
+            "fields": [
+              "ServiceAttempt.status",
+              "ServiceAttempt.attempt_datetime",
+              "ServiceAttempt.service_node_id",
+              "InventoryPosition.ATP_cases (aligned to attempt time)"
+            ]
+          },
+          "analyse": {
+            "rule": "If ATP >= requested AND service status is failed/partial → bucket 'not serviced despite stock'",
+            "result": {
+              "cases": 875,
+              "percentage": 25,
+              "interpretation": "Execution/service issue despite adequate inventory"
+            }
+          },
+          "nodesInvolved": ["ServiceAttempt", "InventoryPosition", "SupplyNode"]
         },
         {
-          title: "Pull Fulfilled Cases",
-          nodes: ['fulfillment', 'fulfillmentline'],
-          data: "Oct: 41,280 fulfilled\nNov: 46,200 fulfilled\nDec: 44,000 fulfilled"
+          "iteration": 2,
+          "phase": "Bucket: Distributor Stock Unavailability",
+          "think": "Now I'll check whether distributor warehouse stock was insufficient at service time for remaining unexplained shortfalls.",
+          "fetch": {
+            "nodes": ["SupplyNode", "InventoryPosition"],
+            "filters": "SupplyNode.node_type = 'DistributorWarehouse'"
+          },
+          "analyse": {
+            "rule": "distributor ATP < requested at service time → 'stock unavailability at distributor'",
+            "result": {
+              "cases": 1505,
+              "percentage": 43,
+              "interpretation": "Insufficient stock at distributor level"
+            }
+          },
+          "nodesInvolved": ["SupplyNode", "InventoryPosition"]
         },
         {
-          title: "Compute Fill Rate by Month",
-          nodes: ['orderline', 'fulfillmentline', 'm104'],
-          data: "Oct: 86.0%, Nov: 88.0%, Dec: 88.0%"
-        },
-        {
-          title: "Identify Top 5 SKUs",
-          nodes: ['sku', 'orderline'],
-          data: "1. Lay's Magic Masala 48g: 9,400 cases\n2. Lay's Spanish Tomato: 8,700\n3. Quaker Oats: 6,200\n4. Kurkure 50g: 5,900\n5. Doritos: 5,100"
-        },
-        {
-          title: "Compute Fill Rate per SKU",
-          nodes: ['sku', 'fulfillmentline'],
-          data: "Magic Masala: 82%\nSpanish Tomato: 74%\nQuaker: 91%\nKurkure: 87%\nDoritos: 77%"
+          "iteration": 3,
+          "phase": "Bucket: Warehouse/Depot Stock Unavailability",
+          "think": "For remaining lines, check ship-from node (warehouse/depot) ATP around commit/dispatch time.",
+          "fetch": {
+            "nodes": ["SalesOrder", "SupplyNode", "InventoryPosition"],
+            "fields": [
+              "SalesOrder.ship_from_node_id",
+              "SupplyNode (warehouse/depot level)",
+              "InventoryPosition.ATP_cases"
+            ]
+          },
+          "analyse": {
+            "result": {
+              "cases": 1120,
+              "percentage": 32,
+              "interpretation": "Insufficient stock at warehouse/depot level"
+            },
+            "sanityCheck": {
+              "calculation": "875 + 1505 + 1120",
+              "total": 3500,
+              "status": "✓ All cases accounted for"
+            }
+          },
+          "nodesInvolved": ["SalesOrder", "SupplyNode", "InventoryPosition"]
         }
       ],
-      finalResponse: {
-        type: "performance",
-        description: "Here's the fulfillment performance analysis for Bangalore Depot over the last 3 months:",
-        monthlyRate: [
-          { month: "Oct 2025", rate: 86.0, requested: 48000, fulfilled: 41280 },
-          { month: "Nov 2025", rate: 88.0, requested: 52500, fulfilled: 46200 },
-          { month: "Dec 2025", rate: 88.0, requested: 50000, fulfilled: 44000 }
+      "finalResponse": {
+        "type": "text_with_breakdown",
+        "summary": "Here's the breakdown of the 3,500 cases of Bangalore order loss (18–31 Dec 2025), derived from inventory and servicing evidence:",
+        "breakdown": [
+          {
+            "cause": "Stock unavailability at distributor",
+            "cases": 1505,
+            "percentage": 43
+          },
+          {
+            "cause": "Stock unavailability at warehouse/depot",
+            "cases": 1120,
+            "percentage": 32
+          },
+          {
+            "cause": "Not serviced despite stock availability (execution issue)",
+            "cases": 875,
+            "percentage": 25
+          }
         ],
-        topSKUs: [
-          { sku: "Quaker Rolled Oats 500g", fillRate: 91, requested: 6200, fulfilled: 5642, status: "good" },
-          { sku: "Kurkure 50g", fillRate: 87, requested: 5900, fulfilled: 5133, status: "good" },
-          { sku: "Lay's 48g Magic Masala", fillRate: 82, requested: 9400, fulfilled: 7708, status: "moderate" },
-          { sku: "Doritos Nacho Cheese 60g", fillRate: 77, requested: 5100, fulfilled: 3927, status: "attention" },
-          { sku: "Lay's 48g Spanish Tomato", fillRate: 74, requested: 8700, fulfilled: 6438, status: "attention" }
-        ],
-        insights: [
-          "Overall fulfillment improved from 86% to 88% over the period",
-          "Quaker Oats leads with 91% fill rate - best in class performance",
-          "Lay's Spanish Tomato needs attention at 74% - lowest among top SKUs",
-          "Magic Masala, despite highest volume (9,400 cases), maintains 82% fill rate"
-        ]
+        "nodesUsed": ["SalesOrderLine", "InventoryPosition", "ServiceAttempt", "SupplyNode", "SalesOrder"]
       }
     },
     {
-      id: 4,
-      title: "SKU-Level Root Cause",
-      question: "What are the reasons for low order fulfillment for Lay's 82g Magic Masala? Show breakdown with % contribution.",
-      steps: [
+      "id": 4,
+      "title": "Distributor Order Fulfillment Rate - Bangalore Depot",
+      "question": "What has been the distributor order fulfillment rate against pristine order for Bangalore depot in the last 3 months?",
+      "outputExpectation": "Month-wise fill rate",
+      "iterations": [
         {
-          title: "Resolve SKU + Scope",
-          nodes: ['sku', 'supplynode', 'timeday'],
-          data: "SKU_118299 (Lay's 82g Magic Masala), Bangalore Depot, Last 30 days"
+          "iteration": 0,
+          "phase": "Resolve Depot Node Cleanly",
+          "think": "'Bangalore depot' could map to CFA/depot/DC. I'll resolve the exact SupplyNode first to ensure accuracy.",
+          "fetch": {
+            "nodes": ["SupplyNode"],
+            "result": {
+              "node_id": "NODE_BLR_DEPOT",
+              "node_name": "Bangalore Depot"
+            }
+          },
+          "analyse": "Depot node clearly identified as NODE_BLR_DEPOT",
+          "nodesInvolved": ["SupplyNode"]
         },
         {
-          title: "Get Shortfall Lines",
-          nodes: ['salesorder', 'orderline', 'fulfillmentline'],
-          data: "Requested: 3,200 cases, Fulfilled: 2,240 cases\nShortfall: 960 cases"
+          "iteration": 1,
+          "phase": "Compute Month-wise Requested vs Fulfilled",
+          "think": "Need to calculate both requested and fulfilled cases for each month, ensuring consistent time bucketing.",
+          "fetch": {
+            "nodes": ["TimeMonth", "SalesOrder", "SalesOrderLine", "FulfillmentLine"],
+            "aggregation": {
+              "requested": "SUM(requested_cases) for orders with ship_from=NODE_BLR_DEPOT by month",
+              "fulfilled": "SUM(fulfilled_cases) joined to those order lines by month"
+            },
+            "result": {
+              "Oct 2025": {
+                "requested": 48000,
+                "fulfilled": 41280
+              },
+              "Nov 2025": {
+                "requested": 52500,
+                "fulfilled": 46200
+              },
+              "Dec 2025": {
+                "requested": 50000,
+                "fulfilled": 44000
+              }
+            }
+          },
+          "analyse": "Successfully pulled requested and fulfilled volumes for all 3 months",
+          "nodesInvolved": ["TimeMonth", "SalesOrder", "SalesOrderLine", "FulfillmentLine"]
         },
         {
-          title: "Check: Demand vs Plan",
-          nodes: ['demandplan', 'salesproj'],
-          data: "Plan: 2,400 cases, Actual: 3,200 (33% excess)\nAttributed: 355 cases (37%)"
-        },
-        {
-          title: "Check: Production Issues",
-          nodes: ['prodorder', 'm401'],
-          data: "Planned: 1,000, Produced: 730\nAttributed: 260 cases (27%)"
-        },
-        {
-          title: "Check: Logistics Delay",
-          nodes: ['shipment', 'shipmentline', 'm502'],
-          data: "4 late shipments to depot\nAttributed: 220 cases (23%)"
-        },
-        {
-          title: "Check: Warehouse Issues",
-          nodes: ['serviceattempt', 'invposition'],
-          data: "ATP adequate but dispatch failed\nAttributed: 125 cases (13%)"
+          "iteration": 2,
+          "phase": "Compute Fill Rates and Sanity Check",
+          "think": "Calculate fill rate as fulfilled/requested. Need to verify that fulfillment month aligns with order month to avoid skewing.",
+          "fetch": null,
+          "analyse": {
+            "calculations": {
+              "Oct 2025": {
+                "requested": 48000,
+                "fulfilled": 41280,
+                "fillRate": 86.0,
+                "calculation": "41280 / 48000 * 100"
+              },
+              "Nov 2025": {
+                "requested": 52500,
+                "fulfilled": 46200,
+                "fillRate": 88.0,
+                "calculation": "46200 / 52500 * 100"
+              },
+              "Dec 2025": {
+                "requested": 50000,
+                "fulfilled": 44000,
+                "fillRate": 88.0,
+                "calculation": "44000 / 50000 * 100"
+              }
+            },
+            "sanityCheck": "If fulfillment month was based on delivery date while requested month is order creation, it can skew. Assume both are consistently bucketed to order month (or consistently to service month).",
+            "assumption": "Time bucketing is consistent across requested and fulfilled metrics"
+          },
+          "nodesInvolved": []
         }
       ],
-      finalResponse: {
-        type: "breakdown",
-        description: "Root cause breakdown for 960 cases shortfall",
-        data: "Excess demand (37%), Production (27%), Logistics (23%), Warehouse (13%)"
+      "finalResponse": {
+        "type": "text_with_metrics",
+        "summary": "Bangalore depot — fulfillment rate vs pristine (Oct–Dec 2025):",
+        "monthlyMetrics": [
+          {
+            "month": "Oct 2025",
+            "fulfilled": 41280,
+            "requested": 48000,
+            "fillRate": "86.0%"
+          },
+          {
+            "month": "Nov 2025",
+            "fulfilled": 46200,
+            "requested": 52500,
+            "fillRate": "88.0%"
+          },
+          {
+            "month": "Dec 2025",
+            "fulfilled": 44000,
+            "requested": 50000,
+            "fillRate": "88.0%"
+          }
+        ],
+        "nodesUsed": ["SupplyNode", "TimeMonth", "SalesOrder", "SalesOrderLine", "FulfillmentLine"]
       }
     },
     {
-      id: 5,
-      title: "Distributor Stock Risk",
-      question: "Which distributors currently have <7 days of stock for Kurkure 48g against current sales projections? Show tabular list with current inventory, month balance to go on plan, ADS 30, stock in transit, estimated DOS; sort by earliest stockout.",
-      steps: [
+      "id": 5,
+      "title": "SKU-wise Fill Rate for Top SKUs - Bangalore Depot",
+      "question": "Can you show this SKU-wise for top 5 SKUs by volumes (for Bangalore depot, last 3 months)?",
+      "outputExpectation": "SKU-wise fill rate table",
+      "iterations": [
         {
-          title: "Resolve SKU",
-          nodes: ['sku'],
-          data: "Kurkure 48g → sku_id=SKU_220114"
+          "iteration": 0,
+          "phase": "Decide Ranking Basis",
+          "think": "'Top 5 by volumes' could be ranked by fulfilled or requested. Since the theme is pristine vs fulfilled, I'll rank by requested volume (pristine demand), then compute fill rate.",
+          "fetch": null,
+          "analyse": "Decision: Rank by requested cases (pristine demand) to identify SKUs with highest demand",
+          "nodesInvolved": []
         },
         {
-          title: "Pull Distributor Inventories",
-          nodes: ['supplynode', 'customer', 'invposition'],
-          data: "Dist A: 85 cases, Dist B: 40, Dist C: 120, Dist D: 30"
+          "iteration": 1,
+          "phase": "Identify Top 5 SKUs by Requested Cases",
+          "think": "Need to aggregate requested cases per SKU for Bangalore depot over last 3 months, then sort and take top 5.",
+          "fetch": {
+            "nodes": ["SalesOrder", "SalesOrderLine", "SKU", "TimeMonth", "SupplyNode"],
+            "filters": "ship_from=NODE_BLR_DEPOT AND last 3 months",
+            "aggregation": "SUM(requested_cases) per SKU, ORDER BY DESC, LIMIT 5",
+            "result": [
+              {
+                "sku": "Lay's 48g Magic Masala",
+                "requestedCases": 9400
+              },
+              {
+                "sku": "Lay's 48g Spanish Tomato",
+                "requestedCases": 8700
+              },
+              {
+                "sku": "Quaker Rolled Oats 500g",
+                "requestedCases": 6200
+              },
+              {
+                "sku": "Kurkure 50g",
+                "requestedCases": 5900
+              },
+              {
+                "sku": "Doritos Nacho Cheese 60g",
+                "requestedCases": 5100
+              }
+            ]
+          },
+          "analyse": "Top 5 SKUs identified by pristine demand volume",
+          "nodesInvolved": ["SalesOrder", "SalesOrderLine", "SKU", "TimeMonth", "SupplyNode"]
         },
         {
-          title: "Pull In-Transit Stock",
-          nodes: ['shipment', 'shipmentline'],
-          data: "Dist A: 20 cases in-transit, Dist B: 0, Dist C: 35, Dist D: 10"
-        },
-        {
-          title: "Compute ADS_30",
-          nodes: ['salesline', 'timeday'],
-          data: "Dist A: 18/day, Dist B: 9/day, Dist C: 22/day, Dist D: 7/day"
-        },
-        {
-          title: "Get Sales Projections",
-          nodes: ['salesproj'],
-          data: "Dist A: 20/day, Dist B: 10/day, Dist C: 24/day, Dist D: 8/day"
-        },
-        {
-          title: "Pull Month Balance",
-          nodes: ['demandplan', 'salesline', 'timemonth'],
-          data: "Dist A: 240 to go, Dist B: 120, Dist C: 310, Dist D: 85"
-        },
-        {
-          title: "Compute DOS & Filter <7",
-          nodes: ['invposition', 'salesproj', 'm205'],
-          data: "Dist B: 4.0 days, Dist D: 5.0, Dist A: 5.25, Dist C: 6.46\nAll <7 days, sorted by earliest stockout"
+          "iteration": 2,
+          "phase": "Compute Fill Rate per SKU",
+          "think": "For each of the top 5 SKUs, calculate fill rate as fulfilled/requested by joining fulfillment data.",
+          "fetch": {
+            "nodes": ["FulfillmentLine"],
+            "note": "Joined to the order lines for the top 5 SKUs"
+          },
+          "analyse": {
+            "calculation": "fill_rate_per_SKU = fulfilled / requested * 100",
+            "results": [
+              {
+                "sku": "Lay's 48g Magic Masala",
+                "fillRate": 82
+              },
+              {
+                "sku": "Lay's 48g Spanish Tomato",
+                "fillRate": 74
+              },
+              {
+                "sku": "Quaker Rolled Oats 500g",
+                "fillRate": 91
+              },
+              {
+                "sku": "Kurkure 50g",
+                "fillRate": 87
+              },
+              {
+                "sku": "Doritos Nacho Cheese 60g",
+                "fillRate": 77
+              }
+            ]
+          },
+          "nodesInvolved": ["FulfillmentLine"]
         }
       ],
-      finalResponse: {
-        type: "table",
-        description: "Priority list of at-risk distributors",
-        data: "4 distributors at risk\nMost urgent: Dist B (Yeshwanthpur) - 4.0 days DOS"
+      "finalResponse": {
+        "type": "table",
+        "summary": "Top 5 SKUs by requested volume (Bangalore depot, Oct–Dec 2025) — fill rate:",
+        "tableData": [
+          {
+            "sku": "Lay's 48g Magic Masala",
+            "fillRate": "82%"
+          },
+          {
+            "sku": "Lay's 48g Spanish Tomato",
+            "fillRate": "74%"
+          },
+          {
+            "sku": "Quaker Rolled Oats 500g",
+            "fillRate": "91%"
+          },
+          {
+            "sku": "Kurkure 50g",
+            "fillRate": "87%"
+          },
+          {
+            "sku": "Doritos Nacho Cheese 60g",
+            "fillRate": "77%"
+          }
+        ],
+        "nodesUsed": ["SupplyNode", "TimeMonth", "SalesOrder", "SalesOrderLine", "FulfillmentLine", "SKU"]
       }
     }
   ];
@@ -933,72 +1244,95 @@ const FMCGKnowledgeGraph = () => {
   const [nodes, setNodes] = useState(initialNodes);
   const [links, setLinks] = useState(initialLinks);
   const simulationRef = useRef(null);
-  
+
   const handleTraversalQuestion = (questionIndex) => {
-    setShowTraversal(true);
-    setSelectedQuestion(questionIndex);
-    setTraversalStep(0);
-    setSelectedNode(null);
-    setIsPlaying(true);
-    updateTraversalHighlight(questionIndex, 0);
-    startAutoPlay(questionIndex);
-  };
+  setShowTraversal(true);
+  setSelectedQuestion(questionIndex);
+  setTraversalStep(0);
+  setSelectedNode(null);
+  setIsPlaying(true);
+  updateTraversalHighlight(questionIndex, 0);
+  startAutoPlay(questionIndex);
+};
+
+const startAutoPlay = (questionIndex) => {
+  if (traversalTimerRef.current) {
+    clearInterval(traversalTimerRef.current);
+  }
   
-  const startAutoPlay = (questionIndex) => {
-    if (traversalTimerRef.current) {
+  let currentStep = 0;
+  const question = questions[questionIndex];
+  const totalIterations = question.iterations.length + 1; // +1 for final response
+  
+  traversalTimerRef.current = setInterval(() => {
+    currentStep++;
+    if (currentStep >= totalIterations) {
       clearInterval(traversalTimerRef.current);
+      setIsPlaying(false);
+      return;
     }
-    
-    let currentStep = 0;
-    const question = questions[questionIndex];
-    const totalSteps = question.steps.length + 1; // +1 for final response
-    
-    traversalTimerRef.current = setInterval(() => {
-      currentStep++;
-      if (currentStep >= totalSteps) {
-        clearInterval(traversalTimerRef.current);
-        setIsPlaying(false);
-        return;
-      }
-      setTraversalStep(currentStep);
-      updateTraversalHighlight(questionIndex, currentStep);
-    }, 2500); // 2.5 seconds per step
-  };
-  
-  const stopAutoPlay = () => {
-    if (traversalTimerRef.current) {
-      clearInterval(traversalTimerRef.current);
-    }
-    setIsPlaying(false);
-  };
-  
- const updateTraversalHighlight = (questionIndex, step) => {
+    setTraversalStep(currentStep);
+    updateTraversalHighlight(questionIndex, currentStep);
+  }, 3000); // 3 seconds per step (increased from 2.5s due to more content)
+};
+
+const stopAutoPlay = () => {
+  if (traversalTimerRef.current) {
+    clearInterval(traversalTimerRef.current);
+  }
+  setIsPlaying(false);
+};
+
+const updateTraversalHighlight = (questionIndex, step) => {
   const question = questions[questionIndex];
   
-  if (step >= question.steps.length) {
-    // Show final response - highlight all nodes used
-    const allNodes = new Set();
-    question.steps.forEach(s => s.nodes.forEach(n => allNodes.add(n)));
+  if (step >= question.iterations.length) {
+    // Show final response - highlight all nodes used from finalResponse.nodesUsed
+    const allNodeIds = new Set();
+    
+    if (question.finalResponse.nodesUsed) {
+      question.finalResponse.nodesUsed.forEach(nodeId => {
+        // Find the actual node in the graph (case-insensitive)
+        const actualNode = nodes.find(n => 
+          n.id.toLowerCase() === nodeId.toLowerCase() || 
+          n.name.toLowerCase() === nodeId.toLowerCase()
+        );
+        if (actualNode) {
+          allNodeIds.add(actualNode.id);
+        }
+      });
+    }
     
     // Find all links between these nodes
     const connectedLinks = new Set();
     links.forEach(link => {
       const sourceId = typeof link.source === 'object' ? link.source.id : link.source;
       const targetId = typeof link.target === 'object' ? link.target.id : link.target;
-      if (allNodes.has(sourceId) && allNodes.has(targetId)) {
+      if (allNodeIds.has(sourceId) && allNodeIds.has(targetId)) {
         connectedLinks.add(link);
       }
     });
     
-    setHighlightedNodes(allNodes);
+    setHighlightedNodes(allNodeIds);
     setHighlightedLinks(connectedLinks);
     return;
   }
   
-  // Accumulate all nodes from step 0 to current step (progressive path)
-  const accumulatedNodes = new Set();
+  // Accumulate all nodes from iteration 0 to current step (progressive path)
+  const accumulatedNodeIds = new Set();
   for (let i = 0; i <= step; i++) {
-    question.steps[i].nodes.forEach(n => accumulatedNodes.add(n));
+    if (question.iterations[i].nodesInvolved) {
+      question.iterations[i].nodesInvolved.forEach(nodeId => {
+        // Find the actual node in the graph (case-insensitive)
+        const actualNode = nodes.find(n => 
+          n.id.toLowerCase() === nodeId.toLowerCase() || 
+          n.name.toLowerCase() === nodeId.toLowerCase()
+        );
+        if (actualNode) {
+          accumulatedNodeIds.add(actualNode.id);
+        }
+      });
+    }
   }
   
   // Find all links between the accumulated nodes
@@ -1006,40 +1340,40 @@ const FMCGKnowledgeGraph = () => {
   links.forEach(link => {
     const sourceId = typeof link.source === 'object' ? link.source.id : link.source;
     const targetId = typeof link.target === 'object' ? link.target.id : link.target;
-    if (accumulatedNodes.has(sourceId) && accumulatedNodes.has(targetId)) {
+    if (accumulatedNodeIds.has(sourceId) && accumulatedNodeIds.has(targetId)) {
       connectedLinks.add(link);
     }
   });
   
-  setHighlightedNodes(accumulatedNodes);
+  setHighlightedNodes(accumulatedNodeIds);
   setHighlightedLinks(connectedLinks);
 };
-  
-  const clearTraversal = () => {
-    stopAutoPlay();
-    setShowTraversal(false);
-    setTraversalStep(0);
-    setSelectedQuestion(0);
-    setHighlightedNodes(new Set());
-    setHighlightedLinks(new Set());
+
+const clearTraversal = () => {
+  stopAutoPlay();
+  setShowTraversal(false);
+  setTraversalStep(0);
+  setSelectedQuestion(0);
+  setHighlightedNodes(new Set());
+  setHighlightedLinks(new Set());
+};
+
+useEffect(() => {
+  createVisualization();
+}, [nodes, links, highlightedNodes, highlightedLinks]);
+
+useEffect(() => {
+  return () => {
+    if (traversalTimerRef.current) {
+      clearInterval(traversalTimerRef.current);
+    }
   };
-  
-  useEffect(() => {
-    createVisualization();
-  }, [nodes, links, highlightedNodes, highlightedLinks]);
-  
-  useEffect(() => {
-    return () => {
-      if (traversalTimerRef.current) {
-        clearInterval(traversalTimerRef.current);
-      }
-    };
-  }, []);
-  
- useEffect(() => {
+}, []);
+
+useEffect(() => {
   updateSelection();
-}, [selectedNode, showTraversal, highlightedNodes, highlightedLinks])
-  
+}, [selectedNode, showTraversal, highlightedNodes, highlightedLinks]);
+
 const updateSelection = () => {
   const svg = d3.select(svgRef.current);
   const hasSelection = selectedNode !== null;
@@ -1054,48 +1388,48 @@ const updateSelection = () => {
     node.selectAll(".highlight-glow").remove();
 
     if (isSelected) {
-        const glowSize = d.type === 'hexagon' ? d.size + 6 : d.type === 'triangle' ? d.size + 7 : d.size + 8;
-        
-        if (d.type === 'hexagon') {
-          node.insert('path', ':first-child')
-            .attr('class', 'node-glow')
-            .attr('d', () => {
-              const size = glowSize;
-              const angle = Math.PI / 3;
-              const points = [];
-              for (let i = 0; i < 6; i++) {
-                const x = size * Math.cos(angle * i);
-                const y = size * Math.sin(angle * i);
-                points.push(`${x},${y}`);
-              }
-              return `M${points.join('L')}Z`;
-            })
-            .attr('fill', 'none')
-            .attr('stroke', '#85A383')
-            .attr('stroke-width', 2.5)
-            .attr('opacity', 0.6);
-        } else if (d.type === 'triangle') {
-          node.insert('path', ':first-child')
-            .attr('class', 'node-glow')
-            .attr('d', () => {
-              const size = glowSize;
-              const height = size * Math.sqrt(3);
-              return `M0,${-height * 0.67} L${size},${height * 0.33} L${-size},${height * 0.33}Z`;
-            })
-            .attr('fill', 'none')
-            .attr('stroke', '#02220E')
-            .attr('stroke-width', 2.5)
-            .attr('opacity', 0.6);
-        } else {
-          node.insert('circle', ':first-child')
-            .attr('class', 'node-glow')
-            .attr('r', glowSize)
-            .attr('fill', 'none')
-            .attr('stroke', '#3B82F6')
-            .attr('stroke-width', 2.5)
-            .attr('opacity', 0.6);
-        }
+      const glowSize = d.type === 'hexagon' ? d.size + 6 : d.type === 'triangle' ? d.size + 7 : d.size + 8;
+      
+      if (d.type === 'hexagon') {
+        node.insert('path', ':first-child')
+          .attr('class', 'node-glow')
+          .attr('d', () => {
+            const size = glowSize;
+            const angle = Math.PI / 3;
+            const points = [];
+            for (let i = 0; i < 6; i++) {
+              const x = size * Math.cos(angle * i);
+              const y = size * Math.sin(angle * i);
+              points.push(`${x},${y}`);
+            }
+            return `M${points.join('L')}Z`;
+          })
+          .attr('fill', 'none')
+          .attr('stroke', '#85A383')
+          .attr('stroke-width', 2.5)
+          .attr('opacity', 0.6);
+      } else if (d.type === 'triangle') {
+        node.insert('path', ':first-child')
+          .attr('class', 'node-glow')
+          .attr('d', () => {
+            const size = glowSize;
+            const height = size * Math.sqrt(3);
+            return `M0,${-height * 0.67} L${size},${height * 0.33} L${-size},${height * 0.33}Z`;
+          })
+          .attr('fill', 'none')
+          .attr('stroke', '#02220E')
+          .attr('stroke-width', 2.5)
+          .attr('opacity', 0.6);
+      } else {
+        node.insert('circle', ':first-child')
+          .attr('class', 'node-glow')
+          .attr('r', glowSize)
+          .attr('fill', 'none')
+          .attr('stroke', '#3B82F6')
+          .attr('stroke-width', 2.5)
+          .attr('opacity', 0.6);
       }
+    }
 
     const mainShape = node.select(
       d.type === "hexagon"
@@ -1188,218 +1522,218 @@ const updateSelection = () => {
       return "#9CA3AF";
     });
 };
-  
-  const createVisualization = () => {
-    d3.select(svgRef.current).selectAll("*").remove();
-    
-    const width = 1400;
-    const height = 700;
-    
-    const svg = d3.select(svgRef.current)
-      .attr('width', width)
-      .attr('height', height)
-      .attr('viewBox', `0 0 ${width} ${height}`);
-    
-    const g = svg.append('g');
-    
-    const zoom = d3.zoom()
-      .scaleExtent([0.3, 3])
-      .on('zoom', (event) => {
-        g.attr('transform', event.transform);
-      });
-    
-    svg.call(zoom);
-    
-    // Set initial zoom to fit content better
-    svg.call(zoom.transform, d3.zoomIdentity.translate(0, 0).scale(0.8));
 
-    svg.on("click", (event) => {
+const createVisualization = () => {
+  d3.select(svgRef.current).selectAll("*").remove();
+  
+  const width = 1400;
+  const height = 700;
+  
+  const svg = d3.select(svgRef.current)
+    .attr('width', width)
+    .attr('height', height)
+    .attr('viewBox', `0 0 ${width} ${height}`);
+  
+  const g = svg.append('g');
+  
+  const zoom = d3.zoom()
+    .scaleExtent([0.3, 3])
+    .on('zoom', (event) => {
+      g.attr('transform', event.transform);
+    });
+  
+  svg.call(zoom);
+  
+  // Set initial zoom to fit content better
+  svg.call(zoom.transform, d3.zoomIdentity.translate(0, 0).scale(0.8));
+
+  svg.on("click", (event) => {
     if (event.target === event.currentTarget || event.target.tagName === "svg") {
       setSelectedNode(null);
       setHighlightedNodes(new Set());
       setHighlightedLinks(new Set());
     }
   });
-    
-    const defs = g.append('defs');
-    
-    defs.append('marker')
-      .attr('id', 'arrowhead')
-      .attr('viewBox', '0 -5 10 10')
-      .attr('refX', 16)
-      .attr('refY', 0)
-      .attr('markerWidth', 5)
-      .attr('markerHeight', 5)
-      .attr('orient', 'auto')
-      .append('path')
-      .attr('d', 'M0,-5L10,0L0,5')
-      .attr('fill', '#9CA3AF');
-    
-    defs.append('marker')
-      .attr('id', 'arrowhead-metric')
-      .attr('viewBox', '0 -5 10 10')
-      .attr('refX', 16)
-      .attr('refY', 0)
-      .attr('markerWidth', 5)
-      .attr('markerHeight', 5)
-      .attr('orient', 'auto')
-      .append('path')
-      .attr('d', 'M0,-5L10,0L0,5')
-      .attr('fill', '#B8CDB6');
-    
-    defs.append('marker')
-      .attr('id', 'arrowhead-decision')
-      .attr('viewBox', '0 -5 10 10')
-      .attr('refX', 16)
-      .attr('refY', 0)
-      .attr('markerWidth', 5)
-      .attr('markerHeight', 5)
-      .attr('orient', 'auto')
-      .append('path')
-      .attr('d', 'M0,-5L10,0L0,5')
-      .attr('fill', '#4A5F49');
-    
-    const simulation = d3.forceSimulation(nodes)
-      .force('link', d3.forceLink(links).id(d => d.id).distance(d => d.type === 'metric' ? 140 : d.type === 'decision' ? 160 : 120))
-      .force('charge', d3.forceManyBody().strength(-800))
-      .force('center', d3.forceCenter(width / 2, height / 2))
-      .force('collision', d3.forceCollide().radius(d => d.size + 30))
-      .force('x', d3.forceX(width / 2).strength(d => d.type === 'hexagon' ? 0.05 : d.type === 'triangle' ? 0.08 : 0.02))
-      .force('y', d3.forceY(height / 2).strength(d => d.type === 'hexagon' ? 0.05 : d.type === 'triangle' ? 0.08 : 0.02));
-    
-    simulationRef.current = simulation;
-    
-    const link = g.selectAll('.link')
-      .data(links)
-      .enter().append('line')
-      .attr('class', 'link')
-      .attr('stroke', d => d.type === 'metric' ? '#B8CDB6' : d.type === 'decision' ? '#4A5F49' : '#D1D5DB')
-      .attr('stroke-width', d => d.type === 'metric' || d.type === 'decision' ? 2 : 1.5)
-      .attr('stroke-opacity', d => d.type === 'metric' || d.type === 'decision' ? 0.7 : 0.6)
-      .attr('stroke-dasharray', d => d.type === 'dashed' ? '4,4' : '0')
-      .attr('marker-end', d => d.type === 'metric' ? 'url(#arrowhead-metric)' : d.type === 'decision' ? 'url(#arrowhead-decision)' : 'url(#arrowhead)');
-    
-    const linkLabel = g.selectAll('.link-label')
-      .data(links)
-      .enter().append('text')
-      .attr('class', 'link-label')
-      .attr('font-size', d => d.type === 'metric' ? '8px' : '9px')
-      .attr('font-weight', '500')
-      .attr('fill', d => d.type === 'metric' ? '#85A383' : d.type === 'decision' ? '#02220E' : '#6B7280')
-      .attr('text-anchor', 'middle')
-      .style('pointer-events', 'none')
-      .text(d => d.label);
-    
-    const node = g.selectAll('.node')
-      .data(nodes)
-      .enter().append('g')
-      .attr('class', 'node')
-      .style('cursor', 'pointer')
-      .call(d3.drag()
-        .on('start', dragstarted)
-        .on('drag', dragged)
-        .on('end', dragended))
-      .on('click', (event, d) => {
-        event.stopPropagation();
-        setSelectedNode({...d});
-
-        // Calculate connected nodes and links
-  const connectedNodes = new Set([d.id]);
-  const connectedLinks = new Set();
   
-  links.forEach(link => {
-    const sourceId = typeof link.source === 'object' ? link.source.id : link.source;
-    const targetId = typeof link.target === 'object' ? link.target.id : link.target;
+  const defs = g.append('defs');
+  
+  defs.append('marker')
+    .attr('id', 'arrowhead')
+    .attr('viewBox', '0 -5 10 10')
+    .attr('refX', 16)
+    .attr('refY', 0)
+    .attr('markerWidth', 5)
+    .attr('markerHeight', 5)
+    .attr('orient', 'auto')
+    .append('path')
+    .attr('d', 'M0,-5L10,0L0,5')
+    .attr('fill', '#9CA3AF');
+  
+  defs.append('marker')
+    .attr('id', 'arrowhead-metric')
+    .attr('viewBox', '0 -5 10 10')
+    .attr('refX', 16)
+    .attr('refY', 0)
+    .attr('markerWidth', 5)
+    .attr('markerHeight', 5)
+    .attr('orient', 'auto')
+    .append('path')
+    .attr('d', 'M0,-5L10,0L0,5')
+    .attr('fill', '#B8CDB6');
+  
+  defs.append('marker')
+    .attr('id', 'arrowhead-decision')
+    .attr('viewBox', '0 -5 10 10')
+    .attr('refX', 16)
+    .attr('refY', 0)
+    .attr('markerWidth', 5)
+    .attr('markerHeight', 5)
+    .attr('orient', 'auto')
+    .append('path')
+    .attr('d', 'M0,-5L10,0L0,5')
+    .attr('fill', '#4A5F49');
+  
+  const simulation = d3.forceSimulation(nodes)
+    .force('link', d3.forceLink(links).id(d => d.id).distance(d => d.type === 'metric' ? 140 : d.type === 'decision' ? 160 : 120))
+    .force('charge', d3.forceManyBody().strength(-800))
+    .force('center', d3.forceCenter(width / 2, height / 2))
+    .force('collision', d3.forceCollide().radius(d => d.size + 30))
+    .force('x', d3.forceX(width / 2).strength(d => d.type === 'hexagon' ? 0.05 : d.type === 'triangle' ? 0.08 : 0.02))
+    .force('y', d3.forceY(height / 2).strength(d => d.type === 'hexagon' ? 0.05 : d.type === 'triangle' ? 0.08 : 0.02));
+  
+  simulationRef.current = simulation;
+  
+  const link = g.selectAll('.link')
+    .data(links)
+    .enter().append('line')
+    .attr('class', 'link')
+    .attr('stroke', d => d.type === 'metric' ? '#B8CDB6' : d.type === 'decision' ? '#4A5F49' : '#D1D5DB')
+    .attr('stroke-width', d => d.type === 'metric' || d.type === 'decision' ? 2 : 1.5)
+    .attr('stroke-opacity', d => d.type === 'metric' || d.type === 'decision' ? 0.7 : 0.6)
+    .attr('stroke-dasharray', d => d.type === 'dashed' ? '4,4' : '0')
+    .attr('marker-end', d => d.type === 'metric' ? 'url(#arrowhead-metric)' : d.type === 'decision' ? 'url(#arrowhead-decision)' : 'url(#arrowhead)');
+  
+  const linkLabel = g.selectAll('.link-label')
+    .data(links)
+    .enter().append('text')
+    .attr('class', 'link-label')
+    .attr('font-size', d => d.type === 'metric' ? '8px' : '9px')
+    .attr('font-weight', '500')
+    .attr('fill', d => d.type === 'metric' ? '#85A383' : d.type === 'decision' ? '#02220E' : '#6B7280')
+    .attr('text-anchor', 'middle')
+    .style('pointer-events', 'none')
+    .text(d => d.label);
+  
+  const node = g.selectAll('.node')
+    .data(nodes)
+    .enter().append('g')
+    .attr('class', 'node')
+    .style('cursor', 'pointer')
+    .call(d3.drag()
+      .on('start', dragstarted)
+      .on('drag', dragged)
+      .on('end', dragended))
+    .on('click', (event, d) => {
+      event.stopPropagation();
+      setSelectedNode({...d});
+
+      // Calculate connected nodes and links
+      const connectedNodes = new Set([d.id]);
+      const connectedLinks = new Set();
+      
+      links.forEach(link => {
+        const sourceId = typeof link.source === 'object' ? link.source.id : link.source;
+        const targetId = typeof link.target === 'object' ? link.target.id : link.target;
+        
+        if (sourceId === d.id || targetId === d.id) {
+          connectedLinks.add(link);
+          connectedNodes.add(sourceId);
+          connectedNodes.add(targetId);
+        }
+      });
+      
+      setHighlightedNodes(connectedNodes);
+      setHighlightedLinks(connectedLinks);
+    });
+  
+  // Draw circles for regular nodes
+  node.filter(d => d.type === 'circle')
+    .append('circle')
+    .attr('r', d => d.size)
+    .attr('fill', d => d.color)
+    .attr('stroke', '#fff')
+    .attr('stroke-width', 2);
+  
+  // Draw hexagons for metric nodes
+  node.filter(d => d.type === 'hexagon')
+    .append('path')
+    .attr('d', d => {
+      const size = d.size;
+      const angle = Math.PI / 3; // 60 degrees
+      const points = [];
+      for (let i = 0; i < 6; i++) {
+        const x = size * Math.cos(angle * i);
+        const y = size * Math.sin(angle * i);
+        points.push(`${x},${y}`);
+      }
+      return `M${points.join('L')}Z`;
+    })
+    .attr('fill', d => d.color)
+    .attr('stroke', '#fff')
+    .attr('stroke-width', 2);
+  
+  // Draw triangles for decision nodes
+  node.filter(d => d.type === 'triangle')
+    .append('path')
+    .attr('d', d => {
+      const size = d.size;
+      const height = size * Math.sqrt(3);
+      return `M0,${-height * 0.67} L${size},${height * 0.33} L${-size},${height * 0.33}Z`;
+    })
+    .attr('fill', d => d.color)
+    .attr('stroke', '#fff')
+    .attr('stroke-width', 2);
+  
+  node.append('text')
+    .attr('dy', d => d.size + 16)
+    .attr('text-anchor', 'middle')
+    .attr('font-size', '11px')
+    .attr('font-weight', '600')
+    .attr('fill', '#1F2937')
+    .style('pointer-events', 'none')
+    .text(d => d.name);
+  
+  simulation.on('tick', () => {
+    link
+      .attr('x1', d => d.source.x)
+      .attr('y1', d => d.source.y)
+      .attr('x2', d => d.target.x)
+      .attr('y2', d => d.target.y);
     
-    if (sourceId === d.id || targetId === d.id) {
-      connectedLinks.add(link);
-      connectedNodes.add(sourceId);
-      connectedNodes.add(targetId);
-    }
+    linkLabel
+      .attr('x', d => (d.source.x + d.target.x) / 2)
+      .attr('y', d => (d.source.y + d.target.y) / 2);
+    
+    node.attr('transform', d => `translate(${d.x},${d.y})`);
   });
   
-  setHighlightedNodes(connectedNodes);
-  setHighlightedLinks(connectedLinks);
-      });
-    
-    // Draw circles for regular nodes
-    node.filter(d => d.type === 'circle')
-      .append('circle')
-      .attr('r', d => d.size)
-      .attr('fill', d => d.color)
-      .attr('stroke', '#fff')
-      .attr('stroke-width', 2);
-    
-    // Draw hexagons for metric nodes
-    node.filter(d => d.type === 'hexagon')
-      .append('path')
-      .attr('d', d => {
-        const size = d.size;
-        const angle = Math.PI / 3; // 60 degrees
-        const points = [];
-        for (let i = 0; i < 6; i++) {
-          const x = size * Math.cos(angle * i);
-          const y = size * Math.sin(angle * i);
-          points.push(`${x},${y}`);
-        }
-        return `M${points.join('L')}Z`;
-      })
-      .attr('fill', d => d.color)
-      .attr('stroke', '#fff')
-      .attr('stroke-width', 2);
-    
-    // Draw triangles for decision nodes
-    node.filter(d => d.type === 'triangle')
-      .append('path')
-      .attr('d', d => {
-        const size = d.size;
-        const height = size * Math.sqrt(3);
-        return `M0,${-height * 0.67} L${size},${height * 0.33} L${-size},${height * 0.33}Z`;
-      })
-      .attr('fill', d => d.color)
-      .attr('stroke', '#fff')
-      .attr('stroke-width', 2);
-    
-    node.append('text')
-      .attr('dy', d => d.size + 16)
-      .attr('text-anchor', 'middle')
-      .attr('font-size', '11px')
-      .attr('font-weight', '600')
-      .attr('fill', '#1F2937')
-      .style('pointer-events', 'none')
-      .text(d => d.name);
-    
-    simulation.on('tick', () => {
-      link
-        .attr('x1', d => d.source.x)
-        .attr('y1', d => d.source.y)
-        .attr('x2', d => d.target.x)
-        .attr('y2', d => d.target.y);
-      
-      linkLabel
-        .attr('x', d => (d.source.x + d.target.x) / 2)
-        .attr('y', d => (d.source.y + d.target.y) / 2);
-      
-      node.attr('transform', d => `translate(${d.x},${d.y})`);
-    });
-    
-    function dragstarted(event, d) {
-      if (!event.active) simulation.alphaTarget(0.3).restart();
-      d.fx = d.x;
-      d.fy = d.y;
-    }
-    
-    function dragged(event, d) {
-      d.fx = event.x;
-      d.fy = event.y;
-    }
-    
-    function dragended(event, d) {
-      if (!event.active) simulation.alphaTarget(0);
-      d.fx = null;
-      d.fy = null;
-    }
-  };
+  function dragstarted(event, d) {
+    if (!event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+  }
+  
+  function dragged(event, d) {
+    d.fx = event.x;
+    d.fy = event.y;
+  }
+  
+  function dragended(event, d) {
+    if (!event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+  }
+};
   
   const groupColors = {
     'Product': '#3B82F6',
@@ -1472,93 +1806,302 @@ const updateSelection = () => {
         </div>
         
         {showTraversal && (
-          <div className="w-96 overflow-y-auto flex-shrink-0 bg-white rounded-xl shadow-lg border border-gray-200">
-            <div className="sticky top-0 bg-gradient-to-r from-teal-600 to-blue-600 p-4 border-b border-teal-700">
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2">
-                  <span className="bg-white text-teal-700 text-xs font-bold px-2 py-1 rounded">Q{questions[selectedQuestion].id}</span>
-                  <h3 className="font-semibold text-white text-sm">{questions[selectedQuestion].title}</h3>
-                </div>
-                <button
-                  onClick={clearTraversal}
-                  className="text-white hover:text-teal-100 transition-colors"
-                >
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
+       <div className="w-96 overflow-y-auto flex-shrink-0 bg-white rounded-xl shadow-lg border border-gray-200">
+  <div className="sticky top-0 bg-gradient-to-r from-teal-600 to-blue-600 p-4 border-b border-teal-700">
+    <div className="flex items-center justify-between mb-2">
+      <div className="flex items-center gap-2">
+        <span className="bg-white text-teal-700 text-xs font-bold px-2 py-1 rounded">Q{questions[selectedQuestion].id}</span>
+        <h3 className="font-semibold text-white text-sm">{questions[selectedQuestion].title}</h3>
+      </div>
+      <button
+        onClick={clearTraversal}
+        className="text-white hover:text-teal-100 transition-colors"
+      >
+        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+    <p className="text-xs text-teal-50">{questions[selectedQuestion].question}</p>
+    <div className="mt-2 text-xs text-teal-100 bg-teal-700 bg-opacity-30 rounded px-2 py-1">
+      Expected: {questions[selectedQuestion].outputExpectation}
+    </div>
+  </div>
+  
+  <div className="p-4">
+    {traversalStep < questions[selectedQuestion].iterations.length ? (
+      <>
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <span className="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded">
+              Iteration {traversalStep + 1} / {questions[selectedQuestion].iterations.length}
+            </span>
+            {isPlaying && (
+              <div className="flex items-center gap-1 text-xs text-green-600">
+                <div className="w-2 h-2 bg-green-600 rounded-full animate-pulse"></div>
+                Auto-playing
               </div>
-              <p className="text-xs text-teal-50">{questions[selectedQuestion].question}</p>
+            )}
+          </div>
+        </div>
+        
+        {/* Iteration Number and Phase */}
+        <div className="flex items-center gap-2 mb-3">
+          <span className="text-xs font-mono text-gray-500">
+            #{questions[selectedQuestion].iterations[traversalStep].iteration}
+          </span>
+          <h4 className="font-semibold text-gray-900">
+            {questions[selectedQuestion].iterations[traversalStep].phase}
+          </h4>
+        </div>
+        
+        {/* Think Section */}
+        {questions[selectedQuestion].iterations[traversalStep].think && (
+          <div className="bg-purple-50 border border-purple-200 rounded-lg p-3 mb-3">
+            <div className="flex items-center gap-1.5 mb-2">
+              <svg className="w-4 h-4 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+              </svg>
+              <div className="text-xs font-semibold text-purple-900">Think:</div>
             </div>
-            
-            <div className="p-4">
-              {traversalStep < questions[selectedQuestion].steps.length ? (
-                <>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2">
-                      <span className="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded">
-                        Step {traversalStep + 1} / {questions[selectedQuestion].steps.length}
-                      </span>
-                      {isPlaying && (
-                        <div className="flex items-center gap-1 text-xs text-green-600">
-                          <div className="w-2 h-2 bg-green-600 rounded-full animate-pulse"></div>
-                          Auto-playing
-                        </div>
-                      )}
-                    </div>
+            <p className="text-xs text-purple-900 leading-relaxed italic">
+              "{questions[selectedQuestion].iterations[traversalStep].think}"
+            </p>
+          </div>
+        )}
+        
+        {/* Nodes Accessed */}
+        {questions[selectedQuestion].iterations[traversalStep].nodesInvolved.length > 0 && (
+  <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-3">
+    <div className="text-xs font-semibold text-amber-900 mb-2">Nodes Accessed:</div>
+    <div className="flex flex-wrap gap-1.5">
+      {questions[selectedQuestion].iterations[traversalStep].nodesInvolved.map((nodeId, idx) => {
+        // Try to find node by matching ID case-insensitively
+        const node = nodes.find(n => 
+          n.id.toLowerCase() === nodeId.toLowerCase() || 
+          n.name.toLowerCase() === nodeId.toLowerCase()
+        );
+        
+        return node ? (
+          <span 
+            key={`${nodeId}-${idx}`} 
+            className="inline-flex items-center gap-1 px-2 py-1 text-xs rounded font-medium" 
+            style={{ backgroundColor: node.color + '20', color: node.color }}
+          >
+            {node.type === 'hexagon' ? '⬡' : node.type === 'triangle' ? '▲' : '●'} {node.name}
+          </span>
+        ) : (
+          <span 
+            key={`${nodeId}-${idx}`} 
+            className="inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded font-medium bg-gray-100 text-gray-600"
+          >
+            ⚠ {nodeId}
+          </span>
+        );
+      })}
+    </div>
+  </div>
+)}
+        
+        {/* Fetch Section */}
+        {questions[selectedQuestion].iterations[traversalStep].fetch && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-3">
+            <div className="flex items-center gap-1.5 mb-2">
+              <svg className="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+              </svg>
+              <div className="text-xs font-semibold text-blue-900">Fetch:</div>
+            </div>
+            <div className="text-xs text-blue-900 space-y-2">
+              {questions[selectedQuestion].iterations[traversalStep].fetch.nodes && (
+                <div>
+                  <span className="font-semibold">Nodes: </span>
+                  <span className="font-mono">{questions[selectedQuestion].iterations[traversalStep].fetch.nodes.join(', ')}</span>
+                </div>
+              )}
+              {questions[selectedQuestion].iterations[traversalStep].fetch.fields && (
+                <div>
+                  <span className="font-semibold">Fields: </span>
+                  <div className="mt-1 font-mono text-xs bg-blue-100 rounded p-2">
+                    {Array.isArray(questions[selectedQuestion].iterations[traversalStep].fetch.fields) 
+                      ? questions[selectedQuestion].iterations[traversalStep].fetch.fields.join(', ')
+                      : questions[selectedQuestion].iterations[traversalStep].fetch.fields}
                   </div>
-                  
-                  <h4 className="font-semibold text-gray-900 mb-3">{questions[selectedQuestion].steps[traversalStep].title}</h4>
-                  
-                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-3">
-                    <div className="text-xs font-semibold text-amber-900 mb-2">Nodes Accessed:</div>
-                    <div className="flex flex-wrap gap-1.5">
-                      {questions[selectedQuestion].steps[traversalStep].nodes.map(nodeId => {
-                        const node = nodes.find(n => n.id === nodeId);
-                        return node ? (
-                          <span key={nodeId} className="inline-flex items-center gap-1 px-2 py-1 text-xs rounded font-medium" style={{ backgroundColor: node.color + '20', color: node.color }}>
-                            {node.type === 'hexagon' ? '⬡' : node.type === 'triangle' ? '▲' : '●'} {node.name}
-                          </span>
-                        ) : null;
-                      })}
-                    </div>
+                </div>
+              )}
+              {questions[selectedQuestion].iterations[traversalStep].fetch.filters && (
+                <div>
+                  <span className="font-semibold">Filters: </span>
+                  <div className="mt-1 font-mono text-xs bg-blue-100 rounded p-2">
+                    {questions[selectedQuestion].iterations[traversalStep].fetch.filters}
                   </div>
-                  
-                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
-                    <div className="text-xs font-semibold text-gray-700 mb-2">Data Retrieved:</div>
-                    <pre className="text-xs text-gray-800 font-mono whitespace-pre-wrap leading-relaxed">{questions[selectedQuestion].steps[traversalStep].data}</pre>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="flex items-center gap-2 mb-4">
-                    <span className="bg-green-600 text-white text-xs font-bold px-2 py-1 rounded">
-                      Final Response
-                    </span>
-                  </div>
-                  
-                  <h4 className="font-semibold text-gray-900 mb-1">{questions[selectedQuestion].finalResponse.type.toUpperCase()}</h4>
-                  <p className="text-sm text-gray-600 mb-3">{questions[selectedQuestion].finalResponse.description}</p>
-                  
-                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                    <pre className="text-sm text-green-900 font-mono whitespace-pre-wrap leading-relaxed">{questions[selectedQuestion].finalResponse.data}</pre>
-                  </div>
-                </>
+                </div>
+              )}
+              {questions[selectedQuestion].iterations[traversalStep].fetch.result && (
+                <div>
+                  <span className="font-semibold">Result: </span>
+                  <pre className="mt-1 font-mono text-xs bg-blue-100 rounded p-2 whitespace-pre-wrap">
+                    {JSON.stringify(questions[selectedQuestion].iterations[traversalStep].fetch.result, null, 2)}
+                  </pre>
+                </div>
               )}
             </div>
-            
-            <div className="sticky bottom-0 bg-white border-t border-gray-200 p-4">
-              <div className="text-xs text-gray-500 mb-2 text-center">
-                {highlightedNodes.size} nodes highlighted on graph
-              </div>
-              <button
-                onClick={clearTraversal}
-                className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 rounded-lg text-sm font-medium transition-colors"
-              >
-                Close & Select Another Question
-              </button>
+          </div>
+        )}
+        
+        {/* Analyse Section */}
+        {questions[selectedQuestion].iterations[traversalStep].analyse && (
+          <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+            <div className="flex items-center gap-1.5 mb-2">
+              <svg className="w-4 h-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+              <div className="text-xs font-semibold text-green-900">Analyse:</div>
+            </div>
+            <div className="text-xs text-green-900">
+              {typeof questions[selectedQuestion].iterations[traversalStep].analyse === 'string' ? (
+                <p className="leading-relaxed">{questions[selectedQuestion].iterations[traversalStep].analyse}</p>
+              ) : (
+                <pre className="font-mono whitespace-pre-wrap leading-relaxed bg-green-100 rounded p-2">
+                  {JSON.stringify(questions[selectedQuestion].iterations[traversalStep].analyse, null, 2)}
+                </pre>
+              )}
             </div>
           </div>
+        )}
+      </>
+    ) : (
+      <>
+        <div className="flex items-center gap-2 mb-4">
+          <span className="bg-green-600 text-white text-xs font-bold px-2 py-1 rounded">
+            ✓ Final Response
+          </span>
+        </div>
+        
+        <h4 className="font-semibold text-gray-900 mb-1 uppercase text-sm">
+          {questions[selectedQuestion].finalResponse.type.replace(/_/g, ' ')}
+        </h4>
+        
+        {questions[selectedQuestion].finalResponse.summary && (
+          <p className="text-sm text-gray-700 mb-4 bg-gray-50 rounded-lg p-3 border border-gray-200">
+            {questions[selectedQuestion].finalResponse.summary}
+          </p>
+        )}
+        
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4 space-y-3">
+          {/* Render different response types */}
+          {questions[selectedQuestion].finalResponse.monthWiseData && (
+            <div>
+              <div className="text-xs font-semibold text-green-900 mb-2">Month-wise Sales:</div>
+              <pre className="text-xs text-green-900 font-mono whitespace-pre-wrap leading-relaxed">
+                {JSON.stringify(questions[selectedQuestion].finalResponse.monthWiseData, null, 2)}
+              </pre>
+            </div>
+          )}
+          
+          {questions[selectedQuestion].finalResponse.threeMonthAverage && (
+            <div>
+              <div className="text-xs font-semibold text-green-900 mb-2">3-Month Average:</div>
+              <pre className="text-xs text-green-900 font-mono whitespace-pre-wrap leading-relaxed">
+                {JSON.stringify(questions[selectedQuestion].finalResponse.threeMonthAverage, null, 2)}
+              </pre>
+            </div>
+          )}
+          
+          {questions[selectedQuestion].finalResponse.brandWiseBreakdown && (
+            <div>
+              <div className="text-xs font-semibold text-green-900 mb-2">Brand-wise Breakdown:</div>
+              <div className="space-y-1">
+                {questions[selectedQuestion].finalResponse.brandWiseBreakdown.map((item, idx) => (
+                  <div key={idx} className="flex justify-between items-center bg-white rounded px-2 py-1 text-xs">
+                    <span className="font-medium">{item.brand}</span>
+                    <span className="text-green-700 font-mono">{item.loss} cases</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          
+          {questions[selectedQuestion].finalResponse.breakdown && (
+            <div>
+              <div className="text-xs font-semibold text-green-900 mb-2">Root Cause Breakdown:</div>
+              <div className="space-y-1">
+                {questions[selectedQuestion].finalResponse.breakdown.map((item, idx) => (
+                  <div key={idx} className="bg-white rounded px-2 py-2 text-xs">
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="font-medium text-gray-900">{item.cause}</span>
+                      <span className="text-green-700 font-mono font-bold">{item.percentage}%</span>
+                    </div>
+                    <div className="text-gray-600">{item.cases} cases</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          
+          {questions[selectedQuestion].finalResponse.monthlyMetrics && (
+            <div>
+              <div className="text-xs font-semibold text-green-900 mb-2">Monthly Performance:</div>
+              <div className="space-y-1">
+                {questions[selectedQuestion].finalResponse.monthlyMetrics.map((item, idx) => (
+                  <div key={idx} className="flex justify-between items-center bg-white rounded px-2 py-1 text-xs">
+                    <span className="font-medium">{item.month}</span>
+                    <span className="text-green-700 font-mono">{item.fillRate}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          
+          {questions[selectedQuestion].finalResponse.tableData && (
+            <div>
+              <div className="text-xs font-semibold text-green-900 mb-2">SKU Performance:</div>
+              <div className="space-y-1">
+                {questions[selectedQuestion].finalResponse.tableData.map((item, idx) => (
+                  <div key={idx} className="flex justify-between items-center bg-white rounded px-2 py-1 text-xs">
+                    <span className="font-medium">{item.sku}</span>
+                    <span className="text-green-700 font-mono font-bold">{item.fillRate}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          
+          {/* Nodes Used */}
+          <div className="pt-3 border-t border-green-300">
+            <div className="text-xs font-semibold text-green-900 mb-2">Nodes Used:</div>
+            <div className="flex flex-wrap gap-1">
+              {questions[selectedQuestion].finalResponse.nodesUsed.map((nodeId, idx) => {
+                const node = nodes.find(n => n.id === nodeId);
+                return node ? (
+                  <span key={idx} className="inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded font-medium bg-white" style={{ color: node.color }}>
+                    {nodeId}
+                  </span>
+                ) : (
+                  <span key={idx} className="inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded font-medium bg-white text-gray-600">
+                    {nodeId}
+                  </span>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </>
+    )}
+  </div>
+  
+  <div className="sticky bottom-0 bg-white border-t border-gray-200 p-4">
+    <div className="text-xs text-gray-500 mb-2 text-center">
+      {highlightedNodes.size} nodes highlighted on graph
+    </div>
+    <button
+      onClick={clearTraversal}
+      className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 rounded-lg text-sm font-medium transition-colors"
+    >
+      Close & Select Another Question
+    </button>
+  </div>
+</div>
         )}
         
         {selectedNode && !showTraversal && (
