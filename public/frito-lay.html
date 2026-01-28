@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Frito-Lay Field Sales WhatsApp Nudges</title>
+    <title>Questt Sales Assistant - WhatsApp Nudges</title>
     <style>
         * {
             margin: 0;
@@ -189,99 +189,29 @@
             font-weight: 600;
         }
 
-        .voice-note {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 6px 10px 6px 6px;
-            background: #1f2c34;
-            border-radius: 8px 8px 8px 0;
-            min-width: 240px;
-            max-width: 280px;
-        }
-
-        .play-button {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: #0052A5;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            flex-shrink: 0;
-            transition: background 0.2s;
-        }
-
-        .play-button:hover {
-            background: #003d7a;
-        }
-
-        .play-icon {
-            width: 0;
-            height: 0;
-            border-left: 10px solid white;
-            border-top: 6px solid transparent;
-            border-bottom: 6px solid transparent;
-            margin-left: 3px;
-        }
-
-        .waveform {
-            flex: 1;
-            height: 28px;
-            display: flex;
-            align-items: center;
-            gap: 3px;
-            padding: 0 4px;
-        }
-
-        .waveform-bar {
-            width: 2px;
-            background: #667781;
-            border-radius: 2px;
-            transition: background 0.2s;
-        }
-
-        .voice-note:hover .waveform-bar {
-            background: #8696a0;
-        }
-
-        .voice-duration {
-            font-size: 13px;
-            color: #8696a0;
-            flex-shrink: 0;
-            font-weight: 400;
-        }
-
         .image-message {
-            background: none !important;
-            padding: 0 !important;
-            border-radius: 12px;
+            padding: 0;
             overflow: hidden;
-            max-width: 280px;
-        }
-
-        .image-message img {
-            width: 100%;
-            display: block;
+            max-width: 300px;
         }
 
         .quick-replies {
             display: flex;
-            gap: 6px;
+            gap: 8px;
+            margin-top: 10px;
             flex-wrap: wrap;
-            margin-top: 8px;
         }
 
         .quick-reply-btn {
+            padding: 6px 12px;
             background: #1f2c34;
             color: #0052A5;
             border: 1px solid #0052A5;
-            padding: 8px 16px;
-            border-radius: 20px;
+            border-radius: 16px;
             font-size: 13px;
             cursor: pointer;
             transition: all 0.2s;
+            white-space: nowrap;
         }
 
         .quick-reply-btn:hover {
@@ -290,24 +220,22 @@
         }
 
         .list-item {
-            color: #e9edef;
-            font-size: 13px;
-            padding: 6px 0;
-            border-bottom: 1px solid #2a3942;
-        }
-
-        .list-item:last-child {
-            border-bottom: none;
+            padding: 8px;
+            background: #1f2c34;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            border-left: 3px solid #0052A5;
         }
 
         .store-highlight {
-            color: #0052A5;
+            color: #e9edef;
+            font-size: 13px;
             font-weight: 500;
         }
 
         .amount-highlight {
             color: #ffd666;
-            font-weight: 500;
+            font-weight: 600;
         }
 
         .input-area {
@@ -316,28 +244,33 @@
             left: 0;
             right: 0;
             background: #1f2c34;
-            padding: 8px;
+            padding: 12px;
             display: flex;
-            align-items: center;
             gap: 8px;
+            align-items: center;
         }
 
         .input-field {
             flex: 1;
             background: #2a3942;
             border: none;
-            padding: 10px 16px;
             border-radius: 24px;
+            padding: 12px 16px;
             color: #e9edef;
-            font-size: 14px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .input-field::placeholder {
+            color: #8696a0;
         }
 
         .send-button {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+            width: 44px;
+            height: 44px;
             background: #0052A5;
             border: none;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -348,41 +281,6 @@
         .send-button:hover {
             background: #003d7a;
         }
-
-        .map-preview {
-            width: 100%;
-            height: 120px;
-            background: #2a3942;
-            border-radius: 8px 8px 0 0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .map-pin {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 32px;
-        }
-
-        .location-details {
-            background: #1f2c34;
-            padding: 12px;
-            border-radius: 0 0 8px 8px;
-        }
-
-        .location-name {
-            color: #0052A5;
-            font-weight: 500;
-            font-size: 14px;
-            margin-bottom: 4px;
-        }
-
-        .location-address {
-            color: #8696a0;
-            font-size: 12px;
-        }
     </style>
 </head>
 <body>
@@ -390,11 +288,11 @@
         <div class="phone-notch"></div>
         
         <div class="whatsapp-header">
-            <div class="back-arrow">←</div>
+            <span class="back-arrow">←</span>
             <div class="contact-avatar">Q</div>
             <div class="contact-info">
-                <div class="contact-name">Questt AI</div>
-                <div class="contact-status">online</div>
+                <div class="contact-name">Questt Sales Assistant</div>
+                <div class="contact-status">Online</div>
             </div>
         </div>
 
@@ -490,85 +388,12 @@ List भेज रहा हूं 👇</div>
                 </div>
             </div>
 
-            <!-- At Store - 9:30 AM with Location -->
-            <div class="message-group">
-                <div class="message received">
-                    <div class="message-bubble image-message">
-                        <div class="map-preview">
-                            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, #0052A5 0%, #003d7a 100%);"></div>
-                            <div style="position: absolute; top: 20px; left: 30px; width: 60px; height: 2px; background: #0052A5; opacity: 0.3;"></div>
-                            <div style="position: absolute; top: 40px; left: 20px; width: 80px; height: 2px; background: #0052A5; opacity: 0.3;"></div>
-                            <div style="position: absolute; top: 60px; left: 50px; width: 40px; height: 2px; background: #0052A5; opacity: 0.3;"></div>
-                            <div class="map-pin">📍</div>
-                            <div style="position: absolute; bottom: 20px; right: 30px; font-size: 10px; color: #8696a0;">0.6 km</div>
-                        </div>
-                        <div class="location-details">
-                            <div class="location-name">राज जनरल स्टोर</div>
-                            <div class="location-address">Rohini Sector 15 • Last visit: 28 Oct</div>
-                        </div>
-                        <div class="message-time" style="padding: 8px 12px; background: #1f2c34;">9:28 AM</div>
-                    </div>
-                </div>
-
-                <div class="message received">
-                    <div class="message-bubble">
-                        <div class="message-text">💡 Store Tips:
-
-Last: Lay's 3 cases + Kurkure 2 cases + Doritos 1 case
-✅ Today: Push Lay's Magic Masala (5+ cases scheme)
-
-⚠️ Missing: Lay's Maxx variants
-(6 nearby stores selling strong)</div>
-                        <div class="message-time">9:28 AM</div>
-                    </div>
-                </div>
-
-
-
-                <div class="message received">
-                    <div class="message-bubble">
-                        <div class="message-text">📸 Photo lo shelf ka
-Lay's visibility check aur Maxx variants push karo</div>
-                        <div class="quick-replies">
-                            <button class="quick-reply-btn">✅ Done</button>
-                            <button class="quick-reply-btn">📸 Photo</button>
-                            <button class="quick-reply-btn">Skip</button>
-                        </div>
-                        <div class="message-time">9:29 AM</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- User Response with photo -->
-            <div class="message-group">
-                <div class="message sent">
-                    <div class="message-bubble image-message">
-                        <div style="background: #1a2027; padding: 40px; text-align: center; color: #667781;">
-                            📷 Shelf Photo
-                            <div style="font-size: 11px; margin-top: 8px;">Lay's prime position</div>
-                        </div>
-                        <div class="message-time" style="padding: 8px 12px; background: #005c4b;">9:45 AM <span class="checkmark">✓✓</span></div>
-                    </div>
-                </div>
-
-                <div class="message sent">
-                    <div class="message-bubble">
-                        <div class="message-text">Retailer ne order liya:
-Lay's Magic Masala - 6 cases
-Lay's Maxx - 2 cases  
-Kurkure - 2 cases
-Doritos - 1 case
-₹1,850 bill hua 👍</div>
-                        <div class="message-time">9:52 AM <span class="checkmark">✓✓</span></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- User asks for help - 11:45 AM -->
+            <!-- User checks store history - 11:40 AM -->
             <div class="message-group">
                 <div class="message sent">
                     <div class="message-bubble">
-                        <div class="message-text">Sharma Kirana pe last 3 months ka order dikhao</div>
+                        <div class="message-text">Sharma Kirana history dikha
+Last 3 orders kya the?</div>
                         <div class="message-time">11:42 AM <span class="checkmark">✓✓</span></div>
                     </div>
                 </div>
@@ -579,28 +404,21 @@ Doritos - 1 case
                     <div class="message-bubble image-message">
                         <div style="background: #1a2027; padding: 16px;">
                             <div style="color: #0052A5; font-weight: 600; margin-bottom: 12px; font-size: 13px;">
-                                📊 शर्मा किराना - Last 3 Months
+                                🏪 शर्मा किराना - Order History
                             </div>
                             <div class="list-item">
                                 <div style="display: flex; justify-content: space-between;">
-                                    <span style="color: #8696a0; font-size: 12px;">25 Oct</span>
+                                    <span style="color: #8696a0; font-size: 12px;">28 Oct</span>
                                     <span class="amount-highlight">₹2,340</span>
                                 </div>
-                                <div style="color: #e9edef; font-size: 11px; margin-top: 4px;">Lay's 8 cases, Kurkure 3, Cheetos 2</div>
+                                <div style="color: #e9edef; font-size: 11px; margin-top: 4px;">Lay's 4 cases + Kurkure 3 cases</div>
                             </div>
                             <div class="list-item">
                                 <div style="display: flex; justify-content: space-between;">
-                                    <span style="color: #8696a0; font-size: 12px;">10 Oct</span>
-                                    <span class="amount-highlight">₹2,180</span>
+                                    <span style="color: #8696a0; font-size: 12px;">12 Oct</span>
+                                    <span class="amount-highlight">₹2,680</span>
                                 </div>
-                                <div style="color: #e9edef; font-size: 11px; margin-top: 4px;">Lay's 7 cases, Doritos 2, Kurkure 2</div>
-                            </div>
-                            <div class="list-item">
-                                <div style="display: flex; justify-content: space-between;">
-                                    <span style="color: #8696a0; font-size: 12px;">26 Sep</span>
-                                    <span class="amount-highlight">₹2,520</span>
-                                </div>
-                                <div style="color: #e9edef; font-size: 11px; margin-top: 4px;">Full Frito-Lay range + Aliva</div>
+                                <div style="color: #e9edef; font-size: 11px; margin-top: 4px;">Mix order - Lay's heavy + Doritos 2</div>
                             </div>
                             <div class="list-item">
                                 <div style="display: flex; justify-content: space-between;">
@@ -692,36 +510,41 @@ Lay's Magic Masala + Maxx full push!</div>
                 </div>
             </div>
 
-            <!-- System tracks pending stores automatically - 2:10 PM -->
+            <!-- NEW: Kurkure Low Volume Achievement Nudge - 2:10 PM -->
             <div class="message-group">
                 <div class="message received">
                     <div class="message-bubble image-message">
                         <div style="background: #1a2027; padding: 16px;">
-                            <div style="color: #ff6b6b; font-weight: 600; margin-bottom: 12px; font-size: 13px;">
-                                ⚡ PRIORITY ALERTS - Pending Stores
+                            <div style="color: #ffd666; font-weight: 600; margin-bottom: 12px; font-size: 13px;">
+                                🎯 KURKURE 48GM - Low Volume Alert
                             </div>
-                            <div style="padding: 10px; background: #2a1f0f; border-radius: 6px; margin-bottom: 8px; border-left: 3px solid #ffd666;">
-                                <div style="color: #ffd666; font-weight: 600; font-size: 13px; margin-bottom: 4px;">मॉडर्न बाजार</div>
-                                <div style="color: #e9edef; font-size: 12px; margin-bottom: 4px;">⚠️ Last 3 visits: NO Kurkure purchase</div>
-                                <div style="color: #8696a0; font-size: 11px;">Push: Kurkure Family Pack (15% margin scheme active)</div>
+                            <div style="padding: 10px; background: #2a1f0f; border-radius: 6px; border-left: 3px solid #ffd666; margin-bottom: 8px;">
+                                <div style="color: #ffd666; font-weight: 600; font-size: 13px; margin-bottom: 4px;">5 Outlets - Current Month Low Achievers</div>
+                                <div style="color: #8696a0; font-size: 11px; margin-top: 4px;">Focus on these stores in today's beat</div>
                             </div>
-                            <div style="padding: 10px; background: #1a2a1f; border-radius: 6px; margin-bottom: 8px; border-left: 3px solid #00a884;">
-                                <div style="color: #00a884; font-weight: 600; font-size: 13px; margin-bottom: 4px;">वर्मा स्टोर्स</div>
-                                <div style="color: #e9edef; font-size: 12px; margin-bottom: 4px;">🎯 ₹720 away from QPS target</div>
-                                <div style="color: #8696a0; font-size: 11px;">Needs 3 more Lay's cases for scheme qualification</div>
+                            <div class="list-item">
+                                <div style="color: #e9edef; font-size: 12px; font-weight: 500; margin-bottom: 2px;">1. मॉडर्न बाजार</div>
+                                <div style="color: #8696a0; font-size: 11px;">Current: 8 units • Target: 24 units • Gap: 16 units</div>
                             </div>
-                            <div style="padding: 10px; background: #0f2a3e; border-radius: 6px; margin-bottom: 8px; border-left: 3px solid #0052A5;">
-                                <div style="color: #0052A5; font-weight: 600; font-size: 13px; margin-bottom: 4px;">गुप्ता ट्रेडर्स</div>
-                                <div style="color: #e9edef; font-size: 12px; margin-bottom: 4px;">📈 Festival season trend: +40% demand</div>
-                                <div style="color: #8696a0; font-size: 11px;">Stock up family packs - Diwali buying starting</div>
+                            <div class="list-item">
+                                <div style="color: #e9edef; font-size: 12px; font-weight: 500; margin-bottom: 2px;">2. गुप्ता ट्रेडर्स</div>
+                                <div style="color: #8696a0; font-size: 11px;">Current: 12 units • Target: 30 units • Gap: 18 units</div>
                             </div>
-                            <div style="padding: 10px; background: #2a1a1a; border-radius: 6px; margin-bottom: 12px; border-left: 3px solid #ff6b6b;">
-                                <div style="color: #ff6b6b; font-weight: 600; font-size: 13px; margin-bottom: 4px;">लकी रिटेल</div>
-                                <div style="color: #e9edef; font-size: 12px; margin-bottom: 4px;">⏰ Payment overdue: ₹740 (12 days)</div>
-                                <div style="color: #8696a0; font-size: 11px;">Gentle reminder + fresh order push</div>
+                            <div class="list-item">
+                                <div style="color: #e9edef; font-size: 12px; font-weight: 500; margin-bottom: 2px;">3. वर्मा स्टोर्स</div>
+                                <div style="color: #8696a0; font-size: 11px;">Current: 6 units • Target: 20 units • Gap: 14 units</div>
                             </div>
-                            <div style="margin-top: 12px; padding: 8px; background: #1f2c34; border-radius: 6px; text-align: center;">
-                                <div style="color: #ffd666; font-size: 12px; font-weight: 500;">💰 Total potential: ₹4,620</div>
+                            <div class="list-item">
+                                <div style="color: #e9edef; font-size: 12px; font-weight: 500; margin-bottom: 2px;">4. सिटी सुपर मार्ट</div>
+                                <div style="color: #8696a0; font-size: 11px;">Current: 15 units • Target: 36 units • Gap: 21 units</div>
+                            </div>
+                            <div class="list-item">
+                                <div style="color: #e9edef; font-size: 12px; font-weight: 500; margin-bottom: 2px;">5. लकी रिटेल</div>
+                                <div style="color: #8696a0; font-size: 11px;">Current: 4 units • Target: 18 units • Gap: 14 units</div>
+                            </div>
+                            <div style="margin-top: 12px; padding: 8px; background: #0f2a3e; border-radius: 6px; text-align: center;">
+                                <div style="color: #ffd666; font-size: 12px; font-weight: 500;">💰 Total Gap: 83 units (₹2,075)</div>
+                                <div style="color: #8696a0; font-size: 11px; margin-top: 2px;">Focus push today to close monthly target</div>
                             </div>
                         </div>
                         <div class="message-time" style="padding: 8px 12px; background: #1f2c34;">2:09 PM</div>
@@ -730,8 +553,8 @@ Lay's Magic Masala + Maxx full push!</div>
 
                 <div class="message received">
                     <div class="message-bubble">
-                        <div class="message-text">💡 Pro tip: मॉडर्न बाजार में Kurkure push karo
-3 visits se miss ho raha hai - easy win! 🎯</div>
+                        <div class="message-text">💡 Priority: Kurkure 48gm push in these 5 outlets
+Month end hai - volume close karna hai! 🎯</div>
                         <div class="message-time">2:09 PM</div>
                     </div>
                 </div>
@@ -741,126 +564,50 @@ Lay's Magic Masala + Maxx full push!</div>
             <div class="message-group">
                 <div class="message sent">
                     <div class="message-bubble">
-                        <div class="message-text">Perfect! Outlet-wise tips help karte hain 💪</div>
+                        <div class="message-text">Got it! Will focus on Kurkure 48gm in these outlets 💪</div>
                         <div class="message-time">2:11 PM <span class="checkmark">✓✓</span></div>
                     </div>
                 </div>
             </div>
 
-            <!-- User asks about scheme - 3:45 PM -->
-            <div class="message-group">
-                <div class="message sent">
-                    <div class="message-bubble">
-                        <div class="message-text">Modern Bazar pe Lay's ka kaunsa scheme best hai?</div>
-                        <div class="message-time">3:42 PM <span class="checkmark">✓✓</span></div>
-                    </div>
-                </div>
-            </div>
-
+            <!-- NEW: Sales Loss Recovery Nudge - 3:30 PM -->
             <div class="message-group">
                 <div class="message received">
                     <div class="message-bubble image-message">
                         <div style="background: #1a2027; padding: 16px;">
-                            <div style="color: #0052A5; font-weight: 600; margin-bottom: 12px; font-size: 13px;">
-                                🎁 मॉडर्न बाजार - Active Schemes
+                            <div style="color: #ff6b6b; font-weight: 600; margin-bottom: 12px; font-size: 13px;">
+                                🚨 SALES LOSS RECOVERY - Action Required
                             </div>
-                            <div style="padding: 10px; background: #0f2a3e; border-radius: 6px; border-left: 3px solid #0052A5; margin-bottom: 8px;">
-                                <div style="color: #0052A5; font-weight: 600; font-size: 13px;">Lay's Magic Masala Mega Push</div>
-                                <div style="color: #e9edef; font-size: 12px; margin-top: 4px;">Buy 10 get 2 free + Hanging strip</div>
-                                <div style="color: #8696a0; font-size: 11px; margin-top: 4px;">Valid: Till 30 Nov | Best margin!</div>
-                            </div>
-                            <div style="padding: 10px; background: #2a1f0f; border-radius: 6px; border-left: 3px solid #ffd666; margin-bottom: 8px;">
-                                <div style="color: #ffd666; font-weight: 600; font-size: 13px;">Kurkure Family Pack</div>
-                                <div style="color: #e9edef; font-size: 12px; margin-top: 4px;">15% margin on 20+ packs</div>
-                                <div style="color: #8696a0; font-size: 11px; margin-top: 4px;">High velocity SKU 🔥</div>
-                            </div>
-                            <div style="padding: 10px; background: #1a2a1f; border-radius: 6px; border-left: 3px solid #00a884; margin-bottom: 8px;">
-                                <div style="color: #00a884; font-weight: 600; font-size: 13px;">Combo Offer</div>
-                                <div style="color: #e9edef; font-size: 12px; margin-top: 4px;">5 Lay's + 3 Kurkure = Free display rack</div>
-                                <div style="color: #8696a0; font-size: 11px; margin-top: 4px;">Visibility boost!</div>
-                            </div>
-                            <div style="margin-top: 12px; padding: 8px; background: #1f2c34; border-radius: 6px; text-align: center;">
-                                <div style="color: #e9edef; font-size: 11px;">📊 Modern last time: ₹1,620</div>
-                                <div style="color: #0052A5; font-size: 12px; font-weight: 500; margin-top: 4px;">Target: ₹2,000+ with schemes</div>
-                            </div>
-                        </div>
-                        <div class="message-time" style="padding: 8px 12px; background: #1f2c34;">3:43 PM</div>
-                    </div>
-                </div>
-
-
-            </div>
-
-            <!-- User Response -->
-            <div class="message-group">
-                <div class="message sent">
-                    <div class="message-bubble">
-                        <div class="message-text">Combo offer push karunga + Lay's Magic 💪</div>
-                        <div class="message-time">3:45 PM <span class="checkmark">✓✓</span></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- User asks about credit - 4:15 PM -->
-            <div class="message-group">
-                <div class="message sent">
-                    <div class="message-bubble">
-                        <div class="message-text">Sharma Kirana ka credit check kar
-Kitna pending hai?</div>
-                        <div class="message-time">4:12 PM <span class="checkmark">✓✓</span></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="message-group">
-                <div class="message received">
-                    <div class="message-bubble image-message">
-                        <div style="background: #1a2027; padding: 16px;">
-                            <div style="color: #0052A5; font-weight: 600; margin-bottom: 12px; font-size: 13px;">
-                                💳 शर्मा किराना - Credit Status
-                            </div>
-                            <div style="padding: 12px; background: #0f2a3e; border-radius: 6px; margin-bottom: 8px;">
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                                    <span style="color: #8696a0; font-size: 12px;">Outstanding:</span>
-                                    <span style="color: #ffd666; font-weight: 600; font-size: 14px;">₹4,520</span>
-                                </div>
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                                    <span style="color: #8696a0; font-size: 12px;">Credit Limit:</span>
-                                    <span style="color: #e9edef; font-size: 13px;">₹8,000</span>
-                                </div>
-                                <div style="display: flex; justify-content: space-between;">
-                                    <span style="color: #8696a0; font-size: 12px;">Credit Days:</span>
-                                    <span style="color: #e9edef; font-size: 13px;">21 days</span>
-                                </div>
+                            <div style="padding: 10px; background: #2a1a1a; border-radius: 6px; border-left: 3px solid #ff6b6b; margin-bottom: 8px;">
+                                <div style="color: #ff6b6b; font-weight: 600; font-size: 13px; margin-bottom: 6px;">2 Outlets - Stock Out Loss Last Week</div>
+                                <div style="color: #e9edef; font-size: 12px; font-weight: 500;">Cheetos Cheeze Puff 28gm</div>
                             </div>
                             <div class="list-item">
-                                <div style="display: flex; justify-content: space-between;">
-                                    <span style="color: #8696a0; font-size: 11px;">Bill #FL-8734 - 25 Oct</span>
-                                    <span class="amount-highlight" style="font-size: 12px;">₹2,340</span>
-                                </div>
-                                <div style="color: #0052A5; font-size: 10px; margin-top: 2px;">Due: 15 Nov</div>
+                                <div style="color: #e9edef; font-size: 12px; font-weight: 500; margin-bottom: 4px;">1. राज जनरल स्टोर</div>
+                                <div style="color: #ff6b6b; font-size: 11px; margin-bottom: 2px;">❌ Stock unavailable on 22 Nov</div>
+                                <div style="color: #8696a0; font-size: 11px; margin-bottom: 2px;">Requested: 24 units • Lost: ₹720</div>
+                                <div style="color: #0052A5; font-size: 11px;">✅ Stock available now - Confirm order today</div>
                             </div>
                             <div class="list-item">
-                                <div style="display: flex; justify-content: space-between;">
-                                    <span style="color: #8696a0; font-size: 11px;">Bill #FL-8598 - 10 Oct</span>
-                                    <span class="amount-highlight" style="font-size: 12px;">₹2,180</span>
-                                </div>
-                                <div style="color: #ff6b6b; font-size: 10px; margin-top: 2px;">Overdue by 7 days</div>
+                                <div style="color: #e9edef; font-size: 12px; font-weight: 500; margin-bottom: 4px;">2. सिटी सुपर मार्ट</div>
+                                <div style="color: #ff6b6b; font-size: 11px; margin-bottom: 2px;">❌ Stock unavailable on 23 Nov</div>
+                                <div style="color: #8696a0; font-size: 11px; margin-bottom: 2px;">Requested: 18 units • Lost: ₹540</div>
+                                <div style="color: #0052A5; font-size: 11px;">✅ Stock available now - Confirm order today</div>
                             </div>
-                            <div style="margin-top: 12px; padding: 8px; background: #1f2c34; border-radius: 6px; text-align: center;">
-                                <div style="color: #0052A5; font-size: 12px;">✅ Credit available: ₹3,480</div>
-                                <div style="color: #8696a0; font-size: 11px; margin-top: 2px;">Can take large order today</div>
+                            <div style="margin-top: 12px; padding: 8px; background: #0f2a3e; border-radius: 6px; text-align: center;">
+                                <div style="color: #0052A5; font-size: 12px; font-weight: 500;">📦 Total Recovery Opportunity: ₹1,260</div>
+                                <div style="color: #8696a0; font-size: 11px; margin-top: 2px;">Take orders today to recover lost sales</div>
                             </div>
                         </div>
-                        <div class="message-time" style="padding: 8px 12px; background: #1f2c34;">4:13 PM</div>
+                        <div class="message-time" style="padding: 8px 12px; background: #1f2c34;">3:28 PM</div>
                     </div>
                 </div>
 
                 <div class="message received">
                     <div class="message-bubble">
-                        <div class="message-text">⚠️ 1 bill overdue - gentle reminder dena
-But good credit limit - ₹2,500 tak le sakte ho</div>
-                        <div class="message-time">4:13 PM</div>
+                        <div class="message-text">⚠️ Reminder: Last week in stock nahi tha
+Aaj zaroor order le lena Cheetos Cheeze Puff 28gm ka! 🎯</div>
+                        <div class="message-time">3:28 PM</div>
                     </div>
                 </div>
             </div>
@@ -869,45 +616,8 @@ But good credit limit - ₹2,500 tak le sakte ho</div>
             <div class="message-group">
                 <div class="message sent">
                     <div class="message-bubble">
-                        <div class="message-text">OK, payment reminder politely de dunga 👍</div>
-                        <div class="message-time">4:15 PM <span class="checkmark">✓✓</span></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Stock check - 4:45 PM -->
-            <div class="message-group">
-                <div class="message sent">
-                    <div class="message-bubble">
-                        <div class="message-text">Lay's Magic Masala 90g stock hai distributor ke paas?
-Ek store 15 cases maang raha</div>
-                        <div class="message-time">4:42 PM <span class="checkmark">✓✓</span></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="message-group">
-                <div class="message received">
-                    <div class="message-bubble">
-                        <div class="message-text">📦 Distributor Stock - Rohini
-
-Lay's Magic Masala 90g: 48 cases ✅
-Lay's Classic Salted 90g: 35 cases ✅
-Lay's India's Magic 52g: 64 cases ✅
-Lay's Maxx 56g: 28 cases ✅
-
-15 cases available hai - order confirm karo ✅</div>
-                        <div class="message-time">4:43 PM</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- User Response -->
-            <div class="message-group">
-                <div class="message sent">
-                    <div class="message-bubble">
-                        <div class="message-text">Perfect! Order le leta hu 👍</div>
-                        <div class="message-time">4:44 PM <span class="checkmark">✓✓</span></div>
+                        <div class="message-text">Perfect! Will prioritize these 2 stores for Cheetos recovery 👍</div>
+                        <div class="message-time">3:30 PM <span class="checkmark">✓✓</span></div>
                     </div>
                 </div>
             </div>
@@ -935,11 +645,10 @@ Earned: ₹6,180 / ₹8,200 potential
 🏆 Rank: 6/9 → 3/9 ⬆️⬆️
 
 📋 Actions taken:
-✅ Outlet-specific nudges - 4 stores
-✅ Credit checks - 1
-✅ Stock reserved - 15 cases
-✅ Category push insights - 2 stores
-✅ QPS tracking - 1 store</div>
+✅ Kurkure 48gm low vol push - 5 stores
+✅ Cheetos recovery orders - 2 stores
+✅ Store history checks - 1
+✅ Unbilled stores covered - 7</div>
                         <div class="message-time">6:45 PM</div>
                     </div>
                 </div>
@@ -998,16 +707,6 @@ Shubh ratri! 🌙</div>
                 setTimeout(() => {
                     this.style.background = '#1f2c34';
                     this.style.color = '#0052A5';
-                }, 200);
-            });
-        });
-
-        // Play button animation
-        document.querySelectorAll('.play-button').forEach(btn => {
-            btn.addEventListener('click', function() {
-                this.style.background = '#003d7a';
-                setTimeout(() => {
-                    this.style.background = '#0052A5';
                 }, 200);
             });
         });
