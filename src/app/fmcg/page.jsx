@@ -1845,7 +1845,7 @@ const createVisualization = () => {
     <div className="flex flex-col h-screen bg-white">
       <div className="px-8 pt-8 pb-4">
         <div className="flex justify-between items-start mb-4">
-          <h1 className="text-3xl font-serif text-gray-900">PepsiCo Business Knowledge Graph</h1>
+          <h1 className="text-3xl font-serif text-gray-900">Sample CPG Company Business Knowledge Graph</h1>
         </div>
         
         {!showTraversal && (
