@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import React, { useState } from 'react';
 import { MessageSquare, TrendingUp, TrendingDown, AlertCircle, ChevronRight, Users, Package, MapPin, Activity, Send, X, Target, Sparkles, Clock, ChevronDown, BarChart3, Eye, Layers } from 'lucide-react';
 
@@ -34,28 +34,28 @@ export default function MorrieGTDashboard() {
   const briefingPoints = [
     {
       type: 'critical',
-      title: 'Central territory beat coverage dropped to 72% yesterday',
-      detail: '4 TSRs in Rajesh\'s Central territory missed 28% of planned calls yesterday. DMS shows 156 outlets uncovered. Coverage gap identified in Malad and Goregaon beats.'
+      title: 'Western territory - projected stockout in 2 days across 3 distributors',
+      detail: 'Stock alert: Lays Classic 52g and Kurkure Masala 85g inventory at 1.2 days cover across Sagar, Gupta, and Metro Distributors. 685 outlets at risk of stockout by Jan 31. Estimated sales loss of Rs 8.2L/day if stockout occurs. Immediate reorder required.'
     },
     {
       type: 'alert',
-      title: 'Gupta Distributors showing stockouts on 3 core SKUs',
-      detail: 'DMS alert: Lays Classic 52g, Kurkure Masala 85g, and Cheetos 90g out of stock at Gupta Distributors as of last night. 420 outlets affected. Replenishment truck scheduled for delivery today.'
+      title: 'Central territory - must-sell SKU inventory running low at 2 distributors',
+      detail: 'Inventory alert: Doritos 90g and Cheetos Flamin Hot at 2.5 days cover in Andheri & Malad distributors. 420 outlets at risk. Projected stockout by Feb 1 if current offtake continues. Need expedited secondary sales push of Rs 4.8L.'
     },
     {
       type: 'alert',
-      title: 'Western suburbs order shortfall - 18% below plan yesterday',
-      detail: 'Pradeep\'s Western territory billed Rs 12.4L vs Rs 15.2L target yesterday. 3 distributors showing lower secondary offtake. DMS flags Metro and Reliable Traders below 80% daily plan.'
+      title: 'Western territory - order frequency dropped across 4 distributors this week',
+      detail: 'Metro, Reliable, Shah Trading, and Sai Distributors placed 32% fewer orders this week (38 orders vs 56 typical). Covering 1,140 outlets. DMS flags irregular ordering pattern across Western territory for last 10 days.'
     },
     {
       type: 'performance',
-      title: 'Weekly run-rate tracking at 87% vs 92% target',
-      detail: 'Monday-Wednesday achievement at 87%. Need Rs 42L additional billing by Friday EOD to hit weekly target. Eastern suburbs at 96%, Central & Western territories need acceleration.'
+      title: 'Region-wide weekly achievement at 87% vs 92% target',
+      detail: 'Current weekly run-rate at 87%. Need Rs 42L additional billing to hit weekly target. Eastern territory at 96%, Central & Western territories need acceleration to close Rs 42L gap.'
     },
     {
       type: 'highlight',
-      title: 'Meera\'s team at 98% call compliance this week',
-      detail: 'Eastern suburbs (Meera) TSM network at 98% call compliance Mon-Wed vs 84% region average. All 12 TSRs maintaining beat discipline. Field Activity System shows consistent execution patterns.'
+      title: 'Central territory - 3 distributors restored to 92%+ distribution from 68% slump',
+      detail: 'Reliable, Sagar, and Ganesh Distributors (Malad & Goregaon areas) recovered from 2-week distribution slump. Now averaging 92% numeric distribution vs 68% two weeks ago. Covering 825 outlets. Secondary sales back to Rs 52L weekly.'
     }
   ];
 
@@ -63,260 +63,248 @@ export default function MorrieGTDashboard() {
     {
       id: 1,
       priority: 'critical',
-      title: 'Premium SKU distribution gap costing Rs 2.2Cr quarterly across Mumbai region',
-      summary: 'Doritos & Cheetos achieving only 68% numeric distribution vs 92% for core Lays portfolio',
+      title: 'Must-sell SKU distribution gap of 24 points vs core portfolio - 1,240 unbilled outlets',
+      summary: 'Doritos & Cheetos at 68% numeric distribution vs 92% for Lays - Rs 2.2Cr quarterly gap',
       keyNumbers: {
-        revenueLoss: 'Rs 2.2Cr quarterly',
-        distributionGap: '68% vs 92% target',
-        affectedOutlets: '1,240 of 3,850 outlets',
-        topASMgap: 'Central territory 24 pts below'
+        distributionGap: '68% vs 92% (24 pts)',
+        unbilledOutlets: '1,240 outlets',
+        revenueOpportunity: 'Rs 2.2Cr quarterly',
+        gapVsLYSM: '-8 pts vs Jan 2025'
       },
-      narrative: "Internal DMS data shows premium portfolio (Doritos, Cheetos, Kurkure premium variants) achieving 68% numeric distribution vs 92% for core Lays across Mumbai region's 3,850 outlets. Gap acute in Central territory (ASM Rajesh) at 61% vs Eastern at 79% (ASM Meera). Secondary sales analysis reveals 4 of 18 distributors consistently failing to stock premium SKUs - these distributors serve 1,240 outlets representing Rs 2.2Cr quarterly opportunity. Root cause analysis shows working capital constraints at mid-size distributors and TSM reluctance to push higher-margin SKUs. Van loading patterns confirm premium SKUs getting deprioritized.",
+      narrative: "Must-sell SKU numeric distribution has declined 8 points vs last year same month, now at 68% compared to 92% for core Lays portfolio. Central Mumbai shows steepest drop at 61% distribution (down from 74% LYSM). Analysis reveals systematic pattern: 4 of 18 distributors consistently under-stock must-sell SKUs despite maintaining 85%+ core distribution. These distributors collectively serve 1,240 outlets - all currently unbilled for must-sell portfolio. Distributor order frequency data shows must-sell SKUs ordered 18% less frequently than core SKUs, suggesting systematic deprioritization in secondary sales cycle.",
       dataTable: {
-        headers: ['Territory', 'Premium Distribution', 'Core Distribution', 'Gap', 'Quarterly Opportunity'],
+        headers: ['Territory', 'Premium Dist', 'vs LYSM', 'Unbilled Outlets', 'Quarterly Gap'],
         rows: [
-          ['Central Mumbai (Rajesh)', '61%', '92%', '-31 pts', 'Rs 85L'],
-          ['Eastern Suburbs (Meera)', '79%', '94%', '-15 pts', 'Rs 42L'],
-          ['Western Suburbs (Pradeep)', '64%', '90%', '-26 pts', 'Rs 68L'],
-          ['Thane (Amit)', '74%', '93%', '-19 pts', 'Rs 27L']
+          ['Central Mumbai', '61%', '-13 pts', '485 outlets', 'Rs 85L'],
+          ['Western Suburbs', '64%', '-10 pts', '358 outlets', 'Rs 68L'],
+          ['Thane', '74%', '-4 pts', '195 outlets', 'Rs 27L'],
+          ['Eastern Suburbs', '79%', '-3 pts', '202 outlets', 'Rs 42L']
         ]
       },
       recommendation: {
-        action: "Phase 1 (Week 1-2): WC support to 2 distributors, intensive TSM training on premium portfolio. Phase 2 (Week 3-4): Incentive restructure, beat optimization. Review Shah Trading transition.",
-        cost: "WC support: Rs 8L (recoverable), TSM training: Rs 2L, incentive adjustment: Rs 3L monthly",
-        return: "Distribution improvement to 84% unlocks Rs 1.6Cr quarterly, 6.2x ROI",
-        roi: "4-week payback on training investment"
+        action: "Systematic distributor engagement required to restore must-sell SKU order frequency. Focus on 4 distributors serving 1,240 unbilled outlets. Address root causes: order size constraints and beat coverage gaps for must-sell portfolio.",
+        return: "Closing gap to 84% distribution unlocks Rs 1.6Cr quarterly recurring revenue",
+        roi: "Represents 0.73% improvement in overall Mumbai numeric distribution"
       },
-      owner: 'RSM Mumbai - Direct ASM coordination',
+      owner: 'Distribution Planning - Mumbai Region',
       color: C.sage,
       trail: [
         {
           timestamp: '09:14 AM',
           agent: 'Orchestrator Agent',
-          action: 'Analyzing weekly performance dashboard',
+          action: 'Analyzing weekly distribution performance',
           database: 'Sales Analytics DB',
-          query: 'SELECT territory, sku_category, numeric_distribution, outlet_count FROM weekly_distribution WHERE region = "Mumbai" AND week = CURRENT_WEEK',
-          thinking: 'Premium SKU distribution significantly lower than core portfolio across all territories. Central territory showing worst performance at 61%. This is unusual - need to investigate distributor-level patterns.',
+          query: 'SELECT territory, sku_category, numeric_distribution, outlet_count, trend_vs_lysm FROM weekly_distribution WHERE region = "Mumbai" AND week = CURRENT_WEEK',
+          thinking: 'Must-sell SKU distribution at 68% vs 92% for core portfolio - 24 point gap. Central territory showing steepest decline at 61% (down 13 points vs LYSM). This gap is widening month-over-month.',
           nextAgent: 'Distribution Agent'
         },
         {
           timestamp: '09:15 AM',
           agent: 'Distribution Agent',
-          action: 'Deep dive into distributor-level stocking patterns',
+          action: 'Identifying distributor-level stocking patterns',
           database: 'DMS System',
-          query: 'SELECT distributor_id, distributor_name, premium_sku_numeric_dist, core_sku_numeric_dist, outlet_count FROM distributor_performance WHERE territory IN ("Central", "Western", "Eastern", "Thane") AND premium_sku_numeric_dist < 70',
-          thinking: '4 distributors showing selective behavior - they maintain 85%+ core distribution but only 60-65% premium. This isn\'t a capability issue, it\'s selective portfolio management. Need to understand why.',
+          query: 'SELECT distributor_id, distributor_name, premium_sku_numeric_dist, core_sku_numeric_dist, outlet_count, unbilled_outlets FROM distributor_performance WHERE territory IN ("Central", "Western", "Eastern", "Thane") AND premium_sku_numeric_dist < 70',
+          thinking: '4 distributors maintain 85%+ core distribution but only 60-65% premium. Collectively serving 1,240 outlets that are unbilled for must-sell portfolio. This is a systematic stocking selectivity pattern.',
           nextAgent: 'Sales Agent'
         },
         {
           timestamp: '09:17 AM',
           agent: 'Sales Agent',
-          action: 'Examining secondary sales order patterns',
+          action: 'Examining secondary sales order frequency patterns',
           database: 'Sales Analytics DB',
-          query: 'SELECT distributor_id, sku_category, avg_order_frequency, avg_order_value FROM secondary_sales WHERE distributor_id IN (102, 105, 108, 112) AND month = CURRENT_MONTH',
-          thinking: 'Premium SKU order frequency 18% lower than core at these 4 distributors. Despite premium having higher margins, they\'re ordering less frequently. Could be working capital constraints - premium requires more upfront investment.',
-          nextAgent: 'Finance Agent'
+          query: 'SELECT distributor_id, sku_category, avg_order_frequency, orders_per_month, trend_3_months FROM secondary_sales WHERE distributor_id IN (102, 105, 108, 112) AND month = CURRENT_MONTH',
+          thinking: 'Must-sell SKU order frequency 18% lower than core at these 4 distributors. Ordering pattern shows 2 times per month for must-sell vs 4 times per month for core. Gap indicates systematic deprioritization in secondary sales cycle.',
+          nextAgent: 'Distribution Agent'
         },
         {
           timestamp: '09:19 AM',
-          agent: 'Finance Agent',
-          action: 'Checking distributor credit utilization',
-          database: 'Sales System',
-          query: 'SELECT distributor_id, distributor_name, credit_limit, credit_utilized, utilization_percentage FROM distributor_financials WHERE distributor_id IN (102, 105, 108, 112)',
-          thinking: 'Gupta Enterprises at 94% credit utilization, Mumbai Suppliers at 89%. Both are WC-stretched. Premium SKUs require higher upfront investment but turn slower than core. These distributors are managing cash flow by limiting premium orders.',
-          nextAgent: 'Field Intelligence Agent'
+          agent: 'Distribution Agent',
+          action: 'Analyzing unbilled outlet coverage for must-sell SKUs',
+          database: 'DMS System',
+          query: 'SELECT territory, COUNT(outlet_id) as unbilled_outlets, SUM(potential_monthly_value) as opportunity FROM outlet_billing_patterns WHERE premium_sku_billed = 0 AND core_sku_billed = 1 GROUP BY territory',
+          thinking: '1,240 outlets currently unbilled for must-sell SKUs despite ordering core portfolio regularly. Central Mumbai accounts for 485 of these outlets (Rs 85L quarterly opportunity). This is a coverage execution gap.',
+          nextAgent: 'Analytics Engine'
         },
         {
           timestamp: '09:21 AM',
-          agent: 'Field Intelligence Agent',
-          action: 'Analyzing TSM beat execution patterns',
-          database: 'Field Activity System',
-          query: 'SELECT tsr_id, tsr_name, distributor_id, premium_calls_percentage, core_calls_percentage, beat_compliance FROM tsr_activity WHERE distributor_id IN (102, 105, 108, 112) AND date >= DATE_SUB(CURRENT_DATE, INTERVAL 30 DAY)',
-          thinking: 'TSMs at these distributors making only 41-52% of calls with premium SKU focus vs 86-91% for core. Even when distributor has stock, TSMs aren\'t pushing it. Behavior issue - TSMs find premium harder to sell or lack confidence.',
-          nextAgent: 'Recommendation Engine'
-        },
-        {
-          timestamp: '09:23 AM',
-          agent: 'Recommendation Engine',
-          action: 'Synthesizing root causes and building action plan',
+          agent: 'Analytics Engine',
+          action: 'Quantifying distribution gap impact and trend',
           database: 'Analytics DB',
-          query: 'SELECT opportunity_value, recommended_actions, investment_required, expected_roi FROM opportunity_calculator WHERE issue_type = "distribution_gap" AND root_causes IN ("wc_constraint", "tsm_behavior")',
-          thinking: 'Two-pronged issue: (1) WC-constrained distributors need temporary support to break the cycle (2) TSM network needs training and incentive restructure. Address WC first in Phase 1, then fix TSM behavior in Phase 2. Combined approach can move distribution from 68% to 84%, unlocking Rs 1.6Cr quarterly.',
+          query: 'SELECT sku_category, current_distribution, lysm_distribution, gap_value_quarterly, trend_direction FROM distribution_gap_analysis WHERE region = "Mumbai" AND category = "premium"',
+          thinking: 'Must-sell portfolio gap widened from 18 points (LYSM) to 24 points currently. If gap continues expanding at current rate, quarterly opportunity loss reaches Rs 2.8Cr by next quarter. Distribution recovery to 84% unlocks Rs 1.6Cr recurring quarterly revenue.',
           nextAgent: null
         }
       ],
       whatIfScenarios: [
-        'What if we provide temporary credit extension to top 2 distributors?',
-        'Should we restructure TSM incentives to favor premium mix?',
-        'Can we pilot simplified premium ordering for smaller distributors?',
-        'What if we focus only on Central territory first?'
+        'What if must-sell SKU gap continues widening at current rate?',
+        'How would closing gap in Central territory alone impact overall distribution?',
+        'What is the correlation between order frequency and distribution gaps?',
+        'Would focusing on top 4 distributors yield proportional improvement?'
       ]
     },
     {
       id: 2,
       priority: 'high',
-      title: 'Eastern suburbs outperformance - Thane West model worth Rs 1.4Cr if replicated',
-      summary: 'ASM Meera Patil achieving 112% through superior TSM network execution and distributor management',
+      title: 'Territory-level distribution variance - 16 point gap between best and worst performing areas',
+      summary: 'Thane West at 94% numeric distribution vs Central Mumbai at 78% - systematic coverage pattern',
       keyNumbers: {
-        achievement: '112% vs 89% region',
-        numericDist: '94% vs 78% average',
-        potentialValue: 'Rs 1.4Cr if replicated',
-        tsmProductivity: '38% higher than region'
+        distributionRange: '78% to 94% (16 pts)',
+        topTerritory: 'Thane West 94%',
+        bottomTerritory: 'Central Mumbai 78%',
+        gapVsLYSM: 'Variance up from 11 pts'
       },
-      narrative: "Thane West (ASM Meera Patil) consistently outperforming at 112% achievement vs 89% regional average. Deep dive reveals systematic approach: 94% numeric distribution vs 78% region, TSM productivity 38% higher, distributor loading patterns optimal. Field observations show Meera's 5 distributors maintain discipline on van loading (mix of 65% core, 25% premium, 10% seasonal vs regional 78-12-10), TSM network has structured beat plans with premium SKU inclusion, outlet service frequency at 92% vs 76% regional. Her management practices include weekly distributor meets with SKU-level planning, TSM daily briefings on priority outlets, and real-time issue escalation system.",
+      narrative: "Territory-level distribution analysis reveals widening performance gap - variance increased from 11 points (LYSM) to 16 points currently. Thane West maintains 94% numeric distribution through consistent 92% outlet service frequency, while Central Mumbai at 78% distribution has only 76% outlet service frequency. Pattern analysis shows top-performing territories have 3 times per week order frequency per distributor vs 2 times in lower-performing areas. Distribution depth (outlets per distributor) is comparable across territories, indicating gap is execution-driven rather than structural. Outlet-level data shows 615 outlets in Central territory are sporadically serviced (visited but not billed regularly), compared to only 145 such outlets in Thane West.",
       dataTable: {
-        headers: ['Territory', 'Achievement', 'Numeric Dist', 'TSM Productivity', 'Replication Potential'],
+        headers: ['Territory', 'Numeric Dist', 'vs LYSM', 'Outlet Service Freq', 'Sporadic Outlets'],
         rows: [
-          ['Thane West (Meera)', '112%', '94%', '38 calls/day', 'Benchmark model'],
-          ['Central Mumbai (Rajesh)', '76%', '78%', '24 calls/day', 'Rs 52L opportunity'],
-          ['Western Suburbs (Pradeep)', '88%', '81%', '28 calls/day', 'Rs 38L opportunity'],
-          ['Thane East (Amit)', '103%', '88%', '32 calls/day', 'Rs 18L opportunity']
+          ['Thane West', '94%', '+1 pt', '92%', '145 outlets'],
+          ['Eastern Suburbs', '88%', '-2 pts', '86%', '238 outlets'],
+          ['Western Suburbs', '81%', '-4 pts', '82%', '412 outlets'],
+          ['Central Mumbai', '78%', '-6 pts', '76%', '615 outlets']
         ]
       },
       recommendation: {
-        action: "Week 1-2: Document Meera's complete playbook. Week 3-4: Rajesh and Pradeep ASMs shadow Meera for distributor meets and TSM management. Week 5-8: Implement with weekly check-ins.",
-        cost: "Training time: Rs 1.2L, process documentation: Rs 0.8L",
-        return: "Central territory gap closure: Rs 52L quarterly, Western partial recovery: Rs 28L. Total Rs 1.08Cr annually.",
-        roi: "5.4x return, practices become permanent capability"
+        action: "Address sporadic billing pattern in Central and Western territories. Focus on 1,027 outlets with irregular service. Distributor order frequency optimization required to match Thane West benchmark of 3 times per week.",
+        return: "Closing distribution gap to 88% across all territories unlocks Rs 1.08Cr annually",
+        roi: "Represents sustained improvement in outlet coverage depth"
       },
-      owner: 'RSM Mumbai - ASM capability building',
+      owner: 'Distribution Planning - Mumbai Region',
       color: C.sage,
       trail: [
         {
           timestamp: '10:05 AM',
           agent: 'Orchestrator Agent',
-          action: 'Detecting performance variance patterns',
+          action: 'Detecting territory-level distribution variance',
           database: 'Sales Analytics DB',
-          query: 'SELECT asm_name, territory, achievement_percentage, numeric_distribution, trend_90_days FROM asm_performance WHERE region = "Mumbai" ORDER BY achievement_percentage DESC',
-          thinking: 'Thane West (ASM Meera) at 112% achievement for 3 consecutive months vs 89% regional average. This isn\'t luck - consistent over-performance suggests systematic approach. Need to understand her management practices.',
-          nextAgent: 'Sales Agent'
-        },
-        {
-          timestamp: '10:07 AM',
-          agent: 'Sales Agent',
-          action: 'Analyzing distributor management patterns under high-performing ASM',
-          database: 'DMS System',
-          query: 'SELECT asm_name, distributor_id, distributor_name, core_mix_percentage, premium_mix_percentage, seasonal_mix_percentage FROM distributor_loading_patterns WHERE asm_name = "Meera Patil" AND date >= DATE_SUB(CURRENT_DATE, INTERVAL 60 DAY)',
-          thinking: 'Meera\'s 5 distributors maintain 65-25-10 (core-premium-seasonal) mix vs regional 78-12-10. This is optimal - higher premium mix drives better margins while maintaining core coverage. She\'s managing her distributor network systematically.',
+          query: 'SELECT territory, numeric_distribution, lysm_distribution, outlet_service_frequency, distributor_count FROM territory_performance WHERE region = "Mumbai" ORDER BY numeric_distribution DESC',
+          thinking: 'Wide distribution gap across territories: Thane West at 94% vs Central Mumbai at 78% (16 point spread). This variance has increased from 11 points LYSM. Need to identify structural vs execution-driven factors.',
           nextAgent: 'Distribution Agent'
         },
         {
-          timestamp: '10:09 AM',
+          timestamp: '10:07 AM',
           agent: 'Distribution Agent',
-          action: 'Examining TSM network performance metrics',
-          database: 'Field Activity System',
-          query: 'SELECT asm_name, COUNT(tsr_id) as tsr_count, AVG(call_rate) as avg_call_rate, AVG(premium_call_percentage) as premium_focus, AVG(beat_adherence) as beat_compliance FROM tsr_performance WHERE asm_name IN ("Meera Patil", "Rajesh Sharma", "Pradeep Iyer", "Amit Kumar") GROUP BY asm_name',
-          thinking: 'Meera\'s 12 TSMs: 96% call rate vs 78% region, 84% premium focus vs 52%, 98% beat adherence. This is management excellence - she\'s created a system that makes her entire TSM network perform consistently at high levels.',
-          nextAgent: 'Field Intelligence Agent'
+          action: 'Analyzing outlet service frequency patterns by territory',
+          database: 'DMS System',
+          query: 'SELECT territory, AVG(service_frequency_weekly) as avg_service_freq, COUNT(CASE WHEN service_pattern = "sporadic" THEN 1 END) as sporadic_outlets FROM outlet_service_patterns WHERE region = "Mumbai" GROUP BY territory',
+          thinking: 'Thane West maintains 92% outlet service frequency with only 145 sporadic outlets. Central Mumbai at 76% frequency with 615 sporadic outlets. Pattern shows execution consistency gap, not structural difference.',
+          nextAgent: 'Sales Agent'
+        },
+        {
+          timestamp: '10:09 AM',
+          agent: 'Sales Agent',
+          action: 'Examining distributor order frequency patterns',
+          database: 'Sales Analytics DB',
+          query: 'SELECT territory, distributor_id, AVG(weekly_order_frequency) as order_freq, trend_3_months FROM distributor_ordering_patterns WHERE region = "Mumbai" GROUP BY territory',
+          thinking: 'Top territories have 3 times per week distributor order frequency vs 2 times in lower-performing areas. Despite comparable distributor density, ordering rhythm differs significantly. This drives the distribution gap.',
+          nextAgent: 'Distribution Agent'
         },
         {
           timestamp: '10:11 AM',
-          agent: 'Field Intelligence Agent',
-          action: 'Documenting ASM management practices and routines',
-          database: 'Field Activity System',
-          query: 'SELECT asm_name, management_practice_type, frequency, last_conducted, participants FROM asm_management_activities WHERE asm_name = "Meera Patil" AND date >= DATE_SUB(CURRENT_DATE, INTERVAL 30 DAY)',
-          thinking: 'Found it! Meera conducts weekly distributor business reviews (every Monday), daily morning TSM briefings (7:30 AM sharp), maintains documented beat plans with SKU priorities. She\'s built a management operating system, not just managing on instinct.',
-          nextAgent: 'Recommendation Engine'
+          agent: 'Distribution Agent',
+          action: 'Mapping sporadic billing patterns across territories',
+          database: 'DMS System',
+          query: 'SELECT territory, outlet_id, COUNT(billing_events) as billing_count, service_pattern FROM outlet_billing_history WHERE date >= DATE_SUB(CURRENT_DATE, INTERVAL 90 DAY) AND service_pattern = "sporadic" GROUP BY territory',
+          thinking: 'Identified 1,027 outlets with sporadic billing (visited but not billed regularly). 615 in Central, 412 in Western suburbs. These outlets represent systematic coverage depth issue - inconsistent conversion from visit to billing.',
+          nextAgent: 'Analytics Engine'
         },
         {
           timestamp: '10:13 AM',
-          agent: 'Recommendation Engine',
-          action: 'Calculating replication opportunity across underperforming territories',
+          agent: 'Analytics Engine',
+          action: 'Quantifying distribution gap closure opportunity',
           database: 'Analytics DB',
-          query: 'SELECT territory, current_achievement, meera_benchmark, gap_percentage, gap_value_quarterly FROM replication_opportunity WHERE asm_name != "Meera Patil" AND region = "Mumbai"',
-          thinking: 'If Central (Rajesh) closes gap from 76% to 100%: Rs 52L quarterly. Western (Pradeep) partial closure: Rs 28L. Thane East minor gains: Rs 18L. Total Rs 1.08Cr annually. High-confidence opportunity because Meera\'s practices are documented and teachable, not talent-dependent.',
+          query: 'SELECT territory, current_distribution, target_distribution, gap_value_annually, outlet_count FROM distribution_opportunity WHERE region = "Mumbai" ORDER BY gap_value_annually DESC',
+          thinking: 'Closing distribution gap to 88% across all territories unlocks Rs 1.08Cr annually. Primary driver: converting 1,027 sporadically serviced outlets to regular billing pattern matching Thane West benchmark.',
           nextAgent: null
         }
       ],
       whatIfScenarios: [
-        'What if other ASMs resist adopting Meera\'s practices?',
-        'Should we incentivize ASMs for adopting best practices?',
-        'Can we scale this model beyond Mumbai region?',
-        'What if Meera gets promoted - how do we preserve her system?'
+        'What drives the 16-point distribution variance between territories?',
+        'How does outlet service frequency correlate with distribution percentage?',
+        'What if sporadic outlets were converted to regular billing patterns?',
+        'Would matching Thane West order frequency close the entire gap?'
       ]
     },
     {
       id: 3,
       priority: 'high',
-      title: 'Festival pre-positioning 18 days to Holi - execution behind target by 23 points',
-      summary: 'Only 62% of outlets have festival displays vs 85% target. Western suburbs most critical at 54%.',
+      title: 'Festival SKU numeric distribution at 72% vs 88% target - 18 days to Holi peak demand',
+      summary: 'Festival portfolio stocking rate 16 points below target across 3,850 outlets',
       keyNumbers: {
-        currentCoverage: '62% of 3,850 outlets',
-        targetCoverage: '85% by Mar 8',
-        gap: '885 outlets pending',
-        westernLag: '54% vs 62% region'
+        currentDistribution: '72% of outlets',
+        targetDistribution: '88% by Mar 8',
+        unbilledOutlets: '615 outlets',
+        gapVsLYSM: '-6 pts vs Holi 2025'
       },
-      narrative: "Holi festival on March 14 (18 days away). Internal merchandising tracker shows only 2,385 of 3,850 outlets (62%) have festival SKU displays vs 85% target, requiring 885 additional installations. Western suburbs (ASM Pradeep) most critical at 54% (432 of 800 outlets). Central at 64%, Eastern at 72%, Thane at 68%. Historical data shows festival displays drive 34% volume uplift during 2-week festival window. At current pace, missing Rs 88L festival opportunity. Root cause: merchandising team capacity stretched (18 merchandisers for 3,850 outlets), ASM Pradeep's territory got lower priority due to distributor transition focus.",
+      narrative: "Festival SKU portfolio (party packs, combo offers, festival variants) currently at 72% numeric distribution vs 88% target for Holi peak window (Mar 14-21). This represents a 6-point decline vs last year's Holi pre-positioning. Distribution gap concentrated in Western suburbs (64%) and Central Mumbai (68%), while Eastern suburbs and Thane track closer to target at 78-82%. Secondary sales data shows 615 outlets have not been billed for festival SKUs despite having regular orders for core portfolio. Festival SKU order frequency from distributors is 2 times per week vs target of 2-3 times - indicating insufficient push in secondary sales cycle. Historical correlation shows 88%+ distribution during festival window drives 34% volume uplift.",
       dataTable: {
-        headers: ['Territory', 'Target Outlets', 'Festival Ready', 'Coverage %', 'Gap to Target'],
+        headers: ['Territory', 'Festival SKU Dist', 'vs LYSM', 'Unbilled Outlets', 'Gap to Target'],
         rows: [
-          ['Western Suburbs', '800', '432', '54%', '-31 pts vs target'],
-          ['Central Mumbai', '1,100', '704', '64%', '-21 pts vs target'],
-          ['Thane', '950', '646', '68%', '-17 pts vs target'],
-          ['Eastern Suburbs', '1,000', '720', '72%', '-13 pts vs target']
+          ['Western Suburbs', '64%', '-8 pts', '288 outlets', '-24 pts'],
+          ['Central Mumbai', '68%', '-7 pts', '352 outlets', '-20 pts'],
+          ['Thane', '78%', '-4 pts', '114 outlets', '-10 pts'],
+          ['Eastern Suburbs', '82%', '-3 pts', '96 outlets', '-6 pts']
         ]
       },
-      supplyChainBacking: "Festival SKU inventory at 142% of normal levels across all warehouses. Sufficient stock for complete rollout. Merchandising materials (displays, standees, POSMs) available.",
+      supplyChainBacking: "Festival SKU inventory at 142% of normal levels. No supply constraints.",
       recommendation: {
-        action: "Emergency action: Deploy 8 additional merchandisers to Western suburbs (Pradeep) for 10 days. Pradeep and merchandising lead to personally oversee Shah Trading & Sai Distributors. Weekend blitz across all territories. Daily ASM check-ins till March 8.",
-        cost: "Additional merchandiser deployment: Rs 3.2L for 10 days, weekend overtime: Rs 1.8L",
-        return: "Festival window protection: Rs 88L potential revenue. Display completion drives 34% uplift vs non-display outlets during 2-week festival period.",
-        roi: "17.6x return on merchandising investment"
+        action: "Accelerate festival SKU secondary sales push across 615 unbilled outlets. Focus distributor engagement in Western and Central territories to increase order frequency from 2 times to 2-3 times per week. Priority on outlets with high footfall during festival period.",
+        return: "Achieving 88% distribution protects Rs 88L festival window revenue opportunity",
+        roi: "Festival periods contribute 12-15% of quarterly revenue in Mumbai region"
       },
-      owner: 'RSM Mumbai - Direct oversight with Trade Marketing',
+      owner: 'Distribution Planning - Festival Category',
       color: C.sage,
       trail: [
         {
           timestamp: '11:20 AM',
           agent: 'Orchestrator Agent',
-          action: 'Running festival readiness check',
-          database: 'Merchandising System',
-          query: 'SELECT festival_name, festival_date, DATEDIFF(festival_date, CURRENT_DATE) as days_remaining, target_coverage_percentage FROM festival_calendar WHERE region = "Mumbai" AND festival_date > CURRENT_DATE ORDER BY festival_date LIMIT 1',
-          thinking: 'Holi festival in 18 days (March 14). Target: 85% outlet coverage with festival displays by March 8. Need to check current installation status immediately - this is a hard deadline.',
-          nextAgent: 'Merchandising Agent'
+          action: 'Analyzing festival SKU distribution readiness',
+          database: 'Sales Analytics DB',
+          query: 'SELECT festival_name, sku_category, current_distribution, target_distribution, days_to_festival FROM festival_distribution_tracking WHERE region = "Mumbai" AND festival_date > CURRENT_DATE ORDER BY festival_date LIMIT 1',
+          thinking: 'Holi festival in 18 days. Festival SKU portfolio at 72% numeric distribution vs 88% target (16 point gap). This is 6 points below LYSM positioning for same period. Distribution lag concentrated in certain territories.',
+          nextAgent: 'Distribution Agent'
         },
         {
           timestamp: '11:22 AM',
-          agent: 'Merchandising Agent',
-          action: 'Assessing current festival display installation status',
-          database: 'Merchandising System',
-          query: 'SELECT territory, COUNT(*) as total_outlets, SUM(CASE WHEN festival_display_installed = 1 THEN 1 ELSE 0 END) as installed_outlets, ROUND(SUM(CASE WHEN festival_display_installed = 1 THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 0) as coverage_percentage FROM outlet_merchandising WHERE region = "Mumbai" GROUP BY territory',
-          thinking: 'Only 2,385 of 3,850 outlets (62%) have displays installed vs 85% target. Gap of 885 outlets with 18 days remaining. Western suburbs at 54% - most critical. Central at 64%, Eastern at 72%, Thane at 68%. Need to understand resource constraints.',
-          nextAgent: 'Field Intelligence Agent'
-        },
-        {
-          timestamp: '11:24 AM',
-          agent: 'Field Intelligence Agent',
-          action: 'Analyzing merchandiser team capacity and utilization',
-          database: 'Field Activity System',
-          query: 'SELECT territory, merchandiser_count, AVG(daily_installations) as avg_installations_per_day, AVG(utilization_percentage) as utilization FROM merchandiser_activity WHERE region = "Mumbai" AND date >= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY) GROUP BY territory',
-          thinking: '18 merchandisers covering 3,850 outlets. Current capacity: 48 installations/day at 92% utilization. Already stretched thin. To install 885 displays in 18 days, need 49 installs/day - above current capacity. Western suburbs has lowest merchandiser-to-outlet ratio.',
+          agent: 'Distribution Agent',
+          action: 'Mapping festival SKU stocking patterns by territory',
+          database: 'DMS System',
+          query: 'SELECT territory, COUNT(outlet_id) as total_outlets, SUM(CASE WHEN festival_sku_billed = 1 THEN 1 ELSE 0 END) as stocked_outlets, SUM(CASE WHEN festival_sku_billed = 0 AND core_sku_billed = 1 THEN 1 ELSE 0 END) as unbilled_outlets FROM outlet_billing_patterns WHERE region = "Mumbai" GROUP BY territory',
+          thinking: '615 outlets unbilled for festival SKUs despite regular core portfolio orders. Western suburbs accounts for 288 unbilled outlets (64% distribution), Central 352 outlets (68% distribution). Gap vs Eastern suburbs (82%) and Thane (78%) indicates execution variance.',
           nextAgent: 'Sales Agent'
         },
         {
-          timestamp: '11:26 AM',
+          timestamp: '11:24 AM',
           agent: 'Sales Agent',
-          action: 'Quantifying festival revenue impact from historical data',
+          action: 'Examining festival SKU secondary sales velocity',
           database: 'Sales Analytics DB',
-          query: 'SELECT territory, AVG(sales_with_display) as avg_sales_with_display, AVG(sales_without_display) as avg_sales_without, ROUND((AVG(sales_with_display) - AVG(sales_without_display)) * 100.0 / AVG(sales_without_display), 0) as uplift_percentage FROM festival_performance_history WHERE festival = "Holi" AND year >= YEAR(CURRENT_DATE) - 2 GROUP BY territory',
-          thinking: 'Historical data shows outlets with festival displays have 34% sales uplift during 2-week festival window. Last Holi: outlets without displays lost Rs 92L potential revenue across Mumbai. At current 62% coverage, we\'re leaving Rs 88L on the table.',
-          nextAgent: 'Recommendation Engine'
+          query: 'SELECT territory, distributor_id, AVG(festival_sku_order_frequency) as order_freq, trend_vs_lysm FROM distributor_ordering_patterns WHERE sku_category = "festival" AND region = "Mumbai" GROUP BY territory',
+          thinking: 'Festival SKU order frequency from distributors at 2 times per week vs target of 2-3 times. This ordering rhythm gap drives the distribution shortfall. Top territories maintain 2.3-2-3 times frequency, lagging territories at 1.5-2 times.',
+          nextAgent: 'Distribution Agent'
+        },
+        {
+          timestamp: '11:26 AM',
+          agent: 'Distribution Agent',
+          action: 'Analyzing historical festival period performance correlation',
+          database: 'Sales Analytics DB',
+          query: 'SELECT territory, festival_distribution_percentage, sales_uplift_percentage, revenue_impact FROM festival_performance_history WHERE festival = "Holi" AND year >= YEAR(CURRENT_DATE) - 2 GROUP BY territory',
+          thinking: 'Historical correlation shows 88%+ festival SKU distribution drives 34% volume uplift during 2-week festival window. Last Holi: territories below 75% distribution lost Rs 92L across Mumbai region. Current 72% distribution projects Rs 88L opportunity gap.',
+          nextAgent: 'Analytics Engine'
         },
         {
           timestamp: '11:28 AM',
-          agent: 'Recommendation Engine',
-          action: 'Building emergency action plan with resource allocation',
+          agent: 'Analytics Engine',
+          action: 'Quantifying distribution acceleration requirement',
           database: 'Analytics DB',
-          query: 'SELECT territory, gap_outlets, recommended_additional_merchandisers, deployment_duration_days, deployment_cost, potential_revenue_protection FROM festival_acceleration_plan WHERE region = "Mumbai" AND festival = "Holi 2026"',
-          thinking: 'Western suburbs (Pradeep) most critical - needs immediate attention. Root cause: Shah Trading distributor onboarding consumed ASM bandwidth, festival prep got deprioritized. Emergency action: Deploy 8 additional merchandisers to Western suburbs for 10 days. Weekend blitz across all territories. Cost Rs 5L, protects Rs 88L revenue. 17.6x ROI.',
+          query: 'SELECT territory, current_distribution, target_distribution, unbilled_outlets, required_order_frequency_increase, revenue_protection FROM festival_gap_analysis WHERE region = "Mumbai" AND festival = "Holi 2026"',
+          thinking: 'Achieving 88% distribution requires converting 615 unbilled outlets and increasing distributor order frequency from 2 times to 2-3 times per week in Western and Central territories. This protects Rs 88L festival window revenue opportunity.',
           nextAgent: null
         }
       ],
       whatIfScenarios: [
-        'What if we focus only on top 500 high-volume outlets?',
-        'Should we extend deadline and accept lower coverage?',
-        'Can we borrow merchandisers from Pune for 1 week?',
-        'What if we incentivize distributors to do self-installation?'
+        'What if festival SKU distribution remains at 72% through festival period?',
+        'How does distributor order frequency impact festival SKU reach?',
+        'What is the revenue correlation between distribution % and festival uplift?',
+        'Would prioritizing Western and Central territories yield optimal ROI?'
       ]
     }
   ];
@@ -326,23 +314,23 @@ export default function MorrieGTDashboard() {
       name: 'Rahul Verma',
       territory: 'Mumbai GT',
       achievement: 76,
-      outlets: { total: 890, active: 605, productive: 485 },
+      outlets: { total: 890, active: 825, productive: 685 },
       coverage: 68,
-      premiumMix: 28,
+      mustSellMix: 28,
       status: 'critical',
       trend: [82, 79, 73, 68],
-      topIssue: 'Distribution gap and premium mix below potential',
+      topIssue: 'Distribution gap and must-sell mix below potential',
       distributors: [
         {
           name: 'Sagar Distributors',
           territory: 'Andheri West & Bandra',
           monthlyVolume: '₹1.4Cr',
-          outlets: { total: 285, active: 178, productive: 142 },
-          orderFrequency: '2.2x weekly',
+          outlets: { total: 285, active: 265, productive: 218 },
+          orderFrequency: '2 times per week',
           achievement: 62,
           status: 'critical',
           metrics: {
-            onTimeDelivery: '72%',
+            mandateCompliance: '78%',
             stockOnHand: '1,850 cases',
             returns: '3.1%'
           },
@@ -350,26 +338,38 @@ export default function MorrieGTDashboard() {
             { 
               name: 'Ramesh Patil', 
               location: 'Andheri West',
-              achievement: 58,
-              outlets: { active: 78, target: 95, lost: 17, coverage: '82%' },
-              productivity: { callsPerDay: 11, ordersPerDay: 5, linesPerOrder: 14 },
-              performanceDrivers: { distribution: -28, mandays: -35, dropSize: -12 }
+              salesActual: '₹6.8L',
+              salesTarget: '₹11.2L',
+              volumeActual: '1,840 cases',
+              volumeTarget: '3,150 cases',
+              achievement: 61,
+              outlets: { active: 78, target: 95, notBilledLast30Days: 17, coverage: '82%' },
+              productivity: { callsPerDay: 11, ordersPerDay: 5, linesPerOrder: 5 },
+              performanceDrivers: { distribution: -28, mandays: -35, avgOrderValue: -12 }
             },
             { 
               name: 'Sunil Kumar', 
               location: 'Bandra West',
-              achievement: 64,
-              outlets: { active: 71, target: 83, lost: 12, coverage: '86%' },
-              productivity: { callsPerDay: 13, ordersPerDay: 6, linesPerOrder: 16 },
-              performanceDrivers: { distribution: -22, mandays: -28, dropSize: -8 }
+              salesActual: '₹8.2L',
+              salesTarget: '₹12.4L',
+              volumeActual: '2,280 cases',
+              volumeTarget: '3,420 cases',
+              achievement: 66,
+              outlets: { active: 71, target: 83, notBilledLast30Days: 12, coverage: '86%' },
+              productivity: { callsPerDay: 13, ordersPerDay: 6, linesPerOrder: 6 },
+              performanceDrivers: { distribution: -22, mandays: -28, avgOrderValue: -8 }
             },
             { 
               name: 'Deepak Rane', 
               location: 'Andheri East',
-              achievement: 63,
-              outlets: { active: 89, target: 107, lost: 18, coverage: '83%' },
-              productivity: { callsPerDay: 12, ordersPerDay: 6, linesPerOrder: 15 },
-              performanceDrivers: { distribution: -25, mandays: -32, dropSize: -10 }
+              salesActual: '₹7.6L',
+              salesTarget: '₹12.8L',
+              volumeActual: '2,050 cases',
+              volumeTarget: '3,480 cases',
+              achievement: 59,
+              outlets: { active: 89, target: 107, notBilledLast30Days: 18, coverage: '83%' },
+              productivity: { callsPerDay: 12, ordersPerDay: 6, linesPerOrder: 5 },
+              performanceDrivers: { distribution: -25, mandays: -32, avgOrderValue: -10 }
             }
           ]
         },
@@ -378,38 +378,68 @@ export default function MorrieGTDashboard() {
           territory: 'Borivali & Kandivali',
           monthlyVolume: '₹1.4Cr',
           outlets: { total: 320, active: 245, productive: 198 },
-          orderFrequency: '2.6x weekly',
+          orderFrequency: '3 times per week',
           achievement: 74,
           status: 'warning',
           metrics: {
-            onTimeDelivery: '81%',
+            mandateCompliance: '92%',
             stockOnHand: '2,100 cases',
             returns: '2.2%'
           },
           tsrs: [
             { 
               name: 'Prakash Mane', 
+ 
               location: 'Borivali West',
+ 
+              salesActual: '₹9.1L',
+ 
+              salesTarget: '₹12.0L',
+ 
+              volumeActual: '2,527 cases',
+ 
+              volumeTarget: '3,333 cases',
+ 
               achievement: 76,
-              outlets: { active: 96, target: 108, lost: 12, coverage: '89%' },
-              productivity: { callsPerDay: 15, ordersPerDay: 8, linesPerOrder: 19 },
-              performanceDrivers: { distribution: -12, mandays: -18, dropSize: -6 }
+              outlets: { active: 96, target: 108, notBilledLast30Days: 12, coverage: '89%' },
+              productivity: { callsPerDay: 15, ordersPerDay: 8, linesPerOrder: 7 },
+              performanceDrivers: { distribution: -12, mandays: -18, avgOrderValue: -6 }
             },
             { 
               name: 'Vijay Shinde', 
+ 
               location: 'Kandivali East',
+ 
+              salesActual: '₹10.2L',
+ 
+              salesTarget: '₹14.0L',
+ 
+              volumeActual: '2,833 cases',
+ 
+              volumeTarget: '3,888 cases',
+ 
               achievement: 73,
-              outlets: { active: 91, target: 105, lost: 14, coverage: '87%' },
-              productivity: { callsPerDay: 14, ordersPerDay: 7, linesPerOrder: 18 },
-              performanceDrivers: { distribution: -15, mandays: -22, dropSize: -7 }
+              outlets: { active: 91, target: 105, notBilledLast30Days: 14, coverage: '87%' },
+              productivity: { callsPerDay: 14, ordersPerDay: 7, linesPerOrder: 7 },
+              performanceDrivers: { distribution: -15, mandays: -22, avgOrderValue: -7 }
             },
             { 
               name: 'Rajesh More', 
+ 
               location: 'Borivali East',
+ 
+              salesActual: '₹9.5L',
+ 
+              salesTarget: '₹13.0L',
+ 
+              volumeActual: '2,638 cases',
+ 
+              volumeTarget: '3,611 cases',
+ 
               achievement: 73,
-              outlets: { active: 93, target: 107, lost: 14, coverage: '87%' },
-              productivity: { callsPerDay: 14, ordersPerDay: 7, linesPerOrder: 17 },
-              performanceDrivers: { distribution: -14, mandays: -20, dropSize: -8 }
+              outlets: { active: 93, target: 107, notBilledLast30Days: 14, coverage: '87%' },
+              productivity: { callsPerDay: 14, ordersPerDay: 7, linesPerOrder: 6 },
+              performanceDrivers: { distribution: -14, mandays: -20, avgOrderValue: -8 }
             }
           ]
         },
@@ -417,31 +447,51 @@ export default function MorrieGTDashboard() {
           name: 'Reliable Traders',
           territory: 'Malad & Goregaon',
           monthlyVolume: '₹1.0Cr',
-          outlets: { total: 285, active: 182, productive: 145 },
-          orderFrequency: '2.5x weekly',
+          outlets: { total: 285, active: 268, productive: 225 },
+          orderFrequency: '2-3 times per week',
           achievement: 68,
           status: 'warning',
           metrics: {
-            onTimeDelivery: '78%',
+            mandateCompliance: '85%',
             stockOnHand: '1,650 cases',
             returns: '2.6%'
           },
           tsrs: [
             { 
               name: 'Anil Pawar', 
+ 
               location: 'Malad West',
+ 
+              salesActual: '₹9.1L',
+ 
+              salesTarget: '₹13.0L',
+ 
+              volumeActual: '2,527 cases',
+ 
+              volumeTarget: '3,611 cases',
+ 
               achievement: 70,
-              outlets: { active: 82, target: 96, lost: 14, coverage: '85%' },
-              productivity: { callsPerDay: 13, ordersPerDay: 6, linesPerOrder: 16 },
-              performanceDrivers: { distribution: -18, mandays: -25, dropSize: -9 }
+              outlets: { active: 82, target: 96, notBilledLast30Days: 14, coverage: '85%' },
+              productivity: { callsPerDay: 13, ordersPerDay: 6, linesPerOrder: 6 },
+              performanceDrivers: { distribution: -18, mandays: -25, avgOrderValue: -9 }
             },
             { 
               name: 'Santosh Jadhav', 
+ 
               location: 'Goregaon West',
+ 
+              salesActual: '₹7.9L',
+ 
+              salesTarget: '₹12.0L',
+ 
+              volumeActual: '2,194 cases',
+ 
+              volumeTarget: '3,333 cases',
+ 
               achievement: 66,
-              outlets: { active: 75, target: 89, lost: 14, coverage: '84%' },
-              productivity: { callsPerDay: 12, ordersPerDay: 5, linesPerOrder: 15 },
-              performanceDrivers: { distribution: -20, mandays: -28, dropSize: -11 }
+              outlets: { active: 75, target: 89, notBilledLast30Days: 14, coverage: '84%' },
+              productivity: { callsPerDay: 12, ordersPerDay: 5, linesPerOrder: 5 },
+              performanceDrivers: { distribution: -20, mandays: -28, avgOrderValue: -11 }
             }
           ]
         }
@@ -453,48 +503,78 @@ export default function MorrieGTDashboard() {
       achievement: 88,
       outlets: { total: 950, active: 865, productive: 720 },
       coverage: 91,
-      premiumMix: 35,
+      mustSellMix: 35,
       status: 'warning',
       trend: [92, 91, 89, 88],
-      topIssue: 'Hadapsar wholesale cluster down 12%',
+      topIssue: 'Hadapsar wholesale cluster down 12% vs LM',
       distributors: [
         {
           name: 'Apex Trading Co',
           territory: 'Pune Central & Deccan',
           monthlyVolume: '₹1.8Cr',
           outlets: { total: 380, active: 342, productive: 298 },
-          orderFrequency: '3.2x weekly',
+          orderFrequency: '3 times per week',
           achievement: 92,
           status: 'healthy',
           metrics: {
-            onTimeDelivery: '91%',
+            mandateCompliance: '94%',
             stockOnHand: '2,850 cases',
             returns: '1.3%'
           },
           tsrs: [
             { 
               name: 'Manoj Deshmukh', 
+ 
               location: 'Deccan',
+ 
+              salesActual: '₹11.3L',
+ 
+              salesTarget: '₹12.0L',
+ 
+              volumeActual: '3,138 cases',
+ 
+              volumeTarget: '3,333 cases',
+ 
               achievement: 94,
-              outlets: { active: 119, target: 125, lost: 6, coverage: '95%' },
-              productivity: { callsPerDay: 17, ordersPerDay: 10, linesPerOrder: 21 },
-              performanceDrivers: { distribution: -3, mandays: -5, dropSize: -2 }
+              outlets: { active: 119, target: 125, notBilledLast30Days: 6, coverage: '95%' },
+              productivity: { callsPerDay: 17, ordersPerDay: 10, linesPerOrder: 7 },
+              performanceDrivers: { distribution: -3, mandays: -5, avgOrderValue: -2 }
             },
             { 
               name: 'Sachin Bhosale', 
+ 
               location: 'Pune Central',
+ 
+              salesActual: '₹12.7L',
+ 
+              salesTarget: '₹14.0L',
+ 
+              volumeActual: '3,527 cases',
+ 
+              volumeTarget: '3,888 cases',
+ 
               achievement: 91,
-              outlets: { active: 112, target: 118, lost: 6, coverage: '95%' },
-              productivity: { callsPerDay: 16, ordersPerDay: 9, linesPerOrder: 20 },
-              performanceDrivers: { distribution: -4, mandays: -6, dropSize: -3 }
+              outlets: { active: 112, target: 118, notBilledLast30Days: 6, coverage: '95%' },
+              productivity: { callsPerDay: 16, ordersPerDay: 9, linesPerOrder: 7 },
+              performanceDrivers: { distribution: -4, mandays: -6, avgOrderValue: -3 }
             },
             { 
               name: 'Vaibhav Kulkarni', 
+ 
               location: 'Shivaji Nagar',
+ 
+              salesActual: '₹12.9L',
+ 
+              salesTarget: '₹14.0L',
+ 
+              volumeActual: '3,583 cases',
+ 
+              volumeTarget: '3,888 cases',
+ 
               achievement: 92,
-              outlets: { active: 130, target: 137, lost: 7, coverage: '95%' },
-              productivity: { callsPerDay: 18, ordersPerDay: 10, linesPerOrder: 22 },
-              performanceDrivers: { distribution: -4, mandays: -6, dropSize: -2 }
+              outlets: { active: 130, target: 137, notBilledLast30Days: 7, coverage: '95%' },
+              productivity: { callsPerDay: 18, ordersPerDay: 10, linesPerOrder: 7 },
+              performanceDrivers: { distribution: -4, mandays: -6, avgOrderValue: -2 }
             }
           ]
         },
@@ -503,38 +583,68 @@ export default function MorrieGTDashboard() {
           territory: 'Hadapsar & Kharadi',
           monthlyVolume: '₹1.4Cr',
           outlets: { total: 295, active: 268, productive: 218 },
-          orderFrequency: '2.8x weekly',
+          orderFrequency: '3 times per week',
           achievement: 78,
           status: 'warning',
           metrics: {
-            onTimeDelivery: '86%',
+            mandateCompliance: '88%',
             stockOnHand: '2,200 cases',
             returns: '1.8%'
           },
           tsrs: [
             { 
               name: 'Ganesh Pawar', 
+ 
               location: 'Hadapsar',
+ 
+              salesActual: '₹10.5L',
+ 
+              salesTarget: '₹14.0L',
+ 
+              volumeActual: '2,916 cases',
+ 
+              volumeTarget: '3,888 cases',
+ 
               achievement: 75,
-              outlets: { active: 78, target: 92, lost: 14, coverage: '85%' },
-              productivity: { callsPerDay: 13, ordersPerDay: 7, linesPerOrder: 17 },
-              performanceDrivers: { distribution: -16, mandays: -22, dropSize: -9 }
+              outlets: { active: 78, target: 92, notBilledLast30Days: 14, coverage: '85%' },
+              productivity: { callsPerDay: 13, ordersPerDay: 7, linesPerOrder: 6 },
+              performanceDrivers: { distribution: -16, mandays: -22, avgOrderValue: -9 }
             },
             { 
               name: 'Kiran Shinde', 
+ 
               location: 'Kharadi',
+ 
+              salesActual: '₹10.4L',
+ 
+              salesTarget: '₹13.0L',
+ 
+              volumeActual: '2,888 cases',
+ 
+              volumeTarget: '3,611 cases',
+ 
               achievement: 80,
-              outlets: { active: 82, target: 88, lost: 6, coverage: '93%' },
-              productivity: { callsPerDay: 15, ordersPerDay: 8, linesPerOrder: 18 },
-              performanceDrivers: { distribution: -10, mandays: -14, dropSize: -6 }
+              outlets: { active: 82, target: 88, notBilledLast30Days: 6, coverage: '93%' },
+              productivity: { callsPerDay: 15, ordersPerDay: 8, linesPerOrder: 7 },
+              performanceDrivers: { distribution: -10, mandays: -14, avgOrderValue: -6 }
             },
             { 
               name: 'Nitin Jagtap', 
+ 
               location: 'Hadapsar East',
+ 
+              salesActual: '₹11.1L',
+ 
+              salesTarget: '₹14.0L',
+ 
+              volumeActual: '3,083 cases',
+ 
+              volumeTarget: '3,888 cases',
+ 
               achievement: 79,
-              outlets: { active: 81, target: 88, lost: 7, coverage: '92%' },
-              productivity: { callsPerDay: 14, ordersPerDay: 7, linesPerOrder: 18 },
-              performanceDrivers: { distribution: -12, mandays: -16, dropSize: -7 }
+              outlets: { active: 81, target: 88, notBilledLast30Days: 7, coverage: '92%' },
+              productivity: { callsPerDay: 14, ordersPerDay: 7, linesPerOrder: 7 },
+              performanceDrivers: { distribution: -12, mandays: -16, avgOrderValue: -7 }
             }
           ]
         },
@@ -543,30 +653,50 @@ export default function MorrieGTDashboard() {
           territory: 'Wakad & Hinjewadi',
           monthlyVolume: '₹1.0Cr',
           outlets: { total: 275, active: 255, productive: 204 },
-          orderFrequency: '3.1x weekly',
+          orderFrequency: '3 times per week',
           achievement: 89,
           status: 'healthy',
           metrics: {
-            onTimeDelivery: '89%',
+            mandateCompliance: '76%',
             stockOnHand: '1,950 cases',
             returns: '1.4%'
           },
           tsrs: [
             { 
               name: 'Sanjay Gaikwad', 
+ 
               location: 'Wakad',
+ 
+              salesActual: '₹12.6L',
+ 
+              salesTarget: '₹14.0L',
+ 
+              volumeActual: '3,500 cases',
+ 
+              volumeTarget: '3,888 cases',
+ 
               achievement: 90,
-              outlets: { active: 130, target: 138, lost: 8, coverage: '94%' },
-              productivity: { callsPerDay: 16, ordersPerDay: 9, linesPerOrder: 20 },
-              performanceDrivers: { distribution: -6, mandays: -10, dropSize: -4 }
+              outlets: { active: 130, target: 138, notBilledLast30Days: 8, coverage: '94%' },
+              productivity: { callsPerDay: 16, ordersPerDay: 9, linesPerOrder: 7 },
+              performanceDrivers: { distribution: -6, mandays: -10, avgOrderValue: -4 }
             },
             { 
               name: 'Amit Shirke', 
+ 
               location: 'Hinjewadi',
+ 
+              salesActual: '₹12.3L',
+ 
+              salesTarget: '₹14.0L',
+ 
+              volumeActual: '3,416 cases',
+ 
+              volumeTarget: '3,888 cases',
+ 
               achievement: 88,
-              outlets: { active: 109, target: 117, lost: 8, coverage: '93%' },
-              productivity: { callsPerDay: 15, ordersPerDay: 8, linesPerOrder: 19 },
-              performanceDrivers: { distribution: -8, mandays: -12, dropSize: -5 }
+              outlets: { active: 109, target: 117, notBilledLast30Days: 8, coverage: '93%' },
+              productivity: { callsPerDay: 15, ordersPerDay: 8, linesPerOrder: 7 },
+              performanceDrivers: { distribution: -8, mandays: -12, avgOrderValue: -5 }
             }
           ]
         }
@@ -578,7 +708,7 @@ export default function MorrieGTDashboard() {
       achievement: 105,
       outlets: { total: 780, active: 780, productive: 685 },
       coverage: 100,
-      premiumMix: 52,
+      mustSellMix: 52,
       status: 'healthy',
       trend: [99, 102, 104, 105],
       topIssue: 'Benchmark performance - replicate practices',
@@ -588,11 +718,11 @@ export default function MorrieGTDashboard() {
           territory: 'Thane West',
           monthlyVolume: '₹1.5Cr',
           outlets: { total: 410, active: 410, productive: 362 },
-          orderFrequency: '3.5x weekly',
+          orderFrequency: '4 times per week',
           achievement: 108,
           status: 'healthy',
           metrics: {
-            onTimeDelivery: '97%',
+            mandateCompliance: '91%',
             stockOnHand: '1,450 cases',
             returns: '0.7%'
           },
@@ -607,11 +737,11 @@ export default function MorrieGTDashboard() {
           territory: 'Thane East',
           monthlyVolume: '₹1.1Cr',
           outlets: { total: 370, active: 370, productive: 323 },
-          orderFrequency: '3.3x weekly',
+          orderFrequency: '3 times per week',
           achievement: 102,
           status: 'healthy',
           metrics: {
-            onTimeDelivery: '95%',
+            mandateCompliance: '83%',
             stockOnHand: '1,680 cases',
             returns: '0.9%'
           },
@@ -629,7 +759,7 @@ export default function MorrieGTDashboard() {
       achievement: 90,
       outlets: { total: 620, active: 595, productive: 510 },
       coverage: 96,
-      premiumMix: 33,
+      mustSellMix: 33,
       status: 'healthy',
       trend: [89, 90, 90, 90],
       topIssue: 'Stable performance, no critical issues',
@@ -639,11 +769,11 @@ export default function MorrieGTDashboard() {
           territory: 'Vashi & Nerul',
           monthlyVolume: '₹1.3Cr',
           outlets: { total: 345, active: 332, productive: 285 },
-          orderFrequency: '3.1x weekly',
+          orderFrequency: '3 times per week',
           achievement: 91,
           status: 'healthy',
           metrics: {
-            onTimeDelivery: '90%',
+            mandateCompliance: '96%',
             stockOnHand: '2,100 cases',
             returns: '1.1%'
           },
@@ -658,11 +788,11 @@ export default function MorrieGTDashboard() {
           territory: 'Panvel & Kharghar',
           monthlyVolume: '₹0.8Cr',
           outlets: { total: 275, active: 263, productive: 225 },
-          orderFrequency: '3.3x weekly',
+          orderFrequency: '3 times per week',
           achievement: 89,
           status: 'healthy',
           metrics: {
-            onTimeDelivery: '92%',
+            mandateCompliance: '87%',
             stockOnHand: '1,550 cases',
             returns: '1.3%'
           },
@@ -818,10 +948,10 @@ export default function MorrieGTDashboard() {
           <>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '32px' }}>
               {[
-                { label: 'Mumbai Achievement', value: '89%', change: '-11%', trend: 'down', icon: Target, color: C.sage },
-                { label: 'Mumbai Active Outlets', value: '1,850', sub: 'of 2,055 total', icon: MapPin, color: C.sage },
-                { label: 'Mumbai Avg Coverage', value: '88%', change: '-6%', trend: 'down', icon: Activity, color: C.lightGrey },
-                { label: 'Mumbai Premium Mix', value: '32%', sub: 'vs 52% Thane', icon: Package, color: C.sage }
+                { label: 'Mumbai Achievement', value: '89%', change: '-11% vs LYSM', trend: 'down', icon: Target, color: C.sage },
+                { label: 'Active Outlets (L90D)', value: '1,850', sub: 'of 2,055 total', icon: MapPin, color: C.sage },
+                { label: 'Mumbai Avg Coverage', value: '88%', change: '-6% vs LYSM', trend: 'down', icon: Activity, color: C.lightGrey },
+                { label: 'Mumbai Must-sell Mix', value: '32%', sub: 'vs 52% Thane', icon: Package, color: C.sage }
               ].map((metric, i) => (
                 <div key={i} style={{ padding: '20px', border: `1px solid ${C.cream}`, borderRadius: '4px', backgroundColor: C.white }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
@@ -980,11 +1110,7 @@ export default function MorrieGTDashboard() {
                         <div style={{ fontSize: '14px', fontWeight: '600', color: C.green, marginBottom: '12px' }}>
                           {insight.recommendation.action}
                         </div>
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginTop: '12px' }}>
-                          <div>
-                            <div style={{ fontSize: '10px', color: C.lightGrey, marginBottom: '4px' }}>Cost</div>
-                            <div style={{ fontSize: '14px', fontWeight: '600', color: C.darkGrey }}>{insight.recommendation.cost}</div>
-                          </div>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', marginTop: '12px' }}>
                           <div>
                             <div style={{ fontSize: '10px', color: C.lightGrey, marginBottom: '4px' }}>Return</div>
                             <div style={{ fontSize: '14px', fontWeight: '600', color: C.sage }}>{insight.recommendation.return}</div>
@@ -1119,8 +1245,8 @@ export default function MorrieGTDashboard() {
                     {[
                       { label: 'Achievement', value: `${territory.achievement}%`, good: territory.achievement >= 85 },
                       { label: 'Coverage', value: `${territory.coverage}%`, good: territory.coverage >= 90 },
-                      { label: 'Premium Mix', value: `${territory.premiumMix}%`, good: territory.premiumMix >= 42 },
-                      { label: 'Active Outlets', value: `${territory.outlets.active} of ${territory.outlets.total}`, good: true }
+                      { label: 'Must-sell Mix', value: `${territory.mustSellMix}%`, good: territory.mustSellMix >= 42 },
+                      { label: 'Active (billed L90D)', value: `${territory.outlets.active} of ${territory.outlets.total}`, good: true }
                     ].map((metric, i) => (
                       <div key={i} style={{ padding: '12px', backgroundColor: C.white, borderRadius: '4px' }}>
                         <div style={{ fontSize: '10px', fontWeight: '500', color: C.lightGrey, marginBottom: '6px', textTransform: 'uppercase' }}>
@@ -1166,8 +1292,8 @@ export default function MorrieGTDashboard() {
                           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginBottom: '16px' }}>
                             {[
                               { label: 'Order Frequency', value: distributor.orderFrequency },
-                              { label: 'Active Outlets', value: `${distributor.outlets.active} of ${distributor.outlets.total}` },
-                              { label: 'Productive', value: `${distributor.outlets.productive} outlets` }
+                              { label: 'Active (billed L90D)', value: `${distributor.outlets.active} of ${distributor.outlets.total}` },
+                              { label: 'Productive (MTD)', value: `${distributor.outlets.productive} outlets` }
                             ].map((metric, i) => (
                               <div key={i} style={{ padding: '12px', backgroundColor: C.white, borderRadius: '4px', border: `1px solid ${C.cream}` }}>
                                 <div style={{ fontSize: '10px', fontWeight: '500', color: C.lightGrey, marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
@@ -1182,7 +1308,7 @@ export default function MorrieGTDashboard() {
 
                           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
                             {[
-                              { label: 'On-time Delivery', value: distributor.metrics.onTimeDelivery },
+                              { label: 'Mandate Compliance', value: distributor.metrics.mandateCompliance },
                               { label: 'Stock On Hand', value: distributor.metrics.stockOnHand },
                               { label: 'Returns', value: distributor.metrics.returns }
                             ].map((metric, i) => (
@@ -1205,17 +1331,60 @@ export default function MorrieGTDashboard() {
                               </div>
                               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
                                 {distributor.tsrs.map((tsr, tsrIdx) => (
-                                  <div key={tsrIdx} style={{ padding: '18px', backgroundColor: C.white, border: `1px solid ${C.cream}`, borderRadius: '6px' }}>
-                                    {/* Header with name and achievement */}
-                                    <div style={{ marginBottom: '14px' }}>
-                                      <div style={{ fontSize: '15px', fontWeight: '600', color: C.green, marginBottom: '2px' }}>
+                                  <div key={tsrIdx} style={{ padding: '20px', backgroundColor: C.white, border: `1px solid ${C.cream}`, borderRadius: '6px' }}>
+                                    
+                                    {/* Header: Name and Location */}
+                                    <div style={{ marginBottom: '12px' }}>
+                                      <div style={{ fontSize: '15px', fontWeight: '600', color: C.darkGreen, marginBottom: '2px' }}>
                                         {tsr.name}
                                       </div>
                                       <div style={{ fontSize: '11px', color: C.lightGrey }}>
                                         {tsr.location}
                                       </div>
-                                      <div style={{ fontSize: '32px', fontWeight: '300', color: tsr.achievement >= 85 ? C.darkGreen : tsr.achievement >= 70 ? '#D97706' : '#DC2626', marginTop: '8px' }}>
-                                        {tsr.achievement}%
+                                    </div>
+
+                                    {/* Sales Achievement - Primary Metric */}
+                                    <div style={{ marginBottom: '16px', padding: '14px', backgroundColor: C.offWhite, borderRadius: '6px', border: `1px solid ${C.cream}` }}>
+                                      <div style={{ fontSize: '10px', fontWeight: '600', color: C.lightGrey, marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                        Sales Achievement
+                                      </div>
+                                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                                        <div>
+                                          <div style={{ fontSize: '22px', fontWeight: '600', color: tsr.achievement >= 85 ? C.darkGreen : tsr.achievement >= 70 ? '#D97706' : '#DC2626' }}>
+                                            {tsr.salesActual}
+                                          </div>
+                                          <div style={{ fontSize: '11px', color: C.lightGrey }}>of {tsr.salesTarget} target</div>
+                                        </div>
+                                        <div style={{ fontSize: '28px', fontWeight: '300', color: tsr.achievement >= 85 ? C.darkGreen : tsr.achievement >= 70 ? '#D97706' : '#DC2626' }}>
+                                          {tsr.achievement}%
+                                        </div>
+                                      </div>
+                                      <div style={{ fontSize: '11px', color: C.darkGrey, paddingTop: '8px', borderTop: `1px solid ${C.cream}` }}>
+                                        Volume: {tsr.volumeActual} / {tsr.volumeTarget}
+                                      </div>
+                                    </div>
+
+                                    {/* Performance Drivers - What's affecting achievement */}
+                                    <div style={{ marginBottom: '14px' }}>
+                                      <div style={{ fontSize: '10px', fontWeight: '600', color: C.lightGrey, marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                        Performance Drivers (vs Last Month)
+                                      </div>
+                                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
+                                        <div style={{ padding: '8px', backgroundColor: `${C.sage}08`, borderRadius: '4px' }}>
+                                          <div style={{ fontSize: '9px', color: C.lightGrey, marginBottom: '2px', textTransform: 'uppercase' }}>Distribution</div>
+                                          <div style={{ fontSize: '14px', fontWeight: '600', color: '#DC2626' }}>{tsr.performanceDrivers.distribution}%</div>
+                                          <div style={{ fontSize: '8px', color: C.lightGrey, marginTop: '2px' }}>vs LM</div>
+                                        </div>
+                                        <div style={{ padding: '8px', backgroundColor: `${C.sage}08`, borderRadius: '4px' }}>
+                                          <div style={{ fontSize: '9px', color: C.lightGrey, marginBottom: '2px', textTransform: 'uppercase' }}>Mandays</div>
+                                          <div style={{ fontSize: '14px', fontWeight: '600', color: '#DC2626' }}>{tsr.performanceDrivers.mandays}%</div>
+                                          <div style={{ fontSize: '8px', color: C.lightGrey, marginTop: '2px' }}>vs LM</div>
+                                        </div>
+                                        <div style={{ padding: '8px', backgroundColor: `${C.sage}08`, borderRadius: '4px' }}>
+                                          <div style={{ fontSize: '9px', color: C.lightGrey, marginBottom: '2px', textTransform: 'uppercase' }}>Avg Order Value</div>
+                                          <div style={{ fontSize: '14px', fontWeight: '600', color: '#DC2626' }}>{tsr.performanceDrivers.avgOrderValue}%</div>
+                                          <div style={{ fontSize: '8px', color: C.lightGrey, marginTop: '2px' }}>vs LM</div>
+                                        </div>
                                       </div>
                                     </div>
 
@@ -1226,20 +1395,20 @@ export default function MorrieGTDashboard() {
                                       </div>
                                       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
                                         <div>
-                                          <div style={{ fontSize: '10px', color: C.lightGrey }}>Active: {tsr.outlets.active}</div>
+                                          <div style={{ fontSize: '10px', color: C.lightGrey }}>Billed this month: {tsr.outlets.active}</div>
                                         </div>
                                         <div style={{ textAlign: 'right' }}>
                                           <div style={{ fontSize: '10px', color: C.lightGrey }}>Target: {tsr.outlets.target}</div>
                                         </div>
                                       </div>
                                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <div style={{ fontSize: '11px', color: '#DC2626' }}>Lost: {tsr.outlets.lost}</div>
+                                        <div style={{ fontSize: '11px', color: '#DC2626' }}>Not billed in 30 days: {tsr.outlets.notBilledLast30Days}</div>
                                         <div style={{ fontSize: '13px', fontWeight: '600', color: C.darkGreen }}>{tsr.outlets.coverage} coverage</div>
                                       </div>
                                     </div>
 
                                     {/* Productivity */}
-                                    <div style={{ marginBottom: '14px' }}>
+                                    <div>
                                       <div style={{ fontSize: '10px', fontWeight: '600', color: C.lightGrey, marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                                         Productivity
                                       </div>
@@ -1255,27 +1424,6 @@ export default function MorrieGTDashboard() {
                                         <div>
                                           <div style={{ fontSize: '9px', color: C.lightGrey, marginBottom: '2px' }}>Lines/Order</div>
                                           <div style={{ fontSize: '16px', fontWeight: '600', color: C.darkGrey }}>{tsr.productivity.linesPerOrder}</div>
-                                        </div>
-                                      </div>
-                                    </div>
-
-                                    {/* Performance Drivers */}
-                                    <div>
-                                      <div style={{ fontSize: '10px', fontWeight: '600', color: C.lightGrey, marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                                        Performance Drivers
-                                      </div>
-                                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
-                                        <div style={{ padding: '8px', backgroundColor: `${C.sage}08`, borderRadius: '4px' }}>
-                                          <div style={{ fontSize: '9px', color: C.lightGrey, marginBottom: '2px', textTransform: 'uppercase' }}>Distribution</div>
-                                          <div style={{ fontSize: '14px', fontWeight: '600', color: '#DC2626' }}>{tsr.performanceDrivers.distribution}%</div>
-                                        </div>
-                                        <div style={{ padding: '8px', backgroundColor: `${C.sage}08`, borderRadius: '4px' }}>
-                                          <div style={{ fontSize: '9px', color: C.lightGrey, marginBottom: '2px', textTransform: 'uppercase' }}>Mandays</div>
-                                          <div style={{ fontSize: '14px', fontWeight: '600', color: '#DC2626' }}>{tsr.performanceDrivers.mandays}%</div>
-                                        </div>
-                                        <div style={{ padding: '8px', backgroundColor: `${C.sage}08`, borderRadius: '4px' }}>
-                                          <div style={{ fontSize: '9px', color: C.lightGrey, marginBottom: '2px', textTransform: 'uppercase' }}>Drop Size</div>
-                                          <div style={{ fontSize: '14px', fontWeight: '600', color: '#DC2626' }}>{tsr.performanceDrivers.dropSize}%</div>
                                         </div>
                                       </div>
                                     </div>
