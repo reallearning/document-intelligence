@@ -13,21 +13,84 @@ const label = { fontSize: 11, fontWeight: 600, letterSpacing: "0.08em", textTran
 const cardBase = { background: C.card, border: `1px solid ${C.border}` };
 
 // ═══════════════════════════════════════════════════════
-// PORTFOLIO KPIs
+// PORTFOLIO SUMMARY — Simple, direct
 // ═══════════════════════════════════════════════════════
-const portfolioKPIs = [
-  { label: "PORTFOLIO ACHIEVEMENT", value: "84%", delta: "−6% vs LYSM", negative: true },
-  { label: "BRANDS ON TRACK", value: "3 / 6", delta: "Eno, Crocin, Iodex behind", negative: true },
-  { label: "PRIORITY ACTIONS", value: "5", delta: "2 critical, 3 high" },
-  { label: "AVG NUMERIC DISTRIBUTION", value: "39%", delta: "−2pp vs last period", negative: true },
+const portfolioSummary = {
+  headline: "3 brands need attention this week",
+  bullets: [
+    { brand: "Eno", status: "pressure", text: "Losing to Gas-O-Fast in Rajasthan. New competitor ads visible on Meta." },
+    { brand: "Crocin", status: "pressure", text: "Pharmacy velocity dropping in UP West. ASMs hearing about competitor margins." },
+    { brand: "Sensodyne", status: "pressure", text: "New entrant Sensodent gaining in e-commerce. Pharmacy-first strategy is our moat." },
+    { brand: "Otrivin", status: "good", text: "Riding pollution demand in Delhi. Campaign extension recommended." },
+  ]
+};
+
+// ═══════════════════════════════════════════════════════
+// FUNNEL STAGES — Consumer journey metrics (our data only)
+// ═══════════════════════════════════════════════════════
+const funnelStages = [
+  {
+    id: "awareness",
+    name: "Awareness",
+    metrics: [
+      { label: "Share of Search", value: "42%", delta: "Flat", isGood: true },
+      { label: "Share of Voice", value: "38%", delta: "−1pp", isGood: false },
+    ],
+    prompts: [
+      { q: "Why is SOV down?", a: "Our media spend in North region was flat while Google Trends shows 'Gas-O-Fast' search volume in Rajasthan up 40% over the past 4 weeks. Meta Ad Library shows they've launched multiple new ads targeting Rajasthan since mid-January. We're likely losing share of voice to their regional push." },
+      { q: "What's Gas-O-Fast doing?", a: "From what we can observe:\n\n• Google Trends: 'Gas-O-Fast' searches in Rajasthan +40% (vs Eno flat)\n• Meta Ad Library: New ads visible since mid-January — creatives are in Hindi with regional messaging\n• Social mentions: r/india and regional subs showing organic mentions of Gas-O-Fast increasing\n\nField teams in Jaipur report seeing Gas-O-Fast visibility increasing at chemist counters." },
+      { q: "Break down by platform", a: "Our Share of Search by platform (Haleon data):\n\n• Google: 44% (Flat)\n• Amazon: 38% (−2pp) — we're seeing more competitor products in search results\n• Blinkit/Zepto: 41% (+1pp) — holding steady\n\nNote: Competitor SOV data is estimated based on search trends and ad library observations, not precise measurement." },
+    ],
+  },
+  {
+    id: "consideration",
+    name: "Consideration",
+    hasIssue: true,
+    metrics: [
+      { label: "Avg CTR", value: "1.8%", delta: "−0.2pp", isGood: false },
+      { label: "Search Rank", value: "#2", delta: "↓1", isGood: false },
+    ],
+    prompts: [
+      { q: "Why is CTR down?", a: "Our CTR decline is concentrated in Rajasthan (1.6% → 1.1%). This coincides with:\n\n• Increased competitor ad activity visible in Meta Ad Library\n• Google Trends showing rising search interest in Gas-O-Fast\n• Our own Amazon data showing Eno dropping from position #2 to #3 for 'antacid' searches in North region\n\nOtrivin CTR is actually up to 2.4% riding pollution-related demand." },
+      { q: "Where are we losing rank?", a: "Based on our Amazon Seller Central and Brand Analytics data:\n\n• Eno dropped from #2 to #3 for 'antacid' in North region\n• Competitor (likely Gas-O-Fast based on search trends) now appearing above us in sponsored results\n• Our organic rank holding\n\nWe can't see competitor bids or spend, but their increased visibility suggests active investment." },
+      { q: "Break down by region", a: "Our CTR by region (Haleon campaign data):\n\n• Delhi NCR: 2.1% (+0.2pp) — Otrivin driving this\n• Rajasthan: 1.1% (−0.5pp) — Eno pressure\n• UP West: 1.6% (−0.1pp) — Slight softness\n• UP East: 1.9% (+0.1pp) — Sensodyne gains\n• MP: 1.7% (Flat)\n\nRajasthan is the clear problem area, aligning with competitor activity signals." },
+    ],
+  },
+  {
+    id: "conversion",
+    name: "Conversion",
+    hasIssue: true,
+    metrics: [
+      { label: "Market Share", value: "58%", delta: "−0.8pp", isGood: false },
+      { label: "ROAS", value: "2.4x", delta: "+0.2x", isGood: true },
+    ],
+    prompts: [
+      { q: "Why is share down?", a: "Nielsen data shows portfolio share down 0.8pp, driven by:\n\n1. **Eno (−1.2pp in North)**: Correlates with competitor activity signals in Rajasthan. Our Jaipur primary sales down 28%.\n\n2. **Crocin (−0.6pp in UP West)**: Field teams report chemists mentioning competitor margin schemes. Not confirmed systematically, but multiple ASMs hearing similar feedback.\n\nOtrivin (+0.4pp) and Sensodyne (+0.8pp) partially offsetting." },
+      { q: "Break down by channel", a: "Our market share by channel (Nielsen + internal):\n\n• Pharmacy: 64% (−1pp) — hearing margin pressure anecdotally\n• GT: 48% (Flat)\n• E-comm: 52% (+2pp) — online growing\n• Q-comm: 58% (+4pp) — strong Otrivin growth\n\nPharmacy softness aligns with field reports about competitor trade schemes, though we don't have systematic data on competitor margins." },
+      { q: "What are ASMs hearing about Dolo?", a: "Field intel (not systematically verified):\n\n• 3 ASMs in UP West independently mentioned hearing about Dolo offering better chemist margins\n• Estimated gap mentioned: 5-6pp higher than our terms\n• Concentrated feedback from Lucknow and Kanpur\n\nThis is anecdotal but consistent pattern. IQVIA prescription data still shows Crocin leading in doctor prescriptions — suggests this is trade-driven, not consumer preference shift." },
+    ],
+  },
+  {
+    id: "repeat",
+    name: "Repeat & Sentiment",
+    metrics: [
+      { label: "R&R Score", value: "4.2★", delta: "Stable", isGood: true },
+      { label: "Repeat Rate", value: "34%", delta: "+2pp", isGood: true },
+    ],
+    prompts: [
+      { q: "Which brand has best repeat?", a: "Based on our e-commerce and loyalty data:\n\n• Sensodyne: 41% (+3pp) — pharmacy recommendation driving loyalty\n• Eno: 38% (+1pp) — sachets create habit\n• Crocin: 36% (+1pp) — stable\n• Otrivin: 32% (+2pp) — seasonal but growing\n\nSensodyne's pharmacy-first strategy appears to create stronger repeat behavior than GT-led distribution." },
+      { q: "R&R breakdown by platform", a: "Our R&R scores by platform (from our Brand Analytics):\n\n• Amazon: 4.3★ (+0.1)\n• Blinkit: 4.1★ (Flat)\n• Zepto: 4.2★ (+0.1)\n• 1mg: 4.4★ (+0.2)\n• Flipkart: 4.0★ (−0.1)\n\nNo major issues. Some Flipkart reviews mention delivery delays — not product related." },
+      { q: "Any sentiment issues?", a: "Social listening (BrandWatch) shows:\n\n• No negative sentiment spikes for any brand\n• Otrivin getting positive mentions related to pollution relief\n• No concerning patterns in reviews or social mentions\n\nSentiment is healthy across portfolio. No product quality or safety concerns surfacing." },
+    ],
+  },
 ];
 
 // ═══════════════════════════════════════════════════════
 // CRITICAL ITEMS (ticker)
 // ═══════════════════════════════════════════════════════
 const criticalItems = [
-  { id: 1, severity: "critical", headline: "Eno losing ground in Rajasthan — Gas-O-Fast regional campaign redirecting demand", detail: "Nielsen North zone: Eno −1.2pp while category grew 6%. Gas-O-Fast running 14 Rajasthani-language Meta ad sets since Jan 18. Jaipur primary sales −28%. Wedding season approaching — action urgent.", category: "Eno" },
-  { id: 2, severity: "critical", headline: "Crocin chemist margins being undercut by Dolo 650 in Lucknow–Kanpur", detail: "Micro Labs offering 22% retail margin vs Crocin's 16%. 14 of top-40 Lucknow chemists shifted recommendation. Consumer search stable — this is trade-driven and recoverable.", category: "Crocin" },
+  { id: 1, severity: "critical", headline: "Eno losing ground in Rajasthan — competitor campaign activity detected", detail: "Nielsen North zone: Eno −1.2pp while category grew 6%. Google Trends shows Gas-O-Fast searches up 40%. New competitor ads visible in Meta Ad Library. Jaipur primary sales −28%. Wedding season approaching — action urgent.", category: "Eno" },
+  { id: 2, severity: "critical", headline: "Crocin pharmacy velocity dropping in UP West — field reports suggest margin pressure", detail: "Our velocity down 18% in Lucknow. ASMs report hearing about competitor margin schemes. Consumer search stable — this appears trade-driven and recoverable.", category: "Crocin" },
   { id: 3, severity: "high", headline: "Sensodyne ₹20 reorder rate in Agra at 85% — pharmacy-first playbook validated", detail: "Pharmacy: 92% reorder. GT: 28%. Three adjacent districts (Mathura, Firozabad, Etah) ready for replication.", category: "Sensodyne" },
   { id: 4, severity: "high", headline: "IMD forecasts monsoon 8 days early — pre-load Crocin and Otrivin at MP distributors", detail: "4 of 8 MP distributors below 10 days stock cover. Historical: early monsoon triggers 25–35% demand spike. Orders must be placed by Wednesday.", category: "Crocin" },
   { id: 5, severity: "high", headline: "Otrivin riding extended pollution demand — IQVIA prescriptions up 32%, campaign extension needed", detail: "AQI >250 for 18 days past seasonal norm. Nasal Mist premium SKU +22% WoW. Campaign paced to end Jan 31 — needs 2-week extension.", category: "Otrivin" },
@@ -131,8 +194,9 @@ const trackRecordStats = {
 const insights = [
   {
     id: 1, priority: "critical", type: "Competitive Alert", category: "Eno", region: "Rajasthan · North Zone",
-    headline: "Eno losing ground in Rajasthan — Gas-O-Fast regional campaign redirecting antacid demand",
-    subtitle: "Eno value share down 1.2pp in North zone while antacid category grew 6%. Demand exists but is being captured by competition.",
+    funnelStage: "consideration", // Links to funnel
+    headline: "Eno losing ground in Rajasthan — competitor campaign activity detected",
+    subtitle: "Eno value share down 1.2pp in North zone while antacid category grew 6%. Google Trends and Meta Ad Library suggest Gas-O-Fast push.",
     kpis: [
       { label: "Eno Share Change", value: "−1.2pp", note: "62.4% → 61.2%" },
       { label: "Gas-O-Fast Gain", value: "+1.7pp", note: "18.1% → 19.8%" },
@@ -141,10 +205,10 @@ const insights = [
     ],
     evidence: [
       { source: "Nielsen IQ", summary: "Eno value share declined 62.4% → 61.2% (−1.2pp) in North zone. Gas-O-Fast gained 1.7pp to 19.8%. Antacid category grew 6% — competitive share loss, not demand decline. Eno weighted distribution stable at 78%." },
-      { source: "Google Trends + E-com Search", summary: "'Gas relief sachet' in Rajasthan +18% over 4 weeks. 'Eno' search flat, 'Gas-O-Fast' +42%. Amazon 'antacid sachet' Jaipur +22% with Gas-O-Fast in top sponsored results. Category demand is rising but being redirected." },
-      { source: "Meta Ad Library + Social", summary: "Gas-O-Fast running 14 active Meta ad sets in Rajasthani language since Jan 18. 12 micro-influencers activated. Instagram Reels engagement 3.2x their baseline. Share of voice moved 12% → 24%." },
-      { source: "Instagram + Reddit", summary: "Gas-O-Fast 'longer lasting relief' narrative gaining traction. r/india and regional subs seeing organic mentions. No negative Eno sentiment — this is media capture, not product issue." },
-      { source: "DMS (Internal Sales)", summary: "Jaipur ASM: −28%. Jodhpur ASM: −22%. Udaipur: −8%. Kota: −3%. Decline concentrated in Jaipur–Jodhpur corridor matching campaign targeting. Sachet SKU most affected (−32% Jaipur)." },
+      { source: "Google Trends", summary: "'Gas relief sachet' searches in Rajasthan +18% over 4 weeks. 'Eno' search flat, 'Gas-O-Fast' +42%. Category demand is rising but being redirected to competitor." },
+      { source: "Meta Ad Library", summary: "Gas-O-Fast has multiple new ads visible targeting North India since mid-January. Ad creatives are in Hindi. We can see the ads exist but not their spend levels or targeting parameters." },
+      { source: "Social Listening (BrandWatch)", summary: "Gas-O-Fast mentions in Rajasthan up 2x vs prior month. 'Longer lasting relief' narrative appearing in organic conversations. No negative Eno sentiment — this is awareness capture, not product issue." },
+      { source: "DMS (Internal Sales)", summary: "Jaipur ASM: −28%. Jodhpur ASM: −22%. Udaipur: −8%. Kota: −3%. Decline concentrated in Jaipur–Jodhpur corridor. Sachet SKU most affected (−32% Jaipur)." },
     ],
     salesAction: "Brief Jaipur and Jodhpur ASMs to counter-detail top 50 chemists. Request ₹1-off trade scheme on Eno sachets for Rajasthan for 4 weeks. Prioritise sachet placement at high-footfall general stores and large chemists near wedding venues.",
     marketingAction: "Commission Rajasthani-language counter-campaign on Meta and YouTube targeting 'gas relief' and 'acidity remedy' search terms. Increase Eno sachet sampling at wedding-season events in Jaipur–Jodhpur.",
@@ -158,8 +222,8 @@ const insights = [
       targets: ["Jaipur ASM — Rahul Sharma", "Udaipur ASM — Priya Mehra"], 
       status: "Pushed today 7:02am",
       fieldBrief: [
-        { target: "Rahul Sharma (Jaipur ASM)", brief: "Gas-O-Fast campaign active — 14 regional ads since Jan 18. Sachet SKU down 32%. Priority: Counter-detail top 25 chemists, push sachet at counter, collect competitor scheme intel. Wedding season 8 weeks out." },
-        { target: "Priya Mehra (Udaipur ASM)", brief: "Campaign not yet active in your territory but spillover likely. Monitor for regional ads. Confirm sachet stock levels ahead of wedding season." },
+        { target: "Rahul Sharma (Jaipur ASM)", brief: "Gas-O-Fast campaign appears active in your territory — Google Trends and social mentions up significantly. Sachet SKU down 32%. Priority: Counter-detail top 25 chemists, push sachet visibility, gather intel on competitor schemes. Wedding season 8 weeks out." },
+        { target: "Priya Mehra (Udaipur ASM)", brief: "Campaign signals not yet strong in Udaipur but spillover likely. Monitor and confirm sachet stock levels ahead of wedding season." },
       ]
     },
     // Actions triggered across the system
@@ -184,16 +248,17 @@ const insights = [
       },
     ],
     agentTrail: [
-      { agent: "Orchestrator", icon: "◈", action: "Detected anomaly: Eno primary sales declining in Rajasthan while category search volume and Nielsen category growth both rising", routing: "Dispatching to Market Share Agent, Consumer Demand Agent, Competitive Media Agent, and Commercial Performance Agent for triangulation" },
+      { agent: "Orchestrator", icon: "◈", action: "Detected anomaly: Eno primary sales declining in Rajasthan while category search volume and Nielsen category growth both rising", routing: "Dispatching to Market Share Agent, Consumer Demand Agent, Competitive Signal Agent, and Commercial Performance Agent for triangulation" },
       { agent: "Market Share Agent", icon: "▣", source: "Nielsen IQ — North Zone Antacid Category", query: "SELECT brand, value_share, volume_share, share_change_pp, weighted_distribution FROM nielsen_category_share WHERE category='Antacid' AND zone='North' AND period='Jan-26'", finding: "Eno value share 62.4% → 61.2% (−1.2pp). Gas-O-Fast 18.1% → 19.8% (+1.7pp). Category grew 6%. Weighted distribution stable — this is a conversion shift, not availability.", inference: "Eno is losing share specifically to Gas-O-Fast. Category is healthy. Problem is competitive, not demand-side." },
-      { agent: "Consumer Demand Agent", icon: "◉", source: "Google Trends · Social Listening · Amazon Search", query: "google_trends(keywords=['gas relief sachet','eno','gas-o-fast'], geo='IN-RJ', timeframe='4w') | social_listening(category='antacid', geo='Rajasthan') | amazon_search(keywords=['antacid sachet'], geo='Jaipur')", finding: "Google: 'gas relief sachet' Rajasthan +18%. 'Eno' flat. 'Gas-o-fast' +42%. Amazon: 'antacid sachet' Jaipur +22%, Gas-O-Fast in top sponsored positions. Social: Gas-O-Fast 'longer lasting relief' narrative gaining traction on Instagram Reels.", inference: "Category demand rising but Gas-O-Fast capturing incremental search and social conversation. Regional-language content strategy intercepting purchase intent across Google, Amazon, and social." },
-      { agent: "Competitive Media Agent", icon: "◆", source: "Meta Ad Library · Social Share of Voice Tracking", query: "meta_ad_library(advertiser='Gas-O-Fast', region='Rajasthan', timeframe='4w') | social_sov(category='antacid', geo='Rajasthan')", finding: "14 active Meta ad sets in Rajasthani language since Jan 18 — 3x normal. Targeting Jaipur and Jodhpur. Regional-language testimonial creatives. Organic post frequency 3x. Share of voice moved 12% → 24%. Competitor views/CTR not observable via public sources.", inference: "Deliberate, well-resourced regional campaign. Combination of paid (14 ad sets) and organic (3x frequency) indicates sustained investment, not one-off burst." },
-      { agent: "Commercial Performance Agent", icon: "▣", source: "DMS (Bizom) — Rajasthan ASM Territories", query: "SELECT asm_territory, eno_primary_sales_4w, eno_primary_sales_prev_4w, pct_change, sku_split FROM dms_primary_sales WHERE state='Rajasthan' AND brand='Eno' ORDER BY pct_change ASC", finding: "Jaipur ASM: −28% (₹4.2L → ₹3.0L). Jodhpur ASM: −22%. Udaipur: −8%. Kota: −3%. Sachet SKU most impacted (−32% Jaipur). Geographic pattern matches Gas-O-Fast campaign targeting exactly.", inference: "Impact concentrated in urban Rajasthan, heaviest on sachet format — both consistent with competitor's messaging and geographic targeting." },
-      { agent: "Synthesis", icon: "✦", finding: null, inference: "Confidence: HIGH. Four independent signals converge — Nielsen confirms share loss to Gas-O-Fast, Google + Amazon + social confirm demand being redirected, Meta Ad Library reveals campaign mechanism, DMS shows geographic concentration matching targeting. Coordinated competitive attack via regional-language digital marketing. Counter-action needed in Jaipur–Jodhpur with urgency ahead of wedding season." },
+      { agent: "Consumer Demand Agent", icon: "◉", source: "Google Trends · Social Listening", query: "google_trends(keywords=['gas relief sachet','eno','gas-o-fast'], geo='IN-RJ', timeframe='4w') | brandwatch_mentions(category='antacid', geo='Rajasthan')", finding: "Google Trends: 'gas relief sachet' Rajasthan +18%. 'Eno' flat. 'Gas-o-fast' +42%. Social listening shows Gas-O-Fast mentions up 2x in regional conversations.", inference: "Category demand rising but Gas-O-Fast capturing incremental search interest. Regional conversation shifting." },
+      { agent: "Competitive Signal Agent", icon: "◆", source: "Meta Ad Library · BrandWatch", query: "meta_ad_library(advertiser='Gas-O-Fast', region='India') | brandwatch_sov(category='antacid', geo='Rajasthan')", finding: "Meta Ad Library shows new Gas-O-Fast ads visible since mid-January, appearing to target North India with regional language content. BrandWatch shows their share of mentions in Rajasthan roughly doubled.", inference: "Competitor has launched a campaign. We can see ad presence but not spend levels, targeting specifics, or engagement metrics." },
+      { agent: "Commercial Performance Agent", icon: "▣", source: "DMS (Bizom) — Rajasthan ASM Territories", query: "SELECT asm_territory, eno_primary_sales_4w, eno_primary_sales_prev_4w, pct_change, sku_split FROM dms_primary_sales WHERE state='Rajasthan' AND brand='Eno' ORDER BY pct_change ASC", finding: "Jaipur ASM: −28% (₹4.2L → ₹3.0L). Jodhpur ASM: −22%. Udaipur: −8%. Kota: −3%. Sachet SKU most impacted (−32% Jaipur).", inference: "Impact concentrated in urban Rajasthan, heaviest on sachet format — consistent with where we're seeing increased competitor search activity." },
+      { agent: "Synthesis", icon: "✦", finding: null, inference: "Confidence: MEDIUM-HIGH. Multiple signals align — Nielsen confirms share loss to Gas-O-Fast, Google Trends shows their search rising while ours flat, Meta Ad Library confirms campaign existence, DMS shows geographic concentration. Evidence points to competitive campaign, though we cannot verify competitor spend or precise targeting. Counter-action recommended for Jaipur–Jodhpur ahead of wedding season." },
     ],
   },
   {
     id: 2, priority: "high", type: "Demand Signal + Expert Performance", category: "Otrivin", region: "Delhi NCR · North Zone",
+    funnelStage: "conversion", // Demand already there, capturing it
     headline: "Delhi pollution extending Otrivin demand beyond season — expert prescriptions and AQI driving sustained pull",
     subtitle: "AQI >250 for 18 consecutive days past normal. IQVIA expert prescriptions up 32%. Otrivin at 112% of target. Campaign extension opportunity.",
     kpis: [
@@ -236,52 +301,58 @@ const insights = [
   },
   {
     id: 3, priority: "critical", type: "Competitive Alert", category: "Crocin", region: "UP West",
-    headline: "Dolo 650 margin scheme undercutting Crocin in Lucknow–Kanpur pharmacy channel",
-    subtitle: "Micro Labs offering 22% retail margin vs Crocin's 16%. 14 of top-40 Lucknow chemists shifted. Consumer search stable — trade-driven, recoverable.",
+    funnelStage: "conversion", // Trade-driven, at point of purchase
+    headline: "Crocin losing pharmacy velocity in UP West — field reports suggest competitor margin scheme",
+    subtitle: "ASMs hearing reports of better Dolo margins at chemists. Our velocity down 18%. Consumer search stable — trade-driven, recoverable.",
     kpis: [
-      { label: "Margin Gap", value: "6pp", note: "22% Dolo vs 16% Crocin" },
-      { label: "Chemists Flipped", value: "14 / 40", note: "Top Lucknow chemists" },
-      { label: "Pharmacy Velocity", value: "−18%", note: "2-week decline" },
-      { label: "Consumer Search", value: "Stable", note: "Trade-driven, not pull" },
+      { label: "Reported Margin Gap", value: "~5-6pp", note: "Anecdotal from field" },
+      { label: "Our Velocity Drop", value: "−18%", note: "Lucknow pharmacy" },
+      { label: "Rx Leadership", value: "Intact", note: "IQVIA confirms" },
+      { label: "Consumer Search", value: "Stable", note: "Not a demand issue" },
     ],
     evidence: [
-      { source: "Field Reports (SFA)", summary: "3 ASMs in Lucknow, Kanpur, Allahabad independently reported Micro Labs offering 22% retail margin on Dolo 650 vs Crocin's 16%. Scheme targeting top-prescribing chemists." },
-      { source: "DMS + IQVIA", summary: "14 of top-40 Lucknow chemists show Crocin velocity −30%+. All 14 now stock Dolo prominently. Remaining 26: Crocin stable (−2%). IQVIA: Crocin still leads in doctor prescriptions across UP West — disconnect between prescription preference and pharmacy-counter recommendation." },
-      { source: "Google Trends", summary: "Consumer search for 'paracetamol' and 'crocin' in UP stable. No consumer preference shift. Entirely trade-level margin play — recoverable." },
+      { source: "Field Reports (SFA)", summary: "3 ASMs in Lucknow, Kanpur, Allahabad independently reported hearing from chemists that Dolo 650 is offering better retail margins — estimates suggest 5-6pp higher than Crocin. Anecdotal but consistent pattern." },
+      { source: "DMS + IQVIA", summary: "Our Crocin velocity in Lucknow pharmacy channel down 18% over 2 weeks. IQVIA shows Crocin still leads in doctor prescriptions across UP West — disconnect between prescription preference and what's being pushed at counter." },
+      { source: "Google Trends", summary: "Consumer search for 'paracetamol' and 'crocin' in UP stable. No consumer preference shift. Pattern suggests trade-level margin play rather than demand issue." },
     ],
     salesAction: "Escalate margin gap to trade marketing. Push Crocin Advance positioning (higher-margin SKU absorbs better trade terms). Schedule joint ASM visits to top 20 lost Lucknow chemists. Highlight IQVIA doctor-prescription leadership in chemist conversations.",
     marketingAction: "Launch 'Trusted since 1964' pharmacy POS campaign in UP West. Leverage IQVIA prescription data in counter materials. Digital campaign targeting 'paracetamol trusted brand' to reinforce consumer pull.",
-    nudgeConnection: "Push to UP West ASMs: 'Dolo 650 margin scheme active in Lucknow — visit your top 20 chemists this week with Crocin Advance samples. Highlight doctor prescription data. Scheme expected to reach Kanpur by week 5.'",
+    nudgeConnection: "Push to UP West ASMs: 'We're hearing reports of Dolo margin schemes in Lucknow — visit your key chemists this week to understand the situation. Bring Crocin Advance samples. Highlight doctor prescription data.'",
     agentTrail: [
       { agent: "Orchestrator", icon: "◈", action: "Flagged: Crocin pharmacy velocity drop in UP West exceeding variance threshold (−18% in 2W)", routing: "Dispatching to Field Intelligence Agent, Distribution Agent, and Consumer Demand Agent" },
-      { agent: "Field Intelligence Agent", icon: "◆", source: "SFA (FieldAssist) — ASM Reports, UP West", query: "SELECT asm_name, report_date, issue_type, competitor_brand, details FROM asm_field_reports WHERE state='UP_West' AND issue_type='competitive_activity' AND date >= DATE_SUB(NOW(), INTERVAL 14 DAY)", finding: "3 ASMs independently reported: Micro Labs offering 22% retail margin on Dolo 650 vs Crocin's 16%. Scheme targeted at top-prescribing chemists.", inference: "Deliberate margin scheme targeting pharmacy channel. 6pp gap significant enough to flip chemist recommendations." },
-      { agent: "Distribution Agent", icon: "▣", source: "DMS — Pharmacy Channel · IQVIA Prescription Data", query: "SELECT chemist_name, city, crocin_velocity_current, crocin_velocity_4w_ago, dolo_stocking FROM pharmacy_outlet_data WHERE state='UP_West' AND segment='top_40' | iqvia_rx(molecule='paracetamol', geo='UP_West')", finding: "14 of top-40 Lucknow chemists flipped — Crocin velocity −30%+ at these outlets. Remaining 26: stable (−2%). Chemist-by-chemist conversion pattern. IQVIA: Crocin leads doctor prescriptions — disconnect with pharmacy counter.", inference: "Margin economics driving chemist switches. IQVIA data proves professional preference hasn't changed — purely trade incentive." },
-      { agent: "Consumer Demand Agent", icon: "◉", source: "Google Trends", query: "google_trends(keywords=['crocin','dolo 650','paracetamol'], geo='IN-UP', timeframe='8w')", finding: "Consumer search for 'paracetamol' and 'crocin' in UP: stable. 'Dolo 650' +8% minor. No consumer campaign or social shift detected.", inference: "Trade-level play, not consumer pull shift. Recoverable with right trade response." },
-      { agent: "Synthesis", icon: "✦", finding: null, inference: "Confidence: HIGH. Root cause: Micro Labs 22% margin scheme. Impact trade-driven, contained to Lucknow. Two response paths: match margin (expensive, sets precedent) or shift to Crocin Advance positioning (higher-margin SKU absorbs better terms). Time-sensitive — scheme likely to expand to Kanpur in 2–3 weeks." },
+      { agent: "Field Intelligence Agent", icon: "◆", source: "SFA (FieldAssist) — ASM Reports, UP West", query: "SELECT asm_name, report_date, issue_type, competitor_brand, details FROM asm_field_reports WHERE state='UP_West' AND issue_type='competitive_activity' AND date >= DATE_SUB(NOW(), INTERVAL 14 DAY)", finding: "3 ASMs independently reported hearing from chemists about better Dolo margins. Estimated 5-6pp gap mentioned. Concentrated in Lucknow and Kanpur.", inference: "Anecdotal but consistent reports suggest margin scheme. Not systematically verified, but pattern worth investigating." },
+      { agent: "Distribution Agent", icon: "▣", source: "DMS — Pharmacy Channel · IQVIA Prescription Data", query: "SELECT city, crocin_velocity_current, crocin_velocity_4w_ago, pct_change FROM pharmacy_velocity WHERE state='UP_West' | iqvia_rx(molecule='paracetamol', geo='UP_West')", finding: "Crocin pharmacy velocity in Lucknow down 18% over 2 weeks. IQVIA shows Crocin still leading doctor prescriptions — disconnect between Rx and counter.", inference: "Trade economics likely driving counter recommendation shift. Professional preference unchanged." },
+      { agent: "Consumer Demand Agent", icon: "◉", source: "Google Trends", query: "google_trends(keywords=['crocin','dolo 650','paracetamol'], geo='IN-UP', timeframe='8w')", finding: "Consumer search for 'paracetamol' and 'crocin' in UP: stable. 'Dolo 650' +8% minor. No major consumer shift.", inference: "Trade-level play, not consumer pull shift. Recoverable with right trade response." },
+      { agent: "Synthesis", icon: "✦", finding: null, inference: "Confidence: MEDIUM. Field intel suggests margin scheme but not systematically verified. Our velocity data confirms impact. IQVIA confirms not a prescription preference issue. Recommended action: gather more intel while preparing trade response options." },
     ],
   },
   {
-    id: 4, priority: "high", type: "Distribution Opportunity", category: "Sensodyne", region: "UP East",
-    headline: "Sensodyne ₹20 pack pharmacy-first strategy validated — 92% reorder in Agra, playbook ready for replication",
-    subtitle: "Channel strategy is the differentiator, not geography. Pharmacy 92% reorder vs GT 28%. Mathura, Firozabad, Etah next.",
+    id: 4, priority: "critical", type: "Competitive Alert", category: "Sensodyne", region: "Mumbai · Test Market",
+    funnelStage: "consideration", // Consideration being contested
+    headline: "Sensodent launched with World Cup campaign — Mumbai is test market, emerging threat",
+    subtitle: "TV ads during cricket, Amazon sponsored ads on our PDPs, 25% retailer margins vs our 20%. Mumbai volume down 1-2%. Pharmacy-first strategy is our moat.",
     kpis: [
-      { label: "Agra Reorder Rate", value: "85%", note: "2.5x territory avg" },
-      { label: "Pharmacy Reorder", value: "92%", note: "Recommendation loop" },
-      { label: "GT Reorder", value: "28%", note: "No recommendation" },
-      { label: "Adjacent Districts", value: "3", note: "Mathura, Firozabad, Etah" },
+      { label: "Mumbai Impact", value: "−1-2%", note: "Localized so far" },
+      { label: "Price Index", value: "85 vs 100", note: "15% cheaper" },
+      { label: "Retailer Margin", value: "25% vs 20%", note: "5pp gap" },
+      { label: "Pharmacy Reorder", value: "92%", note: "Our moat (Agra)" },
     ],
     evidence: [
-      { source: "DMS (Outlet Reorder)", summary: "Agra pharmacy: 92% reorder. GT: 28%. Meerut (GT-led): 26%. Aligarh (GT-led): 31%. Channel mix is the driver — pharmacist recommendation creates a natural repeat-purchase loop that GT lacks." },
-      { source: "Google Trends + Amazon R&R", summary: "Agra search interest 1.4x state average — moderately above, but not 2.5x. Amazon reviews for ₹20 pack mention 'pharmacist recommended' as top purchase trigger. Execution is the multiplier, not demand." },
+      { source: "Google Trends + Social", summary: "'Sensodent' searches spiked during World Cup windows. Social conversation confirms ad visibility — people discussing 'the new sensitivity toothpaste ad'." },
+      { source: "Amazon observation", summary: "Sensodent running higher sponsored product ads than us. Appearing on our PDPs as sponsored display. Higher visibility on generic and Sensodyne keywords." },
+      { source: "Instagram observation", summary: "Sensodent influencer posts showing higher engagement rates than our sponsored content. They're getting better traction." },
+      { source: "Field Reports (Mumbai)", summary: "ASMs report 25% retailer margin vs our 20%. Paid visibility on ground — end-caps, counter displays. BTL concentrated in Mumbai." },
+      { source: "DMS (Internal)", summary: "Mumbai volumes down 1-2%. Rest of India stable. Impact localized to their test market." },
     ],
-    salesAction: "Shift activation in Mathura, Firozabad, Etah to pharmacy-first. Target 200 chemist outlets per district. Use Agra data in distributor pitches.",
-    marketingAction: "Develop pharmacist education kit for ₹20 trial-to-conversion. Create 'Recommended by pharmacists in Agra' localised POS for adjacent districts.",
-    nudgeConnection: "Push to UP East ASMs: 'Agra ₹20 playbook ready — pharmacy-first, 200 chemists per district. Agra data pack attached for distributor conversations.'",
+    salesAction: "Accelerate pharmacy-first in Mumbai — our moat. Don't engage in e-commerce price war. Document competitor activity to prepare counter-playbook.",
+    marketingAction: "Hold on e-commerce promotional spend. Focus 'Dentist Recommended' messaging in pharmacy channel. Monitor for expansion signals to Delhi.",
+    nudgeConnection: "Push to Mumbai ASMs: 'Sensodent active — World Cup ads, Amazon presence, 25% margins. Focus on pharmacy channel. Don't compete on price.'",
     agentTrail: [
-      { agent: "Orchestrator", icon: "◈", action: "Positive signal detected: Sensodyne ₹20 reorder in Agra 2.5x above territory average", routing: "Dispatching to Distribution Agent and Consumer Demand Agent to identify success drivers" },
-      { agent: "Distribution Agent", icon: "▣", source: "DMS — Outlet Reorder Data, Sensodyne ₹20", query: "SELECT district, channel_type, outlets_activated, outlets_reordered, reorder_rate FROM sensodyne_20_activation WHERE territory='UP_East' GROUP BY district, channel_type ORDER BY reorder_rate DESC", finding: "Agra: 85% reorder. Pharmacy: 92%. GT: 28%. Meerut GT-led: 26%. Aligarh GT-led: 31%. Varanasi mixed: 48%.", inference: "Channel mix is primary driver. Pharmacy-led activation produces 3x reorder rate." },
-      { agent: "Consumer Demand Agent", icon: "◉", source: "Google Trends · Amazon R&R", query: "google_trends(keywords=['sensitivity toothpaste','sensodyne'], geo='IN-UP', resolution='city', timeframe='8w') | amazon_reviews(product='Sensodyne 20', market='IN')", finding: "Agra search: 140 index (state avg 100). Meerut: 95. Aligarh: 88. Amazon ₹20 reviews: 'pharmacist recommended' as top trigger.", inference: "Demand 1.4x above average in Agra but 2.5x reorder is execution-driven. Pharmacy recommendation creates natural repeat loop." },
-      { agent: "Synthesis", icon: "✦", finding: null, inference: "Confidence: HIGH. Pharmacy-first = 3x reorder vs GT. Replicable playbook. Adjacent districts have comparable demand but GT-led activation. Switching to pharmacy-first should yield 2–2.5x reorder improvement." },
+      { agent: "Orchestrator", icon: "◈", action: "Multiple signals: Sensodent appearing across search, social, e-commerce, and field reports", routing: "Dispatching to Consumer Demand, Competitive Signal, and Field Intelligence agents" },
+      { agent: "Consumer Demand Agent", icon: "◉", source: "Google Trends · Social", query: "google_trends(['sensodent'], geo='IN', timeframe='8w') | social_mentions('sensodent')", finding: "Searches spiked during World Cup. Social conversation about 'sensitivity ad during match'. Mumbai concentrated.", inference: "TV campaign drove awareness. Strategic timing." },
+      { agent: "Competitive Signal Agent", icon: "◆", source: "Amazon · Instagram · Platform pricing", query: "amazon_sponsored_visibility | instagram_engagement | platform_pricing", finding: "Higher sponsored ads than us. Higher influencer engagement. Price index 85 vs 100.", inference: "Methodical launch — well-funded, not amateur." },
+      { agent: "Field Intelligence Agent", icon: "▣", source: "SFA — Mumbai", query: "field_reports(competitor='sensodent', geo='Mumbai')", finding: "25% retailer margin vs our 20%. BTL visible. Paid shelf visibility.", inference: "Buying distribution via margin." },
+      { agent: "Synthesis", icon: "✦", finding: null, inference: "Confidence: HIGH on signals. Mumbai is test market. Our moat (pharmacy/Rx) intact. Emerging threat — act before they scale." },
     ],
   },
   {
@@ -396,6 +467,263 @@ const PriorityBadge = ({ p }) => {
 };
 
 const StatusDot = ({ s }) => <span style={{ display: "inline-block", width: 8, height: 8, borderRadius: "50%", background: { "on-track": C.green, "needs-attention": C.orange, "at-risk": C.red }[s], marginRight: 8, flexShrink: 0 }} />;
+
+// ═══════════════════════════════════════════════════════
+// FUNNEL VIEW — Horizontal flow with clickable stages
+// ═══════════════════════════════════════════════════════
+const FunnelView = ({ stages, relatedInsightCounts, expandedStage, setExpandedStage, conversation, setConversation }) => {
+  const expanded = stages.find(s => s.id === expandedStage);
+  
+  const handlePromptClick = (prompt) => {
+    setConversation(prev => [...prev, { role: "user", text: prompt.q }, { role: "assistant", text: prompt.a }]);
+  };
+  
+  // Get follow-up prompts (ones not yet asked)
+  const askedQuestions = conversation.filter(m => m.role === "user").map(m => m.text);
+  const remainingPrompts = expanded?.prompts.filter(p => !askedQuestions.includes(p.q)) || [];
+  
+  return (
+    <div>
+      {/* Funnel cards */}
+      <div style={{ 
+        display: "flex", 
+        alignItems: "stretch",
+        background: C.card,
+        border: `1px solid ${C.border}`,
+        overflow: "hidden"
+      }}>
+        {stages.map((stage, i) => {
+          const insightCount = relatedInsightCounts[stage.id] || 0;
+          const isExpanded = expandedStage === stage.id;
+          return (
+            <div 
+              key={stage.id} 
+              onClick={() => {
+                setExpandedStage(isExpanded ? null : stage.id);
+                setConversation([]);
+              }}
+              style={{ 
+                flex: 1, 
+                padding: "20px 24px",
+                borderRight: i < stages.length - 1 ? `1px solid ${C.border}` : "none",
+                borderBottom: isExpanded ? `3px solid ${stage.hasIssue ? C.orange : C.green}` : "3px solid transparent",
+                background: stage.hasIssue ? C.orangePale + "40" : "transparent",
+                cursor: "pointer",
+                transition: "all 0.15s",
+              }}
+              onMouseEnter={e => { if (!isExpanded) e.currentTarget.style.background = stage.hasIssue ? C.orangePale + "60" : C.greenPale + "40"; }}
+              onMouseLeave={e => { if (!isExpanded) e.currentTarget.style.background = stage.hasIssue ? C.orangePale + "40" : "transparent"; }}
+            >
+              {/* Stage name */}
+              <div style={{ 
+                fontSize: 10, 
+                fontWeight: 700, 
+                letterSpacing: "0.1em", 
+                color: stage.hasIssue ? C.orange : C.green,
+                marginBottom: 16,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between"
+              }}>
+                <span>{stage.name.toUpperCase()}</span>
+                {i < stages.length - 1 && (
+                  <span style={{ color: C.border, fontSize: 14, marginRight: -12 }}>›</span>
+                )}
+              </div>
+              
+              {/* Metrics */}
+              {stage.metrics.map((m, j) => (
+                <div key={j} style={{ marginBottom: j < stage.metrics.length - 1 ? 14 : 0 }}>
+                  <div style={{ fontSize: 10, color: C.textLight, marginBottom: 3 }}>{m.label}</div>
+                  <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
+                    <span style={{ fontSize: 22, fontWeight: 700, color: C.text }}>{m.value}</span>
+                    <span style={{ 
+                      fontSize: 11, 
+                      color: m.isGood ? C.green : C.orange,
+                      fontWeight: 500
+                    }}>{m.delta}</span>
+                  </div>
+                </div>
+              ))}
+              
+              {/* Insight count */}
+              {insightCount > 0 && (
+                <div style={{ 
+                  marginTop: 16,
+                  paddingTop: 12,
+                  borderTop: `1px solid ${C.borderLight}`,
+                  fontSize: 11, 
+                  color: C.textMid,
+                }}>
+                  {insightCount} insight{insightCount > 1 ? "s" : ""} below ↓
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+      
+      {/* Expanded conversation panel */}
+      {expanded && (
+        <div style={{ 
+          ...cardBase, 
+          marginTop: -1, 
+          borderTop: "none",
+          overflow: "hidden",
+        }}>
+          {/* Header */}
+          <div style={{ 
+            display: "flex", alignItems: "center", justifyContent: "space-between", 
+            padding: "16px 24px",
+            borderBottom: `1px solid ${C.border}`,
+            background: C.page,
+          }}>
+            <div>
+              <span style={{ fontSize: 14, fontWeight: 600, color: C.text }}>{expanded.name}</span>
+              <span style={{ fontSize: 13, color: C.textMid, marginLeft: 12 }}>
+                {expanded.metrics.map(m => `${m.label}: ${m.value} (${m.delta})`).join("  ·  ")}
+              </span>
+            </div>
+            <div 
+              onClick={(e) => { e.stopPropagation(); setExpandedStage(null); setConversation([]); }}
+              style={{ fontSize: 12, color: C.textLight, cursor: "pointer", padding: "4px 8px" }}
+            >✕</div>
+          </div>
+          
+          {/* Chat area */}
+          <div style={{ 
+            padding: "20px 24px", 
+            minHeight: 200,
+            maxHeight: 400,
+            overflowY: "auto",
+            background: "#FAFAF7",
+          }}>
+            {conversation.length === 0 ? (
+              <div style={{ textAlign: "center", padding: "40px 0" }}>
+                <div style={{ fontSize: 13, color: C.textLight, marginBottom: 16 }}>
+                  Ask Questt about {expanded.name.toLowerCase()} metrics
+                </div>
+                <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
+                  {expanded.prompts.map((p, i) => (
+                    <div 
+                      key={i}
+                      onClick={(e) => { e.stopPropagation(); handlePromptClick(p); }}
+                      style={{ 
+                        padding: "10px 16px", 
+                        background: C.card, 
+                        border: `1px solid ${C.border}`,
+                        color: C.text,
+                        fontSize: 13,
+                        cursor: "pointer",
+                        transition: "all 0.15s",
+                      }}
+                      onMouseEnter={e => { e.currentTarget.style.borderColor = C.green; e.currentTarget.style.color = C.green; }}
+                      onMouseLeave={e => { e.currentTarget.style.borderColor = C.border; e.currentTarget.style.color = C.text; }}
+                    >
+                      {p.q}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                {conversation.map((msg, i) => (
+                  <div key={i} style={{ 
+                    display: "flex", 
+                    justifyContent: msg.role === "user" ? "flex-end" : "flex-start",
+                  }}>
+                    <div style={{ 
+                      maxWidth: msg.role === "user" ? "60%" : "85%",
+                      padding: msg.role === "user" ? "10px 16px" : "16px 20px",
+                      background: msg.role === "user" ? C.green : C.card,
+                      color: msg.role === "user" ? "#FFFFFF" : C.text,
+                      border: msg.role === "user" ? "none" : `1px solid ${C.border}`,
+                      borderRadius: msg.role === "user" ? "16px 16px 4px 16px" : "16px 16px 16px 4px",
+                    }}>
+                      {msg.role === "assistant" && (
+                        <div style={{ fontSize: 10, color: C.green, fontWeight: 600, marginBottom: 8, display: "flex", alignItems: "center", gap: 6 }}>
+                          <span>◈</span> Questt
+                        </div>
+                      )}
+                      <div style={{ 
+                        fontSize: 14, 
+                        lineHeight: 1.7, 
+                        whiteSpace: "pre-line",
+                      }}>
+                        {msg.text}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                
+                {/* Follow-up prompts */}
+                {remainingPrompts.length > 0 && (
+                  <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 8 }}>
+                    {remainingPrompts.map((p, i) => (
+                      <div 
+                        key={i}
+                        onClick={(e) => { e.stopPropagation(); handlePromptClick(p); }}
+                        style={{ 
+                          padding: "8px 14px", 
+                          background: C.card, 
+                          border: `1px solid ${C.border}`,
+                          color: C.textMid,
+                          fontSize: 12,
+                          cursor: "pointer",
+                          borderRadius: 16,
+                          transition: "all 0.15s",
+                        }}
+                        onMouseEnter={e => { e.currentTarget.style.borderColor = C.green; e.currentTarget.style.color = C.green; }}
+                        onMouseLeave={e => { e.currentTarget.style.borderColor = C.border; e.currentTarget.style.color = C.textMid; }}
+                      >
+                        {p.q}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+          
+          {/* Input bar */}
+          <div style={{ 
+            padding: "12px 20px", 
+            background: C.card, 
+            borderTop: `1px solid ${C.border}`,
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
+          }}>
+            <input 
+              type="text" 
+              placeholder="Ask a follow-up question..."
+              onClick={e => e.stopPropagation()}
+              style={{ 
+                flex: 1, 
+                border: `1px solid ${C.border}`,
+                padding: "10px 14px",
+                borderRadius: 20,
+                outline: "none", 
+                fontSize: 13, 
+                color: C.text,
+                background: C.page,
+              }}
+            />
+            <div style={{ 
+              width: 36, height: 36, 
+              background: C.green, 
+              borderRadius: "50%",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              cursor: "pointer",
+              color: "#FFFFFF",
+              fontSize: 14,
+            }}>↑</div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 // ═══════════════════════════════════════════════════════
 // AGENT TRAIL MODAL
@@ -519,6 +847,18 @@ const InsightCard = ({ insight, isExpanded, onToggle, onShowTrail }) => {
             Decision Trail
           </div>
           <span style={{ ...label, fontSize: 10 }}>{insight.category}</span>
+          {insight.funnelStage && (
+            <span style={{ 
+              fontSize: 9, fontWeight: 600, 
+              padding: "3px 8px", 
+              background: C.bluePale, 
+              color: C.blue,
+              letterSpacing: "0.04em",
+              textTransform: "uppercase"
+            }}>
+              {funnelStages.find(f => f.id === insight.funnelStage)?.name || insight.funnelStage}
+            </span>
+          )}
           <span onClick={onToggle} style={{ fontSize: 12, color: C.sage, transform: isExpanded ? "rotate(180deg)" : "none", transition: "transform 0.2s", cursor: "pointer" }}>▾</span>
         </div>
       </div>
@@ -543,103 +883,71 @@ const InsightCard = ({ insight, isExpanded, onToggle, onShowTrail }) => {
             ))}
           </div>
 
-          {/* DECISION */}
-          <div style={{ margin: "0 28px 20px", padding: "22px 24px", border: `1px solid ${C.border}` }}>
-            <div style={{ ...label, fontSize: 10, color: C.orange, marginBottom: 16 }}>SUGGESTED ACTIONS</div>
-            <div style={{ marginBottom: 16 }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: C.textLight, letterSpacing: "0.04em", textTransform: "uppercase", marginBottom: 5 }}>Sales</div>
-              <div style={{ fontSize: 14, color: C.text, lineHeight: 1.65 }}>{insight.salesAction}</div>
+          {/* SUGGESTED ACTIONS — Toned down */}
+          <div style={{ margin: "0 28px 20px", padding: "18px 24px", background: C.page }}>
+            <div style={{ display: "flex", gap: 32 }}>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 10, fontWeight: 600, color: C.textLight, letterSpacing: "0.04em", marginBottom: 6 }}>SALES</div>
+                <div style={{ fontSize: 13, color: C.text, lineHeight: 1.6 }}>{insight.salesAction}</div>
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 10, fontWeight: 600, color: C.textLight, letterSpacing: "0.04em", marginBottom: 6 }}>MARKETING</div>
+                <div style={{ fontSize: 13, color: C.text, lineHeight: 1.6 }}>{insight.marketingAction}</div>
+              </div>
             </div>
-            <div style={{ marginBottom: 0 }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: C.textLight, letterSpacing: "0.04em", textTransform: "uppercase", marginBottom: 5 }}>Marketing</div>
-              <div style={{ fontSize: 14, color: C.text, lineHeight: 1.65 }}>{insight.marketingAction}</div>
-            </div>
-
-            {/* Past Validation */}
+            
+            {/* Past Validation — inline */}
             {insight.pastValidation && (
-              <div style={{ marginTop: 16, padding: "14px 16px", background: C.greenPale, borderLeft: `3px solid ${C.sage}` }}>
-                <div style={{ fontSize: 11, fontWeight: 700, color: C.green, marginBottom: 6 }}>✓ {insight.pastValidation.title}</div>
-                <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6, marginBottom: 4 }}>{insight.pastValidation.detail}</div>
-                <div style={{ fontSize: 11, color: C.green, fontWeight: 600 }}>Outcome: {insight.pastValidation.outcome}</div>
+              <div style={{ marginTop: 14, paddingTop: 14, borderTop: `1px solid ${C.borderLight}`, display: "flex", alignItems: "center", gap: 12 }}>
+                <span style={{ fontSize: 11, color: C.green, fontWeight: 600 }}>✓ Similar action: {insight.pastValidation.outcome}</span>
+                <span style={{ fontSize: 11, color: C.textLight }}>({insight.pastValidation.title})</span>
               </div>
             )}
           </div>
 
-          {/* TRIGGERED ACTIONS — Execution status */}
+          {/* EXECUTION STATUS — Simplified */}
           {insight.triggeredActions && (
-            <div style={{ margin: "0 28px 20px", padding: "22px 24px", border: `1px solid ${C.border}` }}>
-              <div style={{ ...label, fontSize: 10, color: C.green, marginBottom: 16 }}>ACTIONS TRIGGERED</div>
-              
-              {/* Actions list */}
-              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            <div style={{ margin: "0 28px 20px" }}>
+              <div style={{ display: "flex", gap: 12 }}>
                 {insight.triggeredActions.map((act, i) => {
-                  const statusConfig = {
+                  const sc = {
                     complete: { icon: "✓", color: C.green, bg: C.greenPale },
                     pending: { icon: "◷", color: C.orange, bg: C.orangePale },
                     ready: { icon: "○", color: C.blue, bg: C.bluePale },
-                  };
-                  const sc = statusConfig[act.status] || statusConfig.ready;
+                  }[act.status];
                   return (
                     <div key={i} style={{ 
-                      display: "flex", 
-                      alignItems: "center", 
-                      gap: 14,
-                      padding: "12px 16px",
-                      background: C.page,
+                      flex: 1,
+                      padding: "14px 16px",
+                      background: sc.bg,
+                      borderLeft: `3px solid ${sc.color}`,
                     }}>
-                      {/* Status icon */}
-                      <div style={{ 
-                        width: 24, height: 24, 
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        background: sc.bg, 
-                        borderRadius: "50%",
-                        fontSize: 11, color: sc.color, fontWeight: 600
-                      }}>
-                        {sc.icon}
+                      <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
+                        <span style={{ fontSize: 11, color: sc.color }}>{sc.icon}</span>
+                        <span style={{ fontSize: 10, fontWeight: 600, color: sc.color, letterSpacing: "0.04em" }}>{act.statusLabel.toUpperCase()}</span>
                       </div>
-                      
-                      {/* Action + Detail */}
-                      <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: 13, fontWeight: 600, color: C.text }}>{act.action}</div>
-                        <div style={{ fontSize: 12, color: C.textMid, marginTop: 2 }}>{act.detail}</div>
-                      </div>
-                      
-                      {/* Status label */}
-                      <div style={{ 
-                        fontSize: 10, fontWeight: 600, color: sc.color, 
-                        letterSpacing: "0.04em", textTransform: "uppercase",
-                        whiteSpace: "nowrap"
-                      }}>
-                        {act.statusLabel}
-                      </div>
+                      <div style={{ fontSize: 12, fontWeight: 600, color: C.text }}>{act.action}</div>
+                      <div style={{ fontSize: 11, color: C.textMid, marginTop: 2 }}>{act.detail}</div>
                     </div>
                   );
                 })}
               </div>
               
-              {/* ROI + Open in SWT */}
+              {/* Footer with link */}
               <div style={{ 
-                marginTop: 16, 
+                marginTop: 8,
+                padding: "10px 16px",
+                background: C.card,
+                border: `1px solid ${C.border}`,
                 display: "flex", 
                 alignItems: "center", 
                 justifyContent: "space-between",
-                padding: "12px 16px",
-                background: C.greenPale, 
-                borderLeft: `3px solid ${C.sage}`,
               }}>
-                <div style={{ fontSize: 12, color: C.text }}>
-                  <span style={{ fontWeight: 600 }}>Projected Impact:</span> +1.2pp share recovery, ₹4.2L revenue protected
+                <div style={{ fontSize: 12, color: C.textMid }}>
+                  <span style={{ fontWeight: 600, color: C.text }}>Projected:</span> +1.2pp share, ₹4.2L protected
                 </div>
-                <div 
-                  style={{ 
-                    fontSize: 11, fontWeight: 600, color: C.green,
-                    display: "flex", alignItems: "center", gap: 4,
-                    cursor: "pointer",
-                  }}
-                  onMouseEnter={e => e.currentTarget.style.textDecoration = "underline"}
-                  onMouseLeave={e => e.currentTarget.style.textDecoration = "none"}
-                >
-                  Open in Sales Watchtower <span style={{ fontSize: 10 }}>→</span>
+                <div style={{ fontSize: 11, color: C.green, fontWeight: 500 }}>
+                  View in Sales Watchtower →
                 </div>
               </div>
             </div>
@@ -726,6 +1034,8 @@ export default function MarketPulse() {
   const [activeTab, setActiveTab] = useState("pulse");
   const [expandedInsight, setExpandedInsight] = useState(null);
   const [expandedTerritory, setExpandedTerritory] = useState(null);
+  const [expandedStage, setExpandedStage] = useState(null);
+  const [conversation, setConversation] = useState([]);
   const [trailInsight, setTrailInsight] = useState(null);
   const [trackFilter, setTrackFilter] = useState("all"); // all, executed, not-executed
 
@@ -785,29 +1095,46 @@ export default function MarketPulse() {
         {/* ════════════════════════════════════════════════════════════════ */}
         {activeTab === "pulse" && (
           <>
-            {/* KPIs */}
-            <div style={{ display: "flex", gap: 16, marginBottom: 28 }}>
-              {portfolioKPIs.map((kpi, i) => (
-                <div key={i} style={{ ...cardBase, padding: "22px 24px", flex: 1 }}>
-                  <div style={{ ...label, fontSize: 10, marginBottom: 12 }}>{kpi.label}</div>
-                  <div style={{ fontSize: 32, fontWeight: 600, color: C.text, lineHeight: 1 }}>{kpi.value}</div>
-                  <div style={{ fontSize: 12, color: kpi.negative ? C.orange : C.textLight, marginTop: 8 }}>{kpi.delta}</div>
-                </div>
-              ))}
+            {/* Portfolio Summary */}
+            <div style={{ ...cardBase, padding: "24px 28px", marginBottom: 24 }}>
+              <div style={{ fontSize: 18, fontWeight: 600, color: C.text, marginBottom: 16 }}>
+                {portfolioSummary.headline}
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px 24px" }}>
+                {portfolioSummary.bullets.map((b, i) => (
+                  <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+                    <span style={{ 
+                      width: 6, height: 6, borderRadius: "50%", marginTop: 6, flexShrink: 0,
+                      background: b.status === "pressure" ? C.orange : C.green 
+                    }} />
+                    <div>
+                      <span style={{ fontSize: 13, fontWeight: 600, color: C.text }}>{b.brand}: </span>
+                      <span style={{ fontSize: 13, color: C.textMid }}>{b.text}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
 
-            {/* Critical Items */}
+            {/* Consumer Funnel */}
             <div style={{ marginBottom: 36 }}>
-              <h2 style={{ fontFamily: "'Source Serif 4', Georgia, serif", fontSize: 20, fontWeight: 400, margin: "0 0 16px" }}>This Week's Critical Items</h2>
-              {criticalItems.map(item => (
-                <div key={item.id} style={{ ...cardBase, marginBottom: 8, padding: "18px 28px", display: "flex", alignItems: "flex-start", gap: 16 }}>
-                  <SeverityIcon severity={item.severity} />
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: 14, fontWeight: 600, color: C.text, lineHeight: 1.45 }}>{item.headline}</div>
-                    <div style={{ fontSize: 13, color: C.textMid, marginTop: 6, lineHeight: 1.55 }}>{item.detail}</div>
-                  </div>
-                </div>
-              ))}
+              <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: 16 }}>
+                <h2 style={{ fontFamily: "'Source Serif 4', Georgia, serif", fontSize: 20, fontWeight: 400, margin: 0 }}>Consumer Journey</h2>
+                <span style={{ fontSize: 12, color: C.textLight }}>Portfolio view · Week ending Feb 2</span>
+              </div>
+              <FunnelView 
+                stages={funnelStages} 
+                relatedInsightCounts={{
+                  awareness: insights.filter(i => i.funnelStage === "awareness").length,
+                  consideration: insights.filter(i => i.funnelStage === "consideration").length,
+                  conversion: insights.filter(i => i.funnelStage === "conversion").length,
+                  repeat: insights.filter(i => i.funnelStage === "repeat").length,
+                }}
+                expandedStage={expandedStage}
+                setExpandedStage={setExpandedStage}
+                conversation={conversation}
+                setConversation={setConversation}
+              />
             </div>
 
             {/* All Insights */}
@@ -839,47 +1166,39 @@ export default function MarketPulse() {
         {/* ════════════════════════════════════════════════════════════════ */}
         {activeTab === "track" && (
           <>
-            {/* Summary Stats */}
-            <div style={{ display: "flex", gap: 16, marginBottom: 28 }}>
-              <div style={{ ...cardBase, padding: "22px 24px", flex: 1 }}>
-                <div style={{ ...label, fontSize: 10, marginBottom: 8 }}>TOTAL RECOMMENDATIONS</div>
-                <div style={{ fontSize: 36, fontWeight: 600, color: C.text }}>{trackRecordStats.total}</div>
-                <div style={{ fontSize: 12, color: C.textLight, marginTop: 4 }}>Last 3 quarters</div>
-              </div>
-              <div style={{ ...cardBase, padding: "22px 24px", flex: 1 }}>
-                <div style={{ ...label, fontSize: 10, marginBottom: 8 }}>EXECUTION RATE</div>
-                <div style={{ fontSize: 36, fontWeight: 600, color: C.green }}>{Math.round((trackRecordStats.executed / trackRecordStats.total) * 100)}%</div>
-                <div style={{ fontSize: 12, color: C.textLight, marginTop: 4 }}>{trackRecordStats.executed} of {trackRecordStats.total} executed</div>
-              </div>
-              <div style={{ ...cardBase, padding: "22px 24px", flex: 1 }}>
-                <div style={{ ...label, fontSize: 10, marginBottom: 8 }}>AVG LIFT WHEN EXECUTED</div>
-                <div style={{ fontSize: 36, fontWeight: 600, color: C.green }}>{trackRecordStats.avgLiftWhenExecuted}</div>
-                <div style={{ fontSize: 12, color: C.textLight, marginTop: 4 }}>Across {trackRecordStats.executed} actions</div>
-              </div>
-              <div style={{ ...cardBase, padding: "22px 24px", flex: 1 }}>
-                <div style={{ ...label, fontSize: 10, marginBottom: 8 }}>AVG LOSS WHEN NOT EXECUTED</div>
-                <div style={{ fontSize: 36, fontWeight: 600, color: C.red }}>{trackRecordStats.avgLossWhenNotExecuted}</div>
-                <div style={{ fontSize: 12, color: C.textLight, marginTop: 4 }}>Opportunity cost</div>
+            {/* Impact Summary — THE HEADLINE */}
+            <div style={{ ...cardBase, padding: "28px 32px", marginBottom: 24 }}>
+              <div style={{ display: "flex", alignItems: "flex-start", gap: 40 }}>
+                {/* Left: Key Message */}
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 13, color: C.green, fontWeight: 600, marginBottom: 8 }}>TRACK RECORD</div>
+                  <div style={{ fontSize: 24, fontWeight: 600, color: C.text, lineHeight: 1.3, marginBottom: 12 }}>
+                    When you follow our recommendations, you see <span style={{ color: C.green }}>+12.4%</span> average lift.
+                  </div>
+                  <div style={{ fontSize: 14, color: C.textMid, lineHeight: 1.6 }}>
+                    Over the past 3 quarters, 10 of 12 recommendations were executed. Actions taken generated measurable positive outcomes in 8 cases. 
+                    Missed recommendations cost an estimated <span style={{ color: C.red, fontWeight: 500 }}>6.5pp</span> in share opportunity.
+                  </div>
+                </div>
+                
+                {/* Right: Key Numbers */}
+                <div style={{ display: "flex", gap: 24 }}>
+                  <div style={{ textAlign: "center" }}>
+                    <div style={{ fontSize: 42, fontWeight: 700, color: C.green }}>{Math.round((trackRecordStats.executed / trackRecordStats.total) * 100)}%</div>
+                    <div style={{ fontSize: 11, color: C.textLight, marginTop: 4 }}>Execution Rate</div>
+                  </div>
+                  <div style={{ width: 1, background: C.border }} />
+                  <div style={{ textAlign: "center" }}>
+                    <div style={{ fontSize: 42, fontWeight: 700, color: C.text }}>{trackRecordStats.positive}<span style={{ fontSize: 20, color: C.textLight }}>/{trackRecordStats.total}</span></div>
+                    <div style={{ fontSize: 11, color: C.textLight, marginTop: 4 }}>Positive Outcomes</div>
+                  </div>
+                </div>
               </div>
             </div>
-
-            {/* Outcome breakdown */}
-            <div style={{ ...cardBase, padding: "20px 24px", marginBottom: 28, display: "flex", alignItems: "center", gap: 24 }}>
-              <div style={{ fontSize: 13, fontWeight: 600, color: C.text }}>Outcome Breakdown:</div>
-              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <div style={{ width: 12, height: 12, background: C.green, borderRadius: 2 }} />
-                <span style={{ fontSize: 13, color: C.text }}>{trackRecordStats.positive} Positive</span>
-              </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <div style={{ width: 12, height: 12, background: C.orange, borderRadius: 2 }} />
-                <span style={{ fontSize: 13, color: C.text }}>{trackRecordStats.neutral} Neutral</span>
-              </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <div style={{ width: 12, height: 12, background: C.red, borderRadius: 2 }} />
-                <span style={{ fontSize: 13, color: C.text }}>{trackRecordStats.negative} Negative</span>
-              </div>
-              <div style={{ flex: 1 }} />
-              {/* Filter pills */}
+            
+            {/* Filters */}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+              <h2 style={{ fontFamily: "'Source Serif 4', Georgia, serif", fontSize: 20, fontWeight: 400, margin: 0 }}>Recommendation History</h2>
               <div style={{ display: "flex", gap: 8 }}>
                 {[
                   { k: "all", l: "All" },
@@ -905,7 +1224,7 @@ export default function MarketPulse() {
               {/* Table Header */}
               <div style={{ 
                 display: "grid", 
-                gridTemplateColumns: "90px 90px 1fr 100px 140px", 
+                gridTemplateColumns: "90px 90px 1fr 100px 180px", 
                 gap: 16, 
                 padding: "14px 24px", 
                 background: C.page, 
@@ -915,14 +1234,14 @@ export default function MarketPulse() {
                 <div style={{ ...label, fontSize: 9 }}>BRAND</div>
                 <div style={{ ...label, fontSize: 9 }}>RECOMMENDATION</div>
                 <div style={{ ...label, fontSize: 9 }}>STATUS</div>
-                <div style={{ ...label, fontSize: 9 }}>OUTCOME</div>
+                <div style={{ ...label, fontSize: 9 }}>IMPACT</div>
               </div>
 
               {/* Table Rows */}
               {filteredRecs.map((r, i) => (
                 <div key={r.id} style={{ 
                   display: "grid", 
-                  gridTemplateColumns: "90px 90px 1fr 100px 140px", 
+                  gridTemplateColumns: "90px 90px 1fr 100px 180px", 
                   gap: 16, 
                   padding: "18px 24px", 
                   borderBottom: i < filteredRecs.length - 1 ? `1px solid ${C.borderLight}` : "none",

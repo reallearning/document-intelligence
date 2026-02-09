@@ -13,36 +13,34 @@ const label = { fontSize: 11, fontWeight: 600, letterSpacing: "0.08em", textTran
 const cardBase = { background: C.card, border: `1px solid ${C.border}` };
 
 // ═══════════════════════════════════════════════════════
-// ENO BRAND DATA
+// SENSODYNE BRAND DATA
 // ═══════════════════════════════════════════════════════
 const brandData = {
-  tagline: "Antacid · Sachet + Bottle",
-  summary: "Gas-O-Fast running regional-language campaign in Rajasthan — new Hindi ads visible on Meta and YouTube, appearing in Amazon sponsored results. Jaipur–Jodhpur corridor seeing impact (−22% primary). Wedding season in 8 weeks will amplify whoever owns the sachet shelf. Counter-action needed now.",
+  tagline: "Sensitivity Toothpaste · ₹20 Trial + Full Range",
+  summary: "Competitive signal: New competitor Sensodent launched with World Cup advertising, aggressive Amazon presence, and 25% retailer margins (vs our 20%). Impact so far limited to Mumbai (−1-2% volume). Our pharmacy-first strategy is the counter — dentist recommendation drives 3x better repeat than GT.",
   kpis: [
-    { label: "BRAND ACHIEVEMENT", value: "78%", delta: "−8% vs LYSM", negative: true },
-    { label: "RAJASTHAN IMPACT", value: "−22%", delta: "Jaipur–Jodhpur", negative: true },
-    { label: "CATEGORY GROWTH", value: "+6%", delta: "Demand healthy", negative: false },
-    { label: "WEEKS TO WEDDING", value: "~8", delta: "Sachet critical", negative: false },
+    { label: "BRAND ACHIEVEMENT", value: "94%", delta: "−3% vs LYSM", negative: true },
+    { label: "MUMBAI IMPACT", value: "−1-2%", delta: "Localized so far", negative: true },
+    { label: "PRICE INDEX", value: "100 vs 85", delta: "They're 15% cheaper", negative: true },
+    { label: "PHARMACY REORDER", value: "92%", delta: "Our moat (vs 28% GT)", negative: false },
   ],
-  
-  competitorName: "Gas-O-Fast",
+  competitorName: "Sensodent",
   
   // ═══════════════════════════════════════════════════════
-  // CONSUMER FUNNEL — Eno specific
+  // CONSUMER FUNNEL — Sensodyne specific
   // ═══════════════════════════════════════════════════════
   funnelStages: [
     {
       id: "awareness",
       name: "Awareness",
-      hasIssue: true,
       metrics: [
-        { label: "Share of Search (RJ)", value: "51%", delta: "−8pp", isGood: false },
-        { label: "Competitor Search", value: "+40%", delta: "Google Trends", isGood: false },
+        { label: "Share of Search", value: "58%", delta: "−2pp", isGood: false },
+        { label: "Competitor Visibility", value: "Rising", delta: "World Cup + Amazon", isGood: false },
       ],
       prompts: [
-        { q: "Why is search share down in Rajasthan?", a: "Two sources showing the same pattern:\n\n• **Google Trends (Rajasthan)**: 'Gas-O-Fast' +40%, 'Eno' flat, category 'gas relief sachet' +18%\n• **Amazon Brand Analytics**: Our share of search for antacid keywords in Rajasthan dropped 8pp to 51%\n\nThey're capturing category growth. Our branded search is stable nationally, but losing ground in Rajasthan specifically." },
-        { q: "What's Gas-O-Fast doing?", a: "Signals we can observe:\n\n• **Meta Ad Library**: New Hindi-language ads visible since mid-January. Creative focuses on 'longer lasting relief'. We can see the ads exist but can't see their spend or targeting.\n• **YouTube**: Pre-roll ads visible in Rajasthan geo (we've seen them)\n• **Amazon**: Appearing in sponsored results for 'antacid sachet' and 'gas relief'\n• **Instagram**: Influencer content visible on public profiles\n\nThis is a sustained regional push, not a one-off burst." },
-        { q: "Is this affecting the rest of India?", a: "**No — localized to Rajasthan so far.**\n\n• Rajasthan: Significant search shift\n• Delhi NCR: No change\n• UP: No change\n• Rest of North: No change\n\nThey're running a focused regional campaign. Risk is spillover to adjacent markets, especially if they expand before wedding season." },
+        { q: "Why is search share down?", a: "Two sources showing the same pattern:\n\n• **Google Trends**: 'Sensodent' searches spiked during World Cup windows. 'Sensodyne' stable. They're capturing incremental category interest.\n• **Amazon Brand Analytics**: Our share of search for 'sensitivity toothpaste' keywords dropped 2pp to 58%.\n\nTwo factors driving this:\n\n1. **World Cup advertising**: TV campaign drove search spikes during match windows\n2. **Amazon keyword bidding**: Sensodent appearing in sponsored results and on our PDPs\n\nOur branded search 'Sensodyne' is stable — they're capturing category search." },
+        { q: "What's Sensodent doing?", a: "Signals we can observe:\n\n• **TV**: World Cup ad campaign — visible during matches\n• **Influencers**: Higher engagement rates on their sponsored posts vs ours (visible on Instagram public profiles)\n• **Amazon**: Sponsored product ads on generic keywords + sponsored display on our PDPs\n• **Pricing**: Index 85 vs our 100 (visible on Flipkart, Amazon)\n• **Trade**: Field reports of 25% retailer margin vs our 20%\n• **Geography**: Activity concentrated in Mumbai — media, BTL, pricing all focused there\n\nThis is a methodical launch, not spray-and-pray." },
+        { q: "Where is impact showing?", a: "So far, impact is **localized to Mumbai**:\n\n• Mumbai volumes: −1-2% (our DMS data)\n• Rest of India: No measurable impact yet\n• Their media, BTL, and trade push all focused on Mumbai\n\nMumbai is likely their test market before national rollout. Emerging threat — not a crisis yet, but signals are clear." },
       ],
     },
     {
@@ -50,13 +48,13 @@ const brandData = {
       name: "Consideration",
       hasIssue: true,
       metrics: [
-        { label: "Amazon Position", value: "Contested", delta: "Competitor in sponsored", isGood: false },
-        { label: "Price Index", value: "100 vs 95", delta: "5% gap", isGood: false },
+        { label: "Dentist Recommendation", value: "78%", delta: "Stable", isGood: true },
+        { label: "E-comm CTR", value: "2.1%", delta: "−0.4pp (Brand Analytics)", isGood: false },
       ],
       prompts: [
-        { q: "What's happening on Amazon?", a: "Gas-O-Fast is investing in Amazon visibility:\n\n• Appearing in sponsored results for 'antacid sachet', 'gas relief sachet'\n• We can see their ads — can't see their spend\n• Their product listing shows price index ~95 vs our 100 (slightly cheaper)\n• Reviews are decent: 4.0★ vs our 4.3★\n\nThey're buying their way into consideration on the category's fastest-growing channel." },
-        { q: "Price difference?", a: "Gas-O-Fast priced at index 95 vs Eno 100 — about 5% cheaper.\n\nNot a huge gap, but combined with:\n• Regional-language advertising (trust signal)\n• Amazon sponsored visibility\n• Retailer margin (field reports suggest they're offering more)\n\nThe price is part of a broader value story they're telling." },
-        { q: "How is offline consideration?", a: "Mixed signals from field:\n\n• **Shelf space**: ASMs report Gas-O-Fast getting better placement in some Jaipur chemists\n• **Counter visibility**: Their sachets appearing at checkout counters\n• **Retailer feedback**: Anecdotal reports of better margins being offered\n\nWe don't have systematic data on competitor margins, but the pattern suggests they're investing in trade." },
+        { q: "Why is e-comm CTR down?", a: "Sensodent is outspending us on Amazon visibility:\n\n• Higher sponsored product ads on category keywords than us\n• Appearing on our own PDPs as sponsored display\n• Visible on generic terms ('sensitivity toothpaste', 'sensitive teeth')\n\nWe can see their ads appearing but can't see spend. Their visibility is clearly higher — they're buying their way into consideration." },
+        { q: "How is dentist recommendation?", a: "Strong. IQVIA prescription data shows Sensodyne maintains 78% share among dentists for sensitivity cases. Sensodent has zero dental professional coverage — they're skipping the recommendation channel entirely.\n\nThis is our moat. Patients with dentist recommendation have 3x higher repeat rate than self-purchase." },
+        { q: "Price and margin impact?", a: "**Price Index**: Sensodent at 85 vs our 100 (15% cheaper on platforms)\n\n**Retailer Margin**: Field reports say they're offering 25% vs our 20% (5pp gap)\n\nWhere this matters:\n• E-commerce: Price-comparison shoppers\n• MT: Shelf price visibility + retailer push\n• Mumbai retail: Some retailers giving them better placement\n\nWhere it doesn't matter as much:\n• Pharmacy: Dentist recommendation overrides price\n• Our ₹20 trial: Counters price argument at entry point" },
       ],
     },
     {
@@ -64,26 +62,26 @@ const brandData = {
       name: "Conversion",
       hasIssue: true,
       metrics: [
-        { label: "Market Share (North)", value: "61.2%", delta: "−1.2pp", isGood: false },
-        { label: "Rajasthan Primary", value: "−22%", delta: "vs LYSM", isGood: false },
+        { label: "Market Share", value: "68.4%", delta: "−0.6pp", isGood: false },
+        { label: "₹20 Trial Conversion", value: "41%", delta: "+3pp", isGood: true },
       ],
       prompts: [
-        { q: "Where are we losing share?", a: "Nielsen shows North zone share down 1.2pp (62.4% → 61.2%), with Gas-O-Fast gaining 1.7pp.\n\n**Geographic breakdown:**\n• Rajasthan: Major impact (−22% primary sales)\n• Jaipur specifically: −28%\n• Jodhpur: −22%\n• Udaipur–Kota: −6% (less affected)\n• Rest of North: Stable\n\nCategory grew +6% — this is share loss, not demand decline." },
-        { q: "Sachet SKU impact?", a: "Sachet is most affected:\n\n• Jaipur sachet: −32% (our DMS data)\n• Sachet mix dropped to 58% vs 65% plan\n• This matters because wedding season demand is 70% sachet\n\nIf we don't recover sachet position before April, wedding season amplifies whoever owns the shelf." },
-        { q: "Why is category growing but we're losing?", a: "This is the key insight:\n\n• **Category**: +6% (healthy demand)\n• **Eno**: −1.2pp share\n• **Gas-O-Fast**: +1.7pp share\n\nPeople want antacids. They're just choosing Gas-O-Fast in Rajasthan because:\n1. Regional-language ads (trust/relevance)\n2. Amazon visibility\n3. Retail push\n\nDemand is there — we're losing the conversion battle." },
+        { q: "Where are we losing share?", a: "Impact is **localized to Mumbai** so far:\n\n• **Mumbai**: −1-2% volume (our DMS confirms)\n• **Rest of India**: No measurable impact yet\n\nWithin Mumbai:\n• E-commerce and MT most affected (price visibility)\n• Pharmacy stable (our moat holding)\n\nMumbai is their test market — media, BTL, trade margins all concentrated there." },
+        { q: "Is this a crisis?", a: "**Not yet — but it's an emerging threat.**\n\nWhat we know:\n• Impact limited to Mumbai (−1-2%)\n• Pharmacy channel unaffected (our moat)\n• Dentist recommendation share stable (78% per IQVIA)\n\nWhat concerns us:\n• Methodical launch (TV + digital + trade + pricing)\n• Mumbai likely test market before national rollout\n• If they prove the model, expansion follows\n\nTime to act is now, before they scale." },
+        { q: "Trade margin issue?", a: "Field intel from Mumbai ASMs:\n\n• Sensodent offering 25% retailer margin vs our 20%\n• Some MT and GT retailers giving them better shelf position\n• Paid visibility on ground (end-caps, counter displays)\n\nThis is anecdotal but consistent pattern. They're buying distribution via margin. Our counter is pharmacy where dentist recommendation matters more than margin." },
       ],
     },
     {
       id: "repeat",
       name: "Repeat & Sentiment",
       metrics: [
-        { label: "R&R Score", value: "4.3★", delta: "Stable", isGood: true },
-        { label: "Outlet Reorder", value: "68%", delta: "Stable (DMS)", isGood: true },
+        { label: "Pharmacy Reorder", value: "92%", delta: "+4pp", isGood: true },
+        { label: "R&R Score", value: "4.4★", delta: "Stable", isGood: true },
       ],
       prompts: [
-        { q: "Is there a product issue?", a: "**No — this is not a product problem.**\n\n• Amazon R&R score: 4.3★ (stable)\n• Outlet reorder rate: 68% (DMS data, stable)\n• No increase in negative reviews\n\nPeople who buy Eno are satisfied. The problem is fewer people are reaching the purchase in Rajasthan — it's a consideration/conversion issue, not satisfaction." },
-        { q: "Gas-O-Fast reviews?", a: "From Amazon (publicly visible):\n\n• Gas-O-Fast: 4.0★, ~12,000 reviews\n• Common themes: 'good value', 'fast relief', 'regional brand'\n• Some mention 'saw the ad'\n\nOur reviews: 4.3★, ~65,000 reviews. We have the better product perception — we're just losing the awareness and consideration battle in Rajasthan." },
-        { q: "Wedding season impact?", a: "**Wedding season is the amplifier.**\n\nHistorical pattern:\n• April–May: 15–20% antacid demand spike\n• Sachet: 70% of incremental volume\n• Rajasthan + UP: Highest wedding density\n\nWhoever owns the sachet shelf in 8 weeks captures that demand. If Gas-O-Fast maintains momentum, they capture wedding season. If we counter now, we recover position before peak." },
+        { q: "Why is pharmacy reorder so high?", a: "The recommendation loop:\n\n1. Dentist recommends Sensodyne for sensitivity\n2. Patient buys at pharmacy (trust transfer)\n3. Product works → patient returns to same pharmacy\n4. Pharmacist reinforces → repeat purchase\n\nThis loop doesn't exist in GT or e-commerce. Sensodent's direct-to-consumer model skips this entirely — they'll have lower repeat." },
+        { q: "Sensodent reviews?", a: "From Amazon reviews (publicly visible):\n\n• Sensodent: 4.1★ avg, ~2,400 reviews\n• Common feedback: 'good value', 'works okay', 'not as effective as Sensodyne'\n• Some reviews mention switching from Sensodyne for price\n\nOur reviews: 4.4★, ~48,000 reviews. 'Dentist recommended' appears in 34% of positive reviews — the trust signal matters." },
+        { q: "Churn risk?", a: "Analyzing our repeat purchase data:\n\n• High churn risk: E-commerce buyers with no prior dentist touchpoint\n• Medium risk: MT buyers who see Sensodent shelf price\n• Low risk: Pharmacy buyers with dentist recommendation\n\nWe should focus retention efforts on e-commerce cohort — they're most vulnerable to Sensodent's price message." },
       ],
     },
   ],
@@ -92,85 +90,100 @@ const brandData = {
   // REGIONAL BREAKDOWN
   // ═══════════════════════════════════════════════════════
   regions: [
-    { name: "Rajasthan", achievement: 68, status: "at-risk",
-      narrative: "Gas-O-Fast regional campaign causing share loss in Jaipur–Jodhpur corridor. New Hindi ads visible on Meta and YouTube. Amazon sponsored positions contested. Sachet SKU most affected. Wedding season in 8 weeks.",
-      keyWin: "Udaipur–Kota holding at 76% — campaign not active there yet",
-      keyRisk: "Jaipur−Jodhpur down 22-28%. Sachet down 32%. Wedding season will amplify whoever owns shelf.",
+    { name: "Mumbai", achievement: 88, status: "at-risk",
+      narrative: "Sensodent's test market. World Cup ads, influencer campaigns, 25% retailer margins, BTL all concentrated here. Our volume down 1-2%. Early warning — if they prove the model here, national rollout follows.",
+      keyWin: "Pharmacy channel holding — Apollo and wellness chains showing stable reorder",
+      keyRisk: "MT and GT seeing Sensodent shelf gains. E-commerce share under pressure. This is their beachhead.",
       metrics: [
-        { label: "Primary Sales Δ", value: "−22%", negative: true },
-        { label: "Sachet Impact", value: "−32%", note: "Jaipur" },
-        { label: "Numeric Dist.", value: "72%", note: "Stable" },
-        { label: "Weeks to Wedding", value: "~8", note: "Critical window" },
+        { label: "Volume Impact", value: "−1-2%", negative: true },
+        { label: "Sensodent Activity", value: "High", note: "TV, digital, trade, BTL" },
+        { label: "Pharmacy Reorder", value: "84%", note: "Holding" },
+        { label: "Retailer Margin Gap", value: "5pp", note: "25% vs our 20%" },
       ],
-      weeklyTrend: [{w:"W48",v:92},{w:"W49",v:88},{w:"W50",v:84},{w:"W51",v:79},{w:"W52",v:75},{w:"W1",v:72},{w:"W2",v:70},{w:"W3",v:68}],
+      weeklyTrend: [{w:"W48",v:94},{w:"W49",v:93},{w:"W50",v:92},{w:"W51",v:91},{w:"W52",v:90},{w:"W1",v:89},{w:"W2",v:88},{w:"W3",v:88}],
       asmAreas: [
-        { name: "Jaipur–North Rajasthan", ach: 62, primary: "₹3.0L", delta: "−28%", dist: "74%", flag: "Gas-O-Fast ads active" },
-        { name: "Udaipur–Kota–South", ach: 76, primary: "₹4.1L", delta: "−6%", dist: "71%", flag: "Not yet affected" },
+        { name: "Mumbai Central + South", ach: 86, primary: "₹9.2L", delta: "−3%", dist: "76%", flag: "Sensodent BTL + shelf presence" },
+        { name: "Mumbai Suburbs + Thane", ach: 90, primary: "₹7.8L", delta: "−1%", dist: "72%", flag: "MT shelf pressure" },
       ],
     },
-    { name: "Delhi NCR", achievement: 91, status: "on-track",
-      narrative: "Stable. No Gas-O-Fast campaign activity. Sachet performing well in GT. Monitor for spillover from Rajasthan.",
-      keyWin: "Sachet repeat rate 72% in South Delhi GT — highest in North zone",
-      keyRisk: "Watch for campaign spillover from Rajasthan",
+    { name: "Delhi NCR", achievement: 94, status: "needs-attention",
+      narrative: "World Cup ads visible but no ground activation yet. E-commerce ads appearing on our PDPs. If Mumbai succeeds, Delhi is likely next. Build pharmacy moat now.",
+      keyWin: "South Delhi pharmacy pilot: 89% reorder rate — dentist recommendation driving repeat",
+      keyRisk: "Sensodent e-commerce ads appearing on our Amazon PDPs. Ground activation likely coming.",
+      metrics: [
+        { label: "Volume Impact", value: "Flat", negative: false },
+        { label: "Sensodent Presence", value: "Ads only", note: "No ground activation yet" },
+        { label: "Pharmacy Reorder", value: "89%", note: "Pilot area" },
+        { label: "Dentist Coverage", value: "72%", note: "Target 80%" },
+      ],
+      weeklyTrend: [{w:"W48",v:96},{w:"W49",v:96},{w:"W50",v:95},{w:"W51",v:95},{w:"W52",v:94},{w:"W1",v:94},{w:"W2",v:94},{w:"W3",v:94}],
+      asmAreas: [
+        { name: "South Delhi + Gurgaon", ach: 96, primary: "₹8.2L", delta: "Flat", dist: "78%", flag: "Pharmacy pilot strong" },
+        { name: "Noida + East Delhi", ach: 92, primary: "₹6.1L", delta: "−1%", dist: "71%", flag: "Monitor for expansion" },
+      ],
+    },
+    { name: "UP East", achievement: 98, status: "on-track",
+      narrative: "Pharmacy-first strategy validated in Agra — 92% reorder. Sensodent not yet visible in this market. Replication to Mathura, Firozabad, Etah underway. This is our proof point.",
+      keyWin: "Agra pharmacy-first: 92% reorder, 58% trial-to-full conversion. 3x better than GT-led distribution",
+      keyRisk: "Varanasi dentist coverage stalled at 48% — need 60% before Sensodent arrives",
+      metrics: [
+        { label: "Primary Sales Δ", value: "+6%", negative: false },
+        { label: "Pharmacy Reorder", value: "92%", note: "Agra pilot" },
+        { label: "Trial Conversion", value: "58%", note: "Pharmacy channel" },
+        { label: "Dentist Coverage", value: "64%", note: "Above target" },
+      ],
+      weeklyTrend: [{w:"W48",v:94},{w:"W49",v:95},{w:"W50",v:96},{w:"W51",v:96},{w:"W52",v:97},{w:"W1",v:97},{w:"W2",v:98},{w:"W3",v:98}],
+      asmAreas: [
+        { name: "Agra–Mathura", ach: 104, primary: "₹7.8L", delta: "+12%", dist: "76%", flag: "Playbook validated" },
+        { name: "Varanasi–Allahabad", ach: 91, primary: "₹5.4L", delta: "0%", dist: "58%", flag: "Dentist coverage 48%" },
+      ],
+    },
+    { name: "UP West", achievement: 88, status: "needs-attention",
+      narrative: "Mixed. Lucknow pharmacy activation behind plan. Kanpur showing early Sensodent presence in MT. Need to accelerate dentist coverage before Sensodent expands.",
+      keyWin: "Lucknow Apollo pharmacy chain partnership driving 84% reorder in covered outlets",
+      keyRisk: "Sensodent spotted in Kanpur DMart. Our dentist coverage only 52% — vulnerable",
+      metrics: [
+        { label: "Primary Sales Δ", value: "−2%", negative: true },
+        { label: "Pharmacy Reorder", value: "78%", note: "Below Agra benchmark" },
+        { label: "Dentist Coverage", value: "52%", note: "Below 60% target" },
+        { label: "MT Share Δ", value: "−0.8pp", note: "Sensodent entry" },
+      ],
+      weeklyTrend: [{w:"W48",v:92},{w:"W49",v:91},{w:"W50",v:90},{w:"W51",v:90},{w:"W52",v:89},{w:"W1",v:89},{w:"W2",v:88},{w:"W3",v:88}],
+      asmAreas: [
+        { name: "Lucknow–Kanpur", ach: 84, primary: "₹6.2L", delta: "−5%", dist: "64%", flag: "Sensodent in Kanpur MT" },
+        { name: "Agra–Aligarh", ach: 94, primary: "₹5.8L", delta: "+2%", dist: "72%", flag: null },
+      ],
+    },
+    { name: "Rajasthan", achievement: 96, status: "on-track",
+      narrative: "Stable. Sensodent not yet visible. Jaipur pharmacy network strong. Use this window to build dentist coverage before competitor arrives.",
+      keyWin: "Jaipur dental association partnership — 82% of member dentists now recommending Sensodyne",
+      keyRisk: "No immediate risk, but Sensodent likely to expand here within 2-3 months based on their metro-first pattern",
       metrics: [
         { label: "Primary Sales Δ", value: "+4%", negative: false },
-        { label: "Numeric Dist.", value: "81%", note: "Above target" },
-        { label: "Sachet Mix", value: "62%", note: "On plan" },
-        { label: "Stock Cover", value: "18 days", note: "Healthy" },
+        { label: "Pharmacy Reorder", value: "86%", note: "Strong" },
+        { label: "Dentist Coverage", value: "71%", note: "Above target" },
+        { label: "₹20 Trial Velocity", value: "+18%", note: "Growing" },
       ],
-      weeklyTrend: [{w:"W48",v:86},{w:"W49",v:88},{w:"W50",v:89},{w:"W51",v:90},{w:"W52",v:91},{w:"W1",v:90},{w:"W2",v:91},{w:"W3",v:91}],
+      weeklyTrend: [{w:"W48",v:92},{w:"W49",v:93},{w:"W50",v:94},{w:"W51",v:94},{w:"W52",v:95},{w:"W1",v:95},{w:"W2",v:96},{w:"W3",v:96}],
       asmAreas: [
-        { name: "South Delhi + Gurgaon", ach: 94, primary: "₹6.8L", delta: "+6%", dist: "84%", flag: null },
-        { name: "Noida + East Delhi", ach: 88, primary: "₹5.2L", delta: "+2%", dist: "78%", flag: null },
+        { name: "Jaipur–North", ach: 98, primary: "₹7.4L", delta: "+6%", dist: "74%", flag: "Dental association partner" },
+        { name: "Udaipur–Kota–South", ach: 94, primary: "₹5.6L", delta: "+2%", dist: "68%", flag: null },
       ],
     },
-    { name: "UP West", achievement: 74, status: "needs-attention",
-      narrative: "Mixed. Lucknow sachet availability dropping. No Gas-O-Fast activity but vulnerable if they expand. Wedding season coming.",
-      keyWin: "Agra–Aligarh holding at 79% — strong distributor relationship",
-      keyRisk: "Lucknow sachet stock at 54% mix vs 65% plan. If Gas-O-Fast expands here, we're exposed.",
-      metrics: [
-        { label: "Primary Sales Δ", value: "−12%", negative: true },
-        { label: "Sachet Mix", value: "54%", note: "Below plan" },
-        { label: "Numeric Dist.", value: "68%", note: "−3pp vs prior" },
-        { label: "Stock Cover", value: "11 days", note: "Tight" },
-      ],
-      weeklyTrend: [{w:"W48",v:88},{w:"W49",v:86},{w:"W50",v:83},{w:"W51",v:80},{w:"W52",v:78},{w:"W1",v:76},{w:"W2",v:75},{w:"W3",v:74}],
-      asmAreas: [
-        { name: "Lucknow–Kanpur", ach: 70, primary: "₹3.8L", delta: "−16%", dist: "64%", flag: "Sachet availability issue" },
-        { name: "Agra–Aligarh", ach: 79, primary: "₹4.4L", delta: "−6%", dist: "72%", flag: null },
-      ],
-    },
-    { name: "UP East", achievement: 82, status: "needs-attention",
-      narrative: "Mixed. Varanasi distributor activation stalled. Wedding season approaching — need sachet position before April.",
-      keyWin: "Agra–Mathura sachet performance strong",
-      keyRisk: "Varanasi distributor inactive 3 weeks. Gorakhpur sachet stock at 6 days.",
-      metrics: [
-        { label: "Primary Sales Δ", value: "−5%", negative: true },
-        { label: "Numeric Dist.", value: "65%", note: "−1pp" },
-        { label: "Sachet Mix", value: "60%", note: "Near plan" },
-        { label: "Stock Cover", value: "13 days", note: "OK" },
-      ],
-      weeklyTrend: [{w:"W48",v:90},{w:"W49",v:89},{w:"W50",v:87},{w:"W51",v:86},{w:"W52",v:84},{w:"W1",v:83},{w:"W2",v:82},{w:"W3",v:82}],
-      asmAreas: [
-        { name: "Agra–Mathura", ach: 88, primary: "₹5.1L", delta: "+2%", dist: "73%", flag: null },
-        { name: "Varanasi–Allahabad", ach: 74, primary: "₹3.2L", delta: "−11%", dist: "58%", flag: "Distributor inactive 3 weeks" },
-        { name: "Gorakhpur–East", ach: 81, primary: "₹2.9L", delta: "−4%", dist: "62%", flag: "Sachet stock 6 days" },
-      ],
-    },
-    { name: "Madhya Pradesh", achievement: 85, status: "on-track",
-      narrative: "Steady. No competitive pressure. Pre-wedding stocking underway. Bhopal distribution strong.",
-      keyWin: "Bhopal numeric distribution at 78% — highest MP has achieved for Eno",
-      keyRisk: "Rural penetration low at 31%. Watch for Gas-O-Fast expansion.",
+    { name: "Madhya Pradesh", achievement: 90, status: "on-track",
+      narrative: "Steady progress. Bhopal dentist activation showing results. Sensodent not yet present. Focus on building pharmacy moat before they arrive.",
+      keyWin: "Bhopal dental college partnership — students being trained on Sensodyne recommendation",
+      keyRisk: "Rural penetration low at 34% — but Sensodent unlikely to target rural",
       metrics: [
         { label: "Primary Sales Δ", value: "+3%", negative: false },
-        { label: "Numeric Dist.", value: "71%", note: "Improving" },
-        { label: "Sachet Mix", value: "63%", note: "On plan" },
-        { label: "Stock Cover", value: "16 days", note: "Healthy" },
+        { label: "Pharmacy Reorder", value: "81%", note: "Good" },
+        { label: "Dentist Coverage", value: "58%", note: "Near target" },
+        { label: "Rural Penetration", value: "34%", note: "Low but stable" },
       ],
-      weeklyTrend: [{w:"W48",v:80},{w:"W49",v:81},{w:"W50",v:82},{w:"W51",v:83},{w:"W52",v:84},{w:"W1",v:84},{w:"W2",v:85},{w:"W3",v:85}],
+      weeklyTrend: [{w:"W48",v:86},{w:"W49",v:87},{w:"W50",v:88},{w:"W51",v:88},{w:"W52",v:89},{w:"W1",v:89},{w:"W2",v:90},{w:"W3",v:90}],
       asmAreas: [
-        { name: "Bhopal–Indore", ach: 87, primary: "₹5.6L", delta: "+5%", dist: "78%", flag: null },
-        { name: "Jabalpur–Gwalior–East", ach: 82, primary: "₹3.4L", delta: "0%", dist: "63%", flag: "Rural dist. 31%" },
+        { name: "Bhopal–Indore", ach: 93, primary: "₹6.1L", delta: "+5%", dist: "68%", flag: "Dental college partner" },
+        { name: "Jabalpur–Gwalior–East", ach: 86, primary: "₹4.2L", delta: "0%", dist: "54%", flag: "Rural dist. 34%" },
       ],
     },
   ],
@@ -180,87 +193,82 @@ const brandData = {
   // ═══════════════════════════════════════════════════════
   insights: [
     {
-      id: 1, priority: "critical", type: "Competitive Alert", region: "Rajasthan · Jaipur–Jodhpur",
-      headline: "Gas-O-Fast regional campaign capturing share in Rajasthan — counter-action needed before wedding season",
-      subtitle: "New Hindi ads visible on Meta/YouTube. Amazon sponsored positions contested. Jaipur primary down 28%, sachet down 32%. Wedding season in 8 weeks.",
+      id: 1, priority: "critical", type: "Competitive Alert", region: "Mumbai · Test Market",
+      headline: "Sensodent launched with World Cup campaign — Mumbai is their test market, signals are clear",
+      subtitle: "TV ads during World Cup, aggressive Amazon presence, 25% retailer margins, higher influencer engagement. Mumbai volume down 1-2%. Emerging threat — not a crisis yet.",
       indicatorType: "leading",
       kpis: [
-        { label: "Share Change", value: "−1.2pp", note: "North zone" },
-        { label: "Rajasthan Primary", value: "−22%", note: "Jaipur–Jodhpur" },
-        { label: "Sachet Impact", value: "−32%", note: "Jaipur" },
-        { label: "Category Growth", value: "+6%", note: "Demand healthy" },
+        { label: "Mumbai Impact", value: "−1-2%", note: "Our volume" },
+        { label: "Price Index", value: "85 vs 100", note: "15% cheaper" },
+        { label: "Retailer Margin", value: "25% vs 20%", note: "5pp gap" },
+        { label: "Rx Share", value: "78%", note: "Our moat intact" },
       ],
       evidence: [
-        { source: "Nielsen", summary: "North zone share declined 62.4% → 61.2% (−1.2pp). Gas-O-Fast gained 1.7pp to 19.8%. Category grew 6% — this is competitive share loss, not demand decline." },
-        { source: "Google Trends + Amazon Brand Analytics", summary: "'Gas-O-Fast' searches in Rajasthan up ~40% (Trends). Amazon share of search for antacid keywords down 8pp to 51%. Category demand rising but being captured by competitor." },
-        { source: "Meta Ad Library", summary: "Gas-O-Fast Hindi-language ads visible since mid-January. We can see the creatives exist — 'longer lasting relief' messaging. Can't see their spend or targeting details." },
-        { source: "Amazon observation", summary: "Gas-O-Fast appearing in sponsored results for 'antacid sachet' and 'gas relief'. Their listing visible with ~5% price advantage." },
-        { source: "DMS (Internal)", summary: "Jaipur ASM: −28%. Jodhpur: −22%. Sachet SKU most affected (−32% in Jaipur). Pattern matches campaign geography. Udaipur–Kota less affected (−6%)." },
-        { source: "Past Action (Gujarat)", summary: "In Q2 2024, Gas-O-Fast ran similar regional push in Gujarat. Counter-detailing top 40 chemists + trade scheme recovered 0.8pp share within 6 weeks. Wedding season timing amplified recovery to +1.1pp." },
+        { source: "Google Trends + Amazon Brand Analytics", summary: "'Sensodent' searches spiked during World Cup windows. Amazon share of search for 'sensitivity toothpaste' down 2pp. They're capturing category search." },
+        { source: "Amazon observation", summary: "Sensodent running higher sponsored product ads than us on sensitivity keywords. Appearing as sponsored display on our PDPs. Higher visibility on generic and Sensodyne keywords." },
+        { source: "Instagram observation", summary: "Sensodent influencer posts showing higher engagement rates than our sponsored content. Visible on public profiles — they're getting better traction." },
+        { source: "Platform pricing", summary: "Sensodent priced at index 85 vs Sensodyne 100 on Flipkart and Amazon. 15% price gap clearly visible." },
+        { source: "Field Reports (Mumbai)", summary: "ASMs report Sensodent offering 25% retailer margin vs our 20%. Paid visibility on ground — end-caps, counter displays. BTL activity in South Mumbai retail." },
+        { source: "DMS (Internal)", summary: "Mumbai volumes down 1-2% vs prior period. Rest of India stable. Impact is localized to their test market." },
+        { source: "Past Action (Agra Pilot)", summary: "Pharmacy-first strategy delivered 92% reorder vs 28% GT in Agra. Dentist recommendation overrides price sensitivity — this is our proven competitive moat." },
       ],
-      salesAction: "Counter-detail top 50 Jaipur/Jodhpur chemists this week — sachet placement at counter. Brief ASMs on competitive activity. Ensure sachet stock-up ahead of wedding season.",
-      marketingAction: "Evaluate regional-language counter-campaign on Meta/YouTube. Consider trade scheme on sachets for Rajasthan (4 weeks). Activate wedding season messaging early.",
+      salesAction: "Accelerate pharmacy-first in Mumbai — our moat. Brief Mumbai ASMs to focus on pharmacy channel. Don't engage in price competition on MT shelf. Document competitor BTL activity.",
+      marketingAction: "Hold on e-commerce promotional spend. Focus 'Dentist Recommended' messaging in pharmacy. Monitor for Delhi expansion signals. Prepare counter-playbook.",
       pastValidation: {
-        title: "Similar counter-action worked in Gujarat",
-        detail: "In Q2 2024, Gas-O-Fast ran similar regional push in Gujarat. Counter-detailing top 40 chemists + trade scheme recovered 0.8pp share within 6 weeks. Wedding season timing amplified recovery.",
-        outcome: "+1.1pp share recovery by June",
-        confidence: "High — same competitor, same tactic"
+        title: "Pharmacy-first beats price competition",
+        detail: "In Agra pilot, pharmacy channel delivered 92% reorder vs 28% in GT. Dentist recommendation overrides price sensitivity. This is our competitive moat.",
+        outcome: "3.3x better repeat in pharmacy vs GT",
+        confidence: "High — validated in controlled pilot"
       },
       syncedTo: { 
         system: "Sales Watchtower", 
-        targets: ["Jaipur ASM", "Rajasthan RSM"], 
+        targets: ["Mumbai ASMs", "West Zone RSM"], 
         status: "Pushed today",
         fieldBrief: [
-          { target: "Jaipur ASM", brief: "Gas-O-Fast campaign active — new Hindi ads visible. Sachet down 32%. Priority this week: Counter-detail top 25 chemists, push sachet placement at counter. Wedding season in 8 weeks — sachet position now determines who captures demand." },
-          { target: "Rajasthan RSM", brief: "Regional campaign impacting Jaipur–Jodhpur. Udaipur–Kota less affected — campaign not active there yet. Evaluate trade scheme for sachets. Ensure stock-up ahead of wedding season." },
+          { target: "Mumbai ASMs", brief: "Sensodent active in your territory — World Cup ads, Amazon presence, 25% retailer margins. Our volume down 1-2%. Focus on pharmacy channel where our moat is strong. Document competitor BTL and trade activity." },
+          { target: "West Zone RSM", brief: "Mumbai is Sensodent's test market. If they succeed, expansion likely. Prepare counter-playbook using Agra pharmacy-first learnings. Don't compete on price — compete on recommendation." },
         ]
       },
       agentTrail: [
-        { agent: "Orchestrator", icon: "◈", action: "Anomaly detected: Eno primary declining in Rajasthan while category growth rising", routing: "Dispatching to Market Share, Consumer Demand, Competitive Signal agents" },
-        { agent: "Market Share Agent", icon: "▣", source: "Nielsen — North Zone Antacid", query: "SELECT brand, value_share, share_change FROM nielsen WHERE category='Antacid' AND zone='North'", finding: "Eno 62.4% → 61.2% (−1.2pp). Gas-O-Fast +1.7pp. Category +6%.", inference: "Losing share to Gas-O-Fast specifically. Category healthy." },
-        { agent: "Consumer Demand Agent", icon: "◉", source: "Google Trends + Amazon Brand Analytics", query: "google_trends(['gas-o-fast','eno'], geo='IN-RJ') | amazon_brand_analytics('antacid', geo='RJ')", finding: "'Gas-O-Fast' +40% (Trends). Amazon SoS down 8pp to 51%.", inference: "Competitor capturing category growth via regional content." },
-        { agent: "Competitive Signal Agent", icon: "◆", source: "Meta Ad Library · Amazon", query: "meta_ad_library(advertiser='Gas-O-Fast') | amazon_search('antacid sachet')", finding: "Hindi ads visible on Meta. Sponsored positions on Amazon.", inference: "Sustained regional campaign with digital + trade components." },
-        { agent: "Synthesis", icon: "✦", finding: null, inference: "Confidence: HIGH. Four signals converge. Coordinated competitive attack via regional-language digital. Counter-action needed before wedding season amplifies impact." },
+        { agent: "Orchestrator", icon: "◈", action: "Multiple signals detected: New competitor 'Sensodent' appearing across search, social, e-commerce, and field reports", routing: "Dispatching to Market Share, Consumer Demand, Competitive Signal, and Field Intelligence agents" },
+        { agent: "Consumer Demand Agent", icon: "◉", source: "Google Trends · Amazon Brand Analytics", query: "google_trends(keywords=['sensodent','sensodyne'], geo='IN', timeframe='8w') | amazon_brand_analytics('sensitivity toothpaste')", finding: "Sensodent searches spiked during World Cup. Search share down 2pp. Concentrated in Mumbai.", inference: "TV campaign drove awareness. World Cup timing strategic for reach." },
+        { agent: "Competitive Signal Agent", icon: "◆", source: "Amazon observation · Instagram · Platform pricing", query: "amazon_sponsored_visibility('sensitivity toothpaste') | instagram_engagement(brand='sensodent') | platform_pricing(brand='sensodent')", finding: "Higher sponsored ads than us on Amazon. Appearing on our PDPs. Higher influencer engagement. Price index 85 vs 100.", inference: "Methodical launch — TV + digital + trade + pricing. Well-funded, not amateur." },
+        { agent: "Field Intelligence Agent", icon: "▣", source: "SFA — Mumbai ASM reports", query: "field_reports(competitor='sensodent', geo='Mumbai')", finding: "25% retailer margin vs our 20%. BTL visible in South Mumbai. Paid shelf visibility.", inference: "Trade push active. Buying distribution via margin." },
+        { agent: "Commercial Performance Agent", icon: "▣", source: "DMS — Mumbai", query: "SELECT territory, volume_change FROM dms WHERE brand='Sensodyne' AND city='Mumbai'", finding: "Mumbai volumes down 1-2%. Rest of India stable.", inference: "Impact localized to test market. Not yet national." },
+        { agent: "Synthesis", icon: "✦", finding: null, inference: "Confidence: HIGH on signals, MEDIUM on trajectory. Sensodent is real, methodical, and funded. Mumbai is test market. Our moat (pharmacy/Rx) intact. Emerging threat — act before they scale." },
       ],
     },
     {
-      id: 2, priority: "high", type: "Seasonal Opportunity", region: "All Regions",
-      headline: "Wedding season in 8 weeks — sachet demand spikes 15–20%, positioning now determines who captures it",
-      subtitle: "Heavy meals at weddings drive antacid demand. Sachet format is 70% of incremental volume. Rajasthan and UP highest wedding density.",
-      indicatorType: "leading",
+      id: 2, priority: "high", type: "Strategy Validation", region: "UP East · Agra",
+      headline: "Pharmacy-first playbook validated — 92% reorder proves our competitive moat",
+      subtitle: "Dentist recommendation → pharmacy purchase → repeat loop creates 3.3x better retention. This is how we beat Sensodent — not on price, on recommendation.",
+      indicatorType: "lagging",
       kpis: [
-        { label: "Historical Uplift", value: "15–20%", note: "April–May" },
-        { label: "Sachet Share", value: "70%", note: "of incremental" },
-        { label: "Key Regions", value: "RJ, UP", note: "Highest wedding density" },
-        { label: "Planning Window", value: "~8 weeks", note: "Act now" },
+        { label: "Pharmacy Reorder", value: "92%", note: "Agra pilot" },
+        { label: "GT Reorder", value: "28%", note: "Control group" },
+        { label: "Trial Conversion", value: "58%", note: "₹20 to full-size" },
+        { label: "Advantage", value: "3.3x", note: "vs price-led channels" },
       ],
       evidence: [
-        { source: "Historical Sales (3yr)", summary: "April–May consistently shows 15–20% antacid uplift. 2024: +18%. 2023: +16%. Sachet format drives 70% of incremental volume." },
-        { source: "Google Trends", summary: "'Gas after heavy meal', 'acidity remedy' search terms spike 2–3 weeks before wedding season peak. Rajasthan and UP show highest correlation." },
-        { source: "DMS (Stock Cover)", summary: "Most distributors adequate. Rajasthan sachet stocks depleted from Gas-O-Fast displacement — priority replenishment needed." },
-        { source: "Past Action (UP 2024)", summary: "Pre-positioning sachets 4 weeks before wedding season in UP captured +18% incremental volume. Distributors who stocked early saw 2.3x better fill rate during peak week." },
+        { source: "DMS (Outlet Reorder)", summary: "Agra pharmacy: 92% reorder. GT: 28%. Same product, same pricing. Channel strategy is the differentiator." },
+        { source: "DMS (Trial Tracking)", summary: "₹20 trial to full-size conversion: 58% in pharmacy vs 34% in GT. Dentist recommendation provides credibility." },
+        { source: "IQVIA", summary: "Our prescription share for sensitivity: 78%. Sensodent has 0% — they have no professional coverage." },
       ],
-      salesAction: "Ensure sachet stock-up across Rajasthan and UP by end-March. Rajasthan priority replenishment needed. Map high-density wedding geographies for targeted placement.",
-      marketingAction: "Prepare wedding-season digital campaign for early activation (week of Mar 15 vs normal Apr 1). Pre-load 'heavy meal relief' search ads in RJ and UP.",
-      pastValidation: {
-        title: "Seasonal prep delivered last year",
-        detail: "In 2024, pre-positioning sachets 4 weeks before wedding season in UP captured +18% incremental volume. Distributors who stocked early vs late saw 2.3x better fill rate during peak week.",
-        outcome: "+18% incremental, 2.3x fill rate advantage",
-        confidence: "High — consistent 3-year pattern"
-      },
+      salesAction: "Replicate playbook to Mumbai immediately. Share Agra learnings with Mumbai ASMs. Target 200 pharmacy outlets in Mumbai for activation.",
+      marketingAction: "Use Agra data in pharmacy and distributor pitches. Develop 'Dentist Recommended' POS materials for Mumbai pharmacies.",
       syncedTo: { 
         system: "Sales Watchtower", 
-        targets: ["Rajasthan RSM", "UP West RSM"], 
+        targets: ["UP East RSM", "Mumbai ASMs"], 
         status: "Pushed today",
         fieldBrief: [
-          { target: "Rajasthan RSM", brief: "Wedding season in 8 weeks. Sachet is 70% of incremental. Rajasthan stock depleted from Gas-O-Fast displacement — priority replenishment. Map wedding venues for targeted placement." },
-          { target: "UP West RSM", brief: "Wedding season prep. Sachet stock-up across all distributors by end-March. Lucknow sachet mix at 54% — needs attention." },
+          { target: "UP East RSM", brief: "Your Agra playbook is the counter to Sensodent. Share learnings with Mumbai team. Continue deepening coverage in adjacent districts." },
+          { target: "Mumbai ASMs", brief: "Agra playbook ready — pharmacy-first delivers 3.3x better reorder. Apply this in Mumbai to counter Sensodent's price play. Dentist recommendation beats price." },
         ]
       },
       agentTrail: [
-        { agent: "Orchestrator", icon: "◈", action: "Seasonal trigger: Wedding season approaching. Connecting to current competitive situation.", routing: "Dispatching to Demand Forecasting and Distribution agents" },
-        { agent: "Demand Forecasting Agent", icon: "◇", source: "Historical Sales · Google Trends", query: "SELECT year, month, uplift_pct FROM seasonal_demand WHERE trigger='wedding_season'", finding: "Consistent 15–20% uplift. Sachet 70% of incremental.", inference: "Predictable pattern. 8-week window." },
-        { agent: "Synthesis", icon: "✦", finding: null, inference: "Confidence: HIGH. Sachet position now determines who captures wedding season. Rajasthan situation makes this urgent." },
+        { agent: "Orchestrator", icon: "◈", action: "Connecting Agra validation to Sensodent threat", routing: "This playbook is the competitive counter" },
+        { agent: "Distribution Agent", icon: "▣", source: "DMS — Agra Pilot", query: "SELECT channel, reorder_rate FROM sensodyne_pilot WHERE district='Agra'", finding: "Pharmacy 92%, GT 28%. 3.3x advantage.", inference: "Replicable. This is how we beat price competition." },
+        { agent: "Synthesis", icon: "✦", finding: null, inference: "Confidence: HIGH. Proven playbook. Apply to Mumbai immediately." },
       ],
     },
   ],
@@ -269,21 +277,31 @@ const brandData = {
   // PAST RECOMMENDATIONS
   // ═══════════════════════════════════════════════════════
   pastRecommendations: [
-    { id: 1, quarter: "Q2 2024", month: "Apr", region: "Gujarat", type: "Competitive Response",
-      suggestion: "Counter-detail top 40 chemists + trade scheme vs Gas-O-Fast regional push",
-      executed: true, executedBy: "Gujarat RSM",
-      outcome: "+1.1pp share recovery", outcomeValue: 1.1, outcomeType: "positive",
-      detail: "Same competitor, same tactic. Counter-detailing + trade scheme recovered share within 6 weeks. Wedding season timing amplified recovery." },
-    { id: 2, quarter: "Q1 2024", month: "Mar", region: "UP", type: "Seasonal Prep",
-      suggestion: "Pre-position sachets 4 weeks before wedding season",
-      executed: true, executedBy: "UP West RSM",
-      outcome: "+18% incremental volume", outcomeValue: 18, outcomeType: "positive",
-      detail: "Early stocking captured wedding season demand. Distributors who stocked early vs late saw 2.3x better fill rate." },
+    { id: 1, quarter: "Q4 2025", month: "Dec", region: "UP East", type: "Channel Strategy",
+      suggestion: "Pilot pharmacy-first distribution for ₹20 pack in Agra",
+      executed: true, executedBy: "Agra ASM",
+      outcome: "92% reorder rate achieved", outcomeValue: 92, outcomeType: "positive",
+      detail: "Pharmacy channel delivered 92% reorder vs 28% in GT control. Trial-to-full conversion 58% vs 34%. Now being replicated." },
+    { id: 2, quarter: "Q4 2025", month: "Nov", region: "Rajasthan", type: "Partnership",
+      suggestion: "Partner with Jaipur Dental Association for recommendation program",
+      executed: true, executedBy: "Rajasthan RSM",
+      outcome: "82% dentist recommendation share", outcomeValue: 82, outcomeType: "positive",
+      detail: "Association partnership drove 82% of member dentists to actively recommend Sensodyne. Created template for other state associations." },
+    { id: 3, quarter: "Q3 2025", month: "Sep", region: "Delhi NCR", type: "Trial Pack",
+      suggestion: "Launch ₹20 trial pack in pharmacy channel with dentist sampling",
+      executed: true, executedBy: "Marketing Head",
+      outcome: "41% trial-to-full conversion", outcomeValue: 41, outcomeType: "positive",
+      detail: "₹20 entry point removed price barrier. Dentist sampling created recommendation trigger. Conversion 41% vs 28% for direct full-size purchase." },
+    { id: 4, quarter: "Q3 2025", month: "Aug", region: "UP West", type: "E-commerce Defense",
+      suggestion: "Increase Amazon A+ content and review response to defend against private labels",
+      executed: false, executedBy: null,
+      outcome: "E-comm share declined 1.2pp", outcomeValue: -1.2, outcomeType: "negative",
+      detail: "Did not execute. Subsequently lost 1.2pp e-commerce share as Sensodent and private labels gained. Recommendation: e-commerce is not our moat — focus on pharmacy." },
   ],
 };
 
 // ═══════════════════════════════════════════════════════
-// FUNNEL VIEW COMPONENT
+// FUNNEL VIEW COMPONENT (copied from market-pulse)
 // ═══════════════════════════════════════════════════════
 const FunnelView = ({ stages, expandedStage, setExpandedStage, conversation, setConversation }) => {
   const expanded = stages.find(s => s.id === expandedStage);
@@ -722,7 +740,7 @@ const AgentTrailModal = ({ insight, onClose }) => (
 // ═══════════════════════════════════════════════════════
 // MAIN COMPONENT
 // ═══════════════════════════════════════════════════════
-export default function EnoBrandPulse() {
+export default function SensodyneBrandPulse() {
   const [expandedInsight, setExpandedInsight] = useState(null);
   const [expandedTerritory, setExpandedTerritory] = useState(null);
   const [expandedStage, setExpandedStage] = useState(null);
@@ -738,7 +756,7 @@ export default function EnoBrandPulse() {
         <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
           <div style={{ fontSize: 20, fontWeight: 300, color: "#FFFFFF", letterSpacing: "-0.02em" }}>Market Pulse</div>
           <div style={{ width: 1, height: 24, background: "rgba(255,255,255,0.2)" }} />
-          <div style={{ fontSize: 20, fontWeight: 600, color: "#FFFFFF" }}>Eno</div>
+          <div style={{ fontSize: 20, fontWeight: 600, color: "#FFFFFF" }}>Sensodyne</div>
           <div style={{ fontSize: 13, color: "rgba(255,255,255,0.6)", marginLeft: 8 }}>{data.tagline}</div>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
