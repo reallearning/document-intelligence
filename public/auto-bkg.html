@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Automobile Industry — Business Knowledge Graph</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #FFFFFF;
+    --bg2: #F8FAFC;
+    --surface: #FFFFFF;
+    --surface2: #F1F5F9;
+    --surface3: #E2E8F0;
+    --border: #E2E8F0;
+    --border2: #CBD5E1;
+    --text: #0F172A;
+    --text2: #475569;
+    --text3: #94A3B8;
+    --accent: #3B82F6;
+    --vehicle: #3B82F6;
+    --org: #059669;
+    --people: #7C3AED;
+    --geo: #64748B;
+    --time: #D97706;
+    --service: #EA580C;
+    --sales: #DC2626;
+    --finance: #0D9488;
+    --hr: #DB2777;
+    --customer: #0891B2;
+    --workflow: #6D28D9;
+    --kpi: #E11D48;
+    --decision: #0F172A;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+    height: 100vh;
+  }
+
+  .app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+
+  .header {
+    padding: 12px 24px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    z-index: 10;
+    flex-shrink: 0;
+  }
+
+  .header h1 {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+    color: var(--text);
+  }
+  .header h1 span { color: var(--accent); }
+
+  .search-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 7px 12px;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 13px;
+    width: 200px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-box:focus { border-color: var(--accent); }
+  .search-box::placeholder { color: var(--text3); }
+
+  .stats-badge {
+    font-size: 11px;
+    color: var(--text3);
+    font-family: 'JetBrains Mono', monospace;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+  .shape-legend {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    margin-left: 12px;
+    padding-left: 12px;
+    border-left: 1px solid var(--border);
+  }
+  .shape-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    color: var(--text2);
+  }
+  .shape-legend-item svg { flex-shrink: 0; }
+
+  .main-area {
+    flex: 1;
+    display: flex;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .graph-container {
+    flex: 1;
+    background: var(--bg2);
+    position: relative;
+  }
+  .graph-container svg { width: 100%; height: 100%; }
+
+  /* ── LINKS ── */
+  .link { stroke: #CBD5E1; stroke-opacity: 0.6; }
+  .link.highlighted { stroke-opacity: 1; stroke: #64748B; stroke-width: 2px !important; }
+  .link.dimmed { stroke-opacity: 0.08; }
+
+  .link-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 7.5px;
+    fill: #94A3B8;
+    pointer-events: none;
+    user-select: none;
+  }
+  .link-label.highlighted { fill: #475569; font-size: 8.5px; font-weight: 500; }
+  .link-label.dimmed { opacity: 0.06; }
+
+  /* ── NODES ── */
+  .node-shape {
+    cursor: pointer;
+    transition: filter 0.2s;
+  }
+  .node-shape.dimmed { opacity: 0.07; }
+  .node-shape.highlighted { filter: drop-shadow(0 0 6px rgba(0,0,0,0.25)); }
+  .node-shape.selected { filter: drop-shadow(0 0 10px rgba(59,130,246,0.5)); stroke: var(--accent) !important; stroke-width: 2.5px !important; }
+
+  .node-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 8.5px;
+    font-weight: 500;
+    fill: var(--text2);
+    pointer-events: none;
+    user-select: none;
+  }
+  .node-label.dimmed { opacity: 0.06; }
+  .node-label.highlighted { fill: var(--text); font-weight: 600; font-size: 9.5px; }
+
+  /* ── SIDE PANEL ── */
+  .side-panel {
+    width: 400px;
+    background: var(--surface);
+    border-left: 1px solid var(--border);
+    overflow-y: auto;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 5;
+  }
+  .side-panel.open { transform: translateX(0); box-shadow: -8px 0 30px rgba(0,0,0,0.08); }
+
+  .panel-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text3);
+    font-size: 16px;
+    z-index: 2;
+    transition: all 0.15s;
+  }
+  .panel-close:hover { background: var(--surface2); color: var(--text); }
+
+  .panel-content { animation: fadeIn 0.25s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; } }
+
+  .panel-header {
+    padding: 20px 20px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .panel-domain {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .panel-domain-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .panel-node-name { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 8px; color: var(--text); }
+  .panel-definition { font-size: 13px; color: var(--text2); line-height: 1.55; }
+
+  .panel-section {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .panel-section-title {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text3);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .panel-section-title .count {
+    background: var(--surface2);
+    padding: 1px 7px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .attr-tag {
+    display: inline-block;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 3px 9px;
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text2);
+    margin: 2px 3px 2px 0;
+  }
+  .attr-tag.key { border-color: var(--accent); color: var(--accent); background: #EFF6FF; }
+
+  .grain-badge {
+    display: inline-block;
+    background: #FFFBEB;
+    border: 1px solid #FDE68A;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--time);
+  }
+
+  .connection-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 7px 4px;
+    border-bottom: 1px solid var(--surface2);
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background 0.15s;
+  }
+  .connection-item:hover { background: var(--surface2); }
+  .connection-item:last-child { border-bottom: none; }
+
+  .conn-arrow { font-size: 11px; color: var(--text3); margin-top: 2px; flex-shrink: 0; width: 16px; text-align: center; }
+  .conn-details { flex: 1; }
+  .conn-node { font-size: 12px; font-weight: 600; color: var(--text); }
+  .conn-rel { font-size: 11px; color: var(--text3); font-family: 'JetBrains Mono', monospace; }
+  .conn-card { font-size: 10px; color: var(--text3); font-family: 'JetBrains Mono', monospace; }
+
+  .metric-card {
+    background: #FFFBEB;
+    border: 1px solid #FDE68A;
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+  }
+  .metric-name { font-size: 12px; font-weight: 600; color: #B45309; margin-bottom: 4px; }
+  .metric-calc { font-size: 11px; color: var(--text2); font-family: 'JetBrains Mono', monospace; line-height: 1.5; margin-bottom: 4px; }
+  .metric-meta { font-size: 10px; color: var(--text3); display: flex; gap: 12px; }
+  .metric-direction { font-weight: 600; }
+  .metric-direction.up { color: #059669; }
+  .metric-direction.down { color: #DC2626; }
+
+  .decision-card {
+    background: #F8FAFC;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--decision);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+  }
+  .decision-area { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+  .decision-persona { font-size: 10px; color: var(--text3); margin-bottom: 6px; }
+  .decision-question { font-size: 11.5px; color: var(--text2); line-height: 1.5; font-style: italic; margin-bottom: 6px; }
+  .decision-threshold {
+    font-size: 10px;
+    color: var(--text2);
+    font-family: 'JetBrains Mono', monospace;
+    line-height: 1.5;
+    padding: 6px 8px;
+    background: #F1F5F9;
+    border-radius: 4px;
+  }
+
+  .tooltip {
+    position: fixed;
+    background: rgba(15,23,42,0.92);
+    backdrop-filter: blur(8px);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 12px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+    z-index: 100;
+    max-width: 260px;
+    color: #F8FAFC;
+  }
+  .tooltip.visible { opacity: 1; }
+  .tooltip-name { font-weight: 600; margin-bottom: 2px; }
+  .tooltip-domain { font-size: 10px; color: #94A3B8; }
+
+  .side-panel::-webkit-scrollbar { width: 5px; }
+  .side-panel::-webkit-scrollbar-track { background: transparent; }
+  .side-panel::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <h1><span>◆</span> Automobile Industry — Business Knowledge Graph</h1>
+    <input type="text" class="search-box" id="search" placeholder="Search nodes…" />
+    <div class="shape-legend">
+      <div class="shape-legend-item">
+        <svg width="14" height="14"><circle cx="7" cy="7" r="6" fill="#3B82F6"/></svg>
+        Entity
+      </div>
+      <div class="shape-legend-item">
+        <svg width="16" height="14" viewBox="0 0 16 14"><polygon points="8,0 16,4.5 13,13 3,13 0,4.5" fill="#E11D48"/></svg>
+        KPI
+      </div>
+      <div class="shape-legend-item">
+        <svg width="14" height="14" viewBox="0 0 14 14"><polygon points="7,0 14,14 0,14" fill="#0F172A"/></svg>
+        Decision
+      </div>
+    </div>
+    <div class="stats-badge">70 nodes · 39 KPIs · 17 decisions</div>
+  </div>
+
+  <div class="main-area">
+    <div class="graph-container" id="graphContainer"></div>
+    <div class="side-panel" id="sidePanel">
+      <button class="panel-close" id="panelClose">×</button>
+      <div id="panelInner"></div>
+    </div>
+  </div>
+</div>
+
+<div class="tooltip" id="tooltip">
+  <div class="tooltip-name"></div>
+  <div class="tooltip-domain"></div>
+</div>
+
+<script>
+const DOMAINS = {
+  'Vehicle & Product':      { color: '#3B82F6' },
+  'Organization & Network': { color: '#059669' },
+  'People & Roles':         { color: '#7C3AED' },
+  'Geography':              { color: '#64748B' },
+  'Time & SLA':             { color: '#D97706' },
+  'Service & Aftermarket':  { color: '#EA580C' },
+  'Sales & Commercial':     { color: '#DC2626' },
+  'Finance & Compliance':   { color: '#0D9488' },
+  'HR & Admin':             { color: '#DB2777' },
+  'Customer Issues':        { color: '#0891B2' },
+  'Workflow & Process':     { color: '#6D28D9' },
+};
+
+const KPI_COLOR = '#E11D48';
+const DECISION_COLOR = '#0F172A';
+
+const entityNodes = [
+  {id:'VehicleModel',domain:'Vehicle & Product',def:'Top-level product family (Thar, Nexon, Baleno). Frames variant tree, pricing band, service norms.',attrs:['model_id','model_name','segment','fuel_type','launch_year','lifecycle_stage']},
+  {id:'Variant',domain:'Vehicle & Product',def:'Specific trim/configuration (Nexon XZ+ Diesel AMT). Determines price, features, parts BOM.',attrs:['variant_id','model_id','variant_name','transmission','fuel_sub_type','ex_showroom_price']},
+  {id:'VIN',domain:'Vehicle & Product',def:'Unique physical vehicle. Atomic unit for service history, warranty, ownership, tracking.',attrs:['vin','variant_id','manufacturing_date','color','engine_no','warranty_end_date','amc_status']},
+  {id:'Part',domain:'Vehicle & Product',def:'Spare part/component in aftermarket catalog. Maps to SAP Material Master.',attrs:['part_no','part_name','part_category','oem_vs_aftermarket','mrp','hsn_code']},
+  {id:'Accessory',domain:'Vehicle & Product',def:'Optional add-on (alloys, seat covers, infotainment). Sold at dealer/workshop.',attrs:['accessory_id','accessory_name','category','fitment_model_ids','mrp']},
+  {id:'PartBOM',domain:'Vehicle & Product',def:'Bill of Materials linking Variant to Parts with quantity norms.',attrs:['bom_id','variant_id','part_no','qty_per_vehicle','is_critical'],grain:'Variant × Part'},
+  {id:'OEM',domain:'Organization & Network',def:'Parent automobile company. Top of org hierarchy.',attrs:['oem_id','oem_name','headquarters']},
+  {id:'Zone',domain:'Organization & Network',def:'Highest commercial division (N/S/E/W). Owns P&L targets.',attrs:['zone_id','zone_name','oem_id','zone_head_id']},
+  {id:'Region',domain:'Organization & Network',def:'Sub-zone unit headed by RSM. Aggregation for allocation and performance.',attrs:['region_id','region_name','zone_id','rsm_id']},
+  {id:'Area',domain:'Organization & Network',def:'Lowest OEM field unit. ASM owns dealer relationships.',attrs:['area_id','area_name','region_id','asm_id']},
+  {id:'Dealer',domain:'Organization & Network',def:'Authorized sales+service outlet. Key commercial counterparty.',attrs:['dealer_id','dealer_code','dealer_name','area_id','city_id','dealer_type','dealer_grade','sap_vendor_code']},
+  {id:'Workshop',domain:'Organization & Network',def:'Service facility — dealer-attached or standalone ASC.',attrs:['workshop_id','dealer_id','workshop_type','city_id','bays_count','technician_count']},
+  {id:'Stockyard',domain:'Organization & Network',def:'Intermediate vehicle holding between plant and dealer.',attrs:['stockyard_id','stockyard_name','city_id','capacity_units']},
+  {id:'Plant',domain:'Organization & Network',def:'Manufacturing facility. Source for dispatch and VIN generation.',attrs:['plant_id','plant_name','city_id','models_produced','annual_capacity']},
+  {id:'CallCenter',domain:'Organization & Network',def:'Centralized interaction hub for RSA, complaints, bookings.',attrs:['call_center_id','call_center_name','channels_supported','agent_count']},
+  {id:'Supplier',domain:'Organization & Network',def:'Third-party service/parts supplier who submits invoices.',attrs:['supplier_id','supplier_name','supplier_type','sap_vendor_code','gst_number']},
+  {id:'Customer',domain:'People & Roles',def:'Vehicle buyer/owner. Central entity for sales, service, issues.',attrs:['customer_id','name','mobile','email','customer_type','loyalty_tier']},
+  {id:'Technician',domain:'People & Roles',def:'Field/workshop technician executing service and RSA. Skill-rated, geo-located.',attrs:['technician_id','name','workshop_id','skill_level','specializations','current_lat_lng']},
+  {id:'SalesExecutive',domain:'People & Roles',def:'Dealer-level sales person managing bookings and relationships.',attrs:['se_id','name','dealer_id','monthly_target']},
+  {id:'RSM',domain:'People & Roles',def:'Regional Sales Manager. Owns region targets and allocation decisions.',attrs:['rsm_id','name','region_id','target_volume']},
+  {id:'ASM',domain:'People & Roles',def:'Area Sales Manager. Frontline OEM rep managing dealer cluster.',attrs:['asm_id','name','area_id','dealer_count']},
+  {id:'DealerPrincipal',domain:'People & Roles',def:'Owner/operator of dealership. Strategic decision-maker.',attrs:['dp_id','name','dealer_id','investment_grade']},
+  {id:'Employee',domain:'People & Roles',def:'Internal OEM employee. Subject of HR tickets and grievances.',attrs:['employee_id','name','department','designation','grade','reporting_manager_id']},
+  {id:'HRBusinessPartner',domain:'People & Roles',def:'HR rep resolving employee queries for department/location.',attrs:['hrbp_id','name','assigned_departments']},
+  {id:'Country',domain:'Geography',def:'Top geography. Frames regulatory regime.',attrs:['country_id','country_name','currency']},
+  {id:'State',domain:'Geography',def:'Indian state/UT. Drives RTO rules, subsidies, GST.',attrs:['state_id','state_name','state_code','rto_prefix']},
+  {id:'District',domain:'Geography',def:'Administrative district for territory mapping.',attrs:['district_id','district_name','state_id']},
+  {id:'City',domain:'Geography',def:'City/town. Key demand node.',attrs:['city_id','city_name','district_id','tier','population_band']},
+  {id:'Pincode',domain:'Geography',def:'Last-mile geography for RSA dispatch radius.',attrs:['pincode','city_id','lat','lng','serviceable']},
+  {id:'GPSLocation',domain:'Geography',def:'Real-time lat/lng for tracking and geo-fencing.',attrs:['lat','lng','timestamp','entity_type','entity_id'],grain:'Entity × Timestamp'},
+  {id:'FiscalYear',domain:'Time & SLA',def:'Financial year (Apr–Mar). Anchors budgets and targets.',attrs:['fy_id','fy_name','start_date','end_date']},
+  {id:'Quarter',domain:'Time & SLA',def:'Fiscal quarter. Review cadence for performance.',attrs:['quarter_id','fy_id','quarter_name']},
+  {id:'Month',domain:'Time & SLA',def:'Calendar month. Primary reporting grain.',attrs:['month_id','quarter_id','month_name','working_days']},
+  {id:'SLADefinition',domain:'Time & SLA',def:'SLA norm defining resolution time by process, priority, geography.',attrs:['sla_id','process_type','priority','geography_tier','target_hours','escalation_levels']},
+  {id:'SLAWindow',domain:'Time & SLA',def:'Time-bounded SLA state for a ticket. Tracks breach.',attrs:['sla_window_id','ticket_id','sla_id','start_time','target_time','is_breached'],grain:'Ticket × SLA'},
+  {id:'BreakdownTicket',domain:'Service & Aftermarket',def:'On-road breakdown assistance request. Omnichannel entry.',attrs:['ticket_id','vin','customer_id','channel','breakdown_lat_lng','breakdown_type','priority','status']},
+  {id:'TechnicianDispatch',domain:'Service & Aftermarket',def:'Technician assignment to breakdown. Tracks geo-validation.',attrs:['dispatch_id','ticket_id','technician_id','eta_minutes','geo_validated','arrival_distance_meters','resolution_type'],grain:'Ticket × Technician'},
+  {id:'JobCard',domain:'Service & Aftermarket',def:'Service work order at workshop. Labor, parts, billing.',attrs:['jobcard_id','vin','workshop_id','job_type','labor_hours','parts_amount','total_amount','sap_service_order']},
+  {id:'WarrantyClaim',domain:'Service & Aftermarket',def:'Dealer claim against OEM for warranty repair.',attrs:['claim_id','jobcard_id','vin','claim_type','total_claimed','claim_status','sap_claim_no']},
+  {id:'AMCContract',domain:'Service & Aftermarket',def:'Annual Maintenance Contract. Service entitlements + RSA.',attrs:['amc_id','vin','customer_id','plan_type','start_date','end_date','rsa_included']},
+  {id:'PartsReturn',domain:'Service & Aftermarket',def:'Dealer-initiated parts return to OEM.',attrs:['return_id','dealer_id','part_no','qty','reason_code','return_status']},
+  {id:'CreditNote',domain:'Service & Aftermarket',def:'Financial adjustment to dealer. Posted to SAP FI.',attrs:['credit_note_id','dealer_id','reference_type','amount','approval_status']},
+  {id:'RecallCampaign',domain:'Service & Aftermarket',def:'OEM safety/quality recall affecting VIN ranges.',attrs:['recall_id','recall_name','affected_model_ids','defect_description','status']},
+  {id:'VehicleBooking',domain:'Sales & Commercial',def:'Customer booking for new vehicle. Sales funnel entry.',attrs:['booking_id','customer_id','variant_id','dealer_id','booking_date','booking_status']},
+  {id:'AllocationOrder',domain:'Sales & Commercial',def:'OEM-to-dealer vehicle allocation.',attrs:['allocation_id','dealer_id','variant_id','qty','allocation_type','status']},
+  {id:'VehicleInvoice',domain:'Sales & Commercial',def:'Billing document OEM → dealer.',attrs:['invoice_id','dealer_id','vin','ex_factory_price','total_amount','sap_billing_doc']},
+  {id:'VehicleDelivery',domain:'Sales & Commercial',def:'Physical delivery to customer. Triggers warranty start.',attrs:['delivery_id','vin','customer_id','dealer_id','delivery_date','registration_no']},
+  {id:'RefundRequest',domain:'Sales & Commercial',def:'Customer refund for cancelled booking.',attrs:['refund_id','booking_id','refund_amount','reason_code','refund_status']},
+  {id:'VehicleTransit',domain:'Sales & Commercial',def:'In-transit VIN: plant → stockyard → dealer.',attrs:['transit_id','vin','source','destination','dispatch_date','eta','status'],grain:'VIN × Journey'},
+  {id:'FleetDeal',domain:'Sales & Commercial',def:'Bulk purchase with corporate/fleet customer.',attrs:['fleet_deal_id','customer_id','variant_ids','qty','negotiated_price','deal_status']},
+  {id:'SupplierInvoice',domain:'Finance & Compliance',def:'Invoice from supplier. Core of invoice digitization.',attrs:['invoice_id','supplier_id','total_amount','reference_type','validation_status','sap_miro_doc']},
+  {id:'InvoiceValidationRule',domain:'Finance & Compliance',def:'Business rule for auto-validation.',attrs:['rule_id','rule_name','rule_type','tolerance_pct','active']},
+  {id:'PaymentRun',domain:'Finance & Compliance',def:'Batch payment for approved invoices.',attrs:['payment_run_id','run_date','total_amount','payment_method']},
+  {id:'GSTRecord',domain:'Finance & Compliance',def:'GST compliance per invoice.',attrs:['gst_record_id','invoice_id','supplier_gstin','hsn_code','cgst','sgst','igst']},
+  {id:'BudgetLine',domain:'Finance & Compliance',def:'Annual budget by cost center. Controls spend.',attrs:['budget_id','fy_id','cost_center','budget_category','allocated_amount','utilized_amount'],grain:'FY × CostCenter'},
+  {id:'DiscountScheme',domain:'Finance & Compliance',def:'Structured discount scheme with eligibility + budget cap.',attrs:['scheme_id','scheme_name','scheme_type','applicable_models','budget_cap','sap_condition_type']},
+  {id:'DiscountRequest',domain:'Finance & Compliance',def:'Individual discount application validated against rules.',attrs:['request_id','booking_id','scheme_ids_applied','total_discount_requested','within_policy','approval_status']},
+  {id:'SchemeUtilization',domain:'Finance & Compliance',def:'Running tracker of scheme budget consumption.',attrs:['utilization_id','scheme_id','region_id','month_id','amount_utilized','utilization_pct'],grain:'Scheme × Region × Month'},
+  {id:'HRTicket',domain:'HR & Admin',def:'Employee helpdesk ticket for HR/admin queries.',attrs:['ticket_id','employee_id','category','sub_category','priority','status','assigned_to']},
+  {id:'GrievanceCase',domain:'HR & Admin',def:'Confidential grievance escalation. Restricted visibility.',attrs:['grievance_id','ticket_id','grievance_type','severity','is_confidential']},
+  {id:'ApprovalChain',domain:'HR & Admin',def:'Configurable multi-level approval workflow.',attrs:['chain_id','process_type','amount_slab','approval_levels','delegation_rules']},
+  {id:'CustomerCase',domain:'Customer Issues',def:'Unified customer issue from all channels.',attrs:['case_id','customer_id','vin','source_channel','issue_category','severity','media_flagged','legal_flagged']},
+  {id:'CaseInteraction',domain:'Customer Issues',def:'Individual touchpoint within a case.',attrs:['interaction_id','case_id','channel','direction','summary'],grain:'Case × Interaction'},
+  {id:'CaseEscalation',domain:'Customer Issues',def:'Escalation by SLA breach, recontact, media/legal.',attrs:['escalation_id','case_id','escalation_level','trigger','escalated_to'],grain:'Case × Escalation'},
+  {id:'CustomerSurvey',domain:'Customer Issues',def:'Post-resolution NPS/CSAT survey.',attrs:['survey_id','case_id','survey_type','score','verbatim']},
+  {id:'WorkflowTemplate',domain:'Workflow & Process',def:'Configurable process template: stages, transitions, SLA.',attrs:['template_id','template_name','process_type','stages','transition_rules']},
+  {id:'WorkflowInstance',domain:'Workflow & Process',def:'Running instance for a ticket/case/request.',attrs:['instance_id','template_id','entity_type','entity_id','current_stage']},
+  {id:'Notification',domain:'Workflow & Process',def:'Alert/nudge via SMS/email/WhatsApp at transitions.',attrs:['notification_id','instance_id','recipient_role','channel','template']},
+  {id:'Document',domain:'Workflow & Process',def:'Uploaded doc/photo/proof. OCR-processed.',attrs:['document_id','entity_type','entity_id','doc_type','file_url']},
+  {id:'AuditTrail',domain:'Workflow & Process',def:'Immutable log of every action. Compliance trail.',attrs:['audit_id','entity_type','action','actor_id','actor_role','timestamp']},
+];
+
+const entityLinks = [
+  {source:'VehicleModel',target:'Variant',rel:'contains',card:'1:N'},
+  {source:'Variant',target:'VIN',rel:'instantiated_as',card:'1:N'},
+  {source:'Variant',target:'PartBOM',rel:'has_bom',card:'1:N'},
+  {source:'PartBOM',target:'Part',rel:'includes',card:'N:1'},
+  {source:'VehicleModel',target:'Accessory',rel:'fits',card:'N:N'},
+  {source:'OEM',target:'Zone',rel:'divided_into',card:'1:N'},
+  {source:'Zone',target:'Region',rel:'contains',card:'1:N'},
+  {source:'Region',target:'Area',rel:'contains',card:'1:N'},
+  {source:'Area',target:'Dealer',rel:'manages',card:'1:N'},
+  {source:'Dealer',target:'Workshop',rel:'operates',card:'1:N'},
+  {source:'OEM',target:'Plant',rel:'operates',card:'1:N'},
+  {source:'OEM',target:'Stockyard',rel:'uses',card:'1:N'},
+  {source:'OEM',target:'CallCenter',rel:'runs',card:'1:N'},
+  {source:'OEM',target:'Supplier',rel:'contracts',card:'1:N'},
+  {source:'RSM',target:'Region',rel:'heads',card:'1:1'},
+  {source:'ASM',target:'Area',rel:'heads',card:'1:1'},
+  {source:'DealerPrincipal',target:'Dealer',rel:'owns',card:'1:1'},
+  {source:'Technician',target:'Workshop',rel:'works_at',card:'N:1'},
+  {source:'SalesExecutive',target:'Dealer',rel:'works_at',card:'N:1'},
+  {source:'Employee',target:'OEM',rel:'belongs_to',card:'N:1'},
+  {source:'HRBusinessPartner',target:'Employee',rel:'assigned_to',card:'1:N'},
+  {source:'Customer',target:'VIN',rel:'owns',card:'1:N'},
+  {source:'Country',target:'State',rel:'contains',card:'1:N'},
+  {source:'State',target:'District',rel:'contains',card:'1:N'},
+  {source:'District',target:'City',rel:'contains',card:'1:N'},
+  {source:'City',target:'Pincode',rel:'contains',card:'1:N'},
+  {source:'Dealer',target:'City',rel:'located_in',card:'N:1'},
+  {source:'Workshop',target:'City',rel:'located_in',card:'N:1'},
+  {source:'Stockyard',target:'City',rel:'located_in',card:'N:1'},
+  {source:'FiscalYear',target:'Quarter',rel:'contains',card:'1:4'},
+  {source:'Quarter',target:'Month',rel:'contains',card:'1:3'},
+  {source:'Customer',target:'BreakdownTicket',rel:'raises',card:'1:N'},
+  {source:'VIN',target:'BreakdownTicket',rel:'subject_of',card:'1:N'},
+  {source:'BreakdownTicket',target:'TechnicianDispatch',rel:'triggers',card:'1:1'},
+  {source:'Technician',target:'TechnicianDispatch',rel:'assigned_to',card:'1:N'},
+  {source:'VIN',target:'JobCard',rel:'serviced_via',card:'1:N'},
+  {source:'Workshop',target:'JobCard',rel:'executes',card:'1:N'},
+  {source:'JobCard',target:'Part',rel:'consumes',card:'N:N'},
+  {source:'JobCard',target:'WarrantyClaim',rel:'generates',card:'1:0..1'},
+  {source:'VIN',target:'AMCContract',rel:'covered_by',card:'1:0..1'},
+  {source:'Dealer',target:'PartsReturn',rel:'initiates',card:'1:N'},
+  {source:'PartsReturn',target:'CreditNote',rel:'settled_via',card:'1:1'},
+  {source:'RecallCampaign',target:'VIN',rel:'affects',card:'1:N'},
+  {source:'RecallCampaign',target:'JobCard',rel:'triggers',card:'1:N'},
+  {source:'BreakdownTicket',target:'JobCard',rel:'may_create',card:'1:0..1'},
+  {source:'Customer',target:'VehicleBooking',rel:'places',card:'1:N'},
+  {source:'Dealer',target:'AllocationOrder',rel:'receives',card:'1:N'},
+  {source:'AllocationOrder',target:'VIN',rel:'fulfilled_by',card:'N:1'},
+  {source:'VIN',target:'VehicleInvoice',rel:'invoiced_via',card:'1:1'},
+  {source:'VIN',target:'VehicleDelivery',rel:'delivered_via',card:'1:1'},
+  {source:'VehicleBooking',target:'RefundRequest',rel:'may_cancel',card:'1:0..1'},
+  {source:'VIN',target:'VehicleTransit',rel:'tracked_via',card:'1:N'},
+  {source:'Customer',target:'FleetDeal',rel:'negotiates',card:'1:N'},
+  {source:'Plant',target:'VehicleTransit',rel:'dispatches',card:'1:N'},
+  {source:'SalesExecutive',target:'VehicleBooking',rel:'manages',card:'N:N'},
+  {source:'Supplier',target:'SupplierInvoice',rel:'submits',card:'1:N'},
+  {source:'SupplierInvoice',target:'InvoiceValidationRule',rel:'validated_by',card:'N:N'},
+  {source:'SupplierInvoice',target:'PaymentRun',rel:'paid_via',card:'N:1'},
+  {source:'SupplierInvoice',target:'GSTRecord',rel:'has',card:'1:1'},
+  {source:'DiscountScheme',target:'DiscountRequest',rel:'applied_to',card:'1:N'},
+  {source:'DiscountRequest',target:'VehicleBooking',rel:'for',card:'N:1'},
+  {source:'DiscountScheme',target:'SchemeUtilization',rel:'tracked_via',card:'1:N'},
+  {source:'BudgetLine',target:'DiscountScheme',rel:'constrains',card:'1:N'},
+  {source:'BudgetLine',target:'CreditNote',rel:'constrains',card:'1:N'},
+  {source:'Employee',target:'HRTicket',rel:'raises',card:'1:N'},
+  {source:'HRTicket',target:'GrievanceCase',rel:'may_escalate_to',card:'1:0..1'},
+  {source:'HRTicket',target:'ApprovalChain',rel:'routed_via',card:'N:1'},
+  {source:'Customer',target:'CustomerCase',rel:'reports',card:'1:N'},
+  {source:'VIN',target:'CustomerCase',rel:'subject_of',card:'1:N'},
+  {source:'CustomerCase',target:'CaseInteraction',rel:'has',card:'1:N'},
+  {source:'CustomerCase',target:'CaseEscalation',rel:'may_trigger',card:'1:N'},
+  {source:'CustomerCase',target:'CustomerSurvey',rel:'followed_by',card:'1:0..1'},
+  {source:'CustomerCase',target:'JobCard',rel:'may_create',card:'1:0..1'},
+  {source:'WorkflowTemplate',target:'WorkflowInstance',rel:'instantiated_as',card:'1:N'},
+  {source:'WorkflowInstance',target:'Notification',rel:'generates',card:'1:N'},
+  {source:'WorkflowInstance',target:'AuditTrail',rel:'logged_in',card:'1:N'},
+  {source:'WorkflowInstance',target:'Document',rel:'attaches',card:'1:N'},
+  {source:'SLADefinition',target:'BreakdownTicket',rel:'applies_to',card:'1:N'},
+  {source:'SLADefinition',target:'SupplierInvoice',rel:'applies_to',card:'1:N'},
+  {source:'SLADefinition',target:'HRTicket',rel:'applies_to',card:'1:N'},
+  {source:'SLADefinition',target:'CustomerCase',rel:'applies_to',card:'1:N'},
+  {source:'SLADefinition',target:'DiscountRequest',rel:'applies_to',card:'1:N'},
+];
+
+// KPI nodes
+const kpiNodes = [
+  {id:'KPI_RSA_Response',name:'RSA Response Time',calc:'Dispatch.arrived_at − Ticket.created_at',grain:'Ticket',unit:'Min',dir:'down',linked:['BreakdownTicket','TechnicianDispatch']},
+  {id:'KPI_RSA_SLA',name:'RSA SLA Compliance %',calc:'not_breached / all × 100',grain:'Region×Month',unit:'%',dir:'up',linked:['BreakdownTicket','SLAWindow']},
+  {id:'KPI_GeoVal',name:'Geo-Validation Pass %',calc:'geo_validated / all × 100',grain:'Workshop×Month',unit:'%',dir:'up',linked:['TechnicianDispatch']},
+  {id:'KPI_FirstFix',name:'First-Time Fix Rate',calc:'fixed_onsite / all × 100',grain:'Tech×Month',unit:'%',dir:'up',linked:['TechnicianDispatch']},
+  {id:'KPI_BayUtil',name:'Bay Utilization',calc:'labor_hrs / capacity × 100',grain:'Workshop×Month',unit:'%',dir:'up',linked:['JobCard','Workshop']},
+  {id:'KPI_AvgJobRev',name:'Avg Job Card Revenue',calc:'SUM(total) / COUNT(jobs)',grain:'Workshop×Month',unit:'₹',dir:'up',linked:['JobCard']},
+  {id:'KPI_WC_Approval',name:'Warranty Approval Rate',calc:'approved / all × 100',grain:'Dealer×Month',unit:'%',dir:'up',linked:['WarrantyClaim']},
+  {id:'KPI_WC_Reject',name:'Warranty Rejection Rate',calc:'rejected / all × 100',grain:'Dealer×Month',unit:'%',dir:'down',linked:['WarrantyClaim']},
+  {id:'KPI_PartsRet',name:'Parts Return Rate',calc:'return_val / purchase_val × 100',grain:'Dealer×Qtr',unit:'%',dir:'down',linked:['PartsReturn','Part']},
+  {id:'KPI_AMC',name:'AMC Penetration',calc:'VINs_with_AMC / eligible × 100',grain:'Dealer×Qtr',unit:'%',dir:'up',linked:['AMCContract','VIN']},
+  {id:'KPI_Recall',name:'Recall Completion %',calc:'remedied / affected × 100',grain:'Campaign×Region',unit:'%',dir:'up',linked:['RecallCampaign','JobCard','VIN']},
+  {id:'KPI_SvcRetain',name:'Service Retention',calc:'returning_post_warranty / total × 100',grain:'Dealer×FY',unit:'%',dir:'up',linked:['Customer','JobCard']},
+  {id:'KPI_AutoVal',name:'Auto-Validation Pass %',calc:'auto_validated / submitted × 100',grain:'SupType×Month',unit:'%',dir:'up',linked:['SupplierInvoice','InvoiceValidationRule']},
+  {id:'KPI_InvProc',name:'Invoice Processing Time',calc:'AVG(payment − submission)',grain:'Supplier×Month',unit:'Days',dir:'down',linked:['SupplierInvoice','PaymentRun']},
+  {id:'KPI_InvErr',name:'Invoice Error Rate',calc:'rejected / all × 100',grain:'Supplier×Month',unit:'%',dir:'down',linked:['SupplierInvoice']},
+  {id:'KPI_BOT',name:'BOT Approval Rate',calc:'auto_approved / approved × 100',grain:'Month',unit:'%',dir:'up',linked:['SupplierInvoice']},
+  {id:'KPI_GST',name:'GST Compliance %',calc:'GST_pass / all × 100',grain:'Supplier×Month',unit:'%',dir:'up',linked:['SupplierInvoice','GSTRecord']},
+  {id:'KPI_B2D',name:'Booking-to-Delivery',calc:'AVG(delivery − booking)',grain:'Variant×Dealer',unit:'Days',dir:'down',linked:['VehicleBooking','VehicleDelivery']},
+  {id:'KPI_AllocFull',name:'Allocation Fulfillment %',calc:'received / allocated × 100',grain:'Dealer×Month',unit:'%',dir:'up',linked:['AllocationOrder']},
+  {id:'KPI_Cancel',name:'Cancellation Rate',calc:'cancelled / booked × 100',grain:'Dealer×Variant',unit:'%',dir:'down',linked:['VehicleBooking']},
+  {id:'KPI_Refund',name:'Refund Processing Time',calc:'AVG(paid − requested)',grain:'Region×Month',unit:'Days',dir:'down',linked:['RefundRequest']},
+  {id:'KPI_Transit',name:'Vehicle Transit Time',calc:'AVG(arrival − dispatch)',grain:'Plant×Dealer',unit:'Days',dir:'down',linked:['VehicleTransit']},
+  {id:'KPI_StockAge',name:'Dealer Stock Aging',calc:'VINs >60d / total × 100',grain:'Dealer×Month',unit:'%',dir:'down',linked:['VIN','VehicleInvoice']},
+  {id:'KPI_Target',name:'Sales Target %',calc:'actual / target × 100',grain:'Dealer×Model×Month',unit:'%',dir:'up',linked:['VehicleDelivery','RSM']},
+  {id:'KPI_DiscVeh',name:'Discount per Vehicle',calc:'SUM(disc) / COUNT(delivered)',grain:'Variant×Region',unit:'₹',dir:'down',linked:['DiscountRequest','VehicleDelivery']},
+  {id:'KPI_SchUtil',name:'Scheme Utilization %',calc:'utilized / budget × 100',grain:'Scheme×Region',unit:'%',dir:'neutral',linked:['SchemeUtilization','DiscountScheme']},
+  {id:'KPI_PolicyRate',name:'Within-Policy Rate',calc:'within_policy / all × 100',grain:'Region×Month',unit:'%',dir:'up',linked:['DiscountRequest']},
+  {id:'KPI_Elasticity',name:'Discount Elasticity',calc:'Δ Units / Δ Discount × 1000',grain:'Scheme×Model',unit:'U/₹K',dir:'up',linked:['DiscountRequest','VehicleDelivery']},
+  {id:'KPI_HR_Res',name:'HR Resolution Time',calc:'AVG(resolved − created)',grain:'Category×Month',unit:'Hrs',dir:'down',linked:['HRTicket']},
+  {id:'KPI_HR_SLA',name:'HR SLA Compliance %',calc:'within_SLA / all × 100',grain:'Category×Month',unit:'%',dir:'up',linked:['HRTicket','SLAWindow']},
+  {id:'KPI_CaseRes',name:'Case Resolution Time',calc:'AVG(resolved − created)',grain:'Cat×Sev×Month',unit:'Hrs',dir:'down',linked:['CustomerCase']},
+  {id:'KPI_CustSLA',name:'Customer SLA %',calc:'within_SLA / all × 100',grain:'Region×Cat',unit:'%',dir:'up',linked:['CustomerCase','SLAWindow']},
+  {id:'KPI_FCR',name:'First Contact Resolution',calc:'1_interaction_resolved / all × 100',grain:'Channel×Month',unit:'%',dir:'up',linked:['CustomerCase','CaseInteraction']},
+  {id:'KPI_EscRate',name:'Escalation Rate',calc:'escalated / all × 100',grain:'Category×Month',unit:'%',dir:'down',linked:['CustomerCase','CaseEscalation']},
+  {id:'KPI_NPS',name:'NPS (Post-Resolution)',calc:'%Promoters − %Detractors',grain:'Region×Qtr',unit:'Score',dir:'up',linked:['CustomerSurvey']},
+  {id:'KPI_WFAuto',name:'Workflow Automation %',calc:'auto / all × 100',grain:'ProcessType',unit:'%',dir:'up',linked:['WorkflowInstance']},
+  {id:'KPI_CreditTAT',name:'Credit Note TAT',calc:'AVG(posting − request)',grain:'Region×Month',unit:'Days',dir:'down',linked:['CreditNote']},
+  {id:'KPI_RepeatBreak',name:'Breakdown Repeat Rate',calc:'VINs >1 ticket 90d / all × 100',grain:'Model×Qtr',unit:'%',dir:'down',linked:['BreakdownTicket','VIN']},
+  {id:'KPI_FleetConv',name:'Fleet Conversion Rate',calc:'confirmed / proposed × 100',grain:'Region×Qtr',unit:'%',dir:'up',linked:['FleetDeal']},
+];
+
+// Decision nodes
+const decisionNodes = [
+  {id:'DEC_Dispatch',name:'RSA Dispatch Optimization',persona:'Head – RSA Ops',question:'Which technician to dispatch?',threshold:'Nearest L2+ within 15km; else mobile unit 30min',linked:['BreakdownTicket','Technician','GPSLocation','TechnicianDispatch']},
+  {id:'DEC_RSA_Esc',name:'RSA SLA Escalation',persona:'Head – RSA Ops',question:'Ticket breached — escalate to whom?',threshold:'P1: 30m→ASM, 60m→RSM, 120m→VP',linked:['BreakdownTicket','SLAWindow','SLADefinition','ASM','RSM']},
+  {id:'DEC_Vendor',name:'RSA Vendor Review',persona:'Head – RSA Ops',question:'Which vendors underperforming?',threshold:'SLA <70% 2mo → review; <50% → replace',linked:['Supplier','Workshop','TechnicianDispatch']},
+  {id:'DEC_InvExc',name:'Invoice Exception Routing',persona:'Head – Dealer Accounts',question:'Invoice failed validation — approve/return/escalate?',threshold:'<5% → auto; 5-15% → L1; >15% → L2',linked:['SupplierInvoice','InvoiceValidationRule','Part']},
+  {id:'DEC_PayPri',name:'Payment Prioritization',persona:'CFO',question:'Which invoices to prioritize?',threshold:'Overdue >30d → P1; Strategic → P2; FIFO',linked:['SupplierInvoice','Supplier','PaymentRun']},
+  {id:'DEC_WCost',name:'Warranty Cost Control',persona:'Head – Service',question:'Abnormal warranty patterns?',threshold:'Claim >2σ → audit; Dealer >30% region → investigate',linked:['WarrantyClaim','VIN','VehicleModel','Dealer']},
+  {id:'DEC_Parts',name:'Parts Stocking',persona:'Head – Service',question:'Which parts to pre-position?',threshold:'>50/mo → regional; Critical RSA → stockyard',linked:['JobCard','Part','PartBOM','Region']},
+  {id:'DEC_Credit',name:'Credit Note Approval',persona:'Head – Dealer Accts',question:'Approve credit note?',threshold:'<₹50K → auto; 50K-2L → L1; >2L → L2',linked:['CreditNote','Dealer','BudgetLine','PartsReturn']},
+  {id:'DEC_Alloc',name:'Vehicle Allocation',persona:'RSM',question:'How to allocate units across dealers?',threshold:'Booking-linked: mandatory; Stock: weighted score',linked:['AllocationOrder','Dealer','VehicleBooking','VIN']},
+  {id:'DEC_DiscExc',name:'Discount Exception',persona:'RSM / VP Sales',question:'Approve additional discount?',threshold:'<₹10K → RSM; 10-50K → VP; >50K → CFO',linked:['DiscountRequest','DiscountScheme','VehicleBooking','Dealer']},
+  {id:'DEC_Scheme',name:'Scheme Design & Budget',persona:'VP Sales + CFO',question:'Which schemes for next quarter?',threshold:'Elasticity <0.5 → discontinue',linked:['DiscountScheme','SchemeUtilization','VehicleDelivery']},
+  {id:'DEC_Refund',name:'Refund Approval',persona:'Head – Dealer Accts',question:'Process refund?',threshold:'<7d → full auto; 7-30d → deduction; >30d → manual',linked:['RefundRequest','VehicleBooking','Customer']},
+  {id:'DEC_HRRoute',name:'HR Ticket Routing',persona:'CHRO',question:'Route ticket to which resolver?',threshold:'Payroll → payroll; Grievance → ethics; IT → helpdesk',linked:['HRTicket','Employee','HRBusinessPartner']},
+  {id:'DEC_CasePri',name:'Case Priority & Routing',persona:'Call Center Mgr',question:'How to prioritize customer case?',threshold:'Media/legal → P1 → VP CX; Safety → Quality Head',linked:['CustomerCase','Customer','VIN','SLADefinition']},
+  {id:'DEC_Quality',name:'Proactive Quality Alert',persona:'Quality Head',question:'Emerging quality patterns?',threshold:'>50 similar 30d → TSB; >200 → recall eval',linked:['CustomerCase','VIN','VehicleModel','RecallCampaign']},
+  {id:'DEC_Recovery',name:'Customer Recovery',persona:'VP – CX',question:'Which cases need executive intervention?',threshold:'L3 + >7d → VP; Detractor + high CLV → goodwill',linked:['CustomerCase','CaseEscalation','Customer','CustomerSurvey']},
+  {id:'DEC_Budget',name:'Budget Reallocation',persona:'CFO',question:'Reallocate across RSA/schemes/goodwill?',threshold:'Util <50% at Q2 → reallocate 30%',linked:['BudgetLine','DiscountScheme','CreditNote','SchemeUtilization']},
+];
+
+// Build combined node/link arrays
+const allNodes = [
+  ...entityNodes.map(n => ({...n, type: 'entity'})),
+  ...kpiNodes.map(n => ({...n, type: 'kpi', domain: 'KPI'})),
+  ...decisionNodes.map(n => ({...n, type: 'decision', domain: 'Decision'})),
+];
+
+const allLinks = [...entityLinks];
+
+// Add KPI links
+kpiNodes.forEach(k => {
+  k.linked.forEach(target => {
+    if (entityNodes.find(n => n.id === target)) {
+      allLinks.push({source: k.id, target, rel: 'measures', card: '', isKPI: true});
+    }
+  });
+});
+
+// Add decision links
+decisionNodes.forEach(d => {
+  d.linked.forEach(target => {
+    if (entityNodes.find(n => n.id === target)) {
+      allLinks.push({source: d.id, target, rel: 'decides', card: '', isDecision: true});
+    }
+  });
+});
+
+// ═══════ BUILD GRAPH ═══════
+const container = document.getElementById('graphContainer');
+const width = container.clientWidth;
+const height = container.clientHeight;
+
+const svg = d3.select('#graphContainer').append('svg').attr('width', width).attr('height', height);
+const g = svg.append('g');
+const zoomBehavior = d3.zoom().scaleExtent([0.15, 4]).on('zoom', e => g.attr('transform', e.transform));
+svg.call(zoomBehavior);
+
+// Degree for sizing
+const degMap = {};
+allNodes.forEach(n => degMap[n.id] = 0);
+allLinks.forEach(l => { degMap[l.source] = (degMap[l.source]||0)+1; degMap[l.target] = (degMap[l.target]||0)+1; });
+const maxDeg = Math.max(...Object.values(degMap));
+
+function nodeR(id, type) {
+  if (type === 'kpi') return 7;
+  if (type === 'decision') return 8;
+  return 5 + (degMap[id] || 1) / maxDeg * 13;
+}
+
+const simulation = d3.forceSimulation(allNodes)
+  .force('link', d3.forceLink(allLinks).id(d => d.id).distance(d => d.isKPI || d.isDecision ? 50 : 75).strength(d => d.isKPI || d.isDecision ? 0.2 : 0.35))
+  .force('charge', d3.forceManyBody().strength(d => d.type === 'entity' ? -180 : -60))
+  .force('center', d3.forceCenter(width/2, height/2))
+  .force('collision', d3.forceCollide().radius(d => nodeR(d.id, d.type) + 6))
+  .force('x', d3.forceX(width/2).strength(0.03))
+  .force('y', d3.forceY(height/2).strength(0.03));
+
+// Links
+const linkG = g.append('g');
+const linkSel = linkG.selectAll('line').data(allLinks).enter().append('line')
+  .attr('class', 'link')
+  .attr('stroke', d => d.isKPI ? KPI_COLOR : d.isDecision ? DECISION_COLOR : '#CBD5E1')
+  .attr('stroke-width', d => d.isKPI || d.isDecision ? 0.6 : 1)
+  .attr('stroke-dasharray', d => d.isKPI ? '3,3' : d.isDecision ? '2,4' : 'none')
+  .attr('stroke-opacity', d => d.isKPI || d.isDecision ? 0.25 : 0.5);
+
+// Link labels (entity links only)
+const linkLabelG = g.append('g');
+const linkLabelSel = linkLabelG.selectAll('text').data(allLinks.filter(l => !l.isKPI && !l.isDecision)).enter().append('text')
+  .attr('class', 'link-label')
+  .attr('text-anchor', 'middle')
+  .text(d => d.rel);
+
+// Hexagon path
+function hexPath(r) {
+  const pts = [];
+  for (let i = 0; i < 6; i++) {
+    const angle = Math.PI / 3 * i - Math.PI / 6;
+    pts.push(`${r * Math.cos(angle)},${r * Math.sin(angle)}`);
+  }
+  return 'M' + pts.join('L') + 'Z';
+}
+
+// Triangle path
+function triPath(r) {
+  const h = r * 1.3;
+  return `M0,${-h * 0.7} L${h * 0.6},${h * 0.5} L${-h * 0.6},${h * 0.5}Z`;
+}
+
+// Nodes
+const nodeG = g.append('g');
+const nodeSel = nodeG.selectAll('g').data(allNodes).enter().append('g')
+  .call(d3.drag()
+    .on('start', (e,d) => { if (!e.active) simulation.alphaTarget(0.3).restart(); d.fx=d.x; d.fy=d.y; })
+    .on('drag', (e,d) => { d.fx=e.x; d.fy=e.y; })
+    .on('end', (e,d) => { if (!e.active) simulation.alphaTarget(0); d.fx=null; d.fy=null; })
+  );
+
+// Entity circles
+nodeSel.filter(d => d.type === 'entity').append('circle')
+  .attr('class', 'node-shape')
+  .attr('r', d => nodeR(d.id, d.type))
+  .attr('fill', d => DOMAINS[d.domain]?.color || '#64748B')
+  .attr('stroke', '#fff')
+  .attr('stroke-width', 1.5);
+
+// KPI hexagons
+nodeSel.filter(d => d.type === 'kpi').append('path')
+  .attr('class', 'node-shape')
+  .attr('d', d => hexPath(nodeR(d.id, d.type)))
+  .attr('fill', KPI_COLOR)
+  .attr('stroke', '#fff')
+  .attr('stroke-width', 1.5);
+
+// Decision triangles
+nodeSel.filter(d => d.type === 'decision').append('path')
+  .attr('class', 'node-shape')
+  .attr('d', d => triPath(nodeR(d.id, d.type)))
+  .attr('fill', DECISION_COLOR)
+  .attr('stroke', '#fff')
+  .attr('stroke-width', 1.5);
+
+// Labels
+nodeSel.append('text')
+  .attr('class', 'node-label')
+  .attr('dy', d => nodeR(d.id, d.type) + 11)
+  .attr('text-anchor', 'middle')
+  .text(d => d.type === 'entity' ? d.id : (d.name || d.id));
+
+// Events on shapes
+nodeSel.selectAll('.node-shape')
+  .on('mouseover', handleMouseOver)
+  .on('mousemove', (e) => { tooltip.style.left = (e.clientX+14)+'px'; tooltip.style.top = (e.clientY-10)+'px'; })
+  .on('mouseout', handleMouseOut)
+  .on('click', handleClick);
+
+simulation.on('tick', () => {
+  linkSel.attr('x1',d=>d.source.x).attr('y1',d=>d.source.y).attr('x2',d=>d.target.x).attr('y2',d=>d.target.y);
+  linkLabelSel.attr('x', d => (d.source.x+d.target.x)/2).attr('y', d => (d.source.y+d.target.y)/2 - 3);
+  nodeSel.attr('transform', d => `translate(${d.x},${d.y})`);
+});
+
+setTimeout(() => {
+  const b = g.node().getBBox();
+  const s = 0.82 / Math.max(b.width/width, b.height/height);
+  const tx = width/2 - s*(b.x + b.width/2);
+  const ty = height/2 - s*(b.y + b.height/2);
+  svg.transition().duration(800).call(zoomBehavior.transform, d3.zoomIdentity.translate(tx,ty).scale(s));
+}, 2500);
+
+// ═══════ INTERACTIONS ═══════
+const tooltip = document.getElementById('tooltip');
+const sidePanel = document.getElementById('sidePanel');
+let selectedNode = null;
+
+function connIds(nid) {
+  const s = new Set([nid]);
+  allLinks.forEach(l => {
+    const sid = l.source.id||l.source, tid = l.target.id||l.target;
+    if (sid===nid) s.add(tid);
+    if (tid===nid) s.add(sid);
+  });
+  return s;
+}
+
+function highlight(ids) {
+  nodeSel.selectAll('.node-shape').classed('highlighted', d=>ids.has(d.id)).classed('dimmed', d=>!ids.has(d.id)).classed('selected', d=>d.id===selectedNode);
+  nodeSel.selectAll('.node-label').classed('highlighted', d=>ids.has(d.id)).classed('dimmed', d=>!ids.has(d.id));
+  linkSel.classed('highlighted', d => ids.has(d.source.id||d.source)&&ids.has(d.target.id||d.target)).classed('dimmed', d => !(ids.has(d.source.id||d.source)&&ids.has(d.target.id||d.target)));
+  linkLabelSel.classed('highlighted', d => ids.has(d.source.id||d.source)&&ids.has(d.target.id||d.target)).classed('dimmed', d => !(ids.has(d.source.id||d.source)&&ids.has(d.target.id||d.target)));
+}
+
+function clearHL() {
+  nodeSel.selectAll('.node-shape').classed('highlighted',false).classed('dimmed',false).classed('selected',false);
+  nodeSel.selectAll('.node-label').classed('highlighted',false).classed('dimmed',false);
+  linkSel.classed('highlighted',false).classed('dimmed',false);
+  linkLabelSel.classed('highlighted',false).classed('dimmed',false);
+}
+
+function handleMouseOver(e,d) {
+  if (selectedNode) return;
+  highlight(connIds(d.id));
+  tooltip.querySelector('.tooltip-name').textContent = d.type==='entity' ? d.id : d.name;
+  tooltip.querySelector('.tooltip-domain').textContent = d.type==='entity' ? d.domain : d.type==='kpi' ? 'KPI Metric' : 'Decision';
+  tooltip.classList.add('visible');
+}
+
+function handleMouseOut() {
+  if (selectedNode) return;
+  clearHL();
+  tooltip.classList.remove('visible');
+}
+
+function handleClick(e,d) {
+  e.stopPropagation();
+  selectedNode = d.id;
+  highlight(connIds(d.id));
+  tooltip.classList.remove('visible');
+  renderPanel(d);
+  sidePanel.classList.add('open');
+}
+
+svg.on('click', closePanel);
+document.getElementById('panelClose').addEventListener('click', closePanel);
+
+function closePanel() {
+  selectedNode = null;
+  clearHL();
+  sidePanel.classList.remove('open');
+}
+
+function renderPanel(d) {
+  const panel = document.getElementById('panelInner');
+
+  if (d.type === 'kpi') {
+    const color = KPI_COLOR;
+    let html = `<div class="panel-content"><div class="panel-header">
+      <div class="panel-domain" style="color:${color}"><div class="panel-domain-dot" style="background:${color}"></div>KPI METRIC</div>
+      <div class="panel-node-name">${d.name}</div>
+    </div>
+    <div class="panel-section">
+      <div class="panel-section-title">Calculation</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#475569;line-height:1.6;padding:8px 12px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:8px">${d.calc}</div>
+      <div style="margin-top:10px;display:flex;gap:16px;font-size:12px;color:#64748B">
+        <span>Grain: <strong>${d.grain}</strong></span>
+        <span>Unit: <strong>${d.unit}</strong></span>
+        <span class="metric-direction ${d.dir==='up'?'up':'down'}">${d.dir==='up'?'↑ Higher better':d.dir==='down'?'↓ Lower better':'● Contextual'}</span>
+      </div>
+    </div>
+    <div class="panel-section">
+      <div class="panel-section-title">Connected Entities <span class="count">${d.linked.length}</span></div>`;
+    d.linked.forEach(lid => {
+      const en = entityNodes.find(n=>n.id===lid);
+      if (en) {
+        const ec = DOMAINS[en.domain]?.color||'#64748B';
+        html += `<div class="connection-item" onclick="navNode('${lid}')"><div class="conn-arrow">●</div><div class="conn-details"><div class="conn-node" style="color:${ec}">${lid}</div><div class="conn-rel">${en.domain}</div></div></div>`;
+      }
+    });
+    html += `</div></div>`;
+    panel.innerHTML = html;
+    return;
+  }
+
+  if (d.type === 'decision') {
+    let html = `<div class="panel-content"><div class="panel-header">
+      <div class="panel-domain" style="color:${DECISION_COLOR}"><div class="panel-domain-dot" style="background:${DECISION_COLOR}"></div>DECISION</div>
+      <div class="panel-node-name">${d.name}</div>
+      <div style="font-size:12px;color:#64748B;margin-top:4px">${d.persona}</div>
+    </div>
+    <div class="panel-section">
+      <div class="panel-section-title">Question Template</div>
+      <div style="font-size:13px;color:#475569;line-height:1.6;font-style:italic;padding:10px 12px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:8px">"${d.question}"</div>
+    </div>
+    <div class="panel-section">
+      <div class="panel-section-title">Threshold / Rule</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#475569;line-height:1.6;padding:8px 12px;background:#F1F5F9;border-radius:8px">${d.threshold}</div>
+    </div>
+    <div class="panel-section">
+      <div class="panel-section-title">Connected Entities <span class="count">${d.linked.length}</span></div>`;
+    d.linked.forEach(lid => {
+      const en = entityNodes.find(n=>n.id===lid);
+      if (en) {
+        const ec = DOMAINS[en.domain]?.color||'#64748B';
+        html += `<div class="connection-item" onclick="navNode('${lid}')"><div class="conn-arrow">●</div><div class="conn-details"><div class="conn-node" style="color:${ec}">${lid}</div><div class="conn-rel">${en.domain}</div></div></div>`;
+      }
+    });
+    html += `</div></div>`;
+    panel.innerHTML = html;
+    return;
+  }
+
+  // Entity node
+  const color = DOMAINS[d.domain]?.color || '#64748B';
+  const conns = [];
+  entityLinks.forEach(l => {
+    const sid = l.source.id||l.source, tid = l.target.id||l.target;
+    if (sid===d.id) conns.push({dir:'out',node:tid,rel:l.rel,card:l.card});
+    if (tid===d.id) conns.push({dir:'in',node:sid,rel:l.rel,card:l.card});
+  });
+
+  const nodeKPIs = kpiNodes.filter(k => k.linked.includes(d.id));
+  const nodeDecs = decisionNodes.filter(dec => dec.linked.includes(d.id));
+
+  let html = `<div class="panel-content"><div class="panel-header">
+    <div class="panel-domain" style="color:${color}"><div class="panel-domain-dot" style="background:${color}"></div>${d.domain}</div>
+    <div class="panel-node-name">${d.id}</div>
+    <div class="panel-definition">${d.def}</div>
+  </div>
+  <div class="panel-section">
+    <div class="panel-section-title">Attributes <span class="count">${d.attrs.length}</span></div><div>`;
+  d.attrs.forEach((a,i) => { html += `<span class="attr-tag${i===0?' key':''}">${a}</span>`; });
+  html += `</div>`;
+  if (d.grain) html += `<div style="margin-top:8px"><span class="grain-badge">Grain: ${d.grain}</span></div>`;
+  html += `</div>`;
+
+  // Connections
+  html += `<div class="panel-section"><div class="panel-section-title">Relationships <span class="count">${conns.length}</span></div>`;
+  conns.forEach(c => {
+    const tn = entityNodes.find(n=>n.id===c.node);
+    const tc = tn ? DOMAINS[tn.domain]?.color : '#64748B';
+    html += `<div class="connection-item" onclick="navNode('${c.node}')"><div class="conn-arrow">${c.dir==='out'?'→':'←'}</div><div class="conn-details"><div class="conn-node" style="color:${tc}">${c.node}</div><div class="conn-rel">${c.rel} <span class="conn-card">(${c.card})</span></div></div></div>`;
+  });
+  html += `</div>`;
+
+  // KPIs
+  if (nodeKPIs.length) {
+    html += `<div class="panel-section"><div class="panel-section-title" style="color:${KPI_COLOR}">KPIs <span class="count">${nodeKPIs.length}</span></div>`;
+    nodeKPIs.forEach(m => {
+      const dc = m.dir==='up'?'up':'down';
+      const di = m.dir==='up'?'↑':m.dir==='down'?'↓':'●';
+      html += `<div class="metric-card" style="cursor:pointer" onclick="navNode('${m.id}')"><div class="metric-name">${m.name}</div><div class="metric-calc">${m.calc}</div><div class="metric-meta"><span>${m.grain}</span><span>${m.unit}</span><span class="metric-direction ${dc}">${di}</span></div></div>`;
+    });
+    html += `</div>`;
+  }
+
+  // Decisions
+  if (nodeDecs.length) {
+    html += `<div class="panel-section"><div class="panel-section-title" style="color:${DECISION_COLOR}">Decisions <span class="count">${nodeDecs.length}</span></div>`;
+    nodeDecs.forEach(dec => {
+      html += `<div class="decision-card" style="cursor:pointer" onclick="navNode('${dec.id}')"><div class="decision-area">${dec.name}</div><div class="decision-persona">${dec.persona}</div><div class="decision-question">"${dec.question}"</div><div class="decision-threshold">${dec.threshold}</div></div>`;
+    });
+    html += `</div>`;
+  }
+
+  html += `</div>`;
+  panel.innerHTML = html;
+}
+
+function navNode(nid) {
+  const d = allNodes.find(n=>n.id===nid);
+  if (d) { selectedNode=d.id; highlight(connIds(d.id)); renderPanel(d); sidePanel.classList.add('open'); }
+}
+
+// Search
+document.getElementById('search').addEventListener('input', function() {
+  const q = this.value.toLowerCase().trim();
+  if (!q) { clearHL(); selectedNode=null; return; }
+  const m = new Set();
+  allNodes.forEach(n => {
+    const txt = (n.id + ' ' + (n.name||'') + ' ' + (n.domain||'') + ' ' + (n.def||'')).toLowerCase();
+    if (txt.includes(q)) m.add(n.id);
+  });
+  if (m.size) {
+    nodeSel.selectAll('.node-shape').classed('dimmed',d=>!m.has(d.id)).classed('highlighted',d=>m.has(d.id));
+    nodeSel.selectAll('.node-label').classed('dimmed',d=>!m.has(d.id)).classed('highlighted',d=>m.has(d.id));
+    linkSel.classed('dimmed',true);
+    linkLabelSel.classed('dimmed',true);
+  }
+});
+</script>
+</body>
+</html>
