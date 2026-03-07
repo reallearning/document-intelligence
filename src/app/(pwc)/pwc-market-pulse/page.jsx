@@ -2,14 +2,6 @@
 import { useState } from "react";
 import { BarChart, Bar, XAxis, ResponsiveContainer } from "recharts";
 
-const C = {
-  header: "#111A15", page: "#FAFAF8", card: "#FFFFFF", border: "#E5E2DB",
-  borderLight: "#F0EDE7", text: "#1C1C1C", textMid: "#555555", textLight: "#999999",
-  green: "#2D5A3D", greenPale: "#EAF2EF", sage: "#2D5A3D",
-  orange: "#946B1A", orangePale: "#FDFAF0", red: "#B33A3A", redPale: "#FDF3F3",
-};
-const label = { fontSize: 11, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: C.textLight };
-const cardBase = { background: C.card, border: `1px solid ${C.border}` };
 
 // ═══════════════════════════════════════════════════════
 // PORTFOLIO KPIs
@@ -248,15 +240,45 @@ const territories = [
 
 const SeverityIcon = ({ severity }) => {
   const isC = severity === "critical";
-  return <div style={{ width: 32, height: 32, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: isC ? C.redPale : C.orangePale, color: isC ? C.red : C.orange, fontSize: 14, flexShrink: 0 }}>{isC ? "!" : "◷"}</div>;
+  return (
+    <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold ${
+      isC ? "bg-pwc-terra-soft text-pwc-terra" : "bg-pwc-amber-soft text-pwc-amber"
+    }`}>
+      {isC ? "!" : "◷"}
+    </div>
+  );
 };
 
 const PriorityBadge = ({ p }) => {
-  const s = { critical: { bg: C.redPale, color: C.red, l: "CRITICAL" }, high: { bg: C.orangePale, color: C.orange, l: "HIGH PRIORITY" } }[p] || { bg: C.greenPale, color: C.green, l: "MEDIUM" };
-  return <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.06em", padding: "3px 10px", background: s.bg, color: s.color }}>{s.l}</span>;
+  const s = {
+    critical: "bg-pwc-terra-soft text-pwc-terra border border-pwc-terra/20",
+    high: "bg-pwc-amber-soft text-pwc-amber border border-pwc-amber/20",
+  }[p] || "bg-pwc-sage-soft text-pwc-sage border border-pwc-sage/20";
+  return (
+    <span className={`text-[10px] font-bold tracking-[0.06em] uppercase px-2.5 py-0.5 rounded-sm ${s}`}>
+      {p === "critical" ? "Critical" : p === "high" ? "High Priority" : "Medium"}
+    </span>
+  );
 };
 
-const StatusDot = ({ s }) => <span style={{ display: "inline-block", width: 8, height: 8, borderRadius: "50%", background: { "on-track": C.green, "needs-attention": C.orange, "at-risk": C.red }[s], marginRight: 8, flexShrink: 0 }} />;
+const StatusDot = ({ s }) => (
+  <span className={`inline-block w-2 h-2 rounded-full flex-shrink-0 ${
+    s === "on-track" ? "bg-pwc-sage" : s === "needs-attention" ? "bg-pwc-amber" : "bg-pwc-terra"
+  }`} />
+);
+
+const SectionHeader = ({ title, count, right }) => (
+  <div className="flex items-center justify-between mb-4">
+    <div className="flex items-center gap-3">
+      <div className="w-[3px] h-4 bg-pwc-sage rounded-full flex-shrink-0" />
+      <h2 className="text-[15px] font-bold text-pwc-text tracking-tight">{title}</h2>
+      {count !== undefined && (
+        <span className="text-[10px] font-bold text-pwc-dimmer bg-pwc-bg-alt border border-pwc-border-light px-2 py-0.5 rounded">{count}</span>
+      )}
+    </div>
+    {right && <span className="text-[11px] text-pwc-dimmer">{right}</span>}
+  </div>
+);
 
 // ═══════════════════════════════════════════════════════
 // AGENT TRAIL MODAL
@@ -264,77 +286,55 @@ const StatusDot = ({ s }) => <span style={{ display: "inline-block", width: 8, h
 const AgentTrailModal = ({ insight, onClose }) => {
   if (!insight) return null;
   return (
-    <div
-      onClick={onClose}
-      style={{
-        position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
-        background: "rgba(12, 44, 24, 0.45)", backdropFilter: "blur(4px)",
-        display: "flex", alignItems: "center", justifyContent: "center",
-        zIndex: 1000, padding: 40,
-      }}
-    >
-      <div
-        onClick={e => e.stopPropagation()}
-        style={{
-          background: C.card, border: `1px solid ${C.border}`,
-          width: "100%", maxWidth: 780, maxHeight: "85vh",
-          overflow: "hidden", display: "flex", flexDirection: "column",
-          boxShadow: "0 24px 80px rgba(0,0,0,0.18)",
-        }}
-      >
-        {/* Modal header */}
-        <div style={{
-          padding: "20px 28px", borderBottom: `1px solid ${C.border}`,
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-          flexShrink: 0,
-        }}>
+    <div onClick={onClose} className="fixed inset-0 z-[100] bg-pwc-green/40 backdrop-blur-sm flex items-center justify-center p-8">
+      <div onClick={e => e.stopPropagation()} className="bg-white w-full max-w-[740px] max-h-[85vh] flex flex-col rounded-xl shadow-2xl border border-pwc-border overflow-hidden">
+        {/* Header */}
+        <div className="px-7 py-5 border-b border-pwc-border-light flex items-start justify-between flex-shrink-0 bg-pwc-bg-sub rounded-t-xl">
           <div>
-            <div style={{ ...label, fontSize: 10, color: C.green, marginBottom: 6 }}>AGENT DECISION TRAIL</div>
-            <div style={{ fontSize: 15, fontWeight: 600, color: C.text, lineHeight: 1.4 }}>{insight.headline}</div>
-            <div style={{ fontSize: 12, color: C.textLight, marginTop: 4 }}>{insight.category} · {insight.region}</div>
+            <div className="text-[10px] font-bold text-pwc-sage tracking-[0.09em] uppercase mb-1.5">Agent Decision Trail</div>
+            <div className="text-[15px] font-semibold text-pwc-text leading-snug">{insight.headline}</div>
+            <div className="text-[11px] text-pwc-dimmer mt-1">{insight.category} · {insight.region}</div>
           </div>
-          <div
-            onClick={onClose}
-            style={{
-              width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center",
-              cursor: "pointer", fontSize: 18, color: C.textLight, flexShrink: 0,
-              border: `1px solid ${C.border}`, background: C.card,
-              transition: "all 0.15s",
-            }}
-            onMouseEnter={e => { e.currentTarget.style.background = C.page; e.currentTarget.style.color = C.text; }}
-            onMouseLeave={e => { e.currentTarget.style.background = C.card; e.currentTarget.style.color = C.textLight; }}
-          >
-            ✕
-          </div>
+          <button onClick={onClose} className="w-8 h-8 flex items-center justify-center border border-pwc-border rounded text-pwc-dim text-sm hover:bg-pwc-bg-alt cursor-pointer flex-shrink-0 bg-transparent transition-colors">✕</button>
         </div>
-
-        {/* Modal body — scrollable */}
-        <div style={{ overflow: "auto", padding: "24px 28px" }}>
+        {/* Body */}
+        <div className="overflow-auto px-7 py-6">
           {insight.agentTrail.map((step, i) => {
             const isLast = i === insight.agentTrail.length - 1;
             const isSynthesis = step.agent === "Synthesis";
-            const isOrch = step.agent === "Orchestrator";
             return (
-              <div key={i} style={{ display: "flex", gap: 14, paddingBottom: isLast ? 0 : 20, marginBottom: isLast ? 0 : 20, borderBottom: isLast ? "none" : `1px solid ${C.borderLight}` }}>
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: 28, flexShrink: 0 }}>
-                  <div style={{ width: 28, height: 28, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: isSynthesis ? C.greenPale : isOrch ? C.card : C.card, border: `1px solid ${isSynthesis ? C.sage : C.border}`, fontSize: 12 }}>{step.icon}</div>
-                  {!isLast && <div style={{ width: 1, flex: 1, background: C.borderLight, marginTop: 6 }} />}
+              <div key={i} className="flex gap-4">
+                <div className="flex flex-col items-center w-7 flex-shrink-0">
+                  <div className={`w-7 h-7 rounded-full flex items-center justify-center border text-xs flex-shrink-0 mt-0.5 ${
+                    isSynthesis ? "bg-pwc-sage-soft border-pwc-sage/40 text-pwc-sage" : "bg-white border-pwc-border text-pwc-dimmer"
+                  }`}>{step.icon}</div>
+                  {!isLast && <div className="w-px flex-1 bg-pwc-border-light mt-1" />}
                 </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 13, fontWeight: 700, color: isSynthesis ? C.green : C.text }}>{step.agent}</div>
-                  {step.action && <div style={{ fontSize: 12, color: C.textMid, marginTop: 3, lineHeight: 1.5 }}>{step.action}</div>}
-                  {step.routing && <div style={{ fontSize: 11, color: C.sage, marginTop: 3, fontStyle: "italic" }}>{step.routing}</div>}
+                <div className={`flex-1 pl-1 ${!isLast ? "pb-5" : ""}`}>
+                  <div className={`text-[13px] font-bold mb-1.5 ${isSynthesis ? "text-pwc-sage" : "text-pwc-text"}`}>{step.agent}</div>
+                  {step.action && <div className="text-[12px] text-pwc-dim leading-relaxed mb-1.5">{step.action}</div>}
+                  {step.routing && <div className="text-[11px] text-pwc-sage italic mb-2">{step.routing}</div>}
                   {step.source && (
-                    <div style={{ marginTop: 10, padding: "12px 16px", background: C.page, border: `1px solid ${C.borderLight}` }}>
-                      <div style={{ fontSize: 10, fontWeight: 600, color: C.textLight, marginBottom: 6 }}>SOURCE: {step.source}</div>
-                      {step.query && <div style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", color: C.textLight, marginBottom: 10, wordBreak: "break-all", lineHeight: 1.5, padding: "8px 10px", background: C.card, borderRadius: 2 }}>{step.query}</div>}
-                      <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6, marginBottom: step.inference ? 6 : 0 }}><span style={{ fontWeight: 600 }}>Finding: </span>{step.finding}</div>
-                      {step.inference && <div style={{ fontSize: 12, color: C.green, lineHeight: 1.6 }}><span style={{ fontWeight: 600 }}>Inference: </span>{step.inference}</div>}
+                    <div className="bg-pwc-bg-sub border border-pwc-border-light rounded-lg p-4 mt-2">
+                      <div className="text-[10px] font-bold text-pwc-dimmer tracking-wider uppercase mb-2">Source: {step.source}</div>
+                      {step.query && (
+                        <div className="font-fira text-[10px] text-pwc-dim bg-white border border-pwc-border-light rounded p-2.5 mb-3 break-all leading-relaxed">{step.query}</div>
+                      )}
+                      {step.finding && (
+                        <div className="text-[12px] text-pwc-text leading-relaxed mb-1.5">
+                          <span className="font-semibold">Finding: </span>{step.finding}
+                        </div>
+                      )}
+                      {step.inference && !isSynthesis && (
+                        <div className="text-[12px] text-pwc-sage leading-relaxed">
+                          <span className="font-semibold">Inference: </span>{step.inference}
+                        </div>
+                      )}
                     </div>
                   )}
                   {isSynthesis && step.inference && (
-                    <div style={{ marginTop: 10, padding: "14px 18px", background: C.greenPale, borderLeft: `3px solid ${C.sage}` }}>
-                      <div style={{ fontSize: 13, color: C.text, lineHeight: 1.65, fontWeight: 500 }}>{step.inference}</div>
+                    <div className="border-l-[3px] border-pwc-sage bg-pwc-sage-soft rounded-r-lg px-4 py-3 mt-2">
+                      <div className="text-[13px] text-pwc-text leading-relaxed font-medium">{step.inference}</div>
                     </div>
                   )}
                 </div>
@@ -351,87 +351,79 @@ const AgentTrailModal = ({ insight, onClose }) => {
 // INSIGHT CARD
 // ═══════════════════════════════════════════════════════
 const InsightCard = ({ insight, isExpanded, onToggle, onShowTrail }) => {
+  const isCrit = insight.priority === "critical";
   return (
-    <div style={{ ...cardBase, marginBottom: 12, overflow: "hidden" }}>
-      {/* Collapsed */}
-      <div style={{ padding: "20px 28px", cursor: "pointer", display: "flex", alignItems: "flex-start", gap: 16 }}
-        onMouseEnter={e => e.currentTarget.style.background = "#FAFAF7"}
-        onMouseLeave={e => e.currentTarget.style.background = C.card}>
-        <div onClick={onToggle} style={{ display: "flex", alignItems: "flex-start", gap: 16, flex: 1 }}>
+    <div className={`flex bg-white rounded-lg overflow-hidden border transition-shadow ${
+      isExpanded ? "border-pwc-border shadow-md" : "border-pwc-border-light shadow-sm"
+    }`}>
+      <div className={`w-[3px] flex-shrink-0 ${isCrit ? "bg-pwc-terra" : "bg-pwc-amber"}`} />
+      <div className="flex-1 min-w-0">
+        {/* Collapsed */}
+        <div className="px-5 py-4 flex items-start gap-4 cursor-pointer hover:bg-pwc-bg-sub/50 transition-colors" onClick={onToggle}>
           <SeverityIcon severity={insight.priority} />
-          <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 15, fontWeight: 600, color: C.text, lineHeight: 1.45 }}>{insight.headline}</div>
-            <div style={{ fontSize: 13, color: C.textMid, marginTop: 4, lineHeight: 1.5 }}>{insight.subtitle}</div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 flex-wrap mb-1.5">
+              <PriorityBadge p={insight.priority} />
+              <span className="text-[11px] text-pwc-dimmer">{insight.type}</span>
+              <span className="text-pwc-dimmer/40 text-[10px]">·</span>
+              <span className="text-[11px] text-pwc-dimmer">{insight.region}</span>
+            </div>
+            <div className="text-[13px] font-semibold text-pwc-text leading-snug mb-1">{insight.headline}</div>
+            <div className="text-[12px] text-pwc-dim leading-relaxed">{insight.subtitle}</div>
+          </div>
+          <div className="flex items-center gap-2.5 flex-shrink-0 ml-2 mt-0.5">
+            <button
+              onClick={e => { e.stopPropagation(); onShowTrail(insight); }}
+              className="text-[11px] font-semibold text-pwc-sage bg-pwc-sage-soft border border-pwc-sage/20 rounded px-3 py-1.5 flex items-center gap-1.5 cursor-pointer hover:bg-pwc-sage/10 transition-colors whitespace-nowrap"
+            >
+              <span className="text-[10px]">◈</span> Decision Trail
+            </button>
+            <span className={`text-[11px] text-pwc-dimmer inline-block transition-transform ${isExpanded ? "rotate-180" : ""}`}>▾</span>
           </div>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0, marginTop: 2 }}>
-          <div
-            onClick={ev => { ev.stopPropagation(); onShowTrail(insight); }}
-            style={{
-              display: "inline-flex", alignItems: "center", gap: 6,
-              padding: "5px 12px", border: `1px solid ${C.border}`,
-              cursor: "pointer", fontSize: 11, fontWeight: 600, color: C.green,
-              background: C.card, transition: "all 0.15s", whiteSpace: "nowrap",
-            }}
-            onMouseEnter={e => e.currentTarget.style.background = C.greenPale}
-            onMouseLeave={e => e.currentTarget.style.background = C.card}
-          >
-            <span style={{ fontSize: 12 }}>◈</span>
-            Decision Trail
-          </div>
-          <span style={{ ...label, fontSize: 10 }}>{insight.category}</span>
-          <span onClick={onToggle} style={{ fontSize: 12, color: C.sage, transform: isExpanded ? "rotate(180deg)" : "none", transition: "transform 0.2s", cursor: "pointer" }}>▾</span>
-        </div>
-      </div>
 
-      {/* Expanded */}
-      {isExpanded && (
-        <div style={{ borderTop: `1px solid ${C.border}` }}>
-          {/* Header */}
-          <div style={{ padding: "18px 28px 12px", display: "flex", gap: 10, alignItems: "center" }}>
-            <PriorityBadge p={insight.priority} />
-            <span style={{ fontSize: 12, color: C.textLight }}>{insight.type} · {insight.region}</span>
-          </div>
-
-          {/* KPIs */}
-          <div style={{ display: "flex", margin: "0 28px 20px", border: `1px solid ${C.border}` }}>
-            {insight.kpis.map((k, i) => (
-              <div key={i} style={{ flex: 1, padding: "16px 20px", borderRight: i < insight.kpis.length - 1 ? `1px solid ${C.borderLight}` : "none" }}>
-                <div style={{ ...label, fontSize: 9, marginBottom: 6 }}>{k.label}</div>
-                <div style={{ fontSize: 24, fontWeight: 700, color: C.text }}>{k.value}</div>
-                <div style={{ fontSize: 11, color: C.textLight, marginTop: 3 }}>{k.note}</div>
-              </div>
-            ))}
-          </div>
-
-          {/* DECISION (first) */}
-          <div style={{ margin: "0 28px 20px", padding: "22px 24px", border: `1px solid ${C.border}` }}>
-            <div style={{ ...label, fontSize: 10, color: C.orange, marginBottom: 16 }}>DECISION — RECOMMENDED ACTIONS</div>
-            <div style={{ marginBottom: 16 }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: C.textLight, letterSpacing: "0.04em", textTransform: "uppercase", marginBottom: 5 }}>Sales</div>
-              <div style={{ fontSize: 14, color: C.text, lineHeight: 1.65 }}>{insight.salesAction}</div>
-            </div>
-            <div style={{ marginBottom: 16 }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: C.textLight, letterSpacing: "0.04em", textTransform: "uppercase", marginBottom: 5 }}>Marketing</div>
-              <div style={{ fontSize: 14, color: C.text, lineHeight: 1.65 }}>{insight.marketingAction}</div>
-            </div>
-
-          </div>
-
-          {/* SState BPORTING EVIDENCE (condensed) */}
-          <div style={{ margin: "0 28px 24px" }}>
-            <div style={{ ...label, fontSize: 10, marginBottom: 12 }}>SState BPORTING EVIDENCE</div>
-            <div style={{ background: C.page, padding: "20px 24px" }}>
-              {insight.evidence.map((e, i) => (
-                <div key={i} style={{ marginBottom: i < insight.evidence.length - 1 ? 14 : 0, paddingBottom: i < insight.evidence.length - 1 ? 14 : 0, borderBottom: i < insight.evidence.length - 1 ? `1px solid ${C.borderLight}` : "none" }}>
-                  <div style={{ fontSize: 12, fontWeight: 700, color: C.text, marginBottom: 4 }}>{e.source}</div>
-                  <div style={{ fontSize: 13, color: C.textMid, lineHeight: 1.6 }}>{e.summary}</div>
+        {/* Expanded */}
+        {isExpanded && (
+          <div className="border-t border-pwc-border-light">
+            {/* KPIs */}
+            <div className="grid grid-cols-4 border-b border-pwc-border-light">
+              {insight.kpis.map((k, i) => (
+                <div key={i} className={`p-4 ${i < insight.kpis.length - 1 ? "border-r border-pwc-border-light" : ""}`}>
+                  <div className="text-[10px] font-bold text-pwc-dimmer tracking-wider uppercase mb-2">{k.label}</div>
+                  <div className="text-[22px] font-bold text-pwc-text leading-none mb-1">{k.value}</div>
+                  <div className="text-[11px] text-pwc-dimmer">{k.note}</div>
                 </div>
               ))}
             </div>
+            {/* Actions */}
+            <div className="p-5 border-b border-pwc-border-light">
+              <div className="text-[10px] font-bold text-pwc-amber tracking-[0.09em] uppercase mb-4">Recommended Actions</div>
+              <div className="grid grid-cols-2 gap-5">
+                <div>
+                  <div className="text-[10px] font-bold text-pwc-dimmer tracking-wider uppercase mb-2">Sales</div>
+                  <div className="text-[12px] text-pwc-text-mid leading-relaxed">{insight.salesAction}</div>
+                </div>
+                <div>
+                  <div className="text-[10px] font-bold text-pwc-dimmer tracking-wider uppercase mb-2">Marketing</div>
+                  <div className="text-[12px] text-pwc-text-mid leading-relaxed">{insight.marketingAction}</div>
+                </div>
+              </div>
+            </div>
+            {/* Evidence */}
+            <div className="p-5 bg-pwc-bg-sub">
+              <div className="text-[10px] font-bold text-pwc-dimmer tracking-[0.09em] uppercase mb-3">Supporting Evidence</div>
+              <div className="flex flex-col gap-2">
+                {insight.evidence.map((e, i) => (
+                  <div key={i} className="bg-white border border-pwc-border-light rounded-lg p-4">
+                    <div className="text-[11px] font-bold text-pwc-text uppercase tracking-wide mb-1.5">{e.source}</div>
+                    <div className="text-[12px] text-pwc-dim leading-relaxed">{e.summary}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
@@ -440,54 +432,82 @@ const InsightCard = ({ insight, isExpanded, onToggle, onShowTrail }) => {
 // TERRITORY ROW
 // ═══════════════════════════════════════════════════════
 const TerritoryRow = ({ t, isExpanded, onToggle }) => {
-  const sc = { "on-track": C.green, "needs-attention": C.orange, "at-risk": C.red }[t.status];
+  const st = {
+    "on-track":        { bar: "bg-pwc-sage",  text: "text-pwc-sage",  accent: "bg-pwc-sage",  chart: "#1B6B5A" },
+    "needs-attention": { bar: "bg-pwc-amber", text: "text-pwc-amber", accent: "bg-pwc-amber", chart: "#946B1A" },
+    "at-risk":         { bar: "bg-pwc-terra", text: "text-pwc-terra", accent: "bg-pwc-terra", chart: "#B33A3A" },
+  }[t.status];
   return (
-    <div style={{ ...cardBase, marginBottom: 8, overflow: "hidden" }}>
-      <div onClick={onToggle} style={{ padding: "18px 28px", cursor: "pointer", display: "flex", alignItems: "center", gap: 20 }}
-        onMouseEnter={e => e.currentTarget.style.background = "#FAFAF7"}
-        onMouseLeave={e => e.currentTarget.style.background = C.card}>
-        <StatusDot s={t.status} />
-        <div style={{ width: 130, fontSize: 14, fontWeight: 600, color: C.text }}>{t.name}</div>
-        <div style={{ width: 120, display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ flex: 1, height: 4, background: C.borderLight }}><div style={{ width: `${Math.min(t.achievement, 100)}%`, height: "100%", background: sc }} /></div>
-          <span style={{ fontSize: 14, fontWeight: 700, color: sc, minWidth: 36 }}>{t.achievement}%</span>
-        </div>
-        <div style={{ flex: 1, fontSize: 13, color: C.textMid, lineHeight: 1.45 }}>{t.narrative}</div>
-        <span style={{ fontSize: 12, color: C.sage, transform: isExpanded ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>▾</span>
-      </div>
-      {isExpanded && (
-        <div style={{ borderTop: `1px solid ${C.border}`, padding: "20px 28px" }}>
-          <div style={{ display: "flex", gap: 24, marginBottom: 20 }}>
-            <div style={{ flex: 1 }}>
-              <div style={{ ...label, fontSize: 10, marginBottom: 12 }}>ASM Area Breakdown</div>
-              <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                <thead><tr>{["ASM Area", "Achievement"].map(h => <th key={h} style={{ ...label, fontSize: 9, textAlign: "left", padding: "8px 12px", borderBottom: `1px solid ${C.border}` }}>{h}</th>)}</tr></thead>
-                <tbody>{t.asmAreas.map((a, i) => (
-                  <tr key={i}>
-                    <td style={{ fontSize: 13, color: C.text, padding: "10px 12px", borderBottom: `1px solid ${C.borderLight}` }}>{a.name}</td>
-                    <td style={{ fontSize: 13, fontWeight: 600, color: a.achievement >= 85 ? C.green : a.achievement >= 75 ? C.orange : C.red, padding: "10px 12px", borderBottom: `1px solid ${C.borderLight}` }}>{a.achievement}%</td>
-                  </tr>
-                ))}</tbody>
-              </table>
+    <div className={`flex bg-white rounded-lg overflow-hidden border transition-shadow ${
+      isExpanded ? "border-pwc-border shadow-md" : "border-pwc-border-light shadow-sm"
+    }`}>
+      <div className={`w-[3px] flex-shrink-0 ${st.accent}`} />
+      <div className="flex-1 min-w-0">
+        {/* Collapsed */}
+        <div onClick={onToggle} className="px-5 py-4 cursor-pointer flex items-center gap-5 hover:bg-pwc-bg-sub/50 transition-colors">
+          <StatusDot s={t.status} />
+          <div className="w-[140px] text-[13px] font-semibold text-pwc-text flex-shrink-0">{t.name}</div>
+          <div className="flex items-center gap-3 w-[140px] flex-shrink-0">
+            <div className="flex-1 h-1.5 bg-pwc-border-light rounded-full overflow-hidden">
+              <div className={`h-full ${st.bar} rounded-full`} style={{ width: `${Math.min(t.achievement, 100)}%` }} />
             </div>
-            <div style={{ width: 260 }}>
-              <div style={{ ...label, fontSize: 10, marginBottom: 12 }}>Weekly Index (target = 100)</div>
-              <div style={{ height: 100 }}>
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={t.weeklyTrend} barCategoryGap="18%">
-                    <XAxis dataKey="w" tick={{ fontSize: 9, fill: C.textLight }} axisLine={{ stroke: C.border }} tickLine={false} />
-                    <Bar dataKey="v" fill={sc} radius={[2,2,0,0]} opacity={0.8} />
-                  </BarChart>
-                </ResponsiveContainer>
+            <span className={`text-[14px] font-bold ${st.text} w-10 text-right`}>{t.achievement}%</span>
+          </div>
+          <div className="flex-1 text-[12px] text-pwc-dim leading-relaxed min-w-0">{t.narrative}</div>
+          <span className={`text-[11px] text-pwc-dimmer inline-block transition-transform flex-shrink-0 ${isExpanded ? "rotate-180" : ""}`}>▾</span>
+        </div>
+        {/* Expanded */}
+        {isExpanded && (
+          <div className="border-t border-pwc-border-light">
+            <div className="p-5 grid grid-cols-[1fr_260px] gap-6 border-b border-pwc-border-light">
+              <div>
+                <div className="text-[10px] font-bold text-pwc-dimmer tracking-wider uppercase mb-3">ASM Area Breakdown</div>
+                <div className="rounded-lg overflow-hidden border border-pwc-border-light">
+                  <table className="w-full border-collapse text-[13px]">
+                    <thead>
+                      <tr className="bg-pwc-bg-alt">
+                        <th className="text-left px-3 py-2 text-[10px] font-bold text-pwc-dimmer tracking-wider border-b border-pwc-border-light">ASM Area</th>
+                        <th className="text-right px-3 py-2 text-[10px] font-bold text-pwc-dimmer tracking-wider border-b border-pwc-border-light">Achievement</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {t.asmAreas.map((a, i) => (
+                        <tr key={i} className="border-t border-pwc-border-light">
+                          <td className="px-3 py-2.5 text-pwc-text">{a.name}</td>
+                          <td className={`px-3 py-2.5 text-right font-bold ${
+                            a.achievement >= 85 ? "text-pwc-sage" : a.achievement >= 75 ? "text-pwc-amber" : "text-pwc-terra"
+                          }`}>{a.achievement}%</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div>
+                <div className="text-[10px] font-bold text-pwc-dimmer tracking-wider uppercase mb-3">Weekly Index (target = 100)</div>
+                <div className="h-[100px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={t.weeklyTrend} barCategoryGap="18%">
+                      <XAxis dataKey="w" tick={{ fontSize: 9, fill: "#A09D98" }} axisLine={{ stroke: "#E5E2DB" }} tickLine={false} />
+                      <Bar dataKey="v" fill={st.chart} radius={[2, 2, 0, 0]} opacity={0.8} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+            </div>
+            <div className="p-5 grid grid-cols-2 gap-3">
+              <div className="bg-pwc-sage-soft border border-pwc-sage/20 rounded-lg p-4">
+                <div className="text-[10px] font-bold text-pwc-sage tracking-wider uppercase mb-1.5">Key Win</div>
+                <div className="text-[12px] text-pwc-text">{t.keyWin}</div>
+              </div>
+              <div className="bg-pwc-amber-soft border border-pwc-amber/20 rounded-lg p-4">
+                <div className="text-[10px] font-bold text-pwc-amber tracking-wider uppercase mb-1.5">Key Risk</div>
+                <div className="text-[12px] text-pwc-text">{t.keyRisk}</div>
               </div>
             </div>
           </div>
-          <div style={{ display: "flex", gap: 16 }}>
-            <div style={{ flex: 1, padding: "12px 16px", background: C.greenPale }}><div style={{ fontSize: 10, fontWeight: 700, color: C.green, marginBottom: 4 }}>KEY WIN</div><div style={{ fontSize: 12, color: C.text }}>{t.keyWin}</div></div>
-            <div style={{ flex: 1, padding: "12px 16px", background: C.orangePale }}><div style={{ fontSize: 10, fontWeight: 700, color: C.orange, marginBottom: 4 }}>KEY RISK</div><div style={{ fontSize: 12, color: C.text }}>{t.keyRisk}</div></div>
-          </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
@@ -501,80 +521,99 @@ export default function MarketPulse() {
   const [trailInsight, setTrailInsight] = useState(null);
 
   return (
-    <div className="overflow-auto" style={{ fontFamily: "'IBM Plex Sans', -apple-system, sans-serif", background: C.page, height: "100vh", color: C.text }}>
-      <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <div className="h-screen overflow-auto bg-pwc-bg-sub font-inter text-pwc-text flex flex-col">
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
       {/* Header */}
-      <div style={{ background: C.header, padding: "16px 40px" }}>
-        <div style={{ maxWidth: 1180, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <span style={{ fontSize: 15, fontWeight: 500, letterSpacing: 0, opacity: 0.85, color: "#FFFFFF" }}>questt</span>
-                <span style={{ color: "#3BB896", fontSize: 15, fontWeight: 700 }}>.</span>
-              </div>
-              <span style={{ fontSize: 9, opacity: 0.45, fontWeight: 400, letterSpacing: "0.3px", marginTop: -1, color: "#FFFFFF" }}>powered by PwC</span>
-            </div>
-            <span style={{ opacity: 0.25, margin: "0 10px", color: "#FFFFFF" }}>|</span>
-            <span style={{ fontSize: 14, opacity: 0.6, fontWeight: 400, color: "#FFFFFF" }}>Market Pulse</span>
+      <div className="sticky top-0 z-50 bg-pwc-green flex items-center justify-between px-8 h-14 border-b border-white/[0.08] flex-shrink-0">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <span className="text-[13px] font-bold text-white tracking-tight">questt</span>
+            <span className="text-white/20 text-[9px] select-none leading-none">×</span>
+            <span className="text-[10px] font-bold tracking-[0.12em] text-white/50">PwC</span>
           </div>
-          <span style={{ fontSize: 12, color: "#FFFFFF90" }}>Zone A · Week ending Feb 2, 2026</span>
+          <span className="w-px h-4 bg-white/10 block" />
+          <span className="text-[13px] text-white/55 font-normal">Market Pulse</span>
         </div>
+        <span className="text-[11px] text-white/35 font-medium">Zone A · Week ending Feb 2, 2026</span>
       </div>
 
+      {/* Content */}
+      <div className="flex-1 max-w-[1100px] mx-auto w-full px-8 py-8 pb-16">
 
-
-      <div style={{ maxWidth: 1180, margin: "0 auto", padding: "28px 40px 60px" }}>
-
-        {/* KPIs */}
-        <div style={{ display: "flex", gap: 16, marginBottom: 28 }}>
+        {/* KPI Strip */}
+        <div className="grid grid-cols-4 gap-3 mb-8">
           {portfolioKPIs.map((kpi, i) => (
-            <div key={i} style={{ ...cardBase, padding: "22px 24px", flex: 1 }}>
-              <div style={{ ...label, fontSize: 10, marginBottom: 12 }}>{kpi.label}</div>
-              <div style={{ fontSize: 32, fontWeight: 600, color: C.text, lineHeight: 1 }}>{kpi.value}</div>
-              <div style={{ fontSize: 12, color: kpi.negative ? C.orange : C.textLight, marginTop: 8 }}>{kpi.delta}</div>
+            <div key={i} className="bg-white rounded-[10px] border border-pwc-border-light overflow-hidden shadow-sm">
+              <div className={`h-[2.5px] ${kpi.negative ? "bg-pwc-amber" : "bg-pwc-sage"}`} />
+              <div className="p-5">
+                <div className="text-[10px] font-bold text-pwc-dimmer tracking-[0.09em] uppercase mb-2">{kpi.label}</div>
+                <div className="text-[28px] font-bold text-pwc-text leading-none mb-1.5">{kpi.value}</div>
+                <div className={`text-[11px] leading-snug ${kpi.negative ? "text-pwc-amber" : "text-pwc-dimmer"}`}>{kpi.delta}</div>
+              </div>
             </div>
           ))}
         </div>
 
         {/* Critical Items */}
-        <div style={{ marginBottom: 36 }}>
-          <h2 style={{ fontFamily: "Georgia, serif", fontSize: 20, fontWeight: 400, margin: "0 0 16px" }}>This Week's Critical Items</h2>
-          {criticalItems.map(item => (
-            <div key={item.id} style={{ ...cardBase, marginBottom: 8, padding: "18px 28px", display: "flex", alignItems: "flex-start", gap: 16 }}>
-              <SeverityIcon severity={item.severity} />
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 14, fontWeight: 600, color: C.text, lineHeight: 1.45 }}>{item.headline}</div>
-                <div style={{ fontSize: 13, color: C.textMid, marginTop: 6, lineHeight: 1.55 }}>{item.detail}</div>
+        <section className="mb-10">
+          <SectionHeader
+            title="This Week's Critical Items"
+            count={criticalItems.length}
+            right={`${criticalItems.filter(c => c.severity === "critical").length} critical · ${criticalItems.filter(c => c.severity === "high").length} high`}
+          />
+          <div className="flex flex-col gap-2">
+            {criticalItems.map(item => (
+              <div key={item.id} className="flex bg-white rounded-lg overflow-hidden border border-pwc-border-light shadow-sm">
+                <div className={`w-[3px] flex-shrink-0 ${item.severity === "critical" ? "bg-pwc-terra" : "bg-pwc-amber"}`} />
+                <div className="flex-1 px-5 py-4 flex items-start gap-4">
+                  <SeverityIcon severity={item.severity} />
+                  <div className="flex-1 min-w-0">
+                    <div className="text-[13px] font-semibold text-pwc-text leading-snug mb-1">{item.headline}</div>
+                    <div className="text-[12px] text-pwc-dim leading-relaxed">{item.detail}</div>
+                  </div>
+                  <span className={`text-[10px] font-bold tracking-wider px-2 py-1 rounded flex-shrink-0 mt-0.5 ${
+                    item.severity === "critical" ? "bg-pwc-terra-soft text-pwc-terra" : "bg-pwc-amber-soft text-pwc-amber"
+                  }`}>{item.category}</span>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-
-        {/* All Insights */}
-        <div style={{ marginBottom: 40 }}>
-          <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: 16 }}>
-            <h2 style={{ fontFamily: "Georgia, serif", fontSize: 20, fontWeight: 400, margin: 0 }}>Insights & Decisions</h2>
-            <span style={{ fontSize: 12, color: C.textLight }}>{insights.length} active · click to expand</span>
+            ))}
           </div>
-          {insights.map(ins => (
-            <InsightCard key={ins.id} insight={ins} isExpanded={expandedInsight === ins.id} onToggle={() => setExpandedInsight(expandedInsight === ins.id ? null : ins.id)} onShowTrail={setTrailInsight} />
-          ))}
-        </div>
+        </section>
 
-        {/* Territory Overview */}
-        <div>
-          <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: 16 }}>
-            <h2 style={{ fontFamily: "Georgia, serif", fontSize: 20, fontWeight: 400, margin: 0 }}>Territory Overview</h2>
-            <span style={{ fontSize: 12, color: C.textLight }}>5 territories · ASM-level drill-down</span>
+        {/* Insights */}
+        <section className="mb-10">
+          <SectionHeader title="Insights & Decisions" count={insights.length} right="click to expand" />
+          <div className="flex flex-col gap-2">
+            {insights.map(ins => (
+              <InsightCard
+                key={ins.id}
+                insight={ins}
+                isExpanded={expandedInsight === ins.id}
+                onToggle={() => setExpandedInsight(expandedInsight === ins.id ? null : ins.id)}
+                onShowTrail={setTrailInsight}
+              />
+            ))}
           </div>
-          {territories.map(t => (
-            <TerritoryRow key={t.id} t={t} isExpanded={expandedTerritory === t.id} onToggle={() => setExpandedTerritory(expandedTerritory === t.id ? null : t.id)} />
-          ))}
-        </div>
+        </section>
+
+        {/* Territory */}
+        <section>
+          <SectionHeader title="Territory Overview" count={territories.length} right="5 territories · ASM-level drill-down" />
+          <div className="flex flex-col gap-2">
+            {territories.map(t => (
+              <TerritoryRow
+                key={t.id}
+                t={t}
+                isExpanded={expandedTerritory === t.id}
+                onToggle={() => setExpandedTerritory(expandedTerritory === t.id ? null : t.id)}
+              />
+            ))}
+          </div>
+        </section>
+
       </div>
 
-      {/* Agent Trail Modal */}
       {trailInsight && <AgentTrailModal insight={trailInsight} onClose={() => setTrailInsight(null)} />}
     </div>
   );
