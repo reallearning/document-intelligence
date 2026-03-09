@@ -1,7 +1,8 @@
 "use client";
 import { useState, useMemo } from "react";
-import Image from "next/image";
+import { Menu, Bell, Search, ChevronDown, User, Settings, LogOut, Send } from "lucide-react";
 
+/* ═══ QUESTT.COM DESIGN SYSTEM ═══ */
 const C = {
   bg:"#FFFFFF",bgSub:"#FAFAF8",bgAlt:"#F3F0EA",card:"#FFFFFF",
   green:"#111A15",greenMid:"#1C2B24",
@@ -13,19 +14,13 @@ const C = {
   text:"#1A1A18",textMid:"#6B6965",dim:"#6B6965",dimmer:"#A09D98",
   border:"#E5E2DB",borderLight:"#F0EDE7",
 };
-
 const font="'Inter',-apple-system,sans-serif";
+const mono="'JetBrains Mono',monospace";
+const editorial="'Source Serif 4',Georgia,serif";
 const serif="'DM Serif Display',Georgia,serif";
-
 const SIZES=["XS","S","M","L","XL"];
-const Img=({size=44})=>(
-  <div className="rounded-md bg-pwc-bg-alt border border-pwc-border flex items-center justify-center flex-shrink-0" style={{width:size,height:size}}>
-    <svg width={size*.34} height={size*.34} viewBox="0 0 24 24" fill="none" stroke="#A09D98" strokeWidth="1.5">
-      <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>
-    </svg>
-  </div>
-);
-const Pencil=()=>(<svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M11.5 1.5l3 3-9 9H2.5v-3l9-9z"/></svg>);
+const Img=({size=44})=> (<div style={{width:size,height:size,borderRadius:6,background:C.bgAlt,border:`1px solid ${C.border}`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}><svg width={size*.34} height={size*.34} viewBox="0 0 24 24" fill="none" stroke={C.dimmer} strokeWidth="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>);
+const Pencil=()=> (<svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M11.5 1.5l3 3-9 9H2.5v-3l9-9z"/></svg>);
 
 /* ═══ STORES ═══ */
 const STORE_DB = [
@@ -314,13 +309,14 @@ const RAW=[
 
 /* ═══ FLAGS ═══ */
 const FM={
-  "size-shift":    {l:"Size Shift",     accent:"bg-pwc-amber",   badge:"bg-pwc-amber-soft text-pwc-amber border-pwc-amber/20",   banner:"bg-pwc-amber-soft border-b border-pwc-amber/20",   bannerText:"text-pwc-amber"},
-  "low-confidence":{l:"Low Confidence", accent:"bg-pwc-terra",   badge:"bg-pwc-terra-soft text-pwc-terra border-pwc-terra/20",   banner:"bg-pwc-terra-soft border-b border-pwc-terra/20",   bannerText:"text-pwc-terra"},
-  "opportunity":   {l:"Opportunity",    accent:"bg-pwc-sage",    badge:"bg-pwc-sage-soft text-pwc-sage border-pwc-sage/20",      banner:"bg-pwc-sage-soft border-b border-pwc-sage/20",     bannerText:"text-pwc-sage"},
-  "deeper-buy":    {l:"Scale Up",       accent:"bg-pwc-sage",    badge:"bg-pwc-sage-soft text-pwc-sage border-pwc-sage/20",      banner:"bg-pwc-sage-soft border-b border-pwc-sage/20",     bannerText:"text-pwc-sage"},
-  "risk":          {l:"Risk",           accent:"bg-pwc-terra",   badge:"bg-pwc-terra-soft text-pwc-terra border-pwc-terra/20",   banner:"bg-pwc-terra-soft border-b border-pwc-terra/20",   bannerText:"text-pwc-terra"},
+  "size-shift":{l:"Size Shift",bg:C.amberSoft,clr:C.amber,bd:C.amberBorder},
+  "low-confidence":{l:"Low Confidence",bg:C.terraSoft,clr:C.terra,bd:C.terraBorder},
+  "opportunity":{l:"Opportunity",bg:C.sageSoft,clr:"#1B6B5A",bd:C.sageBorder},
+  "deeper-buy":{l:"Scale Up",bg:C.sageSoft,clr:"#1B6B5A",bd:C.sageBorder},
+  "risk":{l:"Risk",bg:C.terraSoft,clr:C.terra,bd:C.terraBorder},
 };
 const SL={"carryover":"Carryover","new-design":"New Design","trend-test":"Trend Test"};
+const SD={"carryover":C.sage,"new-design":C.amber,"trend-test":C.terra};
 
 /* ═══ STORE AGGREGATION ═══ */
 function storeAggCalc(styles,edits){
@@ -329,13 +325,6 @@ function storeAggCalc(styles,edits){
     return {code:st.code,name:st.name,city:st.city,grade:st.grade,sp:st.sp,sl,sc:sl.length,tu:sl.reduce((a,x)=>a+x.units,0),tv:sl.reduce((a,x)=>a+x.units*x.mrp,0)};
   }).sort((a,b)=>b.tu-a.tu);
 }
-
-/* ═══ SHARED UI ATOMS ═══ */
-const GF=(<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>);
-
-const Badge=({type})=>{const f=FM[type];if(!f)return null;return(<span className={`text-[10px] font-bold tracking-wider px-2.5 py-0.5 rounded-full border whitespace-nowrap ${f.badge}`}>{f.l}</span>);};
-const SrcPill=({src})=>(<span className={`text-[10px] font-semibold tracking-wider px-2 py-0.5 rounded-full border ${src==="carryover"?"bg-pwc-sage-soft text-pwc-sage border-pwc-sage/20":src==="new-design"?"bg-pwc-amber-soft text-pwc-amber border-pwc-amber/20":"bg-pwc-terra-soft text-pwc-terra border-pwc-terra/20"}`}>{SL[src]}</span>);
-const ConfDot=({v})=>{const n=parseInt(v);return(<span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${n>=85?"bg-pwc-sage-soft text-pwc-sage":n>=70?"bg-pwc-amber-soft text-pwc-amber":"bg-pwc-terra-soft text-pwc-terra"}`}>{v}%</span>);};
 
 /* ═══ MAIN ═══ */
 export default function BuyPlan(){
@@ -363,8 +352,8 @@ export default function BuyPlan(){
   const commit=(sc)=>{if(!scenario)return;const{sid,ov,nv}=scenario;setEdits(p=>({...p,[sid]:{...p[sid],units:nv}}));if(reason.trim())setEditLog(p=>({...p,[sid]:[...(p[sid]||[]),{from:ov,to:nv,sc:sc.label,reason:reason.trim(),t:new Date().toLocaleTimeString()}]}));setScenario(null);setReason("");};
 
   const EU=({sid,value})=>{const isE=editing===sid;const orig=RAW.find(x=>x.id===sid)?.units;const ch=edits[sid]?.units!==undefined&&value!==orig;
-    if(isE) return (<input autoFocus type="text" value={editVal} onChange={e=>setEditVal(e.target.value)} onBlur={()=>submitEdit(sid)} onKeyDown={e=>{if(e.key==="Enter")submitEdit(sid);if(e.key==="Escape")setEditing(null);}} className="w-[72px] text-sm font-mono font-semibold border-2 border-pwc-sage rounded px-2 py-0.5 text-right outline-none bg-pwc-sage-soft"/>);
-    return (<span onClick={e=>{e.stopPropagation();startEdit(sid,value);}} className={`inline-flex items-center gap-1 font-mono font-semibold text-sm cursor-pointer px-2 py-0.5 rounded border ${ch?"border-pwc-sage bg-pwc-sage-soft text-pwc-green":"border-dashed border-pwc-border bg-transparent text-pwc-text"}`}>{value.toLocaleString()}<span className={`opacity-50 ${ch?"text-pwc-sage":"text-pwc-dimmer"}`}><Pencil/></span></span>);
+    if(isE) return (<input autoFocus type="text" value={editVal} onChange={e=>setEditVal(e.target.value)} onBlur={()=>submitEdit(sid)} onKeyDown={e=>{if(e.key==="Enter")submitEdit(sid);if(e.key==="Escape")setEditing(null);}} style={{width:72,fontSize:14,fontFamily:"monospace",fontWeight:600,border:`2px solid ${C.sage}`,borderRadius:4,padding:"3px 8px",outline:"none",textAlign:"right",background:C.sageSoft}}/>);
+    return (<span onClick={e=>{e.stopPropagation();startEdit(sid,value);}} style={{display:"inline-flex",alignItems:"center",gap:4,fontFamily:"monospace",fontWeight:600,fontSize:14,cursor:"pointer",padding:"3px 8px",borderRadius:4,border:`1px dashed ${ch?C.sage:C.border}`,background:ch?C.sageSoft:"transparent",color:ch?C.green:C.text}}>{value.toLocaleString()}<span style={{color:ch?C.sage:C.dimmer,opacity:.5}}><Pencil/></span></span>);
   };
 
   /* ═══ SCENARIO MODAL ═══ */
@@ -373,375 +362,394 @@ export default function BuyPlan(){
     const priG=GRADES.filter(g=>s.ga[g]).map(g=>{const cu=Math.round(ov*s.ga[g]);let nu=cu;if(diff>0&&(g==="A+"||g==="A")){nu=cu+Math.round(diff*(s.ga[g]/((s.ga["A+"]||0)+(s.ga["A"]||0))));}else if(diff<0&&g==="B/C"){nu=Math.max(0,cu+diff);}else if(diff<0&&g!=="B/C"){const bcCut=Math.min(Math.abs(diff),Math.round(ov*(s.ga["B/C"]||0)));const rem=Math.abs(diff)-bcCut;if(rem>0)nu=cu-Math.round(rem*(s.ga[g]/((s.ga["A+"]||0)+(s.ga["A"]||0))));}const sts=gradeStores(g);return {g,from:cu,to:nu,diff:nu-cu,stores:sts.length,per:sts.length?Math.round(nu/sts.length):nu};});
     const warn=[];if(s.hist?.SS25&&diff<0&&s.hist.SS25.st>=75)warn.push(`SS25 achieved ${s.hist.SS25.st}% 6-wk sell-through at ${s.hist.SS25.u.toLocaleString()} units. Reducing to ${nv.toLocaleString()} may push 6-wk ST above the 90% target — meaning lost sales.`);
     if(!Object.keys(s.hist||{}).length&&diff>0&&diff/ov>.3)warn.push(`No prior sell-through data. Increasing by ${pctChg}% adds ₹${valImpact}L of unvalidated exposure.`);
-    const GR=({gs})=>(
-      <div className="text-[13px] mt-2.5">
-        {gs.map(g=>(
-          <div key={g.g} className="flex gap-2 items-center py-1">
-            <span className="font-semibold text-pwc-dim w-10 text-[13px]">{g.g}</span>
-            <span className="font-mono text-pwc-dimmer w-12 text-right text-[13px]">{g.from.toLocaleString()}</span>
-            <span className="text-pwc-dimmer">→</span>
-            <span className={`font-mono font-semibold w-12 text-right text-[13px] ${g.diff>0?"text-pwc-green":g.diff<0?"text-pwc-terra":"text-pwc-dim"}`}>{g.to.toLocaleString()}</span>
-            <span className={`text-xs ${g.diff>0?"text-pwc-green":g.diff<0?"text-pwc-terra":"text-pwc-dimmer"}`}>({g.diff>0?"+":""}{g.diff})</span>
-            {g.stores>1&&<span className="text-pwc-dimmer text-xs">~{g.per}u / {g.stores} stores</span>}
-          </div>
-        ))}
-      </div>
-    );
-    return (
-      <div onClick={()=>{setScenario(null);setReason("");}} className="fixed inset-0 z-[100] bg-pwc-green/40 flex items-center justify-center p-5">
-        <div onClick={e=>e.stopPropagation()} className="bg-white rounded-xl w-full max-w-[580px] shadow-2xl max-h-[90vh] overflow-auto border border-pwc-border">
-          <div className="px-7 py-[22px] bg-pwc-bg-sub rounded-t-xl border-b border-pwc-border">
-            <div className="flex justify-between">
-              <div><div className="text-[13px] text-pwc-dim">{s.sub} · {s.id}</div><div className="text-lg font-bold font-dm-serif mt-1">{s.name}</div></div>
-              <button onClick={()=>{setScenario(null);setReason("");}} className="bg-transparent border-0 text-xl text-pwc-dim cursor-pointer leading-none">×</button>
-            </div>
-            <div className="flex items-baseline gap-2.5 mt-3">
-              <span className="text-2xl font-bold text-pwc-dimmer font-mono line-through decoration-pwc-border">{ov.toLocaleString()}</span>
-              <span className={`text-2xl font-extrabold font-mono ${diff>0?"text-pwc-green":"text-pwc-terra"}`}>{nv.toLocaleString()}</span>
-              <span className={`text-[13px] font-semibold px-2.5 py-1 rounded ${diff>0?"text-pwc-green bg-pwc-sage-soft":"text-pwc-terra bg-pwc-terra-soft"}`}>{diff>0?"+":""}{diff.toLocaleString()} ({diff>0?"+":""}{pctChg}%)</span>
-            </div>
-            <div className="text-[13px] text-pwc-dim mt-1.5">OTB impact: <b className={diff>0?"text-pwc-green":"text-pwc-terra"}>{diff>0?"+":""}₹{valImpact}L</b> · MRP ₹{s.mrp.toLocaleString()} · {s.margin}% margin</div>
-          </div>
-          {warn.length>0&&<div className="px-7 py-3 bg-pwc-amber-soft border-b border-pwc-amber/20">{warn.map((w,i)=>(<div key={i} className="text-[13px] text-amber-700 flex gap-1.5"><span>⚠</span>{w}</div>))}</div>}
-          <div className="px-7 py-5">
-            <div className="text-xs font-bold text-pwc-dim tracking-wider mb-3.5">CHOOSE DISTRIBUTION</div>
-            {[{gs:propG,label:"Proportional",desc:`All grades adjust by ${pctChg}%. Store ratios unchanged.`},{gs:priG,label:diff>0?"Priority A+/A":"Reduce B/C first",desc:diff>0?"Additional units go to top stores only.":"Lower-tier stores absorb the cut first."}].map(opt=>(
-              <div key={opt.label} onClick={()=>commit({label:opt.label})} className="p-4 bg-white border border-pwc-border rounded-lg cursor-pointer mb-2.5 hover:border-pwc-sage/40 transition-colors">
-                <div className="text-[15px] font-semibold">{opt.label==="Proportional"?"Scale proportionally":opt.label}</div>
-                <div className="text-[13px] text-pwc-dim mt-0.5">{opt.desc}</div>
-                <GR gs={opt.gs}/>
-              </div>
-            ))}
-            <div className="mt-3.5 pt-3.5 border-t border-pwc-border-light">
-              <div className="text-xs font-semibold text-pwc-dim mb-2">BUYER NOTE <span className="font-normal">(optional)</span></div>
-              <input type="text" value={reason} onChange={e=>setReason(e.target.value)} placeholder="e.g. Supplier confirmed capacity..." className="w-full box-border text-sm border border-pwc-border rounded-md px-3.5 py-2.5 outline-none bg-pwc-warm font-inter"/>
-            </div>
+    const GR=({gs})=> (<div style={{fontSize:13,marginTop:10}}>{gs.map(g=> (<div key={g.g} style={{display:"flex",gap:8,alignItems:"center",padding:"4px 0"}}><span style={{fontWeight:600,color:C.dim,width:40,fontSize:13}}>{g.g}</span><span style={{fontFamily:"monospace",color:C.dimmer,width:48,textAlign:"right",fontSize:13}}>{g.from.toLocaleString()}</span><span style={{color:C.dimmer}}>→</span><span style={{fontFamily:"monospace",fontWeight:600,color:g.diff>0?C.green:g.diff<0?C.terra:C.dim,width:48,textAlign:"right",fontSize:13}}>{g.to.toLocaleString()}</span><span style={{color:g.diff>0?C.green:g.diff<0?C.terra:C.dimmer,fontSize:12}}>({g.diff>0?"+":""}{g.diff})</span>{g.stores>1&&<span style={{color:C.dimmer,fontSize:12}}>~{g.per}u / {g.stores} stores</span>}</div>))}</div>);
+    return (<div onClick={()=>{setScenario(null);setReason("");}} style={{position:"fixed",inset:0,zIndex:100,background:"rgba(27,42,33,.4)",display:"flex",alignItems:"center",justifyContent:"center",padding:20}}>
+      <div onClick={e=>e.stopPropagation()} style={{background:"#fff",borderRadius:12,width:"100%",maxWidth:580,boxShadow:"0 24px 80px rgba(12,44,24,.18)",maxHeight:"90vh",overflow:"auto",border:`1px solid ${C.border}`}}>
+        <div style={{padding:"22px 28px",background:C.bgSub,borderRadius:"12px 12px 0 0",borderBottom:`1px solid ${C.border}`}}>
+          <div style={{display:"flex",justifyContent:"space-between"}}><div><div style={{fontSize:13,color:C.dim}}>{s.sub} · {s.id}</div><div style={{fontSize:18,fontWeight:700,fontFamily:serif,marginTop:4}}>{s.name}</div></div><button onClick={()=>{setScenario(null);setReason("");}} style={{background:"none",border:"none",fontSize:20,color:C.dim,cursor:"pointer"}}>×</button></div>
+          <div style={{display:"flex",alignItems:"baseline",gap:10,marginTop:12}}><span style={{fontSize:24,fontWeight:700,color:C.dimmer,fontFamily:"monospace",textDecoration:"line-through",textDecorationColor:C.border}}>{ov.toLocaleString()}</span><span style={{fontSize:24,fontWeight:800,color:diff>0?C.green:C.terra,fontFamily:"monospace"}}>{nv.toLocaleString()}</span><span style={{fontSize:13,fontWeight:600,color:diff>0?C.green:C.terra,background:diff>0?C.sageSoft:C.terraSoft,padding:"4px 10px",borderRadius:4}}>{diff>0?"+":""}{diff.toLocaleString()} ({diff>0?"+":""}{pctChg}%)</span></div>
+          <div style={{fontSize:13,color:C.dim,marginTop:6}}>OTB impact: <b style={{color:diff>0?C.green:C.terra}}>{diff>0?"+":""}₹{valImpact}L</b> · MRP ₹{s.mrp.toLocaleString()}</div>
+        </div>
+        {warn.length>0&&<div style={{padding:"12px 28px",background:C.amberSoft,borderBottom:`1px solid ${C.amberBorder}`}}>{warn.map((w,i)=> (<div key={i} style={{fontSize:13,color:"#7A5C14",display:"flex",gap:6}}><span>⚠</span>{w}</div>))}</div>}
+        <div style={{padding:"20px 28px"}}>
+          <div style={{fontSize:12,fontWeight:700,color:C.dim,letterSpacing:.6,marginBottom:14}}>CHOOSE DISTRIBUTION</div>
+          {[{gs:propG,label:"Proportional",desc:`All grades adjust by ${pctChg}%. Store ratios unchanged.`},{gs:priG,label:diff>0?"Priority A+/A":"Reduce B/C first",desc:diff>0?"Additional units go to top stores only.":"Lower-tier stores absorb the cut first."}].map(opt=> (<div key={opt.label} onClick={()=>commit({label:opt.label})} style={{padding:"16px 18px",background:"#fff",border:`1.5px solid ${C.border}`,borderRadius:8,cursor:"pointer",marginBottom:10}}>
+            <div style={{fontSize:15,fontWeight:600}}>{opt.label==="Proportional"?"Scale proportionally":opt.label}</div>
+            <div style={{fontSize:13,color:C.dim,marginTop:3}}>{opt.desc}</div><GR gs={opt.gs}/>
+          </div>))}
+          <div style={{marginTop:14,paddingTop:14,borderTop:`1px solid ${C.borderLight}`}}>
+            <div style={{fontSize:12,fontWeight:600,color:C.dim,marginBottom:8}}>BUYER NOTE <span style={{fontWeight:400}}>(optional)</span></div>
+            <input type="text" value={reason} onChange={e=>setReason(e.target.value)} placeholder="e.g. Supplier confirmed capacity..." style={{width:"100%",boxSizing:"border-box",fontSize:14,border:`1px solid ${C.border}`,borderRadius:6,padding:"10px 14px",outline:"none",background:C.warm,fontFamily:font}}/>
           </div>
         </div>
       </div>
-    );
+    </div>);
   };
 
   /* ═══ TRAIL MODAL ═══ */
   const TrailModal=()=>{if(!trail)return null;const s=RAW.find(x=>x.id===trail);if(!s?.trail)return null;
     const srcMap={"Demand Planner":"POS Data","Size Curve Analyst":"POS · Size Analytics","Color Performance":"POS · Color Analytics","Color Analyst":"POS · Trend Data","Allocation Engine":"Store Master · Grade Matrix","Price Sensitivity":"Finance · Pricing","Trend Intelligence":"Site Search · Market Intel","Customer Intelligence":"CRM · Loyalty","Supply Chain":"Inventory · Vendor Portal","Synthesis":"All Sources"};
-    return (
-      <div onClick={()=>setTrail(null)} className="fixed inset-0 z-[100] bg-pwc-green/40 flex items-center justify-center p-5">
-        <div onClick={e=>e.stopPropagation()} className="bg-white rounded-2xl w-full max-w-[660px] shadow-2xl max-h-[85vh] overflow-auto border border-pwc-border">
-          <div className="px-7 py-[22px] border-b border-pwc-border-light bg-pwc-bg-sub rounded-t-2xl">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="text-xs font-bold text-pwc-dim tracking-wider">DECISION TRAIL</div>
-                <div className="text-lg font-bold mt-1 font-dm-serif">{s.name}</div>
-              </div>
-              <button onClick={()=>setTrail(null)} className="bg-pwc-warm border border-pwc-border rounded-md px-2.5 py-1 text-[13px] text-pwc-dim cursor-pointer">✕</button>
+    return (<div onClick={()=>setTrail(null)} style={{position:"fixed",inset:0,zIndex:100,background:"rgba(27,42,33,.4)",display:"flex",alignItems:"center",justifyContent:"center",padding:20}}>
+      <div onClick={e=>e.stopPropagation()} style={{background:"#fff",borderRadius:14,width:"100%",maxWidth:660,boxShadow:"0 24px 64px rgba(12,44,24,.18)",maxHeight:"85vh",overflow:"auto",border:`1px solid ${C.border}`}}>
+        <div style={{padding:"22px 28px",borderBottom:`1px solid ${C.borderLight}`,background:C.bgSub,borderRadius:"14px 14px 0 0"}}>
+          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+            <div>
+              <div style={{fontSize:12,fontWeight:700,color:C.dim,letterSpacing:.6}}>DECISION TRAIL</div>
+              <div style={{fontSize:18,fontWeight:700,marginTop:4,fontFamily:serif}}>{s.name}</div>
             </div>
-            <div className="flex gap-2.5 mt-2 text-[13px] text-pwc-dim"><span>{s.trail.agents} agents</span><span>·</span><span>{s.trail.time}</span></div>
-            <div className="mt-2 px-2.5 py-1.5 bg-pwc-amber-soft rounded text-xs text-pwc-amber">Optimization target: 6-week sell-through above 90% at full price</div>
+            <button onClick={()=>setTrail(null)} style={{background:C.warm,border:`1px solid ${C.border}`,borderRadius:6,padding:"4px 10px",fontSize:13,color:C.dim,cursor:"pointer",fontFamily:font}}>✕</button>
           </div>
-          <div className="px-7 py-5">
-            {s.trail.steps.map((st,i)=>{const isFinal=!!st.conf;const src=srcMap[st.a]||"Data Source";
-              const sentences=st.act.split(/(?<=\.)\s+/).filter(Boolean);
-              const conclusionStart=Math.max(1,sentences.length-1);
-              const analysis=sentences.slice(0,conclusionStart).join(" ");
-              const conclusion=sentences.slice(conclusionStart).join(" ");
-              return (
-                <div key={i} className="flex gap-0 mb-0">
-                  <div className="flex flex-col items-center w-7 flex-shrink-0">
-                    <div className={`rounded-full flex-shrink-0 mt-1 border-2 ${isFinal?"w-3.5 h-3.5 bg-pwc-green border-pwc-green":"w-2.5 h-2.5 bg-pwc-sage border-pwc-sage"}`}/>
-                    {i<s.trail.steps.length-1&&<div className="w-0.5 flex-1 bg-pwc-border-light mt-0.5"/>}
-                  </div>
-                  <div className={`flex-1 pl-2 ${i<s.trail.steps.length-1?"pb-5":""}`}>
-                    <div className="flex items-center gap-2 mb-1.5">
-                      <span className={`text-sm font-bold ${isFinal?"text-pwc-green":"text-pwc-text-mid"}`}>{st.a}</span>
-                      <span className="text-[11px] text-pwc-dimmer font-mono">{st.t}</span>
-                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-pwc-bg-sub text-pwc-dimmer border border-pwc-border-light">{src}</span>
-                    </div>
-                    <div className={`px-3 py-2.5 rounded-lg border ${isFinal?"bg-[#EFF5F3] border-pwc-sage/20":"bg-[#F7F9F8] border-pwc-border-light"} ${conclusion?"mb-1.5":""}`}>
-                      <div className="text-[10px] font-semibold text-pwc-dimmer tracking-wider mb-1">{isFinal?"SYNTHESIS":"ANALYSIS"}</div>
-                      <div className="text-[13px] text-pwc-text-mid leading-relaxed">{analysis}</div>
-                    </div>
-                    {conclusion&&<div className={`px-3 py-2 rounded-md border flex gap-1.5 items-start ${isFinal?"bg-pwc-sage-soft border-pwc-sage/20":"bg-white border-pwc-border-light"}`}>
-                      <span className={`text-[10px] font-bold mt-0.5 flex-shrink-0 ${isFinal?"text-pwc-sage":"text-pwc-dim"}`}>→</span>
-                      <div className={`text-[13px] leading-snug ${isFinal?"text-pwc-green font-semibold":"text-pwc-text-mid"}`}>{conclusion}</div>
-                    </div>}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          <div style={{display:"flex",gap:10,marginTop:8,fontSize:13,color:C.dim}}><span>{s.trail.agents} agents</span><span>·</span><span>{s.trail.time}</span></div>
+          <div style={{marginTop:8,padding:"6px 10px",background:C.amberSoft,borderRadius:4,fontSize:12,color:C.amber}}>Optimization target: 6-week sell-through above 90% at full price</div>
         </div>
-      </div>
-    );
+        <div style={{padding:"20px 28px"}}>
+          {s.trail.steps.map((st,i)=>{const isFinal=!!st.conf;const src=srcMap[st.a]||"Data Source";
+            const sentences=st.act.split(/(?<=\.)\s+/).filter(Boolean);
+            const conclusionStart=Math.max(1,sentences.length-1);
+            const analysis=sentences.slice(0,conclusionStart).join(" ");
+            const conclusion=sentences.slice(conclusionStart).join(" ");
+            return (<div key={i} style={{display:"flex",gap:0,marginBottom:0}}>
+              <div style={{display:"flex",flexDirection:"column",alignItems:"center",width:28,flexShrink:0}}>
+                <div style={{width:isFinal?14:10,height:isFinal?14:10,borderRadius:isFinal?7:5,background:isFinal?C.green:C.sage,border:isFinal?`2px solid ${C.green}`:`2px solid ${C.sage}`,flexShrink:0,marginTop:4}}/>
+                {i<s.trail.steps.length-1&&<div style={{width:2,flex:1,background:C.borderLight,marginTop:2}}/>}
+              </div>
+              <div style={{flex:1,paddingBottom:i<s.trail.steps.length-1?20:0,paddingLeft:8}}>
+                <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:6}}>
+                  <span style={{fontSize:14,fontWeight:700,color:isFinal?C.green:C.textMid}}>{st.a}</span>
+                  <span style={{fontSize:11,color:C.dimmer,fontFamily:"monospace"}}>{st.t}</span>
+                  <span style={{fontSize:10,padding:"2px 6px",borderRadius:3,background:C.bgSub,color:C.dimmer,border:`1px solid ${C.borderLight}`}}>{src}</span>
+                </div>
+                <div style={{padding:"10px 12px",background:isFinal?"#EFF5F3":"#F7F9F8",borderRadius:"8px",border:`1px solid ${isFinal?C.sageBorder:C.borderLight}`,marginBottom:conclusion?6:0}}>
+                  <div style={{fontSize:10,fontWeight:600,color:C.dimmer,letterSpacing:.5,marginBottom:4}}>{isFinal?"SYNTHESIS":"ANALYSIS"}</div>
+                  <div style={{fontSize:13,color:C.textMid,lineHeight:1.65}}>{analysis}</div>
+                </div>
+                {conclusion&&<div style={{padding:"8px 12px",background:isFinal?C.sageSoft:"#fff",borderRadius:"6px",border:`1px solid ${isFinal?C.sageBorder:C.borderLight}`,display:"flex",gap:6,alignItems:"flex-start"}}>
+                  <span style={{fontSize:10,color:isFinal?C.sage:C.dim,fontWeight:700,marginTop:3,flexShrink:0}}>→</span>
+                  <div style={{fontSize:13,color:isFinal?C.green:C.textMid,lineHeight:1.55,fontWeight:isFinal?600:400}}>{conclusion}</div>
+                </div>}
+              </div>
+            </div>);
+          })}
+        </div>
+      </div></div>);
   };
 
   /* ═══ STORE EDIT MODAL ═══ */
   const StoreEditModal=()=>{if(!storeEdit)return null;const{store,style,units,grade}=storeEdit;
-    return (
-      <div onClick={()=>setStoreEdit(null)} className="fixed inset-0 z-[100] bg-pwc-green/40 flex items-center justify-center p-5">
-        <div onClick={e=>e.stopPropagation()} className="bg-white rounded-xl w-full max-w-[460px] shadow-2xl border border-pwc-border p-7">
-          <div className="text-xs font-bold text-pwc-dim tracking-wider mb-1.5">STORE-LEVEL ADJUSTMENT</div>
-          <div className="text-base font-bold font-dm-serif">{store} · {style}</div>
-          <div className="text-sm text-pwc-dim mt-2 mb-4">Current allocation: <b>{units} units</b> ({grade} grade)</div>
-          <div className="p-4 bg-pwc-bg-sub rounded-lg border border-pwc-border-light text-sm text-pwc-text-mid leading-relaxed">
-            Store-level edits rebalance remaining units across other stores in the same grade. To change the grade total, edit from the By SKU view.
-          </div>
-          <div className="mt-4 flex gap-2.5">
-            <button onClick={()=>setStoreEdit(null)} className="px-4 py-2.5 rounded-md border border-pwc-border bg-pwc-warm text-pwc-dim text-[13px] cursor-pointer">Close</button>
-            <div className="text-xs text-pwc-dimmer flex items-center">Store-level editing coming in next release</div>
-          </div>
+    return (<div onClick={()=>setStoreEdit(null)} style={{position:"fixed",inset:0,zIndex:100,background:"rgba(27,42,33,.4)",display:"flex",alignItems:"center",justifyContent:"center",padding:20}}>
+      <div onClick={e=>e.stopPropagation()} style={{background:"#fff",borderRadius:12,width:"100%",maxWidth:460,boxShadow:"0 20px 60px rgba(12,44,24,.16)",border:`1px solid ${C.border}`,padding:28}}>
+        <div style={{fontSize:12,fontWeight:700,color:C.dim,letterSpacing:.6,marginBottom:6}}>STORE-LEVEL ADJUSTMENT</div>
+        <div style={{fontSize:16,fontWeight:700,fontFamily:serif}}>{store} · {style}</div>
+        <div style={{fontSize:14,color:C.dim,marginTop:8,marginBottom:18}}>Current allocation: <b>{units} units</b> ({grade} grade)</div>
+        <div style={{padding:16,background:C.bgSub,borderRadius:8,border:`1px solid ${C.borderLight}`,fontSize:14,color:C.textMid,lineHeight:1.6}}>
+          Store-level edits rebalance remaining units across other stores in the same grade. To change the grade total, edit from the By SKU view.
+        </div>
+        <div style={{marginTop:16,display:"flex",gap:10}}>
+          <button onClick={()=>setStoreEdit(null)} style={{padding:"10px 18px",borderRadius:6,border:`1px solid ${C.border}`,background:C.warm,color:C.dim,fontSize:13,cursor:"pointer",fontFamily:font}}>Close</button>
+          <div style={{fontSize:12,color:C.dimmer,display:"flex",alignItems:"center"}}>Store-level editing coming in next release</div>
         </div>
       </div>
-    );
+    </div>);
   };
 
   /* ═══ HEADER ═══ */
   const otb=4.8;const pctUsed=(totV/1e7/otb*100);
-  const Header=({back,backLabel,title,right})=>(
-    <div className="sticky top-0 z-50 bg-pwc-green flex items-center justify-between px-8 h-[52px] flex-shrink-0 border-b border-white/[0.06]">
-      <div className="flex items-center gap-4">
- <div className="flex items-center gap-2">
-            <span className="font-bold text-[1.05rem] tracking-[-0.03em] text-white no-underline">
-              questt<i className="not-italic text-[#3DBCA2]">.</i>
-            </span>
-            <span className="text-white/40 text-sm">×</span>
-            <Image src="/images/pwcLogo.jpg" alt="PwC" width={48} height={24} className="object-contain" />
-          </div>
-        <span className="w-px h-4 bg-white/10 block"/>
-        {back&&<button onClick={back} className="bg-transparent border-0 text-white/45 text-xs cursor-pointer p-0 flex items-center gap-1">
-          <span className="text-sm leading-none">‹</span>{backLabel||"Back"}
-        </button>}
-        {back&&<span className="text-white/20 text-xs">/</span>}
-        <span className="text-[13px] text-white/60 font-normal">{title}</span>
-      </div>
-      {right&&<div className="flex items-center gap-3">{right}</div>}
-    </div>
-  );
+  const [shellProfile,setShellProfile]=useState(false);
+  const [shellNotifs,setShellNotifs]=useState(false);
+  const [shellSearch,setShellSearch]=useState(false);
+  const [sigOpen,setSigOpen]=useState(null);
+  const [sigChats,setSigChats]=useState({});
+  const [sigInput,setSigInput]=useState("");
 
-  /* ═══ COLOR MAP ═══ */
-  const clrMap={Black:"#1a1a1a",White:"#f5f5f5",Navy:"#1a2744",Sage:"#85A383",Blush:"#E8B4B8","Dusty Rose":"#C4848A",Terracotta:"#C85A30",Ivory:"#FFFFF0",Cream:"#FFF8DC",Chambray:"#6B8BA4",Rust:"#B7410E",Charcoal:"#36454F",Olive:"#7A6B1A",Beige:"#D4C5A9","Forest Green":"#2D5F2D",Wine:"#722F37",Emerald:"#2E8B57","Sky Blue":"#87CEEB",Sand:"#C2B280",Pink:"#F4A6B8",Nude:"#E3BC9A",Grey:"#8E8E8E","Black/White":"linear-gradient(135deg,#1a1a1a 50%,#f5f5f5 50%)","Navy/Cream":"linear-gradient(135deg,#1a2744 50%,#FFF8DC 50%)","Olive/White":"linear-gradient(135deg,#6B7B2B 50%,#f5f5f5 50%)","Beige/Black":"linear-gradient(135deg,#D4C5A9 50%,#1a1a1a 50%)","Olive/Cream":"linear-gradient(135deg,#6B7B2B 50%,#FFF8DC 50%)","Blue Stripe":"repeating-linear-gradient(90deg,#6B8BA4 0,#6B8BA4 2px,#f0f4f8 2px,#f0f4f8 5px)","Botanical Print":"linear-gradient(135deg,#2D5F2D 30%,#85A383 60%,#C2B280 100%)","Ditsy Floral":"linear-gradient(135deg,#F4A6B8 30%,#E8B4B8 60%,#85A383 100%)","Botanical":"linear-gradient(135deg,#2D5F2D 30%,#85A383 60%,#C2B280 100%)","Vintage Floral":"linear-gradient(135deg,#C4848A 30%,#D4C5A9 60%,#85A383 100%)","Tropical":"linear-gradient(135deg,#2E8B57 30%,#87CEEB 60%,#F4A6B8 100%)","Geometric":"linear-gradient(135deg,#1a2744 30%,#C85A30 60%,#FFF8DC 100%)"};
+  var bpNotifs=[
+    {id:1,t:"3 styles still carry pre-correction M size curve",ts:"15m ago",ur:true},
+    {id:2,t:"Bodycon Midi flagged for discontinuation review",ts:"1h ago",ur:true},
+    {id:3,t:"Linen Co-ord re-buy trigger set at 70% 6-wk ST",ts:"3h ago",ur:false},
+  ];
+
+  var signals=[
+    {id:0,tag:"PLAN VS HISTORY",clr:C.terra,bg:C.terraSoft,bd:C.terraBorder,
+      title:"SS26 plan expects 87% avg 6-wk ST — up from 81% in SS25",
+      body:"19 of 24 styles have been sized against SS25 actuals. The 6pp improvement comes from size curve corrections (+3pp), colour swaps from underperformers (+2pp), and smarter grade allocation (+1pp). 3 styles still carry pre-correction curves.",
+      qs:[
+        {q:"Which corrections drive the biggest ST improvement?",a:"Size curve fix on Stripe Midi alone accounts for +8pp (from 94% but with M stockouts to a projected clean 96%). Dropping Sage across 3 styles (64% ST) in favour of Olive/Dusty Rose (projected 78-85% ST) adds +2pp to the portfolio average. Grade-level reallocation — pulling bodycon out of B/C — prevents the drag that cost 3pp on the SS25 average."},
+        {q:"What could pull us below 87%?",a:"Two risks: (1) New designs are 42% of the plan but carry avg 65% confidence vs 88% for carryover. If new designs underperform by 10pp, portfolio drops to 83%. (2) Olive is untested — if all 4 olive colourways miss by 15pp, portfolio drops 1.5pp. Mitigation: re-buy triggers on new designs at Week 3, and olive held at 25% allocation."}
+      ]},
+    {id:1,tag:"SEASONAL PATTERN",clr:C.amber,bg:C.amberSoft,bd:C.amberBorder,
+      title:"SS seasons consistently outperform AW by 3-5pp — SS26 plan accounts for this",
+      body:"SS25: 81% avg ST. AW25 tracking 76% at Week 14. SS24: 74%. AW24: 78% (anomaly: blazer-heavy). Linen and relaxed fits drive the SS premium. SS26 leans into both with 5 linen styles and 62% relaxed-fit tops.",
+      qs:[
+        {q:"Why does SS outperform AW?",a:"Three factors: (1) Linen — every linen item has exceeded 85% ST in summer, zero markdowns. AW has no equivalent fabric advantage. (2) Price points are 15% lower in SS (more tops/skirts, fewer blazers/jackets), reducing markdown risk. (3) Summer replenishment cycles are faster — 5-day lead time vs 8-day in AW."},
+        {q:"Is the SS26 plan too aggressive given AW25 is at 76%?",a:"No. AW25 at 76% at Week 14 is actually on trajectory for 80% final — the double-breasted blazer (72% ST, 400 units) is the drag. SS26 has no equivalent single-style risk. The biggest single-style exposure is the Floral Print Dress at 440 units, but with a 70% ST target (not 90%)."}
+      ]},
+    {id:2,tag:"OPPORTUNITY",clr:C.sage,bg:C.sageSoft,bd:C.sageBorder,
+      title:"Linen + olive intersection could be SS26's breakout — Rs 1.2Cr exposure",
+      body:"SS25 linen: 91% avg ST. Brand site olive search: +180% YoY. AW25 olive blazer: 88% ST. SS26 plan has 4 olive styles and 5 linen styles but only 1 overlap (Relaxed Linen Shirt in Olive). Expanding the intersection is the mid-season reorder opportunity.",
+      qs:[
+        {q:"What is the mid-season reorder plan for linen-olive?",a:"If Relaxed Linen Shirt Olive exceeds 80% ST by Week 3: add olive to Linen Wrap Dress (200 units, Rs 9L exposure) and Linen Co-ord (100 units, Rs 6L). Total mid-season olive-linen expansion: Rs 15L. Lead time is 5 weeks from order to floor — hits Week 8-9, still in peak summer demand."},
+        {q:"What is the downside if olive does not work in linen?",a:"Current olive-linen exposure is just the Relaxed Linen Shirt at 25% olive = 285 units at Rs 1,990 = Rs 5.7L. At 60% ST (worst case for a proven silhouette): Rs 1.1L markdown. The mid-season reorder only triggers if data confirms demand. Zero speculative olive-linen commitment beyond 285 units."}
+      ]},
+    {id:3,tag:"RISK",clr:C.terra,bg:C.terraSoft,bd:C.terraBorder,
+      title:"New design confidence averages 65% — 5 styles have never been tested in this range",
+      body:"Cutwork Blouse (55%), Linen Co-ord (68%), Floral Print Dress (70%), Rib Knit Midi (62%), V-Neck Jumpsuit repeat (72%). Combined: 1,440 units, Rs 58L exposure. SS25 new designs averaged 72% ST vs 86% for carryover — a 14pp gap the plan must absorb.",
+      qs:[
+        {q:"How is the plan de-risking new designs?",a:"Three mechanisms: (1) A+/A only distribution — no B/C for any style below 70% confidence. (2) Lower ST targets — new designs measured against 60-70% 6-wk ST, not 90%. (3) Re-buy triggers — if any new design exceeds its target by Week 3, follow-on order activates. The Cutwork Blouse (55% confidence) is explicitly a learning investment, not a revenue play."},
+        {q:"What if we cut new designs and add more carryover units?",a:"Tempting but wrong. SS25 new designs that hit (V-Neck Jumpsuit: 91% ST, Knit Polo: 86%) are now AW25's best performers. The pipeline requires 25-30% new designs each season to maintain range freshness. Cutting to zero new designs would boost SS26 ST by 2-3pp but starve AW26 and SS27 of proven styles."}
+      ]},
+  ];
+
+  var openSig=function(idx){
+    if(sigOpen===idx){setSigOpen(null);return;}
+    setSigOpen(idx);
+    if(!sigChats[idx]){
+      var r=signals[idx].qs||[];
+      var next={};Object.keys(sigChats).forEach(function(k){next[k]=sigChats[k];});
+      next[idx]={msgs:[{role:"ai",text:"What would you like to understand about this?"}],chips:r.map(function(x){return x.q;})};
+      setSigChats(next);
+    }
+  };
+  var sendSig=function(idx,text){
+    if(!text.trim())return;
+    var r=signals[idx].qs||[];var m=null;
+    for(var i=0;i<r.length;i++){if(r[i].q===text)m=r[i];}
+    var ai=m?m.a:"I would recommend checking the decision trail on the relevant style for the full picture.";
+    var prev=sigChats[idx]||{msgs:[],chips:[]};
+    var rem=prev.chips.filter(function(s){return s!==text;});
+    var n1={};Object.keys(sigChats).forEach(function(k){n1[k]=sigChats[k];});
+    n1[idx]={msgs:prev.msgs.concat([{role:"user",text:text},{role:"wait"}]),chips:[]};
+    setSigChats(n1);setSigInput("");
+    setTimeout(function(){
+      setSigChats(function(p){
+        var c=p[idx];if(!c)return p;
+        var n2={};Object.keys(p).forEach(function(k){n2[k]=p[k];});
+        n2[idx]={msgs:c.msgs.filter(function(x){return x.role!=="wait";}).concat([{role:"ai",text:ai}]),chips:rem};
+        return n2;
+      });
+    },800+Math.random()*600);
+  };
+
+  /* ─── SHELL COMPONENTS ─── */
+  var Shell=function(p){return(<div onClick={function(){setShellProfile(false);setShellNotifs(false);}} className="overflow-auto" style={{height:"100vh",background:C.bgSub,fontFamily:font,display:"flex"}}>
+    <div style={{width:60,minHeight:"100vh",background:C.green,display:"flex",flexDirection:"column",alignItems:"center",flexShrink:0,position:"fixed",top:0,left:0,bottom:0,zIndex:100}}>
+      <div style={{marginTop:20,width:30,height:30,borderRadius:6,background:"rgba(255,255,255,0.06)",display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer"}}><Menu size={14} color="rgba(255,255,255,0.4)" strokeWidth={1.5}/></div>
+    </div>
+    <div style={{flex:1,marginLeft:60,minHeight:"100vh",display:"flex",flexDirection:"column"}}>
+      <div style={{background:C.bg,borderBottom:"1px solid "+C.border,padding:"0 36px",height:52,display:"flex",alignItems:"center",justifyContent:"space-between",position:"sticky",top:0,zIndex:50}}>
+        <div style={{display:"flex",alignItems:"center",gap:14}}>
+          <div style={{display:"flex",alignItems:"baseline"}}><span style={{fontSize:15,fontWeight:500,color:C.green,letterSpacing:"-0.01em",fontFamily:font}}>questt</span><span style={{color:C.sage,fontSize:17,fontWeight:700,lineHeight:1}}>.</span></div>
+          <div style={{width:1,height:18,background:C.border}}/>
+          <img src="/images/pwcLogo.jpg" alt="PwC" style={{height:24,display:"block",opacity:0.85}} />
+          <div style={{width:1,height:18,background:C.border}}/>
+          <span style={{fontSize:12,fontWeight:500,color:C.dim,letterSpacing:"0.02em"}}>Buy Planning</span>
+        </div>
+        <div style={{display:"flex",alignItems:"center",gap:6}}>
+          {p.extra||null}
+          <div style={{display:"flex",alignItems:"center",gap:6,padding:"6px 12px",background:shellSearch?C.bg:C.bgSub,border:"1px solid "+(shellSearch?C.sage:C.border),borderRadius:100,transition:"all 0.2s",width:shellSearch?240:160}}>
+            <Search size={13} color={C.dimmer} strokeWidth={1.5}/>
+            <input placeholder="Search styles, stores..." onFocus={function(){setShellSearch(true);}} onBlur={function(){setShellSearch(false);}} style={{border:"none",outline:"none",background:"transparent",fontSize:11,fontFamily:font,color:C.text,width:"100%"}}/>
+            {!shellSearch&&<span style={{fontSize:9,color:C.dimmer,background:C.bg,padding:"1px 5px",borderRadius:3,border:"1px solid "+C.borderLight,fontFamily:mono,whiteSpace:"nowrap"}}>/</span>}
+          </div>
+          <div style={{width:1,height:20,background:C.borderLight,margin:"0 2px"}}/>
+          <div style={{position:"relative"}}>
+            <button onClick={function(e){e.stopPropagation();setShellNotifs(!shellNotifs);setShellProfile(false);}} style={{padding:6,background:shellNotifs?C.bgSub:"transparent",border:"none",borderRadius:6,cursor:"pointer",position:"relative",display:"flex",alignItems:"center"}}><Bell size={16} strokeWidth={1.5} color={C.dim}/><div style={{position:"absolute",top:4,right:4,width:6,height:6,borderRadius:3,background:C.terra,border:"1.5px solid "+C.bg}}/></button>
+            {shellNotifs&&<div onClick={function(e){e.stopPropagation();}} style={{position:"absolute",top:"100%",right:0,marginTop:6,width:300,background:C.bg,border:"1px solid "+C.border,borderRadius:10,boxShadow:"0 12px 40px rgba(0,0,0,0.08)",overflow:"hidden",zIndex:200}}>
+              <div style={{padding:"12px 16px",borderBottom:"1px solid "+C.borderLight,display:"flex",justifyContent:"space-between",alignItems:"center"}}><span style={{fontSize:12,fontWeight:600,color:C.text}}>Notifications</span><span style={{fontSize:10,color:C.sage,cursor:"pointer",fontWeight:500}}>Mark all read</span></div>
+              {bpNotifs.map(function(n){return <div key={n.id} style={{padding:"10px 16px",borderBottom:"1px solid "+C.borderLight,display:"flex",gap:8,alignItems:"flex-start"}}>{n.ur&&<div style={{width:5,height:5,borderRadius:3,background:C.sage,marginTop:5,flexShrink:0}}/>}<div><div style={{fontSize:11,color:C.dim,lineHeight:1.5}}>{n.t}</div><div style={{fontSize:9,color:C.dimmer,marginTop:2,fontFamily:mono}}>{n.ts}</div></div></div>;})}
+            </div>}
+          </div>
+          <div style={{position:"relative"}}>
+            <button onClick={function(e){e.stopPropagation();setShellProfile(!shellProfile);setShellNotifs(false);}} style={{display:"flex",alignItems:"center",gap:6,padding:"3px 6px 3px 3px",background:shellProfile?C.bgSub:"transparent",border:"none",borderRadius:6,cursor:"pointer"}}><div style={{width:28,height:28,borderRadius:14,background:C.sage,display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:600,color:"#fff"}}>BP</div><ChevronDown size={12} color={C.dimmer}/></button>
+            {shellProfile&&<div onClick={function(e){e.stopPropagation();}} style={{position:"absolute",top:"100%",right:0,marginTop:6,width:200,background:C.bg,border:"1px solid "+C.border,borderRadius:10,boxShadow:"0 12px 40px rgba(0,0,0,0.08)",overflow:"hidden",zIndex:200}}>
+              <div style={{padding:"12px 16px",borderBottom:"1px solid "+C.borderLight}}><div style={{fontSize:12,fontWeight:600,color:C.text}}>Buy Planner</div><div style={{fontSize:10,color:C.dimmer,marginTop:1}}>planner@brand.in</div></div>
+              <button style={{display:"flex",alignItems:"center",gap:8,padding:"8px 16px",width:"100%",background:"transparent",border:"none",cursor:"pointer",fontSize:11,color:C.dim,textAlign:"left"}}><User size={13} color={C.dimmer}/>My Profile</button>
+              <button style={{display:"flex",alignItems:"center",gap:8,padding:"8px 16px",width:"100%",background:"transparent",border:"none",cursor:"pointer",fontSize:11,color:C.dim,textAlign:"left"}}><Settings size={13} color={C.dimmer}/>Preferences</button>
+              <div style={{borderTop:"1px solid "+C.borderLight}}><button style={{display:"flex",alignItems:"center",gap:8,padding:"8px 16px",width:"100%",background:"transparent",border:"none",cursor:"pointer",fontSize:11,color:C.terra,textAlign:"left"}}><LogOut size={13} color={C.terra}/>Log Out</button></div>
+            </div>}
+          </div>
+        </div>
+      </div>
+      {p.children}
+      <div style={{marginTop:"auto",borderTop:"1px solid "+C.borderLight,padding:"10px 36px",display:"flex",justifyContent:"space-between",alignItems:"center",background:C.bg}}>
+        <div style={{display:"flex",alignItems:"center",gap:8}}><span style={{fontSize:10,fontWeight:500,color:C.dim}}>questt</span><span style={{color:C.sage,fontSize:11,fontWeight:700}}>.</span><span style={{color:C.borderLight,margin:"0 4px",fontSize:10}}>|</span><span style={{fontSize:9,fontWeight:600,color:C.dim,fontFamily:"Georgia,serif"}}>pwc</span><span style={{fontSize:8,color:C.dimmer,marginLeft:10,fontFamily:mono,letterSpacing:"0.03em"}}>v2.4.1</span></div>
+        <div style={{display:"flex",alignItems:"center",gap:5}}><div style={{width:4,height:4,borderRadius:2,background:C.sage}}/><span style={{fontSize:8,color:C.dimmer,fontFamily:mono}}>Synced 2m ago</span></div>
+      </div>
+    </div>
+  </div>);};
+
+  const Header=function(){return null;};
 
   /* ═══ STYLE CARD ═══ */
-  const StyleCard=({s})=>{
-    const isO=exp===s.id;const tot=s.units;const f=s.flag?FM[s.flag.type]:null;const isEd=edits[s.id]?.units!==undefined;
-    return (
-      <div className={`bg-white rounded-[10px] overflow-hidden transition-shadow ${isO?"border border-pwc-sage/30 shadow-lg":"border border-pwc-border shadow-sm"}`}>
-        {f&&<div className={`h-[3px] opacity-70 ${f.accent}`}/>}
-        <div onClick={()=>setExp(isO?null:s.id)} className="px-5 py-4 cursor-pointer flex items-center gap-4">
-          <Img size={40}/>
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-sm font-semibold text-pwc-text tracking-tight">{s.name}</span>
-              <SrcPill src={s.src}/>
-              {isEd&&<span className="w-1.5 h-1.5 rounded-full bg-pwc-sage flex-shrink-0"/>}
-            </div>
-            <div className="text-[11px] text-pwc-dimmer mt-0.5 flex items-center gap-1.5">
-              <span className="font-mono">{s.id}</span><span>·</span>
-              <span>₹{s.mrp.toLocaleString()} MRP</span><span>·</span>
-              <span>{s.margin}% margin</span><span>·</span>
-              <ConfDot v={s.conf}/>
-            </div>
-          </div>
-          <div className="flex items-center gap-5 flex-shrink-0">
-            {f&&<Badge type={s.flag.type}/>}
-            <div className="text-right">
-              <div className="text-[10px] text-pwc-dimmer font-semibold tracking-wider mb-0.5">UNITS</div>
-              <EU sid={s.id} value={tot}/>
-            </div>
-            <div className="text-right">
-              <div className="text-[10px] text-pwc-dimmer font-semibold tracking-wider mb-0.5">VALUE</div>
-              <div className="text-[13px] font-bold font-mono text-pwc-green">₹{(tot*s.mrp/1e5).toFixed(1)}L</div>
-            </div>
-            <span className={`text-pwc-dimmer text-[11px] inline-block transition-transform ${isO?"rotate-180":""}`}>▾</span>
+  const StyleCard=({s})=>{const isO=exp===s.id;const tot=s.units;const f=s.flag?FM[s.flag.type]:null;const isEd=edits[s.id]?.units!==undefined;
+    return (<div style={{background:"#fff",borderRadius:8,border:`1px solid ${isO?C.sage+"44":C.border}`,transition:"box-shadow 0.15s",boxShadow:isO?"0 2px 12px rgba(12,44,24,0.06)":"none"}}>
+      <div onClick={()=>setExp(isO?null:s.id)} style={{padding:"14px 20px",cursor:"pointer",display:"flex",alignItems:"center",gap:14}}>
+        <Img/><div style={{flex:1,minWidth:0}}>
+          <div style={{display:"flex",alignItems:"center",gap:8}}><span style={{fontSize:15,fontWeight:600}}>{s.name}</span>{isEd&&<span style={{width:6,height:6,borderRadius:3,background:C.sage}}/>}</div>
+          <div style={{fontSize:12,color:C.dim,marginTop:2}}><span style={{fontFamily:"monospace"}}>{s.id}</span> · <span style={{color:SD[s.src],fontWeight:500}}>{SL[s.src]}</span> · ₹{s.mrp.toLocaleString()}</div>
+        </div>
+        <div style={{display:"flex",alignItems:"center",gap:16,flexShrink:0}}>
+          {f&&<span style={{fontSize:12,padding:"3px 10px",borderRadius:4,background:f.bg,color:f.clr,border:`1px solid ${f.bd}`,fontWeight:500}}>{f.l}</span>}
+          <div style={{textAlign:"right"}}><div style={{fontSize:11,color:C.dimmer}}>Units</div><EU sid={s.id} value={tot}/></div>
+          <div style={{textAlign:"right"}}><div style={{fontSize:11,color:C.dimmer}}>Value</div><div style={{fontSize:14,fontWeight:600,fontFamily:"monospace",color:C.green}}>₹{(tot*s.mrp/1e5).toFixed(1)}L</div></div>
+          <span style={{fontSize:12,color:C.dimmer,transition:"transform 0.15s",transform:isO?"rotate(0deg)":"rotate(-90deg)"}}>{"\u25BE"}</span>
+        </div>
+      </div>
+      {isO&&<div style={{padding:"0 20px 18px",borderTop:`1px solid ${C.borderLight}`}}>
+        <div style={{marginTop:14,padding:"12px 16px",background:C.bgSub,borderRadius:6,border:`1px solid ${C.borderLight}`}}>
+          <div style={{fontSize:14,color:C.textMid,lineHeight:1.65}}>{s.reason}</div>
+          <div style={{marginTop:10,display:"flex",gap:8}}>
+            <button onClick={e=>{e.stopPropagation();setTrail(s.id);}} style={{fontSize:12,color:C.sage,fontWeight:600,background:C.sageSoft,border:`1px solid ${C.sageBorder}`,borderRadius:5,padding:"5px 12px",cursor:"pointer",fontFamily:font}}>View Decision Trail</button>
           </div>
         </div>
 
-        {isO&&<div className="border-t border-pwc-border-light">
-          {s.flag&&<div className={`px-5 py-3 flex gap-2.5 items-start ${FM[s.flag.type].banner}`}>
-            <span className={`text-xs font-bold whitespace-nowrap pt-px ${FM[s.flag.type].bannerText}`}>{FM[s.flag.type].l}</span>
-            <span className="text-[13px] text-pwc-text-mid leading-snug">{s.flag.msg}</span>
-          </div>}
+        <div style={{marginTop:10,padding:"14px 16px",background:"#EFF5F3",borderRadius:8,border:`1px solid ${C.sageBorder}`}}>
+          <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:10}}><div style={{width:18,height:18,borderRadius:9,background:C.sage,display:"flex",alignItems:"center",justifyContent:"center"}}><span style={{color:"#fff",fontSize:9,fontWeight:700}}>q</span></div><span style={{fontSize:13,fontWeight:600,color:C.green}}>Ask questt<span style={{color:"#1B6B5A",fontWeight:700}}>.</span></span></div>
+          {s.qs&&s.qs.length>0&&<div style={{display:"flex",flexWrap:"wrap",gap:6,marginBottom:10}}>{s.qs.map((q,qi)=> (<button key={qi} onClick={e=>{e.stopPropagation();setQuestt(true);}} style={{fontSize:12,color:C.green,background:"#fff",border:`1px solid ${C.sageBorder}`,borderRadius:16,padding:"6px 14px",cursor:"pointer",fontFamily:font,lineHeight:1.3,textAlign:"left"}}>{q}</button>))}</div>}
+          <div style={{display:"flex",gap:8}}><input readOnly placeholder="Ask about allocation, sell-through, size curves..." onClick={e=>{e.stopPropagation();setQuestt(true);}} style={{flex:1,padding:"8px 12px",borderRadius:6,border:`1px solid ${C.border}`,fontSize:13,fontFamily:font,background:"#fff",color:C.textMid,cursor:"pointer",outline:"none"}}/><button onClick={e=>{e.stopPropagation();setQuestt(true);}} style={{padding:"8px 14px",borderRadius:6,background:C.green,border:"none",color:"#fff",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:font}}>→</button></div>
+        </div>
 
-          <div className="px-5 py-[18px] flex flex-col gap-3.5">
-            <div className="p-4 bg-pwc-bg-sub rounded-lg border border-pwc-border-light">
-              <div className="text-[13px] text-pwc-text-mid leading-relaxed">{s.reason}</div>
-              <button onClick={e=>{e.stopPropagation();setTrail(s.id);}} className="mt-2.5 text-xs text-pwc-sage font-semibold bg-pwc-sage-soft border border-pwc-sage/20 rounded-md px-3.5 py-1.5 cursor-pointer inline-flex items-center gap-1.5">
-                <span className="text-[10px]">◈</span> View Decision Trail
-              </button>
-            </div>
-
-            <div className="p-4 bg-[#EFF6F3] rounded-lg border border-pwc-sage/20">
-              <div className="flex items-center gap-1.5 mb-2.5">
-                <div className="w-5 h-5 rounded-full bg-pwc-sage flex items-center justify-center flex-shrink-0"><span className="text-white text-[9px] font-bold">q</span></div>
-                <span className="text-[13px] font-semibold text-pwc-green">Ask questt<span className="text-pwc-sage">.</span></span>
-              </div>
-              {s.qs?.length>0&&<div className="flex flex-wrap gap-1.5 mb-2.5">
-                {s.qs.map((q,qi)=>(<button key={qi} onClick={e=>{e.stopPropagation();setQuestt(true);}} className="text-xs text-pwc-green bg-white border border-pwc-sage/20 rounded-full px-3 py-1 cursor-pointer leading-snug">{q}</button>))}
-              </div>}
-              <div className="flex gap-2">
-                <input readOnly placeholder="Ask about allocation, sell-through, size curves…" onClick={e=>{e.stopPropagation();setQuestt(true);}} className="flex-1 px-3 py-2 rounded-md border border-pwc-border text-[13px] bg-white text-pwc-text-mid cursor-pointer outline-none"/>
-                <button onClick={e=>{e.stopPropagation();setQuestt(true);}} className="px-4 py-2 rounded-md bg-pwc-green border-0 text-white text-[13px] cursor-pointer">→</button>
-              </div>
-            </div>
-
-            {Object.keys(s.hist||{}).length>0&&<div>
-              <div className="text-[11px] font-bold text-pwc-dimmer tracking-wider mb-2">PAST PERFORMANCE · 90% 6-WK ST TARGET</div>
-              <div className="rounded-lg overflow-hidden border border-pwc-border">
-                <table className="w-full border-collapse text-[13px]">
-                  <thead><tr className="bg-pwc-bg-sub">
-                    {["Season","Units","6-wk ST","vs Target","Margin","Wks","Notes"].map(h=>(<th key={h} className="text-left px-3 py-2 text-[11px] font-semibold text-pwc-dim border-b border-pwc-border">{h}</th>))}
-                  </tr></thead>
-                  <tbody>{Object.entries(s.hist).sort((a,b)=>b[0].localeCompare(a[0])).map(([ssn,d],ri)=>(
-                    <tr key={ssn} className={`border-b border-pwc-border-light ${ri%2===0?"bg-white":"bg-pwc-bg-sub"}`}>
-                      <td className="px-3 py-2 font-semibold">{ssn}</td>
-                      <td className="px-3 py-2 font-mono">{d.u.toLocaleString()}</td>
-                      <td className="px-3 py-2"><span className={`font-bold text-xs px-2 py-0.5 rounded-full ${d.st>=90?"bg-pwc-sage-soft text-pwc-sage":d.st>=80?"bg-pwc-amber-soft text-pwc-amber":"bg-pwc-terra-soft text-pwc-terra"}`}>{d.st}%</span></td>
-                      <td className={`px-3 py-2 text-xs ${d.st>=90?"text-pwc-sage":"text-pwc-terra"}`}>{d.st>=90?"✓ At target":`${90-d.st}pts below`}</td>
-                      <td className="px-3 py-2">{d.m}%</td>
-                      <td className="px-3 py-2 font-mono text-xs">Wk {d.w}</td>
-                      <td className="px-3 py-2 text-xs text-pwc-dim max-w-[180px]">{d.n}</td>
-                    </tr>
-                  ))}</tbody>
-                </table>
-              </div>
-            </div>}
-
-            <div>
-              <div className="text-[11px] font-bold text-pwc-dimmer tracking-wider mb-2">COLOR ASSORTMENT</div>
-              <div className="flex gap-2 flex-wrap">
-                {s.colors.map(c=>{const bg=clrMap[c.n]||"#1B6B5A";const isLight=["White","Ivory","Cream","Nude"].includes(c.n);
-                  return(<div key={c.n} className="flex items-center gap-2.5 px-3.5 py-2.5 bg-white rounded-lg border border-pwc-border min-w-[130px]">
-                    <div className="w-[22px] h-[22px] rounded-full flex-shrink-0" style={{background:bg,border:isLight?"1px solid #E5E2DB":"none"}}/>
-                    <div>
-                      <div className="font-semibold text-[13px] text-pwc-text">{c.n}</div>
-                      <div className="text-[11px] text-pwc-dim mt-px">{(c.p*100).toFixed(0)}% · {Math.round(tot*c.p).toLocaleString()}u</div>
-                    </div>
-                  </div>);
-                })}
-              </div>
-            </div>
-
-            <div>
-              <div className="text-[11px] font-bold text-pwc-dimmer tracking-wider mb-2">GRADE ALLOCATION <span className="font-normal opacity-70">· click to see store × size breakdown</span></div>
-              <div className="rounded-lg overflow-hidden border border-pwc-border">
-                {GRADES.filter(g=>s.ga[g]).map((g,gi)=>{
-                  const u=Math.round(tot*s.ga[g]);const sts=gradeStores(g);const per=sts.length?Math.round(u/sts.length):u;const pct=(s.ga[g]*100).toFixed(0);
-                  const gKey=s.id+":"+g;const isGO=gradeExp===gKey;const canDrill=sts.length>0;
-                  return(<div key={g} className={gi<GRADES.filter(g=>s.ga[g]).length-1?"border-b border-pwc-border-light":""}>
-                    <div onClick={canDrill?()=>setGradeExp(isGO?null:gKey):undefined} className={`flex items-center gap-3 px-3.5 py-[11px] ${isGO?"bg-pwc-bg-sub":"bg-white"} ${canDrill?"cursor-pointer":"cursor-default"}`}>
-                      <span className="font-bold w-9 text-[13px] text-pwc-green">{g}</span>
-                      <div className="flex-1 h-1.5 bg-pwc-border-light rounded-full overflow-hidden">
-                        <div className="h-1.5 bg-gradient-to-r from-pwc-sage to-[#3D9B85] rounded-full" style={{width:`${s.ga[g]*100}%`}}/>
-                      </div>
-                      <span className="text-xs font-bold text-pwc-green font-mono w-11 text-right">{pct}%</span>
-                      <span className="font-mono font-semibold text-[13px] text-pwc-text w-[52px] text-right">{u.toLocaleString()}</span>
-                      <span className="text-[11px] text-pwc-dim min-w-[110px]">{sts.length>0?`~${per}u × ${sts.length} stores`:g==="B/C"?`~${per}u × ~280 stores`:""}</span>
-                      {canDrill&&<span className={`text-[10px] text-pwc-dimmer inline-block transition-transform ${isGO?"rotate-180":""}`}>▾</span>}
-                    </div>
-                    {isGO&&<div className="pb-2.5 bg-pwc-bg-sub border-t border-pwc-border-light">
-                      <table className="w-full border-collapse text-xs">
-                        <thead><tr className="bg-pwc-bg-alt">
-                          <th className="text-left px-3.5 py-[7px] text-[10px] font-bold text-pwc-dim tracking-wider">Store</th>
-                          <th className="text-left px-2 py-[7px] text-[10px] font-bold text-pwc-dim tracking-wider">City</th>
-                          {SIZES.map(sz=>(<th key={sz} className="text-center px-1 py-[7px] text-[10px] font-bold text-pwc-dim tracking-wider w-9">{sz}</th>))}
-                          <th className="text-right px-3.5 py-[7px] text-[10px] font-bold text-pwc-dim tracking-wider">Total</th>
-                          <th className="text-right px-3.5 py-[7px] text-[10px] font-bold text-pwc-dim tracking-wider">Value</th>
-                        </tr></thead>
-                        <tbody>{sts.map((st,ri)=>{const szArr=storeSizeSplit(per,st.sp);return(
-                          <tr key={st.code} className={`border-b border-pwc-border-light ${ri%2===0?"bg-white":"bg-pwc-bg-sub"}`}>
-                            <td className="px-3.5 py-[7px]"><div className="font-semibold text-xs">{st.name}</div><div className="text-[10px] text-pwc-dimmer font-mono">{st.code}</div></td>
-                            <td className="px-2 py-[7px] text-[11px] text-pwc-dim">{st.city}</td>
-                            {szArr.map((v,j)=>(<td key={j} className={`text-center font-mono text-xs ${v>0?"text-pwc-text-mid":"text-pwc-dimmer"}`}>{v}</td>))}
-                            <td className="text-right px-3.5 py-[7px] font-mono font-bold text-xs text-pwc-green">{per}</td>
-                            <td className="text-right px-3.5 py-[7px] text-[11px] font-semibold text-pwc-green">₹{((per*s.mrp)/1e3).toFixed(1)}K</td>
-                          </tr>);
-                        })}</tbody>
-                        <tfoot><tr className="border-t-2 border-pwc-border bg-pwc-bg-alt">
-                          <td colSpan={2} className="px-3.5 py-[7px] font-bold text-[11px] text-pwc-green">TOTAL ({sts.length} stores)</td>
-                          {SIZES.map((sz,j)=>{const t=sts.reduce((a,st)=>a+storeSizeSplit(per,st.sp)[j],0);return(<td key={j} className="text-center font-mono font-bold text-[11px] text-pwc-green">{t}</td>);})}
-                          <td className="text-right px-3.5 py-[7px] font-mono font-bold text-xs text-pwc-green">{u.toLocaleString()}</td>
-                          <td className="text-right px-3.5 py-[7px] font-bold text-[11px] text-pwc-green">₹{((u*s.mrp)/1e5).toFixed(1)}L</td>
-                        </tr></tfoot>
-                      </table>
-                      <div className="px-3.5 py-1.5 text-[11px] text-pwc-dimmer">Size splits based on each store's POS size profile.</div>
-                    </div>}
-                  </div>);
-                })}
-              </div>
-            </div>
-
-            {editLog[s.id]?.length>0&&<div>
-              <div className="text-[11px] font-bold text-pwc-dimmer tracking-wider mb-1.5">EDIT LOG</div>
-              {editLog[s.id].map((e,i)=>(<div key={i} className="text-xs text-pwc-text-mid py-1.5 border-b border-pwc-border-light flex gap-2 flex-wrap">
-                <span className="font-mono">{e.from.toLocaleString()} → {e.to.toLocaleString()}</span>
-                <span className="text-pwc-dimmer">·</span><span>{e.sc}</span>
-                {e.reason&&<><span className="text-pwc-dimmer">·</span><span className="text-pwc-dim">{e.reason}</span></>}
-                <span className="text-pwc-dimmer ml-auto">{e.t}</span>
-              </div>))}
-            </div>}
-          </div>
+        {s.flag&&<div style={{marginTop:10,padding:"10px 14px",background:FM[s.flag.type].bg,borderRadius:6,border:`1px solid ${FM[s.flag.type].bd}`}}>
+          <div style={{fontSize:12,fontWeight:600,color:FM[s.flag.type].clr,marginBottom:3}}>{FM[s.flag.type].l}</div>
+          <div style={{fontSize:13,color:C.textMid,lineHeight:1.55}}>{s.flag.msg}</div>
         </div>}
-      </div>
-    );
+
+        {Object.keys(s.hist||{}).length>0&&<div style={{marginTop:12}}>
+          <div style={{fontSize:12,fontWeight:700,color:C.dim,letterSpacing:.5,marginBottom:8}}>PAST PERFORMANCE vs 90% 6-WK ST TARGET</div>
+          <table style={{width:"100%",borderCollapse:"collapse",fontSize:13}}>
+            <thead><tr style={{borderBottom:`2px solid ${C.border}`}}>
+              {["Season","Units","6-wk ST","vs Target","Wks to Clear","Notes"].map(h=> (<th key={h} style={{textAlign:"left",padding:"8px 8px",fontSize:12,fontWeight:600,color:C.dim}}>{h}</th>))}
+            </tr></thead>
+            <tbody>{Object.entries(s.hist).sort((a,b)=>b[0].localeCompare(a[0])).map(([ssn,d])=> (<tr key={ssn} style={{borderBottom:`1px solid ${C.borderLight}`}}>
+              <td style={{padding:"8px 8px",fontWeight:600,fontSize:13}}>{ssn}</td>
+              <td style={{padding:"8px 8px",fontFamily:"monospace",fontSize:13}}>{d.u.toLocaleString()}</td>
+              <td style={{padding:"8px 8px",fontWeight:600,color:d.st>=90?C.sage:d.st>=80?"#7A6B1A":C.terra,fontSize:13}}>{d.st}%</td>
+              <td style={{padding:"8px 8px",fontSize:12,color:d.st>=90?C.sage:C.terra}}>{d.st>=90?"At target":d.st>=80?`${90-d.st}pts below`:`${90-d.st}pts below`}</td>
+              <td style={{padding:"8px 8px",fontFamily:"monospace",fontSize:13}}>Wk {d.w}</td>
+              <td style={{padding:"8px 8px",fontSize:12,color:C.dim,maxWidth:180}}>{d.n}</td>
+            </tr>))}</tbody>
+          </table>
+        </div>}
+
+        <div style={{marginTop:12}}>
+          <div style={{fontSize:12,fontWeight:700,color:C.dim,letterSpacing:.5,marginBottom:8}}>COLOR ASSORTMENT</div>
+          <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>{s.colors.map(c=>{const clrMap={
+            Black:"#1a1a1a",White:"#f5f5f5",Navy:"#1a2744",Sage:"#85A383",Blush:"#E8B4B8",
+            "Dusty Rose":"#C4848A",Terracotta:"#C85A30",Ivory:"#FFFFF0",Cream:"#FFF8DC",
+            Chambray:"#6B8BA4",Rust:"#B7410E",Charcoal:"#36454F",Olive:"#7A6B1A",Beige:"#D4C5A9",
+            "Forest Green":"#2D5F2D",Wine:"#722F37",Emerald:"#2E8B57",
+            "Sky Blue":"#87CEEB",Sand:"#C2B280",Pink:"#F4A6B8",Nude:"#E3BC9A",Grey:"#8E8E8E",
+            "Black/White":"linear-gradient(135deg, #1a1a1a 50%, #f5f5f5 50%)",
+            "Navy/Cream":"linear-gradient(135deg, #1a2744 50%, #FFF8DC 50%)",
+            "Olive/White":"linear-gradient(135deg, #6B7B2B 50%, #f5f5f5 50%)",
+            "Beige/Black":"linear-gradient(135deg, #D4C5A9 50%, #1a1a1a 50%)",
+            "Olive/Cream":"linear-gradient(135deg, #6B7B2B 50%, #FFF8DC 50%)",
+            "Blue Stripe":"repeating-linear-gradient(90deg, #6B8BA4 0px, #6B8BA4 2px, #f0f4f8 2px, #f0f4f8 5px)",
+            "Botanical Print":"linear-gradient(135deg, #2D5F2D 30%, #85A383 60%, #C2B280 100%)",
+            "Ditsy Floral":"linear-gradient(135deg, #F4A6B8 30%, #E8B4B8 60%, #85A383 100%)",
+            "Botanical":"linear-gradient(135deg, #2D5F2D 30%, #85A383 60%, #C2B280 100%)",
+            "Vintage Floral":"linear-gradient(135deg, #C4848A 30%, #D4C5A9 60%, #85A383 100%)",
+            "Tropical":"linear-gradient(135deg, #2E8B57 30%, #87CEEB 60%, #F4A6B8 100%)",
+            "Geometric":"linear-gradient(135deg, #1a2744 30%, #C85A30 60%, #FFF8DC 100%)",
+          };const bg=clrMap[c.n]||C.sage;
+            return (<div key={c.n} style={{padding:"10px 14px",background:C.warm,borderRadius:8,border:`1px solid ${C.borderLight}`,fontSize:13,display:"flex",alignItems:"center",gap:10,minWidth:120}}>
+            <div style={{width:20,height:20,borderRadius:10,background:bg,border:(c.n==="White"||c.n==="Ivory"||c.n==="Cream"||c.n==="Nude")?`1px solid ${C.border}`:"none",flexShrink:0}}/>
+            <div><div style={{fontWeight:600,fontSize:13}}>{c.n}</div>
+            <div style={{color:C.dim,fontSize:12,marginTop:1}}>{(c.p*100).toFixed(0)}% · {Math.round(tot*c.p).toLocaleString()}u</div></div>
+          </div>);})}</div>
+        </div>
+
+        <div style={{marginTop:12}}>
+          <div style={{fontSize:12,fontWeight:700,color:C.dim,letterSpacing:.5,marginBottom:8}}>GRADE ALLOCATION <span style={{fontWeight:400,color:C.dimmer}}>· click grade to see store × size</span></div>
+          {GRADES.filter(g=>s.ga[g]).map(g=>{const u=Math.round(tot*s.ga[g]);const sts=gradeStores(g);const per=sts.length?Math.round(u/sts.length):u;const pct=(s.ga[g]*100).toFixed(0);
+            const gKey=s.id+":"+g;const isGO=gradeExp===gKey;const canDrill=sts.length>0;
+            return (<div key={g}>
+              <div onClick={canDrill?()=>setGradeExp(isGO?null:gKey):undefined} style={{display:"flex",alignItems:"center",gap:12,padding:"10px 0",borderBottom:isGO?"none":`1px solid ${C.borderLight}`,cursor:canDrill?"pointer":"default"}}>
+              <span style={{fontWeight:700,width:40,fontSize:14,color:C.green,display:"flex",alignItems:"center",gap:4}}>{canDrill&&<span style={{fontSize:10,color:C.dimmer,transition:"transform 0.15s",transform:isGO?"rotate(0deg)":"rotate(-90deg)",display:"inline-block"}}>{"\u25BE"}</span>}{g}</span>
+              <div style={{flex:1,position:"relative",height:20,background:C.borderLight,borderRadius:4,overflow:"hidden"}}>
+                <div style={{height:20,background:`linear-gradient(90deg, ${C.sage} 0%, #3D9B85 100%)`,borderRadius:4,width:`${s.ga[g]*100}%`,display:"flex",alignItems:"center",paddingLeft:8}}>
+                  {s.ga[g]>=0.15&&<span style={{fontSize:11,fontWeight:600,color:"#fff"}}>{pct}%</span>}
+                </div>
+              </div>
+              <span style={{fontFamily:"monospace",fontWeight:700,width:56,textAlign:"right",fontSize:14,color:C.green}}>{u.toLocaleString()}</span>
+              <span style={{fontSize:12,color:C.dim,minWidth:100}}>{sts.length>0?`~${per}u × ${sts.length} stores`:g==="B/C"?`~${per}u × ~280 stores`:""}</span>
+            </div>
+            {isGO&&<div style={{padding:"8px 0 12px 0",borderBottom:`1px solid ${C.borderLight}`}}>
+              <table style={{width:"100%",borderCollapse:"collapse",fontSize:12}}>
+                <thead><tr style={{borderBottom:`2px solid ${C.border}`,background:C.bgSub}}>
+                  <th style={{textAlign:"left",padding:"6px 8px",fontSize:11,fontWeight:600,color:C.dim}}>Store</th>
+                  <th style={{textAlign:"left",padding:"6px 8px",fontSize:11,fontWeight:600,color:C.dim}}>City</th>
+                  {SIZES.map(sz=> (<th key={sz} style={{textAlign:"center",padding:"6px 4px",fontSize:11,fontWeight:600,color:C.dim,width:38}}>{sz}</th>))}
+                  <th style={{textAlign:"right",padding:"6px 8px",fontSize:11,fontWeight:600,color:C.dim}}>Total</th>
+                  <th style={{textAlign:"right",padding:"6px 8px",fontSize:11,fontWeight:600,color:C.dim}}>Value</th>
+                </tr></thead>
+                <tbody>{sts.map((st,ri)=>{const szArr=storeSizeSplit(per,st.sp);
+                  return (<tr key={st.code} style={{borderBottom:`1px solid ${C.borderLight}`,background:ri%2===0?"#fff":C.bgSub}}>
+                    <td style={{padding:"7px 8px"}}><div style={{fontWeight:600,fontSize:13}}>{st.name}</div><div style={{fontSize:10,color:C.dimmer}}>{st.code}</div></td>
+                    <td style={{padding:"7px 8px",fontSize:12,color:C.dim}}>{st.city}</td>
+                    {szArr.map((v,j)=> (<td key={j} style={{textAlign:"center",fontFamily:"monospace",fontSize:12,color:v>0?C.textMid:C.dimmer}}>{v}</td>))}
+                    <td style={{textAlign:"right",fontFamily:"monospace",fontWeight:600,fontSize:13,color:C.green}}>{per}</td>
+                    <td style={{textAlign:"right",fontSize:12,fontWeight:600,color:C.green}}>₹{((per*s.mrp)/1e3).toFixed(1)}K</td>
+                  </tr>);
+                })}</tbody>
+                <tfoot><tr style={{borderTop:`2px solid ${C.border}`,background:C.bgSub}}>
+                  <td colSpan={2} style={{padding:"7px 8px",fontWeight:700,fontSize:12,color:C.green}}>TOTAL ({sts.length} stores)</td>
+                  {SIZES.map((sz,j)=>{const t=sts.reduce((a,st)=>a+storeSizeSplit(per,st.sp)[j],0);return (<td key={j} style={{textAlign:"center",fontFamily:"monospace",fontWeight:600,fontSize:12,color:C.green}}>{t}</td>);})}
+                  <td style={{textAlign:"right",fontFamily:"monospace",fontWeight:700,fontSize:13,color:C.green}}>{u.toLocaleString()}</td>
+                  <td style={{textAlign:"right",fontWeight:700,fontSize:12,color:C.green}}>₹{((u*s.mrp)/1e5).toFixed(1)}L</td>
+                </tr></tfoot>
+              </table>
+              <div style={{marginTop:6,padding:"6px 10px",background:C.bgSub,borderRadius:4,fontSize:11,color:C.dimmer}}>
+                Store-level size splits based on each store's POS size profile. Click any store's total to adjust.
+              </div>
+            </div>}
+            </div>);
+          })}
+        </div>
+
+        {editLog[s.id]?.length>0&&<div style={{marginTop:12}}>
+          <div style={{fontSize:12,fontWeight:700,color:C.dim,letterSpacing:.5,marginBottom:6}}>EDIT LOG</div>
+          {editLog[s.id].map((e,i)=> (<div key={i} style={{fontSize:12,color:C.textMid,padding:"4px 0",borderBottom:`1px solid ${C.borderLight}`}}>
+            <span style={{fontFamily:"monospace"}}>{e.from.toLocaleString()} → {e.to.toLocaleString()}</span> · {e.sc} · <span style={{color:C.dim}}>{e.reason}</span> <span style={{color:C.dimmer}}>{e.t}</span>
+          </div>))}
+        </div>}
+      </div>}
+    </div>);
   };
 
   /* ═══ STORE CARD ═══ */
-  const StoreCard=({st})=>{
-    const isO=stExp===st.code;
-    const isPlus=st.grade==="A+";
-    return (
-      <div style={{background:"#fff",borderRadius:10,border:`1px solid ${isO?C.sage+"55":C.border}`,marginBottom:4,overflow:"hidden",boxShadow:isO?"0 4px 16px rgba(17,26,21,0.07)":"0 1px 3px rgba(0,0,0,0.04)"}}>
-        <div onClick={()=>setStExp(isO?null:st.code)} style={{padding:"14px 20px",cursor:"pointer",display:"flex",alignItems:"center",gap:14}}>
-          <div style={{width:36,height:36,borderRadius:8,background:isPlus?C.sageSoft:C.bgAlt,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-            <span style={{fontSize:12,fontWeight:800,color:isPlus?C.sage:C.dim}}>{st.grade}</span>
-          </div>
-          <div style={{flex:1,minWidth:0}}>
-            <div style={{fontSize:14,fontWeight:600,color:C.text,letterSpacing:"-0.01em"}}>{st.name}</div>
-            <div style={{fontSize:11,color:C.dimmer,marginTop:2}}><span style={{fontFamily:"monospace"}}>{st.code}</span> · {st.city}</div>
-          </div>
-          <div style={{display:"flex",gap:18,alignItems:"center",flexShrink:0}}>
-            {[{l:"Styles",v:st.sc},{l:"Units",v:st.tu.toLocaleString(),mono:true,bold:true},{l:"Value",v:`₹${(st.tv/1e5).toFixed(1)}L`}].map(m=>(
-              <div key={m.l} style={{textAlign:"right"}}>
-                <div style={{fontSize:10,color:C.dimmer,fontWeight:600,letterSpacing:"0.06em",marginBottom:2}}>{m.l}</div>
-                <div style={{fontSize:13,fontWeight:m.bold?700:600,fontFamily:m.mono?"monospace":"inherit",color:m.bold?C.green:C.text}}>{m.v}</div>
-              </div>
-            ))}
-            <span style={{color:C.dimmer,fontSize:11,transition:"transform 0.2s",transform:isO?"rotate(180deg)":"rotate(0deg)",display:"inline-block"}}>▾</span>
-          </div>
+  const StoreCard=({st})=>{const isO=stExp===st.code;
+    return (<div style={{background:"#fff",borderRadius:8,border:`1px solid ${isO?C.sage+"44":C.border}`,marginBottom:4}}>
+      <div onClick={()=>setStExp(isO?null:st.code)} style={{padding:"12px 20px",cursor:"pointer",display:"flex",alignItems:"center",gap:14}}>
+        <div style={{flex:1}}><div style={{display:"flex",alignItems:"center",gap:6}}><span style={{fontSize:14,fontWeight:600}}>{st.name}</span><span style={{fontSize:11,padding:"2px 6px",borderRadius:3,background:st.grade==="A+"?C.sageSoft:C.warm,color:st.grade==="A+"?C.sage:C.dim}}>{st.grade}</span></div><div style={{fontSize:12,color:C.dim}}>{st.code} · {st.city}</div></div>
+        <div style={{display:"flex",gap:16,alignItems:"center",flexShrink:0}}>
+          <div style={{textAlign:"right"}}><div style={{fontSize:11,color:C.dimmer}}>Styles</div><div style={{fontSize:14,fontWeight:600}}>{st.sc}</div></div>
+          <div style={{textAlign:"right"}}><div style={{fontSize:11,color:C.dimmer}}>Units</div><div style={{fontSize:14,fontWeight:700,color:C.green,fontFamily:"monospace"}}>{st.tu.toLocaleString()}</div></div>
+          <div style={{textAlign:"right"}}><div style={{fontSize:11,color:C.dimmer}}>Value</div><div style={{fontSize:14,fontWeight:600}}>₹{(st.tv/1e5).toFixed(1)}L</div></div>
+          <span style={{fontSize:11,color:C.dimmer}}>{isO?"▾":"▸"}</span>
         </div>
-        {isO&&<div style={{borderTop:`1px solid ${C.borderLight}`,background:C.bgSub}}>
-          <div style={{overflowX:"auto"}}>
-            <table style={{width:"100%",borderCollapse:"collapse",fontSize:13}}>
-              <thead><tr style={{background:C.bgAlt}}>
-                {["Style","Cat"].map(h=>(<th key={h} style={{textAlign:"left",padding:"8px 14px",fontSize:10,fontWeight:700,color:C.dim,letterSpacing:"0.06em",borderBottom:`1px solid ${C.border}`,whiteSpace:"nowrap"}}>{h}</th>))}
-                {SIZES.map(sz=>(<th key={sz} style={{textAlign:"center",padding:"8px 6px",fontSize:10,fontWeight:700,color:C.dim,letterSpacing:"0.06em",width:38,borderBottom:`1px solid ${C.border}`}}>{sz}</th>))}
-                {["Total","Value"].map(h=>(<th key={h} style={{textAlign:"right",padding:"8px 14px",fontSize:10,fontWeight:700,color:C.dim,letterSpacing:"0.06em",borderBottom:`1px solid ${C.border}`}}>{h}</th>))}
-              </tr></thead>
-              <tbody>{st.sl.sort((a,b)=>b.units-a.units).map((x,ri)=>{
-                const szU=x.oneSize?null:storeSizeSplit(x.units,st.sp);
-                return(<tr key={x.id} style={{background:ri%2===0?"#fff":C.bgSub,borderBottom:`1px solid ${C.borderLight}`}}>
-                  <td style={{padding:"8px 14px"}}><div style={{fontWeight:500,fontSize:13}}>{x.name}</div><div style={{fontSize:10,color:C.dimmer,fontFamily:"monospace"}}>{x.id}</div></td>
-                  <td style={{padding:"8px 8px",color:C.dim,fontSize:12,whiteSpace:"nowrap"}}>{x.sub}</td>
-                  {szU?szU.map((v,j)=>(<td key={j} style={{textAlign:"center",fontFamily:"monospace",color:v>0?C.textMid:C.dimmer,fontSize:12}}>{v}</td>)):SIZES.map((_,j)=>(<td key={j} style={{textAlign:"center",color:C.dimmer,fontSize:10}}>{j===2?"OS":""}</td>))}
-                  <td style={{textAlign:"right",padding:"8px 14px",fontFamily:"monospace",fontWeight:700,fontSize:13,color:C.green}}>{x.units}</td>
-                  <td style={{textAlign:"right",padding:"8px 14px",fontWeight:600,color:C.green,fontSize:12}}>₹{((x.units*x.mrp)/1e3).toFixed(0)}K</td>
-                </tr>);
-              })}</tbody>
-              <tfoot><tr style={{background:C.bgAlt,borderTop:`2px solid ${C.border}`}}>
-                <td colSpan={2} style={{padding:"8px 14px",fontWeight:700,color:C.green,fontSize:12}}>TOTAL</td>
-                {SIZES.map((_,j)=>{const t=st.sl.reduce((a,x)=>x.oneSize?a:a+storeSizeSplit(x.units,st.sp)[j],0);return(<td key={j} style={{textAlign:"center",fontFamily:"monospace",fontWeight:700,fontSize:12,color:C.green}}>{t}</td>);})}
-                <td style={{textAlign:"right",padding:"8px 14px",fontFamily:"monospace",fontWeight:700,fontSize:13,color:C.green}}>{st.tu.toLocaleString()}</td>
-                <td style={{textAlign:"right",padding:"8px 14px",fontWeight:700,fontSize:12,color:C.green}}>₹{(st.tv/1e5).toFixed(1)}L</td>
-              </tr></tfoot>
-            </table>
-          </div>
-          <div style={{padding:"8px 14px",display:"flex",alignItems:"center",gap:10,borderTop:`1px solid ${C.borderLight}`}}>
-            <span style={{fontSize:10,fontWeight:700,color:C.dimmer,letterSpacing:"0.07em"}}>SIZE PROFILE</span>
-            {SIZES.map(sz=>(<span key={sz} style={{fontSize:11}}><span style={{color:C.dim}}>{sz} </span><span style={{fontWeight:700,color:C.text}}>{(st.sp[sz]*100).toFixed(0)}%</span></span>))}
-          </div>
-        </div>}
       </div>
-    );
+      {isO&&<div style={{padding:"0 20px 16px",borderTop:`1px solid ${C.borderLight}`}}>
+        <table style={{width:"100%",borderCollapse:"collapse",fontSize:13,marginTop:10}}><thead><tr style={{borderBottom:`2px solid ${C.border}`}}>
+          {["Style","Cat"].map(h=> (<th key={h} style={{textAlign:"left",padding:"6px 8px",fontSize:12,color:C.dim,fontWeight:600}}>{h}</th>))}
+          {SIZES.map(sz=> (<th key={sz} style={{textAlign:"center",padding:"6px 4px",fontSize:12,color:C.dim,fontWeight:600,width:40}}>{sz}</th>))}
+          {["Total","Value"].map(h=> (<th key={h} style={{textAlign:"right",padding:"6px 8px",fontSize:12,color:C.dim,fontWeight:600}}>{h}</th>))}
+        </tr></thead><tbody>{st.sl.sort((a,b)=>b.units-a.units).map(x=>{const szU=x.oneSize?null:storeSizeSplit(x.units,st.sp);return (<tr key={x.id} style={{borderBottom:`1px solid ${C.borderLight}`}}>
+          <td style={{padding:"6px 8px"}}><div style={{fontWeight:500,fontSize:13}}>{x.name}</div><div style={{fontSize:10,color:C.dimmer,fontFamily:"monospace"}}>{x.id}</div></td>
+          <td style={{color:C.dim,fontSize:12}}>{x.sub}</td>
+          {szU?szU.map((v,j)=> (<td key={j} style={{textAlign:"center",fontFamily:"monospace",color:C.dim,fontSize:13}}>{v}</td>)):SIZES.map((_,j)=> (<td key={j} style={{textAlign:"center",color:C.dimmer,fontSize:10}}>{j===2?"OS":""}</td>))}
+          <td style={{textAlign:"right",fontFamily:"monospace",fontWeight:600,fontSize:13}}>{x.units}</td>
+          <td style={{textAlign:"right",fontWeight:600,color:C.green,fontSize:13}}>₹{((x.units*x.mrp)/1e3).toFixed(0)}K</td>
+        </tr>);})}</tbody>
+        <tfoot><tr style={{borderTop:`2px solid ${C.border}`}}><td colSpan={2} style={{padding:"6px 8px",fontWeight:700,color:C.green,fontSize:13}}>TOTAL</td>
+          {SIZES.map((sz,j)=>{const t=st.sl.reduce((a,x)=>x.oneSize?a:a+storeSizeSplit(x.units,st.sp)[j],0);return (<td key={j} style={{textAlign:"center",fontFamily:"monospace",fontWeight:600,color:C.green,fontSize:12}}>{t}</td>);})}
+          <td style={{textAlign:"right",fontFamily:"monospace",fontWeight:700,color:C.green,fontSize:13}}>{st.tu.toLocaleString()}</td>
+          <td style={{textAlign:"right",fontWeight:700,color:C.green,fontSize:13}}>₹{(st.tv/1e5).toFixed(1)}L</td>
+        </tr></tfoot></table>
+        <div style={{marginTop:10,padding:"8px 12px",background:C.bgSub,borderRadius:4,border:`1px solid ${C.borderLight}`,display:"flex",alignItems:"center",gap:12}}>
+          <span style={{fontSize:10,fontWeight:700,color:C.dim,letterSpacing:.5}}>SIZE PROFILE</span>
+          {SIZES.map(sz=> (<span key={sz} style={{fontSize:12}}><span style={{color:C.dim}}>{sz}</span> <span style={{fontWeight:600}}>{(st.sp[sz]*100).toFixed(0)}%</span></span>))}
+        </div>
+      </div>}
+    </div>);
   };
 
   /* ═══ PAST SEASON DATA ═══ */
@@ -816,134 +824,196 @@ export default function BuyPlan(){
       ]},
   };
 
+  var pastSignals={
+    AW25:[
+      {tag:"LIVE",clr:C.sage,title:"V-Neck Jumpsuit test is outperforming — 91% ST at Week 14, validating the format",body:"120-unit test buy. Now the highest-ST style in AW25. Jumpsuit format confirmed for SS26 expansion. The cross-category signal (relaxed fit + occasion wear) is the insight, not just the silhouette."},
+      {tag:"WATCH",clr:C.amber,title:"Double-breasted blazer dragging portfolio — 72% ST, 288 of 400 units sold",body:"Outsold 3:1 by single-button in the same season. Customer preference has structurally shifted to relaxed silhouettes. SS26 plan does not include double-breasted. Single-button scaled to 520 units instead."},
+      {tag:"CONFIRMED",clr:C.sage,title:"Olive blazer at 88% ST — strongest colour signal going into SS26",body:"First olive piece in range. 82% ST vs 76% for the same blazer in black-only season. This single data point justified 4 olive colourways in the SS26 plan."},
+    ],
+    SS25:[
+      {tag:"OUTCOME",clr:C.sage,title:"Linen wrap dress was the standout — 93% ST, sold out by Week 5 in A+",body:"500 units, Rs 18.6L revenue. M stocked out in 8 of 12 A+ stores. This drove the SS26 decision to scale to 760 units (+52%) with corrected M curve. The best style in any season to date."},
+      {tag:"OUTCOME",clr:C.terra,title:"Sage colour underperformed across 3 styles — 64% avg ST vs 85% for other colours",body:"Sage required 30% markdown to clear. Replaced by olive in SS26 plan across Stripe Midi, Oversized Shirt, and Pleated Skirt. This single colour swap improves projected portfolio ST by 2pp."},
+      {tag:"LEARNING",clr:C.copper,title:"M size was systematically under-allocated — 41% of demand vs 35% planned",body:"SS25 actuals: M was 41% of sales across all styles. Plan had 35%. XL was 6% of sales vs 10% planned (38% residual). SS26 corrected the curve to M 38%, XL 8%. Validated even in North stores where L/XL index higher."},
+    ],
+    AW24:[
+      {tag:"OUTCOME",clr:C.amber,title:"First season with structured blazers — 82% ST on wool blend, but sizing ran large",body:"360 units. ST was solid but return rate was 14% (vs 8% avg) due to sizing. Led to size curve recalibration for all blazers from AW25 onwards. The blazer category has improved every season since."},
+      {tag:"LEARNING",clr:C.copper,title:"Turtleneck sweater at 72% ST confirmed knitwear is not a strength for this brand",body:"520 units, needed 25% markdown. Repeat purchase rate for knitwear buyers was 22% vs 38% for woven. SS25 and SS26 both reduced knitwear allocation. The brand's identity is woven, not knit."},
+    ],
+    SS24:[
+      {tag:"OUTCOME",clr:C.amber,title:"First season on the platform — 74% avg ST established the baseline",body:"16 styles, Rs 2.7Cr. Every subsequent season has improved: AW24 78%, SS25 81%, AW25 tracking 76%. The platform's size curve and grade allocation improvements account for 5-7pp of that improvement."},
+      {tag:"LEARNING",clr:C.copper,title:"Printed co-ord set at 76% ST showed co-ords work — but only at the right price",body:"Rs 2,990 co-ord hit 76% ST. This gave confidence for the Cotton Solid Co-ord in SS25 (78% ST at same price) and the premium Linen Co-ord in SS26 (Rs 5,990, untested price). Each season tests one step up."},
+    ],
+  };
+
   /* ═══ SEASONS HOMEPAGE ═══ */
   const SeasonsHome=()=>{
     const seasons=[
-      {id:"SS26",label:"Spring Summer 2026",status:"Allocation Planning",statusColor:C.terra,statusBg:C.terraSoft,statusBd:C.terraBorder,
-        styles:styles.length,units:totU.toLocaleString(),budget:`₹${(totV/1e7).toFixed(1)}Cr`,margin:"58.4%",extra:`${styles.filter(s=>s.src==="carryover").length} carryover · ${styles.filter(s=>s.src==="new-design").length} new design`,action:"plan"},
+      {id:"SS26",label:"Spring Summer 2026",status:"New Season",statusColor:C.terra,statusBg:C.terraSoft,statusBd:C.terraBorder,
+        styles:styles.length,units:totU.toLocaleString(),budget:`₹${(totV/1e7).toFixed(1)}Cr`,margin:"58.4%",extra:`${styles.filter(s=>s.src==="carryover").length} carryover, ${styles.filter(s=>s.src==="new-design").length} new design`,action:"plan"},
       {id:"AW25",label:"Autumn Winter 2025",status:PAST_SEASONS.AW25.status,statusColor:PAST_SEASONS.AW25.statusColor,statusBg:PAST_SEASONS.AW25.statusBg,statusBd:PAST_SEASONS.AW25.statusBd,
         styles:PAST_SEASONS.AW25.styles,units:PAST_SEASONS.AW25.units,budget:PAST_SEASONS.AW25.budget,margin:PAST_SEASONS.AW25.margin,extra:PAST_SEASONS.AW25.week+` · Avg ST ${PAST_SEASONS.AW25.stAvg}`,action:"past"},
       {id:"SS25",label:"Spring Summer 2025",status:PAST_SEASONS.SS25.status,statusColor:PAST_SEASONS.SS25.statusColor,statusBg:PAST_SEASONS.SS25.statusBg,statusBd:PAST_SEASONS.SS25.statusBd,
         styles:PAST_SEASONS.SS25.styles,units:PAST_SEASONS.SS25.units,budget:PAST_SEASONS.SS25.budget,margin:PAST_SEASONS.SS25.margin,extra:`Avg ST ${PAST_SEASONS.SS25.stAvg}`,action:"past"},
-      {id:"AW24",label:"Autumn Winter 2024",status:"Complete",statusColor:C.dim,statusBg:C.cream,statusBd:C.border,styles:18,units:"9.8K",budget:"₹3.1Cr",margin:"55.8%",extra:"Avg ST 78%",action:"past"},
-      {id:"SS24",label:"Spring Summer 2024",status:"Complete",statusColor:C.dim,statusBg:C.cream,statusBd:C.border,styles:16,units:"8.6K",budget:"₹2.7Cr",margin:"54.2%",extra:"Avg ST 74%",action:"past"},
+      {id:"AW24",label:"Autumn Winter 2024",status:"Complete",statusColor:C.dim,statusBg:C.cream,statusBd:C.border,
+        styles:18,units:"9.8K",budget:"₹3.1Cr",margin:"55.8%",extra:"Avg ST 78%",action:"past"},
+      {id:"SS24",label:"Spring Summer 2024",status:"Complete",statusColor:C.dim,statusBg:C.cream,statusBd:C.border,
+        styles:16,units:"8.6K",budget:"₹2.7Cr",margin:"54.2%",extra:"Avg ST 74%",action:"past"},
     ];
-    return (
-      <div className="overflow-auto" style={{height:"100vh",background:C.bgSub,fontFamily:font,display:"flex",flexDirection:"column"}}>
-        {GF}
-        <Header title="Buy Planning"/>
-        <div style={{flex:1,maxWidth:1060,margin:"0 auto",width:"100%",padding:"40px 32px 64px"}}>
-          {/* SS26 hero */}
-          <div onClick={()=>{setView("plan");setSeason("SS26");}} style={{background:`linear-gradient(135deg,${C.green} 0%,#1C3D2A 100%)`,borderRadius:14,padding:"40px 40px 36px",cursor:"pointer",color:"#fff",marginBottom:28,position:"relative",overflow:"hidden",boxShadow:"0 8px 32px rgba(17,26,21,0.20)"}}>
-            <div style={{position:"absolute",top:-40,right:-40,width:220,height:220,borderRadius:"50%",background:"radial-gradient(circle,rgba(59,184,150,0.12) 0%,transparent 70%)"}}/>
-            <div style={{position:"absolute",bottom:-20,left:240,width:160,height:160,borderRadius:"50%",background:"radial-gradient(circle,rgba(255,255,255,0.04) 0%,transparent 70%)"}}/>
-            <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",gap:20}}>
+    return (<Shell extra={null}>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=DM+Serif+Display:ital@0;1&family=Source+Serif+4:wght@300;400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+      <div style={{maxWidth:1100,padding:"36px 36px 64px"}}>
+        <div style={{borderRadius:14,overflow:"hidden",marginBottom:36,border:"1px solid "+C.border}}>
+          {/* ── Dark hero zone ── */}
+          <div onClick={function(){setView("plan");setSeason("SS26");}} style={{background:"linear-gradient(135deg, "+C.green+" 0%, #1A3D28 100%)",padding:"32px 32px 28px",cursor:"pointer",color:"#fff",position:"relative"}}>
+            <div style={{position:"absolute",top:0,right:0,width:200,height:200,background:"radial-gradient(circle, rgba(133,163,131,0.15) 0%, transparent 70%)"}}/>
+            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:16}}>
               <div>
-                <span style={{fontSize:11,fontWeight:700,letterSpacing:"0.08em",padding:"4px 12px",borderRadius:99,background:"rgba(179,58,58,0.22)",color:"#F4A27A",border:"1px solid rgba(179,58,58,0.3)",display:"inline-block",marginBottom:14}}>{seasons[0].status.toUpperCase()}</span>
-                <div style={{fontSize:30,fontWeight:400,fontFamily:serif,letterSpacing:"-0.02em",marginBottom:6}}>{seasons[0].label}</div>
-                <div style={{fontSize:13,color:"rgba(255,255,255,0.5)",marginBottom:28}}>{seasons[0].extra}</div>
-                <div style={{display:"flex",gap:36,marginBottom:32}}>
-                  {[{l:"Styles",v:seasons[0].styles},{l:"Total Units",v:seasons[0].units},{l:"OTB Budget",v:seasons[0].budget},{l:"Avg Margin",v:seasons[0].margin}].map(m=>(
-                    <div key={m.l}>
-                      <div style={{fontSize:10,fontWeight:600,letterSpacing:"0.08em",color:"rgba(255,255,255,0.4)",marginBottom:4}}>{m.l}</div>
-                      <div style={{fontSize:22,fontWeight:700,letterSpacing:"-0.01em"}}>{m.v}</div>
-                    </div>
-                  ))}
-                </div>
-                <div style={{display:"inline-flex",alignItems:"center",gap:8,padding:"11px 22px",background:"rgba(255,255,255,0.12)",borderRadius:8,border:"1px solid rgba(255,255,255,0.18)",fontWeight:600,fontSize:13,backdropFilter:"blur(4px)"}}>
-                  Open Buy Plan <span>→</span>
-                </div>
+                <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:6}}><span style={{fontSize:10,padding:"3px 12px",borderRadius:100,fontWeight:600,background:"rgba(223,118,73,0.25)",color:"#F8A87A",border:"1px solid rgba(223,118,73,0.3)",fontFamily:mono,letterSpacing:"0.04em"}}>{seasons[0].status}</span></div>
+                <div style={{fontSize:26,fontWeight:700,fontFamily:serif}}>{seasons[0].label}</div>
+                <div style={{fontSize:13,opacity:.6,marginTop:3}}>{seasons[0].extra}</div>
               </div>
+              <div style={{display:"inline-flex",alignItems:"center",gap:6,padding:"10px 22px",background:"rgba(255,255,255,0.12)",borderRadius:100,border:"1px solid rgba(255,255,255,0.15)",fontWeight:600,fontSize:13,backdropFilter:"blur(4px)"}}>Finalize Buy Plan <span style={{fontSize:15}}>→</span></div>
             </div>
+            <div style={{display:"flex",gap:36}}>{[{label:"Styles",value:seasons[0].styles},{label:"Total Units",value:seasons[0].units},{label:"OTB Budget",value:seasons[0].budget}].map(function(m){return <div key={m.label}><div style={{fontSize:9,opacity:.4,fontWeight:500,letterSpacing:"0.08em",fontFamily:mono}}>{m.label.toUpperCase()}</div><div style={{fontSize:20,fontWeight:700,marginTop:4}}>{m.value}</div></div>;})}</div>
           </div>
 
-          {/* past seasons */}
-          <div style={{fontSize:11,fontWeight:700,color:C.dimmer,letterSpacing:"0.09em",marginBottom:10}}>PAST SEASONS</div>
-          <div style={{background:"#fff",borderRadius:12,border:`1px solid ${C.border}`,overflow:"hidden",boxShadow:"0 1px 4px rgba(0,0,0,0.04)"}}>
-            {seasons.slice(1).map((s,i)=>(
-              <div key={s.id} onClick={()=>{setView("past");setSeason(s.id);setPastTab("style");}} style={{padding:"16px 24px",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"space-between",borderBottom:i<seasons.length-2?`1px solid ${C.borderLight}`:"none",transition:"background 0.12s"}}>
-                <div style={{display:"flex",alignItems:"center",gap:16}}>
-                  <div style={{width:52,height:36,borderRadius:6,background:C.bgAlt,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-                    <span style={{fontSize:12,fontWeight:800,color:C.green,fontFamily:serif}}>{s.id}</span>
-                  </div>
-                  <div>
-                    <div style={{fontSize:14,fontWeight:500,color:C.text}}>{s.label}</div>
-                    <div style={{fontSize:11,color:C.dimmer,marginTop:2}}>{s.extra}</div>
-                  </div>
-                </div>
-                <div style={{display:"flex",alignItems:"center",gap:24}}>
-                  <span style={{fontSize:11,fontWeight:600,padding:"3px 10px",borderRadius:99,color:s.statusColor,background:s.statusBg,border:`1px solid ${s.statusBd}`}}>{s.status}</span>
-                  {[{l:"Styles",v:s.styles},{l:"Units",v:s.units},{l:"Budget",v:s.budget}].map(m=>(
-                    <div key={m.l} style={{textAlign:"right",minWidth:52}}>
-                      <div style={{fontSize:10,color:C.dimmer,fontWeight:600,letterSpacing:"0.05em"}}>{m.l}</div>
-                      <div style={{fontSize:13,fontWeight:600,color:C.green,marginTop:1}}>{m.v}</div>
+          {/* ── Signals zone (same card, white bg) ── */}
+          <div style={{background:C.bg}}>
+            <div style={{padding:"16px 32px 12px",display:"flex",alignItems:"center",justifyContent:"space-between",borderBottom:"1px solid "+C.borderLight}}>
+              <span style={{fontSize:9,fontWeight:600,letterSpacing:"0.12em",color:C.dimmer,fontFamily:mono}}>SEASON SIGNALS</span>
+              <span style={{fontSize:9,fontFamily:mono,color:C.dimmer,letterSpacing:"0.06em"}}>{signals.length} ACTIVE</span>
+            </div>
+            {signals.map(function(sig,si){return <div key={sig.id}>
+              <div style={{padding:"16px 32px",borderBottom:si<signals.length-1?"1px solid "+C.borderLight:"none"}}>
+                <div style={{display:"flex",alignItems:"flex-start",gap:14}}>
+                  <div style={{width:3,height:38,borderRadius:2,background:sig.clr,flexShrink:0,marginTop:2}}/>
+                  <div style={{flex:1}}>
+                    <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:5}}>
+                      <span style={{fontSize:9,fontWeight:600,letterSpacing:"0.1em",color:sig.clr,fontFamily:mono}}>{sig.tag}</span>
                     </div>
-                  ))}
-                  <span style={{color:C.dimmer,fontSize:13}}>›</span>
+                    <div style={{fontSize:14,fontWeight:600,color:C.text,lineHeight:1.4,marginBottom:4}}>{sig.title}</div>
+                    <div style={{fontSize:12,color:C.dim,lineHeight:1.6}}>{sig.body}</div>
+                    <button onClick={function(){openSig(si);}} style={{marginTop:10,display:"inline-flex",alignItems:"center",gap:6,padding:"5px 16px",background:sigOpen===si?C.green:"transparent",color:sigOpen===si?"#fff":C.sage,border:"1px solid "+(sigOpen===si?C.green:C.sageBorder),borderRadius:100,fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:font,transition:"all 0.15s"}}>
+                      <div style={{width:13,height:13,borderRadius:7,background:sigOpen===si?"rgba(255,255,255,0.25)":C.sage,display:"flex",alignItems:"center",justifyContent:"center"}}><span style={{color:"#fff",fontSize:7,fontWeight:700}}>q</span></div>
+                      Dig deeper
+                    </button>
+                  </div>
                 </div>
+                {sigOpen===si&&sigChats[si]&&<div style={{marginTop:14,marginLeft:17,background:C.bgSub,borderRadius:8,border:"1px solid "+C.borderLight,overflow:"hidden"}}>
+                  <div style={{padding:"14px 18px",maxHeight:260,overflowY:"auto"}}>
+                    {sigChats[si].msgs.map(function(msg,mi){return <div key={mi} style={{marginBottom:10}}>
+                      {msg.role==="wait"?<div style={{display:"flex",gap:8,alignItems:"center"}}><div style={{width:18,height:18,borderRadius:9,background:C.sage,display:"flex",alignItems:"center",justifyContent:"center"}}><span style={{color:"#fff",fontSize:7,fontWeight:700}}>q</span></div><span style={{fontSize:12,color:C.dimmer}}>Thinking...</span></div>
+                      :msg.role==="ai"?<div style={{display:"flex",gap:8,alignItems:"flex-start"}}><div style={{width:18,height:18,borderRadius:9,background:C.sage,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,marginTop:1}}><span style={{color:"#fff",fontSize:7,fontWeight:700}}>q</span></div><div style={{fontSize:12,lineHeight:1.65,color:C.dim,flex:1}}>{msg.text}</div></div>
+                      :<div style={{display:"flex",justifyContent:"flex-end"}}><div style={{padding:"8px 12px",background:C.green,color:"#fff",borderRadius:8,fontSize:12,lineHeight:1.4,maxWidth:"85%"}}>{msg.text}</div></div>}
+                    </div>;})}
+                    {sigChats[si].chips.length>0&&<div style={{display:"flex",flexWrap:"wrap",gap:6,marginTop:6}}>
+                      {sigChats[si].chips.map(function(ch,ci){return <button key={ci} onClick={function(){sendSig(si,ch);}} style={{padding:"5px 14px",background:C.bg,border:"1px solid "+C.border,borderRadius:100,fontSize:10,color:C.dim,cursor:"pointer",fontFamily:font,transition:"all 0.15s"}}
+                        onMouseEnter={function(e){e.currentTarget.style.borderColor=C.sage;e.currentTarget.style.color=C.sage;}}
+                        onMouseLeave={function(e){e.currentTarget.style.borderColor=C.border;e.currentTarget.style.color=C.dim;}}
+                      >{ch}</button>;})}
+                    </div>}
+                  </div>
+                  <div style={{padding:"10px 18px",borderTop:"1px solid "+C.borderLight,display:"flex",gap:6}}>
+                    <input type="text" value={sigOpen===si?sigInput:""} onChange={function(e){setSigInput(e.target.value);}} onKeyPress={function(e){if(e.key==="Enter")sendSig(si,sigInput);}} placeholder="Ask about this signal..." style={{flex:1,padding:"7px 12px",border:"1px solid "+C.border,borderRadius:100,fontSize:11,fontFamily:font,outline:"none",background:C.bg}}/>
+                    <button onClick={function(){sendSig(si,sigInput);}} style={{padding:"7px 14px",background:C.green,color:"#fff",border:"none",borderRadius:100,cursor:"pointer",display:"flex",alignItems:"center"}}><Send size={12} strokeWidth={2}/></button>
+                  </div>
+                </div>}
               </div>
-            ))}
+            </div>;})}
           </div>
         </div>
+
+        <div style={{fontSize:9,fontWeight:600,color:C.dimmer,letterSpacing:"0.12em",fontFamily:mono,marginBottom:14}}>PAST SEASONS</div>
+        <div style={{borderRadius:10,border:`1px solid ${C.border}`,overflow:"hidden"}}>
+          {seasons.slice(1).map((s,i)=> (<div key={s.id} onClick={()=>{setView("past");setSeason(s.id);setPastTab("style");}} style={{padding:"18px 24px",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"space-between",borderBottom:i<seasons.length-2?`1px solid ${C.borderLight}`:"none",background:i%2===0?C.bg:C.bgSub,transition:"background 0.15s"}}>
+            <div style={{display:"flex",alignItems:"center",gap:14}}>
+              <span style={{fontSize:17,fontWeight:700,color:C.green,fontFamily:serif,width:48}}>{s.id}</span>
+              <div><div style={{fontSize:14,fontWeight:500,color:C.text}}>{s.label}</div><div style={{fontSize:12,color:C.dimmer,marginTop:1}}>{s.extra}</div>
+                {pastSignals[s.id]&&pastSignals[s.id][0]&&<div style={{fontSize:11,color:C.dim,marginTop:6,display:"flex",alignItems:"flex-start",gap:6,maxWidth:600}}><div style={{width:3,minHeight:14,borderRadius:1,background:pastSignals[s.id][0].clr,flexShrink:0,marginTop:1}}/><span style={{lineHeight:1.5}}>{pastSignals[s.id][0].title}</span></div>}
+              </div>
+            </div>
+            <div style={{display:"flex",alignItems:"center",gap:28}}>
+              <span style={{fontSize:12,padding:"3px 10px",borderRadius:20,fontWeight:600,color:s.statusColor,background:s.statusBg,border:`1px solid ${s.statusBd}`}}>{s.status}</span>
+              {[{l:"Styles",v:s.styles},{l:"Units",v:s.units},{l:"Budget",v:s.budget}].map(m=> (<div key={m.l} style={{textAlign:"right",minWidth:56}}><div style={{fontSize:10,color:C.dimmer}}>{m.l}</div><div style={{fontSize:14,fontWeight:600,color:C.green}}>{m.v}</div></div>))}
+              <span style={{color:C.dimmer,fontSize:12}}>→</span>
+            </div>
+          </div>))}
+        </div>
       </div>
-    );
+    </Shell>);
   };
 
   /* ═══ PAST SEASON VIEW ═══ */
   const PastSeasonView=()=>{
     const ps=PAST_SEASONS[season];if(!ps)return null;
-    return (
-      <div className="overflow-auto" style={{height:"100vh",background:C.bgSub,fontFamily:font,display:"flex",flexDirection:"column"}}>
-        {GF}
-        <Header back={()=>{setView("seasons");setSeason(null);}} backLabel="All Seasons" title={season}
-          right={<><span style={{fontSize:12,fontWeight:600,padding:"4px 12px",borderRadius:99,background:"rgba(255,255,255,0.12)",color:"rgba(255,255,255,0.75)"}}>{ps.status}</span><span style={{fontSize:12,color:"rgba(255,255,255,0.5)"}}>Avg ST <b style={{color:"#fff"}}>{ps.stAvg}</b></span></>}/>
-        <div style={{maxWidth:1060,margin:"0 auto",width:"100%",padding:"32px 32px 64px"}}>
-          <div style={{marginBottom:20}}>
-            <div style={{fontSize:24,fontWeight:400,fontFamily:serif,color:C.text,letterSpacing:"-0.01em",marginBottom:4}}>{ps.label}</div>
-            <div style={{fontSize:13,color:C.dim}}>{ps.styles} styles · {ps.units} units · {ps.budget} · {ps.margin} margin</div>
+    return (<Shell extra={<div style={{display:"flex",alignItems:"center",gap:10}}>
+        <span style={{fontSize:10,padding:"3px 10px",borderRadius:100,fontWeight:600,background:C.sageSoft,color:C.sage,fontFamily:mono}}>{ps.status}{ps.week!=="Final"?" "+ps.week:""}</span>
+        <span style={{fontSize:11,color:C.dim}}>Avg ST: <b>{ps.stAvg}</b></span>
+      </div>}>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=DM+Serif+Display:ital@0;1&family=Source+Serif+4:wght@300;400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+      <div style={{maxWidth:1100,padding:"28px 36px"}}>
+        <button onClick={()=>{setView("seasons");setSeason(null);}} style={{fontSize:12,color:C.sage,fontWeight:600,background:"none",border:"none",cursor:"pointer",padding:0,marginBottom:8,fontFamily:font}}>← All Seasons</button>
+        <div style={{fontSize:22,fontWeight:600,fontFamily:serif}}>{ps.label}</div>
+        <div style={{fontSize:13,color:C.dim,marginTop:3}}>{ps.styles} styles · {ps.units} units · {ps.budget}</div>
+
+        {pastSignals[season]&&pastSignals[season].length>0&&<div style={{background:C.bg,borderRadius:10,border:"1px solid "+C.border,marginTop:20,marginBottom:20,overflow:"hidden"}}>
+          <div style={{padding:"14px 24px 10px",borderBottom:"1px solid "+C.borderLight,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+            <span style={{fontSize:9,fontWeight:600,letterSpacing:"0.12em",color:C.dimmer,fontFamily:mono}}>WHAT HAPPENED</span>
+            <span style={{fontSize:9,fontFamily:mono,color:C.dimmer}}>{pastSignals[season].length} SIGNALS</span>
           </div>
-          <div style={{display:"flex",gap:4,padding:"3px",background:C.bgAlt,borderRadius:8,width:"fit-content",marginBottom:18}}>
-            {[{k:"style",l:"By Style"},{k:"store",l:"By Store"}].map(t=>(
-              <button key={t.k} onClick={()=>setPastTab(t.k)} style={{padding:"7px 18px",borderRadius:6,border:"none",background:pastTab===t.k?"#fff":"transparent",color:pastTab===t.k?C.green:C.dim,fontWeight:pastTab===t.k?700:500,fontSize:13,cursor:"pointer",fontFamily:font,boxShadow:pastTab===t.k?"0 1px 3px rgba(0,0,0,0.08)":"none"}}>{t.l}</button>
-            ))}
-          </div>
-          <div style={{background:"#fff",borderRadius:12,border:`1px solid ${C.border}`,overflow:"hidden",boxShadow:"0 1px 4px rgba(0,0,0,0.04)"}}>
-            {pastTab==="style"&&<table style={{width:"100%",borderCollapse:"collapse",fontSize:13}}>
-              <thead><tr style={{background:C.bgAlt}}>
-                {["Style","Category","Planned","Sold","6-wk ST","vs 90%","Revenue"].map(h=>(<th key={h} style={{textAlign:"left",padding:"10px 14px",fontSize:10,fontWeight:700,color:C.dim,letterSpacing:"0.07em",borderBottom:`1px solid ${C.border}`}}>{h}</th>))}
-              </tr></thead>
-              <tbody>{ps.topStyles.map((s,ri)=>(
-                <tr key={s.id} style={{background:ri%2===0?"#fff":C.bgSub,borderBottom:`1px solid ${C.borderLight}`}}>
-                  <td style={{padding:"11px 14px"}}><div style={{fontWeight:600,fontSize:13}}>{s.name}</div><div style={{fontSize:10,color:C.dimmer,fontFamily:"monospace"}}>{s.id}</div></td>
-                  <td style={{padding:"11px 14px",fontSize:12,color:C.dim}}>{s.sub}</td>
-                  <td style={{padding:"11px 14px",fontFamily:"monospace",fontSize:13,color:C.dim}}>{s.planned.toLocaleString()}</td>
-                  <td style={{padding:"11px 14px",fontFamily:"monospace",fontWeight:700,fontSize:13}}>{s.sold.toLocaleString()}</td>
-                  <td style={{padding:"11px 14px"}}><span style={{fontWeight:700,padding:"3px 9px",borderRadius:99,fontSize:11,background:s.st>=90?C.sageSoft:s.st>=80?C.amberSoft:C.terraSoft,color:s.st>=90?C.sage:s.st>=80?C.amber:C.terra}}>{s.st}%</span></td>
-                  <td style={{padding:"11px 14px",fontSize:12,color:s.st>=90?C.sage:C.terra,fontWeight:500}}>{s.st>=90?"✓ At target":`${90-s.st}pts below`}</td>
-                  <td style={{padding:"11px 14px",fontWeight:700,color:C.green,fontSize:13}}>{s.revenue}</td>
-                </tr>
-              ))}</tbody>
-            </table>}
-            {pastTab==="store"&&<table style={{width:"100%",borderCollapse:"collapse",fontSize:13}}>
-              <thead><tr style={{background:C.bgAlt}}>
-                {["Store","Grade","Styles","Units","Value","Avg ST"].map(h=>(<th key={h} style={{textAlign:"left",padding:"10px 14px",fontSize:10,fontWeight:700,color:C.dim,letterSpacing:"0.07em",borderBottom:`1px solid ${C.border}`}}>{h}</th>))}
-              </tr></thead>
-              <tbody>{ps.topStores.map((s,ri)=>(
-                <tr key={s.code} style={{background:ri%2===0?"#fff":C.bgSub,borderBottom:`1px solid ${C.borderLight}`}}>
-                  <td style={{padding:"11px 14px"}}><div style={{fontWeight:600,fontSize:13}}>{s.name}</div><div style={{fontSize:10,color:C.dimmer}}>{s.code}</div></td>
-                  <td style={{padding:"11px 14px"}}><span style={{fontSize:11,fontWeight:700,padding:"3px 8px",borderRadius:99,background:s.grade==="A+"?C.sageSoft:C.bgAlt,color:s.grade==="A+"?C.sage:C.dim}}>{s.grade}</span></td>
-                  <td style={{padding:"11px 14px",fontSize:13,color:C.dim}}>{s.styles}</td>
-                  <td style={{padding:"11px 14px",fontFamily:"monospace",fontWeight:700,fontSize:13}}>{s.units.toLocaleString()}</td>
-                  <td style={{padding:"11px 14px",fontWeight:700,color:C.green,fontSize:13}}>{s.value}</td>
-                  <td style={{padding:"11px 14px"}}><span style={{fontWeight:700,padding:"3px 9px",borderRadius:99,fontSize:11,background:parseInt(s.st)>=85?C.sageSoft:parseInt(s.st)>=78?C.amberSoft:C.terraSoft,color:parseInt(s.st)>=85?C.sage:parseInt(s.st)>=78?C.amber:C.terra}}>{s.st}</span></td>
-                </tr>
-              ))}</tbody>
-            </table>}
-          </div>
-          <div style={{marginTop:10,fontSize:11,color:C.dimmer}}>Showing top {pastTab==="style"?ps.topStyles.length:ps.topStores.length} {pastTab==="style"?"styles by sell-through":"stores by units"}. Full data in source systems.</div>
-        </div>
+          {pastSignals[season].map(function(sig,si){
+            var sc=sig.clr;
+            return <div key={si} style={{padding:"14px 24px",borderBottom:si<pastSignals[season].length-1?"1px solid "+C.borderLight:"none"}}>
+              <div style={{display:"flex",alignItems:"flex-start",gap:12}}>
+                <div style={{width:3,height:32,borderRadius:2,background:sc,flexShrink:0,marginTop:2}}/>
+                <div>
+                  <span style={{fontSize:9,fontWeight:600,letterSpacing:"0.1em",color:sc,fontFamily:mono}}>{sig.tag}</span>
+                  <div style={{fontSize:13,fontWeight:600,color:C.text,lineHeight:1.4,marginTop:4}}>{sig.title}</div>
+                  <div style={{fontSize:12,color:C.dim,lineHeight:1.6,marginTop:3}}>{sig.body}</div>
+                </div>
+              </div>
+            </div>;
+          })}
+        </div>}
+
+        <div style={{display:"flex",gap:0,marginTop:20,marginBottom:18,borderBottom:`2px solid ${C.borderLight}`}}>{[{k:"style",l:"By Style"},{k:"store",l:"By Store"}].map(t=> (<button key={t.k} onClick={()=>setPastTab(t.k)} style={{padding:"10px 24px",borderRadius:0,border:"none",borderBottom:pastTab===t.k?`2px solid ${C.green}`:"2px solid transparent",background:"transparent",color:pastTab===t.k?C.green:C.dim,fontWeight:pastTab===t.k?700:500,fontSize:14,cursor:"pointer",fontFamily:font,marginBottom:-2,transition:"all 0.15s"}}>{t.l}</button>))}</div>
+
+        {pastTab==="style"&&<div>
+          <table style={{width:"100%",borderCollapse:"collapse",fontSize:14}}>
+            <thead><tr style={{borderBottom:`2px solid ${C.border}`,background:C.bgSub}}>
+              {["Style","Category","Planned","Sold","6-wk ST","vs 90%","Revenue"].map(h=> (<th key={h} style={{textAlign:"left",padding:"10px 12px",fontSize:12,fontWeight:600,color:C.dim}}>{h}</th>))}
+            </tr></thead>
+            <tbody>{ps.topStyles.map((s,ri)=> (<tr key={s.id} style={{borderBottom:`1px solid ${C.borderLight}`,background:ri%2===0?"#fff":C.bgSub}}>
+              <td style={{padding:"10px 12px"}}><div style={{fontWeight:600,fontSize:14}}>{s.name}</div><div style={{fontSize:11,color:C.dimmer,fontFamily:"monospace"}}>{s.id}</div></td>
+              <td style={{padding:"10px 12px",fontSize:13,color:C.dim}}>{s.sub}</td>
+              <td style={{padding:"10px 12px",fontFamily:"monospace",fontSize:14,color:C.dim}}>{s.planned.toLocaleString()}</td>
+              <td style={{padding:"10px 12px",fontFamily:"monospace",fontWeight:600,fontSize:14}}>{s.sold.toLocaleString()}</td>
+              <td style={{padding:"10px 12px"}}><span style={{fontWeight:600,padding:"2px 8px",borderRadius:4,fontSize:13,background:s.st>=90?C.sageSoft:s.st>=80?"#F0F2E6":C.terraSoft,color:s.st>=90?C.sage:s.st>=80?"#7A6B1A":C.terra}}>{s.st}%</span></td>
+              <td style={{padding:"10px 12px",fontSize:12,color:s.st>=90?C.sage:C.terra}}>{s.st>=90?"At target":`${90-s.st}pts below`}</td>
+              <td style={{padding:"10px 12px",fontWeight:600,color:C.green,fontSize:14}}>{s.revenue}</td>
+            </tr>))}</tbody>
+          </table>
+          <div style={{marginTop:12,fontSize:12,color:C.dimmer}}>Showing top {ps.topStyles.length} styles by sell-through. Full data available in source systems.</div>
+        </div>}
+
+        {pastTab==="store"&&<div>
+          <table style={{width:"100%",borderCollapse:"collapse",fontSize:14}}>
+            <thead><tr style={{borderBottom:`2px solid ${C.border}`,background:C.bgSub}}>
+              {["Store","Grade","Styles","Units","Value","Avg ST"].map(h=> (<th key={h} style={{textAlign:"left",padding:"10px 12px",fontSize:12,fontWeight:600,color:C.dim}}>{h}</th>))}
+            </tr></thead>
+            <tbody>{ps.topStores.map((s,ri)=> (<tr key={s.code} style={{borderBottom:`1px solid ${C.borderLight}`,background:ri%2===0?"#fff":C.bgSub}}>
+              <td style={{padding:"10px 12px"}}><div style={{fontWeight:600,fontSize:14}}>{s.name}</div><div style={{fontSize:11,color:C.dimmer}}>{s.code}</div></td>
+              <td style={{padding:"10px 12px"}}><span style={{fontSize:12,padding:"2px 8px",borderRadius:4,background:s.grade==="A+"?C.sageSoft:C.warm,color:s.grade==="A+"?C.sage:C.dim,fontWeight:600}}>{s.grade}</span></td>
+              <td style={{padding:"10px 12px",fontSize:14}}>{s.styles}</td>
+              <td style={{padding:"10px 12px",fontFamily:"monospace",fontWeight:600,fontSize:14}}>{s.units.toLocaleString()}</td>
+              <td style={{padding:"10px 12px",fontWeight:600,color:C.green,fontSize:14}}>{s.value}</td>
+              <td style={{padding:"10px 12px"}}><span style={{fontWeight:600,padding:"2px 8px",borderRadius:4,fontSize:13,background:parseInt(s.st)>=85?C.sageSoft:parseInt(s.st)>=78?"#F0F2E6":C.terraSoft,color:parseInt(s.st)>=85?C.sage:parseInt(s.st)>=78?"#7A6B1A":C.terra}}>{s.st}</span></td>
+            </tr>))}</tbody>
+          </table>
+          <div style={{marginTop:12,fontSize:12,color:C.dimmer}}>Showing top {ps.topStores.length} stores by units. B/C stores aggregated in source systems.</div>
+        </div>}
       </div>
-    );
+    </Shell>);
   };
 
   /* ═══ ROUTER ═══ */
@@ -951,133 +1021,63 @@ export default function BuyPlan(){
   if(view==="past") return (<PastSeasonView/>);
 
   /* ═══ PLAN VIEW (SS26) ═══ */
-  const PlanTabs=()=>(
-    <div style={{display:"flex",gap:4,padding:"3px",background:C.bgAlt,borderRadius:8,width:"fit-content"}}>
-      {[{k:"sku",l:"By SKU"},{k:"store",l:"By Store"}].map(t=>(
-        <button key={t.k} onClick={()=>setTab(t.k)} style={{padding:"7px 18px",borderRadius:6,border:"none",background:tab===t.k?"#fff":"transparent",color:tab===t.k?C.green:C.dim,fontWeight:tab===t.k?700:500,fontSize:13,cursor:"pointer",fontFamily:font,boxShadow:tab===t.k?"0 1px 3px rgba(0,0,0,0.08)":"none",transition:"all 0.15s"}}>{t.l}</button>
-      ))}
-    </div>
-  );
-  const flaggedCount=styles.filter(s=>s.flag).length;
-  const editsCount=Object.keys(edits).length;
-
-  return (
-    <div className="overflow-auto" style={{height:"100vh",background:C.bgSub,fontFamily:font,display:"flex",flexDirection:"column"}}>
-      {GF}
-      <Header back={()=>{setView("seasons");setSeason(null);}} backLabel="All Seasons" title="Spring Summer 2026"
-        right={<>
-          <div style={{display:"flex",alignItems:"center",gap:6}}>
-            <div style={{textAlign:"right"}}>
-              <div style={{fontSize:10,color:"rgba(255,255,255,0.4)",fontWeight:600,letterSpacing:"0.07em"}}>PLANNED / OTB</div>
-              <div style={{fontSize:13,fontWeight:600,color:"#fff"}}>₹{(totV/1e7).toFixed(1)}Cr <span style={{color:"rgba(255,255,255,0.35)",fontWeight:400}}>/ ₹{otb}Cr</span></div>
-            </div>
-            <div style={{width:50,height:4,background:"rgba(255,255,255,0.12)",borderRadius:2,overflow:"hidden"}}>
-              <div style={{height:4,background:pctUsed>95?"#F4927A":"#3BB896",borderRadius:2,width:`${Math.min(pctUsed,100)}%`}}/>
-            </div>
+  return (<Shell extra={<span style={{fontSize:10,padding:"4px 12px",borderRadius:100,fontWeight:600,background:C.sageSoft,color:C.sage,fontFamily:mono,letterSpacing:"0.02em"}}>Target: 6-wk ST above 90%</span>}>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=DM+Serif+Display:ital@0;1&family=Source+Serif+4:wght@300;400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+    <ScenarioModal/><TrailModal/><StoreEditModal/>
+    {questt&&<div onClick={()=>setQuestt(false)} style={{position:"fixed",inset:0,zIndex:90,background:"rgba(27,42,33,.35)",display:"flex",alignItems:"center",justifyContent:"center",padding:20}}>
+      <div onClick={e=>e.stopPropagation()} style={{background:"#fff",borderRadius:14,width:"100%",maxWidth:500,boxShadow:"0 24px 64px rgba(12,44,24,.18)",border:`1px solid ${C.border}`,overflow:"hidden"}}>
+        <div style={{background:C.green,padding:"16px 24px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+          <div style={{display:"flex",alignItems:"center",gap:10}}><div style={{width:28,height:28,borderRadius:14,background:"rgba(255,255,255,.15)",display:"flex",alignItems:"center",justifyContent:"center"}}><span style={{color:"#fff",fontSize:12,fontWeight:700}}>q</span></div><div style={{display:"flex",flexDirection:"column",alignItems:"flex-start"}}><div style={{display:"flex",alignItems:"center"}}><span style={{color:"#fff",fontSize:15,fontWeight:500}}>questt</span><span style={{color:"#3BB896",fontSize:15,fontWeight:700}}>.</span></div><span style={{fontSize:9,opacity:.45,color:"#fff",fontWeight:400,letterSpacing:.3,marginTop:-1}}>powered by PwC</span></div></div>
+          <button onClick={()=>setQuestt(false)} style={{background:"rgba(255,255,255,.1)",border:"none",borderRadius:6,color:"rgba(255,255,255,.7)",padding:"4px 10px",fontSize:13,cursor:"pointer",fontFamily:font}}>✕</button>
+        </div>
+        <div style={{padding:"20px 24px",maxHeight:320,overflow:"auto"}}>
+          <div style={{display:"flex",gap:10,marginBottom:16}}>
+            <div style={{width:24,height:24,borderRadius:12,background:C.sageSoft,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,marginTop:2}}><span style={{fontSize:10,fontWeight:700,color:C.sage}}>Q</span></div>
+            <div style={{background:C.bgSub,borderRadius:"4px 12px 12px 12px",padding:"10px 14px",fontSize:14,color:C.textMid,lineHeight:1.6,maxWidth:"85%"}}>I can help you explore allocation scenarios, dig into sell-through patterns, and validate your decisions against the 6-week ST target. What would you like to investigate?</div>
           </div>
-          <button style={{background:"rgba(255,255,255,0.12)",border:"1px solid rgba(255,255,255,0.2)",borderRadius:6,color:"#fff",padding:"6px 14px",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:font}}>Export Plan</button>
-        </>}
-      />
-
-      <ScenarioModal/><TrailModal/><StoreEditModal/>
-
-      {/* questt modal */}
-      {questt&&<div onClick={()=>setQuestt(false)} style={{position:"fixed",inset:0,zIndex:90,background:"rgba(17,26,21,0.45)",display:"flex",alignItems:"center",justifyContent:"center",padding:20}}>
-        <div onClick={e=>e.stopPropagation()} style={{background:"#fff",borderRadius:14,width:"100%",maxWidth:500,boxShadow:"0 24px 64px rgba(12,44,24,.20)",border:`1px solid ${C.border}`,overflow:"hidden"}}>
-          <div style={{background:C.green,padding:"14px 20px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-            <div style={{display:"flex",alignItems:"center",gap:10}}>
-              <div style={{width:28,height:28,borderRadius:14,background:"rgba(255,255,255,.12)",display:"flex",alignItems:"center",justifyContent:"center"}}><span style={{color:"#fff",fontSize:12,fontWeight:700}}>q</span></div>
-              <div style={{display:"flex",alignItems:"center",gap:5}}>
-                <span style={{color:"#fff",fontSize:14,fontWeight:700}}>questt</span>
-                <span style={{color:"rgba(255,255,255,0.22)",fontSize:9,fontWeight:300}}>×</span>
-                <span style={{color:"rgba(255,255,255,0.45)",fontSize:10,fontWeight:700,letterSpacing:"0.12em",textTransform:""}}>PwC</span>
-              </div>
-            </div>
-            <button onClick={()=>setQuestt(false)} style={{background:"rgba(255,255,255,.1)",border:"1px solid rgba(255,255,255,.15)",borderRadius:6,color:"rgba(255,255,255,.7)",padding:"4px 10px",fontSize:12,cursor:"pointer",fontFamily:font}}>✕</button>
-          </div>
-          <div style={{padding:"20px",maxHeight:300,overflow:"auto"}}>
-            <div style={{display:"flex",gap:10,marginBottom:14}}>
-              <div style={{width:22,height:22,borderRadius:11,background:C.sageSoft,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}><span style={{fontSize:10,fontWeight:700,color:C.sage}}>Q</span></div>
-              <div style={{background:C.bgSub,borderRadius:"4px 12px 12px 12px",padding:"10px 14px",fontSize:13,color:C.textMid,lineHeight:1.6,maxWidth:"88%"}}>I can help you explore allocation scenarios, dig into sell-through patterns, and validate decisions against the 6-week ST target.</div>
-            </div>
-            <div style={{display:"flex",flexWrap:"wrap",gap:6,paddingLeft:32}}>
-              {["Which styles are at risk of missing 90% ST?","Show size curve shift for Stripe Midi","Compare SS25 vs SS26 allocation"].map((q,i)=>(<button key={i} style={{fontSize:12,color:C.green,background:"#fff",border:`1px solid ${C.sageBorder}`,borderRadius:99,padding:"5px 12px",cursor:"pointer",fontFamily:font}}>{q}</button>))}
-            </div>
-          </div>
-          <div style={{padding:"12px 20px",borderTop:`1px solid ${C.borderLight}`,display:"flex",gap:8}}>
-            <input placeholder="Ask about this plan…" style={{flex:1,padding:"9px 12px",borderRadius:8,border:`1px solid ${C.border}`,fontSize:13,fontFamily:font,outline:"none"}}/>
-            <button style={{padding:"9px 16px",borderRadius:8,background:C.green,border:"none",color:"#fff",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:font}}>→</button>
+          <div style={{display:"flex",flexWrap:"wrap",gap:6,marginLeft:34}}>
+            {["Which styles are at risk of missing the 90% target?","Show me the size curve shift for the Stripe Midi","Compare SS25 vs SS26 allocation for top 5 styles"].map((q,i)=> (<button key={i} style={{fontSize:12,color:C.green,background:"#fff",border:`1px solid ${C.sageBorder}`,borderRadius:16,padding:"6px 12px",cursor:"pointer",fontFamily:font}}>{q}</button>))}
           </div>
         </div>
+        <div style={{padding:"12px 24px 16px",borderTop:`1px solid ${C.borderLight}`,display:"flex",gap:8}}>
+          <input placeholder="Ask about this plan..." style={{flex:1,padding:"10px 14px",borderRadius:8,border:`1px solid ${C.border}`,fontSize:14,fontFamily:font,outline:"none"}}/>
+          <button style={{padding:"10px 18px",borderRadius:8,background:C.green,border:"none",color:"#fff",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:font}}>Send</button>
+        </div>
+      </div>
+    </div>}
+    <div style={{maxWidth:1100,margin:"0 auto",padding:"28px 32px"}}>
+      <div style={{marginBottom:20}}>
+          <button onClick={()=>{setView("seasons");setSeason(null);}} style={{fontSize:12,color:C.sage,fontWeight:600,background:"none",border:"none",cursor:"pointer",padding:0,marginBottom:6,fontFamily:font}}>← All Seasons</button>
+          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+            <div style={{fontSize:22,fontWeight:600,fontFamily:serif}}>Spring Summer 2026</div>
+            <div style={{display:"flex",alignItems:"center",gap:16}}>
+              <div style={{display:"flex",alignItems:"center",gap:8}}><div><div style={{fontSize:10,color:C.dimmer,fontWeight:500}}>PLANNED / OTB</div><div style={{fontSize:14,fontWeight:600,color:C.green}}>₹{(totV/1e7).toFixed(1)}Cr <span style={{color:C.dimmer,fontWeight:400}}>/ ₹{otb}Cr</span></div></div><div style={{width:60,height:4,background:C.borderLight,borderRadius:2}}><div style={{height:4,background:pctUsed>95?C.terra:C.sage,borderRadius:2,width:`${Math.min(pctUsed,100)}%`}}/></div></div>
+              <button style={{background:C.green,border:"none",borderRadius:6,color:"#fff",padding:"7px 16px",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:font}}>Export Plan</button>
+            </div>
+          </div>
+          <div style={{fontSize:13,color:C.dim,marginTop:3}}>{styles.length} styles · {totU.toLocaleString()} units · {styles.filter(s=>s.src==="carryover").length} carryover, {styles.filter(s=>s.src==="new-design").length} new design</div>
+      </div>
+      <div style={{display:"flex",gap:0,marginBottom:18,borderBottom:`2px solid ${C.borderLight}`}}>{[{k:"sku",l:"By SKU"},{k:"store",l:"By Store"}].map(t=> (<button key={t.k} onClick={()=>setTab(t.k)} style={{padding:"10px 24px",borderRadius:0,border:"none",borderBottom:tab===t.k?`2px solid ${C.green}`:"2px solid transparent",background:"transparent",color:tab===t.k?C.green:C.dim,fontWeight:tab===t.k?700:500,fontSize:14,cursor:"pointer",fontFamily:font,marginBottom:-2,transition:"all 0.15s"}}>{t.l}</button>))}</div>
+      <div style={{display:"flex",gap:16,marginBottom:16,flexWrap:"wrap"}}>{[
+        {l:"Carryover",v:styles.filter(s=>s.src==="carryover").length,c:C.textMid,bg:C.bgSub},
+        {l:"New Design",v:styles.filter(s=>s.src==="new-design").length,c:C.textMid,bg:C.bgSub},
+        {l:"Edits",v:Object.keys(edits).length,c:Object.keys(edits).length>0?C.amber:C.dimmer,bg:Object.keys(edits).length>0?C.amberSoft:C.bgSub},
+      ].map(m=> (<div key={m.l} style={{padding:"6px 14px",borderRadius:6,background:m.bg,fontSize:12,display:"flex",alignItems:"center",gap:6}}>
+        <span style={{fontWeight:700,color:m.c,fontSize:14}}>{m.v}</span><span style={{color:C.dim}}>{m.l}</span>
+      </div>))}</div>
+      {tab==="sku"&&<div>{grouped.map(({cat,styles:gs,units:cu,count})=> (<div key={cat} style={{marginBottom:8}}>
+        <div onClick={()=>setCatOpen(p=>({...p,[cat]:!p[cat]}))} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 16px",cursor:"pointer",background:C.bgSub,borderRadius:6,border:`1px solid ${C.borderLight}`}}>
+          <div style={{display:"flex",alignItems:"center",gap:8}}><span style={{fontSize:11,color:C.dim,transition:"transform 0.15s",transform:catOpen[cat]?"rotate(0deg)":"rotate(-90deg)",display:"inline-block"}}>{"\u25BE"}</span><span style={{fontSize:15,fontWeight:600,color:C.green,fontFamily:serif}}>{cat}</span><span style={{fontSize:12,color:C.dimmer,background:C.bg,padding:"1px 8px",borderRadius:10,border:`1px solid ${C.borderLight}`}}>{count}</span></div>
+          <span style={{fontSize:13,fontFamily:"monospace",fontWeight:600,color:C.green}}>{cu.toLocaleString()}u</span>
+        </div>{catOpen[cat]&&<div style={{display:"flex",flexDirection:"column",gap:4,marginTop:4}}>{gs.map(s=> (<StyleCard key={s.id} s={s}/>))}</div>}
+      </div>))}</div>}
+      {tab==="store"&&<div>
+        <div style={{background:C.bgSub,borderRadius:8,padding:"14px 20px",marginBottom:12,border:`1px solid ${C.borderLight}`,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+          <div><div style={{fontSize:14,fontWeight:600}}>B/C Stores (Aggregated)</div><div style={{fontSize:12,color:C.dim}}>~280 stores · Carryover styles with B/C allocation</div></div>
+          <div style={{display:"flex",gap:16}}><div style={{textAlign:"right"}}><div style={{fontSize:11,color:C.dimmer}}>Units</div><div style={{fontSize:15,fontWeight:700,color:C.green,fontFamily:"monospace"}}>{bcU.toLocaleString()}</div></div><div style={{textAlign:"right"}}><div style={{fontSize:11,color:C.dimmer}}>Value</div><div style={{fontSize:15,fontWeight:600}}>₹{(bcV/1e7).toFixed(2)}Cr</div></div></div>
+        </div>
+        {sa.map(st=> (<StoreCard key={st.code} st={st}/>))}
       </div>}
-
-      <div style={{maxWidth:1060,margin:"0 auto",width:"100%",padding:"32px 32px 64px"}}>
-        {/* KPI strip */}
-        <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:8,marginBottom:28}}>
-          {[
-            {l:"Total Styles",v:styles.length,sub:`${styles.filter(s=>s.src==="carryover").length} carryover · ${styles.filter(s=>s.src==="new-design").length} new`,accent:C.green,vc:C.green},
-            {l:"Total Units",v:totU.toLocaleString(),sub:`₹${(totV/1e7).toFixed(1)}Cr planned value`,mono:true,accent:C.sage,vc:C.green},
-            {l:"Flagged for Review",v:flaggedCount,sub:"Need buyer decision",accent:flaggedCount>0?C.amber:C.border,vc:flaggedCount>0?C.amber:C.dim},
-            {l:"Buyer Edits",v:editsCount,sub:editsCount>0?"Changes pending export":"No edits yet",accent:editsCount>0?C.amber:C.border,vc:editsCount>0?C.amber:C.dim},
-          ].map(k=>(
-            <div key={k.l} style={{background:"#fff",borderRadius:10,border:`1px solid ${C.borderLight}`,borderTop:`2.5px solid ${k.accent}`,padding:"16px 18px",boxShadow:"0 1px 4px rgba(0,0,0,0.04)"}}>
-              <div style={{fontSize:10,fontWeight:700,color:C.dimmer,letterSpacing:"0.09em",marginBottom:8,textTransform:"uppercase"}}>{k.l}</div>
-              <div style={{fontSize:26,fontWeight:700,color:k.vc,fontFamily:k.mono?"monospace":"inherit",letterSpacing:k.mono?"-0.02em":"-0.01em",lineHeight:1,marginBottom:5}}>{k.v}</div>
-              <div style={{fontSize:11,color:C.dimmer,lineHeight:1.4}}>{k.sub}</div>
-            </div>
-          ))}
-        </div>
-
-        {/* tabs + filters row */}
-        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:16}}>
-          <PlanTabs/>
-          {tab==="sku"&&<div style={{display:"flex",gap:8}}>
-            {[{l:"Carryover",v:styles.filter(s=>s.src==="carryover").length,bg:C.bgAlt,c:C.dim},
-              {l:"New Design",v:styles.filter(s=>s.src==="new-design").length,bg:C.amberSoft,c:C.amber},
-              {l:"Flagged",v:flaggedCount,bg:C.amberSoft,c:C.amber},
-            ].map(m=>(<div key={m.l} style={{display:"flex",alignItems:"center",gap:5,padding:"5px 12px",borderRadius:99,background:m.bg,fontSize:11,fontWeight:600,color:m.c}}>
-              <span style={{fontWeight:800}}>{m.v}</span> {m.l}
-            </div>))}
-          </div>}
-        </div>
-
-        {/* by SKU */}
-        {tab==="sku"&&<div style={{display:"flex",flexDirection:"column",gap:6}}>
-          {grouped.map(({cat,styles:gs,units:cu,count})=>(
-            <div key={cat}>
-              <div onClick={()=>setCatOpen(p=>({...p,[cat]:!p[cat]}))} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"9px 16px 9px 13px",cursor:"pointer",background:catOpen[cat]?"#fff":C.bgSub,borderRadius:8,border:`1px solid ${catOpen[cat]?C.sage+"44":C.border}`,borderLeft:`3px solid ${catOpen[cat]?C.sage:C.dimmer}`,marginBottom:catOpen[cat]?6:4,transition:"border-color 0.2s,background 0.15s"}}>
-                <div style={{display:"flex",alignItems:"center",gap:10}}>
-                  <span style={{fontSize:10,color:catOpen[cat]?C.sage:C.dimmer,transform:catOpen[cat]?"rotate(0deg)":"rotate(-90deg)",display:"inline-block",transition:"transform 0.15s,color 0.15s"}}>▾</span>
-                  <span style={{fontSize:13,fontWeight:700,color:C.text,letterSpacing:"-0.01em"}}>{cat}</span>
-                  <span style={{fontSize:10,fontWeight:700,color:C.dimmer,background:C.bgAlt,padding:"2px 7px",borderRadius:4,border:`1px solid ${C.borderLight}`}}>{count}</span>
-                </div>
-                <span style={{fontSize:11,fontFamily:"monospace",fontWeight:600,color:C.dim}}>{cu.toLocaleString()} u</span>
-              </div>
-              {catOpen[cat]&&<div style={{display:"flex",flexDirection:"column",gap:4,marginBottom:6}}>
-                {gs.map(s=>(<StyleCard key={s.id} s={s}/>))}
-              </div>}
-            </div>
-          ))}
-        </div>}
-
-        {/* by store */}
-        {tab==="store"&&<div>
-          <div style={{background:"#fff",borderRadius:10,border:`1px solid ${C.border}`,padding:"16px 20px",marginBottom:8,display:"flex",alignItems:"center",justifyContent:"space-between",boxShadow:"0 1px 3px rgba(0,0,0,0.04)"}}>
-            <div>
-              <div style={{fontSize:13,fontWeight:600,color:C.text}}>B/C Stores (Aggregated)</div>
-              <div style={{fontSize:11,color:C.dimmer,marginTop:2}}>~280 stores · Styles with B/C allocation</div>
-            </div>
-            <div style={{display:"flex",gap:20}}>
-              {[{l:"Units",v:bcU.toLocaleString(),mono:true},{l:"Value",v:`₹${(bcV/1e7).toFixed(2)}Cr`}].map(m=>(
-                <div key={m.l} style={{textAlign:"right"}}>
-                  <div style={{fontSize:10,color:C.dimmer,fontWeight:600,letterSpacing:"0.06em",marginBottom:2}}>{m.l}</div>
-                  <div style={{fontSize:14,fontWeight:700,color:C.green,fontFamily:m.mono?"monospace":"inherit"}}>{m.v}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-          {sa.map(st=>(<StoreCard key={st.code} st={st}/>))}
-        </div>}
     </div>
-  </div>);
+  </Shell>);
 }
