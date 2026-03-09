@@ -1,7 +1,16 @@
-"use client";
+"use client"
 import { useState } from "react";
+import { Menu, Bell, Search, ChevronDown, Settings, LogOut, User, Shield, Send, Clock, CheckCircle, XCircle } from "lucide-react";
 import { BarChart, Bar, XAxis, ResponsiveContainer } from "recharts";
-import Image from "next/image";
+
+const C = {
+  header: "#111A15", page: "#FAFAF8", card: "#FFFFFF", border: "#E5E2DB",
+  borderLight: "#F0EDE7", text: "#1C1C1C", textMid: "#555555", textLight: "#999999",
+  green: "#2D5A3D", greenPale: "#EAF2EF", sage: "#2D5A3D",
+  orange: "#946B1A", orangePale: "#FDFAF0", red: "#B33A3A", redPale: "#FDF3F3",
+};
+const label = { fontSize: 11, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: C.textLight };
+const cardBase = { background: C.card, border: `1px solid ${C.border}` };
 
 // ═══════════════════════════════════════════════════════
 // PORTFOLIO KPIs
@@ -240,45 +249,15 @@ const territories = [
 
 const SeverityIcon = ({ severity }) => {
   const isC = severity === "critical";
-  return (
-    <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold ${
-      isC ? "bg-pwc-terra-soft text-pwc-terra" : "bg-pwc-amber-soft text-pwc-amber"
-    }`}>
-      {isC ? "!" : "◷"}
-    </div>
-  );
+  return <div style={{ width: 32, height: 32, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: isC ? C.redPale : C.orangePale, color: isC ? C.red : C.orange, fontSize: 14, flexShrink: 0 }}>{isC ? "!" : "◷"}</div>;
 };
 
 const PriorityBadge = ({ p }) => {
-  const s = {
-    critical: "bg-pwc-terra-soft text-pwc-terra border border-pwc-terra/20",
-    high: "bg-pwc-amber-soft text-pwc-amber border border-pwc-amber/20",
-  }[p] || "bg-pwc-sage-soft text-pwc-sage border border-pwc-sage/20";
-  return (
-    <span className={`text-[10px] font-bold tracking-[0.06em] uppercase px-2.5 py-0.5 rounded-sm ${s}`}>
-      {p === "critical" ? "Critical" : p === "high" ? "High Priority" : "Medium"}
-    </span>
-  );
+  const s = { critical: { bg: C.redPale, color: C.red, l: "CRITICAL" }, high: { bg: C.orangePale, color: C.orange, l: "HIGH PRIORITY" } }[p] || { bg: C.greenPale, color: C.green, l: "MEDIUM" };
+  return <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.06em", padding: "3px 10px", background: s.bg, color: s.color }}>{s.l}</span>;
 };
 
-const StatusDot = ({ s }) => (
-  <span className={`inline-block w-2 h-2 rounded-full flex-shrink-0 ${
-    s === "on-track" ? "bg-pwc-sage" : s === "needs-attention" ? "bg-pwc-amber" : "bg-pwc-terra"
-  }`} />
-);
-
-const SectionHeader = ({ title, count, right }) => (
-  <div className="flex items-center justify-between mb-4">
-    <div className="flex items-center gap-3">
-      <div className="w-[3px] h-4 bg-pwc-sage rounded-full flex-shrink-0" />
-      <h2 className="text-[15px] font-bold text-pwc-text tracking-tight">{title}</h2>
-      {count !== undefined && (
-        <span className="text-[10px] font-bold text-pwc-dimmer bg-pwc-bg-alt border border-pwc-border-light px-2 py-0.5 rounded">{count}</span>
-      )}
-    </div>
-    {right && <span className="text-[11px] text-pwc-dimmer">{right}</span>}
-  </div>
-);
+const StatusDot = ({ s }) => <span style={{ display: "inline-block", width: 8, height: 8, borderRadius: "50%", background: { "on-track": C.green, "needs-attention": C.orange, "at-risk": C.red }[s], marginRight: 8, flexShrink: 0 }} />;
 
 // ═══════════════════════════════════════════════════════
 // AGENT TRAIL MODAL
@@ -286,55 +265,77 @@ const SectionHeader = ({ title, count, right }) => (
 const AgentTrailModal = ({ insight, onClose }) => {
   if (!insight) return null;
   return (
-    <div onClick={onClose} className="fixed inset-0 z-[100] bg-pwc-green/40 backdrop-blur-sm flex items-center justify-center p-8">
-      <div onClick={e => e.stopPropagation()} className="bg-white w-full max-w-[740px] max-h-[85vh] flex flex-col rounded-xl shadow-2xl border border-pwc-border overflow-hidden">
-        {/* Header */}
-        <div className="px-7 py-5 border-b border-pwc-border-light flex items-start justify-between flex-shrink-0 bg-pwc-bg-sub rounded-t-xl">
+    <div
+      onClick={onClose}
+      style={{
+        position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
+        background: "rgba(12, 44, 24, 0.45)", backdropFilter: "blur(4px)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        zIndex: 1000, padding: 40,
+      }}
+    >
+      <div
+        onClick={e => e.stopPropagation()}
+        style={{
+          background: C.card, border: `1px solid ${C.border}`,
+          width: "100%", maxWidth: 780, maxHeight: "85vh",
+          overflow: "hidden", display: "flex", flexDirection: "column",
+          boxShadow: "0 24px 80px rgba(0,0,0,0.18)",
+        }}
+      >
+        {/* Modal header */}
+        <div style={{
+          padding: "20px 28px", borderBottom: `1px solid ${C.border}`,
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+          flexShrink: 0,
+        }}>
           <div>
-            <div className="text-[10px] font-bold text-pwc-sage tracking-[0.09em] uppercase mb-1.5">Agent Decision Trail</div>
-            <div className="text-[15px] font-semibold text-pwc-text leading-snug">{insight.headline}</div>
-            <div className="text-[11px] text-pwc-dimmer mt-1">{insight.category} · {insight.region}</div>
+            <div style={{ ...label, fontSize: 10, color: C.green, marginBottom: 6 }}>AGENT DECISION TRAIL</div>
+            <div style={{ fontSize: 15, fontWeight: 600, color: C.text, lineHeight: 1.4 }}>{insight.headline}</div>
+            <div style={{ fontSize: 12, color: C.textLight, marginTop: 4 }}>{insight.category} · {insight.region}</div>
           </div>
-          <button onClick={onClose} className="w-8 h-8 flex items-center justify-center border border-pwc-border rounded text-pwc-dim text-sm hover:bg-pwc-bg-alt cursor-pointer flex-shrink-0 bg-transparent transition-colors">✕</button>
+          <div
+            onClick={onClose}
+            style={{
+              width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center",
+              cursor: "pointer", fontSize: 18, color: C.textLight, flexShrink: 0,
+              border: `1px solid ${C.border}`, background: C.card,
+              transition: "all 0.15s",
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = C.page; e.currentTarget.style.color = C.text; }}
+            onMouseLeave={e => { e.currentTarget.style.background = C.card; e.currentTarget.style.color = C.textLight; }}
+          >
+            ✕
+          </div>
         </div>
-        {/* Body */}
-        <div className="overflow-auto px-7 py-6">
+
+        {/* Modal body — scrollable */}
+        <div style={{ overflow: "auto", padding: "24px 28px" }}>
           {insight.agentTrail.map((step, i) => {
             const isLast = i === insight.agentTrail.length - 1;
             const isSynthesis = step.agent === "Synthesis";
+            const isOrch = step.agent === "Orchestrator";
             return (
-              <div key={i} className="flex gap-4">
-                <div className="flex flex-col items-center w-7 flex-shrink-0">
-                  <div className={`w-7 h-7 rounded-full flex items-center justify-center border text-xs flex-shrink-0 mt-0.5 ${
-                    isSynthesis ? "bg-pwc-sage-soft border-pwc-sage/40 text-pwc-sage" : "bg-white border-pwc-border text-pwc-dimmer"
-                  }`}>{step.icon}</div>
-                  {!isLast && <div className="w-px flex-1 bg-pwc-border-light mt-1" />}
+              <div key={i} style={{ display: "flex", gap: 14, paddingBottom: isLast ? 0 : 20, marginBottom: isLast ? 0 : 20, borderBottom: isLast ? "none" : `1px solid ${C.borderLight}` }}>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: 28, flexShrink: 0 }}>
+                  <div style={{ width: 28, height: 28, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: isSynthesis ? C.greenPale : isOrch ? C.card : C.card, border: `1px solid ${isSynthesis ? C.sage : C.border}`, fontSize: 12 }}>{step.icon}</div>
+                  {!isLast && <div style={{ width: 1, flex: 1, background: C.borderLight, marginTop: 6 }} />}
                 </div>
-                <div className={`flex-1 pl-1 ${!isLast ? "pb-5" : ""}`}>
-                  <div className={`text-[13px] font-bold mb-1.5 ${isSynthesis ? "text-pwc-sage" : "text-pwc-text"}`}>{step.agent}</div>
-                  {step.action && <div className="text-[12px] text-pwc-dim leading-relaxed mb-1.5">{step.action}</div>}
-                  {step.routing && <div className="text-[11px] text-pwc-sage italic mb-2">{step.routing}</div>}
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: isSynthesis ? C.green : C.text }}>{step.agent}</div>
+                  {step.action && <div style={{ fontSize: 12, color: C.textMid, marginTop: 3, lineHeight: 1.5 }}>{step.action}</div>}
+                  {step.routing && <div style={{ fontSize: 11, color: C.sage, marginTop: 3, fontStyle: "italic" }}>{step.routing}</div>}
                   {step.source && (
-                    <div className="bg-pwc-bg-sub border border-pwc-border-light rounded-lg p-4 mt-2">
-                      <div className="text-[10px] font-bold text-pwc-dimmer tracking-wider uppercase mb-2">Source: {step.source}</div>
-                      {step.query && (
-                        <div className="font-fira text-[10px] text-pwc-dim bg-white border border-pwc-border-light rounded p-2.5 mb-3 break-all leading-relaxed">{step.query}</div>
-                      )}
-                      {step.finding && (
-                        <div className="text-[12px] text-pwc-text leading-relaxed mb-1.5">
-                          <span className="font-semibold">Finding: </span>{step.finding}
-                        </div>
-                      )}
-                      {step.inference && !isSynthesis && (
-                        <div className="text-[12px] text-pwc-sage leading-relaxed">
-                          <span className="font-semibold">Inference: </span>{step.inference}
-                        </div>
-                      )}
+                    <div style={{ marginTop: 10, padding: "12px 16px", background: C.page, border: `1px solid ${C.borderLight}` }}>
+                      <div style={{ fontSize: 10, fontWeight: 600, color: C.textLight, marginBottom: 6 }}>SOURCE: {step.source}</div>
+                      {step.query && <div style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", color: C.textLight, marginBottom: 10, wordBreak: "break-all", lineHeight: 1.5, padding: "8px 10px", background: C.card, borderRadius: 2 }}>{step.query}</div>}
+                      <div style={{ fontSize: 12, color: C.text, lineHeight: 1.6, marginBottom: step.inference ? 6 : 0 }}><span style={{ fontWeight: 600 }}>Finding: </span>{step.finding}</div>
+                      {step.inference && <div style={{ fontSize: 12, color: C.green, lineHeight: 1.6 }}><span style={{ fontWeight: 600 }}>Inference: </span>{step.inference}</div>}
                     </div>
                   )}
                   {isSynthesis && step.inference && (
-                    <div className="border-l-[3px] border-pwc-sage bg-pwc-sage-soft rounded-r-lg px-4 py-3 mt-2">
-                      <div className="text-[13px] text-pwc-text leading-relaxed font-medium">{step.inference}</div>
+                    <div style={{ marginTop: 10, padding: "14px 18px", background: C.greenPale, borderLeft: `3px solid ${C.sage}` }}>
+                      <div style={{ fontSize: 13, color: C.text, lineHeight: 1.65, fontWeight: 500 }}>{step.inference}</div>
                     </div>
                   )}
                 </div>
@@ -351,79 +352,87 @@ const AgentTrailModal = ({ insight, onClose }) => {
 // INSIGHT CARD
 // ═══════════════════════════════════════════════════════
 const InsightCard = ({ insight, isExpanded, onToggle, onShowTrail }) => {
-  const isCrit = insight.priority === "critical";
   return (
-    <div className={`flex bg-white rounded-lg overflow-hidden border transition-shadow ${
-      isExpanded ? "border-pwc-border shadow-md" : "border-pwc-border-light shadow-sm"
-    }`}>
-      <div className={`w-[3px] flex-shrink-0 ${isCrit ? "bg-pwc-terra" : "bg-pwc-amber"}`} />
-      <div className="flex-1 min-w-0">
-        {/* Collapsed */}
-        <div className="px-5 py-4 flex items-start gap-4 cursor-pointer hover:bg-pwc-bg-sub/50 transition-colors" onClick={onToggle}>
+    <div style={{ ...cardBase, marginBottom: 12, overflow: "hidden" }}>
+      {/* Collapsed */}
+      <div style={{ padding: "20px 28px", cursor: "pointer", display: "flex", alignItems: "flex-start", gap: 16 }}
+        onMouseEnter={e => e.currentTarget.style.background = "#FAFAF7"}
+        onMouseLeave={e => e.currentTarget.style.background = C.card}>
+        <div onClick={onToggle} style={{ display: "flex", alignItems: "flex-start", gap: 16, flex: 1 }}>
           <SeverityIcon severity={insight.priority} />
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 flex-wrap mb-1.5">
-              <PriorityBadge p={insight.priority} />
-              <span className="text-[11px] text-pwc-dimmer">{insight.type}</span>
-              <span className="text-pwc-dimmer/40 text-[10px]">·</span>
-              <span className="text-[11px] text-pwc-dimmer">{insight.region}</span>
-            </div>
-            <div className="text-[13px] font-semibold text-pwc-text leading-snug mb-1">{insight.headline}</div>
-            <div className="text-[12px] text-pwc-dim leading-relaxed">{insight.subtitle}</div>
-          </div>
-          <div className="flex items-center gap-2.5 flex-shrink-0 ml-2 mt-0.5">
-            <button
-              onClick={e => { e.stopPropagation(); onShowTrail(insight); }}
-              className="text-[11px] font-semibold text-pwc-sage bg-pwc-sage-soft border border-pwc-sage/20 rounded px-3 py-1.5 flex items-center gap-1.5 cursor-pointer hover:bg-pwc-sage/10 transition-colors whitespace-nowrap"
-            >
-              <span className="text-[10px]">◈</span> Decision Trail
-            </button>
-            <span className={`text-[11px] text-pwc-dimmer inline-block transition-transform ${isExpanded ? "rotate-180" : ""}`}>▾</span>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: 15, fontWeight: 600, color: C.text, lineHeight: 1.45 }}>{insight.headline}</div>
+            <div style={{ fontSize: 13, color: C.textMid, marginTop: 4, lineHeight: 1.5 }}>{insight.subtitle}</div>
           </div>
         </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0, marginTop: 2 }}>
+          <div
+            onClick={ev => { ev.stopPropagation(); onShowTrail(insight); }}
+            style={{
+              display: "inline-flex", alignItems: "center", gap: 6,
+              padding: "5px 12px", border: `1px solid ${C.border}`,
+              cursor: "pointer", fontSize: 11, fontWeight: 600, color: C.green,
+              background: C.card, transition: "all 0.15s", whiteSpace: "nowrap",
+            }}
+            onMouseEnter={e => e.currentTarget.style.background = C.greenPale}
+            onMouseLeave={e => e.currentTarget.style.background = C.card}
+          >
+            <span style={{ fontSize: 12 }}>◈</span>
+            Decision Trail
+          </div>
+          <span style={{ ...label, fontSize: 10 }}>{insight.category}</span>
+          <span onClick={onToggle} style={{ fontSize: 12, color: C.sage, transform: isExpanded ? "rotate(180deg)" : "none", transition: "transform 0.2s", cursor: "pointer" }}>▾</span>
+        </div>
+      </div>
 
-        {/* Expanded */}
-        {isExpanded && (
-          <div className="border-t border-pwc-border-light">
-            {/* KPIs */}
-            <div className="grid grid-cols-4 border-b border-pwc-border-light">
-              {insight.kpis.map((k, i) => (
-                <div key={i} className={`p-4 ${i < insight.kpis.length - 1 ? "border-r border-pwc-border-light" : ""}`}>
-                  <div className="text-[10px] font-bold text-pwc-dimmer tracking-wider uppercase mb-2">{k.label}</div>
-                  <div className="text-[22px] font-bold text-pwc-text leading-none mb-1">{k.value}</div>
-                  <div className="text-[11px] text-pwc-dimmer">{k.note}</div>
+      {/* Expanded */}
+      {isExpanded && (
+        <div style={{ borderTop: `1px solid ${C.border}` }}>
+          {/* Header */}
+          <div style={{ padding: "18px 28px 12px", display: "flex", gap: 10, alignItems: "center" }}>
+            <PriorityBadge p={insight.priority} />
+            <span style={{ fontSize: 12, color: C.textLight }}>{insight.type} · {insight.region}</span>
+          </div>
+
+          {/* KPIs */}
+          <div style={{ display: "flex", margin: "0 28px 20px", border: `1px solid ${C.border}` }}>
+            {insight.kpis.map((k, i) => (
+              <div key={i} style={{ flex: 1, padding: "16px 20px", borderRight: i < insight.kpis.length - 1 ? `1px solid ${C.borderLight}` : "none" }}>
+                <div style={{ ...label, fontSize: 9, marginBottom: 6 }}>{k.label}</div>
+                <div style={{ fontSize: 24, fontWeight: 700, color: C.text }}>{k.value}</div>
+                <div style={{ fontSize: 11, color: C.textLight, marginTop: 3 }}>{k.note}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* DECISION (first) */}
+          <div style={{ margin: "0 28px 20px", padding: "22px 24px", border: `1px solid ${C.border}` }}>
+            <div style={{ ...label, fontSize: 10, color: C.orange, marginBottom: 16 }}>DECISION — RECOMMENDED ACTIONS</div>
+            <div style={{ marginBottom: 16 }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: C.textLight, letterSpacing: "0.04em", textTransform: "uppercase", marginBottom: 5 }}>Sales</div>
+              <div style={{ fontSize: 14, color: C.text, lineHeight: 1.65 }}>{insight.salesAction}</div>
+            </div>
+            <div style={{ marginBottom: 16 }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: C.textLight, letterSpacing: "0.04em", textTransform: "uppercase", marginBottom: 5 }}>Marketing</div>
+              <div style={{ fontSize: 14, color: C.text, lineHeight: 1.65 }}>{insight.marketingAction}</div>
+            </div>
+
+          </div>
+
+          {/* SUPPORTING EVIDENCE (condensed) */}
+          <div style={{ margin: "0 28px 24px" }}>
+            <div style={{ ...label, fontSize: 10, marginBottom: 12 }}>SUPPORTING EVIDENCE</div>
+            <div style={{ background: C.page, padding: "20px 24px" }}>
+              {insight.evidence.map((e, i) => (
+                <div key={i} style={{ marginBottom: i < insight.evidence.length - 1 ? 14 : 0, paddingBottom: i < insight.evidence.length - 1 ? 14 : 0, borderBottom: i < insight.evidence.length - 1 ? `1px solid ${C.borderLight}` : "none" }}>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: C.text, marginBottom: 4 }}>{e.source}</div>
+                  <div style={{ fontSize: 13, color: C.textMid, lineHeight: 1.6 }}>{e.summary}</div>
                 </div>
               ))}
             </div>
-            {/* Actions */}
-            <div className="p-5 border-b border-pwc-border-light">
-              <div className="text-[10px] font-bold text-pwc-amber tracking-[0.09em] uppercase mb-4">Recommended Actions</div>
-              <div className="grid grid-cols-2 gap-5">
-                <div>
-                  <div className="text-[10px] font-bold text-pwc-dimmer tracking-wider uppercase mb-2">Sales</div>
-                  <div className="text-[12px] text-pwc-text-mid leading-relaxed">{insight.salesAction}</div>
-                </div>
-                <div>
-                  <div className="text-[10px] font-bold text-pwc-dimmer tracking-wider uppercase mb-2">Marketing</div>
-                  <div className="text-[12px] text-pwc-text-mid leading-relaxed">{insight.marketingAction}</div>
-                </div>
-              </div>
-            </div>
-            {/* Evidence */}
-            <div className="p-5 bg-pwc-bg-sub">
-              <div className="text-[10px] font-bold text-pwc-dimmer tracking-[0.09em] uppercase mb-3">Supporting Evidence</div>
-              <div className="flex flex-col gap-2">
-                {insight.evidence.map((e, i) => (
-                  <div key={i} className="bg-white border border-pwc-border-light rounded-lg p-4">
-                    <div className="text-[11px] font-bold text-pwc-text uppercase tracking-wide mb-1.5">{e.source}</div>
-                    <div className="text-[12px] text-pwc-dim leading-relaxed">{e.summary}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -432,82 +441,54 @@ const InsightCard = ({ insight, isExpanded, onToggle, onShowTrail }) => {
 // TERRITORY ROW
 // ═══════════════════════════════════════════════════════
 const TerritoryRow = ({ t, isExpanded, onToggle }) => {
-  const st = {
-    "on-track":        { bar: "bg-pwc-sage",  text: "text-pwc-sage",  accent: "bg-pwc-sage",  chart: "#1B6B5A" },
-    "needs-attention": { bar: "bg-pwc-amber", text: "text-pwc-amber", accent: "bg-pwc-amber", chart: "#946B1A" },
-    "at-risk":         { bar: "bg-pwc-terra", text: "text-pwc-terra", accent: "bg-pwc-terra", chart: "#B33A3A" },
-  }[t.status];
+  const sc = { "on-track": C.green, "needs-attention": C.orange, "at-risk": C.red }[t.status];
   return (
-    <div className={`flex bg-white rounded-lg overflow-hidden border transition-shadow ${
-      isExpanded ? "border-pwc-border shadow-md" : "border-pwc-border-light shadow-sm"
-    }`}>
-      <div className={`w-[3px] flex-shrink-0 ${st.accent}`} />
-      <div className="flex-1 min-w-0">
-        {/* Collapsed */}
-        <div onClick={onToggle} className="px-5 py-4 cursor-pointer flex items-center gap-5 hover:bg-pwc-bg-sub/50 transition-colors">
-          <StatusDot s={t.status} />
-          <div className="w-[140px] text-[13px] font-semibold text-pwc-text flex-shrink-0">{t.name}</div>
-          <div className="flex items-center gap-3 w-[140px] flex-shrink-0">
-            <div className="flex-1 h-1.5 bg-pwc-border-light rounded-full overflow-hidden">
-              <div className={`h-full ${st.bar} rounded-full`} style={{ width: `${Math.min(t.achievement, 100)}%` }} />
-            </div>
-            <span className={`text-[14px] font-bold ${st.text} w-10 text-right`}>{t.achievement}%</span>
-          </div>
-          <div className="flex-1 text-[12px] text-pwc-dim leading-relaxed min-w-0">{t.narrative}</div>
-          <span className={`text-[11px] text-pwc-dimmer inline-block transition-transform flex-shrink-0 ${isExpanded ? "rotate-180" : ""}`}>▾</span>
+    <div style={{ ...cardBase, marginBottom: 8, overflow: "hidden" }}>
+      <div onClick={onToggle} style={{ padding: "18px 28px", cursor: "pointer", display: "flex", alignItems: "center", gap: 20 }}
+        onMouseEnter={e => e.currentTarget.style.background = "#FAFAF7"}
+        onMouseLeave={e => e.currentTarget.style.background = C.card}>
+        <StatusDot s={t.status} />
+        <div style={{ width: 130, fontSize: 14, fontWeight: 600, color: C.text }}>{t.name}</div>
+        <div style={{ width: 120, display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{ flex: 1, height: 4, background: C.borderLight }}><div style={{ width: `${Math.min(t.achievement, 100)}%`, height: "100%", background: sc }} /></div>
+          <span style={{ fontSize: 14, fontWeight: 700, color: sc, minWidth: 36 }}>{t.achievement}%</span>
         </div>
-        {/* Expanded */}
-        {isExpanded && (
-          <div className="border-t border-pwc-border-light">
-            <div className="p-5 grid grid-cols-[1fr_260px] gap-6 border-b border-pwc-border-light">
-              <div>
-                <div className="text-[10px] font-bold text-pwc-dimmer tracking-wider uppercase mb-3">ASM Area Breakdown</div>
-                <div className="rounded-lg overflow-hidden border border-pwc-border-light">
-                  <table className="w-full border-collapse text-[13px]">
-                    <thead>
-                      <tr className="bg-pwc-bg-alt">
-                        <th className="text-left px-3 py-2 text-[10px] font-bold text-pwc-dimmer tracking-wider border-b border-pwc-border-light">ASM Area</th>
-                        <th className="text-right px-3 py-2 text-[10px] font-bold text-pwc-dimmer tracking-wider border-b border-pwc-border-light">Achievement</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {t.asmAreas.map((a, i) => (
-                        <tr key={i} className="border-t border-pwc-border-light">
-                          <td className="px-3 py-2.5 text-pwc-text">{a.name}</td>
-                          <td className={`px-3 py-2.5 text-right font-bold ${
-                            a.achievement >= 85 ? "text-pwc-sage" : a.achievement >= 75 ? "text-pwc-amber" : "text-pwc-terra"
-                          }`}>{a.achievement}%</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              <div>
-                <div className="text-[10px] font-bold text-pwc-dimmer tracking-wider uppercase mb-3">Weekly Index (target = 100)</div>
-                <div className="h-[100px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={t.weeklyTrend} barCategoryGap="18%">
-                      <XAxis dataKey="w" tick={{ fontSize: 9, fill: "#A09D98" }} axisLine={{ stroke: "#E5E2DB" }} tickLine={false} />
-                      <Bar dataKey="v" fill={st.chart} radius={[2, 2, 0, 0]} opacity={0.8} />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
+        <div style={{ flex: 1, fontSize: 13, color: C.textMid, lineHeight: 1.45 }}>{t.narrative}</div>
+        <span style={{ fontSize: 12, color: C.sage, transform: isExpanded ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>▾</span>
+      </div>
+      {isExpanded && (
+        <div style={{ borderTop: `1px solid ${C.border}`, padding: "20px 28px" }}>
+          <div style={{ display: "flex", gap: 24, marginBottom: 20 }}>
+            <div style={{ flex: 1 }}>
+              <div style={{ ...label, fontSize: 10, marginBottom: 12 }}>ASM Area Breakdown</div>
+              <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                <thead><tr>{["ASM Area", "Achievement"].map(h => <th key={h} style={{ ...label, fontSize: 9, textAlign: "left", padding: "8px 12px", borderBottom: `1px solid ${C.border}` }}>{h}</th>)}</tr></thead>
+                <tbody>{t.asmAreas.map((a, i) => (
+                  <tr key={i}>
+                    <td style={{ fontSize: 13, color: C.text, padding: "10px 12px", borderBottom: `1px solid ${C.borderLight}` }}>{a.name}</td>
+                    <td style={{ fontSize: 13, fontWeight: 600, color: a.achievement >= 85 ? C.green : a.achievement >= 75 ? C.orange : C.red, padding: "10px 12px", borderBottom: `1px solid ${C.borderLight}` }}>{a.achievement}%</td>
+                  </tr>
+                ))}</tbody>
+              </table>
             </div>
-            <div className="p-5 grid grid-cols-2 gap-3">
-              <div className="bg-pwc-sage-soft border border-pwc-sage/20 rounded-lg p-4">
-                <div className="text-[10px] font-bold text-pwc-sage tracking-wider uppercase mb-1.5">Key Win</div>
-                <div className="text-[12px] text-pwc-text">{t.keyWin}</div>
-              </div>
-              <div className="bg-pwc-amber-soft border border-pwc-amber/20 rounded-lg p-4">
-                <div className="text-[10px] font-bold text-pwc-amber tracking-wider uppercase mb-1.5">Key Risk</div>
-                <div className="text-[12px] text-pwc-text">{t.keyRisk}</div>
+            <div style={{ width: 260 }}>
+              <div style={{ ...label, fontSize: 10, marginBottom: 12 }}>Weekly Index (target = 100)</div>
+              <div style={{ height: 100 }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={t.weeklyTrend} barCategoryGap="18%">
+                    <XAxis dataKey="w" tick={{ fontSize: 9, fill: C.textLight }} axisLine={{ stroke: C.border }} tickLine={false} />
+                    <Bar dataKey="v" fill={sc} radius={[2,2,0,0]} opacity={0.8} />
+                  </BarChart>
+                </ResponsiveContainer>
               </div>
             </div>
           </div>
-        )}
-      </div>
+          <div style={{ display: "flex", gap: 16 }}>
+            <div style={{ flex: 1, padding: "12px 16px", background: C.greenPale }}><div style={{ fontSize: 10, fontWeight: 700, color: C.green, marginBottom: 4 }}>KEY WIN</div><div style={{ fontSize: 12, color: C.text }}>{t.keyWin}</div></div>
+            <div style={{ flex: 1, padding: "12px 16px", background: C.orangePale }}><div style={{ fontSize: 10, fontWeight: 700, color: C.orange, marginBottom: 4 }}>KEY RISK</div><div style={{ fontSize: 12, color: C.text }}>{t.keyRisk}</div></div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -519,101 +500,275 @@ export default function MarketPulse() {
   const [expandedInsight, setExpandedInsight] = useState(null);
   const [expandedTerritory, setExpandedTerritory] = useState(null);
   const [trailInsight, setTrailInsight] = useState(null);
+  const [mainTab, setMainTab] = useState("pulse");
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [notifsOpen, setNotifsOpen] = useState(false);
+  const [searchFocused, setSearchFocused] = useState(false);
+  const [digOpen, setDigOpen] = useState(null);
+  const [digChats, setDigChats] = useState({});
+  const [digInput, setDigInput] = useState("");
+  const [expandedHistory, setExpandedHistory] = useState(null);
+
+  const nots = [
+    { id: 1, text: "DigestEase Western State alert escalated", time: "12m ago", ur: true },
+    { id: 2, text: "FeverEase margin scheme in Town A", time: "45m ago", ur: true },
+    { id: 3, text: "NasalClear campaign extension approved", time: "2h ago", ur: false },
+  ];
+
+  const digData = {
+    0: [
+      { q: "What is QuickRelief spending?", a: "14 active social ad sets since Jan 18, all regional dialect. Estimated Rs 12-15L over 3 weeks. 3x normal organic frequency. Share of voice moved 12% to 24% in antacid social. Sustained investment, not a test burst." },
+      { q: "How much revenue are we losing?", a: "City 1 ASM: Rs 1.2L/week lost. City 2: Rs 0.8L/week. Total: Rs 2.4L/week (Rs 10L/month). Bigger risk: peak season drives 15-20% antacid uplift. If QuickRelief captures that, Rs 40-50L exposure over 6 weeks." },
+      { q: "What would a counter-campaign cost?", a: "Regional counter on Meta + YouTube: Rs 8-10L for 4 weeks. Trade scheme (Rs 1-off sachets): Rs 6L. Total: Rs 14-16L. Doing nothing costs Rs 10L/month + Rs 40-50L peak season risk. Counter ROI is 3-4x at conservative recovery." }
+    ],
+    1: [
+      { q: "Can we match the 22% margin?", a: "Matching erodes Rs 4.2L/month across State B West. Better: push FeverEase Plus which already carries 24% margin, exceeding PharmaRival without any scheme. Use Rx Analytics doctor-prescription data as leverage with chemists." },
+      { q: "How fast is this spreading?", a: "Currently 14 of 40 Town A chemists. Town B: 3 enquiries but zero switches. Based on CompLabs rollout pattern: Town B in 2-3 weeks, Town K in 4-5 weeks. Window to contain is now." }
+    ],
+    2: [
+      { q: "Why does pharmacy reorder 3x better?", a: "Pharmacist recommendation loop: patient asks about sensitivity, pharmacist recommends Rs 20 trial, patient gets relief, returns for full-size. GT has no recommendation trigger. Town C pharmacy: 92% reorder vs GT: 28%." },
+      { q: "Cost to replicate in 3 districts?", a: "Per district: Rs 1.8L (education kits + sampling + POS). Return: Rs 6.2L monthly at 85% reorder. 3.4x ROI in 8 weeks. Total 3-district: Rs 5.4L investment, Rs 18.6L monthly return." }
+    ],
+    3: [
+      { q: "Which distributors stock out first?", a: "Hub A (7 days cover, 5.4 at spike) stocks out first. Hub B follows 18 hours later. Hub C and Hub D breach safety at 1.3x spike. The 5-7 day replenishment cycle means Hub A and Hub B will stock out before resupply." },
+      { q: "Over-stocking vs under-stocking cost?", a: "Over-stock: Rs 2.1L carrying cost. Under-stock during spike: Rs 14L lost sales plus retailer confidence damage. 7x asymmetric risk. The 15% buffer costs Rs 2.1L but protects Rs 14L." }
+    ],
+    4: [
+      { q: "How long will pollution demand last?", a: "Air Quality Board: 2 more weeks AQI above 200. Demand normalizes about 10 days after AQI drops below 150. So 3-4 weeks remaining. The 3.2x ROAS holds for 2 more weeks." },
+      { q: "Should we raise Premium Spray price?", a: "No. Premium Spray drives trading-up (Rs 85 to Rs 145), adding Rs 12L/month margin without price change. A price increase risks pushing consumers to competitor spray (Rs 120). Capture volume now." }
+    ],
+  };
+
+  const pastDecisions = [
+    { id: 1, date: "Dec 2025", brand: "DigestEase", decision: "Launched sachet counter-display program in State B East after detecting 8% share erosion", action: "Deployed POS displays at 1,200 outlets + Rs 2-off launch scheme for 3 weeks", outcome: "Share recovered 58% to 63% in 6 weeks. Counter-display outlets showed 2.1x higher sachet velocity.", status: "success", impact: "+Rs 18L quarterly", learning: "Sachet POS at general stores outperformed pharmacy. Speed of response (2 weeks from detection) was critical. Competitor had only 3 weeks of momentum." },
+    { id: 2, date: "Nov 2025", brand: "FeverEase", decision: "Pre-positioned stock at 12 distributors ahead of early winter forecast", action: "15% buffer stock. Alert sent to ASMs 10 days before cold wave.", outcome: "Zero stockouts during Dec cold wave. Competitors faced 4-6 day gaps. FeverEase captured 3.2pp incremental share.", status: "success", impact: "+Rs 26L in Dec", learning: "Weather-triggered pre-positioning works. 10-day lead time sufficient. 15% buffer was right. Actual spike was 22% vs predicted 25-35%." },
+    { id: 3, date: "Oct 2025", brand: "DentaShield", decision: "Shifted Town H activation from pharmacy-first to GT-led based on distributor request", action: "Activated 180 GT outlets instead of planned 120 pharmacy outlets", outcome: "Town H reorder: 26% (vs 85% pharmacy-first Town C). Rs 4.8L invested, only Rs 1.2L in reorders.", status: "failed", impact: "-Rs 3.6L net", learning: "Distributor preference for GT was wrong channel. Pharmacy recommendation loop is THE driver. Validated pharmacy-first as non-negotiable for the Rs 20 SKU." },
+    { id: 4, date: "Oct 2025", brand: "NasalClear", decision: "Extended Q3 digital campaign by 2 weeks during unexpected pollution spike", action: "Incremental Rs 12L spend. Shifted creative to pollution-specific messaging.", outcome: "3.8x ROAS during extension (vs 2.1x base). Premium SKU became number 1 in Metro City pharmacy.", status: "success", impact: "+Rs 46L incremental", learning: "Pollution-triggered extensions deliver outsized ROAS. AQI-specific creative doubled CTR. Always have pollution creative ready as contingency." },
+    { id: 5, date: "Sep 2025", brand: "PainAway", decision: "Ignored early signals of competitor van coverage in rural Central State", action: "No action taken. Flagged as monitor in weekly review.", outcome: "By Dec 2025, rural distribution dropped 38% to 31% (-7pp). 1.9pp share loss. Recovery requires 3-6 months.", status: "failed", impact: "-Rs 22L quarterly", learning: "Early competitive distribution signals must trigger immediate response, not monitor status. Structural moves compound quickly. 6 weeks of inaction cost 7pp. The monitor decision was the most expensive of Q4." },
+    { id: 6, date: "Aug 2025", brand: "VitaBoost", decision: "Launched VitaBoost Recharge on e-commerce 4 weeks before offline to validate demand", action: "E-com exclusive launch. Tracked rank, reviews, search data.", outcome: "Reached number 3 in daily vitamins. 4.2 stars with 1200+ reviews. Demand validated but offline activation lagged.", status: "partial", impact: "Demand validated, Rs 8L e-com", learning: "E-com-first validates demand cheaply. But distributor materials must be ready BEFORE e-com launch. The proof point loses urgency if pitch happens 6 weeks later." },
+  ];
+
+  const openDig = function(idx) {
+    if (digOpen === idx) { setDigOpen(null); return; }
+    setDigOpen(idx);
+    if (!digChats[idx]) {
+      var r = digData[idx] || [];
+      var next = {};
+      Object.keys(digChats).forEach(function(k) { next[k] = digChats[k]; });
+      next[idx] = { messages: [{ type: "ai", text: "I can help you dig deeper. What would you like to explore?" }], suggestions: r.map(function(x) { return x.q; }) };
+      setDigChats(next);
+    }
+  };
+
+  var sendDig = function(idx, text) {
+    if (!text.trim()) return;
+    var r = digData[idx] || [];
+    var m = null;
+    for (var i = 0; i < r.length; i++) { if (r[i].q === text) m = r[i]; }
+    var aiText = m ? m.a : "I would recommend reviewing the agent trail for the full data picture.";
+    var prev = digChats[idx] || { messages: [], suggestions: [] };
+    var rem = prev.suggestions.filter(function(s) { return s !== text; });
+    var n1 = {};
+    Object.keys(digChats).forEach(function(k) { n1[k] = digChats[k]; });
+    n1[idx] = { messages: prev.messages.concat([{ type: "user", text: text }, { type: "typing" }]), suggestions: [] };
+    setDigChats(n1);
+    setDigInput("");
+    setTimeout(function() {
+      setDigChats(function(p) {
+        var c = p[idx];
+        if (!c) return p;
+        var n2 = {};
+        Object.keys(p).forEach(function(k) { n2[k] = p[k]; });
+        n2[idx] = { messages: c.messages.filter(function(x) { return x.type !== "typing"; }).concat([{ type: "ai", text: aiText }]), suggestions: rem };
+        return n2;
+      });
+    }, 900 + Math.random() * 600);
+  };
 
   return (
-    <div className="h-screen overflow-auto bg-pwc-bg-sub font-inter text-pwc-text flex flex-col">
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <div style={{ fontFamily: "'IBM Plex Sans', -apple-system, sans-serif", background: C.page, minHeight: "100vh", color: C.text, display: "flex" }}>
+      <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 
-      {/* Header */}
-      <div className="sticky top-0 z-50 bg-pwc-green flex items-center justify-between px-8 h-14 border-b border-white/[0.08] flex-shrink-0">
-        <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2">
-                   <span className="font-bold text-[1.05rem] tracking-[-0.03em] text-white no-underline">
-                     questt<i className="not-italic text-[#3DBCA2]">.</i>
-                   </span>
-                   <span className="text-white/40 text-sm">×</span>
-                   <Image src="/images/pwcLogo.jpg" alt="PwC" width={48} height={24} className="object-contain" />
-                 </div>
-          <span className="w-px h-4 bg-white/10 block" />
-          <span className="text-[13px] text-white/55 font-normal">Market Pulse</span>
+      <div style={{ width: 64, minHeight: "100vh", background: C.header, borderRight: "1px solid rgba(255,255,255,0.06)", display: "flex", flexDirection: "column", alignItems: "center", flexShrink: 0, position: "fixed", top: 0, left: 0, bottom: 0, zIndex: 100 }}>
+        <div style={{ marginTop: 16, width: 36, height: 36, borderRadius: 8, border: "1px solid rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+          <Menu size={16} color="rgba(255,255,255,0.5)" strokeWidth={1.5} />
         </div>
-        <span className="text-[11px] text-white/35 font-medium">Zone A · Week ending Feb 2, 2026</span>
+        <div style={{ flex: 1 }} />
       </div>
 
-      {/* Content */}
-      <div className="flex-1 max-w-[1100px] mx-auto w-full px-8 py-8 pb-16">
+      <div className="overflow-auto" style={{ flex: 1, marginLeft: 64, height: "100vh", display: "flex", flexDirection: "column" }}>
+        <div style={{ background: C.card, borderBottom: "1px solid " + C.border, padding: "0 32px", height: 56, display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 50 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+            <div style={{ display: "flex", alignItems: "baseline" }}>
+              <span style={{ fontSize: 17, fontWeight: 600, color: C.header, letterSpacing: "-0.02em" }}>questt</span>
+              <span style={{ color: C.green, fontSize: 20, fontWeight: 700, lineHeight: 1 }}>.</span>
+            </div>
+            <span style={{ fontSize: 11, color: C.border }}>|</span>
+            <img src='/images/pwcLogo.jpg' alt="PwC" style={{ height: 28, display: "block" }} />
+            <div style={{ width: 1, height: 20, background: C.border, margin: "0 2px" }} />
+            <span style={{ fontSize: 12, fontWeight: 500, color: C.textMid }}>Market Pulse</span>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "7px 14px", background: searchFocused ? C.card : C.page, border: "1px solid " + (searchFocused ? C.green : C.border), borderRadius: 6, transition: "all 0.2s", width: searchFocused ? 280 : 200 }}>
+              <Search size={14} color={C.textLight} strokeWidth={1.5} />
+              <input placeholder="Search brands, insights..." onFocus={function() { setSearchFocused(true); }} onBlur={function() { setSearchFocused(false); }} style={{ border: "none", outline: "none", background: "transparent", fontSize: 12, fontFamily: "'IBM Plex Sans',sans-serif", color: C.text, width: "100%" }} />
+              {!searchFocused && <span style={{ fontSize: 10, color: C.textLight, background: C.card, padding: "1px 6px", borderRadius: 3, border: "1px solid " + C.border, fontFamily: "'JetBrains Mono',monospace", whiteSpace: "nowrap" }}>/</span>}
+            </div>
+            <div style={{ width: 1, height: 24, background: C.border, margin: "0 4px" }} />
+            <div style={{ position: "relative" }}>
+              <button onClick={function(e) { e.stopPropagation(); setNotifsOpen(!notifsOpen); setProfileOpen(false); }} style={{ padding: 8, background: notifsOpen ? C.page : "transparent", border: "none", borderRadius: 6, cursor: "pointer", position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <Bell size={18} strokeWidth={1.5} color={C.textMid} />
+                <div style={{ position: "absolute", top: 6, right: 6, width: 7, height: 7, borderRadius: "50%", background: "#DC2626", border: "1.5px solid #fff" }} />
+              </button>
+              {notifsOpen && <div onClick={function(e) { e.stopPropagation(); }} style={{ position: "absolute", top: "100%", right: 0, marginTop: 8, width: 320, background: C.card, border: "1px solid " + C.border, borderRadius: 8, boxShadow: "0 8px 30px rgba(0,0,0,0.1)", overflow: "hidden", zIndex: 200 }}>
+                <div style={{ padding: "12px 16px", borderBottom: "1px solid " + C.border, display: "flex", justifyContent: "space-between" }}><span style={{ fontSize: 13, fontWeight: 600 }}>Notifications</span><span style={{ fontSize: 11, color: C.green, cursor: "pointer" }}>Mark all read</span></div>
+                {nots.map(function(n) { return <div key={n.id} style={{ padding: "12px 16px", borderBottom: "1px solid " + C.borderLight, background: n.ur ? C.green + "08" : "transparent", display: "flex", gap: 10 }}>{n.ur && <div style={{ width: 6, height: 6, borderRadius: "50%", background: C.green, marginTop: 6, flexShrink: 0 }} />}<div><div style={{ fontSize: 12, color: C.textMid, lineHeight: 1.5 }}>{n.text}</div><div style={{ fontSize: 10, color: C.textLight, marginTop: 3 }}>{n.time}</div></div></div>; })}
+              </div>}
+            </div>
+            <div style={{ position: "relative" }}>
+              <button onClick={function(e) { e.stopPropagation(); setProfileOpen(!profileOpen); setNotifsOpen(false); }} style={{ display: "flex", alignItems: "center", gap: 8, padding: "4px 8px 4px 4px", background: profileOpen ? C.page : "transparent", border: "none", borderRadius: 6, cursor: "pointer" }}>
+                <div style={{ width: 30, height: 30, borderRadius: "50%", background: "linear-gradient(135deg,#3BB896," + C.green + ")", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 600, color: "#fff" }}>ZM</div>
+                <ChevronDown size={14} color={C.textLight} />
+              </button>
+              {profileOpen && <div onClick={function(e) { e.stopPropagation(); }} style={{ position: "absolute", top: "100%", right: 0, marginTop: 8, width: 220, background: C.card, border: "1px solid " + C.border, borderRadius: 8, boxShadow: "0 8px 30px rgba(0,0,0,0.1)", overflow: "hidden", zIndex: 200 }}>
+                <div style={{ padding: "14px 16px", borderBottom: "1px solid " + C.border }}><div style={{ fontSize: 13, fontWeight: 600 }}>Zone Manager</div><div style={{ fontSize: 11, color: C.textLight, marginTop: 2 }}>zm.north@client.in</div></div>
+                <button style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 16px", width: "100%", background: "transparent", border: "none", cursor: "pointer", fontSize: 12, color: C.textMid, textAlign: "left" }}><User size={14} color={C.textLight} />My Profile</button>
+                <button style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 16px", width: "100%", background: "transparent", border: "none", cursor: "pointer", fontSize: 12, color: C.textMid, textAlign: "left" }}><Settings size={14} color={C.textLight} />Preferences</button>
+                <div style={{ borderTop: "1px solid " + C.border }}><button style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 16px", width: "100%", background: "transparent", border: "none", cursor: "pointer", fontSize: 12, color: C.red, textAlign: "left" }}><LogOut size={14} color={C.red} />Log Out</button></div>
+              </div>}
+            </div>
+          </div>
+        </div>
 
-        {/* KPI Strip */}
-        <div className="grid grid-cols-4 gap-3 mb-8">
+        <div style={{ background: C.card, borderBottom: "1px solid " + C.border, padding: "0 32px", display: "flex", gap: 8 }}>
+          {["pulse", "history"].map(function(t) { return <button key={t} onClick={function() { setMainTab(t); }} style={{ padding: "16px 24px", fontSize: 13, fontWeight: mainTab === t ? 600 : 400, color: mainTab === t ? C.header : C.textLight, background: "transparent", border: "none", borderBottom: mainTab === t ? "2px solid " + C.header : "2px solid transparent", cursor: "pointer" }}>{t === "pulse" ? "Market Pulse" : "Decision History"}</button>; })}
+        </div>
+
+        <div style={{ maxWidth: 1180, padding: "28px 32px 60px" }}>
+        {mainTab === "pulse" && <div>
+
+        {/* KPIs */}
+        <div style={{ display: "flex", gap: 16, marginBottom: 28 }}>
           {portfolioKPIs.map((kpi, i) => (
-            <div key={i} className="bg-white rounded-[10px] border border-pwc-border-light overflow-hidden shadow-sm">
-              <div className={`h-[2.5px] ${kpi.negative ? "bg-pwc-amber" : "bg-pwc-sage"}`} />
-              <div className="p-5">
-                <div className="text-[10px] font-bold text-pwc-dimmer tracking-[0.09em] uppercase mb-2">{kpi.label}</div>
-                <div className="text-[28px] font-bold text-pwc-text leading-none mb-1.5">{kpi.value}</div>
-                <div className={`text-[11px] leading-snug ${kpi.negative ? "text-pwc-amber" : "text-pwc-dimmer"}`}>{kpi.delta}</div>
-              </div>
+            <div key={i} style={{ ...cardBase, padding: "22px 24px", flex: 1 }}>
+              <div style={{ ...label, fontSize: 10, marginBottom: 12 }}>{kpi.label}</div>
+              <div style={{ fontSize: 32, fontWeight: 600, color: C.text, lineHeight: 1 }}>{kpi.value}</div>
+              <div style={{ fontSize: 12, color: kpi.negative ? C.orange : C.textLight, marginTop: 8 }}>{kpi.delta}</div>
             </div>
           ))}
         </div>
 
         {/* Critical Items */}
-        <section className="mb-10">
-          <SectionHeader
-            title="This Week's Critical Items"
-            count={criticalItems.length}
-            right={`${criticalItems.filter(c => c.severity === "critical").length} critical · ${criticalItems.filter(c => c.severity === "high").length} high`}
-          />
-          <div className="flex flex-col gap-2">
-            {criticalItems.map(item => (
-              <div key={item.id} className="flex bg-white rounded-lg overflow-hidden border border-pwc-border-light shadow-sm">
-                <div className={`w-[3px] flex-shrink-0 ${item.severity === "critical" ? "bg-pwc-terra" : "bg-pwc-amber"}`} />
-                <div className="flex-1 px-5 py-4 flex items-start gap-4">
-                  <SeverityIcon severity={item.severity} />
-                  <div className="flex-1 min-w-0">
-                    <div className="text-[13px] font-semibold text-pwc-text leading-snug mb-1">{item.headline}</div>
-                    <div className="text-[12px] text-pwc-dim leading-relaxed">{item.detail}</div>
-                  </div>
-                  <span className={`text-[10px] font-bold tracking-wider px-2 py-1 rounded flex-shrink-0 mt-0.5 ${
-                    item.severity === "critical" ? "bg-pwc-terra-soft text-pwc-terra" : "bg-pwc-amber-soft text-pwc-amber"
-                  }`}>{item.category}</span>
+        <div style={{ marginBottom: 36 }}>
+          <h2 style={{ fontFamily: "Georgia, serif", fontSize: 20, fontWeight: 400, margin: "0 0 16px" }}>This Week's Critical Items</h2>
+          {criticalItems.map(function(item, ci) { return (
+            <div key={item.id} style={{ ...cardBase, marginBottom: 8, overflow: "hidden" }}>
+              <div style={{ padding: "18px 28px", display: "flex", alignItems: "flex-start", gap: 16 }}>
+                <SeverityIcon severity={item.severity} />
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 14, fontWeight: 600, color: C.text, lineHeight: 1.45 }}>{item.headline}</div>
+                  <div style={{ fontSize: 13, color: C.textMid, marginTop: 6, lineHeight: 1.55, marginBottom: 10 }}>{item.detail}</div>
+                  <button onClick={function() { openDig(ci); }} style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "5px 14px", background: digOpen === ci ? C.header : "transparent", color: digOpen === ci ? "#fff" : C.green, border: "1px solid " + (digOpen === ci ? C.header : "rgba(45,90,61,0.2)"), borderRadius: 20, fontSize: 12, fontWeight: 500, cursor: "pointer" }}>
+                    <div style={{ width: 14, height: 14, borderRadius: 7, background: digOpen === ci ? "#3BB896" : C.green, display: "flex", alignItems: "center", justifyContent: "center" }}><span style={{ color: "#fff", fontSize: 7, fontWeight: 700 }}>q</span></div>
+                    Dig deeper
+                  </button>
                 </div>
               </div>
-            ))}
-          </div>
-        </section>
+              {digOpen === ci && digChats[ci] && <div style={{ borderTop: "1px solid " + C.border, background: C.page }}>
+                <div style={{ padding: "16px 28px", maxHeight: 360, overflowY: "auto" }}>
+                  {digChats[ci].messages.map(function(msg, mi) { return <div key={mi} style={{ marginBottom: 14 }}>
+                    {msg.type === "typing" ? <div style={{ display: "flex", gap: 10, alignItems: "flex-start" }}><div style={{ width: 22, height: 22, borderRadius: 11, background: C.green, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><span style={{ color: "#fff", fontSize: 9, fontWeight: 700 }}>q</span></div><div style={{ padding: "12px 16px", background: C.card, border: "1px solid " + C.border, borderRadius: 6, fontSize: 13, color: C.textLight }}>Thinking...</div></div>
+                    : msg.type === "ai" ? <div style={{ display: "flex", gap: 10, alignItems: "flex-start" }}><div style={{ width: 22, height: 22, borderRadius: 11, background: C.green, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><span style={{ color: "#fff", fontSize: 9, fontWeight: 700 }}>q</span></div><div style={{ padding: "10px 14px", background: C.card, border: "1px solid " + C.border, borderRadius: 6, fontSize: 13, lineHeight: 1.65, color: C.textMid, flex: 1 }}>{msg.text}</div></div>
+                    : <div style={{ display: "flex", justifyContent: "flex-end" }}><div style={{ padding: "10px 14px", background: C.header, color: "#fff", borderRadius: 6, fontSize: 13, lineHeight: 1.5, maxWidth: "80%" }}>{msg.text}</div></div>}
+                  </div>; })}
+                  {digChats[ci].suggestions.length > 0 && <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 8 }}>
+                    {digChats[ci].suggestions.map(function(sug, si) { return <button key={si} onClick={function() { sendDig(ci, sug); }} style={{ padding: "7px 14px", background: C.card, border: "1px solid " + C.border, borderRadius: 20, fontSize: 12, color: C.textMid, cursor: "pointer" }}>{sug}</button>; })}
+                  </div>}
+                </div>
+                <div style={{ padding: "12px 28px", borderTop: "1px solid " + C.border, display: "flex", gap: 10 }}>
+                  <input type="text" value={digOpen === ci ? digInput : ""} onChange={function(e) { setDigInput(e.target.value); }} onKeyPress={function(e) { if (e.key === "Enter") sendDig(ci, digInput); }} placeholder="Ask anything..." style={{ flex: 1, padding: "10px 14px", border: "1px solid " + C.border, borderRadius: 6, fontSize: 13, outline: "none", background: C.card }} />
+                  <button onClick={function() { sendDig(ci, digInput); }} style={{ padding: "10px 16px", background: C.header, color: "#fff", border: "none", borderRadius: 6, cursor: "pointer", display: "flex", alignItems: "center" }}><Send size={14} strokeWidth={2} /></button>
+                </div>
+              </div>}
+            </div>
+          ); })}
+        </div>
 
-        {/* Insights */}
-        <section className="mb-10">
-          <SectionHeader title="Insights & Decisions" count={insights.length} right="click to expand" />
-          <div className="flex flex-col gap-2">
-            {insights.map(ins => (
-              <InsightCard
-                key={ins.id}
-                insight={ins}
-                isExpanded={expandedInsight === ins.id}
-                onToggle={() => setExpandedInsight(expandedInsight === ins.id ? null : ins.id)}
-                onShowTrail={setTrailInsight}
-              />
-            ))}
+        {/* All Insights */}
+        <div style={{ marginBottom: 40 }}>
+          <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: 16 }}>
+            <h2 style={{ fontFamily: "Georgia, serif", fontSize: 20, fontWeight: 400, margin: 0 }}>Insights & Decisions</h2>
+            <span style={{ fontSize: 12, color: C.textLight }}>{insights.length} active · click to expand</span>
           </div>
-        </section>
+          {insights.map(ins => (
+            <InsightCard key={ins.id} insight={ins} isExpanded={expandedInsight === ins.id} onToggle={() => setExpandedInsight(expandedInsight === ins.id ? null : ins.id)} onShowTrail={setTrailInsight} />
+          ))}
+        </div>
 
-        {/* Territory */}
-        <section>
-          <SectionHeader title="Territory Overview" count={territories.length} right="5 territories · ASM-level drill-down" />
-          <div className="flex flex-col gap-2">
-            {territories.map(t => (
-              <TerritoryRow
-                key={t.id}
-                t={t}
-                isExpanded={expandedTerritory === t.id}
-                onToggle={() => setExpandedTerritory(expandedTerritory === t.id ? null : t.id)}
-              />
-            ))}
+        {/* Territory Overview */}
+        <div>
+          <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: 16 }}>
+            <h2 style={{ fontFamily: "Georgia, serif", fontSize: 20, fontWeight: 400, margin: 0 }}>Territory Overview</h2>
+            <span style={{ fontSize: 12, color: C.textLight }}>5 territories · ASM-level drill-down</span>
           </div>
-        </section>
+          {territories.map(t => (
+            <TerritoryRow key={t.id} t={t} isExpanded={expandedTerritory === t.id} onToggle={() => setExpandedTerritory(expandedTerritory === t.id ? null : t.id)} />
+          ))}
+        </div>
 
+        </div>}
+
+        {mainTab === "history" && <div>
+          <div style={{ marginBottom: 24 }}>
+            <h2 style={{ fontFamily: "Georgia,serif", fontSize: 20, fontWeight: 400, margin: "0 0 6px" }}>Decision History</h2>
+            <p style={{ fontSize: 13, color: C.textLight, margin: 0 }}>Past decisions, outcomes, and what the system learned. This is how Market Pulse gets smarter.</p>
+          </div>
+          {pastDecisions.map(function(d) {
+            var sc = d.status === "success" ? C.green : d.status === "failed" ? C.red : C.orange;
+            var scBg = d.status === "success" ? C.greenPale : d.status === "failed" ? C.redPale : C.orangePale;
+            var scLabel = d.status === "success" ? "Positive" : d.status === "failed" ? "Negative" : "Partial";
+            var ScIcon = d.status === "success" ? CheckCircle : d.status === "failed" ? XCircle : Clock;
+            var isExp = expandedHistory === d.id;
+            return <div key={d.id} style={{ ...cardBase, marginBottom: 10, overflow: "hidden" }}>
+              <div onClick={function() { setExpandedHistory(isExp ? null : d.id); }} style={{ padding: "18px 28px", cursor: "pointer", display: "flex", alignItems: "flex-start", gap: 16 }}>
+                <div style={{ width: 32, height: 32, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: scBg, flexShrink: 0 }}><ScIcon size={16} color={sc} strokeWidth={2} /></div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
+                    <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase", color: sc, padding: "2px 8px", background: scBg, borderRadius: 10 }}>{scLabel}</span>
+                    <span style={{ fontSize: 11, color: C.textLight }}>{d.date} {d.brand}</span>
+                    <span style={{ fontSize: 12, fontWeight: 600, color: sc, marginLeft: "auto" }}>{d.impact}</span>
+                  </div>
+                  <div style={{ fontSize: 14, fontWeight: 600, color: C.text, lineHeight: 1.45 }}>{d.decision}</div>
+                </div>
+              </div>
+              {isExp && <div style={{ borderTop: "1px solid " + C.border, padding: "20px 28px" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
+                  <div><div style={{ ...label, fontSize: 9, marginBottom: 6 }}>ACTION TAKEN</div><div style={{ fontSize: 13, color: C.textMid, lineHeight: 1.6 }}>{d.action}</div></div>
+                  <div><div style={{ ...label, fontSize: 9, marginBottom: 6 }}>OUTCOME</div><div style={{ fontSize: 13, color: C.textMid, lineHeight: 1.6 }}>{d.outcome}</div></div>
+                </div>
+                <div style={{ padding: "14px 18px", background: scBg, borderLeft: "3px solid " + sc }}>
+                  <div style={{ ...label, fontSize: 9, color: sc, marginBottom: 6 }}>WHAT THE SYSTEM LEARNED</div>
+                  <div style={{ fontSize: 13, color: C.text, lineHeight: 1.6, fontWeight: 500 }}>{d.learning}</div>
+                </div>
+              </div>}
+            </div>;
+          })}
+        </div>}
+        </div>
+
+        <div style={{ marginTop: "auto", borderTop: "1px solid " + C.border, padding: "12px 32px", display: "flex", justifyContent: "space-between", alignItems: "center", background: C.card }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <span style={{ fontSize: 11, fontWeight: 500, color: C.textMid }}>questt</span>
+            <span style={{ color: C.green, fontSize: 12, fontWeight: 700 }}>.</span>
+            <span style={{ fontSize: 10, color: C.border, margin: "0 2px" }}>|</span>
+            <span style={{ fontSize: 10, fontWeight: 600, color: C.textMid, fontFamily: "Georgia, serif" }}>pwc</span>
+            <span style={{ fontSize: 10, color: C.textLight, marginLeft: 10 }}>Market Pulse v2.4</span>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+            <div style={{ width: 5, height: 5, borderRadius: "50%", background: "#3BB896" }} />
+            <span style={{ fontSize: 10, color: C.textLight }}>Synced 2 min ago</span>
+          </div>
+        </div>
       </div>
 
       {trailInsight && <AgentTrailModal insight={trailInsight} onClose={() => setTrailInsight(null)} />}
