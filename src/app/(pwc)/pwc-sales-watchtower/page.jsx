@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import { MessageSquare, AlertCircle, ChevronRight, Package, MapPin, Activity, Send, X, Target, Sparkles, Clock, ChevronDown, BarChart3, Layers, TrendingUp } from 'lucide-react';
+import Image from 'next/image';
 
 /* ─── Sub-components ─────────────────────────────────── */
 
@@ -577,16 +578,18 @@ export default function QuesttSalesWatchtower() {
   /* ─── Render ─────────────────────────────────────────── */
 
   return (
-    <div className="min-h-screen bg-pwc-bg-sub font-inter overflow-auto">
+    <div className="h-screen overflow-auto bg-pwc-bg-sub font-inter overflow-auto">
 
       {/* Header */}
       <div className="sticky top-0 z-50 bg-pwc-green flex items-center justify-between px-8 h-14 border-b border-white/[0.08] flex-shrink-0">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <span className="text-[13px] font-bold text-white tracking-tight">questt</span>
-            <span className="text-white/20 text-[9px] select-none leading-none">×</span>
-            <span className="text-[10px] font-bold tracking-[0.12em] text-white/50">PwC</span>
-          </div>
+                     <span className="font-bold text-[1.05rem] tracking-[-0.03em] text-white no-underline">
+                       questt<i className="not-italic text-[#3DBCA2]">.</i>
+                     </span>
+                     <span className="text-white/40 text-sm">×</span>
+                     <Image src="/images/pwcLogo.jpg" alt="PwC" width={48} height={24} className="object-contain" />
+                   </div>
           <span className="w-px h-4 bg-white/10 block" />
           <span className="text-[13px] text-white/55 font-normal">Sales Watchtower</span>
         </div>

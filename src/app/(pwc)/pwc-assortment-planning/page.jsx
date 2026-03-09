@@ -1,5 +1,6 @@
 "use client";
 import { useState, useMemo } from "react";
+import Image from "next/image";
 
 const C = {
   bg:"#FFFFFF",bgSub:"#FAFAF8",bgAlt:"#F3F0EA",card:"#FFFFFF",
@@ -499,11 +500,13 @@ export default function BuyPlan(){
   const Header=({back,backLabel,title,right})=>(
     <div className="sticky top-0 z-50 bg-pwc-green flex items-center justify-between px-8 h-[52px] flex-shrink-0 border-b border-white/[0.06]">
       <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2">
-          <span className="text-[13px] font-bold text-white tracking-tight">questt</span>
-          <span className="text-white/20 text-[9px] select-none leading-none">×</span>
-          <span className="text-[10px] font-bold tracking-[0.12em] text-white/50">PwC</span>
-        </div>
+ <div className="flex items-center gap-2">
+            <span className="font-bold text-[1.05rem] tracking-[-0.03em] text-white no-underline">
+              questt<i className="not-italic text-[#3DBCA2]">.</i>
+            </span>
+            <span className="text-white/40 text-sm">×</span>
+            <Image src="/images/pwcLogo.jpg" alt="PwC" width={48} height={24} className="object-contain" />
+          </div>
         <span className="w-px h-4 bg-white/10 block"/>
         {back&&<button onClick={back} className="bg-transparent border-0 text-white/45 text-xs cursor-pointer p-0 flex items-center gap-1">
           <span className="text-sm leading-none">‹</span>{backLabel||"Back"}
