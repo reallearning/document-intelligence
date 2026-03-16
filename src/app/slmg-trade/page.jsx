@@ -17,7 +17,7 @@ const C = {
   blue: "#3B6FA0", bluePale: "#EFF5FB",
   cream: "#F3F0EB", warmGrey: "#E8E5DE",
 };
-const font = "'IBM Plex Sans', -apple-system, sans-serif";
+const font="'Inter',-apple-system,sans-serif";
 const serif = "Georgia, serif";
 const mono = "'JetBrains Mono', monospace";
 
@@ -583,6 +583,7 @@ export default function SLMGTradeCommand() {
 
   return (
     <div onClick={() => { setShellProfile(false); setShellNotifs(false); }} className="overflow-auto" style={{ height: "100vh", background: C.page, fontFamily: font, color: C.text, display: "flex" }}>
+          <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=DM+Serif+Display:ital@0;1&family=Source+Serif+4:wght@300;400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
       {/* SIDEBAR */}
       <div style={{ width: 60, minHeight: "100vh", background: C.green, display: "flex", flexDirection: "column", alignItems: "center", flexShrink: 0, position: "fixed", top: 0, left: 0, bottom: 0, zIndex: 100 }}>
         <div style={{ marginTop: 20, width: 30, height: 30, borderRadius: 6, background: "rgba(255,255,255,0.06)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}><Menu size={14} color="rgba(255,255,255,0.4)" strokeWidth={1.5} /></div>
@@ -591,9 +592,11 @@ export default function SLMGTradeCommand() {
       {/* MAIN AREA */}
       <div style={{ flex: 1, marginLeft: 60, minHeight: "100vh", display: "flex", flexDirection: "column" }}>
         {/* TOP BAR */}
-        <div style={{ background: C.card, borderBottom: `1px solid ${C.border}`, padding: "0 36px", height: 52, display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 50 }}>
+        <div style={{ background: C.card, borderBottom: `1px solid ${C.border}`, padding: "8px 36px", height: 52, display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 50 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+  <div style={{display:"flex",alignItems:"center",gap:14}}>
           <div style={{display:"flex",alignItems:"baseline"}}><span style={{fontSize:15,fontWeight:500,color:C.green,letterSpacing:"-0.01em",fontFamily:font}}>questt</span><span style={{color:C.sage,fontSize:17,fontWeight:700,lineHeight:1}}>.</span></div>
+        </div>
             <div style={{ width: 1, height: 18, background: C.border }} />
             <span style={{ fontSize: 12, fontWeight: 600, color: C.textMid, letterSpacing: "0.02em" }}>SLMG Beverages</span>
             <div style={{ width: 1, height: 18, background: C.border }} />
@@ -635,7 +638,7 @@ export default function SLMGTradeCommand() {
 
       <div style={{ maxWidth: 1140, margin: "0 auto", padding: "28px 36px" }}>
         {/* MORNING BRIEF */}
-        <div style={{ marginBottom: 8 }}><div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 18 }}><h2 style={{ fontFamily: serif, fontSize: 22, fontWeight: 700, color: C.text, margin: 0 }}>Morning Brief</h2><span style={{ fontSize: 12, color: C.textLight }}>5 items ranked by revenue impact</span></div>
+        <div style={{ marginBottom: 8 }}><div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 18 }}><h2 style={{ fontFamily: serif, fontSize: 22, fontWeight: 700, color: C.text, margin: 0 }}>Morning Brief</h2></div>
           {briefCards.map((c, i) => <IntelCard key={c.id} card={c} defaultOpen={i === 0} onAsk={handleAsk} />)}
         </div>
 
