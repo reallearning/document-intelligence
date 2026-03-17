@@ -1,5 +1,6 @@
 "use client"
 import { useState, useEffect, useRef } from "react";
+import * as d3 from "d3";
 
 // ═══════════════════════════════════════════════════════════
 // DOMAIN COLORS — matching Questt BKG system
@@ -46,7 +47,6 @@ const DL = {
 // NODES — layer: ontology | metrics | decisions
 //         kg: user | product | shared (decisions fed by both)
 // ═══════════════════════════════════════════════════════════
-
 const NODES = [
   // ─── USER KG: ONTOLOGY ───
   { id: "Customer", layer: "ontology", kg: "user", domain: "identity", r: 22, desc: "Core entity — every node connects here" },
@@ -256,155 +256,294 @@ const EDGES = [
 ];
 
 // ═══════════════════════════════════════════════════════════
+// SIMULATION WORLD SIZE
+// ═══════════════════════════════════════════════════════════
+const W = 3200;
+const H = 2400;
+
+// ═══════════════════════════════════════════════════════════
 // COMPONENT
 // ═══════════════════════════════════════════════════════════
 export default function App() {
-  const canvasRef = useRef(null);
-  const [simNodes, setSimNodes] = useState([]);
-  const [simLinks, setSimLinks] = useState([]);
+  const svgRef = useRef(null);
+  const wrapperRef = useRef(null);
+  const applySelectionRef = useRef(null); // set by viz effect, called by selection effect
+
   const [selected, setSelected] = useState(null);
-  const [hoverNode, setHoverNode] = useState(null);
-  const [transform, setTransform] = useState({ x: 0, y: 0, k: 1 });
-  const dragRef = useRef(null);
-  const panRef = useRef(null);
-  const simRef = useRef(null);
-  const W = 3200;
-  const H = 2400;
 
+  // When selection changes (e.g. from detail panel), push the update into D3
   useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js";
-    script.onload = () => {
-      const nodes = NODES.map(n => ({
-        ...n,
-        x: n.kg === "user" ? W * 0.30 + (Math.random() - 0.5) * W * 0.4
-           : n.kg === "product" ? W * 0.70 + (Math.random() - 0.5) * W * 0.4
-           : W * 0.5 + (Math.random() - 0.5) * W * 0.5,
-        y: n.layer === "ontology" ? H * 0.28 + (Math.random() - 0.5) * H * 0.35
-           : n.layer === "metrics" ? H * 0.6 + (Math.random() - 0.5) * H * 0.2
-           : H * 0.88 + (Math.random() - 0.5) * H * 0.15,
-      }));
+    applySelectionRef.current?.(selected);
+  }, [selected]);
 
-      const nodeMap = {};
-      nodes.forEach(n => nodeMap[n.id] = n);
-      const links = EDGES.filter(([s,t]) => nodeMap[s] && nodeMap[t]).map(([s,t,rel]) => ({ source: s, target: t, rel }));
+  // ─── Build visualization ─────────────────────────────────
+  useEffect(() => {
+    const wrapper = wrapperRef.current;
+    if (!wrapper) return;
 
-      const sim = d3.forceSimulation(nodes)
-        .force("link", d3.forceLink(links).id(d => d.id).distance(d => {
-          const s = nodeMap[d.source?.id || d.source];
-          const t = nodeMap[d.target?.id || d.target];
-          if (!s || !t) return 160;
-          if (s.kg !== t.kg || s.kg === "shared" || t.kg === "shared") return 300;
-          if (s.layer !== t.layer) return 180;
-          return 120;
-        }).strength(d => {
-          const s = nodeMap[d.source?.id || d.source];
-          const t = nodeMap[d.target?.id || d.target];
-          if (!s || !t) return 0.08;
-          if (s.kg !== t.kg || s.kg === "shared" || t.kg === "shared") return 0.025;
-          return 0.1;
-        }))
-        .force("charge", d3.forceManyBody().strength(-500).distanceMax(800))
-        .force("x", d3.forceX(d => d.kg === "user" ? W * 0.30 : d.kg === "product" ? W * 0.70 : W * 0.5).strength(d => d.kg === "shared" ? 0.015 : 0.05))
-        .force("y", d3.forceY(d => d.layer === "ontology" ? H * 0.28 : d.layer === "metrics" ? H * 0.6 : H * 0.88).strength(0.06))
-        .force("collide", d3.forceCollide(d => d.r + 22))
-        .alphaDecay(0.008);
+    const { width: cw, height: ch } = wrapper.getBoundingClientRect();
 
-      simRef.current = sim;
-      sim.on("tick", () => {
-        nodes.forEach(n => {
-          n.x = Math.max(80, Math.min(W - 80, n.x));
-          n.y = Math.max(80, Math.min(H - 80, n.y));
-        });
-        setSimNodes([...nodes]);
-        setSimLinks(links.map(l => ({
-          sx: l.source.x, sy: l.source.y, tx: l.target.x, ty: l.target.y, rel: l.rel,
-          sid: l.source.id, tid: l.target.id,
-        })));
+    const svg = d3.select(svgRef.current)
+      .attr("width", cw)
+      .attr("height", ch);
+
+    svg.selectAll("*").remove();
+
+    const g = svg.append("g");
+
+    // ── Zoom + pan ──
+    const zoom = d3.zoom()
+      .scaleExtent([0.1, 4])
+      .on("zoom", event => g.attr("transform", event.transform));
+
+    svg.call(zoom);
+
+    // Fit the world (W×H) into the viewport on load
+    const initialK = Math.min(cw / W, ch / H) * 0.85;
+    svg.call(zoom.transform, d3.zoomIdentity
+      .translate((cw - W * initialK) / 2, (ch - H * initialK) / 2)
+      .scale(initialK));
+
+    // ── Simulation data ──
+    const nodes = NODES.map(n => ({
+      ...n,
+      x: n.kg === "user"    ? W * 0.30 + (Math.random() - 0.5) * W * 0.4
+       : n.kg === "product" ? W * 0.70 + (Math.random() - 0.5) * W * 0.4
+       : W * 0.5  + (Math.random() - 0.5) * W * 0.5,
+      y: n.layer === "ontology" ? H * 0.28 + (Math.random() - 0.5) * H * 0.35
+       : n.layer === "metrics"  ? H * 0.60 + (Math.random() - 0.5) * H * 0.20
+       : H * 0.88 + (Math.random() - 0.5) * H * 0.15,
+    }));
+
+    const nodeMap = {};
+    nodes.forEach(n => { nodeMap[n.id] = n; });
+
+    // Pre-tag each link with isCross so attr calls don't need nodeMap lookups
+    const links = EDGES
+      .filter(([s, t]) => nodeMap[s] && nodeMap[t])
+      .map(([s, t, rel]) => {
+        const sn = nodeMap[s], tn = nodeMap[t];
+        const isCross = sn.kg !== tn.kg || sn.kg === "shared" || tn.kg === "shared";
+        return { source: s, target: t, rel, isCross };
       });
+
+    // ── Draw edges ──
+    const edgeG = g.append("g");
+
+    const linkLines = edgeG.selectAll("line")
+      .data(links)
+      .enter().append("line")
+      .attr("stroke",        d => d.isCross ? "#2D5A3D" : "#888")
+      .attr("stroke-width",  d => d.isCross ? 0.8 : 0.6)
+      .attr("stroke-opacity",d => d.isCross ? 0.25 : 0.2)
+      .attr("stroke-dasharray", d => d.isCross ? "8 5" : null)
+      .style("pointer-events", "none");
+
+    const linkLabels = edgeG.selectAll("text")
+      .data(links)
+      .enter().append("text")
+      .attr("font-size", 7)
+      .attr("font-family", "'JetBrains Mono', monospace")
+      .attr("font-weight", 400)
+      .attr("fill", "#aaa")
+      .attr("opacity", 0.45)
+      .attr("text-anchor", "middle")
+      .style("pointer-events", "none")
+      .text(d => d.rel);
+
+    // ── Draw nodes ──
+    const nodeG = g.append("g");
+
+    // Track whether the pointer moved enough to count as a drag
+    let wasDragged = false;
+
+    const nodeGroups = nodeG.selectAll("g")
+      .data(nodes)
+      .enter().append("g")
+      .style("cursor", "pointer")
+      .call(
+        d3.drag()
+          .on("start", (event, d) => {
+            wasDragged = false;
+            if (!event.active) sim.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+          })
+          .on("drag", (event, d) => {
+            wasDragged = true;
+            d.fx = event.x;
+            d.fy = event.y;
+          })
+          .on("end", (event, d) => {
+            if (!event.active) sim.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+          })
+      )
+      .on("click", (event, d) => {
+        event.stopPropagation();
+        if (wasDragged) return;
+        const next = d._selected ? null : d.id;
+        setSelected(next);
+      });
+
+    // Click SVG background → deselect
+    svg.on("click", () => setSelected(null));
+
+    // Shapes
+    nodeGroups.each(function(d) {
+      const el = d3.select(this);
+      const color = DC[d.domain] || "#888";
+      const r = d.r * 1.6;
+
+      if (d.layer === "ontology") {
+        el.append("circle")
+          .attr("r", r)
+          .attr("fill", color)
+          .attr("stroke", "#FAFAF8")
+          .attr("stroke-width", 1.2);
+      } else if (d.layer === "metrics") {
+        const s = r * 1.4;
+        el.append("rect")
+          .attr("x", -s / 2).attr("y", -s / 2)
+          .attr("width", s).attr("height", s)
+          .attr("transform", "rotate(45)")
+          .attr("fill", color)
+          .attr("stroke", "#FAFAF8")
+          .attr("stroke-width", 1.2);
+      } else {
+        const s = r * 1.5;
+        el.append("polygon")
+          .attr("points", `0,${-s * 0.7} ${s * 0.65},${s * 0.45} ${-s * 0.65},${s * 0.45}`)
+          .attr("fill", color)
+          .attr("stroke", "#FAFAF8")
+          .attr("stroke-width", 1.2);
+      }
+    });
+
+    // Labels
+    nodeGroups.append("text")
+      .attr("y", d => {
+        const r = d.r * 1.6;
+        return d.layer === "decisions" ? r * 1.5 + 14 : -(r) - 6;
+      })
+      .attr("text-anchor", "middle")
+      .attr("font-size", 13)
+      .attr("font-weight", 500)
+      .attr("font-family", "'IBM Plex Sans', sans-serif")
+      .attr("fill", "#1C1C1C")
+      .attr("stroke", "#FAFAF8")
+      .attr("stroke-width", 5)
+      .attr("paint-order", "stroke")
+      .style("pointer-events", "none")
+      .text(d => d.id.replace(/([a-z])([A-Z])/g, "$1 $2").replace("SMS:", "SMS: "));
+
+    // ── Simulation ──
+    const sim = d3.forceSimulation(nodes)
+      .force("link", d3.forceLink(links).id(d => d.id)
+        .distance(d => d.isCross ? 300 : d.source?.layer !== d.target?.layer ? 180 : 120)
+        .strength(d => d.isCross ? 0.025 : 0.1))
+      .force("charge", d3.forceManyBody().strength(-500).distanceMax(800))
+      .force("x", d3.forceX(d => d.kg === "user" ? W * 0.30 : d.kg === "product" ? W * 0.70 : W * 0.5)
+        .strength(d => d.kg === "shared" ? 0.015 : 0.05))
+      .force("y", d3.forceY(d => d.layer === "ontology" ? H * 0.28 : d.layer === "metrics" ? H * 0.60 : H * 0.88)
+        .strength(0.06))
+      .force("collide", d3.forceCollide(d => d.r * 1.6 + 10))
+      .alphaDecay(0.008);
+
+    sim.on("tick", () => {
+      nodes.forEach(n => {
+        n.x = Math.max(80, Math.min(W - 80, n.x));
+        n.y = Math.max(80, Math.min(H - 80, n.y));
+      });
+
+      linkLines
+        .attr("x1", d => d.source.x).attr("y1", d => d.source.y)
+        .attr("x2", d => d.target.x).attr("y2", d => d.target.y);
+
+      linkLabels.attr("transform", d => {
+        const mx = (d.source.x + d.target.x) / 2;
+        const my = (d.source.y + d.target.y) / 2;
+        const angle = Math.atan2(d.target.y - d.source.y, d.target.x - d.source.x) * 180 / Math.PI;
+        const flip = angle > 90 || angle < -90;
+        return `translate(${mx},${my - 3}) rotate(${flip ? angle + 180 : angle})`;
+      });
+
+      nodeGroups.attr("transform", d => `translate(${d.x},${d.y})`);
+    });
+
+    // ── Selection visual update (called by the React useEffect) ──
+    const applySelection = (selId) => {
+      // Tag each node so click handler can toggle
+      nodes.forEach(n => { n._selected = n.id === selId; });
+
+      const connectedIds = new Set();
+      if (selId) {
+        EDGES.forEach(([s, t]) => {
+          if (s === selId) connectedIds.add(t);
+          if (t === selId) connectedIds.add(s);
+        });
+      }
+
+      nodeGroups
+        .attr("opacity", d => {
+          if (!selId) return 1;
+          return d.id === selId || connectedIds.has(d.id) ? 1 : 0.06;
+        })
+        .select("text")
+        .attr("font-weight", d => d.id === selId ? 700 : 500);
+
+      linkLines
+        .attr("stroke-opacity", d => {
+          if (!selId) return d.isCross ? 0.25 : 0.2;
+          return d.source.id === selId || d.target.id === selId ? 0.8 : 0.03;
+        })
+        .attr("stroke-width", d => {
+          if (!selId) return d.isCross ? 0.8 : 0.6;
+          return d.source.id === selId || d.target.id === selId ? 2 : 0.6;
+        })
+        .attr("stroke", d => {
+          if (!selId || (d.source.id !== selId && d.target.id !== selId)) {
+            return d.isCross ? "#2D5A3D" : "#888";
+          }
+          return d.isCross ? "#2D5A3D" : "#555";
+        });
+
+      linkLabels
+        .attr("opacity", d => {
+          if (!selId) return 0.45;
+          return d.source.id === selId || d.target.id === selId ? 0.9 : 0;
+        })
+        .attr("fill", d => {
+          if (!selId) return "#aaa";
+          return d.source.id === selId || d.target.id === selId
+            ? (d.isCross ? "#2D5A3D" : "#555") : "#aaa";
+        });
     };
-    document.head.appendChild(script);
-    return () => { if (simRef.current) simRef.current.stop(); };
+
+    applySelectionRef.current = applySelection;
+
+    return () => {
+      sim.stop();
+      svg.on("click", null);
+    };
   }, []);
 
-  const connectedIds = new Set();
+  // ─── Detail panel data ──────────────────────────────────
+  const selectedNode = selected ? NODES.find(n => n.id === selected) : null;
   const connectedEdgeLabels = [];
   if (selected) {
     EDGES.forEach(([s, t, rel]) => {
-      if (s === selected) { connectedIds.add(t); connectedEdgeLabels.push({ other: t, rel, dir: "out" }); }
-      if (t === selected) { connectedIds.add(s); connectedEdgeLabels.push({ other: s, rel, dir: "in" }); }
+      if (s === selected) connectedEdgeLabels.push({ other: t, rel, dir: "out" });
+      if (t === selected) connectedEdgeLabels.push({ other: s, rel, dir: "in" });
     });
   }
 
-  const handleWheel = (e) => {
-    e.preventDefault();
-    const delta = e.deltaY > 0 ? 0.92 : 1.08;
-    setTransform(t => ({ ...t, k: Math.max(0.3, Math.min(3, t.k * delta)) }));
-  };
-
-  const handleMouseDown = (e) => {
-    if (e.target.tagName === "svg" || e.target.classList.contains("bg")) {
-      panRef.current = { sx: e.clientX, sy: e.clientY, ox: transform.x, oy: transform.y };
-    }
-  };
-  const handleMouseMove = (e) => {
-    if (panRef.current) {
-      setTransform(t => ({
-        ...t,
-        x: panRef.current.ox + (e.clientX - panRef.current.sx) / t.k,
-        y: panRef.current.oy + (e.clientY - panRef.current.sy) / t.k,
-      }));
-    }
-  };
-  const handleMouseUp = () => { panRef.current = null; };
-
-  function drawNode(n) {
-    const isActive = selected === n.id;
-    const isConn = connectedIds.has(n.id);
-    const isDimmed = selected && !isActive && !isConn;
-    const isHover = hoverNode === n.id;
-    const color = DC[n.domain] || "#888";
-    const op = isDimmed ? 0.06 : 1;
-    const sw = isActive ? 3 : isConn ? 2 : 1.2;
-    const r = (isActive ? n.r * 1.4 : isHover ? n.r * 1.2 : n.r) * 1.6;
-
-    let shape;
-    if (n.layer === "ontology") {
-      shape = <circle cx={n.x} cy={n.y} r={r} fill={color} stroke="#fff" strokeWidth={sw} opacity={op * 0.9} />;
-    } else if (n.layer === "metrics") {
-      const s = r * 1.4;
-      shape = <rect x={n.x - s/2} y={n.y - s/2} width={s} height={s} fill={color} stroke="#fff" strokeWidth={sw} opacity={op * 0.9} transform={`rotate(45 ${n.x} ${n.y})`} rx={2} />;
-    } else {
-      const s = r * 1.5;
-      shape = <polygon points={`${n.x},${n.y - s*0.7} ${n.x + s*0.65},${n.y + s*0.45} ${n.x - s*0.65},${n.y + s*0.45}`} fill={color} stroke="#fff" strokeWidth={sw} opacity={op * 0.9} />;
-    }
-
-    const showLabel = !isDimmed;
-    const labelY = n.layer === "decisions" ? n.y + r + 18 : n.y - r - 6;
-
-    return (
-      <g key={n.id}
-        onMouseEnter={() => setHoverNode(n.id)}
-        onMouseLeave={() => setHoverNode(null)}
-        onClick={(e) => { e.stopPropagation(); setSelected(selected === n.id ? null : n.id); }}
-        style={{ cursor: "pointer" }}>
-        {shape}
-        {showLabel && (
-          <text x={n.x} y={labelY} textAnchor="middle" fontSize={13} fontWeight={isActive ? 700 : 500}
-            fill={isDimmed ? "#ccc" : "#1C1C1C"} fontFamily="'IBM Plex Sans', sans-serif"
-            stroke="#FAFAF8" strokeWidth={4} paintOrder="stroke">
-            {n.id.replace(/([a-z])([A-Z])/g, "$1 $2").replace("SMS:", "SMS: ")}
-          </text>
-        )}
-      </g>
-    );
-  }
-
-  const selectedNode = selected ? NODES.find(n => n.id === selected) : null;
-
+  // ─── Render ─────────────────────────────────────────────
   return (
     <div style={{ fontFamily: "'IBM Plex Sans', sans-serif", background: "#FAFAF8", minHeight: "100vh", padding: "16px" }}>
       <div style={{ maxWidth: 1400, margin: "0 auto" }}>
+
         {/* Header */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8 }}>
           <div>
@@ -414,10 +553,11 @@ export default function App() {
             </div>
             <div style={{ height: 2, width: 48, background: "#2D5A3D", margin: "3px 0 4px" }} />
             <div style={{ fontSize: 10, color: "#999" }}>
-              {NODES.filter(n=>n.layer==="ontology").length} entities · {NODES.filter(n=>n.layer==="metrics").length} metrics · {NODES.filter(n=>n.layer==="decisions").length} decisions · {EDGES.length} edges · Scroll to zoom, drag to pan, click nodes to inspect
+              {NODES.filter(n => n.layer === "ontology").length} entities · {NODES.filter(n => n.layer === "metrics").length} metrics · {NODES.filter(n => n.layer === "decisions").length} decisions · {EDGES.length} edges · Scroll to zoom, drag nodes or canvas to pan
             </div>
           </div>
-          {/* Legend */}
+
+          {/* Shape legend */}
           <div style={{ display: "flex", gap: 12, fontSize: 10, color: "#555", alignItems: "center" }}>
             <span style={{ display: "flex", alignItems: "center", gap: 3 }}>
               <svg width="10" height="10"><circle cx="5" cy="5" r="4.5" fill="#888" stroke="#fff" strokeWidth="0.6"/></svg>Entity
@@ -443,63 +583,8 @@ export default function App() {
 
         {/* Graph + detail */}
         <div style={{ display: "flex", gap: 12 }}>
-          <div style={{ flex: 1, background: "#fff", borderRadius: 10, border: "0.5px solid #E5E2DB", overflow: "hidden", position: "relative", height: "80vh" }}
-            onWheel={handleWheel} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} onMouseLeave={handleMouseUp}>
-            <svg width="100%" height="100%" viewBox={`0 0 ${W} ${H}`} style={{ display: "block", cursor: panRef.current ? "grabbing" : "grab" }}
-              onClick={() => setSelected(null)}>
-              <g transform={`translate(${transform.x}, ${transform.y}) scale(${transform.k})`}>
-                {/* Background zones */}
-                <rect className="bg" x={0} y={0} width={W} height={H} fill="transparent" />
-                <rect x={10} y={H*0.12} width={W*0.48} height={H*0.82} fill="#185FA5" opacity={0.015} rx={16} />
-                <rect x={W*0.52} y={H*0.12} width={W*0.47} height={H*0.82} fill="#D85A30" opacity={0.015} rx={16} />
-                <text x={W*0.25} y={H*0.14} textAnchor="middle" fontSize={28} fontWeight={600} fill="#185FA5" opacity={0.3} fontFamily="'IBM Plex Sans'">User KG</text>
-                <text x={W*0.75} y={H*0.14} textAnchor="middle" fontSize={28} fontWeight={600} fill="#D85A30" opacity={0.3} fontFamily="'IBM Plex Sans'">Product KG</text>
-                {/* Layer labels */}
-                <text x={30} y={H*0.30} fontSize={18} fontWeight={600} fill="#999" opacity={0.35} fontFamily="'IBM Plex Sans'" transform={`rotate(-90 30 ${H*0.30})`}>ONTOLOGY</text>
-                <text x={30} y={H*0.62} fontSize={18} fontWeight={600} fill="#999" opacity={0.35} fontFamily="'IBM Plex Sans'" transform={`rotate(-90 30 ${H*0.62})`}>METRICS</text>
-                <text x={30} y={H*0.90} fontSize={18} fontWeight={600} fill="#999" opacity={0.35} fontFamily="'IBM Plex Sans'" transform={`rotate(-90 30 ${H*0.90})`}>DECISIONS</text>
-
-                {/* Edges */}
-                {simLinks.map((l, i) => {
-                  const isHighlighted = selected && (l.sid === selected || l.tid === selected);
-                  const isDimmed = selected && !isHighlighted;
-                  const isCross = (() => {
-                    const sn = NODES.find(n => n.id === l.sid);
-                    const tn = NODES.find(n => n.id === l.tid);
-                    return sn && tn && (sn.kg !== tn.kg || sn.kg === "shared" || tn.kg === "shared");
-                  })();
-                  const mx = (l.sx + l.tx) / 2;
-                  const my = (l.sy + l.ty) / 2;
-                  const dx = l.tx - l.sx;
-                  const dy = l.ty - l.sy;
-                  const len = Math.sqrt(dx*dx + dy*dy);
-                  const angle = Math.atan2(dy, dx) * 180 / Math.PI;
-                  const flipLabel = angle > 90 || angle < -90;
-                  return (
-                    <g key={i}>
-                      <line x1={l.sx} y1={l.sy} x2={l.tx} y2={l.ty}
-                        stroke={isCross ? "#2D5A3D" : "#888"}
-                        strokeWidth={isHighlighted ? 2 : isCross ? 0.8 : 0.6}
-                        strokeDasharray={isCross ? "8 5" : "none"}
-                        opacity={isDimmed ? 0.03 : isHighlighted ? 0.7 : isCross ? 0.25 : 0.2} />
-                      {!isDimmed && l.rel && len > 80 && (
-                        <text x={mx} y={my - 3} textAnchor="middle" fontSize={7}
-                          fill={isHighlighted ? (isCross ? "#2D5A3D" : "#555") : "#aaa"} 
-                          fontFamily="'JetBrains Mono', monospace" fontWeight={400}
-                          opacity={isHighlighted ? 0.9 : 0.45}
-                          transform={`rotate(${flipLabel ? angle + 180 : angle} ${mx} ${my})`}
-                          stroke="#fff" strokeWidth={isHighlighted ? 3 : 2} paintOrder="stroke">
-                          {l.rel}
-                        </text>
-                      )}
-                    </g>
-                  );
-                })}
-
-                {/* Nodes */}
-                {simNodes.map(n => drawNode(n))}
-              </g>
-            </svg>
+          <div ref={wrapperRef} style={{ flex: 1, position: "relative", height: "80vh" }}>
+            <svg ref={svgRef} style={{ display: "block", width: "100%", height: "100%" }} />
           </div>
 
           {/* Detail panel */}
@@ -565,7 +650,7 @@ export default function App() {
         </div>
 
         <div style={{ display: "flex", justifyContent: "space-between", marginTop: 8, fontSize: 9, color: "#999" }}>
-          <span>User KG: {NODES.filter(n=>n.kg==="user").length} nodes · Product KG: {NODES.filter(n=>n.kg==="product").length} nodes · Shared decisions: {NODES.filter(n=>n.kg==="shared").length}</span>
+          <span>User KG: {NODES.filter(n => n.kg === "user").length} nodes · Product KG: {NODES.filter(n => n.kg === "product").length} nodes · Shared decisions: {NODES.filter(n => n.kg === "shared").length}</span>
           <span>questt. · JioFS Intelligence Warehouse · BKG v1</span>
         </div>
       </div>
