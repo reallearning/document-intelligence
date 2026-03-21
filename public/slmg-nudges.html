@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SLMG Field Sales WhatsApp Nudges</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #0a0a0a; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .phone-container { width: 100%; max-width: 400px; height: 820px; background: #000; border-radius: 40px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); overflow: hidden; position: relative; border: 8px solid #1a1a1a; }
+        .phone-notch { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 150px; height: 30px; background: #000; border-radius: 0 0 20px 20px; z-index: 10; }
+        .whatsapp-header { background: #075E54; color: white; padding: 50px 16px 12px 16px; display: flex; align-items: center; gap: 12px; }
+        .back-arrow { font-size: 24px; }
+        .contact-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #2D5A3D 0%, #3BB896 100%); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; }
+        .contact-info { flex: 1; }
+        .contact-name { font-size: 17px; font-weight: 500; }
+        .contact-status { font-size: 13px; opacity: 0.8; }
+        .chat-background { background: #0d1418; height: calc(100% - 142px); overflow-y: auto; padding: 16px 12px 80px 12px; position: relative; }
+        .chat-background::-webkit-scrollbar { width: 6px; }
+        .chat-background::-webkit-scrollbar-thumb { background: #2a3942; border-radius: 3px; }
+        .message-group { margin-bottom: 20px; }
+        .timestamp { text-align: center; color: #8696a0; font-size: 12px; margin: 16px 0 12px 0; background: #1c2830; display: inline-block; padding: 6px 12px; border-radius: 8px; position: relative; left: 50%; transform: translateX(-50%); }
+        .message { max-width: 82%; margin-bottom: 4px; animation: fadeInUp 0.3s ease; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .message.received { margin-right: auto; }
+        .message.sent { margin-left: auto; }
+        .message-bubble { padding: 8px 12px; border-radius: 8px; position: relative; word-wrap: break-word; }
+        .received .message-bubble { background: #1f2c34; color: #e9edef; border-radius: 8px 8px 8px 0; }
+        .sent .message-bubble { background: #005c4b; color: #e9edef; border-radius: 8px 8px 0 8px; }
+        .message-text { font-size: 14.5px; line-height: 1.4; white-space: pre-wrap; }
+        .message-time { font-size: 11px; color: #8696a0; margin-top: 4px; display: flex; align-items: center; gap: 4px; justify-content: flex-end; }
+        .sent .message-time { color: #9fb4bd; }
+        .checkmark { color: #53bdeb; font-size: 15px; font-weight: 600; }
+        .image-message { background: none !important; padding: 0 !important; border-radius: 12px; overflow: hidden; max-width: 290px; }
+        .quick-replies { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+        .quick-reply-btn { background: #1f2c34; color: #2D5A3D; border: 1px solid #2D5A3D; padding: 8px 16px; border-radius: 20px; font-size: 13px; cursor: pointer; transition: all 0.2s; }
+        .quick-reply-btn:hover { background: #2D5A3D; color: white; }
+        .list-item { color: #e9edef; font-size: 13px; padding: 6px 0; border-bottom: 1px solid #2a3942; }
+        .list-item:last-child { border-bottom: none; }
+        .store-highlight { color: #2D5A3D; font-weight: 500; }
+        .amount-highlight { color: #ffd666; font-weight: 500; }
+        .input-area { position: absolute; bottom: 0; left: 0; right: 0; background: #1f2c34; padding: 8px; display: flex; align-items: center; gap: 8px; }
+        .input-field { flex: 1; background: #2a3942; border: none; padding: 10px 16px; border-radius: 24px; color: #e9edef; font-size: 14px; outline: none; }
+        .send-button { width: 40px; height: 40px; border-radius: 50%; background: #2D5A3D; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s; }
+        .send-button:hover { background: #1B4F32; }
+        .map-preview { width: 100%; height: 110px; background: #2a3942; border-radius: 8px 8px 0 0; position: relative; overflow: hidden; }
+        .map-pin { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 32px; }
+        .location-details { background: #1f2c34; padding: 12px; border-radius: 0 0 8px 8px; }
+        .location-name { color: #2D5A3D; font-weight: 500; font-size: 14px; margin-bottom: 4px; }
+        .location-address { color: #8696a0; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="phone-container">
+        <div class="phone-notch"></div>
+        <div class="whatsapp-header">
+            <div class="back-arrow">←</div>
+            <div class="contact-avatar">Q</div>
+            <div class="contact-info">
+                <div class="contact-name">Questt AI</div>
+                <div class="contact-status">online</div>
+            </div>
+        </div>
+
+        <div class="chat-background" id="chatContainer">
+            <div class="timestamp">TODAY</div>
+
+            <!-- ═══ MORNING BRIEF 6:30 AM ═══ -->
+            <div class="message-group">
+                <div class="message received">
+                    <div class="message-bubble">
+                        <div class="message-text">🌅 शुभ प्रभात Deepak!
+
+📊 Mar Performance:
+Target: 3,200 cases | Done: 2,140 (66.9%)
+
+🎯 Focus Brand - Thums Up:
+Target: 45% mix | Current: 38% 🔴
+
+💰 Incentive Earned: ₹5,420 / ₹9,800
+   • Volume (67%): ₹3,180
+   • Outlet billing (82/110): ₹1,540
+   • Cooler purity (71%): ₹700
+
+🏆 Team Rank: 7/12
+
+आज का Target: 142 cases
+Route: Bareilly City - Prem Nagar belt</div>
+                        <div class="message-time">6:30 AM</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ PRE-ROUTE: UNBILLED OUTLETS 7:15 AM ═══ -->
+            <div class="message-group">
+                <div class="message received">
+                    <div class="message-bubble">
+                        <div class="message-text">⚠️ URGENT: 6 outlets unbilled
+(आज की beat - Prem Nagar)
+
+List bhej raha hoon 👇</div>
+                        <div class="message-time">7:15 AM</div>
+                    </div>
+                </div>
+
+                <div class="message received">
+                    <div class="message-bubble image-message">
+                        <div style="background: #1a2027; padding: 16px;">
+                            <div style="color: #ff6b6b; font-weight: 600; margin-bottom: 12px; font-size: 13px;">
+                                📦 UNBILLED OUTLETS - आज की Beat
+                            </div>
+                            <div class="list-item">
+                                <span class="store-highlight">1. सिंह कोल्ड ड्रिंक्स</span> - <span class="amount-highlight">18 cases</span>
+                                <div style="color: #ff6b6b; font-size: 10px; margin-top: 2px;">⚠️ Campa stock spotted last visit</div>
+                            </div>
+                            <div class="list-item">
+                                <span class="store-highlight">2. पटेल जनरल स्टोर</span> - <span class="amount-highlight">12 cases</span>
+                            </div>
+                            <div class="list-item">
+                                <span class="store-highlight">3. माँ दुर्गा किराना</span> - <span class="amount-highlight">8 cases</span>
+                                <div style="color: #2D5A3D; font-size: 10px; margin-top: 2px;">🧊 Cooler outlet - purity check due</div>
+                            </div>
+                            <div class="list-item">
+                                <span class="store-highlight">4. अग्रवाल स्वीट्स</span> - <span class="amount-highlight">15 cases</span>
+                            </div>
+                            <div class="list-item">
+                                <span class="store-highlight">5. नया बाजार स्टोर</span> - <span class="amount-highlight">6 cases</span>
+                            </div>
+                            <div class="list-item">
+                                <span class="store-highlight">6. शुक्ला पान भंडार</span> - <span class="amount-highlight">4 cases</span>
+                            </div>
+                            <div style="margin-top: 12px; padding: 8px; background: #0f2a3e; border-radius: 6px; border-left: 3px solid #2D5A3D;">
+                                <div style="color: #2D5A3D; font-size: 12px; font-weight: 500;">🎁 SCHEME ACTIVE</div>
+                                <div style="color: #e9edef; font-size: 12px; margin-top: 4px;">Thums Up 250ml PET: Buy 10 cases free 1 + cooler sticker</div>
+                            </div>
+                            <div style="margin-top: 12px; padding: 8px; background: #2a1f0f; border-radius: 6px; border-left: 3px solid #ffd666;">
+                                <div style="color: #ffd666; font-size: 12px; font-weight: 500;">☀️ SUMMER PUSH</div>
+                                <div style="color: #e9edef; font-size: 12px; margin-top: 4px;">Maaza 200ml Tetra: Rs8/case incentive. ASSP Rs10 packs available.</div>
+                            </div>
+                            <div style="margin-top: 12px; text-align: center; color: #ffd666; font-weight: 600;">
+                                Total potential: 63 cases
+                            </div>
+                        </div>
+                        <div class="message-time" style="padding: 8px 12px; background: #1f2c34;">7:15 AM</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Response -->
+            <div class="message-group">
+                <div class="message sent">
+                    <div class="message-bubble">
+                        <div class="message-text">👍 Pehle Singh Cold Drinks jaaunga
+Campa wala issue handle karta hoon</div>
+                        <div class="message-time">7:18 AM <span class="checkmark">✓✓</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ AT STORE: COMPETITIVE ALERT + LOCATION 8:45 AM ═══ -->
+            <div class="message-group">
+                <div class="message received">
+                    <div class="message-bubble image-message">
+                        <div class="map-preview">
+                            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, #2D5A3D 0%, #1B4F32 100%);"></div>
+                            <div style="position: absolute; top: 20px; left: 25px; width: 70px; height: 2px; background: rgba(255,255,255,0.1);"></div>
+                            <div style="position: absolute; top: 40px; left: 15px; width: 90px; height: 2px; background: rgba(255,255,255,0.1);"></div>
+                            <div style="position: absolute; top: 60px; left: 45px; width: 50px; height: 2px; background: rgba(255,255,255,0.1);"></div>
+                            <div class="map-pin">📍</div>
+                            <div style="position: absolute; bottom: 15px; right: 20px; font-size: 10px; color: #8696a0;">0.3 km</div>
+                        </div>
+                        <div class="location-details">
+                            <div class="location-name">सिंह कोल्ड ड्रिंक्स</div>
+                            <div class="location-address">Prem Nagar Chauraha • Last visit: 5 Mar</div>
+                        </div>
+                        <div class="message-time" style="padding: 8px 12px; background: #1f2c34;">8:42 AM</div>
+                    </div>
+                </div>
+
+                <div class="message received">
+                    <div class="message-bubble image-message">
+                        <div style="background: #1a2027; padding: 16px;">
+                            <div style="color: #ff6b6b; font-weight: 600; margin-bottom: 10px; font-size: 13px;">
+                                🚨 COMPETITIVE ALERT - सिंह कोल्ड ड्रिंक्स
+                            </div>
+                            <div style="padding: 10px; background: #2a1a1a; border-radius: 6px; margin-bottom: 10px; border-left: 3px solid #ff6b6b;">
+                                <div style="color: #ff6b6b; font-weight: 600; font-size: 12px;">Campa Cola spotted</div>
+                                <div style="color: #e9edef; font-size: 11px; margin-top: 4px;">Last field audit (Mar 5): 2 Campa crates visible. Owner said "margin zyada hai"</div>
+                                <div style="color: #8696a0; font-size: 10px; margin-top: 4px;">Campa retailer margin: Rs18/case vs our Rs8/case</div>
+                            </div>
+                            <div style="color: #2D5A3D; font-weight: 600; margin-bottom: 8px; font-size: 12px;">💡 Counter Strategy:</div>
+                            <div style="color: #e9edef; font-size: 12px; line-height: 1.5;">
+                                1. Push Thums Up scheme: Buy 10 free 1 (effective Rs12/case margin)
+                                2. Cooler exclusivity bonus: Rs15/case if >80% Coca-Cola
+                                3. Highlight: "Summer season aa rahi hai, Thums Up demand 2x hogi"
+                            </div>
+                        </div>
+                        <div class="message-time" style="padding: 8px 12px; background: #1f2c34;">8:43 AM</div>
+                    </div>
+                </div>
+
+                <div class="message received">
+                    <div class="message-bubble">
+                        <div class="message-text">💡 Store Tips:
+
+Last order: TU 250ml 8 cases + Sprite 4 cases + Maaza 2 cases
+Missing: Kinley 1L (6 nearby stores stocking)
+Missing: ASSP Rs10 pack (summer demand starting)
+
+📸 Cooler photo lo - purity check karo
+Campa hata ke Coca-Cola brands fill karo</div>
+                        <div class="quick-replies">
+                            <button class="quick-reply-btn">✅ Done</button>
+                            <button class="quick-reply-btn">📸 Photo</button>
+                            <button class="quick-reply-btn">Skip</button>
+                        </div>
+                        <div class="message-time">8:43 AM</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User at store -->
+            <div class="message-group">
+                <div class="message sent">
+                    <div class="message-bubble image-message">
+                        <div style="background: #1a2027; padding: 40px; text-align: center; color: #667781;">
+                            📷 Cooler Photo
+                            <div style="font-size: 11px; margin-top: 8px;">Before: Campa 3 facings</div>
+                        </div>
+                        <div class="message-time" style="padding: 8px 12px; background: #005c4b;">8:58 AM <span class="checkmark">✓✓</span></div>
+                    </div>
+                </div>
+                <div class="message sent">
+                    <div class="message-bubble">
+                        <div class="message-text">Baat ki owner se. Scheme samjhaya.
+Order liya:
+Thums Up 250ml - 12 cases
+Sprite 600ml - 4 cases
+Maaza 200ml Tetra - 6 cases
+Kinley 1L - 4 cases (pehli baar!)
+ASSP Rs10 pack - 3 cases
+
+Total: 29 cases 💪
+Campa 2 crate hatwa ke TU bhara cooler me</div>
+                        <div class="message-time">9:15 AM <span class="checkmark">✓✓</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System acknowledgment -->
+            <div class="message-group">
+                <div class="message received">
+                    <div class="message-bubble">
+                        <div class="message-text">🎯 Bahut badhiya! 29 cases - best order of the week!
+
+Cooler purity: 85% ✅ (was 62%)
+New SKU added: Kinley 1L + ASSP ✅
+Campa displacement: 2 crates removed ✅
+
+💰 Incentive impact: +Rs180 (cooler bonus)</div>
+                        <div class="message-time">9:16 AM</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ USER ASKS FOR OUTLET HISTORY 10:30 AM ═══ -->
+            <div class="message-group">
+                <div class="message sent">
+                    <div class="message-bubble">
+                        <div class="message-text">Patel General Store ka last 3 month order dikhao</div>
+                        <div class="message-time">10:28 AM <span class="checkmark">✓✓</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="message-group">
+                <div class="message received">
+                    <div class="message-bubble image-message">
+                        <div style="background: #1a2027; padding: 16px;">
+                            <div style="color: #2D5A3D; font-weight: 600; margin-bottom: 12px; font-size: 13px;">
+                                📊 पटेल जनरल स्टोर - Last 3 Months
+                            </div>
+                            <div class="list-item">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span style="color: #8696a0; font-size: 12px;">5 Mar</span>
+                                    <span class="amount-highlight">14 cases</span>
+                                </div>
+                                <div style="color: #e9edef; font-size: 11px; margin-top: 4px;">TU 250ml 6cs, Sprite 4cs, Maaza 2cs, Limca 2cs</div>
+                            </div>
+                            <div class="list-item">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span style="color: #8696a0; font-size: 12px;">19 Feb</span>
+                                    <span class="amount-highlight">11 cases</span>
+                                </div>
+                                <div style="color: #e9edef; font-size: 11px; margin-top: 4px;">TU 250ml 5cs, Sprite 3cs, Maaza 2cs, Kinley 1cs</div>
+                            </div>
+                            <div class="list-item">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span style="color: #8696a0; font-size: 12px;">6 Feb</span>
+                                    <span class="amount-highlight">12 cases</span>
+                                </div>
+                                <div style="color: #e9edef; font-size: 11px; margin-top: 4px;">TU 250ml 5cs, Sprite 4cs, Limca 3cs</div>
+                            </div>
+                            <div class="list-item">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span style="color: #8696a0; font-size: 12px;">22 Jan</span>
+                                    <span class="amount-highlight">10 cases</span>
+                                </div>
+                                <div style="color: #e9edef; font-size: 11px; margin-top: 4px;">TU 250ml 4cs, Sprite 3cs, Maaza 2cs, Fanta 1cs</div>
+                            </div>
+                            <div style="margin-top: 12px; padding: 8px; background: #0f2a3e; border-radius: 6px;">
+                                <div style="color: #e9edef; font-size: 12px;">Avg Order: 11.7 cases</div>
+                                <div style="color: #8696a0; font-size: 11px; margin-top: 2px;">Buys every 2 weeks | TU heavy | No ASSP yet</div>
+                            </div>
+                        </div>
+                        <div class="message-time" style="padding: 8px 12px; background: #1f2c34;">10:29 AM</div>
+                    </div>
+                </div>
+
+                <div class="message received">
+                    <div class="message-bubble">
+                        <div class="message-text">✅ Regular buyer hai - growing trend
+Target: 14-16 cases aaj
+Push: ASSP Rs10 pack + Maaza Tetra (summer pre-load)
+Limca dropped last order - push back</div>
+                        <div class="message-time">10:29 AM</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User response -->
+            <div class="message-group">
+                <div class="message sent">
+                    <div class="message-bubble">
+                        <div class="message-text">Patel se 16 cases liya 🎯
+ASSP bhi add kiya pehli baar
+Limca bhi wapas daala</div>
+                        <div class="message-time">10:52 AM <span class="checkmark">✓✓</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ MID-DAY: DISTRIBUTOR STOCK CHECK 12:30 PM ═══ -->
+            <div class="message-group">
+                <div class="message sent">
+                    <div class="message-bubble">
+                        <div class="message-text">Sharma Beverages ke paas Maaza 200ml Tetra stock hai?
+Ek outlet 10 cases maang raha hai</div>
+                        <div class="message-time">12:28 PM <span class="checkmark">✓✓</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="message-group">
+                <div class="message received">
+                    <div class="message-bubble">
+                        <div class="message-text">📦 Distributor Stock - Sharma Beverages
+
+Maaza 200ml Tetra: 85 cases ✅
+Maaza 600ml PET: 42 cases ✅
+Thums Up 250ml PET: 220 cases ✅
+Thums Up ASSP 200ml: 64 cases ✅
+Sprite 600ml PET: 38 cases ⚠️ (low)
+Kinley 1L: 96 cases ✅
+
+10 cases Maaza Tetra available - order confirm karo ✅
+
+⚠️ Sprite 600ml low stock - kal delivery aayegi</div>
+                        <div class="message-time">12:29 PM</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Response -->
+            <div class="message-group">
+                <div class="message sent">
+                    <div class="message-bubble">
+                        <div class="message-text">OK Maaza confirm. Sprite aaj push nahi karunga kal tak</div>
+                        <div class="message-time">12:31 PM <span class="checkmark">✓✓</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ AFTERNOON: PRIORITY ALERTS 2:15 PM ═══ -->
+            <div class="message-group">
+                <div class="message received">
+                    <div class="message-bubble image-message">
+                        <div style="background: #1a2027; padding: 16px;">
+                            <div style="color: #ff6b6b; font-weight: 600; margin-bottom: 12px; font-size: 13px;">
+                                ⚡ PRIORITY - 3 Stores Pending
+                            </div>
+                            <div style="padding: 10px; background: #2a1f0f; border-radius: 6px; margin-bottom: 8px; border-left: 3px solid #ffd666;">
+                                <div style="color: #ffd666; font-weight: 600; font-size: 13px; margin-bottom: 4px;">अग्रवाल स्वीट्स</div>
+                                <div style="color: #e9edef; font-size: 12px; margin-bottom: 4px;">🎯 Holi party pack push karo - shaadi + Holi demand</div>
+                                <div style="color: #8696a0; font-size: 11px;">TU 1.25L family pack scheme active. Sweet shop = high footfall.</div>
+                            </div>
+                            <div style="padding: 10px; background: #1a2a1f; border-radius: 6px; margin-bottom: 8px; border-left: 3px solid #00a884;">
+                                <div style="color: #00a884; font-weight: 600; font-size: 13px; margin-bottom: 4px;">नया बाजार स्टोर</div>
+                                <div style="color: #e9edef; font-size: 12px; margin-bottom: 4px;">🧊 New cooler deployed last week - purity check!</div>
+                                <div style="color: #8696a0; font-size: 11px;">First check since installation. >80% purity = Rs15/case bonus active.</div>
+                            </div>
+                            <div style="padding: 10px; background: #2a1a1a; border-radius: 6px; margin-bottom: 12px; border-left: 3px solid #ff6b6b;">
+                                <div style="color: #ff6b6b; font-weight: 600; font-size: 13px; margin-bottom: 4px;">शुक्ला पान भंडार</div>
+                                <div style="color: #e9edef; font-size: 12px; margin-bottom: 4px;">⏰ Payment overdue: Rs2,800 (18 days)</div>
+                                <div style="color: #8696a0; font-size: 11px;">Gentle reminder de. Chota order le - Rs500 minimum.</div>
+                            </div>
+                            <div style="margin-top: 12px; padding: 8px; background: #1f2c34; border-radius: 6px; text-align: center;">
+                                <div style="color: #ffd666; font-size: 12px; font-weight: 500;">💰 Total potential: 25 cases</div>
+                            </div>
+                        </div>
+                        <div class="message-time" style="padding: 8px 12px; background: #1f2c34;">2:12 PM</div>
+                    </div>
+                </div>
+
+                <div class="message received">
+                    <div class="message-bubble">
+                        <div class="message-text">💡 Pro tip: अग्रवाल स्वीट्स me Holi party pack push karo
+Sweet shop pe footfall bohot hai - TU 1.25L ka scheme use karo 🎯</div>
+                        <div class="message-time">2:13 PM</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Response -->
+            <div class="message-group">
+                <div class="message sent">
+                    <div class="message-bubble">
+                        <div class="message-text">Agrawal pe party pack 8 cases le liye!
+Naya Bazaar cooler 90% purity ✅
+Shukla se Rs1,400 collect kiya + 4 cases order</div>
+                        <div class="message-time">3:45 PM <span class="checkmark">✓✓</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ USER ASKS ABOUT SCHEME 4:10 PM ═══ -->
+            <div class="message-group">
+                <div class="message sent">
+                    <div class="message-bubble">
+                        <div class="message-text">Maa Durga Kirana pe kaunsa scheme best hai?
+Owner ne bola Campa sasta hai</div>
+                        <div class="message-time">4:08 PM <span class="checkmark">✓✓</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="message-group">
+                <div class="message received">
+                    <div class="message-bubble image-message">
+                        <div style="background: #1a2027; padding: 16px;">
+                            <div style="color: #2D5A3D; font-weight: 600; margin-bottom: 12px; font-size: 13px;">
+                                🎁 माँ दुर्गा किराना - Schemes + Counter
+                            </div>
+                            <div style="padding: 10px; background: #0f2a3e; border-radius: 6px; border-left: 3px solid #2D5A3D; margin-bottom: 8px;">
+                                <div style="color: #2D5A3D; font-weight: 600; font-size: 13px;">Thums Up 250ml Buy 10+1</div>
+                                <div style="color: #e9edef; font-size: 12px; margin-top: 4px;">Effective margin Rs12/case vs Campa Rs18</div>
+                                <div style="color: #8696a0; font-size: 11px; margin-top: 4px;">Valid: till 31 Mar</div>
+                            </div>
+                            <div style="padding: 10px; background: #2a1f0f; border-radius: 6px; border-left: 3px solid #ffd666; margin-bottom: 8px;">
+                                <div style="color: #ffd666; font-weight: 600; font-size: 13px;">Cooler Exclusivity Bonus</div>
+                                <div style="color: #e9edef; font-size: 12px; margin-top: 4px;">Rs15/case bonus - cooler me >80% Coca-Cola</div>
+                                <div style="color: #8696a0; font-size: 11px; margin-top: 4px;">Total effective: Rs27/case (beats Campa Rs18) 💪</div>
+                            </div>
+                            <div style="padding: 10px; background: #1a2a1f; border-radius: 6px; border-left: 3px solid #00a884; margin-bottom: 8px;">
+                                <div style="color: #00a884; font-weight: 600; font-size: 13px;">ASSP Rs10 Pack</div>
+                                <div style="color: #e9edef; font-size: 12px; margin-top: 4px;">Matches Campa price point exactly</div>
+                                <div style="color: #8696a0; font-size: 11px; margin-top: 4px;">Consumer: same Rs10 price, Thums Up brand ⚡</div>
+                            </div>
+                            <div style="margin-top: 12px; padding: 10px; background: #2a1a1a; border-radius: 6px;">
+                                <div style="color: #ff6b6b; font-size: 12px; font-weight: 600; margin-bottom: 4px;">🗣️ Campa Counter Script:</div>
+                                <div style="color: #e9edef; font-size: 12px; line-height: 1.5;">"Bhaiya, Campa ka margin zyada dikhe but consumer Thums Up maangta hai. Summer me demand 2x hoti hai. Cooler bonus + scheme se aapka margin Rs27/case hai. Aur Thums Up ki brand pull se stock rotate hota hai."</div>
+                            </div>
+                        </div>
+                        <div class="message-time" style="padding: 8px 12px; background: #1f2c34;">4:09 PM</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Response -->
+            <div class="message-group">
+                <div class="message sent">
+                    <div class="message-bubble">
+                        <div class="message-text">Script kaam kiya! Owner convinced 🙏
+8 cases TU + 4 cases Maaza + ASSP liya
+Cooler me Campa hatayi</div>
+                        <div class="message-time">4:32 PM <span class="checkmark">✓✓</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ CREDIT CHECK 4:50 PM ═══ -->
+            <div class="message-group">
+                <div class="message sent">
+                    <div class="message-bubble">
+                        <div class="message-text">Maa Durga ka credit kitna hai?
+Owner bada order dena chahta hai Holi ke liye</div>
+                        <div class="message-time">4:48 PM <span class="checkmark">✓✓</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="message-group">
+                <div class="message received">
+                    <div class="message-bubble image-message">
+                        <div style="background: #1a2027; padding: 16px;">
+                            <div style="color: #2D5A3D; font-weight: 600; margin-bottom: 12px; font-size: 13px;">
+                                💳 माँ दुर्गा किराना - Credit Status
+                            </div>
+                            <div style="padding: 12px; background: #0f2a3e; border-radius: 6px; margin-bottom: 8px;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                    <span style="color: #8696a0; font-size: 12px;">Outstanding:</span>
+                                    <span style="color: #ffd666; font-weight: 600; font-size: 14px;">Rs6,240</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                    <span style="color: #8696a0; font-size: 12px;">Credit Limit:</span>
+                                    <span style="color: #e9edef; font-size: 13px;">Rs15,000</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span style="color: #8696a0; font-size: 12px;">Credit Days:</span>
+                                    <span style="color: #e9edef; font-size: 13px;">14 days</span>
+                                </div>
+                            </div>
+                            <div class="list-item">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span style="color: #8696a0; font-size: 11px;">Bill #SB-4521 - 5 Mar</span>
+                                    <span class="amount-highlight" style="font-size: 12px;">Rs3,840</span>
+                                </div>
+                                <div style="color: #2D5A3D; font-size: 10px; margin-top: 2px;">Due: 19 Mar (6 days left)</div>
+                            </div>
+                            <div class="list-item">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span style="color: #8696a0; font-size: 11px;">Bill #SB-4389 - 19 Feb</span>
+                                    <span class="amount-highlight" style="font-size: 12px;">Rs2,400</span>
+                                </div>
+                                <div style="color: #ff6b6b; font-size: 10px; margin-top: 2px;">Overdue by 6 days</div>
+                            </div>
+                            <div style="margin-top: 12px; padding: 8px; background: #1f2c34; border-radius: 6px; text-align: center;">
+                                <div style="color: #2D5A3D; font-size: 12px;">✅ Credit available: Rs8,760</div>
+                                <div style="color: #8696a0; font-size: 11px; margin-top: 2px;">Holi order Rs5,000-6,000 tak le sakte ho</div>
+                            </div>
+                        </div>
+                        <div class="message-time" style="padding: 8px 12px; background: #1f2c34;">4:49 PM</div>
+                    </div>
+                </div>
+
+                <div class="message received">
+                    <div class="message-bubble">
+                        <div class="message-text">⚠️ 1 bill overdue - politely Rs2,400 ka reminder de do
+But credit limit healthy hai - Holi order Rs5-6K tak le sakte ho easily 👍</div>
+                        <div class="message-time">4:49 PM</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Response -->
+            <div class="message-group">
+                <div class="message sent">
+                    <div class="message-bubble">
+                        <div class="message-text">Payment Rs2,400 collect kar liya 🙏
+Holi advance order: TU 1.25L 10 cases + Maaza 8 cases + Sprite 6 cases
+Rs5,200 ka order! Kal delivery hogi</div>
+                        <div class="message-time">5:05 PM <span class="checkmark">✓✓</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ END OF DAY SUMMARY 6:30 PM ═══ -->
+            <div class="message-group">
+                <div class="message received">
+                    <div class="message-bubble">
+                        <div class="message-text">🎉 Shandar din Deepak!
+
+📊 Today's Summary:
+Cases: 158 (Target: 142) ✅ 🔥
+Outlets Billed: 6/6 (100%) ✅
+Cooler Checks: 3 (2 purity restored) ✅
+
+🥤 Brand Mix:
+Thums Up: 52% ✅ (target 45%)
+Maaza: 22% ⬆️ (summer push working)
+Sprite: 12%
+Kinley: 8% (new outlet added!)
+Others: 6%
+
+💰 MTD: 66.9% → 72.2%
+Focus Brand: 38% → 42% ⬆️
+
+💵 Incentive Update:
+Earned: ₹6,280 / ₹9,800 potential
+   • Volume (72%): ₹3,840 ⬆️
+   • Outlet billing (88/110): ₹1,540
+   • Cooler purity (76%): ₹900 ⬆️
+
+🏆 Rank: 7/12 → 4/12 ⬆️⬆️
+
+🥊 Campa Wins Today:
+Outlets reclaimed: 2 (cooler purity restored)
+New Campa-counter orders: 3 outlets</div>
+                        <div class="message-time">6:30 PM</div>
+                    </div>
+                </div>
+
+                <div class="message received">
+                    <div class="message-bubble">
+                        <div class="message-text">📅 Kal ki prep:
+Route: Prem Nagar Extension - Civil Lines
+Target: 148 cases
+First store: यादव जूस सेंटर (8:00 AM)
+
+☀️ Summer Alert: Maaza + ASSP heavy push
+Kal 4 stores me Campa new stock milne ki info hai
+Counter strategy ready rakhna
+
+🎯 Holi: 2 din baad! Party pack push maximum karo
+
+💡 Pro tip: Rs2,400 payment collect kiya
+2 aur stores ka reminder auto-bhej diya jayega
+
+Shubh ratri! 🌙</div>
+                        <div class="message-time">6:31 PM</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Response -->
+            <div class="message-group">
+                <div class="message sent">
+                    <div class="message-bubble">
+                        <div class="message-text">Thanks! Aaj bohot helpful tha especially Campa counter wala script 🙏
+Kal full attack mode! 💪</div>
+                        <div class="message-time">6:34 PM <span class="checkmark">✓✓</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-area">
+            <input type="text" class="input-field" placeholder="Type a message">
+            <button class="send-button">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const chatContainer = document.getElementById('chatContainer');
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+        document.querySelectorAll('.quick-reply-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.style.background = '#2D5A3D';
+                this.style.color = 'white';
+                setTimeout(() => { this.style.background = '#1f2c34'; this.style.color = '#2D5A3D'; }, 200);
+            });
+        });
+    </script>
+</body>
+</html>
