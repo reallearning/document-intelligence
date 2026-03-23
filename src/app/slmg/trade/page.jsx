@@ -969,7 +969,7 @@ export default function SLMGTradeCommand() {
     { id: "actions", label: "Schemes" },
   ];
 
-  const sideW = 160;
+  const sideW = 180;
 
   return (
     <div className="overflow-auto" style={{ background: C.page, height: "100vh", fontFamily: font, color: C.text }}>
@@ -1017,7 +1017,7 @@ export default function SLMGTradeCommand() {
             border: "none", cursor: "pointer", marginBottom: 4, transition: "all 0.15s", textAlign: "left",
           }}>
             <span style={{ fontSize: 13, fontWeight: activeTab === tab.id ? 600 : 400, color: activeTab === tab.id ? "#fff" : "rgba(255,255,255,0.4)", fontFamily: font }}>{tab.label}</span>
-            {tab.count && <span style={{ fontSize: 9, fontFamily: mono, padding: "1px 6px", borderRadius: 6, background: activeTab === tab.id ? C.green : "rgba(255,255,255,0.08)", color: activeTab === tab.id ? "#fff" : "rgba(255,255,255,0.4)", fontWeight: 700 }}>{tab.count}</span>}
+            {tab.count && <span style={{margin: "0 4px", fontSize: 9, fontFamily: mono, padding: "1px 6px", borderRadius: 6, background: activeTab === tab.id ? C.green : "rgba(255,255,255,0.08)", color: activeTab === tab.id ? "#fff" : "rgba(255,255,255,0.4)", fontWeight: 700 }}>{tab.count}</span>}
           </button>
         ))}
         <div style={{ flex: 1 }} />
