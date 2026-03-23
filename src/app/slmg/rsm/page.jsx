@@ -17,6 +17,7 @@ export default function QuesttSalesWatchtower() {
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
+  const [insightCategory, setInsightCategory] = useState('all');
   const chatMessagesEndRef = React.useRef(null);
 
   React.useEffect(() => {
@@ -84,7 +85,7 @@ export default function QuesttSalesWatchtower() {
     {
       type: 'critical',
       title: 'Bareilly territory - 3 distributors below 2 days stock cover on sparkling SKUs',
-      detail: 'Stock alert: Thums Up 250ml PET and Sprite 600ml PET inventory at 1.2 days cover across Sharma Beverages, Verma Distributors, and Gupta Trading Co. These 3 distributors collectively serve 685 outlets. Estimated sales loss of Rs 8.2L/day if stockout occurs. Immediate reorder from Bareilly plant required.',
+      detail: 'Stock alert: Thums Up 250ml PET and Sprite 600ml PET inventory at 1.2 days cover across Sharma Beverages, Verma Distributors, and Gupta Trading Co. These 3 distributors collectively serve 685 outlets. Estimated sales loss of Rs 4.2L/day on these 2 SKUs if stockout occurs. Immediate reorder from Bareilly plant required.',
       sources: ['inventory', 'dms']
     },
     {
@@ -107,8 +108,8 @@ export default function QuesttSalesWatchtower() {
     },
     {
       type: 'highlight',
-      title: 'Lucknow territory - 3 distributors restored to 92%+ distribution from 68% slump',
-      detail: 'Singh Sales Agency, Ladhani Lucknow, and Pandey Sales Corp (Gorakhpur City and Basti areas) recovered from 2-week distribution slump. Now averaging 92% numeric distribution vs 68% two weeks ago. These distributors serve 825 outlets. Secondary sales back to Rs 52L weekly.',
+      title: 'Region recovery — 3 distributors across Lucknow and Gorakhpur restored to 92%+ distribution',
+      detail: 'Ladhani Lucknow (Hazratganj/Aminabad), Mishra Beverages (Sultanpur/Unnao), and Pandey Sales Corp (Gorakhpur City) recovered from 2-week distribution slump after focused intervention. Now averaging 92% numeric distribution vs 68% two weeks ago. These distributors collectively serve 825 outlets. Weekly secondary sales back to Rs 52L combined.',
       sources: ['dms', 'sfa']
     }
   ];
@@ -116,6 +117,7 @@ export default function QuesttSalesWatchtower() {
   const insights = [
     {
       id: 1,
+      category: 'noncola',
       priority: 'critical',
       title: 'Non-cola SKU distribution gap of 24 points vs core portfolio - 1,240 unbilled outlets',
       summary: 'Maaza and Kinley 1L at 68% numeric distribution vs 92% for Thums Up - Rs 2.2Cr quarterly gap',
@@ -199,6 +201,7 @@ export default function QuesttSalesWatchtower() {
     },
     {
       id: 2,
+      category: 'territory',
       priority: 'high',
       title: 'Territory-level distribution variance - 16 point gap between best and worst performing areas',
       summary: 'Gorakhpur West at 94% numeric distribution vs Bareilly District at 78% - systematic coverage pattern',
@@ -282,6 +285,7 @@ export default function QuesttSalesWatchtower() {
     },
     {
       id: 3,
+      category: 'summer',
       priority: 'high',
       title: 'Summer peak SKU numeric distribution at 72% vs 88% target - 18 days to summer peak demand',
       summary: 'Summer peak portfolio stocking rate 16 points below target across 3,850 outlets',
@@ -362,6 +366,223 @@ export default function QuesttSalesWatchtower() {
         'How does distributor order frequency impact summer peak SKU reach?',
         'What is the revenue correlation between distribution % and summer uplift?',
         'Would prioritizing Bareilly and Lucknow territories yield optimal ROI?'
+      ]
+    },
+    {
+      id: 4,
+      category: 'cooler',
+      priority: 'healthy',
+      title: 'Gorakhpur cooler outlets billing 28% higher than non-cooler outlets — asset ROI proven but underexploited',
+      summary: 'Cooler-equipped outlets across the region generate Rs 11,400/month vs Rs 8,900 at non-cooler outlets, but Bareilly cooler outlet velocity is declining',
+      keyNumbers: {
+        coolerLift: '+28% billing velocity',
+        coolerOutlets: '1,840 region-wide',
+        bareillyDecline: '-14% velocity drop L3M',
+        gorakhpurBenchmark: 'Rs 12,200/outlet/mo'
+      },
+      narrative: "Cross-referencing the asset master (cooler placements) with DMS billing data reveals a clear pattern: cooler-equipped outlets generate 28% higher monthly billing than non-cooler outlets in the same beats (Rs 11,400 vs Rs 8,900 region average). However, this lift varies sharply by territory. Gorakhpur cooler outlets average Rs 12,200/month with stable month-on-month velocity. Bareilly cooler outlets have dropped from Rs 10,800 to Rs 9,300 over the last 3 months — a 14% velocity decline that is not mirrored at non-cooler outlets in the same beats. This suggests the cooler asset itself is being underutilized: likely poor stocking, reduced salesman attention, or competitive encroachment at cooler outlets specifically. Bareilly has 455 cooler outlets, and the velocity gap between Bareilly (Rs 9,300) and Gorakhpur (Rs 12,200) represents Rs 13.2L/month in unrealized throughput from existing assets alone.",
+      dataTable: {
+        headers: ['Territory', 'Cooler Outlet Velocity', 'vs L3M Trend', 'Non-cooler Velocity', 'Cooler Outlets'],
+        rows: [
+          ['Gorakhpur-Deoria', 'Rs 12,200/mo', 'Stable', 'Rs 9,400/mo', '485'],
+          ['Ayodhya-Amethi', 'Rs 10,800/mo', '-4%', 'Rs 8,600/mo', '320'],
+          ['Lucknow-Unnao', 'Rs 10,100/mo', '-8%', 'Rs 8,800/mo', '580'],
+          ['Bareilly-Moradabad', 'Rs 9,300/mo', '-14%', 'Rs 8,900/mo', '455']
+        ]
+      },
+      recommendation: {
+        action: "Investigate the Bareilly cooler velocity decline: cross-reference with salesman visit data at cooler outlets, check if cooler outlets are being visited less frequently than non-cooler outlets in the same beat. Gorakhpur ASM reports that frequent cooler-specific attention during visits drives the velocity gap — worth validating and replicating. Consider deploying a cooler-focused visit protocol as a pilot in Bareilly.",
+        return: "Closing the velocity gap between Bareilly (Rs 9,300) and Gorakhpur (Rs 12,200) across 455 cooler outlets = Rs 13.2L/month uplift",
+        roi: "Primarily an execution fix at existing assets — no capex required, estimated Rs 1.6Cr annual throughput from velocity recovery alone"
+      },
+      owner: 'Trade Marketing - Cooler Assets',
+      color: C.sage,
+      sources: ['dms'],
+      trail: [
+        { timestamp: '08:30 AM', agent: 'Orchestrator Agent', action: 'Comparing outlet billing velocity by cooler status', database: 'DMS System + Asset Master', query: 'SELECT territory, has_cooler, AVG(monthly_billing) as avg_velocity, COUNT(outlet_id) as outlet_count FROM outlet_billing JOIN asset_master ON outlet_id WHERE region = "UP_Region" AND billing_month >= DATE_SUB(CURRENT_DATE, INTERVAL 3 MONTH) GROUP BY territory, has_cooler', thinking: 'Cooler outlets bill 28% higher than non-cooler across the region. But the gap varies: Gorakhpur +30%, Bareilly only +4%. Bareilly cooler outlets are underperforming their asset potential.', nextAgent: 'Distribution Agent' },
+        { timestamp: '08:32 AM', agent: 'Distribution Agent', action: 'Analyzing cooler outlet velocity trend by territory', database: 'DMS System', query: 'SELECT territory, month, AVG(monthly_billing) as velocity FROM outlet_billing JOIN asset_master ON outlet_id WHERE has_cooler = 1 AND region = "UP_Region" GROUP BY territory, month ORDER BY month DESC LIMIT 12', thinking: 'Gorakhpur cooler outlets: stable at Rs 12,200 for 6 months. Bareilly cooler outlets: Rs 10,800 three months ago, Rs 9,300 now. 14% decline. Non-cooler outlets in Bareilly are flat. The decline is cooler-specific, not territory-wide.', nextAgent: 'Sales Agent' },
+        { timestamp: '08:34 AM', agent: 'Sales Agent', action: 'Checking salesman visit patterns at cooler vs non-cooler outlets', database: 'SFA System', query: 'SELECT territory, has_cooler, AVG(visits_per_month) as visit_freq, AVG(time_per_visit_mins) as visit_duration FROM salesman_visits JOIN asset_master ON outlet_id WHERE territory IN ("Bareilly-Moradabad", "Gorakhpur-Deoria") GROUP BY territory, has_cooler', thinking: 'Gorakhpur salesmen spend 18% more time at cooler outlets than non-cooler (8.2 min vs 6.9 min). Bareilly salesmen show no difference (6.4 min vs 6.2 min). Gorakhpur salesmen are doing something extra at cooler outlets that Bareilly salesmen are not.', nextAgent: 'Analytics Engine' },
+        { timestamp: '08:36 AM', agent: 'Analytics Engine', action: 'Quantifying cooler velocity recovery opportunity', database: 'Analytics DB', query: 'SELECT territory, cooler_outlets, current_velocity, gorakhpur_benchmark, monthly_gap, annual_opportunity FROM cooler_opportunity_model WHERE region = "UP_Region"', thinking: 'Closing Bareilly cooler velocity to Gorakhpur benchmark: 455 outlets × Rs 2,900/month gap = Rs 13.2L/month = Rs 1.6Cr/year. This is an execution fix on existing assets, not new capex. The SFA visit data suggests the lever is salesman behavior at cooler outlets.', nextAgent: null }
+      ],
+      whatIfScenarios: [
+        'What is driving the velocity decline at Bareilly cooler outlets specifically?',
+        'How much time do Gorakhpur salesmen spend at cooler outlets vs Bareilly?',
+        'Would adding new coolers in Lucknow outperform fixing velocity on existing Bareilly coolers?',
+        'What is the correlation between cooler outlet velocity and competitive billing patterns?'
+      ]
+    },
+    {
+      id: 5,
+      category: 'shelf',
+      priority: 'high',
+      title: '14 Bareilly beats showing synchronized 15%+ billing decline — pattern consistent with competitive displacement',
+      summary: 'Clustered, simultaneous secondary sales drops across 680 outlets in Bareilly City and Rampur, not explained by seasonal or distribution factors',
+      keyNumbers: {
+        affectedBeats: '14 beats',
+        avgBillingDecline: '-18% over 8 weeks',
+        outletExposure: '680 outlets',
+        weeklyRevenueAtRisk: 'Rs 4.8L/week'
+      },
+      narrative: "DMS billing analysis flagged an unusual pattern: 14 beats in Bareilly City and Rampur show synchronized secondary sales decline of 15-22% over the last 8 weeks. This is not a gradual territory-wide trend — adjacent beats in the same distributor territories are stable or growing. The decline is concentrated in mid-tier kirana outlets (Rs 400-800/week billing), not large accounts or modern trade. Order frequency at affected outlets dropped from 3.2 to 2.4 orders per month, and average order value declined 12%. Nielsen Western UP data for the same period shows Campa Cola gaining 4.2 share points in the carbonated segment. The geographic clustering (14 contiguous beats), outlet profile (mid-tier GT), and timing (simultaneous onset) are consistent with coordinated competitive entry, not organic churn. Gorakhpur territory shows no similar pattern despite comparable outlet profiles, suggesting visit frequency (3x/week in Gorakhpur vs 2x in Bareilly) may be a protective factor.",
+      dataTable: {
+        headers: ['Beat Cluster', 'Billing Decline', 'Affected Outlets', 'Avg Order Freq Drop', 'Weekly Revenue'],
+        rows: [
+          ['Bareilly City North', '-22%', '196 outlets', '3.4 to 2.2/mo', 'Rs 1.4L'],
+          ['Bareilly City South', '-19%', '174 outlets', '3.1 to 2.3/mo', 'Rs 1.2L'],
+          ['Rampur Urban', '-16%', '182 outlets', '3.2 to 2.6/mo', 'Rs 1.1L'],
+          ['Rampur Rural', '-12%', '128 outlets', '2.8 to 2.4/mo', 'Rs 1.1L']
+        ]
+      },
+      recommendation: {
+        action: "Immediate field investigation: deploy ASM Bareilly for 2-day outlet audit in the 14 affected beats to confirm competitive cause (Campa presence, rack placements, pricing changes). In parallel, increase salesman visit frequency from 2x to 3x/week in affected beats and activate a retention scheme (Rs 15/case margin bump for 4 weeks) at the 680 affected outlets to stem further volume loss while root cause is confirmed.",
+        return: "Protecting Rs 4.8L/week (Rs 2.5Cr annual) revenue base from further erosion",
+        roi: "Rs 4.1L retention scheme cost (4 weeks) + Rs 0.6L incremental logistics vs Rs 2.5Cr annual revenue at risk"
+      },
+      owner: 'Sales Operations - Competitive Response',
+      color: C.sage,
+      sources: ['dms'],
+      trail: [
+        { timestamp: '09:45 AM', agent: 'Orchestrator Agent', action: 'Detecting anomalous billing decline pattern', database: 'DMS System', query: 'SELECT beat_id, beat_name, pct_change_8_weeks, outlet_count, weekly_billing FROM beat_performance WHERE territory = "Bareilly-Moradabad" AND pct_change_8_weeks < -15 ORDER BY pct_change_8_weeks ASC', thinking: '14 beats with >15% decline in 8 weeks. Adjacent beats are stable. This is geographically clustered and simultaneous — not random outlet-level churn. Pattern suggests coordinated external factor.', nextAgent: 'Distribution Agent' },
+        { timestamp: '09:47 AM', agent: 'Distribution Agent', action: 'Ruling out distribution and supply causes', database: 'DMS System', query: 'SELECT beat_id, distributor_stock_cover, distributor_order_freq, salesman_visit_pct FROM beat_health_check WHERE beat_id IN (SELECT beat_id FROM beat_performance WHERE pct_change_8_weeks < -15)', thinking: 'Distributor stock levels and order frequency are normal in affected beats. Salesman visit rates are unchanged. This rules out supply-side causes. The decline is demand-side — outlets are ordering less despite normal supply availability.', nextAgent: 'Sales Agent' },
+        { timestamp: '09:49 AM', agent: 'Sales Agent', action: 'Profiling affected outlet characteristics', database: 'DMS System', query: 'SELECT outlet_tier, avg_weekly_billing_before, avg_weekly_billing_current, order_frequency_change, lines_per_order_change FROM outlet_decline_analysis WHERE beat_id IN (affected_beats) GROUP BY outlet_tier', thinking: 'Decline concentrated in mid-tier outlets (Rs 400-800/week). Large accounts and MT stable. Mid-tier kirana are the most vulnerable to competitive switching — they lack loyalty commitments and respond to margin offers. Profile matches competitive displacement pattern.', nextAgent: 'Analytics Engine' },
+        { timestamp: '09:51 AM', agent: 'Analytics Engine', action: 'Cross-referencing with Nielsen market data', database: 'Analytics DB + Nielsen', query: 'SELECT geography, brand, share_change_8_weeks FROM nielsen_share WHERE geography = "Western_UP" AND category = "carbonated" AND share_change > 2', thinking: 'Nielsen shows Campa gaining 4.2 share points in Western UP carbonated segment over the same 8-week period. Geographic and temporal correlation with the DMS billing decline. Combined evidence strongly suggests competitive displacement, though field confirmation is needed.', nextAgent: null }
+      ],
+      whatIfScenarios: [
+        'What if this billing decline pattern spreads to Lucknow territory?',
+        'How does salesman visit frequency correlate with billing retention in these beats?',
+        'What is the cost of a 4-week retention scheme vs letting the decline continue?',
+        'Which specific outlets are declining fastest and should be prioritized?'
+      ]
+    },
+    {
+      id: 6,
+      category: 'tradepromo',
+      priority: 'medium',
+      title: 'Trade promo ROI varies 4x across schemes — top scheme drives 8.2 cases/Rs vs bottom at 2.1 cases/Rs',
+      summary: 'Slab-based volume schemes outperforming flat margin schemes by 3.2x on cases-per-rupee metric',
+      keyNumbers: {
+        topSchemeROI: '8.2 cases/Rs',
+        bottomSchemeROI: '2.1 cases/Rs',
+        activeSchemes: '7 concurrent',
+        totalSpend: 'Rs 3.8Cr MTD'
+      },
+      narrative: "Analysis of 7 concurrent trade promotion schemes running in the UP region reveals significant ROI variance. The top performer is the Thums Up volume slab scheme (buy 10 cases get 1 free equivalent) at 8.2 cases/Rs invested — this scheme drives incremental ordering behavior because distributors actively chase the slab threshold. The worst performer is the flat Rs 8/case margin boost on Kinley 1L at 2.1 cases/Rs — this scheme is not changing distributor behavior, it is simply subsidizing existing volume. Three schemes (Maaza seasonal push, Sprite combo, and Limca margin boost) are performing in the middle range (4.5-5.8 cases/Rs). The Campa Cola counter-scheme (emergency margin match in Bareilly) is at 3.4 cases/Rs but is defensive spending — its purpose is volume retention, not growth.",
+      dataTable: {
+        headers: ['Scheme', 'Type', 'MTD Spend', 'Cases/Rs', 'Incremental Volume'],
+        rows: [
+          ['Thums Up Volume Slab', 'Slab', 'Rs 82L', '8.2', '+6,700 cases'],
+          ['Maaza Seasonal Push', 'Combo', 'Rs 48L', '5.8', '+2,780 cases'],
+          ['Sprite Display Combo', 'Combo', 'Rs 35L', '5.1', '+1,785 cases'],
+          ['Limca Margin Boost', 'Flat margin', 'Rs 42L', '4.5', '+1,890 cases'],
+          ['Campa Counter-Scheme', 'Defensive', 'Rs 68L', '3.4', '+2,312 cases'],
+          ['Non-cola Bundle Push', 'Bundle', 'Rs 55L', '2.8', '+1,540 cases'],
+          ['Kinley 1L Margin Boost', 'Flat margin', 'Rs 50L', '2.1', '+1,050 cases']
+        ]
+      },
+      recommendation: {
+        action: "Reallocate Rs 50L from the two underperforming flat margin schemes (Kinley 1L, non-cola bundle) into an expanded Thums Up slab structure and a new Maaza-Kinley combo slab. Slab mechanics drive behavior change; flat margins just subsidize status quo. Retain Campa counter-scheme as defensive necessity.",
+        return: "Projected 3,200 additional cases/month from reallocation — equivalent to Rs 38L incremental revenue",
+        roi: "Same Rs 1.05Cr quarterly spend, 28% more volume output"
+      },
+      owner: 'Trade Marketing - Scheme Management',
+      color: C.sage,
+      sources: ['dms', 'primary'],
+      trail: [
+        { timestamp: '10:15 AM', agent: 'Orchestrator Agent', action: 'Analyzing concurrent trade promotion performance', database: 'Scheme Management', query: 'SELECT scheme_name, scheme_type, mtd_spend, cases_generated, cases_per_rupee FROM active_schemes WHERE region = "UP_Region" AND status = "active" ORDER BY cases_per_rupee DESC', thinking: '4x ROI variance across 7 schemes. Slab mechanics outperform flat margin by 3.2x. Two bottom schemes consuming Rs 1.05Cr/quarter with minimal incremental impact.', nextAgent: 'Sales Agent' },
+        { timestamp: '10:17 AM', agent: 'Sales Agent', action: 'Examining scheme-level distributor behavior patterns', database: 'DMS System', query: 'SELECT scheme_id, AVG(order_size_change_pct) as behavior_change, COUNT(DISTINCT distributor_id) as participating FROM scheme_participation WHERE region = "UP_Region" GROUP BY scheme_id', thinking: 'Slab schemes drive 18% average order size increase — distributors actively optimize to hit thresholds. Flat margin schemes show only 3% order size change — no behavioral shift, just a margin pad on existing orders.', nextAgent: 'Analytics Engine' },
+        { timestamp: '10:19 AM', agent: 'Analytics Engine', action: 'Modeling reallocation impact', database: 'Analytics DB', query: 'SELECT reallocation_scenario, projected_incremental_cases, projected_revenue_lift FROM scheme_optimizer WHERE source_schemes IN ("kinley_margin", "noncola_bundle") AND target_type = "slab"', thinking: 'Reallocating Rs 50L from flat to slab: projected 3,200 additional cases/month. Same total spend, 28% more output. The Campa counter-scheme should stay — it is defensive and the 3.4 cases/Rs understates its value (it prevents volume loss).', nextAgent: null }
+      ],
+      whatIfScenarios: [
+        'What if we convert all flat margin schemes to slab-based mechanics?',
+        'How would removing the Campa counter-scheme impact Bareilly volume?',
+        'Can we design a combined non-cola slab that drives bundle adoption?',
+        'What is the optimal slab threshold for Maaza-Kinley combo?'
+      ]
+    },
+    {
+      id: 7,
+      category: 'dropsize',
+      priority: 'high',
+      title: 'Average drop size in GT channel at Rs 1,840 — 23% below Gorakhpur benchmark and declining',
+      summary: 'Kirana outlets ordering smaller quantities per visit, compressing distributor margins and increasing cost-to-serve',
+      keyNumbers: {
+        gtDropSize: 'Rs 1,840',
+        gorakhpurBenchmark: 'Rs 2,380',
+        gapVsLYSM: '-18% vs Jan 2025',
+        costToServe: 'Rs 142/delivery'
+      },
+      narrative: "General Trade drop size has been declining for 5 consecutive months — from Rs 2,240 in Oct 2025 to Rs 1,840 currently. This is compressing distributor margins because the cost-to-serve per delivery (Rs 142 including salesman time, logistics, and billing) remains fixed regardless of order size. At Rs 1,840 average drop, distributor net margin is approximately 4.2% vs 6.8% at the LYSM average of Rs 2,240. The decline is concentrated in two factors: (1) retailers splitting orders across more frequent, smaller deliveries to manage working capital, and (2) salesman focus on visit count rather than order value, incentivized by coverage targets rather than revenue targets. Gorakhpur territory maintains Rs 2,380 average drop because salesmen are incentivized on lines-per-order (7.2 avg) rather than just calls-per-day.",
+      dataTable: {
+        headers: ['Territory', 'Avg Drop Size', 'vs LYSM', 'Lines/Order', 'Cost-to-Serve'],
+        rows: [
+          ['Bareilly-Moradabad', 'Rs 1,620', '-24%', '4.8', 'Rs 148'],
+          ['Lucknow-Unnao', 'Rs 1,780', '-20%', '5.4', 'Rs 144'],
+          ['Ayodhya-Amethi', 'Rs 1,920', '-14%', '6.1', 'Rs 138'],
+          ['Gorakhpur-Deoria', 'Rs 2,380', '-6%', '7.2', 'Rs 132']
+        ]
+      },
+      recommendation: {
+        action: "Restructure salesman incentives: shift from calls-per-day to a weighted metric combining lines-per-order (40%), coverage (30%), and order value (30%). Set minimum order threshold of Rs 1,500 for standard delivery; orders below threshold batched to next-day delivery. Pilot in Bareilly for 4 weeks.",
+        return: "Lifting average drop from Rs 1,840 to Rs 2,200 saves Rs 18L annually in logistics and restores distributor margins to 5.8%",
+        roi: "Incentive restructure is budget-neutral; logistics savings of Rs 18L are pure margin improvement"
+      },
+      owner: 'Sales Operations - GT Channel',
+      color: C.sage,
+      sources: ['dms', 'sfa'],
+      trail: [
+        { timestamp: '11:00 AM', agent: 'Orchestrator Agent', action: 'Detecting GT drop size decline pattern', database: 'DMS System', query: 'SELECT month, AVG(order_value) as avg_drop, AVG(lines_per_order) as avg_lines, COUNT(DISTINCT outlet_id) as outlets FROM secondary_orders WHERE channel = "GT" AND region = "UP_Region" GROUP BY month ORDER BY month DESC LIMIT 6', thinking: '5 consecutive months of decline. Rs 2,240 to Rs 1,840 (-18%). Not seasonal — last year same period was stable. This is a structural shift in ordering behavior.', nextAgent: 'Sales Agent' },
+        { timestamp: '11:02 AM', agent: 'Sales Agent', action: 'Analyzing salesman incentive impact on order behavior', database: 'SFA System', query: 'SELECT territory, incentive_structure, avg_calls_per_day, avg_lines_per_order, avg_order_value FROM salesman_performance WHERE region = "UP_Region" GROUP BY territory', thinking: 'Gorakhpur salesmen incentivized on lines-per-order average 7.2 lines and Rs 2,380 drop. Bareilly salesmen incentivized on calls-per-day average 4.8 lines and Rs 1,620 drop. Incentive structure directly shapes ordering behavior.', nextAgent: 'Distribution Agent' },
+        { timestamp: '11:04 AM', agent: 'Distribution Agent', action: 'Quantifying distributor margin compression', database: 'DMS System', query: 'SELECT territory, avg_drop_size, fixed_cost_per_delivery, net_margin_pct, margin_vs_lysm FROM distributor_economics WHERE region = "UP_Region"', thinking: 'At Rs 1,840 drop, distributor net margin is 4.2% vs 6.8% LYSM. Bareilly distributors at 3.8% — approaching the threshold where distributors start deprioritizing smaller outlets. This creates a distribution gap feedback loop.', nextAgent: 'Analytics Engine' },
+        { timestamp: '11:06 AM', agent: 'Analytics Engine', action: 'Modeling incentive restructure impact', database: 'Analytics DB', query: 'SELECT incentive_scenario, projected_avg_drop, margin_improvement, logistics_savings FROM drop_size_optimizer WHERE region = "UP_Region"', thinking: 'Shifting to weighted metric (lines 40%, coverage 30%, value 30%) projects Rs 2,200 average drop within 8 weeks based on Gorakhpur benchmark. Rs 18L annual logistics savings. Distributor margins recover to 5.8%. Budget-neutral change.', nextAgent: null }
+      ],
+      whatIfScenarios: [
+        'What if we implement minimum order thresholds across all territories?',
+        'How would the lines-per-order incentive affect outlet coverage rates?',
+        'What is the distributor margin breakeven drop size?',
+        'Would a digital ordering tool help consolidate kirana orders?'
+      ]
+    },
+    {
+      id: 8,
+      category: 'manpower',
+      priority: 'opportunity',
+      title: 'Bareilly territory 3 salesmen short of optimal coverage — 148 outlets per salesman vs 110 benchmark',
+      summary: 'Manpower gap in highest-need territory creating cascading impact on visit frequency, drop size, and distribution',
+      keyNumbers: {
+        currentRatio: '148 outlets/SM',
+        benchmark: '110 outlets/SM',
+        manpowerGap: '3 salesmen',
+        revenueAtRisk: 'Rs 2.1Cr quarterly'
+      },
+      narrative: "Bareilly-Moradabad territory operates with 6 salesmen covering 890 outlets (148 outlets per salesman). The UP region benchmark, set by Gorakhpur (110 outlets per salesman), shows that territories above 130 outlets per salesman consistently underperform on visit frequency (-22%), productive calls (-18%), and billing consistency (-14%). The manpower gap in Bareilly is the root cause behind several other alerts: the low outlet service frequency (76% vs 92% in Gorakhpur), the declining drop size (salesmen rush visits to cover more outlets), and the non-cola distribution gap (salesmen skip non-core portfolios to save time). Adding 3 salesmen (moving to 112 outlets per salesman) would address the coverage deficit and is projected to lift territory achievement from 76% to 88% within 8 weeks based on Gorakhpur trajectory when it moved from 135 to 110 outlets per salesman 6 months ago.",
+      dataTable: {
+        headers: ['Territory', 'Salesmen', 'Outlets/SM', 'Visit Frequency', 'Achievement'],
+        rows: [
+          ['Bareilly-Moradabad', '6', '148', '76%', '76%'],
+          ['Lucknow-Unnao', '8', '106', '84%', '82%'],
+          ['Ayodhya-Amethi', '5', '110', '86%', '88%'],
+          ['Gorakhpur-Deoria', '7', '111', '92%', '105%']
+        ]
+      },
+      recommendation: {
+        action: "Add 3 salesmen to Bareilly-Moradabad territory immediately. Recruit from existing SLMG bench or temporary hire from local market (Bareilly has adequate talent pool). Deploy with Gorakhpur-style daily audit protocol from day 1. Expected ramp: 4 weeks to full productivity based on existing beat plans.",
+        return: "Lifting Bareilly achievement from 76% to 88% = Rs 1.4Cr additional quarterly secondary sales",
+        roi: "Rs 2.7L quarterly salesman cost (Rs 30K/month x 3 x 3 months) vs Rs 1.4Cr quarterly revenue lift"
+      },
+      owner: 'Sales Operations - Manpower Planning',
+      color: C.sage,
+      sources: ['sfa', 'dms'],
+      trail: [
+        { timestamp: '11:30 AM', agent: 'Orchestrator Agent', action: 'Analyzing territory-level manpower adequacy', database: 'SFA System', query: 'SELECT territory, salesman_count, outlet_count, outlets_per_salesman, visit_frequency_pct FROM territory_manpower WHERE region = "UP_Region"', thinking: 'Bareilly at 148 outlets/SM — 35% above the 110 benchmark. Every other territory is within 5% of benchmark. This is the most acute manpower imbalance in the region.', nextAgent: 'Sales Agent' },
+        { timestamp: '11:32 AM', agent: 'Sales Agent', action: 'Correlating manpower ratio with performance metrics', database: 'SFA System', query: 'SELECT territory, outlets_per_salesman, visit_frequency_pct, productive_calls_pct, billing_consistency_pct, achievement_pct FROM territory_performance WHERE region = "UP_Region" ORDER BY outlets_per_salesman', thinking: 'Near-perfect inverse correlation (r = -0.94) between outlets-per-salesman and achievement. Every 10 outlets above 110 benchmark correlates with 4-point achievement drop. Bareilly at 148 is 38 outlets above benchmark — predicts 15-point achievement gap, actual gap is 12 points (within model range).', nextAgent: 'Distribution Agent' },
+        { timestamp: '11:34 AM', agent: 'Distribution Agent', action: 'Tracing manpower gap to cascading performance impacts', database: 'DMS System', query: 'SELECT metric_name, bareilly_value, gorakhpur_value, gap_pct FROM territory_comparison WHERE metrics IN ("visit_frequency", "drop_size", "noncola_distribution", "outlet_service_rate")', thinking: 'Manpower gap cascades: low visit frequency (-22%) leads to low drop size (-32%), which leads to distributor margin compression (-2.6 pts), which leads to non-cola deprioritization (-24 pts distribution gap). Fixing manpower is the upstream fix for multiple downstream problems.', nextAgent: 'Analytics Engine' },
+        { timestamp: '11:36 AM', agent: 'Analytics Engine', action: 'Modeling ROI of manpower addition', database: 'Analytics DB', query: 'SELECT salesman_addition, new_outlets_per_sm, projected_achievement, quarterly_revenue_lift, quarterly_cost FROM manpower_model WHERE territory = "Bareilly-Moradabad"', thinking: 'Adding 3 salesmen: Rs 2.7L/quarter cost. Projected achievement lift 76% to 88% = Rs 1.4Cr quarterly revenue gain. Gorakhpur achieved similar trajectory in 8 weeks when it added 2 salesmen 6 months ago. ROI is 52x — this is the highest-return intervention available in the region.', nextAgent: null }
+      ],
+      whatIfScenarios: [
+        'What if we add only 2 salesmen instead of 3?',
+        'How long did Gorakhpur take to ramp after adding manpower?',
+        'Would redistributing beats across existing 6 salesmen partially close the gap?',
+        'What is the total P&L impact including all downstream improvements?'
       ]
     }
   ];
@@ -787,7 +1008,7 @@ export default function QuesttSalesWatchtower() {
   const whatIfResponses = {
     1: {
       'What if non-cola portfolio gap continues widening at current rate?': {
-        text: "Projecting the current trajectory forward:\n\n• Month 1 (now, +4 weeks): Gap widens from 24 to 28 points. 1,620 unbilled outlets (up from 1,240). Quarterly revenue loss: ₹2.8Cr (up from ₹2.2Cr).\n\n• Month 2: Gap reaches 31 points. Retailer delistings begin at outlets unbilled for 60+ days. Estimated 340 permanent delistings requiring full re-onboarding.\n\n• Month 3: Campa Cola substitution accelerates. Based on Bareilly District patterns, Campa Cola (RCPL) captures 8-12% incremental shelf share in non-cola category. This share becomes structurally sticky.\n\nCumulative impact over 1 quarter: ₹3.4Cr revenue loss + ₹45L recovery cost (re-onboarding + trade schemes). The gap becomes self-reinforcing - distributors see declining demand signals and further reduce non-cola ordering.",
+        text: "Projecting the current trajectory forward:\n\n• Month 1 (now, +4 weeks): Gap widens from 24 to 28 points. 1,620 unbilled outlets (up from 1,240). Quarterly revenue loss: ₹2.8Cr (up from ₹2.2Cr).\n\n• Month 2: Gap reaches 31 points. Retailer delistings begin at outlets unbilled for 60+ days. Estimated 340 permanent delistings requiring full re-onboarding.\n\n• Month 3: Competitive substitution risk accelerates. DMS data from the 14 Bareilly beats already showing billing decline (Insight 5) suggests that when SLMG vacates a category at an outlet, competitors fill the gap. Outlets unbilled for non-cola portfolios for 60+ days are the most vulnerable to permanent switching.\n\nCumulative impact over 1 quarter: ₹3.4Cr revenue loss + ₹45L recovery cost (re-onboarding + trade schemes). The gap becomes self-reinforcing - distributors see declining demand signals and further reduce non-cola ordering.",
         suggestions: ['What\'s the break-even point for intervention?', 'Show me the action plan', 'Which territory deteriorates fastest?']
       },
       'How would closing gap in Lucknow territory alone impact overall distribution?': {
@@ -823,7 +1044,7 @@ export default function QuesttSalesWatchtower() {
     },
     3: {
       'What if summer peak SKU distribution remains at 72% through summer peak period?': {
-        text: "Historical modeling based on last 3 summer cycles:\n\n• At 72% distribution: Expected volume uplift of 18-20% vs normal period\n• At 88% distribution (target): Expected volume uplift of 34%\n• Revenue delta: ₹88L over the 2-week summer peak window\n\nBut the bigger risk is competitive shelf capture. During Summer 2025, territories below 75% distribution saw Campa summer packs gain 12% incremental shelf share - and 40% of those placements were still active 6 weeks post-summer.\n\nTotal exposure: ₹88L direct loss + ₹30-40L trailing competitive impact = ~₹1.2Cr if we stay at 72%.\n\nWith only 18 days to peak, every day of inaction costs approximately ₹1.5-2 points of achievable distribution. The window for full recovery to 88% closes in about 10 days.",
+        text: "Historical modeling based on last 3 summer cycles:\n\n• At 72% distribution: Expected volume uplift of 18-20% vs normal period\n• At 88% distribution (target): Expected volume uplift of 34%\n• Revenue delta: ₹88L over the 2-week summer peak window\n\nBut the bigger risk is competitive displacement. During Summer 2025, territories below 75% distribution saw Campa summer packs gain 4+ Nielsen share points — and that share proved sticky through Q3. DMS billing data shows outlets that switched during summer 2025 had not fully recovered SLMG volume 6 months later.\n\nTotal exposure: ₹88L direct loss + ₹30-40L trailing volume impact over the following quarter = ~₹1.2Cr if we stay at 72%.\n\nWith only 18 days to peak, every day of inaction costs approximately ₹1.5-2 points of achievable distribution. The window for full recovery to 88% closes in about 10 days.",
         suggestions: ['What\'s the fastest path to 82%?', 'Which outlets matter most for summer?', 'Prioritize Moradabad vs Bareilly - which first?']
       },
       'How does distributor order frequency impact summer peak SKU reach?': {
@@ -837,6 +1058,96 @@ export default function QuesttSalesWatchtower() {
       'Would prioritizing Bareilly and Lucknow territories yield optimal ROI?': {
         text: "Yes - Bareilly and Lucknow represent 84% of the summer distribution gap:\n\n• Moradabad: 64% to target 88% (24-point gap, 288 unbilled outlets)\n• Bareilly: 68% to target 88% (20-point gap, 352 outlets)\n• Combined: 640 of 850 total unbilled summer peak outlets (75%)\n\nROI comparison:\n• Bareilly and Moradabad focus: ₹74L revenue protection, ₹6.8L investment = 10.9x ROI\n• Gorakhpur and Eastern focus: ₹14L revenue protection, ₹2.1L investment = 6.7x ROI\n\nBareilly and Moradabad yields 1.6x better ROI because:\n1. Larger outlet universe = more leverage per intervention\n2. Summer peak SKU supply already at depot (no logistics constraint)\n3. Existing distributor relationships - these aren't new partners, they're underperforming on this specific category\n\nRecommend: 80% of resources to Bareilly and Moradabad, 20% to maintain Gorakhpur and Eastern trajectory. This maximizes the probability of hitting 82%+ UP-wide within the 18-day window.",
         suggestions: ['Build the resource allocation plan', 'What\'s Day 1 action for Moradabad?', 'How do we track daily progress?']
+      }
+    },
+    4: {
+      'What is driving the velocity decline at Bareilly cooler outlets specifically?': {
+        text: "Cross-referencing DMS billing with SFA visit logs at cooler outlets reveals two factors:\n\n1. Visit duration gap: Gorakhpur salesmen spend 8.2 minutes per cooler outlet vs 6.4 minutes in Bareilly. The extra 1.8 minutes likely includes cooler attention (restocking, rearranging, cleaning). We can see the effect in billing data even though we can't see what happens inside the outlet.\n\n2. SKU breadth at cooler outlets: Gorakhpur cooler outlets average 6.8 billed lines per visit. Bareilly cooler outlets average 4.2 lines. This suggests Gorakhpur salesmen are actively selling the full portfolio at cooler outlets, while Bareilly salesmen are treating cooler outlets the same as any other stop.\n\nThe velocity decline (-14% over 3 months) correlates with the period when Bareilly's outlet-per-salesman ratio crossed 140. Salesmen under time pressure cut the extras first — and cooler outlet attention is an extra.\n\nThe data tells us what's happening. To understand *why* at a process level, we'd need a field investigation: have the ASM ride along with salesmen and observe what Gorakhpur does differently at cooler outlets.",
+        suggestions: ['What would a field investigation look like?', 'Can we compare lines-per-order at cooler vs non-cooler?', 'Is the decline worse at specific distributor territories?']
+      },
+      'How much time do Gorakhpur salesmen spend at cooler outlets vs Bareilly?': {
+        text: "SFA timestamped check-in/check-out data gives us a clear picture:\n\nGorakhpur — cooler outlets:\n• Avg time per visit: 8.2 minutes\n• Avg time at non-cooler outlets: 6.9 minutes\n• Difference: +19% more time at cooler outlets\n\nBareilly — cooler outlets:\n• Avg time per visit: 6.4 minutes\n• Avg time at non-cooler outlets: 6.2 minutes\n• Difference: +3% (essentially no difference)\n\nGorakhpur salesmen are clearly treating cooler outlets as higher-value stops that deserve more attention. Bareilly salesmen are not differentiating. The 1.8-minute gap per outlet × 15-20 cooler visits per day = 27-36 minutes of cooler-specific activity in Gorakhpur vs essentially zero in Bareilly.\n\nWe can't see from the data exactly what those extra minutes involve. But the billing velocity correlation is clear: more time at cooler outlets = higher throughput at cooler outlets.",
+        suggestions: ['How do we get Bareilly salesmen to spend more time at cooler outlets?', 'Would a cooler-specific incentive change behavior?', 'What does Gorakhpur ASM say about the process?']
+      },
+      'Would adding new coolers in Lucknow outperform fixing velocity on existing Bareilly coolers?': {
+        text: "Fixing existing Bareilly cooler velocity is 5x more cost-effective:\n\n• Option A — Recover velocity at 455 existing Bareilly coolers:\n  Cost: Primarily execution change (salesman behavior), minimal capex\n  Target: Lift from Rs 9,300 to Rs 11,500/outlet/month (Gorakhpur minus 5% for territory differences)\n  Monthly lift: Rs 10L across 455 outlets\n  Annual impact: Rs 1.2Cr\n\n• Option B — Add 200 new coolers in Lucknow:\n  Cost: Rs 24L (Rs 12,000/cooler placement + logistics)\n  Expected velocity: Rs 10,100/month (current Lucknow cooler average)\n  Additional vs non-cooler: Rs 1,300/outlet/month × 200 = Rs 2.6L/month\n  Annual impact: Rs 31L\n  Payback period: 9+ months\n\nThe math strongly favors Option A. You already have 455 cooler assets in Bareilly generating below-potential returns. Every rupee of velocity improvement on those assets is essentially free — you've already paid for the coolers.\n\nNew cooler placement makes sense in Lucknow once Bareilly velocity is recovered, as a growth play rather than a recovery play.",
+        suggestions: ['Build the Bareilly velocity recovery plan', 'What is the long-term cooler placement strategy?', 'How many coolers does the region need?']
+      },
+      'What is the correlation between cooler outlet velocity and competitive billing patterns?': {
+        text: "We can see this indirectly through DMS data:\n\nIn the 14 Bareilly beats with suspected competitive displacement (Insight 5), cooler outlets are declining 8% faster than non-cooler outlets in the same beats. This is counterintuitive — cooler outlets should be *more* resilient because they have branded SLMG equipment on-premise.\n\nThis suggests that when cooler outlets are poorly maintained (low velocity, infrequent salesman attention), the cooler becomes a liability rather than an asset — it signals to the retailer that SLMG isn't invested in the outlet, making them more receptive to competitive offers.\n\nConversely, in Gorakhpur (no competitive displacement pattern), cooler outlets are 34% more resilient than non-cooler outlets during normal volume fluctuations.\n\nThe cooler is a relationship anchor when it's working. It's a relationship signal when it's not. Right now, in Bareilly, 455 coolers are sending the wrong signal.",
+        suggestions: ['Should we prioritize cooler velocity recovery in the competitive beats?', 'How quickly does velocity recovery translate to competitive defense?', 'What is the combined intervention plan?']
+      }
+    },
+    5: {
+      'What if this billing decline pattern spreads to Lucknow territory?': {
+        text: "Lucknow is the likely next target based on pattern analysis:\n\nThe Bareilly displacement follows a geographic expansion pattern — Campa entered Western UP market through the weakest-served territories first. Lucknow is the logical next step because:\n\n1. Second-lowest salesman visit frequency in the region (84% vs Gorakhpur's 92%)\n2. Larger outlet universe (850 vs Bareilly's 890) with similar mid-tier kirana profile\n3. Adjacent geography — Campa distribution infrastructure built in Bareilly can extend to Lucknow at low marginal cost\n\nIf Lucknow follows the Bareilly trajectory:\n• Expected impact window: 4-8 weeks after first signs appear\n• Revenue exposure: Rs 6.2L/week (Lucknow has higher per-outlet revenue)\n• Most vulnerable: 340 mid-tier outlets with <3x/week visit frequency\n\nPre-emptive action: Increase visit frequency in Lucknow to 3x/week for the top 200 vulnerable outlets now, before displacement starts. Cost: Rs 0.4L/month incremental logistics. This is the cheapest competitive defense available.",
+        suggestions: ['Build the Lucknow pre-emptive plan', 'How do we detect early displacement signals?', 'What is our total defensive budget?']
+      },
+      'How does salesman visit frequency correlate with billing retention in these beats?': {
+        text: "Very strong correlation in the affected 14 beats — billing retention maps directly to visit cadence:\n\nOutlets with 3+ salesman visits/month in the affected beats:\n• Billing decline: -6% (mild, within normal variation)\n• Order frequency: stable at 3.0/month\n\nOutlets with 2 visits/month:\n• Billing decline: -18% (significant)\n• Order frequency: dropped from 3.1 to 2.4/month\n\nOutlets with <2 visits/month:\n• Billing decline: -28% (severe)\n• Order frequency: dropped from 2.6 to 1.8/month\n\nThe mechanism is intuitive: regularly visited outlets have an active relationship with the salesman. The retailer has a reason to maintain SLMG stock because someone is showing up, taking orders, and providing service. Infrequently visited outlets are functionally abandoned — if a competitor shows up with attention and margin, the switch is easy.\n\nThis is the strongest evidence that the manpower fix (Insight 8) is also a competitive defense fix.",
+        suggestions: ['Can we prioritize visit frequency increase in the 14 beats?', 'What is the cost to move all affected outlets to 3x/month?', 'How quickly does billing stabilize after visit frequency increases?']
+      },
+      'What is the cost of a 4-week retention scheme vs letting the decline continue?': {
+        text: "Retention scheme economics:\n\n• Scheme: Rs 15/case margin bump at 680 affected outlets for 4 weeks\n• Estimated volume in affected outlets: 2,800 cases/week\n• Weekly scheme cost: Rs 42K\n• 4-week total: Rs 1.68L\n\nCost of doing nothing (based on current trajectory):\n• Current weekly decline rate: Rs 22K/week (1.8% of Rs 4.8L base declining per week)\n• Over 4 weeks without intervention: cumulative loss of Rs 220K + structural damage\n• After 8 weeks: decline rate accelerates as retailers form new habits\n• Quarterly impact if unchecked: Rs 8-10L revenue permanently lost\n\nThe retention scheme buys time — it holds volume while the real fix (visit frequency increase + field investigation of root cause) is deployed. The scheme alone doesn't solve the problem. But without it, you lose outlets during the 3-4 weeks it takes to implement the structural fix.\n\nRecommend: Deploy scheme immediately as a bridge. Use the 4-week window to increase visit frequency and run the field audit. Review scheme continuation at week 4 based on whether structural fix is taking hold.",
+        suggestions: ['Deploy the retention scheme this week', 'What if the decline continues despite the scheme?', 'Can we target the scheme to only the fastest-declining outlets?']
+      },
+      'Which specific outlets are declining fastest and should be prioritized?': {
+        text: "Sorting the 680 affected outlets by rate of billing decline:\n\nTier 1 — Fastest decline (>25% drop in 8 weeks): 148 outlets\n• Concentrated in Bareilly City North and South\n• Average weekly billing dropped from Rs 620 to Rs 440\n• Order frequency: down from 3.4 to 1.9/month\n• These outlets are close to going dark entirely. Intervention window: 2-3 weeks.\n\nTier 2 — Moderate decline (15-25% drop): 312 outlets\n• Spread across all 4 beat clusters\n• Billing dropped from Rs 580 to Rs 460\n• Order frequency: down from 3.1 to 2.4/month\n• Still active but trajectory is clear. Intervention window: 4-6 weeks.\n\nTier 3 — Early signals (<15% drop): 220 outlets\n• Mostly in Rampur (further from competitive epicenter)\n• Billing dropped from Rs 510 to Rs 450\n• Order frequency: barely changed (2.8 to 2.6/month)\n• Easiest to retain. Likely respond to visit frequency alone without scheme.\n\nRecommend: Retention scheme for Tier 1 + Tier 2 (460 outlets, Rs 1.2L/month). Visit frequency increase for all three tiers. Field audit focused on Tier 1 to confirm root cause.",
+        suggestions: ['Generate the Tier 1 outlet list for the ASM', 'What is the salesman route adjustment needed?', 'How do we track recovery weekly?']
+      }
+    },
+    6: {
+      'What if we convert all flat margin schemes to slab-based mechanics?': {
+        text: "Modeling a full conversion of the 2 flat margin schemes (Kinley 1L, Limca) to slab mechanics:\n\n• Current output: 2,940 incremental cases/month from Rs 92L combined spend (3.2 cases/Rs)\n• Projected output at slab mechanics: 5,800 incremental cases/month from same Rs 92L (6.3 cases/Rs)\n• Net gain: 2,860 additional cases/month = Rs 34L incremental revenue\n\nThe conversion is not risk-free. Flat margin schemes have one advantage: they are simple for distributors to understand and claim. Slab mechanics require distributors to actively manage their ordering to hit thresholds. The 4 distributors in Bareilly with irregular ordering patterns may struggle with slab targets initially.\n\nRecommend: Convert Kinley 1L first (lower volume, easier to test). Set 3 tiers: 50 cases (Rs 400 bonus), 100 cases (Rs 1,000), 150 cases (Rs 1,800). Keep Limca flat for one more month as control comparison.",
+        suggestions: ['What should the Kinley slab thresholds be?', 'How do we train distributors on slab mechanics?', 'What if distributors game the system by consolidating orders?']
+      },
+      'How would removing the Campa counter-scheme impact Bareilly volume?': {
+        text: "Removing the counter-scheme would be catastrophic for Bareilly volume. Here's the projection:\n\nThe counter-scheme currently subsidizes 680 outlets where Campa is actively competing. These outlets generate Rs 4.8L/week in secondary sales. The scheme costs Rs 68L MTD (approximately Rs 17L/week).\n\nWithout the scheme:\n• Week 1-2: Distributor margins drop to 2.1% in affected outlets (below breakeven for many)\n• Week 3-4: 40% of affected outlets shift to Campa for at least partial portfolio (based on similar situations in Delhi NCR)\n• Week 8: Estimated 60% volume loss in affected outlets = Rs 2.9L/week lost\n• Quarterly impact: Rs 35L revenue loss\n\nThe counter-scheme's 3.4 cases/Rs ROI looks weak compared to the Thums Up slab (8.2), but it's defensive — its value is measured in revenue retained, not generated. At Rs 17L/week spend protecting Rs 4.8L/week revenue, the real ROI is: losing the Rs 17L/week spend triggers Rs 2.9L/week revenue loss. Net: you save Rs 17L but lose Rs 2.9L/week forever. Terrible trade.",
+        suggestions: ['Can we make the counter-scheme more efficient?', 'What if we pair it with the display intervention?', 'Is there a way to gradually reduce scheme dependency?']
+      },
+      'Can we design a combined non-cola slab that drives bundle adoption?': {
+        text: "Yes — this is potentially the highest-impact new scheme we could launch:\n\nConcept: \"Non-Cola Starter Slab\" — Buy 20 cases of any non-cola mix (Maaza + Kinley + Limca), get Rs 1,200 bonus per distributor per week.\n\n• Targets the core problem: non-cola is deprioritized because distributors order each SKU separately in small quantities\n• Bundle mechanics force distributors to think about non-cola as a single category\n• 20-case threshold is achievable for even mid-tier distributors (current avg is 14 cases/week non-cola)\n\nProjected impact:\n• Participating distributors: 32 of 48 (the 16 already above 20 cases don't need the push)\n• Incremental non-cola volume: 1,920 cases/month\n• Scheme cost: Rs 19.2L/month\n• Cases/Rs: 5.0 (better than both flat margin schemes currently running)\n\nThis directly addresses the non-cola distribution gap (Insight 1) through a scheme-based lever rather than pure execution improvement.",
+        suggestions: ['Build the scheme brief for trade marketing', 'Would Paritosh approve this spend level?', 'How does this interact with existing non-cola schemes?']
+      },
+      'What is the optimal slab threshold for Maaza-Kinley combo?': {
+        text: "Based on current ordering patterns and distributor capacity analysis:\n\nOptimal 3-tier slab:\n• Tier 1: 15 cases (Rs 600 bonus) — targets the 18 distributors currently ordering 10-14 non-cola cases/week. Achievable stretch.\n• Tier 2: 25 cases (Rs 1,400 bonus) — targets the 14 distributors currently at 18-22 cases. Meaningful jump.\n• Tier 3: 40 cases (Rs 2,800 bonus) — aspirational. Only 6 distributors currently hit this naturally. But the bonus is attractive enough to motivate serious effort.\n\nWhy these thresholds work:\n1. Tier 1 gap (5-case stretch) is achievable in 1 order cycle — instant wins build momentum\n2. Tier 2 incentive (Rs 1,400) exceeds the margin differential vs core SKUs — makes non-cola economically rational\n3. Tier 3 creates aspiration without being unreachable\n\nProjected scheme cost: Rs 22L/month. Projected incremental cases: 2,400/month. Cases/Rs: 5.5 (above the Sprite combo scheme at 5.1).",
+        suggestions: ['Run this by trade marketing for feasibility', 'How do we prevent cannibalization of existing non-cola schemes?', 'What is the minimum participation rate for this to work?']
+      }
+    },
+    7: {
+      'What if we implement minimum order thresholds across all territories?': {
+        text: "Minimum order threshold (MOT) analysis by territory:\n\nRecommended threshold: Rs 1,500 per delivery (current average is Rs 1,840, so this catches only the tail — approximately 28% of orders).\n\n• Bareilly impact: 34% of orders currently below Rs 1,500. These would be batched to next-day, reducing daily deliveries by 20%. Logistics savings: Rs 4.8L/quarter.\n• Lucknow impact: 26% of orders below threshold. Logistics savings: Rs 3.2L/quarter.\n• Ayodhya impact: 18% of orders below. Savings: Rs 1.8L/quarter.\n• Gorakhpur impact: 12% of orders below. Savings: Rs 1.1L/quarter.\n\nTotal quarterly savings: Rs 10.9L\n\nRisk: 8-12% of below-threshold orders may be lost entirely (retailers go to competitor). This represents Rs 2.4L/quarter worst case. Net benefit: Rs 8.5L/quarter.\n\nMitigation: Grandfather the top 100 outlets by relationship value — allow them below-threshold orders. These are established accounts where flexibility preserves loyalty.",
+        suggestions: ['How do we communicate MOT to retailers?', 'What exceptions should we allow?', 'Would a digital ordering consolidation tool reduce below-threshold orders?']
+      },
+      'How would the lines-per-order incentive affect outlet coverage rates?': {
+        text: "This is the key concern with the incentive restructure — and the data shows it's manageable:\n\nGorakhpur experience after switching to lines-per-order incentive (6 months ago):\n• Week 1-3: Coverage dipped from 94% to 88% as salesmen spent more time per outlet\n• Week 4-6: Coverage recovered to 91% as salesmen optimized their pitch cadence\n• Week 8+: Coverage stabilized at 93% — 1 point below the pre-change level\n• Lines-per-order: Jumped from 5.8 to 7.2 (stable)\n\nThe net effect: you lose 1-2 points of coverage permanently but gain 24% more lines per order. Since each additional line averages Rs 180, the value of the lines gain (Rs 180 x 1.4 extra lines x 85 outlets/day) vastly exceeds the coverage dip value.\n\nThe weighted metric (lines 40%, coverage 30%, value 30%) is specifically designed to prevent the coverage collapse — salesmen can't maximize income by going deep on fewer outlets because coverage still counts for 30% of incentive.",
+        suggestions: ['How do we handle the transition dip in weeks 1-3?', 'Should we adjust the 40/30/30 weighting?', 'What is the optimal lines-per-order target by territory?']
+      },
+      'What is the distributor margin breakeven drop size?': {
+        text: "Distributor margin breakeven analysis by territory:\n\nFixed cost per delivery: Rs 142 (salesman time Rs 68 + logistics Rs 52 + billing/admin Rs 22)\nDistributor gross margin: 8.5% of order value\n\nBreakeven drop size: Rs 142 / 8.5% = Rs 1,671\n\nCurrent position by territory:\n• Bareilly: Rs 1,620 — BELOW BREAKEVEN. Distributors are losing money on 52% of deliveries.\n• Lucknow: Rs 1,780 — Rs 109 above breakeven. Thin buffer.\n• Ayodhya: Rs 1,920 — Rs 249 above breakeven. Comfortable.\n• Gorakhpur: Rs 2,380 — Rs 709 above breakeven. Healthy.\n\nBareilly distributors being below breakeven explains several other symptoms: deprioritization of non-core SKUs (lower-margin items get cut first), reduced order frequency (distributors push for consolidated orders), and rising return rates (distributors accept orders they shouldn't to hit volume targets, then deal with returns).\n\nThis is urgent. Below-breakeven operation is not sustainable beyond 2-3 months. After that, distributors start exiting or switching to Campa where margins are guaranteed.",
+        suggestions: ['How do we immediately fix Bareilly economics?', 'What is the relationship between drop size and distributor churn?', 'Would a logistics subsidy be cheaper than losing distributors?']
+      },
+      'Would a digital ordering tool help consolidate kirana orders?': {
+        text: "Digital ordering consolidation has moderate potential — it addresses 30-40% of the drop size problem:\n\nThe drop size decline has two root causes:\n1. Retailer behavior (60%): Splitting orders to manage cash flow. Digital tools don't fix this.\n2. Order fragmentation (40%): Multiple small orders from same outlet across the week. Digital consolidation fixes this.\n\nA WhatsApp-based ordering bot (integrated with DMS) could:\n• Allow retailers to add items to a running order through the week\n• Auto-consolidate and dispatch when order hits Rs 1,500 threshold\n• Send reminder: \"Your order is at Rs 1,200 — add Rs 300 more for free delivery today\"\n\nProjected impact:\n• 35% of below-threshold orders would consolidate above threshold\n• Average drop size improvement: Rs 220 (from Rs 1,840 to Rs 2,060)\n• Not a complete solution, but meaningful when combined with incentive restructure\n\nImplementation: Rs 2.4L one-time (WhatsApp Business API + DMS integration) + Rs 8K/month operational. ROI positive in 3 months.",
+        suggestions: ['How long to build and deploy this?', 'Would retailers actually use WhatsApp ordering?', 'Can we pilot with 50 outlets first?']
+      }
+    },
+    8: {
+      'What if we add only 2 salesmen instead of 3?': {
+        text: "Two salesmen gets you to 111 outlets per salesman (just at benchmark), but the improvement curve is non-linear:\n\n• 3 salesmen (112 outlets/SM): Projected achievement 88%, full alignment with Gorakhpur model\n• 2 salesmen (148 → 111 outlets/SM): Projected achievement 84%, meaningful improvement but plateau\n• Difference: 4 achievement points = Rs 48L quarterly revenue\n\nThe third salesman costs Rs 0.9L/quarter but unlocks Rs 48L in incremental revenue (53x ROI on the marginal hire).\n\nWhy the non-linearity: At 111 outlets/SM, salesmen can maintain the basic visit cadence but cannot implement the premium activities (daily cooler audit, Friday sweep for unbilled outlets, non-cola push). At 112, there's enough headroom for these activities. The difference between \"adequate\" and \"excellent\" is that third salesman.\n\nRecommendation: Hire all 3. The marginal ROI on the third is actually the highest of the three because it unlocks the quality layer on top of the quantity fix.",
+        suggestions: ['What if we temporarily reassign 1 SM from Lucknow?', 'How do we justify the headcount to management?', 'What is the hiring timeline?']
+      },
+      'How long did Gorakhpur take to ramp after adding manpower?': {
+        text: "Gorakhpur's manpower ramp timeline (added 2 salesmen in Sep 2025):\n\n• Pre-addition: 135 outlets/SM, 84% achievement\n• Week 1-2: New salesmen onboarding, shadowing existing routes. Achievement dipped to 81% (expected — training overhead)\n• Week 3-4: New beats activated. Achievement recovered to 85%. Visit frequency jumped from 82% to 88%.\n• Week 5-6: Salesmen hitting stride. Achievement at 92%. Daily audit protocol adopted by new hires.\n• Week 8: Achievement at 98%. All downstream metrics (drop size, non-cola distribution) started improving.\n• Week 12: Achievement stabilized at 105% (current level). Gorakhpur became the region benchmark.\n\nTotal time to full productivity: 8 weeks. The key success factor was pairing each new salesman with the top-performing existing salesman for the first 2 weeks. This transferred the audit cadence and retailer relationship skills faster than any formal training could.\n\nFor Bareilly: Expect a similar 8-week ramp. The starting point is worse (76% vs Gorakhpur's 84%), so absolute gains will be larger but relative pace should be comparable.",
+        suggestions: ['Who should train the new Bareilly salesmen?', 'Can we borrow Gorakhpur top performers for 2 weeks?', 'What metrics should we track weekly during ramp?']
+      },
+      'Would redistributing beats across existing 6 salesmen partially close the gap?': {
+        text: "Beat redistribution without new hires gets you approximately 25% of the improvement — necessary but insufficient:\n\nCurrent beat allocation in Bareilly is uneven:\n• SM-01 (Bareilly City): 165 outlets — severely overloaded\n• SM-02 (Bareilly City): 160 outlets — overloaded\n• SM-03 (Rampur): 155 outlets — overloaded\n• SM-04, 05, 06: 130-140 each — above benchmark but manageable\n\nOptimized redistribution (no new hires):\n• Equalize to 148 each (current average)\n• Impact: SM-01 and SM-02 see 10-15% improvement in visit frequency\n• Overall territory achievement: 76% to 79% (+3 points)\n\nThe problem: Even after redistribution, every salesman is still 35% above benchmark. You can shuffle the deck chairs, but the ship is still understaffed. Redistribution should happen in parallel with hiring — it's a week-1 action while recruitment takes 3-4 weeks.\n\nRecommend: Redistribute beats immediately (costs nothing, gains 3 points) AND begin recruiting 3 salesmen. The redistribution buys time while the hiring pipeline fills.",
+        suggestions: ['Build the beat redistribution plan', 'How quickly can we recruit in Bareilly?', 'What is the combined impact of redistribution + 3 hires?']
+      },
+      'What is the total P&L impact including all downstream improvements?': {
+        text: "The manpower fix is the upstream intervention that cascades into multiple downstream improvements. Full P&L model:\n\nDirect impact (manpower → achievement):\n• Achievement: 76% → 88% = Rs 1.4Cr quarterly revenue lift\n\nDownstream impact 1 (visit frequency → drop size):\n• Visit frequency: 76% → 88% enables drop size recovery from Rs 1,620 to Rs 2,100\n• Logistics savings: Rs 4.8L/quarter\n• Distributor margin: 3.8% → 5.6% (moves above breakeven, prevents distributor churn)\n\nDownstream impact 2 (visit frequency → non-cola distribution):\n• More visit time per outlet enables non-cola push\n• Non-cola distribution: 61% → 72% estimated (not full closure, but significant)\n• Non-cola revenue lift: Rs 42L/quarter\n\nDownstream impact 3 (visit frequency → competitive defense):\n• Higher visit frequency correlates with billing retention — outlets visited 3x/month show only -6% decline vs -18% at outlets visited 2x/month in the 14 affected beats\n• Estimated revenue retained in competitive beats: Rs 18L/quarter\n\nTotal quarterly impact: Rs 1.4Cr (direct) + Rs 4.8L (logistics) + Rs 42L (non-cola) + Rs 18L (defense) = Rs 2.05Cr\nTotal quarterly cost: Rs 2.7L (3 salesmen)\nROI: 76x\n\nThis is why manpower is the single highest-leverage intervention in the region.",
+        suggestions: ['Present this to Paritosh as the priority investment', 'How do we sequence all these interventions?', 'Build the 8-week implementation roadmap']
       }
     }
   };
@@ -899,7 +1210,7 @@ export default function QuesttSalesWatchtower() {
           suggestions: ['Which distributors should we prioritize?', 'What would a combined order mandate look like?', 'How fast can we close this gap?']
         },
         'what is the risk if we do not act?': {
-          text: "The gap is compounding. At current trajectory:\n\n• By end of Feb: Distribution gap widens to 28 points (from 24), adding 380 more unbilled outlets\n• Quarterly revenue loss: Escalates from ₹2.2Cr to ₹2.8Cr\n• Retailer delistings: Once an outlet goes 45+ days unbilled for a SKU, reactivation takes 3x the effort - 285 of the 1,240 outlets are already past 30 days\n• Competitive substitution: Campa Cola brand X has launched a Maaza equivalent in Bareilly District at 5% lower price point. Every week of gap gives them shelf space that becomes harder to reclaim.\n\nThe tipping point is approximately 3 weeks out - after that, recovery cost doubles.",
+          text: "The gap is compounding. At current trajectory:\n\n• By end of Feb: Distribution gap widens to 28 points (from 24), adding 380 more unbilled outlets\n• Quarterly revenue loss: Escalates from ₹2.2Cr to ₹2.8Cr\n• Retailer delistings: Once an outlet goes 45+ days unbilled for a SKU, reactivation takes 3x the effort - 285 of the 1,240 outlets are already past 30 days\n• Competitive risk: Outlets unbilled for non-cola portfolios are the most vulnerable to competitive substitution. The 14 Bareilly beats already showing billing displacement (Insight 5) overlap significantly with the non-cola distribution gap — these outlets are being lost on two fronts simultaneously.\n\nThe tipping point is approximately 3 weeks out - after that, recovery cost doubles.",
           suggestions: ['Show me the action plan', 'What\'s the competitor threat in detail?', 'How do we prevent recurrence?']
         },
         'show me the action plan': {
@@ -931,7 +1242,7 @@ export default function QuesttSalesWatchtower() {
       },
       3: { // Summer peak SKU distribution
         'what if summer peak sku distribution remains at 72% through summer peak period?': {
-          text: "Historical modeling based on last 3 summer cycles shows:\n\n• At 72% distribution: Expected volume uplift of 18-20% vs normal period\n• At 88% distribution (target): Expected volume uplift of 34%\n• Revenue delta: ₹88L over the 2-week summer peak window\n\nBut the bigger risk is competitive shelf capture. During Summer 2025, territories below 75% distribution saw Campa summer packs gain 12% incremental shelf share - and that share proved sticky. 40% of those competitor placements were still active 6 weeks after summer peak.\n\nBottom line: The ₹88L is the direct loss. The trailing competitive impact adds another ₹30-40L over the following quarter. Total exposure is closer to ₹1.2Cr if we stay at 72%.",
+          text: "Historical modeling based on last 3 summer cycles shows:\n\n• At 72% distribution: Expected volume uplift of 18-20% vs normal period\n• At 88% distribution (target): Expected volume uplift of 34%\n• Revenue delta: ₹88L over the 2-week summer peak window\n\nBut the bigger risk is competitive displacement. During Summer 2025, territories below 75% distribution saw Campa gain 4+ Nielsen share points in summer packs — and DMS billing data shows those outlets had not recovered SLMG volume 6 months later. Once a retailer stocks Campa for summer and it sells, the relationship sticks.\n\nBottom line: The ₹88L is the direct loss. The trailing competitive impact adds another ₹30-40L over the following quarter. Total exposure is closer to ₹1.2Cr if we stay at 72%.",
           suggestions: ['What\'s the fastest path to 82%?', 'Which outlets matter most for summer?', 'How did we hit 88% last year?']
         },
         'why is this happening?': {
@@ -941,6 +1252,68 @@ export default function QuesttSalesWatchtower() {
         default: {
           text: "I can help analyze the summer distribution gap, model scenarios for different distribution levels, or build an acceleration plan. The clock is ticking - 18 days to peak. What's most urgent?",
           suggestions: ['What if summer peak SKU distribution remains at 72% through summer peak period?', 'Show me the action plan']
+        }
+      },
+      4: { // Cooler outlet velocity (positive)
+        'why is this happening?': {
+          text: "The data shows *what's* happening clearly; the *why* needs field investigation:\n\nWhat we can see from DMS + SFA:\n• Gorakhpur cooler outlets: Rs 12,200/month velocity, stable 6 months. Salesmen spend 8.2 min per cooler outlet.\n• Bareilly cooler outlets: Rs 9,300/month velocity, down 14% in 3 months. Salesmen spend 6.4 min per cooler outlet.\n• The velocity gap is cooler-specific — non-cooler outlets in both territories show comparable trends.\n\nWhat we can infer: Gorakhpur salesmen are doing something different at cooler outlets that Bareilly salesmen are not. The extra 1.8 minutes per visit correlates with 28% higher billing and higher lines-per-order (6.8 vs 4.2).\n\nWhat we can't see from data alone: What exactly happens during those extra minutes. Is it cooler restocking? SKU arrangement? Retailer conversations about the full portfolio? This is where ASM Gorakhpur's input becomes critical — he reports that his team pays specific attention to cooler presentation during visits, but we'd need a field ride-along to document the exact process.",
+          suggestions: ['How do we investigate the Gorakhpur process?', 'Show me the action plan', 'What is the revenue opportunity from closing the gap?']
+        },
+        'show me the action plan': {
+          text: "Two-phase approach — investigate, then replicate:\n\nPhase 1: Understand (Week 1-2)\n• ASM Gorakhpur ride-along: 2 days observing top-performing salesmen at cooler outlets, documenting the process\n• Compare visit pattern data: pull SFA time-per-visit, lines-per-order, and SKU mix at cooler vs non-cooler outlets across all territories\n• Interview ASM Gorakhpur on the process changes he implemented and when velocity started improving\n\nPhase 2: Pilot (Week 3-6)\n• Deploy Gorakhpur's process (once documented) to 3 Bareilly salesmen covering ~230 cooler outlets\n• Track weekly: cooler outlet velocity, lines-per-order, visit duration\n• Compare pilot salesmen vs control (other 3 Bareilly salesmen)\n• If velocity improves, roll to all Bareilly salesmen in week 6, then Lucknow\n\nCost: Minimal (primarily ASM time for investigation + ride-along). No capex.\nExpected outcome: If Bareilly cooler velocity recovers to Rs 11,500 (Gorakhpur minus territory adjustment), monthly uplift = Rs 10L across 455 outlets.",
+          suggestions: ['How do we measure the pilot?', 'Who runs the ride-along?', 'What if the process is too complex to replicate?']
+        },
+        default: {
+          text: "Gorakhpur's cooler outlets are significantly outperforming the rest of the region. The data shows what's happening — billing velocity, visit duration, lines-per-order all correlate. I can walk you through the data, the investigation plan, or the revenue opportunity. What's most useful?",
+          suggestions: ['Why is this happening?', 'Show me the action plan', 'What is the revenue opportunity?']
+        }
+      },
+      5: { // Competitive displacement (billing pattern)
+        'why is this happening?': {
+          text: "The DMS data tells us *what* is happening with high confidence. The *why* requires field validation:\n\nWhat we know from data:\n• 14 beats with synchronized 15-22% billing decline over 8 weeks\n• Adjacent beats in the same distributor territories are stable — this is not a supply or distribution issue\n• Decline concentrated in mid-tier kirana (Rs 400-800/week). Large accounts and MT unaffected.\n• Order frequency dropped from 3.2 to 2.4/month at affected outlets, while non-affected outlets in same territory hold steady\n\nWhat external data suggests:\n• Nielsen Western UP data shows Campa gaining 4.2 share points in carbonated segment during the same 8-week period\n• Geographic and temporal correlation is strong\n\nWhat we don't know yet:\n• Specific competitive mechanism (pricing? rack placement? direct salesman poaching?)\n• Whether it's Campa specifically or broader competitive activity\n• Whether the affected outlets are stocking both brands or switching entirely\n\nRecommendation: Field audit in the 14 beats this week. Have ASM Bareilly visit 20-30 affected outlets directly and document what's changed on the ground. The data has flagged the problem. Now we need eyes in the market to confirm the cause.",
+          suggestions: ['What does the field audit look like?', 'Show me the action plan', 'How do we contain this while investigating?']
+        },
+        'show me the action plan': {
+          text: "Three-track response — investigate, contain, pre-empt:\n\nTrack 1 — Field Investigation (this week):\n• ASM Bareilly visits 30 affected outlets across the 4 beat clusters over 2 days\n• Document: What competitive products are now stocked? Any new display equipment? Pricing changes? Retailer feedback on why ordering has changed?\n• Output: Root cause confirmed within 5 days\n\nTrack 2 — Contain (immediate, parallel to investigation):\n• Increase salesman visit frequency from 2x to 3x/week in the 14 affected beats\n• Deploy 4-week retention scheme: Rs 15/case margin bump at the 460 fastest-declining outlets (Tier 1 + Tier 2)\n• Cost: Rs 4.1L scheme + Rs 0.6L logistics = Rs 4.7L total for 4 weeks\n• Purpose: Hold volume while structural fix is identified\n\nTrack 3 — Pre-empt (week 2-3):\n• Monitor Lucknow beats for early signals of similar pattern (weekly billing velocity scan)\n• Increase visit frequency to 3x/week in Lucknow's 200 most vulnerable mid-tier outlets\n• Cost: Rs 0.4L/month\n\nTotal investment: Rs 5.5L for 4 weeks. Revenue protected: Rs 4.8L/week = Rs 2.5Cr annual base.",
+          suggestions: ['Deploy the retention scheme today', 'How do we monitor Lucknow?', 'What if the field audit confirms Campa?']
+        },
+        default: {
+          text: "DMS has flagged an unusual billing decline pattern in 14 Bareilly beats — synchronized, geographically clustered, and concentrated in mid-tier outlets. The pattern is consistent with competitive displacement but needs field confirmation. I can walk you through the data, the investigation plan, or the containment strategy. What's most urgent?",
+          suggestions: ['Why is this happening?', 'Show me the action plan', 'Which outlets are declining fastest?']
+        }
+      },
+      6: { // Trade promo ROI
+        'why is this happening?': {
+          text: "The 4x ROI variance traces to a fundamental difference in scheme mechanics:\n\nSlab schemes (8.2 cases/Rs) change behavior: Distributors actively optimize ordering to hit thresholds. The Thums Up slab (buy 10 get 1 free) creates a target that distributors plan around. They consolidate orders, push salesmen to fill gaps, and manage inventory to hit the next tier.\n\nFlat margin schemes (2.1 cases/Rs) subsidize status quo: A flat Rs 8/case on Kinley doesn't change how distributors order. They claim the margin on whatever they would have ordered anyway. There's no threshold to chase, no behavior to change.\n\nThe evidence is clear in order pattern data: Slab scheme distributors show 18% larger average orders and 12% more frequent ordering. Flat margin distributors show zero change in ordering pattern — the same cadence at a lower cost to SLMG.\n\nWe're essentially paying Rs 50L/month (Kinley + non-cola bundle) for zero incremental behavior change.",
+          suggestions: ['How do we fix underperforming schemes?', 'Show me the action plan', 'What slab mechanics would work for non-cola?']
+        },
+        default: {
+          text: "Trade promo effectiveness varies dramatically across schemes. I can help analyze what's working, recommend reallocation, or design new slab mechanics. What would be most useful?",
+          suggestions: ['Why is this happening?', 'Show me the action plan', 'What is the reallocation recommendation?']
+        }
+      },
+      7: { // Drop size
+        'why is this happening?': {
+          text: "The drop size decline has two converging causes:\n\n1. Retailer working capital pressure (60% of the problem): Post-Diwali cash crunch hit kirana outlets hard. Retailers are ordering smaller quantities more frequently to conserve cash. Average order has gone from 3.2 order cycles/week to 4.1, but each order is 28% smaller. Same weekly spend, more deliveries.\n\n2. Salesman incentive misalignment (40%): Salesmen are incentivized on calls-per-day and coverage targets. This drives them to minimize time per outlet — take the order, move on. They're not upselling, not suggesting combo orders, not pushing for minimum quantities. In Gorakhpur, where incentives include lines-per-order, salesmen spend 40% more time per outlet but generate 45% larger orders.\n\nThe Gorakhpur model proves the incentive lever works. The retailer working capital issue is external and will normalize post-summer. But the incentive misalignment is a structural problem we can fix now.",
+          suggestions: ['How do we fix the incentive structure?', 'Show me the action plan', 'What is the distributor margin impact?']
+        },
+        default: {
+          text: "GT drop size is declining and compressing distributor margins. I can analyze root causes, model incentive restructuring impact, or build the improvement plan. Where should we start?",
+          suggestions: ['Why is this happening?', 'Show me the action plan', 'What is the distributor margin breakeven?']
+        }
+      },
+      8: { // Manpower
+        'why is this happening?': {
+          text: "Bareilly's manpower gap is an accumulation of three factors:\n\n1. Attrition not replaced: 2 salesmen left in the last 6 months (one to Campa, one personal reasons). Neither was replaced — positions held open during a hiring freeze.\n\n2. Territory expansion without headcount: Bareilly territory absorbed 180 outlets from a defunct sub-distributor in Nov 2025. The outlet universe grew 25% with zero headcount addition.\n\n3. No manpower planning model: Unlike Gorakhpur (which actively maintains 110 outlets/SM ratio), Bareilly has never been staffed to a ratio target. It was \"adequate\" at 120 outlets/SM 8 months ago, then deteriorated through attrition + expansion.\n\nThe compounding effect: At 148 outlets/SM, salesmen are firefighting — hitting volume targets on core SKUs by skipping everything else (non-cola, cooler audits, retailer relationship building). This creates the downstream problems we're seeing across multiple insight cards.",
+          suggestions: ['Show me the action plan', 'How do we prevent this from happening again?', 'What is the total P&L impact?']
+        },
+        'show me the action plan': {
+          text: "Immediate + structural manpower fix:\n\nWeek 1 (Now):\n• Redistribute beats across existing 6 salesmen (equalize load). Gains: 3 achievement points.\n• Open 3 requisitions. Bareilly has an active FMCG talent market — salesman recruitment typically takes 2-3 weeks.\n• Temporarily reassign 1 high-performing salesman from Lucknow (106 outlets/SM, can absorb) for critical Bareilly City beats.\n\nWeek 2-4 (Recruit + Onboard):\n• New hires shadow top performers for first 2 weeks (Gorakhpur buddy system model)\n• Activate beat plans for new salesmen — focus on the 180 outlets from the defunct sub-distributor first (highest neglect = highest quick-win potential)\n• Deploy with daily audit protocol from day 1 (don't let bad habits form)\n\nWeek 5-8 (Ramp):\n• New salesmen running independent beats\n• Weekly achievement tracking vs 88% target\n• Course-correct beat allocation based on actual performance data\n\nCost: Rs 2.7L/quarter. Projected return: Rs 2.05Cr/quarter (including all downstream improvements).",
+          suggestions: ['How do we get Paritosh to approve 3 hires?', 'What is the risk if we delay?', 'Build the business case document']
+        },
+        default: {
+          text: "Bareilly's manpower gap is the upstream cause behind several other problems we're seeing. I can walk you through the analysis, the hiring plan, or the full P&L impact including downstream effects. What's most urgent?",
+          suggestions: ['Why is this happening?', 'Show me the action plan', 'What is the total P&L impact including all downstream improvements?']
         }
       }
     };
@@ -982,9 +1355,9 @@ export default function QuesttSalesWatchtower() {
   // Morrie briefing chat responses keyed by briefing index
   const morrieResponses = {
     0: [
-      { q: 'Which specific outlets are most at risk?', a: 'The 685 at-risk outlets break down as: 312 outlets served by Sharma Beverages (Bareilly City), 198 by Gamma (Lucknow West), and 175 by Beta (Bareilly Citywest). Alpha\'s outlets are most critical - their Thums Up 250ml PET stock is at 0.8 days cover vs 1.2 days average. These 312 outlets account for ₹3.4L/day of the ₹8.2L daily exposure.' },
-      { q: 'What\'s the fastest reorder path?', a: 'Emergency reorder through the regional depot can fulfill in 36 hours vs 72 hours for standard cycle. The depot currently holds 4,200 cases of Thums Up 250ml PET and 2,800 cases of Sprite 600ml PET - sufficient for 8 days cover. Recommend triggering emergency secondary dispatch to Alpha and Gamma distributors by EOD today. Cost delta: ₹12K additional logistics vs ₹8.2L/day sales loss.' },
-      { q: 'Has this happened before with these distributors?', a: 'Yes - Sharma Beverages had a similar stockout event in Oct 2025 (lasted 4 days, ₹28L revenue loss). Root cause was the same: ordering rhythm dropped from 3x/week to 1x/week without early detection. Post-incident, a reorder trigger was set at 2.5 days cover but was later relaxed to 1.5 days. Recommend resetting threshold to 2.5 days permanently.' }
+      { q: 'Which specific outlets are most at risk?', a: 'The 685 at-risk outlets break down as: 312 outlets served by Sharma Beverages (Bareilly City), 198 by Gupta Trading Co (Rampur), and 175 by Verma Distributors (Bareilly South). Sharma\'s outlets are most critical — their Thums Up 250ml PET stock is at 0.8 days cover vs 1.2 days average. These 312 outlets account for Rs 1.8L/day of the Rs 4.2L daily exposure.' },
+      { q: 'What\'s the shortest reorder path?', a: 'Direct restock from the Bareilly plant is the fastest route — 18-hour turnaround vs 36 hours through the regional depot. The plant currently has 6,800 cases of Thums Up 250ml PET and 4,100 cases of Sprite 600ml PET in finished goods inventory. Bareilly plant is 22 km from Sharma Beverages and 35 km from Gupta Trading Co — well within same-day dispatch range. Recommend triggering an emergency plant-to-distributor dispatch for all 3 distributors by EOD today. Logistics cost: ₹18K for direct plant dispatch vs ₹4.2L/day in sales loss if stockout hits. The depot route adds an extra 18 hours because stock has to move plant → depot → distributor instead of plant → distributor directly.' },
+      { q: 'Has this happened before with these distributors?', a: 'Yes — Sharma Beverages had a similar stockout event in Oct 2025 (lasted 4 days, Rs 17L revenue loss on sparkling SKUs). Root cause was the same: ordering rhythm dropped from 3x/week to 1x/week without early detection. Post-incident, a reorder trigger was set at 2.5 days cover but was later relaxed to 1.5 days. Recommend resetting threshold to 2.5 days permanently.' }
     ],
     1: [
       { q: 'What\'s the risk timeline if we don\'t act?', a: 'At current depletion rate, Bareilly City distributor hits zero stock in 48 hours, Gorakhpur City in 72 hours. Once stockout occurs, outlet reactivation takes 5-7 days on average (retailers switch to competitor SKUs). Projected cascade: 420 outlets unbilled, ₹4.8L immediate loss, ₹18L over recovery period. The secondary sales push needs to start within 24 hours to avoid the stockout.' },
@@ -1313,7 +1686,7 @@ export default function QuesttSalesWatchtower() {
                 }}
               >
                 <div style={{ width: 30, height: 30, borderRadius: '50%', background: 'linear-gradient(135deg, #3BB896 0%, #2D5A3D 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontWeight: '600', color: '#fff' }}>
-                  RS
+                  PL
                 </div>
                 <ChevronDown size={14} color={C.lightGrey} />
               </button>
@@ -1322,8 +1695,8 @@ export default function QuesttSalesWatchtower() {
               {profileDropdownOpen && (
                 <div onClick={e => e.stopPropagation()} style={{ position: 'absolute', top: '100%', right: 0, marginTop: '8px', width: '220px', backgroundColor: C.white, border: `1px solid ${C.cream}`, borderRadius: '8px', boxShadow: '0 8px 30px rgba(0,0,0,0.1)', overflow: 'hidden', zIndex: 200 }}>
                   <div style={{ padding: '14px 16px', borderBottom: `1px solid ${C.cream}` }}>
-                    <div style={{ fontSize: '13px', fontWeight: '600', color: C.green }}>RSM UP</div>
-                    <div style={{ fontSize: '11px', color: C.lightGrey, marginTop: '2px' }}>rsm.metro@foodco.in</div>
+                    <div style={{ fontSize: '13px', fontWeight: '600', color: C.green }}>Paritosh Ladhani</div>
+                    <div style={{ fontSize: '11px', color: C.lightGrey, marginTop: '2px' }}>paritosh.ladhani@slmg.in</div>
                   </div>
                   {[
                     { label: 'My Profile', icon: User },
@@ -1579,8 +1952,56 @@ export default function QuesttSalesWatchtower() {
                   Key Insights
                 </h2>
 
+                {/* Category Filter Strip */}
+                <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', overflowX: 'auto', paddingBottom: '4px', flexWrap: 'wrap' }}>
+                  {[
+                    { key: 'all', label: 'All Insights', count: insights.length },
+                    { key: 'noncola', label: 'Non-cola vs Cola', count: insights.filter(i => i.category === 'noncola').length },
+                    { key: 'summer', label: 'Summer Readiness', count: insights.filter(i => i.category === 'summer').length },
+                    { key: 'territory', label: 'Territory Gaps', count: insights.filter(i => i.category === 'territory').length },
+                    { key: 'cooler', label: 'Cooler Asset Performance', count: insights.filter(i => i.category === 'cooler').length },
+                    { key: 'shelf', label: 'Competitive Displacement', count: insights.filter(i => i.category === 'shelf').length },
+                    { key: 'manpower', label: 'Manpower Deployment', count: insights.filter(i => i.category === 'manpower').length },
+                    { key: 'tradepromo', label: 'Trade Promo Schemes', count: insights.filter(i => i.category === 'tradepromo').length },
+                    { key: 'dropsize', label: 'Drop-size by Channel', count: insights.filter(i => i.category === 'dropsize').length },
+                  ].map(cat => (
+                    <button
+                      key={cat.key}
+                      onClick={() => setInsightCategory(cat.key)}
+                      style={{
+                        padding: '8px 16px',
+                        borderRadius: '20px',
+                        border: `1px solid ${insightCategory === cat.key ? C.darkGreen : C.cream}`,
+                        backgroundColor: insightCategory === cat.key ? C.darkGreen : C.white,
+                        color: insightCategory === cat.key ? C.white : C.darkGrey,
+                        fontSize: '12px',
+                        fontWeight: insightCategory === cat.key ? '600' : '400',
+                        cursor: 'pointer',
+                        fontFamily: font,
+                        whiteSpace: 'nowrap',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        transition: 'all 0.2s'
+                      }}
+                      onMouseEnter={e => { if (insightCategory !== cat.key) { e.currentTarget.style.borderColor = C.sage; e.currentTarget.style.backgroundColor = `${C.sage}08`; }}}
+                      onMouseLeave={e => { if (insightCategory !== cat.key) { e.currentTarget.style.borderColor = C.cream; e.currentTarget.style.backgroundColor = C.white; }}}
+                    >
+                      {cat.label}
+                      <span style={{ 
+                        fontSize: '10px', 
+                        fontFamily: mono, 
+                        padding: '1px 6px', 
+                        borderRadius: '8px', 
+                        backgroundColor: insightCategory === cat.key ? 'rgba(255,255,255,0.2)' : C.offWhite,
+                        color: insightCategory === cat.key ? 'rgba(255,255,255,0.8)' : C.lightGrey
+                      }}>{cat.count}</span>
+                    </button>
+                  ))}
+                </div>
+
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                  {insights.map((insight) => (
+                  {insights.filter(insight => insightCategory === 'all' || insight.category === insightCategory).map((insight) => (
                     <div 
                       key={insight.id} 
                       style={{ 

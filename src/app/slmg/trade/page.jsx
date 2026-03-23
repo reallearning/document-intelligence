@@ -20,11 +20,12 @@ const serif = "Georgia, serif";
 const mono = "'JetBrains Mono', monospace";
 
 const sources = {
-  d365: { l: "SLMG D365", lag: "T+1", c: C.green },
-  dms: { l: "DMS Secondary", lag: "T+1", c: C.green },
+  d365: { l: "SLMG D365 F&O", lag: "T+1", c: C.green },
+  dms: { l: "Vxceed DMS", lag: "T+1", c: C.green },
   sfa: { l: "SFA Visit Logs", lag: "T+0", c: C.green },
   nielsen: { l: "NielsenIQ", lag: "~6 wk", c: C.orange },
   scheme: { l: "Scheme Mgmt", lag: "T+1", c: C.green },
+  cts: { l: "Cooler Tracking", lag: "T+0", c: C.green },
 };
 
 /* ═══ CONVERSATION RESPONSES ═══ */
@@ -65,10 +66,10 @@ The 14 beats form a contiguous geographic band running south from Gorakhpur city
 | ... | ... | ... | ... | ... |
 | **Total (14 beats)** | **8 distributors** | **-19.2% avg** | **76% avg** | **All 14** |
 
-**Pattern:** All 14 beats are in areas where RCPL appointed new distributors between Dec 2025 and Feb 2026. The secondary sales decline started 2-3 weeks after Campa stock became available through those distributors. The geographic concentration suggests a coordinated RCPL territory expansion, not random competitive pressure.
+**Pattern:** All 14 beats show Campa WD above 55% in the latest NielsenIQ cycle (Jan audit), up from near-zero in the Q2'25 audit. The secondary sales decline in our DMS started 2-3 weeks after Campa WD appeared in these beats. The geographic concentration along the Gorakhpur-Deoria-Kushinagar corridor suggests a coordinated competitive expansion, not random pressure.
 
 **Key insight from SFA cross-reference:** Beats where salesman visit compliance is above 80% are declining at -14%. Beats below 80% are declining at -24%. Execution intensity is a compounding factor on top of the competitive pressure.`,
-    followUps: ["Show distributor-level detail for these beats", "What's RCPL's likely next expansion target?", "Can we pre-position a counter-scheme in adjacent beats?"],
+    followUps: ["Show distributor-level detail for these beats", "Which adjacent beats show early NielsenIQ WD movement?", "Can we pre-position a counter-scheme in adjacent beats?"],
   },
   "Which beats with coolers are closest to flipping?": {
     agents: ["Beat Risk Model", "Churn Predictor"],
@@ -107,9 +108,9 @@ Scoped across all Lucknow urban MT outlets where SLMG has active distribution:
 | **Total monthly** | - | - | **₹2.04 L** |
 | **Total quarterly** | - | - | **₹6.48 L** |
 
-For context, the existing Limca margin scheme running across all of Central UP (including rural where Lahori has zero presence) costs ₹4.8 Cr/quarter. Redirecting just 30% of that (₹1.44 Cr) fully funds this blitz with budget to spare.
+For context, the existing Limca margin scheme running across all of Central UP (including rural where Limca volumes are flat with no competitive pressure per DMS data) costs ₹4.8 Cr/quarter. Redirecting just 30% of that (₹1.44 Cr) fully funds this blitz with budget to spare.
 
-**Expected impact:** Based on similar visibility interventions in Delhi NCR MT (2024 data), secondary placement drives 25-35% uplift in impulse purchase velocity. For Lucknow, projected Limca+Sprite volume recovery: 3,200-4,500 cases/month.`,
+**Expected impact:** Based on TM-Q1-04 Sprite MT visibility results (1.24x uplift in these same stores since Feb 15), secondary placement drives 24-35% uplift in impulse purchase velocity. For Lucknow, projected Limca+Sprite volume recovery: 3,200-4,500 cases/month.`,
     followUps: ["Compare this ROI vs the existing margin scheme", "Which 180 outlets have the highest footfall?", "Can we pilot in 50 outlets first?"],
   },
   "Simulate: what if 5 distributors go dark in April?": {
@@ -157,7 +158,7 @@ Selected the 5 most stressed distributors (inventory >16 days, order frequency d
 **Bottom line:** Same ₹5 Cr budget. 13,500 more cases per month. 4.4x efficiency improvement. The 18 E.UP distributors being conceded serve beats with sub-200 secondary sales per week and no cooler coverage. Bihar gains distribution density ahead of summer.
 
 **Risk:** If Coca-Cola leadership sees the E.UP share decline in the next Nielsen cycle, the optics are bad even though the economics are right. Recommend framing this as "strategic concentration" with the supporting data ready.`,
-    followUps: ["Run this for ₹8.6 Cr (full waste scheme reallocation)", "What's the Bihar share projection after reallocation?", "How do we frame this for the Coca-Cola India review?"],
+    followUps: ["Run this for ₹12.8 Cr (full waste scheme reallocation)", "What's the Bihar share projection after reallocation?", "How do we frame this for the Coca-Cola India review?"],
   },
   "Simulate: if Campa WD reaches 70% in E.UP, what's the volume impact?": {
     agents: ["Competitive Scenario Model", "Elasticity Engine"],
@@ -182,60 +183,60 @@ At current Campa expansion velocity (+4-5 pts per Nielsen cycle), 70% WD is appr
 **Implication:** If SLMG is going to make a stand in E.UP, the next 60 days are the window. After 70% WD, the economics of winning back become 3-4x more expensive than defending now.`,
     followUps: ["What's the cost to hold the line at 65% WD?", "Which beat clusters are still below 50% Campa WD?", "Model the total 12-month revenue loss if we don't act"],
   },
-  "Show all 23 schemes ranked by uplift with cost data": {
+  "Show all 14 schemes ranked by uplift with cost data": {
     agents: ["Scheme Analyzer"],
     sources: ["scheme", "dms"],
-    body: `**All 23 Active Schemes: Ranked by Volume Uplift Coefficient**
+    body: `**All 14 Active Schemes: Ranked by Volume Uplift Coefficient**
 
 | # | Scheme | Zone | Mechanic | Budget | Uplift | Cost/Inc. Case | Week |
 |---|---|---|---|---|---|---|---|
 | 1 | Bihar outlet activation slab | S. Bihar | Slab | ₹8.2 Cr | **1.42x** | ₹128 | 5/12 |
 | 2 | Uttarakhand tourism promo | UK | Consumer | ₹3.1 Cr | **1.35x** | ₹142 | 7/12 |
 | 3 | Thums Up cooler bonus | C.UP | Cooler | ₹7.8 Cr | **1.28x** | ₹147 | 6/12 |
-| 4 | Bihar market seeding | N. Bihar | Margin | ₹6.4 Cr | **1.26x** | ₹164 | 5/12 |
-| 5 | W.UP summer pre-load | W.UP | Slab | ₹5.2 Cr | **1.24x** | ₹172 | 4/12 |
+| 4 | Sprite MT visibility | C.UP | Visibility | ₹2.4 Cr | **1.24x** | ₹172 | 4/12 |
+| 5 | Maaza summer pre-load | All | Slab | ₹4.2 Cr | **1.22x** | ₹184 | 2/4 |
 | ... | ... | ... | ... | ... | ... | ... | ... |
-| 21 | Consumer promo rural | C.UP | Consumer | ₹4.1 Cr | **1.05x** | ₹892 | 6/12 |
-| 22 | Rural kirana margin | W.UP | Margin | ₹6.2 Cr | **1.04x** | ₹1,034 | 5/12 |
-| 23 | Distributor vol bonus | Bkd | Volume | ₹3.8 Cr | **1.02x** | ₹1,890 | 8/12 |
+| 12 | Consumer promo rural | C.UP | Consumer | ₹4.1 Cr | **1.05x** | ₹892 | 6/12 |
+| 13 | Rural kirana margin | W.UP | Margin | ₹6.2 Cr | **1.04x** | ₹1,034 | 5/12 |
+| 14 | Distributor vol bonus | Bkd | Volume | ₹3.8 Cr | **1.02x** | ₹1,890 | 8/12 |
 
 **Key patterns:**
 - **Slab-based and cooler-linked** schemes consistently outperform (avg uplift 1.28x)
 - **Flat margin schemes** in low-threat zones are the worst performers (avg 1.04x)
 - The **top 5 schemes** generate 68% of all incremental volume from 42% of budget
-- The **bottom 3** generate <3% of incremental volume from 22% of budget
+- The **bottom 3** generate <3% of incremental volume from 18% of budget
 
-Median uplift across all 23: **1.18x**. Anything below 1.10x should be reviewed for modification or termination.`,
+Median uplift across all 14: **1.18x**. Anything below 1.10x should be reviewed for modification or termination.`,
     followUps: ["Which mechanic works best in rural GT specifically?", "What's the optimal number of schemes to run simultaneously?", "Design a new scheme for E.UP cooler defense"],
   },
   "Simulate: terminate bottom 3 and redeploy. Full impact model.": {
     agents: ["Reallocation Optimizer", "Scheme Simulator", "Volume Projector"],
     sources: ["scheme", "dms", "d365"],
-    body: `**Full Reallocation Simulation: Terminate Bottom 3, Redeploy ₹8.6 Cr**
+    body: `**Full Reallocation Simulation: Terminate Bottom 3, Redeploy ₹12.8 Cr**
 
 **Step 1: Terminate**
-| Scheme | Remaining Budget | Freed |
-|---|---|---|
-| TM-Q1-08 (Dist bonus, Bkd) | ₹1.6 Cr (4 wks left) | ₹1.6 Cr |
-| TM-Q1-14 (Rural margin, W.UP) | ₹3.6 Cr (7 wks left) | ₹3.2 Cr* |
-| TM-Q1-19 (Consumer promo, C.UP) | ₹2.2 Cr (6 wks left) | ₹1.8 Cr* |
-*Narrowed to >10% decline beats, partial continue.
+| Scheme | Spend to Date | Budget | Freed for Q2 |
+|---|---|---|---|
+| TM-Q1-11 (Limca rural margin, C.UP) | ₹2.8 Cr | ₹3.2 Cr | ₹2.8 Cr |
+| TM-Q1-12 (Rural kirana margin, W.UP) | ₹6.2 Cr | ₹6.0 Cr | ₹6.2 Cr |
+| TM-Q1-13 (Distributor vol bonus, Bkd) | ₹3.8 Cr | ₹4.0 Cr | ₹3.8 Cr |
+2-week distributor notice per agreements. TM-Q1-12 termination risk: zero (A/B data definitive).
 
-**Total freed: ₹6.6 Cr immediately + ₹2.0 Cr from ongoing savings = ₹8.6 Cr**
+**Total freed: ₹12.8 Cr for redeployment**
 
 **Step 2: Redeploy**
-| Destination | Amount | Expected Efficiency | Projected Inc. Cases |
+| Destination | Amount | Precedent | Projected Inc. Cases/Mo |
 |---|---|---|---|
-| E.UP cooler beat defense (48 distributors) | ₹5.2 Cr | 5.8 cases/₹ | 30,160 |
-| Lucknow MT visibility (180 MT stores) | ₹1.4 Cr | 4.2 cases/₹ | 5,880 |
-| Summer reserve (pre-positioned) | ₹2.0 Cr | held | - |
-| **Total** | **₹8.6 Cr** | - | **36,040 cases/qtr** |
+| Holi acceleration (immediate) | ₹3.6 Cr | Holi '25: 1.82x | 85K in 10 days |
+| Bihar distributor WC support | ₹2.0 Cr | TM-Q1-06 retention model | Protects 180 beats |
+| Bundelkhand beat expansion | ₹2.8 Cr | TM-Q1-01 Bihar activation (1.42x) | ~8,200/mo |
+| Maaza E.UP summer pre-load | ₹1.5 Cr | Mar '25 pre-load (1.28x) | ~12,000/mo |
+| Summer reserve (Campa counter) | ₹2.9 Cr | Held for April | - |
+| **Total** | **₹12.8 Cr** | | **~110K inc. cases/mo** |
 
-**vs. Current: Bottom 3 schemes generate ~3,100 incremental cases/quarter at ₹8.6 Cr.**
+**vs. Current: Bottom 3 schemes generate ~5,000 incremental cases/month at ₹12.8 Cr.**
 
-**Net improvement: +32,940 cases/quarter. 11.6x efficiency gain.**
-
-This is the single highest-ROI action available this quarter.`,
+**Net improvement: ~105,000 additional cases/month. Budget-neutral. Weighted ROI: 2.4x vs 1.03x.**`,
     followUps: ["Generate the approval memo for this reallocation", "What's the risk if E.UP defense doesn't hold?", "Timeline to see results?"],
   },
   "Break down volume by brand across zones": {
@@ -245,15 +246,19 @@ This is the single highest-ROI action available this quarter.`,
 
 | Brand | C.UP | W.UP | E.UP | UK | N.Bih | S.Bih | Bkd | Total |
 |---|---|---|---|---|---|---|---|---|
-| **Thums Up** | 3,420 | 2,940 | 2,590 | 1,230 | 2,160 | 1,320 | 960 | 14,620 |
-| **Sprite** | 2,280 | 1,960 | 1,620 | 820 | 1,440 | 880 | 640 | 9,640 |
-| **Limca** | 1,710 | 1,470 | 1,210 | 610 | 1,080 | 660 | 480 | 7,220 |
-| **Maaza** | 1,140 | 980 | 810 | 410 | 720 | 440 | 320 | 4,820 |
-| **Kinley** | 1,990 | 1,710 | 1,420 | 720 | 1,260 | 770 | 560 | 8,430 |
-| **Others** | 860 | 740 | 450 | 310 | 540 | 330 | 240 | 3,470 |
+| **Thums Up** | 5,180 | 4,560 | 4,170 | 1,580 | 3,060 | 1,920 | 1,330 | **21,800** |
+| **Sprite** | 2,360 | 1,840 | 1,280 | 730 | 1,060 | 690 | 440 | **8,400** |
+| **Maaza** | 1,390 | 1,200 | 830 | 630 | 1,100 | 720 | 330 | **6,200** |
+| **Limca** | 1,240 | 1,060 | 880 | 530 | 570 | 300 | 220 | **4,800** |
+| **Kinley** | 860 | 850 | 610 | 530 | 1,240 | 660 | 350 | **5,100** |
+| **Others** | 370 | 290 | 330 | 100 | 170 | 110 | 530 | **1,900** |
 | **Total** | **11,400** | **9,800** | **8,100** | **4,100** | **7,200** | **4,400** | **3,200** | **48,200** |
 
-**Key signal:** Limca in E.UP is declining fastest (-8.2% MoM), which is surprising given that the primary E.UP threat is Campa (which competes with Thums Up, not Limca). This suggests Lahori/flavored soda may have more distribution in E.UP than the Lucknow-focused narrative implies. Worth investigating.`,
+**Key signals:**
+- Thums Up is 52% of E.UP volume but 74% of E.UP scheme spend. Defensive overspend is brand-specific.
+- Kinley in Bihar (1,240 + 660 = 1,900) is 37% of total Kinley. Bihar entry-SKU strategy is working.
+- Limca in C.UP (1,240) is flat while zone grows 11.8%. The urban MT decline is dragging.
+- Maaza in Bihar (1,100 + 720 = 1,820) growing fastest but E.UP pre-load lagging at 830 (28% below target).`,
     followUps: ["Show Limca decline by beat in E.UP", "Which brand has the highest margin contribution?", "Break this down by channel (GT vs MT)"],
   },
   "Show spend efficiency trend over last 6 months": {
@@ -297,8 +302,8 @@ Bihar's declining efficiency is expected in a new territory build-out and should
     followUps: ["Can we extend the combo to include Kinley?", "What's the Campa WD growth rate in Uttarakhand?"],
   },
   "Which outlets are at risk of losing cooler purity?": {
-    agents: ["Field Audit Analyzer"], sources: ["sfa", "dms"],
-    body: `**Cooler Purity Risk: Central UP (TM-Q1-03)**\n\nOf 340 enrolled outlets maintaining >80% Coca-Cola cooler purity:\n\n**12 outlets lost purity in Feb** (dropped below 80% Coca-Cola product in cooler)\n- 8 in Lucknow suburbs where Campa offered free coolers\n- 4 in Kanpur where competitor offered higher margin\n\n**28 outlets at risk (purity 80-85%, declining trend)**\n- SFA data shows these outlets added 1-2 Campa SKUs to cooler in last 4 weeks\n- If trend continues, they'll breach the 80% threshold by mid-April\n\n**All 28 are in beats where Campa WD is 35-50%.** In beats where Campa WD is >50%, we've already lost most cooler exclusivity. In beats <35%, coolers are stable.\n\n**Immediate action needed:** Targeted salesman visits to the 28 at-risk outlets. Each cooler-exclusive outlet generates 28% more Thums Up offtake than mixed coolers. Losing 28 outlets = Rs18L/month revenue impact.`,
+    agents: ["Field Audit Analyzer"], sources: ["cts", "dms"],
+    body: `**Cooler Purity Risk: Central UP (TM-Q1-03)**\n\nOf 340 enrolled outlets maintaining >80% Coca-Cola cooler purity:\n\n**12 outlets lost purity in Feb** (CTS shows they dropped below 80% Coca-Cola product in cooler)\n- 8 in Lucknow suburbs (purity dropped from 85% to 62-68% in 3 weeks)\n- 4 in Kanpur (purity dropped from 82% to 70-75%)\n\n**28 outlets at risk (purity 80-85%, declining trend)**\n- CTS data shows purity trending down 2-3 pts/week in these outlets over last 4 weeks\n- If trend continues, they'll breach the 80% threshold by mid-April\n\n**Geographic pattern:** All 28 at-risk outlets are in beats where NielsenIQ shows Campa WD at 35-50%. In beats where Campa WD is >50%, we've already lost most cooler exclusivity. In beats <35%, coolers are stable. The 35-50% WD band is the battleground.\n\n**Immediate action needed:** Targeted salesman visits to the 28 at-risk outlets. Each cooler-exclusive outlet generates 28% more Thums Up offtake than mixed coolers (DMS data). Losing 28 outlets = Rs18L/month revenue impact.`,
     followUps: ["What's the cost of deploying 50 more coolers in Lucknow suburbs?", "Compare sales velocity: cooler-exclusive vs mixed outlets"],
   },
   "What's the cost of deploying 50 more coolers in Lucknow suburbs?": {
@@ -313,18 +318,18 @@ Bihar's declining efficiency is expected in a new territory build-out and should
   },
   "Show store-by-store performance for this scheme": {
     agents: ["MT Analytics"], sources: ["dms"],
-    body: `**Sprite MT Visibility: Store-Level Performance (TM-Q1-04)**\n\n180 Lucknow MT stores with secondary placement:\n\n**Top 20 stores (DMart Gomti Nagar, Spencer's Hazratganj, etc.)**\n- Avg uplift: 1.42x. These are high-footfall stores where end-cap placement drives significant impulse.\n\n**Middle 120 stores**\n- Avg uplift: 1.24x. Consistent with scheme average. Checkout counter placement working.\n\n**Bottom 40 stores**\n- Avg uplift: 1.08x. Smaller format stores where secondary placement has limited incremental visibility. Consider dropping these and reallocating Rs800/outlet/month to higher-performing stores.\n\n**Lahori overlap:** In 68 stores where Lahori also has secondary placement, Sprite holds share (uplift 1.18x). In 42 stores where only Lahori has placement and Sprite doesn't, Sprite loses -6.8% QoQ. The 70 stores where Sprite has placement and Lahori doesn't show 1.34x uplift.\n\n**Action:** The 42 Lahori-only stores are the gap. Adding Sprite placement in those 42 stores costs Rs33.6K/month but protects an estimated Rs8.2L/month in share.`,
+    body: `**Sprite MT Visibility: Store-Level Performance (TM-Q1-04)**\n\n180 Lucknow MT stores with secondary placement:\n\n**Top 20 stores (DMart Gomti Nagar, Spencer's Hazratganj, etc.)**\n- Avg uplift: 1.42x. These are high-footfall stores where end-cap placement drives significant impulse.\n\n**Middle 120 stores**\n- Avg uplift: 1.24x. Consistent with scheme average. Checkout counter placement working.\n\n**Bottom 40 stores**\n- Avg uplift: 1.08x. Smaller format stores where secondary placement has limited incremental visibility. Consider dropping these and reallocating Rs800/outlet/month to higher-performing stores.\n\n**Placement vs no-placement comparison:** In our 180 stores with Sprite secondary placement, Sprite holds share even as the broader Lucknow MT channel declines -6.8% QoQ. In stores without our placement, Sprite follows the channel decline. The uplift gap between placed and unplaced stores is 18-24 pts.\n\n**Action:** Extending placement to the remaining high-footfall Lucknow MT stores where we don't have Sprite placement yet. Matching the TM-Q1-04 mechanic at Rs800/outlet/month.`,
     followUps: ["What would it cost to extend to all UP MT stores?", "Which 42 stores need Sprite placement added?"],
   },
   "What would it cost to extend to all UP MT stores?": {
     agents: ["Scheme Designer", "Cost Model"], sources: ["scheme", "dms"],
-    body: `**Sprite/Limca Visibility: All UP Modern Trade**\n\nCurrently covering 180 Lucknow MT stores. Total UP MT universe: 620 stores.\n\n| Expansion | Stores | Monthly Cost | Projected Uplift |\n|---|---|---|---|\n| Current (Lucknow) | 180 | Rs1.44L | 1.24x (measured) |\n| + Kanpur | +85 | +Rs0.68L | Est. 1.18x |\n| + Varanasi/Prayagraj | +110 | +Rs0.88L | Est. 1.15x |\n| + Rest of UP | +245 | +Rs1.96L | Est. 1.08x |\n| **Full UP** | **620** | **Rs4.96L/month** | **Est. 1.16x avg** |\n\n**Recommendation:** Extend to Kanpur first (highest Lahori presence outside Lucknow). The rest-of-UP stores are lower priority because Lahori hasn't penetrated beyond Lucknow-Kanpur yet. Phased rollout: Kanpur in April, evaluate, then Varanasi/Prayagraj in June.`,
-    followUps: ["What's Lahori's MT presence in Kanpur?", "Can we fund Kanpur from the Limca margin scheme savings?"],
+    body: `**Sprite/Limca Visibility: All UP Modern Trade**\n\nCurrently covering 180 Lucknow MT stores. Total UP MT universe: 620 stores.\n\n| Expansion | Stores | Monthly Cost | Projected Uplift |\n|---|---|---|---|\n| Current (Lucknow) | 180 | Rs1.44L | 1.24x (measured) |\n| + Kanpur | +85 | +Rs0.68L | Est. 1.18x |\n| + Varanasi/Prayagraj | +110 | +Rs0.88L | Est. 1.15x |\n| + Rest of UP | +245 | +Rs1.96L | Est. 1.08x |\n| **Full UP** | **620** | **Rs4.96L/month** | **Est. 1.16x avg** |\n\n**Recommendation:** Extend to Kanpur first (second-largest urban MT cluster in SLMG territory, where Limca+Sprite are also showing QoQ decline per DMS data). The rest-of-UP stores are lower priority because the urban MT decline is concentrated in Lucknow and Kanpur. Phased rollout: Kanpur in April, evaluate, then Varanasi/Prayagraj in June.`,
+    followUps: ["What's the Limca+Sprite decline rate in Kanpur MT?", "Can we fund Kanpur from the Limca margin scheme savings?"],
   },
   "Compare Sprite vs Lahori velocity where both have placement": {
     agents: ["Category Analyzer"], sources: ["dms", "nielsen"],
-    body: `**Sprite vs Lahori: Head-to-Head in Dual-Placement MT Stores**\n\n68 stores in Lucknow where both Sprite and Lahori have secondary placement:\n\n| Metric | Sprite | Lahori Zeera | Notes |\n|---|---|---|---|\n| Cases/store/week | 8.4 | 6.2 | Sprite +35% |\n| Revenue/store/week | Rs3,360 | Rs1,860 | Sprite +81% (higher ASP) |\n| Consumer picks/day | 18 | 22 | Lahori higher frequency |\n| Avg transaction value | Rs42 | Rs18 | Sprite 2.3x higher |\n\n**Key insight:** Lahori wins on frequency (more individual purchases) but Sprite wins on revenue (higher-value transactions). Lahori is a Rs10-15 impulse buy. Sprite is a Rs40 planned purchase. They're targeting different occasions even in the same store.\n\n**This means visibility is defensive, not offensive.** We don't need to beat Lahori on frequency. We need to maintain presence so consumers don't substitute when they want a sparkling drink and only see Lahori.`,
-    followUps: ["Are there stores where Sprite velocity dropped after Lahori got placement?"],
+    body: `**Sprite Performance: Placement vs No-Placement Stores**\n\nWe can't see Lahori's sell-through data, but we can see how our own Sprite performs based on whether we have visibility investment or not:\n\n| Store Segment | Sprite Cases/Wk | QoQ Trend | TM-Q1-04 Active? |\n|---|---|---|---|\n| 180 stores with Sprite placement | 8.4 | +2.4% | Yes |\n| ~120 comparable stores without | 5.8 | -6.8% | No |\n| Gap | +2.6 cases/store/wk | +9.2 pts | |\n\n**The visibility gap is 9.2 percentage points.** Stores with Sprite secondary placement are growing. Stores without are declining at the same rate as the broader Lucknow MT channel.\n\n**NielsenIQ context:** Flavored soda category is +48% YoY in UP urban. The decline in our non-placement stores suggests consumers are switching to alternatives when they don't see Sprite on the shelf. We don't need to know the competitor's exact numbers to know our own visibility is the variable.\n\n**This means visibility is defensive.** We don't need to outsell alternatives. We need to be present so consumers don't substitute when they're looking for a sparkling drink.`,
+    followUps: ["What would it cost to add placement in the 120 unplaced stores?"],
   },
   "Which zones haven't started loading yet?": {
     agents: ["Pre-Season Tracker"], sources: ["dms", "d365"],
@@ -387,8 +392,8 @@ Bihar's declining efficiency is expected in a new territory build-out and should
     followUps: ["What's happening with Campa in Bundelkhand?"],
   },
   "What's happening with Campa in Bundelkhand?": {
-    agents: ["Competitive Intelligence"], sources: ["nielsen", "sfa"],
-    body: `**Campa in Bundelkhand: Early Stage but Accelerating**\n\nCampa WD in Bundelkhand: 18% (up from 6% in Q3 2025). Still early, but the growth rate is the fastest outside E.UP.\n\n**Where:** Concentrated in 4 district HQs: Jhansi, Banda, Hamirpur, Lalitpur. Not yet in rural beats.\n\n**How:** RCPL appointed 3 dedicated distributors in Oct 2025. Offering Rs22/case retailer margin (vs Coca-Cola Rs8-12/case). Free cooler deployment in Jhansi town.\n\n**SFA field reports:** Salesmen report Campa signage appearing in 40+ outlets in Jhansi. 8 outlets in Jhansi city center have replaced Thums Up display with Campa. This is the same pattern we saw in Gorakhpur 6 months ago before the E.UP share collapse.\n\n**The current Bundelkhand scheme (vol bonus) does nothing to address this.** It gives distributors a quarterly slab while Campa is winning outlets one by one in district HQs. The beat-expansion alternative would at least activate the unserved beats before Campa gets there.`,
+    agents: ["Competitive Intelligence"], sources: ["nielsen", "dms"],
+    body: `**Campa in Bundelkhand: Early Stage but Accelerating**\n\nNielsenIQ Campa WD in Bundelkhand: 18% (up from 6% in Q3 2025). Still early, but the growth rate is the fastest outside E.UP.\n\n**Where the impact shows in our data:** DMS secondary decline concentrated in 4 district HQ beats: Jhansi, Banda, Hamirpur, Lalitpur. Rural beats unaffected. This matches the E.UP pattern from 6 months ago where Campa entered through urban district HQs first.\n\n**What our data tells us:** SLMG's Thums Up velocity in Jhansi town beats dropped 8% MoM despite no scheme changes. CTS shows 4 outlets in Jhansi lost cooler purity in the last month. This is the same early-warning pattern we saw in Gorakhpur before the E.UP share collapse.\n\n**The current Bundelkhand scheme (vol bonus) does nothing to address this.** It gives distributors a quarterly slab while our volume erodes in district HQs. The beat-expansion alternative would at least activate the 80 unserved beats before competitive distribution reaches them.`,
     followUps: ["How long before Bundelkhand looks like E.UP?", "What's the intervention playbook from the E.UP experience?"],
   },
   "What's the redemption rate by urban vs rural?": {
@@ -478,12 +483,12 @@ Bihar's declining efficiency is expected in a new territory build-out and should
   },
   "What would a Limca visibility scheme cost instead?": {
     agents: ["Scheme Designer"], sources: ["scheme", "dms"],
-    body: `**Limca Visibility Scheme: MT + Urban GT**\n\nReplace current TM-Q1-11 (Rs4/case flat margin, rural GT) with a visibility scheme targeting the actual Lahori threat:\n\n| Component | Outlets | Monthly Cost | Mechanic |\n|---|---|---|---|\n| MT secondary placement | 180 stores | Rs1.44L | End-cap + checkout (matching Sprite scheme) |\n| Urban GT branding | 400 outlets | Rs2.0L | Shelf strips + counter mat + Limca poster |\n| Cooler purity bonus | 120 outlets | Rs0.6L | Rs8/case for Limca cooler-share >25% |\n| **Total monthly** | **700 outlets** | **Rs4.04L** |\n| **Total quarterly** | | **Rs12.12L (Rs1.2 Cr)** |\n\nCurrent scheme: Rs2.8 Cr for 1.04x uplift in rural (where Lahori isn't even the threat).\nProposed: Rs1.2 Cr for estimated 1.18-1.24x uplift in urban MT+GT (where Lahori IS the threat).\n\nSaves Rs1.6 Cr AND addresses the actual competitive dynamic. The scheme-threat mismatch is the core problem.`,
+    body: `**Limca Visibility Scheme: MT + Urban GT**\n\nReplace current TM-Q1-11 (Rs4/case flat margin, rural GT) with a visibility scheme targeting the channel where Limca is actually declining:\n\n| Component | Outlets | Monthly Cost | Mechanic |\n|---|---|---|---|\n| MT secondary placement | 180 stores | Rs1.44L | End-cap + checkout (matching Sprite TM-Q1-04 mechanic) |\n| Urban GT branding | 400 outlets | Rs2.0L | Shelf strips + counter mat + Limca poster |\n| Cooler purity bonus | 120 cooler outlets | Rs0.6L | Rs8/case for Limca cooler-share >25% |\n| **Total monthly** | **700 outlets** | **Rs4.04L** |\n| **Total quarterly** | | **Rs12.12L (Rs1.2 Cr)** |\n\nCurrent scheme: Rs2.8 Cr for 1.04x uplift in rural (where Limca is flat, no competitive pressure).\nProposed: Rs1.2 Cr for estimated 1.18-1.24x uplift in urban MT+GT (where Limca is declining -6.8% QoQ).\n\nSaves Rs1.6 Cr AND addresses the actual channel where the problem is. TM-Q1-04 Sprite visibility (same mechanic, same stores) is the direct precedent at 1.24x.`,
     followUps: ["If we terminated the rural margin, what volume would we actually lose?"],
   },
   "Show Limca vs Lahori velocity by outlet type": {
     agents: ["Category Analyzer"], sources: ["dms", "nielsen"],
-    body: `**Limca vs Lahori Zeera: Velocity by Channel**\n\n| Channel | Limca Cases/Outlet/Wk | Lahori Cases/Outlet/Wk | Limca Trend | Lahori Trend |\n|---|---|---|---|---|\n| Lucknow MT | 4.2 | 6.8 | -6.8% QoQ | +48% QoQ |\n| Lucknow Urban GT | 2.8 | 3.1 | -4.2% QoQ | +32% QoQ |\n| C.UP Semi-Urban GT | 3.4 | 0.8 | +1.2% QoQ | +120% QoQ (from low base) |\n| C.UP Rural GT | 4.1 | 0.2 | Flat | Negligible |\n\n**Lahori is an urban phenomenon.** In Lucknow MT, Lahori already outsells Limca per outlet. In rural GT, Lahori barely exists. The current Limca scheme (Rs4/case rural margin) is defending territory that isn't under attack while ignoring the territory that is.\n\nLahori's growth is steepest in MT (+48% QoQ) because that's where they invest in secondary placement. If Limca matches placement, historical data from Sprite MT scheme (TM-Q1-04) suggests we can hold share.`,
+    body: `**Limca Performance by Channel (Vxceed DMS)**\n\n| Channel | Limca Cases/Outlet/Wk | QoQ Trend | Scheme Active? |\n|---|---|---|---|\n| Lucknow MT | 4.2 | -6.8% QoQ | No visibility scheme |\n| Lucknow Urban GT | 2.8 | -4.2% QoQ | No visibility scheme |\n| C.UP Semi-Urban GT | 3.4 | +1.2% QoQ | TM-Q1-11 margin (Rs4/case) |\n| C.UP Rural GT | 4.1 | Flat | TM-Q1-11 margin (Rs4/case) |\n\n**The decline is urban, not rural.** Limca is losing share in exactly the channels where we have zero visibility investment (Lucknow MT and Urban GT). In rural GT where TM-Q1-11 runs, Limca is flat, but there's no competitive pressure there to begin with.\n\n**NielsenIQ context:** Flavored soda category grew 48% YoY in UP urban. The category is expanding fastest in MT and urban GT, exactly where Limca is declining. This isn't a Limca brand problem. It's a visibility gap in the channels where the category is growing.\n\n**The scheme-channel mismatch is clear:** Rs2.8 Cr of margin spend in rural (flat, no threat) while urban MT (-6.8%) and urban GT (-4.2%) get nothing. TM-Q1-04 Sprite visibility proves the fix works in these exact channels.`,
     followUps: ["What would a Limca visibility scheme cost instead?"],
   },
   "If we terminated this, what volume would we actually lose?": {
@@ -505,19 +510,19 @@ const briefCards = [
     hl: "Eastern UP is losing ground despite being the highest-spend zone",
     sum: "Volume declining for the third consecutive month while trade spend runs 28% over budget. Secondary sales in 14 beats collapsed. Distributor fill rates falling. Every additional rupee yields diminishing returns.",
     kpis: [{ l: "Volume", v: "8.1M", d: "-4.2%", b: 1 }, { l: "Spend", v: "₹24 Cr", d: "128% of plan", b: 1 }, { l: "Efficiency", v: "2.71", d: "-21% MoM", b: 1 }, { l: "Share", v: "49.1%", d: "-7.8 pts", b: 1 }],
-    ev: [{ s: "dms", t: "Secondary sales down 4.2% MoM. Third consecutive decline. Concentrated in 14 beats south of Gorakhpur." }, { s: "scheme", t: "Spend/case: ₹296 - highest across all zones, 2.8x the Uttarakhand benchmark." }, { s: "sfa", t: "Visit compliance dropped to 76% in declining beats. Route restructuring last quarter reassigned salesmen in 42 beats." }, { s: "nielsen", t: "Campa WD jumped 38% to 61% in 6 months. Fastest build-out in any SLMG zone." }],
-    dec: { act: "Concentrate spend on cooler-equipped beats with secondary still above 500 cases/wk per distributor. Redirect ₹5.2 Cr from lowest-performing distributors to targeted visibility + volume-slab schemes in defensible territory.", why: "The bottom-performing distributors are in beats already lost to Campa's pricing. Cooler-equipped beats still show brand preference in DMS data.", imp: "Defend ~62,000 cases/month. Efficiency gain: +0.8 cases/₹.", conf: "High", time: "7 days to deploy. 3 weeks to measure." },
-    trail: [{ a: "Volume Analyzer", q: "Secondary sales by beat, E.UP, 12 wks", f: "14 beats in Gorakhpur-Deoria: sustained >15% decline. Distributor fill rate 94%. Demand-side driven, not supply.", s: "dms" }, { a: "Spend Efficiency", q: "Trade spend vs volume, by distributor", f: "Bottom decile distributors: spend +42%, vol -28%. Top quartile: spend +8%, vol flat.", s: "scheme" }, { a: "Competitive Signal", q: "Campa WD, E.UP, 4 Nielsen cycles", f: "WD: 38 -> 44 -> 52 -> 61%. RCPL distributor count doubled.", s: "nielsen" }, { a: "Field Execution", q: "Visit compliance and route history, E.UP", f: "Beats with >80% visit compliance: -14% decline. Beats <80%: -24%. Execution is compounding the competitive pressure.", s: "sfa" }, { a: "Synthesis", q: null, f: "Eastern UP is bifurcating. Concentrate on defensible cooler-equipped beats. Concede non-cooler beats in Campa-dense territory.", s: null }],
+    ev: [{ s: "dms", t: "Secondary sales down 4.2% MoM. Third consecutive decline. Concentrated in 14 beats south of Gorakhpur. Thums Up 600ml PET hardest hit (-8.2%), while 250ml ASSP holding flat. Maaza 200ml Tetra declined 12% in same beats." }, { s: "scheme", t: "Spend/case: ₹296 - highest across all zones, 2.8x the Uttarakhand benchmark. Thums Up accounts for 74% of E.UP scheme spend but only 58% of volume." }, { s: "sfa", t: "Visit compliance dropped to 76% in declining beats. Route restructuring last quarter reassigned salesmen in 42 beats. CTS data shows cooler purity below 50% in 12 of the declining distributors." }, { s: "nielsen", t: "Campa WD jumped 38% to 61% in 6 months. Fastest build-out in any SLMG zone. Campa 250ml at ₹10 directly competing with Thums Up ASSP." }],
+    dec: { act: "Concentrate spend on 168 cooler-equipped beats with secondary still above 500 cases/wk. Redirect ₹5.2 Cr from the 42 lowest-performing distributors (incl. Sharma Traders GKP, Verma Agencies DEO, Tiwari Sales DEO) to a targeted Thums Up 600ml PET + 250ml ASSP visibility scheme in defensible Gorakhpur urban and Varanasi beats. Precedent: Capping TM-Q1-03 cooler bonus to cooler beats only in C.UP delivered 1.28x uplift vs 1.08x in non-cooler beats, same pattern expected here.", why: "The bottom 112 non-cooler beats are in areas where Campa WD exceeds 60% and RCPL has dedicated distributors offering ₹18/case retailer margin plus free coolers. Cooler-equipped beats still show 1.22x uplift in DMS data because the cooler creates brand visibility that the margin alone cannot. TM-Q1-03 in C.UP proves this: cooler beats 1.42x uplift, non-cooler 1.08x. Same mechanic, same logic.", imp: "Defend ~62,000 cases/month in cooler beats. Efficiency gain: +0.8 cases/₹. Save ₹5.2 Cr for redeployment to Bihar summer pre-positioning.", conf: "High", time: "7 days to deploy. 3 weeks to measure." },
+    trail: [{ a: "Volume Analyzer", q: "Secondary sales by beat, E.UP, 12 wks", f: "14 beats in Gorakhpur-Deoria: sustained >15% decline. Distributor fill rate 94%. Demand-side driven, not supply.", s: "dms" }, { a: "Spend Efficiency", q: "Trade spend vs volume, by distributor", f: "Bottom decile distributors: spend +42%, vol -28%. Top quartile: spend +8%, vol flat.", s: "scheme" }, { a: "Competitive Signal", q: "Campa WD, E.UP, 4 Nielsen cycles", f: "WD: 38 -> 44 -> 52 -> 61%. Fastest WD build-out across any SLMG territory. Correlates with our secondary decline in the same beats.", s: "nielsen" }, { a: "Field Execution", q: "Visit compliance and route history, E.UP", f: "Beats with >80% visit compliance: -14% decline. Beats <80%: -24%. Execution is compounding the competitive pressure.", s: "sfa" }, { a: "Scheme Benchmarker", q: "TM-Q1-03 cooler bonus performance by beat type", f: "C.UP cooler bonus: cooler beats 1.42x uplift, non-cooler beats 1.08x. 34 pt gap. Cooler infrastructure creates a defensible advantage that margin alone does not. This is the basis for the cap recommendation.", s: "scheme" }, { a: "Synthesis", q: null, f: "Eastern UP is bifurcating. Concentrate on defensible cooler-equipped beats (proven 1.22-1.42x uplift in similar schemes). Concede non-cooler beats in Campa-dense territory.", s: null }],
     qs: ["What if we increase rural margin by ₹3/case in the top 80 distributors?", "Show me the 14 declining beats in detail", "Which beats with coolers are closest to flipping?"],
   },
   {
     id: "lahori", sev: "warn", type: "CATEGORY THREAT", scope: "Central UP · Lucknow",
-    hl: "Lahori Zeera's third plant opens in Lucknow. Wrong scheme type deployed.",
-    sum: "Limca and Sprite losing 6.8% in urban MT while zone overall grows. Current scheme is margin-based but the threat is visibility.",
-    kpis: [{ l: "Limca+Sprite MT", v: "-6.8%", d: "QoQ decline", b: 1 }, { l: "Flavored Soda", v: "+48%", d: "YoY, UP urban", b: 0 }, { l: "Lahori (LKO)", v: "~12%", d: "Est. share", b: 1 }, { l: "Limca Scheme", v: "Margin", d: "No visibility", b: 1 }],
-    ev: [{ s: "dms", t: "Limca + Sprite in Lucknow urban MT: -6.8% QoQ despite 11.8% zone growth." }, { s: "nielsen", t: "Flavored soda grew 48% YoY in UP urban." }, { s: "scheme", t: "Only Limca scheme: ₹4/case margin. No visibility scheme for urban MT." }],
-    dec: { act: "Launch secondary placement at ₹800/outlet/month in 180 Lucknow MT outlets. Fund from rural GT margin scheme.", why: "Lahori wins through shelf presence, not margin.", imp: "Recover 30-40% of lost volume. ₹8-10 Cr revenue at risk.", conf: "Medium", time: "10 days deploy. 4 weeks measure." },
-    trail: [{ a: "Category Analyzer", q: "Flavored soda vs CSD, UP urban", f: "+48% YoY. New occasions, not switching.", s: "nielsen" }, { a: "Volume Analyzer", q: "Limca+Sprite, Lucknow MT", f: "Decline in 180 outlets where Lahori has secondary placement.", s: "dms" }, { a: "Synthesis", q: null, f: "Scheme-threat mismatch. Redirect margin spend to visibility.", s: null }],
+    hl: "Limca + Sprite declining 6.8% QoQ in Lucknow MT while zone grows 11.8%. Scheme-threat mismatch.",
+    sum: "Central UP overall is growing, but Limca and Sprite are losing ground specifically in Lucknow urban MT. NielsenIQ shows flavored soda as the fastest-growing sub-category in UP. The only active Limca scheme is a ₹4/case margin in rural GT, where there is no competitive pressure. Urban MT, where the decline is concentrated, has no visibility investment.",
+    kpis: [{ l: "Limca+Sprite MT", v: "-6.8%", d: "QoQ decline", b: 1 }, { l: "Flavored Soda", v: "+48%", d: "YoY, UP urban", b: 0 }, { l: "Zone Overall", v: "+11.8%", d: "C.UP growing", b: 0 }, { l: "Limca Scheme", v: "Margin", d: "Rural only", b: 1 }],
+    ev: [{ s: "dms", t: "Limca + Sprite in Lucknow urban MT: -6.8% QoQ. Central UP zone overall: +11.8%. The decline is channel-specific (MT) and geography-specific (Lucknow urban), not a broad volume issue." }, { s: "nielsen", t: "Flavored soda category grew 48% YoY in UP urban per NielsenIQ Jan audit. Coca-Cola portfolio losing ~3.6 pts share across SLMG territories. New entrants growing at the ₹10 price point." }, { s: "scheme", t: "Only active Limca scheme (TM-Q1-11): ₹4/case flat margin in rural GT. Zero visibility or placement spend in urban MT where the decline is happening. TM-Q1-04 Sprite visibility (180 MT stores, ₹800/outlet) is delivering 1.24x but only covers Sprite, not Limca." }],
+    dec: { act: "Extend the TM-Q1-04 Sprite visibility mechanic to include Limca. Add secondary placement at ₹800/outlet/month in the same 180 Lucknow MT outlets (DMart, Spencer's, Reliance Fresh). Fund from TM-Q1-11 Limca rural margin scheme (₹2.8 Cr currently yielding 1.04x in rural where no competitive pressure exists). Precedent: TM-Q1-04 Sprite MT visibility is already delivering 1.24x uplift with this exact mechanic in these exact stores.", why: "TM-Q1-04 proves secondary placement works in Lucknow MT. Sprite is holding in stores where it has placement but declining where it doesn't. Limca has no placement anywhere in MT. The rural margin scheme spends ₹2.8 Cr defending territory with no competitive pressure while the urban territory under pressure gets nothing.", imp: "Recover 30-40% of lost urban MT volume. ₹8-10 Cr annual revenue at risk if Lucknow MT position erodes further. TM-Q1-04 precedent suggests 1.18-1.24x uplift achievable.", conf: "Medium", time: "10 days to deploy (replicating existing TM-Q1-04 mechanic). 4 weeks to measure." },
+    trail: [{ a: "Volume Analyzer", q: "Limca+Sprite secondary sales, Lucknow MT vs rest of C.UP", f: "Lucknow MT: -6.8% QoQ. Rest of C.UP: +11.8%. Decline is isolated to urban MT channel, not a broad Limca/Sprite problem.", s: "dms" }, { a: "Category Analyzer", q: "Flavored soda vs CSD, UP urban, NielsenIQ", f: "+48% YoY category growth. New entrants capturing occasions Coca-Cola portfolio doesn't address. Share shift concentrated at ₹10 price point.", s: "nielsen" }, { a: "Scheme Benchmarker", q: "TM-Q1-04 Sprite MT visibility performance", f: "Same mechanic (₹800/outlet/month secondary placement) running in 180 C.UP MT stores since Feb 15. Delivering 1.24x uplift for Sprite. This is the direct precedent: same stores, same channel, same mechanic. Extending to Limca is low-risk replication.", s: "scheme" }, { a: "Synthesis", q: null, f: "Scheme-threat mismatch. ₹2.8 Cr defending rural (no threat) while urban MT (under pressure) gets zero. TM-Q1-04 proves the fix works. Replicate for Limca.", s: null }],
     qs: ["What would a Sprite visibility blitz cost across all Lucknow MT?", "Compare Limca velocity in GT vs MT outlets"],
   },
   {
@@ -526,19 +531,19 @@ const briefCards = [
     sum: "11.6M cases, 480+ beats activated since territory takeover. Distributor working capital stretched. If they pull back in April, SLMG loses the summer window.",
     kpis: [{ l: "Volume", v: "11.6M", d: "+19.8%", b: 0 }, { l: "Spend", v: "₹37.8 Cr", d: "120% of plan", b: 1 }, { l: "Stressed Dist.", v: "14 / 82", d: "Inv: 8->14 days", b: 1 }, { l: "Nielsen", v: "-", d: "No baseline", b: 1 }],
     ev: [{ s: "dms", t: "N. Bihar +18.3%, S. Bihar +22.1%. 480+ new beats activated." }, { s: "d365", t: "14 distributors: inventory days outstanding at 14 (target 8). Receivables climbing." }, { s: "scheme", t: "₹37.8 Cr vs ₹31.6 Cr budget. Over-indexing on market seeding schemes." }],
-    dec: { act: "Extend payment terms 7 to 12 days for 14 stressed distributors. Cap loading at 110% of trailing secondary sales.", why: "Summer peak 2.2-2.5x baseline. Fix working capital now.", imp: "Protect 480+ beats served by these distributors. ₹28-35 Cr at risk.", conf: "High", time: "5 days for terms." },
-    trail: [{ a: "Distribution Health", q: "Inventory + order freq, Bihar", f: "14 distributors stressed. Post-loading digestion. Receivables climbing.", s: "d365" }, { a: "Synthesis", q: null, f: "Fix distribution health now to protect summer peak.", s: null }],
+    dec: { act: "Extend payment terms from 7 to 12 days for the 14 stressed distributors (incl. Sharma Beverages Patna, Krishna Traders Muzaffarpur, Gaya Sales Corp, Buxar Distributors, Singh & Sons Bhagalpur). Cap primary loading at 110% of trailing secondary to prevent inventory bloat. Priority: secure the 5 distributors serving 180 beats in N. Bihar before summer.", why: "Buxar plant just inaugurated Mar 1. Distribution logistics still stabilizing. Summer peak drives 2.2-2.5x baseline volume. Working capital stress now means these distributors pull back at peak.", imp: "Protect 480+ beats and ₹28-35 Cr summer volume served by these distributors. ₹2.8 Cr working capital cost for 60 days.", conf: "High", time: "5 days for terms extension. Weekly monitoring via D365 receivables." },
+    trail: [{ a: "Distribution Health", q: "Inventory + order freq, Bihar distributors", f: "14 of 82 distributors showing stress: inventory days outstanding at 14 (target 8). Receivables climbing. Order frequency dropping from 3.2x/wk to 2.1x/wk in last 4 weeks.", s: "d365" }, { a: "Seasonal Projector", q: "Summer peak volume multiplier, Bihar", f: "Bihar summer multiplier: 2.2-2.5x baseline based on N. India seasonal patterns. If 14 distributors pull back during peak, the 180 beats they serve go dark at the worst possible time.", s: "dms" }, { a: "Precedent Analyzer", q: "Past distributor retention interventions", f: "TM-Q1-06 Kinley rural push in Bihar: per-bottle incentive retained 22 new distributors through the initial cash-flow-negative period. 68% subsequently ordered sparkling SKUs. Payment term extension is the same principle applied to working capital stress.", s: "scheme" }, { a: "Synthesis", q: null, f: "Fix distribution health now. Buxar plant operational since Mar 1 means logistics are stabilizing, but distributors need working capital bridge to carry summer inventory. Payment extension + loading cap is low-cost insurance (₹2.8 Cr for 60 days) against ₹28-35 Cr at-risk volume.", s: null }],
     qs: ["List the 14 stressed distributors with beat coverage", "Simulate: what if 5 distributors go dark in April?"],
   },
   {
     id: "waste", sev: "warn", type: "SCHEME WASTE", scope: "Cross-territory",
-    hl: "₹14 Cr across 3 schemes generating near-zero incremental volume",
-    sum: "Uplift below 1.05x. ₹14 Cr subsidizing baseline at ₹1,167/case vs ₹147 for top performers.",
-    kpis: [{ l: "Waste", v: "3 / 23", d: "₹14.1 Cr", b: 1 }, { l: "Uplift", v: "1.04x", d: "vs 1.18 median", b: 1 }, { l: "Cost/Case", v: "₹1,167", d: "vs ₹147 top", b: 1 }, { l: "Redeploy", v: "₹8.6 Cr", d: "~85K cases", b: 0 }],
-    ev: [{ s: "scheme", t: "TM-Q1-14: Uplift 1.04. TM-Q1-08: 1.02. TM-Q1-19: 1.05." }, { s: "dms", t: "Control areas show same volume trends." }],
-    dec: { act: "Terminate TM-Q1-08. Narrow others. Redirect ₹8.6 Cr.", why: "8x efficiency gain available.", imp: "~85-110K inc. cases/qtr vs ~12K.", conf: "High", time: "Terminate this week." },
-    trail: [{ a: "Scheme Performance", q: "All 23 schemes", f: "Bottom 3 = 22% budget, <3% incremental.", s: "scheme" }, { a: "Synthesis", q: null, f: "Clear arbitrage. ₹1,167 to ₹147. 8x.", s: null }],
-    qs: ["Show all 23 schemes ranked by uplift with cost data", "Simulate: terminate bottom 3 and redeploy. Full impact model."],
+    hl: "₹12.8 Cr across 3 schemes generating near-zero incremental volume",
+    sum: "Uplift below 1.05x. ₹12.8 Cr subsidizing baseline volume that would exist without the scheme.",
+    kpis: [{ l: "Waste", v: "3 / 14", d: "₹12.8 Cr", b: 1 }, { l: "Uplift", v: "1.04x", d: "vs 1.18 median", b: 1 }, { l: "Cost/Inc Case", v: "₹8,533", d: "vs ₹639 top", b: 1 }, { l: "Redeploy", v: "₹12.8 Cr", d: "~110K cases/mo", b: 0 }],
+    ev: [{ s: "scheme", t: "TM-Q1-11 Limca rural: 1.04x uplift, declining 3 quarters running. TM-Q1-12 Rural kirana: 1.04x, control areas identical. TM-Q1-13 Distributor vol bonus: 1.02x, quarter-end loading pattern confirmed." }, { s: "dms", t: "Control areas in W.UP show same volume trends as TM-Q1-12 scheme beats. Brand mix unchanged: 62% Thums Up, 18% Sprite in both scheme and control. TM-Q1-13 showing 80% quarter-end loading spike in Bundelkhand with post-quarter -49% crater." }],
+    dec: { act: "Terminate TM-Q1-12 (Rural kirana margin, W.UP, ₹6.2 Cr), TM-Q1-13 (Distributor vol bonus, Bundelkhand, ₹3.8 Cr), and TM-Q1-11 (Limca rural margin, C.UP, ₹2.8 Cr). Redistribute: ₹3.6 Cr to Holi acceleration, ₹2.0 Cr to Bihar distributor working capital support, ₹2.8 Cr to Bundelkhand beat-expansion scheme, ₹1.5 Cr to Maaza E.UP summer pre-load, ₹2.9 Cr to summer reserve for Campa counter-moves.", why: "Control beats show identical volume trends to scheme beats for all three. 13x efficiency gap between bottom 3 and top performers. Top 6 schemes generate 82% of incremental on 39% of spend.", imp: "~110K additional inc. cases/month vs ~5K currently. Budget-neutral. Weighted avg ROI jumps from 1.03x to 2.4x.", conf: "High", time: "Terminate this week. 2-week distributor notice per agreements. Redeployment starts within 7 days." },
+    trail: [{ a: "Scheme Performance", q: "All active schemes ranked by uplift", f: "Bottom 3: TM-Q1-11 (1.04x), TM-Q1-12 (1.04x), TM-Q1-13 (1.02x). Combined ₹12.8 Cr = 18% of total scheme spend, generating <3% of incremental volume.", s: "scheme" }, { a: "A/B Validator", q: "Control vs scheme beats for TM-Q1-12", f: "85 control beats in adjacent W.UP territory show identical volume trends to 310 scheme beats. +2.9% scheme vs +1.8% control, p=0.34 (not significant). This is the clearest termination case: definitive A/B evidence of zero incremental.", s: "dms" }, { a: "Redeployment Modeler", q: "Where does the ₹12.8 Cr deliver best ROI?", f: "Top redeployment targets by projected ROI: Holi acceleration (1.8x), Bihar distributor support (3.5x), Bundelkhand beat expansion (1.42x, matching TM-Q1-01 Bihar activation mechanic). Weighted avg: 2.4x vs current 1.03x.", s: "scheme" }, { a: "Synthesis", q: null, f: "Clear arbitrage: ₹8,533/incremental case in bottom 3 vs ₹639 for TM-Q1-01 Bihar activation. 13x efficiency gap. A/B data is definitive for TM-Q1-12. Redeployment plan uses proven mechanics (Bihar activation slab delivered 1.42x).", s: null }],
+    qs: ["Show all 14 schemes ranked by uplift with cost data", "Simulate: terminate bottom 3 and redeploy. Full impact model."],
   },
   {
     id: "uk", sev: "good", type: "BRIGHT SPOT", scope: "Uttarakhand",
@@ -562,22 +567,22 @@ const briefCards = [
   },
   {
     id: "anomaly", sev: "critical", type: "ANOMALY DETECTED", scope: "N. Bihar - 3 Distributors",
-    hl: "Abnormal volume spike at 3 Bihar distributors: secondary up 340% in one week",
-    sum: "Sharma Beverages (Patna), Krishna Traders (Muzaffarpur), and Gaya Sales Corp show single-week spikes of 280-410%. Pattern consistent with promo-led loading beyond consumption. Inventory days jumped from 8 to 22.",
+    hl: "Abnormal primary loading at 3 Bihar distributors: 340% above trailing average in 1 week",
+    sum: "Sharma Beverages (Patna), Gaya Sales Corp, and Buxar Distributors show single-week primary billing spikes of 280-410%. Pattern consistent with promo-led loading beyond consumption. Inventory days jumped from 8 to 22.",
     kpis: [{ l: "Spike", v: "340%", d: "1-week avg", b: 1 }, { l: "Inv Days", v: "22", d: "vs 8 target", b: 1 }, { l: "Flagged", v: "3 / 82", d: "Bihar dist.", b: 1 }, { l: "At Risk", v: "Rs4.2 Cr", d: "Scheme exposure", b: 1 }],
-    ev: [{ s: "dms", t: "Sharma Beverages: 4,200 cases on Mar 8 vs trailing avg of 980/week. All Thums Up 600ml PET." }, { s: "scheme", t: "Bihar seeding scheme pays Rs18/case slab above 800 cases/week. All 3 crossed 3,000+ in a single load." }, { s: "d365", t: "Inventory jumped to 22 days cover vs 8-day target. No corresponding retail offtake increase in SFA data." }],
+    ev: [{ s: "d365", t: "Sharma Beverages: ₹4,200 primary billing on Mar 8 vs trailing avg of ₹980/week. All Thums Up 600ml PET." }, { s: "scheme", t: "Bihar seeding scheme pays Rs18/case slab above 800 cases/week. All 3 crossed 3,000+ in a single load." }, { s: "dms", t: "No corresponding secondary offtake increase. Beat-level DMS orders flat. Inventory jumped to 22 days cover vs 8-day target." }],
     dec: { act: "Freeze further loading at these 3 until inventory normalizes to 10 days. Investigate whether scheme payout reached retailer level or was retained by distributor.", why: "Pattern matches promo-loading behavior. If scheme margin not passed to retailers, this is leakage.", imp: "Rs4.2 Cr scheme exposure. Clawback required if leakage confirmed.", conf: "High", time: "Freeze today. Investigation 5 days." },
-    trail: [{ a: "Anomaly Detector", q: "Secondary volume spikes >200%, all zones, 4 weeks", f: "3 Bihar distributors flagged. Single-SKU concentration (Thums Up 600ml). All on Mar 8.", s: "dms" }, { a: "Scheme Validator", q: "Bihar seeding scheme, slab thresholds vs claims", f: "All 3 crossed slab on a single load. Claims: Rs54K-Rs75K per distributor.", s: "scheme" }, { a: "Inventory Monitor", q: "Days cover, flagged distributors, 8 weeks", f: "Steady 6-9 days for 7 weeks. Jumped to 19-24 on week 8.", s: "d365" }, { a: "Retail Passthrough", q: "Retailer-level pricing, flagged distributor beats", f: "SFA shows no MRP change at retail. Scheme margin not visible in consumer pricing.", s: "sfa" }, { a: "Synthesis", q: null, f: "Promo-led loading with possible scheme leakage. Freeze + investigate.", s: null }],
+    trail: [{ a: "Anomaly Detector", q: "Primary billing anomalies >200%, all zones, 4 weeks", f: "3 Bihar distributors flagged in D365 billing. Single-SKU concentration (Thums Up 600ml). All on Mar 8.", s: "d365" }, { a: "Scheme Validator", q: "Bihar seeding scheme, slab thresholds vs claims", f: "All 3 crossed slab on a single load. Claims: Rs54K-Rs75K per distributor.", s: "scheme" }, { a: "Inventory Monitor", q: "Days cover, flagged distributors, 8 weeks", f: "Steady 6-9 days for 7 weeks. Jumped to 19-24 on week 8.", s: "d365" }, { a: "Secondary Cross-Check", q: "DMS secondary for same distributors, same period", f: "No corresponding secondary spike. Beat-level orders flat. Loading is sitting at distributor warehouse.", s: "dms" }, { a: "Synthesis", q: null, f: "Promo-led primary loading with no secondary pull-through. Freeze + investigate.", s: null }],
     qs: ["Show the full loading pattern for Sharma Beverages", "Has this happened before with Bihar distributors?", "What is the clawback mechanism if leakage is confirmed?"],
   },
   {
     id: "fund", sev: "warn", type: "FUND OVERSPEND", scope: "Thums Up - E.UP",
-    hl: "Thums Up trade accruals running Rs3.8 Cr over budget in Eastern UP",
-    sum: "Accruals at Rs18.2 Cr vs Rs14.4 Cr budget (126%). Driven by defensive schemes against Campa. Budget exhausts 4 weeks before summer peak. Maaza underspent by Rs1.2 Cr.",
-    kpis: [{ l: "Accruals", v: "Rs18.2 Cr", d: "126% of budget", b: 1 }, { l: "Overshoot", v: "Rs3.8 Cr", d: "Thums Up E.UP", b: 1 }, { l: "Exhaustion", v: "Apr 2", d: "4 wks pre-peak", b: 1 }, { l: "Maaza", v: "Rs1.2 Cr", d: "Underspent", b: 0 }],
-    ev: [{ s: "scheme", t: "Thums Up accruals: Rs18.2 Cr claimed vs Rs14.4 Cr allocated. 3 defensive schemes running simultaneously." }, { s: "scheme", t: "Maaza E.UP: Rs3.1 Cr vs Rs4.3 Cr budget (72%). Kinley: Rs2.8 Cr vs Rs3.0 Cr (93%)." }, { s: "d365", t: "At current accrual velocity, Thums Up E.UP budget exhausts by Apr 2. Summer peak starts Apr 15." }],
-    dec: { act: "Reallocate Rs1.2 Cr from Maaza underspend. Cap 2 of 3 defensive schemes to priority beats only. Request Rs2.6 Cr supplementary.", why: "Can't go dark on Thums Up during Campa expansion. But can't hemorrhage at current rate.", imp: "Extends budget to Apr 20. Supplementary needed for full summer.", conf: "Medium", time: "Reallocation: 3 days. Supplementary: 7 days." },
-    trail: [{ a: "Fund Tracker", q: "Accruals vs budget, brand x zone", f: "Thums Up E.UP at 126%. All other combos within 105%.", s: "scheme" }, { a: "Burn Rate", q: "Weekly accrual velocity, 8 weeks", f: "Accelerating: Rs1.8 Cr/wk in Feb vs Rs1.4 Cr/wk in Jan. Exhaustion: Apr 2.", s: "scheme" }, { a: "Cross-Brand", q: "Underspend by brand, E.UP", f: "Maaza: Rs1.2 Cr free. Kinley: Rs0.2 Cr.", s: "scheme" }, { a: "Synthesis", q: null, f: "Reallocate Maaza underspend. Cap schemes. Request supplementary.", s: null }],
+    hl: "Thums Up trade accruals running Rs3.4 Cr over budget in Eastern UP",
+    sum: "Accruals at Rs13.6 Cr vs Rs10.2 Cr budget (133%). Driven by defensive schemes against Campa. Budget exhausts 4 weeks before summer peak. Maaza E.UP underspent by Rs0.8 Cr.",
+    kpis: [{ l: "Accruals", v: "Rs13.6 Cr", d: "133% of budget", b: 1 }, { l: "Overshoot", v: "Rs3.4 Cr", d: "Thums Up E.UP", b: 1 }, { l: "Exhaustion", v: "Apr 2", d: "4 wks pre-peak", b: 1 }, { l: "Maaza", v: "Rs0.8 Cr", d: "Underspent", b: 0 }],
+    ev: [{ s: "scheme", t: "Thums Up accruals: Rs13.6 Cr claimed vs Rs10.2 Cr allocated. 3 defensive schemes running simultaneously in E.UP." }, { s: "scheme", t: "Maaza E.UP: Rs2.0 Cr vs Rs2.8 Cr budget (71%). Kinley: Rs2.8 Cr vs Rs3.0 Cr (93%)." }, { s: "d365", t: "At current accrual velocity, Thums Up E.UP budget exhausts by Apr 2. Summer peak starts Apr 15." }],
+    dec: { act: "Reallocate Rs0.8 Cr from Maaza underspend to extend TU E.UP runway. Cap 2 of 3 defensive schemes to cooler-equipped beats only (as per Recommendation #1). Request Rs2.6 Cr supplementary for summer.", why: "Can't go dark on Thums Up during Campa expansion. But can't continue at 133% burn rate. Capping to cooler beats slows the burn while preserving the highest-ROI territory.", imp: "Extends TU E.UP budget from Apr 2 to mid-April. Supplementary needed for full summer.", conf: "Medium", time: "Reallocation: 3 days. Supplementary: 7 days." },
+    trail: [{ a: "Fund Tracker", q: "Accruals vs budget, brand x zone", f: "Thums Up E.UP at 133%. Sprite E.UP at 122%. All other combos within 105%.", s: "scheme" }, { a: "Burn Rate", q: "Weekly accrual velocity, 8 weeks", f: "Accelerating: Rs1.8 Cr/wk in Feb vs Rs1.4 Cr/wk in Jan. At current pace, exhaustion: Apr 2.", s: "scheme" }, { a: "Cross-Brand", q: "Underspend by brand, E.UP", f: "Maaza: Rs0.8 Cr free. Kinley: Rs0.2 Cr.", s: "scheme" }, { a: "Synthesis", q: null, f: "Reallocate Maaza underspend. Cap schemes to cooler beats. Request supplementary.", s: null }],
     qs: ["Show accruals vs budget for all brand x zone combinations", "What if we cut the weakest Thums Up scheme?", "Project when each brand-zone budget exhausts"],
   },
   {
@@ -592,7 +597,7 @@ const briefCards = [
   },
   {
     id: "anomaly", sev: "critical", type: "ANOMALY DETECTED", scope: "N. Bihar · 3 distributors",
-    hl: "Abnormal volume spike: 3 Bihar distributors loaded 340% above trailing average in 1 week",
+    hl: "Abnormal primary loading: 3 Bihar distributors billed 340% above trailing average in 1 week",
     sum: "Sharma Beverages (Patna), Gaya Sales Corp, and Buxar Distributors loaded 3.4x their trailing 4-week average in the last 7 days. Pattern matches promo-led target loading rather than demand. Scheme pass-through to retailers unverified. SKU concentration in Thums Up 600ml PET only.",
     kpis: [{ l: "Loading Spike", v: "340%", d: "vs 4-wk avg", b: 1 }, { l: "Distributors", v: "3 / 82", d: "N+S Bihar", b: 1 }, { l: "SKU Conc.", v: "88%", d: "TU 600ml only", b: 1 }, { l: "Retailer Pass", v: "Unverified", d: "No SFA confirm", b: 1 }],
     ev: [{ s: "d365", t: "Primary billing for these 3 distributors: ₹4.2 Cr in 7 days vs ₹1.24 Cr trailing weekly average. Loading ratio 3.4x." }, { s: "sfa", t: "SFA visit data shows no corresponding increase in beat-level secondary orders. Salesman order patterns unchanged." }, { s: "scheme", t: "All 3 distributors are on a Q1 volume-slab scheme with a threshold at ₹15 Cr. Current cumulative: ₹13.8 Cr. Loading appears timed to cross the slab threshold before quarter end." }],
@@ -601,13 +606,13 @@ const briefCards = [
     qs: ["Show the daily loading pattern for these 3 distributors", "What's the scheme payout if they cross the ₹15 Cr slab?", "How many other distributors are within 10% of a slab threshold?"],
   },
   {
-    id: "fund", sev: "warn", type: "FUND MANAGEMENT", scope: "Cross-territory · Q1 FY27",
-    hl: "Trade promo accruals running ₹18 Cr ahead of budget. Thums Up x E.UP is 68% of the overspend.",
-    sum: "Q1 allocated: ₹436 Cr. Accrued to date: ₹312 Cr (72% through, 67% of quarter elapsed). At current pace, Q1 closes at ₹466 Cr, ₹30 Cr over budget. Thums Up in E.UP accounts for ₹12.2 Cr of the projected overspend due to defensive scheme escalation against Campa.",
-    kpis: [{ l: "Allocated", v: "₹436 Cr", d: "Q1 FY27", b: 0 }, { l: "Accrued", v: "₹312 Cr", d: "72% used, 67% elapsed", b: 1 }, { l: "Projected", v: "₹466 Cr", d: "+₹30 Cr over", b: 1 }, { l: "Top Driver", v: "TU x E.UP", d: "₹12.2 Cr over", b: 1 }],
-    ev: [{ s: "scheme", t: "18 of 23 schemes running within 5% of pace. 3 schemes in E.UP and 2 in Bihar account for 82% of overspend." }, { s: "d365", t: "Accrual vs disbursement lag: ₹8.4 Cr accrued but not yet disbursed. Distributor claim processing averaging 14 days." }],
-    dec: { act: "Freeze E.UP defensive scheme escalation at current levels. Redirect ₹5 Cr from terminated bottom-3 schemes (Brief #4) to Bihar summer pre-positioning. Net effect: projected overspend drops from ₹30 Cr to ₹17 Cr.", why: "E.UP defensive spending is yielding 0.91x ROI (below breakeven). Bihar summer spend delivers 3.5x. The reallocation improves both the budget position and the ROI.", imp: "₹13 Cr budget improvement. Bihar summer protection.", conf: "High", time: "Freeze this week. Reallocation deploys in 7 days." },
-    trail: [{ a: "Budget Tracker", q: "Q1 accruals vs allocation by brand x zone", f: "Overall 72% used at 67% elapsed. E.UP Thums Up: 89% used. Bihar: 78% used. Uttarakhand: 58% used.", s: "scheme" }, { a: "Overspend Predictor", q: "Project Q1 close by zone at current pace", f: "E.UP: ₹31.2 Cr vs ₹24 Cr budget (+₹7.2 Cr). Bihar: ₹41.8 Cr vs ₹37.8 Cr (+₹4 Cr). Others within budget.", s: "scheme" }, { a: "Synthesis", q: null, f: "Overspend is concentrated and addressable. Freeze E.UP escalation + terminate waste schemes = ₹13 Cr recovered.", s: null }],
+    id: "fund", sev: "warn", type: "FUND MANAGEMENT", scope: "Cross-territory · Q4 FY26",
+    hl: "Trade promo accruals running ₹18 Cr ahead of budget pace. Thums Up x E.UP driving 39% of overspend.",
+    sum: "Q4 FY26 (Jan-Mar) allocated: ₹436 Cr. Accrued to date: ₹362 Cr (83% used, 79% of quarter elapsed). At current velocity, Q4 closes at ₹458 Cr, ₹22 Cr over budget. Thums Up in E.UP accounts for ₹7 Cr of the projected overspend due to defensive scheme escalation against Campa.",
+    kpis: [{ l: "Allocated", v: "₹436 Cr", d: "Q4 FY26", b: 0 }, { l: "Accrued", v: "₹362 Cr", d: "83% used, 79% elapsed", b: 1 }, { l: "Projected", v: "₹458 Cr", d: "+₹22 Cr over", b: 1 }, { l: "Top Driver", v: "TU x E.UP", d: "₹7 Cr over", b: 1 }],
+    ev: [{ s: "scheme", t: "9 of 14 active schemes running within 5% of pace. 3 schemes in E.UP and 2 in Bihar account for 82% of overspend. Weekly velocity accelerating: ₹5.4 Cr/wk in Mar vs ₹4.8 Cr/wk in Feb." }, { s: "d365", t: "Accrual vs disbursement lag: ₹8.4 Cr accrued but not yet disbursed. Distributor claim processing averaging 14 days." }],
+    dec: { act: "Freeze E.UP defensive scheme escalation at current levels. Redirect ₹5 Cr from terminated bottom-3 schemes (Recommendation #4) to Bihar summer pre-positioning. Net effect: projected overspend drops from ₹22 Cr to ₹9 Cr.", why: "E.UP defensive spending is yielding 0.91x ROI (below breakeven). Bihar summer spend delivers 3.5x. The reallocation improves both the budget position and the ROI.", imp: "₹13 Cr budget improvement. Bihar summer protection.", conf: "High", time: "Freeze this week. Reallocation deploys in 7 days." },
+    trail: [{ a: "Budget Tracker", q: "Q4 FY26 accruals vs allocation by brand x zone", f: "Overall 83% used at 79% elapsed. E.UP Thums Up: 133% used. Bihar: 120% used. Uttarakhand: 91% used. 5 overspending schemes pulling the average above pace.", s: "scheme" }, { a: "Overspend Predictor", q: "Project Q4 close by zone at current velocity", f: "E.UP projected: ₹30.4 Cr vs ₹18.8 Cr budget (+₹11.6 Cr). Bihar: ₹47.8 Cr vs ₹31.5 Cr budget (+₹16.3 Cr). Others within budget or underspent. Recent weekly velocity in E.UP+Bihar accelerating.", s: "scheme" }, { a: "Synthesis", q: null, f: "Overspend is concentrated and addressable. Freeze E.UP escalation + terminate waste schemes = ₹13 Cr recovered.", s: null }],
     qs: ["Show accrual vs budget by brand across all zones", "What's the disbursement lag by distributor?", "Simulate: freeze E.UP + terminate bottom 3. Full budget impact."],
   },
 ];
@@ -622,12 +627,22 @@ const zones = [
   { id: "bkd", n: "Bundelkhand", vol: 3.2, vd: 5.1, sp: 5.8, sP: 104, ef: 4.21, sh: "54.8%", shD: -3.2, st: "watch", out: "140", oD: -0.4, trend: [2.9, 3.0, 3.0, 3.1, 3.2], note: "Campa appearing in district HQs." },
 ];
 
+const brands = [
+  { id: "tu", n: "Thums Up", vol: 21.8, vd: 4.1, sp: 42.6, sP: 118, ef: 3.12, sh: "Primary CSD", shD: -4.2, st: "warn", skus: "250ml ASSP, 600ml PET, 1.25L, 2L", trend: [19.8, 20.2, 20.6, 21.1, 21.8], note: "Largest brand. E.UP defensive spend driving overshoot." },
+  { id: "sp", n: "Sprite", vol: 8.4, vd: 8.2, sp: 12.6, sP: 102, ef: 4.64, sh: "Lemon-lime", shD: -1.4, st: "good", skus: "250ml ASSP, 600ml PET, 1.25L", trend: [7.2, 7.5, 7.8, 8.1, 8.4], note: "Growing. MT visibility scheme working in C.UP." },
+  { id: "mz", n: "Maaza", vol: 6.2, vd: 12.4, sp: 8.8, sP: 82, ef: 6.21, sh: "Mango juice", shD: 1.2, st: "good", skus: "200ml Tetra, 250ml PET, 600ml, 1.2L", trend: [4.8, 5.2, 5.6, 5.9, 6.2], note: "Best ROI format (200ml Tetra). E.UP pre-load lagging." },
+  { id: "lm", n: "Limca", vol: 4.8, vd: -2.1, sp: 5.4, sP: 96, ef: 3.84, sh: "Cloudy lemon", shD: -3.8, st: "warn", skus: "200ml RGB, 250ml ASSP, 600ml PET", trend: [5.2, 5.1, 5.0, 4.9, 4.8], note: "Lahori Zeera taking share in Lucknow MT." },
+  { id: "kn", n: "Kinley", vol: 5.1, vd: 16.8, sp: 4.8, sP: 93, ef: 5.42, sh: "Water", shD: null, st: "good", skus: "500ml, 1L, 20L jar", trend: [3.8, 4.1, 4.4, 4.7, 5.1], note: "Bihar entry SKU. 68% convert to sparkling." },
+  { id: "cc", n: "Coca-Cola", vol: 1.4, vd: 1.8, sp: 2.2, sP: 94, ef: 4.18, sh: "International cola", shD: -0.6, st: "good", skus: "300ml CAN, 750ml PET, 2L", trend: [1.3, 1.3, 1.4, 1.4, 1.4], note: "Urban premium. Small but stable." },
+  { id: "fn", n: "Fanta", vol: 0.5, vd: -5.2, sp: 0.8, sP: 88, ef: 3.92, sh: "Orange CSD", shD: -1.1, st: "watch", skus: "250ml, 600ml PET", trend: [0.6, 0.6, 0.5, 0.5, 0.5], note: "Declining. Fanta Apple Delite not offsetting." },
+];
+
 const shareTrend = [{ q: "Q1'25", ck: 59.8, ca: 7.1, la: 3.2, pe: 19.2 }, { q: "Q2'25", ck: 58.9, ca: 8.6, la: 4.1, pe: 18.8 }, { q: "Q3'25", ck: 57.4, ca: 10.2, la: 5.4, pe: 18.4 }, { q: "Q4'25", ck: 56.8, ca: 11.8, la: 6.1, pe: 18.2 }, { q: "Jan'26", ck: 56.2, ca: 12.4, la: 6.8, pe: 18.1 }];
 const runningSchemes = [
   { id: "TM-Q1-01", name: "Bihar outlet activation slab", brand: "Thums Up", zone: "S. Bihar", channel: "Rural GT", mechanic: "Volume slab: Rs12/case above 800 cases/wk per distributor", spend: 8.2, budget: 9.0, uplift: 1.42, start: "Jan 6", end: "Mar 31", st: "good",
     distributors: 34, beats: 480, incCases: "42,800/mo", passThrough: "92%", prevRun: null,
     detail: "Best-performing scheme. Activation-linked mechanic is driving real beat expansion, not loading. 480+ new beats activated since Jan. Distributor fill rate at 88% across scheme distributors. Secondary pull-through confirmed by SFA in 92% of beats.",
-    risk: "14 distributors showing inventory stress (see Brief). If they pull back before summer, these beats go dark.",
+    risk: "14 distributors showing inventory stress (see Recommendations). If they pull back before summer, these beats go dark.",
     qs: ["Which of the 34 distributors are stressed?", "What happens if we extend this to N. Bihar?", "Show beat-level secondary trends for this scheme"] },
   { id: "TM-Q1-02", name: "Uttarakhand tourism promo", brand: "Multi-brand", zone: "Uttarakhand", channel: "Urban GT + MT", mechanic: "Consumer combo: TU 600ml + Maaza 200ml at Rs45 (vs Rs55 unbundled)", spend: 3.1, budget: 3.4, uplift: 1.35, start: "Feb 1", end: "Jun 30", st: "good",
     distributors: 18, beats: 210, incCases: "8,400/mo", passThrough: "96%", prevRun: "Summer '25: 1.31x",
@@ -637,12 +652,12 @@ const runningSchemes = [
   { id: "TM-Q1-03", name: "Thums Up cooler bonus", brand: "Thums Up", zone: "Central UP", channel: "All", mechanic: "Rs15/case bonus for outlets maintaining >80% Coca-Cola cooler purity", spend: 7.8, budget: 8.5, uplift: 1.28, start: "Jan 1", end: "Mar 31", st: "good",
     distributors: 28, beats: 340, incCases: "31,200/mo", passThrough: "88%", prevRun: "Q3'25: 1.22x (improved)",
     detail: "Cooler purity enforcement driving brand preference. Outlets maintaining >80% Coca-Cola in cooler show 28% higher Thums Up offtake vs mixed coolers. Works best where Campa WD is <40%. SFA audit confirms 88% compliance among enrolled outlets.",
-    risk: "Campa offering free coolers in Lucknow suburbs. 12 outlets switched in Feb. Need cooler deployment response.",
+    risk: "CTS flagged 12 outlets in Lucknow suburbs that lost cooler purity in Feb (dropped below 80% Coca-Cola). Need cooler deployment response in encroachment zone.",
     qs: ["Which outlets are at risk of losing cooler purity?", "What's the cost of deploying 50 more coolers in Lucknow suburbs?", "Compare sales velocity: cooler-exclusive vs mixed outlets"] },
   { id: "TM-Q1-04", name: "Sprite MT visibility", brand: "Sprite", zone: "Central UP", channel: "Modern Trade", mechanic: "Secondary placement: end-cap + checkout counter at Rs800/outlet/month", spend: 2.4, budget: 2.8, uplift: 1.24, start: "Feb 15", end: "May 31", st: "good",
     distributors: 6, beats: null, incCases: "4,200/mo", passThrough: "100% (direct)", prevRun: "New scheme",
-    detail: "Counter-Lahori play in 180 Lucknow MT stores (DMart, Spencer's, Reliance Fresh). Secondary placement driving 24% impulse uplift. Lahori has secondary placement in 38% of these stores. Where both have placement, Sprite holds share. Where only Lahori has placement, Sprite loses 6.8% QoQ.",
-    risk: "Lahori expanding to 60 more Lucknow stores in Q2. Need to match or lose urban MT position.",
+    detail: "Counter-competitive play in 180 Lucknow MT stores (DMart, Spencer's, Reliance Fresh). Secondary placement driving 24% impulse uplift. Where Sprite has placement, it holds share even as the broader Lucknow MT channel declines. Where Sprite lacks placement, it loses 6.8% QoQ. Visibility is the differentiator.",
+    risk: "Lucknow MT Limca+Sprite decline accelerating QoQ. If visibility gap widens in Q2, urban MT position erodes further.",
     qs: ["Show store-by-store performance for this scheme", "What would it cost to extend to all UP MT stores?", "Compare Sprite vs Lahori velocity where both have placement"] },
   { id: "TM-Q1-05", name: "Maaza summer pre-load", brand: "Maaza", zone: "All", channel: "All", mechanic: "Rs8/case early stocking incentive for distributors loading before Mar 25", spend: 4.2, budget: 6.8, uplift: 1.22, start: "Mar 1", end: "Mar 31", st: "good",
     distributors: 52, beats: "All", incCases: "18,600/mo", passThrough: "78%", prevRun: "Mar '25: 1.28x",
@@ -657,7 +672,7 @@ const runningSchemes = [
   { id: "TM-Q1-07", name: "E.UP defensive margin", brand: "Thums Up", zone: "Eastern UP", channel: "Rural GT", mechanic: "Rs18/case flat margin to all distributors to match Campa's Rs18/case retailer margin", spend: 12.4, budget: 9.6, uplift: 1.08, start: "Dec 1", end: "Mar 31", st: "critical",
     distributors: 42, beats: 280, incCases: "8,400/mo", passThrough: "71%", prevRun: "Ongoing since Dec, escalated twice",
     detail: "Largest single scheme by spend. 129% of budget. Defensive against Campa but ROI at 0.91x in Gorakhpur-Deoria cluster (below breakeven). Only 71% of margin reaching retailers, 29% retained by distributors. In beats where Campa WD exceeds 60%, this scheme generates zero incremental volume. Essentially subsidizing baseline in lost territory.",
-    risk: "Hemorrhaging Rs1.8 Cr/week above budget. Budget exhausts Apr 2, four weeks before summer peak. If terminated abruptly, risk of 15-20% further volume loss in E.UP.",
+    risk: "Already 129% of scheme budget (Rs12.4 Cr vs Rs9.6 Cr allocated). Accruing at Rs0.83 Cr/week vs budgeted Rs0.56 Cr/week. If not capped, E.UP trade budget exhausts entirely by Apr 2, four weeks before summer peak. If terminated abruptly, risk of 15-20% further volume loss in E.UP.",
     qs: ["Show the 14 beats where this scheme has zero effect", "What if we cap this to cooler-equipped beats only?", "What's the minimum margin level to hold non-Campa beats?"] },
   { id: "TM-Q1-08", name: "E.UP beat recovery slab", brand: "Multi-brand", zone: "Eastern UP", channel: "Rural GT", mechanic: "Slab: Rs22/case for distributors in beats with >15% secondary decline", spend: 5.8, budget: 5.0, uplift: 1.06, start: "Feb 1", end: "Mar 31", st: "warn",
     distributors: 18, beats: 86, incCases: "3,200/mo", passThrough: "64%", prevRun: null,
@@ -666,7 +681,7 @@ const runningSchemes = [
     qs: ["What slab threshold would actually drive incremental?", "Show uplift by beat for this scheme", "What if we replaced this with a cooler deployment scheme?"] },
   { id: "TM-Q1-09", name: "Bihar seeding scheme", brand: "Thums Up", zone: "N. Bihar", channel: "All", mechanic: "Volume slab: Rs18/case above 800 cases/wk per distributor", spend: 6.8, budget: 7.2, uplift: 1.14, start: "Jan 1", end: "Mar 31", st: "warn",
     distributors: 28, beats: 310, incCases: "12,400/mo", passThrough: "82%", prevRun: null,
-    detail: "Good mechanic for new territory seeding. But 3 distributors gaming the slab with single-week spikes of 340% (see Anomaly alert in Brief). Excluding the 3 flagged distributors, remaining 25 show 1.22x uplift, which is solid. Slab threshold needs anti-gaming controls for Q2.",
+    detail: "Good mechanic for new territory seeding. But 3 distributors gaming the slab with single-week spikes of 340% (see Anomaly alert in Recommendations). Excluding the 3 flagged distributors, remaining 25 show 1.22x uplift, which is solid. Slab threshold needs anti-gaming controls for Q2.",
     risk: "Rs4.2 Cr exposure from potential scheme leakage at 3 distributors. Buxar plant just inaugurated, so distribution logistics still stabilizing.",
     qs: ["Show uplift excluding the 3 flagged distributors", "What anti-gaming controls should we add for Q2?", "How is the Buxar plant ramp affecting this scheme's economics?"] },
   { id: "TM-Q1-10", name: "Holi activation", brand: "Multi-brand", zone: "All UP", channel: "All", mechanic: "Party pack combo (TU 1.25L + Maaza 600ml + Sprite 600ml at Rs99) + Rs4/case distributor Holi bonus", spend: 1.2, budget: 4.8, uplift: null, start: "Mar 8", end: "Mar 18", st: "watch",
@@ -676,8 +691,8 @@ const runningSchemes = [
     qs: ["Which zones haven't started Holi loading?", "Compare this year's activation to Holi 2025 day by day", "What's the risk if we don't fully deploy by Mar 13?"] },
   { id: "TM-Q1-11", name: "Limca rural margin", brand: "Limca", zone: "Central UP", channel: "Rural GT", mechanic: "Rs4/case flat margin to distributors", spend: 2.8, budget: 3.2, uplift: 1.04, start: "Jan 1", end: "Mar 31", st: "warn",
     distributors: 22, beats: 240, incCases: "1,800/mo", passThrough: "75%", prevRun: "Q3'25: 1.06x (declining trend)",
-    detail: "Third consecutive quarter of declining uplift (1.12x > 1.06x > 1.04x). The Lahori Zeera threat to Limca is visibility-driven, not margin-driven. This scheme gives distributors Rs4/case but doesn't address the fact that Lahori has secondary placement in 38% of Lucknow MT stores. Flat margin in rural GT doesn't counter an urban MT visibility attack.",
-    risk: "Scheme-threat mismatch. Spending Rs2.8 Cr on rural margin when the battle is urban visibility. If Lahori's third Lucknow plant comes online, this scheme becomes fully ineffective.",
+    detail: "Third consecutive quarter of declining uplift (1.12x > 1.06x > 1.04x). The competitive threat to Limca in Lucknow is visibility-driven, not margin-driven. This scheme gives distributors Rs4/case in rural GT but doesn't address the urban MT channel where Limca is actually declining 6.8% QoQ. Flat margin in rural GT doesn't counter an urban MT visibility problem.",
+    risk: "Scheme-threat mismatch. Spending Rs2.8 Cr on rural margin when Limca decline is concentrated in urban MT (-6.8% QoQ). This scheme becomes increasingly irrelevant as the urban competitive pressure grows.",
     qs: ["What would a Limca visibility scheme cost instead?", "Show Limca vs Lahori velocity by outlet type", "If we terminated this, what volume would we actually lose?"] },
   { id: "TM-Q1-12", name: "Rural kirana margin", brand: "Multi-brand", zone: "Western UP", channel: "Rural GT", mechanic: "Rs3/case flat margin across all SKUs for all distributors", spend: 6.2, budget: 6.0, uplift: 1.04, start: "Oct 1", end: "Mar 31", st: "critical",
     distributors: 38, beats: 310, incCases: "2,400/mo", passThrough: "68%", prevRun: "Running continuously since Oct '25",
@@ -696,12 +711,12 @@ const runningSchemes = [
     qs: ["What's the redemption rate by urban vs rural?", "What would an under-the-cap mechanic cost?", "Show which beats have the highest redemption rates"] },
 ];
 const fundData = [
-  { brand: "Thums Up", zone: "Eastern UP", alloc: 14.4, accrual: 18.2, pct: 126, exhausts: "Apr 2", st: "critical" },
+  { brand: "Thums Up", zone: "Eastern UP", alloc: 10.2, accrual: 13.6, pct: 133, exhausts: "Apr 2", st: "critical" },
   { brand: "Thums Up", zone: "Central UP", alloc: 12.8, accrual: 12.2, pct: 95, exhausts: "May 8", st: "good" },
   { brand: "Thums Up", zone: "Bihar", alloc: 8.6, accrual: 9.8, pct: 114, exhausts: "Apr 18", st: "warn" },
   { brand: "Sprite", zone: "Central UP", alloc: 5.2, accrual: 5.4, pct: 104, exhausts: "Apr 28", st: "good" },
-  { brand: "Sprite", zone: "Eastern UP", alloc: 4.8, accrual: 5.6, pct: 117, exhausts: "Apr 12", st: "warn" },
-  { brand: "Maaza", zone: "Eastern UP", alloc: 4.3, accrual: 3.1, pct: 72, exhausts: "Jun+", st: "good" },
+  { brand: "Sprite", zone: "Eastern UP", alloc: 3.6, accrual: 4.4, pct: 122, exhausts: "Apr 12", st: "warn" },
+  { brand: "Maaza", zone: "Eastern UP", alloc: 2.8, accrual: 2.0, pct: 71, exhausts: "Jun+", st: "good" },
   { brand: "Maaza", zone: "Bihar", alloc: 3.2, accrual: 2.8, pct: 88, exhausts: "May 22", st: "good" },
   { brand: "Kinley", zone: "All", alloc: 3.0, accrual: 2.8, pct: 93, exhausts: "May+", st: "good" },
 ];
@@ -899,9 +914,8 @@ const IntelCard = ({ card, defaultOpen, onAsk, onTrail }) => {
         <div style={{ display: "flex", gap: 10 }}>{card.kpis.map((k, i) => <div key={i} style={{ flex: 1, padding: "10px 14px", borderRadius: 10, background: k.b ? bg : C.greenPale, border: `1px solid ${(k.b ? color : C.green)}15` }}><div style={{ fontSize: 9.5, fontFamily: mono, color: C.textLight, letterSpacing: 0.4, marginBottom: 3 }}>{k.l}</div><div style={{ fontSize: 18, fontWeight: 700, color: C.text, letterSpacing: -0.3 }}>{k.v}</div><div style={{ fontSize: 10.5, fontFamily: mono, fontWeight: 600, color: k.b ? color : C.green, marginTop: 2 }}>{k.d}</div></div>)}</div>
       </div>
       {exp && <div style={{ padding: "0 24px 22px" }}>
-        <div style={{ marginBottom: 18 }}><div style={{ fontFamily: mono, fontSize: 9, letterSpacing: 1.2, color: C.textLight, marginBottom: 10 }}>EVIDENCE</div>{card.ev.map((e, i) => <div key={i} style={{ display: "flex", gap: 10, marginBottom: 7, alignItems: "flex-start" }}><SrcBadge id={e.s} /><span style={{ fontSize: 13, color: C.text, lineHeight: 1.65, flex: 1 }}>{e.t}</span></div>)}</div>
-        <div style={{ background: C.greenSoft, borderRadius: 12, padding: "18px 20px", border: `1px solid ${C.green}18` }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}><div style={{ width: 22, height: 22, borderRadius: 6, background: C.green, display: "flex", alignItems: "center", justifyContent: "center" }}><span style={{ color: "#fff", fontSize: 12, fontWeight: 700 }}>→</span></div><span style={{ fontFamily: mono, fontSize: 10, letterSpacing: 0.8, color: C.green, fontWeight: 700 }}>SUGGESTED DECISION</span></div>
+        <div style={{ background: C.greenSoft, borderRadius: 12, padding: "18px 20px", border: `1px solid ${C.green}18`, marginBottom: 18 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}><div style={{ width: 22, height: 22, borderRadius: 6, background: C.green, display: "flex", alignItems: "center", justifyContent: "center" }}><span style={{ color: "#fff", fontSize: 12, fontWeight: 700 }}>→</span></div><span style={{ fontFamily: mono, fontSize: 10, letterSpacing: 0.8, color: C.green, fontWeight: 700 }}>RECOMMENDED ACTION</span></div>
           <div style={{ fontSize: 14, color: C.text, lineHeight: 1.7, fontWeight: 500, marginBottom: 10 }}>{card.dec.act}</div>
           <div style={{ fontSize: 13, color: C.textMid, lineHeight: 1.7, marginBottom: 16, paddingLeft: 16, borderLeft: `2px solid ${C.green}30` }}><span style={{ fontWeight: 600, color: C.text }}>Why: </span>{card.dec.why}</div>
           <div style={{ display: "flex", gap: 10 }}>
@@ -910,6 +924,7 @@ const IntelCard = ({ card, defaultOpen, onAsk, onTrail }) => {
             <div style={{ flex: 1, padding: "12px 16px", background: C.card, borderRadius: 10, border: `1px solid ${C.border}` }}><div style={{ fontSize: 9, fontFamily: mono, color: C.textLight, letterSpacing: 0.5, marginBottom: 4 }}>TIMEFRAME</div><div style={{ fontSize: 13, color: C.text, lineHeight: 1.5 }}>{card.dec.time}</div></div>
           </div>
         </div>
+        <div style={{ marginBottom: 18 }}><div style={{ fontFamily: mono, fontSize: 9, letterSpacing: 1.2, color: C.textLight, marginBottom: 10 }}>SUPPORTING EVIDENCE</div>{card.ev.map((e, i) => <div key={i} style={{ display: "flex", gap: 10, marginBottom: 7, alignItems: "flex-start" }}><SrcBadge id={e.s} /><span style={{ fontSize: 13, color: C.text, lineHeight: 1.65, flex: 1 }}>{e.t}</span></div>)}</div>
         {card.qs && <AskBar prompts={card.qs} onAsk={onAsk} />}
       </div>}
     </div>
@@ -928,6 +943,8 @@ export default function SLMGTradeCommand() {
   const [activeTab, setActiveTab] = useState("brief");
   const [trailModal, setTrailModal] = useState(null);
   const [expandedZone, setExpandedZone] = useState(null);
+  const [expandedBrand, setExpandedBrand] = useState(null);
+  const [perfView, setPerfView] = useState("geo");
   const [schemeSearch, setSchemeSearch] = useState("");
   const [schemeFilters, setSchemeFilters] = useState({ status: "all", brand: "all", zone: "all", channel: "all" });
 
@@ -946,21 +963,53 @@ export default function SLMGTradeCommand() {
     }, 1800);
   };
 
-  const sideW = 140;
   const tabs = [
-    { id: "brief", label: "Brief", count: briefCards.length },
+    { id: "brief", label: "Recommendations", count: briefCards.length },
     { id: "performance", label: "Performance" },
-    { id: "actions", label: "Actions" },
+    { id: "actions", label: "Schemes" },
   ];
 
+  const sideW = 160;
+
   return (
-    <div className="overflow-auto" style={{ background: C.page, height: "100vh", fontFamily: font, color: C.text, display: "flex" }}>
-      {/* SIDE NAV */}
-      <div style={{ width: sideW, background: C.header, display: "flex", flexDirection: "column", padding: "16px 10px", position: "fixed", top: 0, left: 0, bottom: 0, zIndex: 100 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 28, paddingLeft: 6 }}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="5" fill={C.green} /><text x="12" y="16" textAnchor="middle" fill="#fff" fontSize="13" fontWeight="800" fontFamily={font}>Q</text></svg>
-          <span style={{ fontFamily: serif, fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.8)" }}>questt</span>
+    <div className="overflow-auto" style={{ background: C.page, height: "100vh", fontFamily: font, color: C.text }}>
+      {/* TOP BAR */}
+      <div style={{ background: C.card, borderBottom: `1px solid ${C.border}`, position: "fixed", top: 0, left: 0, right: 0, zIndex: 101, height: 56 }}>
+        <div style={{ padding: "0 24px", display: "flex", alignItems: "center", height: 56 }}>
+          {/* Hamburger */}
+          <div style={{ width: 40, height: 40, borderRadius: 10, background: C.header, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0 }}>
+            <svg width="18" height="14" viewBox="0 0 18 14" fill="none"><line x1="1" y1="2" x2="17" y2="2" stroke="rgba(255,255,255,0.7)" strokeWidth="2" strokeLinecap="round" /><line x1="1" y1="7" x2="17" y2="7" stroke="rgba(255,255,255,0.7)" strokeWidth="2" strokeLinecap="round" /><line x1="1" y1="12" x2="17" y2="12" stroke="rgba(255,255,255,0.7)" strokeWidth="2" strokeLinecap="round" /></svg>
+          </div>
+          {/* Logo + Client + Page */}
+          <div style={{ display: "flex", alignItems: "center", marginLeft: 16 }}>
+            <span style={{ fontFamily: serif, fontSize: 18, fontWeight: 700, color: C.text, letterSpacing: -0.3 }}>questt</span><span style={{ fontSize: 18, fontWeight: 700, color: C.green }}>.</span>
+            <div style={{ width: 1, height: 20, background: C.border, margin: "0 16px" }} />
+            <span style={{ fontSize: 14, fontWeight: 600, color: C.text }}>SLMG</span>
+            <div style={{ width: 1, height: 20, background: C.border, margin: "0 16px" }} />
+            <span style={{ fontSize: 14, color: C.textMid }}>Trade Spend</span>
+          </div>
+          <div style={{ flex: 1 }} />
+          {/* Search */}
+          <div style={{ position: "relative", width: 260 }}>
+            <span style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", fontSize: 13, color: C.textLight }}>⌕</span>
+            <input readOnly placeholder="Search insights, territories, schemes..." style={{ width: "100%", padding: "8px 40px 8px 32px", borderRadius: 8, border: `1px solid ${C.border}`, background: C.page, fontSize: 12.5, fontFamily: font, color: C.textMid, outline: "none", cursor: "pointer" }} />
+            <span style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", fontSize: 10, fontFamily: mono, color: C.textLight, background: C.card, border: `1px solid ${C.border}`, borderRadius: 4, padding: "1px 5px" }}>/</span>
+          </div>
+          {/* Bell */}
+          <div style={{ width: 36, height: 36, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", marginLeft: 12, position: "relative" }}>
+            <svg width="18" height="20" viewBox="0 0 18 20" fill="none"><path d="M14 7A5 5 0 004 7c0 5.25-2 6.5-2 6.5h14S14 12.25 14 7z" stroke={C.textMid} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /><path d="M10.73 17a2 2 0 01-3.46 0" stroke={C.textMid} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            <div style={{ position: "absolute", top: 6, right: 6, width: 6, height: 6, borderRadius: "50%", background: C.red }} />
+          </div>
+          {/* Avatar */}
+          <div style={{ width: 36, height: 36, borderRadius: "50%", background: C.green, display: "flex", alignItems: "center", justifyContent: "center", marginLeft: 8, cursor: "pointer", flexShrink: 0 }}>
+            <span style={{ fontSize: 13, fontWeight: 700, color: "#fff", fontFamily: font }}>PL</span>
+          </div>
+          <svg width="12" height="8" viewBox="0 0 12 8" fill="none" style={{ marginLeft: 4, flexShrink: 0 }}><path d="M1 1.5L6 6.5L11 1.5" stroke={C.textLight} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
         </div>
+      </div>
+
+      {/* SIDE NAV */}
+      <div style={{ width: sideW, background: C.header, display: "flex", flexDirection: "column", padding: "16px 10px", position: "fixed", top: 56, left: 0, bottom: 0, zIndex: 100 }}>
         {tabs.map(tab => (
           <button key={tab.id} onClick={() => setActiveTab(tab.id)} style={{
             width: "100%", padding: "10px 12px", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "space-between",
@@ -979,28 +1028,22 @@ export default function SLMGTradeCommand() {
       </div>
 
       {/* MAIN CONTENT */}
-      <div style={{ flex: 1, marginLeft: sideW }}>
-        {/* HEADER */}
-        <div style={{ background: C.header, padding: "0 36px" }}>
-          <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 0" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <span style={{ fontFamily: serif, fontSize: 17, fontWeight: 600, color: "#fff", whiteSpace: "nowrap" }}>Trade Spend Command Center</span>
-              <span style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", whiteSpace: "nowrap" }}>SLMG · UP · Uttarakhand · Bihar</span>
-            </div>
-            <span style={{ fontFamily: mono, fontSize: 10, color: "rgba(255,255,255,0.3)", whiteSpace: "nowrap" }}>12 Mar 2026 · 11:42 AM</span>
-          </div>
-        </div>
-
+      <div style={{ marginLeft: sideW, paddingTop: 56 }}>
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "28px 36px" }}>
 
-        {/* MORNING BRIEF */}
-        {activeTab === "brief" && <div style={{ marginBottom: 8 }}><div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 18 }}><h2 style={{ fontFamily: serif, fontSize: 22, fontWeight: 700, color: C.text, margin: 0 }}>Morning Brief</h2><span style={{ fontSize: 12, color: C.textLight }}>{briefCards.length} items ranked by revenue impact</span></div>
+        {/* RECOMMENDATIONS */}
+        {activeTab === "brief" && <div style={{ marginBottom: 8 }}><div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 18 }}><h2 style={{ fontFamily: serif, fontSize: 22, fontWeight: 700, color: C.text, margin: 0 }}>Recommendations</h2><span style={{ fontSize: 12, color: C.textLight }}>{briefCards.length} items ranked by revenue impact</span></div>
           {briefCards.map((c, i) => <IntelCard key={c.id} card={c} defaultOpen={i === 0} onAsk={handleAsk} onTrail={card => setTrailModal(card)} />)}
         </div>}
 
         {/* PERFORMANCE: Territory + Competition + Spend Efficiency */}
-        {activeTab === "performance" && <><SectionHead title="Volume & Distribution" sub="March 2026 MTD" />
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 18 }}>
+        {activeTab === "performance" && <><SectionHead title="Volume & Distribution" sub="March 2026 MTD" right={
+          <div style={{ display: "flex", background: C.cream, borderRadius: 8, border: `1px solid ${C.border}`, overflow: "hidden" }}>
+            <button onClick={() => setPerfView("geo")} style={{ padding: "6px 14px", fontSize: 11.5, fontWeight: perfView === "geo" ? 600 : 400, color: perfView === "geo" ? C.green : C.textLight, background: perfView === "geo" ? C.greenPale : "transparent", border: "none", cursor: "pointer", fontFamily: font, transition: "all 0.15s" }}>By Zone</button>
+            <button onClick={() => setPerfView("brand")} style={{ padding: "6px 14px", fontSize: 11.5, fontWeight: perfView === "brand" ? 600 : 400, color: perfView === "brand" ? C.green : C.textLight, background: perfView === "brand" ? C.greenPale : "transparent", border: "none", cursor: "pointer", fontFamily: font, transition: "all 0.15s" }}>By Brand</button>
+          </div>
+        } />
+        {perfView === "geo" && <><div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 18 }}>
           <div style={{ background: C.card, borderRadius: 14, border: `1px solid ${C.border}`, padding: "20px 22px", boxShadow: "0 1px 3px rgba(0,0,0,0.03)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}><div><div style={{ fontSize: 10, fontFamily: mono, color: C.textLight, letterSpacing: 0.6 }}>TOTAL SECONDARY VOLUME</div><div style={{ display: "flex", alignItems: "baseline", gap: 6, marginTop: 6 }}><span style={{ fontSize: 32, fontWeight: 700, color: C.text, letterSpacing: -1 }}>48.2M</span><span style={{ fontSize: 13, color: C.textLight }}>cases</span></div><div style={{ fontSize: 12, fontFamily: mono, fontWeight: 600, color: C.green, marginTop: 4 }}>+9.3% vs Feb 2026</div></div>
               <div style={{ width: 200 }}>{zones.slice(0, 5).map(z => <div key={z.id} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}><span style={{ fontSize: 10, color: C.textLight, width: 55, textAlign: "right" }}>{z.n.replace(" UP", "").replace("N. ", "N.")}</span><div style={{ flex: 1, height: 6, borderRadius: 3, background: C.cream, overflow: "hidden" }}><div style={{ width: `${(z.vol / 12) * 100}%`, height: "100%", borderRadius: 3, background: sC(z.st), opacity: 0.6 }} /></div><span style={{ fontSize: 10, fontFamily: mono, color: C.textMid, width: 32, textAlign: "right" }}>{z.vol}M</span></div>)}</div>
@@ -1110,16 +1153,98 @@ export default function SLMGTradeCommand() {
         </div>
         <Takeaway color={C.orange} bg={C.orangePale}>Growth of 9.3% masks a divergence: Bihar (+20%) and Uttarakhand (+15%) accelerating, <strong style={{ color: C.red }}>Eastern UP declining with worst beat-level secondary drop in 12 months</strong>. Bihar drives 24% of incremental volume.</Takeaway>
         <AskBar prompts={["Break down volume by brand across zones", "Which beats declined most in E.UP?", "Show spend efficiency trend over last 6 months"]} onAsk={handleAsk} />
+        </>}
+
+        {/* BRAND VIEW */}
+        {perfView === "brand" && <>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 18 }}>
+          <div style={{ background: C.card, borderRadius: 14, border: `1px solid ${C.border}`, padding: "20px 22px", boxShadow: "0 1px 3px rgba(0,0,0,0.03)" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}><div><div style={{ fontSize: 10, fontFamily: mono, color: C.textLight, letterSpacing: 0.6 }}>TOTAL SECONDARY VOLUME</div><div style={{ display: "flex", alignItems: "baseline", gap: 6, marginTop: 6 }}><span style={{ fontSize: 32, fontWeight: 700, color: C.text, letterSpacing: -1 }}>48.2M</span><span style={{ fontSize: 13, color: C.textLight }}>cases</span></div><div style={{ fontSize: 12, fontFamily: mono, fontWeight: 600, color: C.green, marginTop: 4 }}>+9.3% vs Feb 2026</div></div>
+              <div style={{ width: 200 }}>{brands.slice(0, 5).map(b => <div key={b.id} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}><span style={{ fontSize: 10, color: C.textLight, width: 55, textAlign: "right" }}>{b.n}</span><div style={{ flex: 1, height: 6, borderRadius: 3, background: C.cream, overflow: "hidden" }}><div style={{ width: `${(b.vol / 24) * 100}%`, height: "100%", borderRadius: 3, background: sC(b.st), opacity: 0.6 }} /></div><span style={{ fontSize: 10, fontFamily: mono, color: C.textMid, width: 32, textAlign: "right" }}>{b.vol}M</span></div>)}</div>
+            </div>
+          </div>
+          <div style={{ background: C.card, borderRadius: 14, border: `1px solid ${C.border}`, padding: "20px 22px", boxShadow: "0 1px 3px rgba(0,0,0,0.03)" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}><div><div style={{ fontSize: 10, fontFamily: mono, color: C.textLight, letterSpacing: 0.6 }}>BRAND PORTFOLIO</div><div style={{ display: "flex", alignItems: "baseline", gap: 6, marginTop: 6 }}><span style={{ fontSize: 32, fontWeight: 700, color: C.text, letterSpacing: -1 }}>7</span><span style={{ fontSize: 13, color: C.textLight }}>active brands</span></div><div style={{ fontSize: 12, fontFamily: mono, fontWeight: 600, color: C.green, marginTop: 4 }}>Thums Up: 45% of volume</div></div>
+              <div style={{ display: "flex", gap: 12 }}><div style={{ textAlign: "center", padding: "10px 14px", background: C.greenPale, borderRadius: 10 }}><div style={{ fontSize: 9, fontFamily: mono, color: C.green }}>GROWING</div><div style={{ fontSize: 20, fontWeight: 700, color: C.green, marginTop: 2 }}>4</div><div style={{ fontSize: 10, color: C.green }}>Maaza best ROI</div></div><div style={{ textAlign: "center", padding: "10px 14px", background: C.orangePale, borderRadius: 10 }}><div style={{ fontSize: 9, fontFamily: mono, color: C.orange }}>UNDER PRESSURE</div><div style={{ fontSize: 20, fontWeight: 700, color: C.orange, marginTop: 2 }}>2</div><div style={{ fontSize: 10, color: C.orange }}>TU, Limca</div></div></div>
+            </div>
+          </div>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {brands.map(b => {
+            const color = sC(b.st);
+            const isExp = expandedBrand === b.id;
+            const months = ["Oct", "Nov", "Dec", "Jan", "Feb"];
+            const tMin = Math.min(...b.trend) * 0.85;
+            const tMax = Math.max(...b.trend) * 1.1;
+            const chartW = 420, chartH = 120, padL = 40, padR = 12, padT = 8, padB = 24;
+            const plotW = chartW - padL - padR, plotH = chartH - padT - padB;
+            const toX = i => padL + (i / (b.trend.length - 1)) * plotW;
+            const toY = v => padT + plotH - ((v - tMin) / (tMax - tMin || 1)) * plotH;
+            const gridLines = [tMin, tMin + (tMax - tMin) / 2, tMax].map(v => Math.round(v * 10) / 10);
+            return (
+              <div key={b.id} onClick={() => setExpandedBrand(isExp ? null : b.id)} style={{ background: C.card, borderRadius: 12, border: `1px solid ${isExp ? `${color}40` : C.border}`, borderLeft: `3px solid ${color}`, boxShadow: isExp ? `0 4px 16px ${color}08` : "0 1px 3px rgba(0,0,0,0.03)", cursor: "pointer", overflow: "hidden", transition: "all 0.2s" }}>
+                <div style={{ padding: "14px 20px", display: "flex", alignItems: "center", gap: 16 }}>
+                  <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 14 }}>
+                    <div style={{ minWidth: 150 }}>
+                      <div style={{ fontSize: 15, fontWeight: 600, color: C.text }}>{b.n}</div>
+                      <div style={{ fontSize: 11, color: C.textMid, marginTop: 2 }}>{b.note}</div>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
+                      <span style={{ fontSize: 22, fontWeight: 700, color: C.text }}>{b.vol}M</span>
+                      <span style={{ fontSize: 11, color: C.textLight }}>cases</span>
+                      <span style={{ fontSize: 12, fontFamily: mono, fontWeight: 600, color: b.vd < 0 ? C.red : C.green, marginLeft: 4 }}>{b.vd > 0 ? "+" : ""}{b.vd}%</span>
+                    </div>
+                  </div>
+                  <div style={{ width: 20, height: 20, borderRadius: 6, background: C.cream, display: "flex", alignItems: "center", justifyContent: "center", transition: "transform 0.2s", transform: isExp ? "rotate(180deg)" : "none", flexShrink: 0 }}><span style={{ fontSize: 9, color: C.textLight }}>▾</span></div>
+                </div>
+                {isExp && (
+                  <div style={{ padding: "0 20px 18px", borderTop: `1px solid ${C.borderLight}` }}>
+                    <div style={{ display: "flex", gap: 16, paddingTop: 14 }}>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontSize: 10, fontFamily: mono, color: C.textLight, letterSpacing: 0.4, marginBottom: 6 }}>SECONDARY VOLUME (M cases)</div>
+                        <svg width={chartW} height={chartH} style={{ display: "block" }}>
+                          {gridLines.map((v, i) => (<g key={i}><line x1={padL} y1={toY(v)} x2={chartW - padR} y2={toY(v)} stroke={C.borderLight} strokeWidth={0.5} strokeDasharray="3,4" /><text x={padL - 6} y={toY(v) + 3} textAnchor="end" fill={C.textLight} fontSize={9} fontFamily={mono}>{v}</text></g>))}
+                          {months.map((m, i) => (<text key={i} x={toX(i)} y={chartH - 4} textAnchor="middle" fill={C.textLight} fontSize={9} fontFamily={mono}>{m}</text>))}
+                          <polygon points={`${toX(0)},${toY(tMin)} ${b.trend.map((v, i) => `${toX(i)},${toY(v)}`).join(" ")} ${toX(b.trend.length - 1)},${toY(tMin)}`} fill={color} opacity={0.06} />
+                          <polyline points={b.trend.map((v, i) => `${toX(i)},${toY(v)}`).join(" ")} fill="none" stroke={color} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                          {b.trend.map((v, i) => (<g key={i}><circle cx={toX(i)} cy={toY(v)} r={3.5} fill={C.card} stroke={color} strokeWidth={2} />{i === b.trend.length - 1 && (<text x={toX(i)} y={toY(v) - 10} textAnchor="middle" fill={color} fontSize={10} fontWeight={700} fontFamily={mono}>{v}M</text>)}</g>))}
+                          <line x1={padL} y1={padT} x2={padL} y2={chartH - padB} stroke={C.borderLight} strokeWidth={1} />
+                        </svg>
+                      </div>
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, width: 280, flexShrink: 0 }}>
+                        {[
+                          { l: "TRADE SPEND", v: `₹${b.sp} Cr`, sub: `${b.sP}% of plan`, c: b.sP > 115 ? C.red : b.sP > 100 ? C.orange : C.green },
+                          { l: "EFFICIENCY", v: `${b.ef}`, sub: "cases/₹", c: b.ef > 4.5 ? C.green : b.ef > 3 ? C.orange : C.red },
+                          { l: "SKU MIX", v: b.skus.split(",").length.toString(), sub: b.skus.split(",")[0], c: C.textMid },
+                          { l: "CATEGORY", v: b.sh, sub: b.shD === null ? "New segment" : `${b.shD > 0 ? "+" : ""}${b.shD} pts YoY`, c: b.shD === null ? C.textLight : b.shD < -3 ? C.red : b.shD < 0 ? C.orange : C.green },
+                        ].map((m, mi) => (
+                          <div key={mi} style={{ padding: "10px 12px", background: C.cream, borderRadius: 8 }}>
+                            <div style={{ fontSize: 9, fontFamily: mono, color: C.textLight, letterSpacing: 0.4 }}>{m.l}</div>
+                            <div style={{ fontSize: 16, fontWeight: 700, color: C.text, marginTop: 4 }}>{m.v}</div>
+                            <div style={{ fontSize: 10.5, fontFamily: mono, fontWeight: 600, color: m.c, marginTop: 2 }}>{m.sub}</div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+        <Takeaway color={C.orange} bg={C.orangePale}>Thums Up carries 45% of volume but 55% of trade spend at 118% of plan. <strong>Maaza 200ml Tetra is the highest-ROI format in portfolio (6.2x)</strong> but E.UP pre-load lagging at 28%. Limca declining 3 consecutive quarters as Lahori takes urban MT share.</Takeaway>
+        <AskBar prompts={["Show Thums Up spend by zone and SKU", "Compare Maaza 200ml Tetra ROI vs other formats", "What's driving Limca decline by channel?"]} onAsk={handleAsk} />
+        </>}
 
         {/* COMPETITIVE POSITION */}
         <SectionHead title="Competitive Position" sub="Market share and threat landscape" right={<SrcBadge id="nielsen" />} />
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
           <div style={{ background: C.card, borderRadius: 14, border: `1px solid ${C.border}`, padding: "20px 24px", boxShadow: "0 1px 3px rgba(0,0,0,0.03)" }}><div style={{ fontFamily: serif, fontSize: 16, fontWeight: 600, color: C.text, marginBottom: 4 }}>Market Share Trend</div><div style={{ fontSize: 11, color: C.textLight, marginBottom: 14 }}>SLMG territories · Volume share · Jan 2026 audit</div><ShareChart /><Takeaway color={C.red} bg={C.redPale}>Coca-Cola lost 3.6 pts in 12 months. <strong>Campa (+5.3 pts) takes from Coca-Cola, not PepsiCo.</strong></Takeaway></div>
           <div style={{ background: C.card, borderRadius: 14, border: `1px solid ${C.border}`, padding: "20px 24px", boxShadow: "0 1px 3px rgba(0,0,0,0.03)" }}><div style={{ fontFamily: serif, fontSize: 16, fontWeight: 600, color: C.text, marginBottom: 16 }}>Threat Breakdown</div>
-            {[{ n: "Campa Cola (RCPL)", sh: "12.4%", d: "+5.3 pts", wd: "Avg 42%, E.UP 61%", t: "Price + margin war in rural GT. Funded by Reliance.", c: C.red }, { n: "Lahori + Flavored Soda", sh: "6.8%", d: "+3.6 pts", wd: "Urban MT, Lucknow 11-13%", t: "Category creation. Ethnic soda Coca-Cola doesn't address.", c: C.orange }, { n: "PepsiCo", sh: "18.1%", d: "-1.1 pts", wd: "Stable", t: "Traditional competitor. Not the active threat.", c: C.blue }].map((comp, i) => <div key={i} style={{ padding: "14px 16px", background: C.cream, borderRadius: 10, marginBottom: i < 2 ? 10 : 0, borderLeft: `3px solid ${comp.c}` }}><div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}><span style={{ fontSize: 14, fontWeight: 600, color: C.text }}>{comp.n}</span><div style={{ display: "flex", gap: 10, alignItems: "baseline" }}><span style={{ fontFamily: mono, fontSize: 16, fontWeight: 700, color: comp.c }}>{comp.sh}</span><span style={{ fontFamily: mono, fontSize: 11, color: comp.c, fontWeight: 600 }}>{comp.d}</span></div></div><div style={{ fontSize: 11, color: C.textLight, marginBottom: 4 }}>WD: {comp.wd}</div><div style={{ fontSize: 12.5, color: C.textMid, lineHeight: 1.55 }}>{comp.t}</div></div>)}
+            {[{ n: "Campa Cola (RCPL)", sh: "12.4%", d: "+5.3 pts", wd: "WD: Avg 42%, E.UP 61%", t: "Price + margin war in rural GT. ₹18/case retailer margin plus free coolers.", c: C.red }, { n: "Lahori + Flavored Soda", sh: "6.8%", d: "+3.6 pts", wd: "Share: UP urban ~11-13%", t: "Category creation in flavored soda. Growing 48% YoY in UP urban.", c: C.orange }, { n: "PepsiCo", sh: "18.1%", d: "-1.1 pts", wd: "WD: Stable", t: "Traditional competitor. Not the active threat.", c: C.blue }].map((comp, i) => <div key={i} style={{ padding: "14px 16px", background: C.cream, borderRadius: 10, marginBottom: i < 2 ? 10 : 0, borderLeft: `3px solid ${comp.c}` }}><div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}><span style={{ fontSize: 14, fontWeight: 600, color: C.text }}>{comp.n}</span><div style={{ display: "flex", gap: 10, alignItems: "baseline" }}><span style={{ fontFamily: mono, fontSize: 16, fontWeight: 700, color: comp.c }}>{comp.sh}</span><span style={{ fontFamily: mono, fontSize: 11, color: comp.c, fontWeight: 600 }}>{comp.d}</span></div></div><div style={{ fontSize: 11, color: C.textLight, marginBottom: 4 }}>{comp.wd}</div><div style={{ fontSize: 12.5, color: C.textMid, lineHeight: 1.55 }}>{comp.t}</div></div>)}
           </div>
         </div>
-        <AskBar prompts={["Simulate: if Campa WD reaches 70% in E.UP, what's the volume impact?", "Show Lahori distribution growth by month"]} onAsk={handleAsk} />
+        <AskBar prompts={["Simulate: if Campa WD reaches 70% in E.UP, what's the volume impact?", "Show our Limca+Sprite decline trend by month in Lucknow MT"]} onAsk={handleAsk} />
 
         {/* SPEND EFFICIENCY */}
         <SectionHead title="Spend Efficiency" sub="Where trade investment generates returns" />
@@ -1295,7 +1420,7 @@ export default function SLMGTradeCommand() {
             </div>
           ))}
         </div>
-        <Takeaway color={C.red} bg={C.redPale}><strong>Thums Up E.UP budget exhausts Apr 2</strong>, 4 weeks before summer peak. Maaza E.UP Rs1.2 Cr underspent. Cross-brand reallocation available but needs approval.</Takeaway>
+        <Takeaway color={C.red} bg={C.redPale}><strong>Thums Up E.UP budget exhausts Apr 2</strong>, 4 weeks before summer peak. Maaza E.UP Rs0.8 Cr underspent. Cross-brand reallocation available but needs approval.</Takeaway>
         <AskBar prompts={["Project all brand-zone exhaustion dates at current velocity", "What if we freeze the weakest E.UP Thums Up scheme?", "Simulate: reallocate Maaza underspend to Thums Up"]} onAsk={handleAsk} />
 
         {/* COMING UP */}
@@ -1330,9 +1455,7 @@ export default function SLMGTradeCommand() {
           <div style={{ display: "flex", gap: 8 }}>{Object.entries(sources).map(([k, s]) => <span key={k} style={{ display: "inline-flex", alignItems: "center", gap: 4, padding: "2px 8px", borderRadius: 4, background: s.c === C.green ? C.greenPale : C.orangePale, fontSize: 8.5, fontFamily: mono }}><span style={{ width: 4, height: 4, borderRadius: "50%", background: s.c }} /><span style={{ color: C.textMid }}>{s.l}</span><span style={{ color: C.textLight }}>{s.lag}</span></span>)}</div>
         </div>
       </div>
-      </div>{/* close main content */}
-
-      {/* TRAIL MODAL */}
+      </div>{/* close marginLeft wrapper */}
       {trailModal && <>
         <div onClick={() => setTrailModal(null)} style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,0.4)", zIndex: 998, backdropFilter: "blur(3px)" }} />
         <div style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 640, maxHeight: "80vh", background: C.card, borderRadius: 16, boxShadow: "0 24px 80px rgba(0,0,0,0.2)", zIndex: 999, display: "flex", flexDirection: "column", overflow: "hidden" }}>
