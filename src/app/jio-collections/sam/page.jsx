@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useState } from "react";
 
 const C={bg:"#FAFAF8",card:"#FFFFFF",border:"#E5E2DB",borderLight:"#F0EDE7",text:"#1C1C1C",sub:"#555",muted:"#999",lt:"#CCC",
@@ -20,7 +20,7 @@ function DecisionTrail({title,subtitle,steps,onClose}){
 function ConvPanel({messages,onClose,onAsk}){const[q,setQ]=useState("");const send=()=>{if(q.trim()){onAsk(q.trim());setQ("");}};return(<div style={{position:"fixed",top:0,right:0,width:420,height:"100vh",background:C.card,borderLeft:`1px solid ${C.border}`,boxShadow:"-4px 0 24px rgba(0,0,0,0.08)",zIndex:200,display:"flex",flexDirection:"column"}}><div style={{padding:"14px 16px",borderBottom:`1px solid ${C.border}`,display:"flex",justifyContent:"space-between",alignItems:"center"}}><div style={{display:"flex",alignItems:"center",gap:8}}><div style={{width:20,height:20,borderRadius:"50%",background:C.accent,color:"#fff",fontSize:9,fontWeight:700,display:"flex",alignItems:"center",justifyContent:"center"}}>Q</div><span style={{fontSize:13,fontWeight:600}}>Discuss with questt.</span></div><button onClick={onClose} style={{background:"none",border:"none",cursor:"pointer",fontSize:18,color:C.muted}}>×</button></div><div style={{flex:1,overflowY:"auto",padding:14}}>{messages.map((m,i)=>(<div key={i} style={{marginBottom:10}}>{m.role==="user"?(<div style={{display:"flex",justifyContent:"flex-end"}}><div style={{padding:"8px 12px",background:C.accentPale,borderRadius:8,fontSize:12,color:C.accent,maxWidth:"85%"}}>{m.text}</div></div>):(<div>{m.agents&&<div style={{display:"flex",gap:4,marginBottom:4}}>{m.agents.map((a,j)=>(<span key={j} style={{fontSize:9,fontFamily:mn,color:C.accent,padding:"2px 6px",background:C.accentPale,borderRadius:3}}>{a} Agent</span>))}</div>}<div style={{fontSize:12,color:C.sub,lineHeight:1.6,whiteSpace:"pre-line"}}>{m.text}</div>{m.followUps&&<div style={{display:"flex",flexDirection:"column",gap:4,marginTop:8}}>{m.followUps.map((f,j)=>(<button key={j} onClick={()=>onAsk(f)} style={{padding:"5px 8px",background:C.bg,border:`1px solid ${C.border}`,borderRadius:5,fontSize:10,color:C.sub,cursor:"pointer",fontFamily:sn,textAlign:"left"}}>{f}</button>))}</div>}</div>)}</div>))}</div><div style={{padding:"10px 14px",borderTop:`1px solid ${C.border}`,display:"flex",gap:8}}><input value={q} onChange={e=>setQ(e.target.value)} onKeyDown={e=>e.key==="Enter"&&send()} placeholder="Ask a follow-up..." style={{flex:1,padding:"8px 10px",border:`1px solid ${C.border}`,borderRadius:6,fontSize:12,fontFamily:sn,outline:"none"}}/><button onClick={send} style={{padding:"8px 14px",background:C.accent,color:"#fff",border:"none",borderRadius:6,fontSize:11,fontWeight:600,cursor:"pointer"}}>→</button></div></div>);}
 
 // ═══════════════════════════════════════════════════
-// DATA — Portfolio-level, bucket migration, macro triggers
+// DATA — Portfolio-level, bucket movement, macro triggers
 // ═══════════════════════════════════════════════════
 
 const buckets=[
@@ -32,7 +32,7 @@ const buckets=[
 ];
 
 const segments=[
-  {id:"hosp",name:"Hospitality & Travel",accounts:847,value:"₹142Cr",migrationProb:"—",trigger:"Geopolitical — Iran-Israel escalation",bucket:"30-60 (reclassified)",status:"Action required",c:C.red,
+  {id:"hosp",name:"Hospitality & Travel",accounts:847,value:"₹142Cr",riskLevel:"—",trigger:"Geopolitical — Iran-Israel escalation",bucket:"30-60 (reclassified)",status:"Action required",c:C.red,
     territories:[
       {name:"Mumbai",accounts:218,value:"₹38Cr",topAccounts:["Vikram Khanna ₹2.8Cr DPD 18","Seaside Hotels ₹1.9Cr DPD 12","Gateway Restaurants ₹0.8Cr DPD 22"]},
       {name:"Delhi-NCR",accounts:195,value:"₹32Cr",topAccounts:["Priya Hospitality ₹1.2Cr DPD 35","Royal Caterers ₹0.9Cr DPD 28","Capital Tours ₹0.7Cr DPD 15"]},
@@ -40,22 +40,22 @@ const segments=[
       {name:"Rajasthan",accounts:108,value:"₹14Cr",topAccounts:["Heritage Hotels Group ₹2.2Cr DPD 25","Desert Safari Ops ₹0.6Cr DPD 18"]},
       {name:"Others",accounts:184,value:"₹40Cr",topAccounts:["Deepak Hotels (Pune) ₹4.5Cr DPD 42","Sunrise Tours (Bangalore) ₹1.8Cr DPD 25"]},
     ]},
-  {id:"textile",name:"Textile MSME",accounts:89,value:"₹18Cr",migrationProb:"38%",trigger:"Commodity — Cotton +22%",bucket:"0-30",status:"Monitor",c:C.amber,
+  {id:"textile",name:"Textile MSME",accounts:89,value:"₹18Cr",riskLevel:"38%",trigger:"Commodity — Cotton +22%",bucket:"0-30",status:"Monitor",c:C.amber,
     territories:[
       {name:"Gujarat",accounts:32,value:"₹6.8Cr",topAccounts:["Surat Fabrics ₹1.2Cr DPD 8","Ahmedabad Textiles ₹0.9Cr DPD 14"]},
       {name:"Tamil Nadu",accounts:24,value:"₹4.2Cr",topAccounts:["Tirupur Exports ₹0.8Cr DPD 10","Coimbatore Mills ₹0.6Cr DPD 5"]},
       {name:"Maharashtra",accounts:18,value:"₹3.8Cr",topAccounts:["Amit Traders ₹0.15Cr DPD 12"]},
       {name:"Rajasthan",accounts:15,value:"₹3.2Cr",topAccounts:["Jaipur Weaves ₹0.5Cr DPD 8"]},
     ]},
-  {id:"salaried",name:"Salaried — Job Loss / Stress",accounts:48,value:"₹22Cr",migrationProb:"64%",trigger:"Call notes + bureau signals",bucket:"0-30 / 30-60",status:"Treatment review",c:C.copper,
+  {id:"salaried",name:"Salaried — Job Loss / Stress",accounts:48,value:"₹22Cr",riskLevel:"64%",trigger:"Call notes + bureau signals",bucket:"0-30 / 30-60",status:"Treatment review",c:C.copper,
     territories:[
       {name:"Bangalore",accounts:14,value:"₹6.2Cr",topAccounts:["IT layoff cluster — 8 accounts from 2 employers"]},
       {name:"Mumbai",accounts:12,value:"₹5.8Cr",topAccounts:["Rahul Menon ₹0.042Cr DPD 22 — insurance payout April 10"]},
       {name:"Hyderabad",accounts:11,value:"₹5.4Cr",topAccounts:["Pharma restructuring — 6 accounts"]},
       {name:"Others",accounts:11,value:"₹4.6Cr",topAccounts:[]},
     ]},
-  {id:"performing",name:"Standard Book — Performing",accounts:5210,value:"₹3,800Cr",migrationProb:"4%",trigger:"None",bucket:"0-30",status:"BAU",c:C.accent,territories:[]},
-  {id:"hardcoll",name:"Hard Collections (60+ DPD)",accounts:1320,value:"₹880Cr",migrationProb:"—",trigger:"—",bucket:"60-90 / 90+ / NPA",status:"Legal + Settlement",c:C.red,
+  {id:"performing",name:"Standard Book — Performing",accounts:5210,value:"₹3,800Cr",riskLevel:"4%",trigger:"None",bucket:"0-30",status:"BAU",c:C.accent,territories:[]},
+  {id:"hardcoll",name:"Hard Collections (60+ DPD)",accounts:1320,value:"₹880Cr",riskLevel:"—",trigger:"—",bucket:"60-90 / 90+ / NPA",status:"Legal + Settlement",c:C.red,
     territories:[
       {name:"Mumbai",accounts:380,value:"₹265Cr",topAccounts:["12 accounts >₹5Cr — legal proceedings active"]},
       {name:"Delhi-NCR",accounts:310,value:"₹218Cr",topAccounts:["8 accounts >₹5Cr — settlement negotiation"]},
@@ -64,15 +64,24 @@ const segments=[
 ];
 
 const topAccounts=[
-  {name:"Deepak Hotels",product:"Commercial Loan",value:"₹4.5Cr",dpd:42,bucket:"30-60",territory:"Pune",trigger:"Hospitality",treatment:"RM call — restructure",flag:"Sector"},
-  {name:"Coastal Resorts",product:"Term Loan",value:"₹3.1Cr",dpd:8,bucket:"0-30",territory:"Goa",trigger:"Hospitality",treatment:"Proactive outreach",flag:"Sector"},
-  {name:"Vikram Khanna",product:"Commercial Loan",value:"₹2.8Cr",dpd:18,bucket:"0-30",territory:"Mumbai",trigger:"Hospitality",treatment:"RM call this week",flag:"Sector"},
-  {name:"Heritage Hotels",product:"Term Loan",value:"₹2.2Cr",dpd:25,bucket:"0-30",territory:"Rajasthan",trigger:"Hospitality",treatment:"Restructure assessment",flag:"Sector"},
-  {name:"Sunrise Tours",product:"WC Facility",value:"₹1.8Cr",dpd:25,bucket:"0-30",territory:"Bangalore",trigger:"Hospitality",treatment:"Digital outreach",flag:"Sector"},
-  {name:"Priya Hospitality",product:"WC Facility",value:"₹1.2Cr",dpd:35,bucket:"30-60",territory:"Delhi-NCR",trigger:"Hospitality + GST decline",treatment:"Restructure — tenure ext.",flag:"Sector"},
-  {name:"Sunita Devi",product:"Business Loan",value:"₹8L",dpd:45,bucket:"30-60",territory:"Mumbai",trigger:"Call: family emergency. But FD ₹3L opened",treatment:"SMS nudge only",flag:"Call intel"},
-  {name:"Rahul Menon",product:"Personal Loan",value:"₹4.2L",dpd:22,bucket:"0-30",territory:"Mumbai",trigger:"Call: lost IT job. Insurance payout April 10.",treatment:"Pause until April 12",flag:"Call intel"},
-  {name:"Amit Traders",product:"Business Loan",value:"₹15L",dpd:12,bucket:"0-30",territory:"Maharashtra",trigger:"Cotton +22%",treatment:"Proactive restructure",flag:"Commodity"},
+  {name:"Deepak Hotels",product:"Commercial Loan",value:"₹4.5Cr",dpd:42,bucket:"30-60",territory:"Pune",trigger:"Hospitality",treatment:"RM call — restructure",flag:"Sector",prob:"84%",npaProb:"52%",
+    trail:[{step:"Account snapshot",source:"Core Banking",finding:"₹4.5Cr commercial, DPD 42. Budget hotel chain, 5 properties in Pune. Revenue declining 3 consecutive quarters: ₹82L → ₹68L → ₹54L."},{step:"Structural decline",source:"GST",finding:"Declining before crisis — Pune business travel already soft from IT spending cuts. Geopolitical event accelerates existing trajectory."},{step:"Risk assessment",source:"Delinquency model",finding:"60-90 risk: 84%. NPA risk: 52% — highest in portfolio. Structural decline makes this fundamentally different from accounts healthy before the crisis."},{step:"Viability question",source:"Collections strategy",finding:"Is the business viable long-term? If yes: restructure. If no: settlement at 70% (₹3.15Cr recovery). Need RM visit to assess. LTV ~55% — recoverable."}]},
+  {name:"Coastal Resorts",product:"Term Loan",value:"₹3.1Cr",dpd:8,bucket:"0-30",territory:"Goa",trigger:"Hospitality",treatment:"Proactive outreach",flag:"Sector",prob:"78%",npaProb:"34%",
+    trail:[{step:"Account snapshot",source:"Core Banking",finding:"Term loan ₹3.1Cr, DPD 8. Resort property in Goa — 100% tourist revenue."},{step:"Geopolitical event",source:"News",finding:"Goa is among the most tourism-dependent territories. International visitors are 60%+ of revenue. Travel restrictions = immediate revenue collapse."},{step:"Risk assessment",source:"Delinquency model",finding:"Risk of slipping: 78% (was 15%). Tourist-dependent, single property, no diversification."},{step:"Treatment",source:"Collections strategy",finding:"Proactive outreach — assess cash reserves and willingness to restructure before DPD escalates."}]},
+  {name:"Vikram Khanna",product:"Commercial Loan",value:"₹2.8Cr",dpd:18,bucket:"0-30",territory:"Mumbai",trigger:"Hospitality",treatment:"RM call this week",flag:"Sector",prob:"89%",npaProb:"38%",
+    trail:[{step:"Account snapshot",source:"Core Banking",finding:"₹2.8Cr commercial, DPD 18. 3 mid-range hotels (Andheri/Bandra/Juhu). CASA ₹18L covers ~4.7 months EMI."},{step:"Revenue trajectory",source:"GST",finding:"Q4 GST already declining 15%. Post-crisis: estimated 40-50% revenue drop. Coverage ratio drops from 2.8× to 1.4×."},{step:"Risk assessment",source:"Delinquency model",finding:"30-60 risk: 89% (was 24%). NPA risk: 38%. 100% hospitality revenue, tourist locations."},{step:"Treatment",source:"Collections strategy",finding:"RM call — tenure extension (EMI -22%) or 3-month moratorium. Assigned to Ankit (Nancy's team)."}]},
+  {name:"Heritage Hotels",product:"Term Loan",value:"₹2.2Cr",dpd:25,bucket:"0-30",territory:"Rajasthan",trigger:"Hospitality",treatment:"Restructure assessment",flag:"Sector",prob:"75%",npaProb:"30%",
+    trail:[{step:"Account snapshot",source:"Core Banking",finding:"₹2.2Cr term loan, DPD 25. Heritage hotel group in Rajasthan — tourist segment."},{step:"Geopolitical impact",source:"News",finding:"Rajasthan heritage tourism depends on international visitors. Revenue decline 35-45% expected."},{step:"Treatment",source:"Collections strategy",finding:"Needs RM visit to assess. Preet Singh (North team) territory."}]},
+  {name:"Sunrise Tours",product:"WC Facility",value:"₹1.8Cr",dpd:25,bucket:"0-30",territory:"Bangalore",trigger:"Hospitality",treatment:"Digital outreach",flag:"Sector",prob:"82%",npaProb:"40%",
+    trail:[{step:"Account snapshot",source:"Core Banking",finding:"WC ₹1.8Cr, DPD 25. Travel operator — international tour packages."},{step:"Business viability",source:"Agent calls",finding:"International tours completely stopped. Zero bookings for next 2+ months. Recovery timeline 6-12 months."},{step:"Treatment question",source:"Collections strategy",finding:"Restructure or settlement? Business viability is the key question. Digital outreach to assess."}]},
+  {name:"Priya Hospitality",product:"WC Facility",value:"₹1.2Cr",dpd:35,bucket:"30-60",territory:"Delhi-NCR",trigger:"Hospitality + GST decline",treatment:"Restructure — tenure ext.",flag:"Sector",prob:"72%",npaProb:"31%",
+    trail:[{step:"Account snapshot",source:"Core Banking",finding:"WC ₹1.2Cr, DPD 35. Restaurant chain, 4 outlets in Mumbai."},{step:"Revenue + operational",source:"GST + Payroll",finding:"Revenue down 40%. Staff reduced 12→8. Business contracting but owner is cooperative."},{step:"Treatment",source:"Collections strategy",finding:"Tenure extension — convert WC to term loan, 36mo. External crisis, not operational failure."}]},
+  {name:"Sunita Devi",product:"Business Loan",value:"₹8L",dpd:45,bucket:"30-60",territory:"Mumbai",trigger:"Call: family emergency. But FD ₹3L opened",treatment:"SMS nudge only",flag:"Call intel",prob:"35%",npaProb:"8%",
+    trail:[{step:"Account snapshot",source:"Core Banking",finding:"BL ₹8L, DPD 45. 3 years perfect payments before this."},{step:"Call intelligence",source:"Agent calls",finding:"Family emergency, shop closed temporarily. Sounded stressed."},{step:"Contradicting signal",source:"Core Banking",finding:"FD ₹3L opened day after the call — she has liquidity. Not financial distress."},{step:"Treatment",source:"Collections strategy",finding:"SMS only. No calls. She has funds and will pay when personal situation stabilizes. Probability dropped from 55% to 35% after FD signal."}]},
+  {name:"Rahul Menon",product:"Personal Loan",value:"₹4.2L",dpd:22,bucket:"0-30",territory:"Mumbai",trigger:"Call: lost IT job. Insurance payout April 10.",treatment:"Pause until April 12",flag:"Call intel",prob:"85%",npaProb:"12%",
+    trail:[{step:"Account snapshot",source:"Core Banking",finding:"PL ₹4.2L, DPD 22. Bureau 712, clean. Only loan."},{step:"Call intelligence",source:"Agent calls",finding:"Disclosed: Infosys layoff, insurance payout April 10. Specific date, verifiable."},{step:"Treatment",source:"Nancy — 24 Mar",finding:"Pause until April 12. Will migrate to 30-60 — knowingly accepted. NPA prob only 12% because payout is expected."}]},
+  {name:"Amit Traders",product:"Business Loan",value:"₹15L",dpd:12,bucket:"0-30",territory:"Maharashtra",trigger:"Cotton +22%",treatment:"Proactive restructure",flag:"Commodity",prob:"58%",npaProb:"15%",
+    trail:[{step:"Account snapshot",source:"Core Banking",finding:"BL ₹15L, DPD 12. Textile trader, Ahmedabad. 15-year operator."},{step:"Commodity spike",source:"Commodity data",finding:"Cotton +22% in 14 days. 68% of input costs. Margins compressed 12%→4%."},{step:"Cash flow impact",source:"GST + model",finding:"At compressed margins, EMI coverage drops below 1×. Will miss next EMI without intervention."},{step:"Treatment",source:"Collections strategy",finding:"Proactive tenure extension (EMI -20%). Sep 2024 comparison: similar spike, 84% cure with early restructure."}]},
 ];
 
 const regions=[
@@ -114,7 +123,7 @@ const briefs=[
     body:"Restructured accounts from January: 180 of 246 are now current (73% cure rate). ₹42Cr recovered vs ₹8Cr cost of restructuring. Best performing segment: salaried PL (82% cure). Worst: MSME working capital (58% cure). Treatment validation confirms early intervention outperforms standard collections by 32pp.",
     sources:["core"],
     prompts:["Which segments should we expand restructuring to?","Compare cure rates by treatment type","What's the cost-benefit per segment?"],
-    convResp:{agents:["Collections"],text:"Restructuring performance detail:\n\nBy segment:\n• Salaried PL: 82% cure (strongest). Tenure extension works because income is stable — they just needed breathing room.\n• Secured (HL/LAP): 76% cure. Collateral gives them incentive to stay current.\n• MSME WC: 58% cure. Lower because business cash flow is harder to predict.\n• Commercial: 64% cure. Better than MSME but below salaried.\n\nBy treatment type:\n• Tenure extension: 78% cure (best)\n• Moratorium: 65% cure (helps temporary disruption)\n• Rate reduction: 71% cure\n• Settlement: 89% resolution (but at 70% recovery rate)\n\nRecommendation: expand restructuring to the 847 hospitality accounts NOW. Early restructure cure is 73% vs 41% post-migration. The ₹142Cr at risk — proactive restructuring could save ₹60-80Cr in provisions.",followUps:["Cost of restructuring the 847 accounts?","What if we wait vs act now?","Show me the treatment effectiveness data"]}},
+    convResp:{agents:["Collections"],text:"Restructuring performance detail:\n\nBy segment:\n• Salaried PL: 82% cure (strongest). Tenure extension works because income is stable — they just needed breathing room.\n• Secured (HL/LAP): 76% cure. Collateral gives them incentive to stay current.\n• MSME WC: 58% cure. Lower because business cash flow is harder to predict.\n• Commercial: 64% cure. Better than MSME but below salaried.\n\nBy treatment type:\n• Tenure extension: 78% cure (best)\n• Moratorium: 65% cure (helps temporary disruption)\n• Rate reduction: 71% cure\n• Settlement: 89% resolution (but at 70% recovery rate)\n\nRecommendation: expand restructuring to the 847 hospitality accounts NOW. Early restructure cure is 73% vs 41% after they slip. The ₹142Cr at risk — proactive restructuring could save ₹60-80Cr in provisions.",followUps:["Cost of restructuring the 847 accounts?","What if we wait vs act now?","Show me the treatment effectiveness data"]}},
   {sev:"info",headline:"Call center intelligence: 12 customers disclosed material information in last 7 days",
     body:"12 accounts where customers disclosed material information during calls — job loss (4), medical emergency (3), business closure (2), insurance payout pending (2), inheritance expected (1). 8 of these weren't reflected anywhere else. Treatment strategies updated.",
     sources:["callnotes","core"],
@@ -122,9 +131,9 @@ const briefs=[
     convResp:{agents:["Risk","Collections"],text:"12 accounts with material call disclosures:\n\nJob loss (4):\n• Rahul Menon — PL ₹4.2L, DPD 22. Said lost IT job, waiting for insurance payout April 10. Don't push until April.\n• Customer B — BL ₹6L, DPD 15. Company shut down. Needs restructuring.\n• 2 others — both salaried, both in 0-30.\n\nMedical emergency (3):\n• All have medical spend data corroborating the call notes.\n\nBusiness closure (2):\n• Both MSME. GST filings confirm zero revenue last quarter.\n\nInsurance payout pending (2):\n• Rahul Menon (above) + 1 other. Both have specific dates — don't call until payout.\n\nInheritance expected (1):\n• Customer in 30-60 expecting property settlement. High probability of bulk payment.\n\nAll 12 accounts have updated treatment strategies based on what customers told us.",followUps:["Update treatment for the 4 job-loss accounts","Which accounts should we pause calls on?","Which ones changed treatment?"]}},
 ];
 
-const insightCategories=[{id:"all",label:"All",count:4},{id:"bucket",label:"Bucket Migration",count:1},{id:"macro",label:"Macro Triggers",count:1},{id:"treatment",label:"Treatment",count:2}];
+const insightCategories=[{id:"all",label:"All",count:4},{id:"bucket",label:"Bucket Movement",count:1},{id:"macro",label:"Macro Triggers",count:1},{id:"treatment",label:"Treatment",count:2}];
 const insightsData=[
-  {id:"i1",cat:["bucket","all"],severity:"CRITICAL",domain:"30–60 Migration · Hospitality",sources:["news","core","gst"],
+  {id:"i1",cat:["bucket","all"],severity:"CRITICAL",domain:"30–60 Movement · Hospitality",sources:["news","core","gst"],
     headline:"847 hospitality accounts reclassified to 30–60 overnight — ₹142Cr additional exposure in bucket",
     sub:"Geopolitical event mapped to hospitality sector exposure across the commercial portfolio.",
     metrics:[{l:"ACCOUNTS",v:"847"},{l:"VALUE AT RISK",v:"₹142Cr"},{l:"AVG PROBABILITY",v:"78%"},{l:"SEGMENTS",v:"3"}],
@@ -147,17 +156,24 @@ const insightsData=[
     metrics:[{l:"ACCOUNTS",v:"89"},{l:"AT RISK",v:"34"},{l:"EXPOSURE",v:"₹18Cr"},{l:"MARGIN COMPRESSION",v:"12%→4%"}],
     narrative:"Cotton prices: ₹62,400 → ₹76,100 per candy in 14 days (+22%). This is the sharpest spike since September 2024 (+18%).\n\n89 textile MSME customers have >₹10L exposure. At current raw material costs, margins compress from 12% to 4%. For 34 accounts, EMI/revenue ratio exceeds 25% at compressed margins — they'll likely miss the next EMI cycle.\n\nTerritory breakdown:\n• Gujarat: 12 accounts, ₹6.8Cr (highest concentration — Surat/Ahmedabad textile belt)\n• Tamil Nadu: 9 accounts, ₹4.2Cr (Tirupur/Coimbatore)\n• Maharashtra: 8 accounts, ₹3.8Cr\n• Rajasthan: 5 accounts, ₹3.2Cr\n\nLargest exposure: Amit Traders (₹15L, DPD 12). GST filings show Q4 flat despite typically +15-20% seasonal. Cotton is 68% of his input costs.\n\nComparison to Sep 2024 spike: 28 accounts were at risk, 19 restructured proactively, 16 cured (84%). This spike is sharper and broader — 34 accounts at risk vs 28 last time.",
     action:"Offer proactive tenure extension to the 34 highest-risk accounts. Contact the remaining 55 with an awareness check.",
-    returnVal:"Proactive restructuring prevents ₹6Cr migration to 30-60",roi:"Cost: ₹0.4Cr restructuring ops. Prevented: ₹6Cr provisions.",
+    returnVal:"Proactive restructuring prevents ₹6Cr in slippage to 30-60",roi:"Cost: ₹0.4Cr restructuring ops. Prevented: ₹6Cr provisions.",
     convResp:{agents:["Risk"],text:"Textile MSME detail:\n\n34 accounts at highest risk (EMI/revenue >25% at compressed margins):\n• 12 in Gujarat (₹6.8Cr)\n• 9 in Tamil Nadu (₹4.2Cr)\n• 8 in Maharashtra (₹3.8Cr)\n• 5 in Rajasthan (₹3.2Cr)\n\nAmit Traders is the largest single exposure (₹15L, DPD 12). His GST filings show Q4 flat despite typically being +15-20%. Cotton is 68% of his input costs.\n\nComparison to last spike (Sep 2024): prices rose 18%, 28 accounts were at risk, 19 restructured proactively, 16 cured (84%). This time the spike is sharper (+22%) and broader.",followUps:["Start restructuring for the 34","Compare to Sep 2024 spike outcomes","Show me Amit Traders' full profile"]}},
   {id:"i4",cat:["treatment","all"],severity:"POSITIVE",domain:"Treatment Effectiveness · Q4",sources:["core"],
     headline:"Early restructuring outperforms standard collections by 32pp — expand to hospitality segment?",
     sub:"180 of 246 restructured accounts now current. Best: salaried PL (82%). Worst: MSME WC (58%).",
     metrics:[{l:"CURE RATE",v:"73%"},{l:"RECOVERED",v:"₹42Cr"},{l:"COST",v:"₹8Cr"},{l:"ROI",v:"5.3×"}],
-    narrative:"Q4 restructuring results (246 accounts):\n\nCure rate by segment:\n• Salaried PL: 82% (93 of 113 now current). Tenure extension works — income is stable, they needed breathing room.\n• Secured (HL/LAP): 76% (38 of 50). Collateral gives incentive to stay current.\n• Commercial: 64% (29 of 45). Better than standard collections (41%) but below salaried.\n• MSME WC: 58% (22 of 38). Business cash flow harder to predict.\n\nCure rate by treatment type:\n• Tenure extension: 78% (best performer)\n• Rate reduction: 71%\n• Moratorium: 65% (works for temporary disruption)\n• Settlement: 89% resolution but at 70% recovery rate\n\nApplied to the 847 hospitality accounts: 620 match profiles where restructuring works (>65% expected cure). At the commercial average cure rate of 68%, that's 422 accounts staying current and ₹58Cr in provisions prevented. If we wait for migration, cure drops to 41% — only 254 cured, ₹36Cr additional provisions.\n\nCost of restructuring 620 accounts: ~₹1.6Cr. Cost of doing nothing: ₹36Cr+ in provisions.",
+    narrative:"Q4 restructuring results (246 accounts):\n\nCure rate by segment:\n• Salaried PL: 82% (93 of 113 now current). Tenure extension works — income is stable, they needed breathing room.\n• Secured (HL/LAP): 76% (38 of 50). Collateral gives incentive to stay current.\n• Commercial: 64% (29 of 45). Better than standard collections (41%) but below salaried.\n• MSME WC: 58% (22 of 38). Business cash flow harder to predict.\n\nCure rate by treatment type:\n• Tenure extension: 78% (best performer)\n• Rate reduction: 71%\n• Moratorium: 65% (works for temporary disruption)\n• Settlement: 89% resolution but at 70% recovery rate\n\nApplied to the 847 hospitality accounts: 620 match profiles where restructuring works (>65% expected cure). At the commercial average cure rate of 68%, that's 422 accounts staying current and ₹58Cr in provisions prevented. If we wait and they slip, cure drops to 41% — only 254 cured, ₹36Cr additional provisions.\n\nCost of restructuring 620 accounts: ~₹1.6Cr. Cost of doing nothing: ₹36Cr+ in provisions.",
     action:"Approve expansion of restructuring to hospitality segment. Estimated 620 of 847 are good candidates based on treatment effectiveness profiles.",
     returnVal:"If 73% cure rate holds: ₹60-80Cr in prevented provisions",roi:"₹2Cr restructuring cost on 620 accounts. ₹60Cr+ prevention.",
-    convResp:{agents:["Collections"],text:"Treatment effectiveness data for the restructuring expansion decision:\n\nCure rate by treatment × segment:\n• Tenure extension + salaried: 82%\n• Tenure extension + commercial: 68%\n• Moratorium + salaried: 72%\n• Moratorium + commercial: 61%\n• Rate reduction + secured: 76%\n\nFor the 847 hospitality accounts:\n• 620 match profiles where restructuring works (>65% expected cure rate)\n• 180 are in segments where settlement might be more appropriate\n• 47 need more investigation before treatment decision\n\nIf we restructure the 620 at 68% cure rate (commercial average): 422 accounts stay current. ₹58Cr in provisions prevented. Cost: ₹1.6Cr.\n\nIf we wait and they migrate to 30-60: cure rate drops to 41%. Only 254 cured. ₹36Cr additional provisions.",followUps:["Approve restructuring for the 620","Which 47 need investigation?","Compare treatment costs now vs after migration"]}},
+    convResp:{agents:["Collections"],text:"Treatment effectiveness data for the restructuring expansion decision:\n\nCure rate by treatment × segment:\n• Tenure extension + salaried: 82%\n• Tenure extension + commercial: 68%\n• Moratorium + salaried: 72%\n• Moratorium + commercial: 61%\n• Rate reduction + secured: 76%\n\nFor the 847 hospitality accounts:\n• 620 match profiles where restructuring works (>65% expected cure rate)\n• 180 are in segments where settlement might be more appropriate\n• 47 need more investigation before treatment decision\n\nIf we restructure the 620 at 68% cure rate (commercial average): 422 accounts stay current. ₹58Cr in provisions prevented. Cost: ₹1.6Cr.\n\nIf we wait and they slip to 30-60: cure rate drops to 41%. Only 254 cured. ₹36Cr additional provisions.",followUps:["Approve restructuring for the 620","Which 47 need investigation?","Compare treatment costs now vs after slippage"]}},
 ];
+
+
+// ═══ DECISION TRAIL OVERLAY ═══
+function TrailOverlay({account,onClose}){
+  if(!account||!account.trail)return null;
+  return(<div><div onClick={onClose} style={{position:"fixed",top:0,left:0,right:0,bottom:0,background:"rgba(0,0,0,0.35)",zIndex:300,backdropFilter:"blur(2px)"}}/><div style={{position:"fixed",top:"50%",left:"50%",transform:"translate(-50%,-50%)",width:650,maxHeight:"82vh",background:C.card,borderRadius:10,boxShadow:"0 16px 64px rgba(0,0,0,0.18)",zIndex:301,display:"flex",flexDirection:"column",overflow:"hidden"}}><div style={{padding:"18px 24px",borderBottom:`1px solid ${C.border}`}}><div style={{fontSize:10,fontFamily:mn,color:C.accent,letterSpacing:"0.1em",fontWeight:600,marginBottom:6}}>DECISION TRAIL</div><div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}><div><div style={{fontFamily:sr,fontSize:16,fontWeight:700}}>{account.name}</div><div style={{fontSize:12,color:C.muted,marginTop:2}}>{account.value||account.outstanding} · DPD {account.dpd}</div></div><button onClick={onClose} style={{background:"none",border:"none",cursor:"pointer",fontSize:20,color:C.muted,lineHeight:1}}>×</button></div></div><div style={{flex:1,overflowY:"auto",padding:"20px 24px"}}>{account.trail.map((t,i)=>(<div key={i} style={{display:"flex",gap:14}}><div style={{display:"flex",flexDirection:"column",alignItems:"center",width:24,flexShrink:0}}><div style={{width:24,height:24,borderRadius:"50%",background:i===account.trail.length-1?C.accent:C.bg,border:`1.5px solid ${i===account.trail.length-1?C.accent:C.border}`,display:"flex",alignItems:"center",justifyContent:"center"}}><span style={{fontSize:10,color:i===account.trail.length-1?"#fff":C.muted,fontWeight:700}}>{i+1}</span></div>{i<account.trail.length-1&&<div style={{width:1,flex:1,minHeight:12,background:C.border}}/>}</div><div style={{flex:1,paddingBottom:i<account.trail.length-1?16:0}}><div style={{display:"flex",alignItems:"center",gap:8,marginBottom:4}}><span style={{fontSize:13,fontWeight:600}}>{t.step}</span><span style={{fontSize:9,fontFamily:mn,color:C.muted,padding:"1px 5px",background:C.bg,borderRadius:3}}>{t.source}</span></div><div style={{fontSize:12,color:C.sub,lineHeight:1.55,padding:"8px 10px",background:C.bg,borderRadius:6,borderLeft:`3px solid ${i===account.trail.length-1?C.accent:C.border}`}}>{t.finding}</div></div></div>))}</div></div></div>);
+}
 
 // ═══════════════════════════════════════════════════
 // APP
@@ -167,6 +183,7 @@ export default function App(){
   const [insightFilter,setInsightFilter]=useState("all");
   const [expandedInsight,setExpandedInsight]=useState(null);
   const [conv,setConv]=useState(null);
+  const [trailAccount,setTrailAccount]=useState(null);
   const [selectedBucket,setSelectedBucket]=useState(null);
   const [expandedSeg,setExpandedSeg]=useState(null);
   const [expandedRegion,setExpandedRegion]=useState(null);
@@ -323,7 +340,7 @@ export default function App(){
                     <div style={{fontSize:12,color:C.muted,marginTop:4}}>{seg.accounts.toLocaleString()} accounts · {seg.value} · Bucket: {seg.bucket}</div>
                   </div>
                   <div style={{display:"flex",alignItems:"center",gap:16}}>
-                    <div style={{textAlign:"center"}}><div style={{fontSize:18,fontWeight:700,fontFamily:sr,color:seg.c}}>{seg.migrationProb}</div><div style={{fontSize:8,fontFamily:mn,color:C.muted}}>MIGRATION PROB</div></div>
+                    <div style={{textAlign:"center"}}><div style={{fontSize:18,fontWeight:700,fontFamily:sr,color:seg.c}}>{seg.riskLevel}</div><div style={{fontSize:8,fontFamily:mn,color:C.muted}}>RISK</div></div>
                     <span style={{fontSize:11,color:C.lt,transform:isOpen?"rotate(180deg)":"none"}}>▾</span>
                   </div>
                 </div>
@@ -366,15 +383,16 @@ export default function App(){
             <div style={{fontSize:10,fontFamily:mn,color:C.muted,letterSpacing:"0.06em",fontWeight:600,marginBottom:10}}>TOP ACCOUNTS BY EXPOSURE — ACTION REQUIRED</div>
             <div style={{border:`1px solid ${C.border}`,borderRadius:8,overflow:"hidden"}}>
               <div style={{display:"flex",padding:"8px 14px",background:C.bg,borderBottom:`1px solid ${C.border}`,fontSize:9,fontFamily:mn,color:C.muted}}>
-                <span style={{flex:1}}>ACCOUNT</span><span style={{width:90}}>PRODUCT</span><span style={{width:70}}>EXPOSURE</span><span style={{width:50}}>DPD</span><span style={{width:70}}>TERRITORY</span><span style={{width:90}}>TRIGGER</span><span style={{flex:1}}>TREATMENT</span>
+                <span style={{flex:1}}>ACCOUNT</span><span style={{width:80}}>PRODUCT</span><span style={{width:60}}>EXPOSURE</span><span style={{width:40}}>DPD</span><span style={{width:55}}>PROB</span><span style={{width:65}}>TERRITORY</span><span style={{width:80}}>TRIGGER</span><span style={{flex:1}}>TREATMENT</span>
               </div>
-              {topAccounts.map((a,i)=>(<div key={i} style={{display:"flex",alignItems:"center",padding:"8px 14px",borderBottom:i<topAccounts.length-1?`1px solid ${C.borderLight}`:"none"}}>
+              {topAccounts.map((a,i)=>(<div key={i} onClick={()=>a.trail&&setTrailAccount(a)} style={{display:"flex",alignItems:"center",padding:"8px 14px",borderBottom:i<topAccounts.length-1?`1px solid ${C.borderLight}`:"none",cursor:a.trail?"pointer":"default"}} onMouseEnter={e=>{if(a.trail)e.currentTarget.style.background=C.bg}} onMouseLeave={e=>e.currentTarget.style.background="transparent"}>
                 <div style={{flex:1}}><span style={{fontSize:12,fontWeight:600}}>{a.name}</span></div>
-                <span style={{width:90,fontSize:11,color:C.muted}}>{a.product.length>14?a.product.slice(0,14)+"…":a.product}</span>
-                <span style={{width:70,fontSize:12,fontWeight:600}}>{a.value}</span>
-                <span style={{width:50,fontSize:11,color:a.dpd>=30?C.red:C.amber}}>{a.dpd}</span>
-                <span style={{width:70,fontSize:11,color:C.muted}}>{a.territory}</span>
-                <span style={{width:90}}><span style={{fontSize:9,fontFamily:mn,color:a.flag==="Sector"?C.red:a.flag==="Commodity"?C.amber:C.blue,padding:"1px 5px",background:a.flag==="Sector"?C.redPale:a.flag==="Commodity"?C.amberPale:C.bluePale,borderRadius:3}}>{a.flag}</span></span>
+                <span style={{width:80,fontSize:10,color:C.muted}}>{a.product.length>14?a.product.slice(0,14)+"…":a.product}</span>
+                <span style={{width:60,fontSize:12,fontWeight:600}}>{a.value}</span>
+                <span style={{width:40,fontSize:11,color:a.dpd>=30?C.red:C.amber}}>{a.dpd}</span>
+                <span style={{width:55}}><span style={{fontSize:11,fontWeight:700,fontFamily:sr,color:parseInt(a.prob)>=70?C.red:parseInt(a.prob)>=50?C.amber:C.accent}}>{a.prob}</span></span>
+                <span style={{width:65,fontSize:10,color:C.muted}}>{a.territory}</span>
+                <span style={{width:80}}><span style={{fontSize:9,fontFamily:mn,color:a.flag==="Sector"?C.red:a.flag==="Commodity"?C.amber:C.blue,padding:"1px 5px",background:a.flag==="Sector"?C.redPale:a.flag==="Commodity"?C.amberPale:C.bluePale,borderRadius:3}}>{a.flag}</span></span>
                 <span style={{flex:1,fontSize:11,color:C.sub}}>{a.treatment}</span>
               </div>))}
             </div>
@@ -457,5 +475,6 @@ export default function App(){
     </div>
 
     {conv&&<ConvPanel messages={conv.messages} onClose={()=>setConv(null)} onAsk={addConvMsg}/>}
+    {trailAccount&&<TrailOverlay account={trailAccount} onClose={()=>setTrailAccount(null)}/>}
   </div>);
 }
