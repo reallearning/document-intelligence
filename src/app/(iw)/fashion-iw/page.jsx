@@ -40,7 +40,6 @@ const allMetrics = [
   { id: "margin", label: "Gross Margin", tag: "lagging", target: "\u2191 300-500bps", outcome: "profit" },
   { id: "md_d", label: "Markdown Depth", tag: "leading", target: "\u2193 avg disc %", outcome: "profit" },
   { id: "sizefit", label: "Size Fit Score", tag: "leading", target: "\u2191 to 0.85+", outcome: "growth" },
-  { id: "roas", label: "Campaign ROAS", tag: "leading", target: "\u2191 lift per \u20B9", outcome: "profit" },
 ].map((m, i) => ({ ...m, x: mxF(i), y: 95, w: MW, h: MH }));
 
 // ═══ LAYER 3: DECISIONS (5 groups)
