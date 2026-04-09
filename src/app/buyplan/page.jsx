@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useState, useMemo } from "react";
 
 /* ═══ QUESTT.COM DESIGN SYSTEM ═══ */
@@ -81,288 +81,487 @@ const RAW=[
     colors:[{n:"Black/White",p:.40,c:[.07,.20,.38,.25,.10]},{n:"Navy/Cream",p:.35,c:STD},{n:"Olive/White",p:.25,c:STD}],ga:{"A+":.22,"A":.40,"B/C":.38},
     flag:{type:"size-shift",msg:"M allocation increased from 35% to 38% based on SS25 data where M stocked out by Week 5 across 8 of 12 A+ stores. This drove an estimated 42 lost units. XL reduced from 10% to 8%. XL had 38% residual in SS25. Size curve validated against 6-week ST target."},
     hist:{SS25:{u:540,st:94,m:59,w:5,n:"Sold out too fast. M stockout by Wk5 in 8/12 A+."},SS24:{u:480,st:82,m:57,w:10,n:"First season. Moderate performance."}},
-    reason:"Carryover with size correction. SS25 achieved 94% 6-wk ST but M stocked out by Week 5. Scaling from 540 to 680 units (+26%) with M shifted from 35% to 38%. Olive/White replacing underperforming Sage (Sage: 64% ST vs style avg 82%).",
+    reason:"Stripe Midi Dress: SS25 under-allocation confirmed, 42 units lost demand at A+ stores, M size stockout Week 5 repeating SS24 pattern. Scaling 26% with M-heavy size correction and Sage-to-Olive color swap.",
     trail:T([
-      {a:"Demand Planner",t:"0.3s",act:"Pulled SS25 sell-through by size × store. Sold 540 units at 94% 6-week ST; exceeding the 90% target, which means we under-allocated. M stocked out by Week 5 in 8 of 12 A+ stores. Estimated 42 units of unmet demand based on rate-of-sale extrapolation: avg 1.2u/store/week × 8 stores × 4.5 remaining weeks = 43 units lost."},
-      {a:"Size Curve Analyst",t:"1.2s",act:"Recalculated size curve from SS25 actuals. M demand was 41% of sales (vs 35% planned). XL was 6% of sales (vs 10% planned, 38% residual). New curve: XS 7%, S 20%, M 38%, L 27%, XL 8%. Validated against North stores where L/XL index higher; even there, XL only hit 9%."},
-      {a:"Color Performance",t:"2.0s",act:"SS25 color-level ST: Black/White 96%, Navy/Cream 92%, Sage 64%. Sage had 36% unsold stock requiring 30% markdown. Replaced with Olive/White; olive stripe trending +180% in brand site search Jan 2026. Allocated Olive/White at 25% (conservative for untested color)."},
-      {a:"Allocation Engine",t:"2.8s",act:"Unit derivation: To hit 90% 6-wk ST at SS25 rate-of-sale (1.2u/store/wk in A+, 0.6u in A, 0.2u in B/C): A+ = 12 stores × 12u = 144 (22%). A = 21 stores × 13u = 273 (40%). B/C = ~280 stores × 1u (top 263) = 263 (38%). Total = 680 units."},
-      {a:"Synthesis",t:"3.4s",act:"Final: 680 units across 3 colors with corrected M-heavy size curve. The 26% increase from SS25 is justified by the stockout signal; we were under-serving proven demand. Confidence 86% (high data reliability, slight uncertainty on new Olive/White color).",conf:"86%"}
+      {a:"Demand Planner",t:"0.3s",act:"Pulled 2-season sell-through for S26-DR-101. SS24: 480u allocated, 394u sold, 82.1% 6-wk ST in 10 weeks. SS25: 540u allocated, 508u sold, 94.1% 6-wk ST in just 5 weeks. ROS at A+ stores: 1.2u/store/wk (SS25) vs 0.8u (SS24), a 50% velocity increase. Stockout triggered Week 5 at 8 of 12 A+ stores; style sold through the entire A+ allocation 9 weeks before season end. Imputing lost demand at 1.2u/store/wk x 8 stores x 4.5 weeks = 43.2u. This is a supply-constrained style, not a demand-limited one; true demand was ~583u and we only gave it 540."},
+      {a:"Size Curve Analyst",t:"1.2s",act:"Queried size-level sales for SS25. Actual distribution: XS 6.8%, S 19.2%, M 41.3%, L 24.8%, XL 5.9%. Planned distribution was: XS 7%, S 20%, M 35%, L 28%, XL 10%. M over-sold plan by 6.3 points with zero residual at season end. XL under-sold by 4.1 points; 20 of 54 XL units remained unsold (38% residual). Cross-checked against FL01 and FL03 (northern stores where L/XL historically indexes higher); even there M was 39.1% and XL was 8.7%. The chain-average size template was wrong for this silhouette; M at 35% was structurally under-allocated and XL at 10% was over-allocated by almost double actual demand."},
+      {a:"Color Performance",t:"2.0s",act:"Queried color-level performance for SS25. Black/White: 206 of 214u sold, 96.2% ST, zero markdown. Navy/Cream: 178 of 194u sold, 91.8% ST, minimal residual. Sage: 84 of 132u sold, 63.6% ST; 48u residual cleared at 30% discount, realized margin 28.6% vs 59% at full price. Sage cost us Rs 2.7L in markdown value. Cross-referenced site search: 'olive stripe' at 47 searches/wk (+180% QoQ), 'sage stripe' at 12 searches/wk (-22% QoQ). Olive/White replaces Sage at 25% of mix. Conservative allocation for an untested color, but the demand signal from search is strong and olive is performing at 88.4% ST in the trouser category already."},
+      {a:"Allocation Engine",t:"2.8s",act:"Queried store-style affinity scores from the collaborative filtering model. A+ stores: avg affinity 0.91 (range 0.84-0.97 across 12 stores). A stores: avg 0.72 (range 0.58-0.86 across 21 stores). B/C: avg 0.34, but 263 of ~280 stores clear the 0.20 minimum threshold. Derived units at 90% ST target: A+ = 12 x 12.0u = 144 (21.2%). A = 21 x 13.0u = 273 (40.1%). B/C = 263 x 1.0u = 263 (38.7%). Total = 680u. OTB impact: Rs 12.52L against Dresses budget of Rs 42.1L (29.7% of category). The affinity model is driving a slightly flatter grade split than last season; B/C gets 38.7% (up from 35% in SS25) because the style has broad appeal confirmed by 2 seasons of data."},
+      {a:"Synthesis",t:"3.4s",act:"Recommending 680 units across 3 colors with M-corrected size curve (M at 38%, XL at 8%). The 26% increase from 540u is justified: 43u proven lost demand from stockout + 12% organic trend growth. One controlled risk: Olive/White replacing Sage (170u exposure, Rs 3.1L at cost). Mitigated by cross-category olive performance and search trend. Re-buy trigger pre-set: if Week 4 projected ST exceeds 93%, the supply chain agent will check fabric availability for a 200u follow-on. This is a high-confidence allocation on a proven winner with one variable being tested.",conf:"86%"}
     ]),qs:["What if we kept Sage alongside Olive/White?","Show the M stockout store-by-store"]},
 
   {id:"S26-CD-102",name:"Linen Co-ord Set",sub:"Co-ords",units:420,mrp:5990,cost:2516,margin:58,src:"new-design",conf:68,
     colors:[{n:"Beige/Black",p:.55,c:STD},{n:"Olive/Cream",p:.45,c:STD}],ga:{"A+":.40,"A":.60},
     flag:{type:"low-confidence",msg:"First premium linen co-ord at the highest co-ord price point. No direct historical match. Recommendation is based on cross-category signals: linen fabric 6-wk ST averaged 91% in SS25, co-ord sets grew 34% YoY, and the premium price bracket showed no resistance in blazers. Restricted to A+ and A stores only."},
     hist:{},
-    reason:"New category entry at the highest co-ord price point. Unit count derived from cross-category benchmarking: linen dresses averaged 8u/A+ store and 5u/A store in SS25, discounted 40% for untested format. Conservative 420 units with no B/C distribution. Re-buy trigger at 70% 6-wk ST.",
+    reason:"Linen Co-ord Set: new entry with no direct sales history. Nearest carryover matches suggest 357-420u demand range. Restricted to A+/A only with Rs 10.6L exposure cap.",
     trail:T([
-      {a:"Demand Planner",t:"0.4s",act:"No direct history. Cross-category benchmark: Linen dresses averaged 8 units per A+ store and 5 units per A store in first 6 weeks of SS25 (91% ST). Co-ord sets are a different format, so applied 40% discount: 5u/A+ store, 3u/A store as base estimate."},
-      {a:"Price Sensitivity",t:"1.3s",act:"At the highest co-ord price point. Checked resistance: Single-button blazer sold at 76% ST at a comparable price. Linen wrap dress sold at 87% ST at a lower point. The premium bracket has not been tested in co-ords, but linen commands a premium; no markdown was needed on any linen item in SS25."},
-      {a:"Allocation Engine",t:"2.1s",act:"Unit derivation: A+ = 12 stores × 14u = 168 (40%). A = 21 stores × 12u = 252 (60%). B/C excluded; zero category history at this price point. Total = 420 units."},
-      {a:"Color Analyst",t:"2.8s",act:"Two-color assortment only for a new entry. Beige/Black at 55%; neutral co-ord is the safer lead. Olive/Cream at 45%; olive is SS26's breakout color across the range. No third color to limit risk."},
-      {a:"Synthesis",t:"3.5s",act:"Conservative 420 units. A+/A only. The cross-category signals are strong (linen + co-ord both trending), but the specific combination is untested. Re-buy trigger: if 6-wk ST exceeds 70%, place 200-unit follow-on order. Confidence 68%.",conf:"68%"}
+      {a:"Demand Planner",t:"0.4s",act:"No sell-through history for Linen Co-ord Set. Queried the similarity model for nearest carryover matches. Top 3: Cotton Solid Co-ord (similarity: 0.84), Linen Co-ord Set (0.76). Weighted avg demand from matches: 483u at 78% projected 6-wk ST. Applying 22% new-style discount for unproven demand. Co-ords category is growing 32% YoY which provides upward pressure on the forecast."},
+      {a:"Allocation Engine",t:"1.2s",act:"Restricted to A+/A only (no B/C history for this style type at this price point). A+ = 12 stores x 14u = 168 (40%). A = 21 stores x 12u = 252 (60%). Total = 420. Size curve: STD (standard); no silhouette-based size shift. OTB impact: Rs 10.6L against Co-ords budget. Exposure cap applied: max Rs 13L downside if style achieves 0% ST."},
+      {a:"Synthesis",t:"1.8s",act:"420 units. New entry with no history; allocation is conservative and test-oriented. B/C excluded entirely; prove demand at A+/A before widening distribution. Flag: First premium linen co-ord at the highest co-ord price point. Re-buy trigger: if Week 4 projected ST exceeds 56% at A+, expand to release to B/C stores. This is a signal-gathering buy, not a volume play.",conf:"68%"}
     ]),qs:["What if we tested A+ stores only first?","What is the lead time for a re-buy?"]},
 
   {id:"S26-TP-103",name:"Cutwork Blouse",sub:"Tops",units:180,mrp:3490,cost:1466,margin:58,src:"new-design",conf:55,
     colors:[{n:"White",p:.60,c:SSK},{n:"Blush",p:.40,c:SSK}],ga:{"A+":.55,"A":.45},
     flag:{type:"low-confidence",msg:"Cutwork/broderie anglaise is a strong SS26 trend (+160% search YoY) but untested in the brand's range. This is a 180-unit test buy capped at maximum exposure. A+ and A stores only, weighted towards metro flagships where the fashion-forward segment concentrates."},
     hist:{},
-    reason:"Trend test: cutwork/broderie anglaise. 180 units across A+/A only. If 6-wk ST exceeds 60%, this validates the embellishment trend for AW26 expansion.",
+    reason:"Cutwork Blouse: new entry with no direct sales history. Nearest carryover matches suggest 153-180u demand range. Restricted to A+/A only with Rs 2.6L exposure cap.",
     trail:T([
-      {a:"Trend Intelligence",t:"0.5s",act:"Cutwork/broderie anglaise search volume up 160% YoY on brand site. Competitors launched 3 cutwork pieces in SS26 in a similar price range. Trend is validated externally but untested within the brand's design language."},
-      {a:"Demand Planner",t:"1.4s",act:"For unproven silhouettes, the brand's test threshold caps maximum exposure. Applied 10% buffer reduction to 180 units. Target: 60% 6-wk ST (lower threshold for test buys vs 90% for proven styles)."},
-      {a:"Allocation Engine",t:"2.2s",act:"Unit derivation: A+ = 12 stores × 8u = 96 (55%). A = 21 stores × 4u = 84 (45%). B/C excluded. Small-skew size curve (SSK: XS 10%, S 25%, M 35%, L 22%, XL 8%) since cutwork buyers trend younger/smaller."},
-      {a:"Synthesis",t:"2.9s",act:"Test buy only. 180 units, 2 colors, A+/A distribution. White leads at 60%; broderie reads best on white. This is not a revenue play; it is a category learning investment. Confidence 55%.",conf:"55%"}
+      {a:"Demand Planner",t:"0.4s",act:"No sell-through history for Cutwork Blouse. Queried the similarity model for nearest carryover matches. Top 3: Rib Tank Top (similarity: 0.84), Oversized Cotton Shirt (0.79), Knit Polo (0.71). Weighted avg demand from matches: 207u at 80% projected 6-wk ST. Applying 27% new-style discount for unproven demand. Tops category is growing 15% YoY which provides upward pressure on the forecast."},
+      {a:"Allocation Engine",t:"1.2s",act:"Restricted to A+/A only (no B/C history for this style type at this price point). A+ = 12 stores x 8.3u = 99 (55%). A = 21 stores x 3.9u = 81 (45%). Total = 180. Size curve: SSK (small-skew); buyers index XS-S at 62% vs 25% standard. OTB impact: Rs 2.6L against Tops budget. Exposure cap applied: max Rs 3L downside if style achieves 0% ST."},
+      {a:"Synthesis",t:"1.8s",act:"180 units. New entry with no history; allocation is conservative and test-oriented. B/C excluded entirely; prove demand at A+/A before widening distribution. Flag: Cutwork/broderie anglaise is a strong SS26 trend (+160% search YoY) but untested in the brand's range. Re-buy trigger: if Week 4 projected ST exceeds 69% at A+, expand to release to B/C stores. This is a signal-gathering buy, not a volume play.",conf:"55%"}
     ]),qs:["What if it sells out; what is the fastest re-buy?","Should we price lower for a test?"]},
 
   {id:"S26-BZ-104",name:"Single-Button Blazer",sub:"Blazers",units:520,mrp:4990,cost:2196,margin:56,src:"carryover",conf:87,
     colors:[{n:"Black",p:.55,c:STD},{n:"Dusty Rose",p:.45,c:STD}],ga:{"A+":.30,"A":.40,"B/C":.30},
     flag:{type:"opportunity",msg:"Single-button blazer has grown steadily: 280u (68% ST) in SS24 to 380u (76% ST) in AW25 to 420u (82% ST) in SS25. Outsells double-breasted 3:1. System recommends scaling to 520u (+24%) and adding Dusty Rose. Non-neutral blazer buyers have 92% retention rate."},
     hist:{SS24:{u:280,st:68,m:54,w:16,n:"First structured blazer. Modest start."},AW25:{u:380,st:76,m:56,w:12,n:"Strong full-price sell-through."},SS25:{u:420,st:82,m:55,w:8,n:"Black only. Approached 90% 6-wk target."}},
-    reason:"Three-season growth (280 to 380 to 420) with improving ST approaching the 90% 6-wk target. SS25 hit 82% in 8 weeks; on trajectory to hit the target with modest scale. Dusty Rose added to capture the high-retention non-neutral segment (92% repurchase).",
+    reason:"Single-Button Blazer: 3-season carryover scaling 24% to 520u. SS25: 420u at 82% 6-wk ST (approaching target). Single-button blazer has grown steadily: 280u (68% ST) in SS24 to 380u (76% ST) in AW25 to 420u (82% ST) in SS25.",
     trail:T([
-      {a:"Demand Planner",t:"0.3s",act:"Three-season trajectory: SS24 280u (68% 6-wk ST), AW25 380u (76%), SS25 420u (82%). Rate of sale accelerating: 0.8u/A+ store/wk in SS24, now 1.3u in SS25. At current ROS, 520 units should yield ~88% 6-wk ST; approaching the 90% target without overshooting."},
-      {a:"Color Analyst",t:"1.1s",act:"SS25 was Black-only at 82% ST. Adding Dusty Rose based on: (1) non-neutral color buyers have 92% retention vs 68% for neutral-only, (2) Dusty Rose tested in AW25 dresses at 78% ST, (3) blazer + non-neutral creates high-LTV customer acquisition. Split: Black 55% (proven), Dusty Rose 45% (strategic)."},
-      {a:"Allocation Engine",t:"1.9s",act:"Unit derivation at 88% 6-wk ST target: A+ = 12 stores × 13u = 156 (30%). A = 21 stores × 10u = 210 (40%). B/C = ~280 stores × 0.55u (top 154 stores) = 154 (30%). Total = 520. B/C gets allocation because blazer demand is distributed; not metro-concentrated."},
-      {a:"Synthesis",t:"2.6s",act:"520 units, 2 colors. Black is the safe foundation; Dusty Rose is the strategic bet for customer segment expansion. This style is moving from 'promising' to 'anchor' status. Confidence 87%.",conf:"87%"}
+      {a:"Demand Planner",t:"0.3s",act:"Pulled 3-season sell-through history. AW25: 380u allocated, 289u sold, 76% 6-wk ST, cleared in 12 weeks. SS24: 280u allocated, 190u sold, 68% 6-wk ST, cleared in 16 weeks. SS25: 420u allocated, 344u sold, 82% 6-wk ST, cleared in 8 weeks. Trajectory: +14pts per season on sell-through. ROS at A+ stores: 1.1u/store/wk in SS25. Tracking close to the 90% target. Modest scale-up should close the gap. Prophet forecast for SS26: 520u at 90% projected 6-wk ST based on trend extrapolation + seasonal adjustment."},
+      {a:"Color Analyst",t:"1.0s",act:"Queried color-level performance from SS25. Black: 55% of allocation, top performer. Dusty Rose: 45% of allocation, weakest.  Standard size curve applied."},
+      {a:"Allocation Engine",t:"2.2s",act:"Queried store-style affinity model. A+ avg affinity: 0.78. A avg: 0.64. B/C: 0.30, with 256 stores clearing 0.20 threshold. Unit derivation at 90% ST target: A+ = 12 stores x 13u = 156 (30%). A = 21 stores x 9.9u = 208 (40%). B/C = 156 (30%). Total = 520u. OTB impact: Rs 11.4L against Blazers category budget. Larger-than-usual scale-up justified by under-allocation signal from prior season stockouts."},
+      {a:"Synthesis",t:"2.6s",act:"520 units (+24% vs SS25's 420u). Moderate-confidence allocation. 82% ST in SS25 leaves 8pts gap to target. Scale-up is incremental, not aggressive. Key variable: opportunity.",conf:"87%"}
     ]),qs:["Is there ASP ceiling risk at this price?","Should we add a third color?"]},
 
   {id:"S26-DR-105",name:"Linen Wrap Dress",sub:"Dresses",units:760,mrp:3990,cost:1676,margin:58,src:"carryover",conf:84,
     colors:[{n:"Terracotta",p:.35,c:LSK},{n:"Ivory",p:.35,c:LSK},{n:"Sage",p:.30,c:LSK}],ga:{"A+":.26,"A":.40,"B/C":.34},
     flag:{type:"deeper-buy",msg:"System recommends 760 units; 52% above SS25's 500 units. Linen wrap hit 93% 6-wk ST (exceeding the 90% target), effectively selling out by Week 5 in A+ stores. Unmet demand estimated at 110 units. Linen fabric is up 15% YoY so supplier commitment needed by Jan 20."},
     hist:{SS24:{u:360,st:74,m:56,w:14,n:"Understocked in A+. Could have sold more."},SS25:{u:500,st:93,m:58,w:5,n:"Sold out by Wk5 in A+. Best linen performer."}},
-    reason:"Linen wrap had the highest 6-wk ST of any style in SS25 (93%, exceeding the 90% target). A+ stores sold out by Week 5 with 110 units of estimated unmet demand. Scaling 52% is aggressive but the demand signal is unambiguous. Earthy palette aligned with summer trends. Supplier deadline: Jan 20.",
+    reason:"Linen Wrap Dress: highest-performing style in SS25 at 93% 6-wk ST, A+ stores sold out by Week 5 with 108u estimated lost demand. Largest scale-up in the plan (+52%) backed by unambiguous stockout signal and linen fabric outperformance.",
     trail:T([
-      {a:"Demand Planner",t:"0.3s",act:"SS25: 500 units at 93% 6-wk ST. 3 points above the 90% target, indicating under-allocation. A+ stores averaged 1.8u/wk ROS, selling out by Week 5. Extrapolating unmet demand: 12 A+ stores × 1.8u/wk × 5 remaining weeks = ~108 lost units."},
-      {a:"Supply Chain",t:"1.4s",act:"Linen fabric spot pricing up 15% YoY. Supplier can deliver 760 units if committed by January 20. Delaying to February increases cost per unit. Current quoted landed cost on file."},
-      {a:"Color Analyst",t:"2.2s",act:"SS25 color-level data: Terracotta 96% ST, Ivory 91% ST, Dusty Blue 84% ST. Replacing Dusty Blue with Sage (Sage indexing higher in SS26 search data). Split: Terracotta 35%, Ivory 35%, Sage 30%; near-equal split since top 2 colors both exceeded 90% target."},
-      {a:"Allocation Engine",t:"3.0s",act:"Unit derivation at 90% 6-wk ST: A+ = 12 stores × 16u = 192 (26%). A = 21 stores × 14u = 294 (40%). B/C = ~280 stores × 1u (top 274) = 274 (34%). Total = 760. Large-skew size curve (LSK) for wrap silhouette. L/XL runs larger in wrap dresses."},
-      {a:"Synthesis",t:"3.7s",act:"760 units is a 52% increase; the largest scale-up in the plan. Justified by: (1) 6-wk ST exceeded the 90% target, (2) clear unmet demand signal from stockouts, (3) linen is the best-performing summer fabric. Main risk: supply commitment deadline. Confidence 84%.",conf:"84%"}
+      {a:"Demand Planner",t:"0.3s",act:"Pulled 2-season history. SS24: 360u, 74% 6-wk ST, sold through in 14 weeks. Understocked at A+ (only 8u/store). SS25: 500u, 93% 6-wk ST, sold through in 5 weeks at A+. This was our fastest seller. ROS at A+ was 1.8u/store/wk; at A was 1.1u; at B/C was 0.4u. A+ stores hit zero stock by Week 5; B/C still had inventory until Week 12. Imputing lost demand: 12 stores x 1.8u/wk x 5 remaining weeks = 108u. That's Rs 4.3L in missed full-price revenue. True demand was ~608u. We gave it 500 and left money on the table."},
+      {a:"Supply Chain",t:"1.4s",act:"Checked linen fabric position. Spot price up 15% YoY (Rs 340/m vs Rs 296/m in Jan '25). Our preferred supplier (Vardhman) has 1,200m of our linen quality reserved through Feb 28. 760 units requires ~950m at 1.25m/unit. That's within the reservation. BUT if we commit after Jan 20, Vardhman releases 400m of the reservation to another buyer. Lead time: 6 weeks from PO to warehouse. If we commit Jan 20, goods land Week -2 (pre-season). If we wait until Feb, goods land Week 4 and we miss the first month of selling. The supplier window is real and it's closing."},
+      {a:"Color Analyst",t:"2.2s",act:"SS25 color breakdown: Terracotta 182 of 190u sold (95.8% ST), Ivory 168 of 180u sold (93.3% ST), Dusty Blue 109 of 130u sold (83.8% ST). Terracotta outperformed by 12 points, which aligns with site search data: 'terracotta dress' = 62 searches/wk (+210% YoY), 'dusty blue dress' = 8 searches/wk (-34% YoY). Replacing Dusty Blue with Sage for SS26. Sage search volume is 28/wk (+85% YoY); not as strong as terracotta but significantly better than the declining dusty blue. Allocating near-equal split: Terracotta 35%, Ivory 35%, Sage 30%. Both top colors exceeded our 90% target, so no need to skew heavily to one."},
+      {a:"Allocation Engine",t:"3.0s",act:"Queried affinity model. A+ stores avg affinity score: 0.93 (this is the highest affinity of any dress in the plan). A stores: 0.78. B/C: 0.38 with 274 of ~280 stores clearing the 0.20 threshold. Units at 90% target: A+ = 12 x 16.0u = 192 (25.3%). A = 21 x 14.0u = 294 (38.7%). B/C = 274 x 1.0u = 274 (36.1%). Total = 760u. Applied LSK (large-skew) size curve because wrap silhouettes size up; L/XL accounts for 37% of sales vs 28% in standard dresses. OTB impact: Rs 12.74L, bringing Dresses category to 60.2% committed. Significant but justified by the demand signal."},
+      {a:"Synthesis",t:"3.7s",act:"760 units; 52% increase from SS25's 500u. This is the largest scale-up in the entire plan and it's justified by: (1) proven 93% 6-wk ST, (2) 108u quantified lost demand from stockouts, (3) highest store affinity score of any dress, (4) linen fabric confirmed as the best-performing summer material across the portfolio. One hard constraint: supplier must be committed by Jan 20 or we lose 400m of reserved fabric. Re-buy trigger pre-set: if Week 3 projected ST exceeds 95%, supply chain agent checks Vardhman's remaining capacity for a 300u follow-on order.",conf:"84%"}
     ]),qs:["What is the exact supplier deadline?","How does linen perform by region?"]},
 
   {id:"S26-TR-106",name:"Wide-Leg Pleated Trouser",sub:"Trousers",units:900,mrp:2490,cost:1095,margin:56,src:"carryover",conf:90,
     colors:[{n:"Black",p:.35,c:STD},{n:"Navy",p:.25,c:STD},{n:"Olive",p:.20,c:STD},{n:"Cream",p:.20,c:STD}],ga:{"A+":.20,"A":.34,"B/C":.46},
     flag:{type:"deeper-buy",msg:"Wide-leg pleated trousers are a structural category shift, not a seasonal trend. Share of trouser sales: SS24 28%, AW25 32%, SS25 36%, projected SS26 44%. Pleated outsells all other wide-leg variants 1.6x. System recommends 900u (+29% vs SS25's 700u)."},
     hist:{SS24:{u:520,st:72,m:54,w:16,n:"Wide-leg was 28% of trouser mix."},AW25:{u:620,st:81,m:56,w:11,n:"Pleated outsold all other wide-leg 1.6x."},SS25:{u:700,st:86,m:55,w:8,n:"Wide-leg now 36% of trouser mix. Near 90% target."}},
-    reason:"Structural shift in the trouser category; wide-leg went from 28% of sales to 36% in two seasons. SS25 hit 86% 6-wk ST, approaching the 90% target. Four-color assortment captures safe (Black/Navy 60%) and growth (Olive/Cream 40%) segments.",
+    reason:"Wide-Leg Pleated Trouser: 3-season carryover scaling 29% to 900u. SS25: 700u at 86% 6-wk ST (approaching target). Wide-leg pleated trousers are a structural category shift, not a seasonal trend.",
     trail:T([
-      {a:"Demand Planner",t:"0.3s",act:"Analysed trouser silhouette mix over 3 seasons. Wide-leg share: SS24 28%, AW25 32%, SS25 36%. Pleated outsells straight-wide and palazzo 1.6x. SS25: 700u at 86% 6-wk ST; just 4 points below the 90% target. At current growth rate, 900 units should yield 89-91% 6-wk ST."},
-      {a:"Color Analyst",t:"1.0s",act:"SS25 color-level data (Black only): 86% ST. Adding 3 colors based on trouser color demand patterns: Navy (25%) anchors workwear, Olive (20%) and Cream (20%) capture the casual/weekend segment. Color split derived from palazzo color data where multi-color assortment lifted total ST by 8 points."},
-      {a:"Allocation Engine",t:"1.8s",act:"Unit derivation: A+ = 12 stores × 15u = 180 (20%). A = 21 stores × 14u = 294 (34%). B/C = ~280 stores × 1.5u (top 284) = 426 (46%). B/C gets 46% because wide-leg trousers have broad appeal; not metro-concentrated. Total = 900."},
-      {a:"Synthesis",t:"2.5s",act:"900 units. This is a structural category bet, not a fashion risk. The pleated wide-leg is replacing slim-fit as the default trouser. Confidence 90%.",conf:"90%"}
+      {a:"Demand Planner",t:"0.3s",act:"Pulled 3-season sell-through history. AW25: 620u allocated, 502u sold, 81% 6-wk ST, cleared in 11 weeks. SS24: 520u allocated, 374u sold, 72% 6-wk ST, cleared in 16 weeks. SS25: 700u allocated, 602u sold, 86% 6-wk ST, cleared in 8 weeks. Trajectory: +14pts per season on sell-through. ROS at A+ stores: 1.8u/store/wk in SS25. Tracking close to the 90% target. Modest scale-up should close the gap. Prophet forecast for SS26: 900u at 88% projected 6-wk ST based on trend extrapolation + seasonal adjustment."},
+      {a:"Color Analyst",t:"1.0s",act:"Queried color-level performance from SS25. Black: 35% of allocation, top performer. Navy: 25% of allocation. Olive: 20% of allocation. Cream: 20% of allocation, weakest. Color assortment is 4 deep; Black leads at 35%. Cross-referencing site search data confirms black demand is 36% above category average. Standard size curve applied."},
+      {a:"Allocation Engine",t:"1.6s",act:"Queried store-style affinity model. A+ avg affinity: 0.85. A avg: 0.63. B/C: 0.27, with 514 stores clearing 0.20 threshold. Unit derivation at 90% ST target: A+ = 12 stores x 15u = 180 (20%). A = 21 stores x 14.6u = 306 (34%). B/C = 414 (46%). Total = 900u. OTB impact: Rs 9.9L against Trousers category budget. Larger-than-usual scale-up justified by under-allocation signal from prior season stockouts."},
+      {a:"Synthesis",t:"2.8s",act:"900 units (+29% vs SS25's 700u). High-confidence allocation on a proven performer. Approaching the 90% target; this scale-up should close the gap. Re-buy trigger set at 94% projected ST by Week 4.",conf:"90%"}
     ]),qs:["Is there a saturation point for wide-leg?","Should slim-fit be phased out?"]},
 
   {id:"S26-DR-107",name:"Satin Maxi Dress",sub:"Dresses",units:280,mrp:5990,cost:2516,margin:58,src:"new-design",conf:62,
     colors:[{n:"Emerald",p:.50,c:STD},{n:"Black",p:.50,c:STD}],ga:{"A+":.50,"A":.50},
     flag:{type:"low-confidence",msg:"Entry into the evening/occasion maxi dress category at the highest dress price point. No direct precedent. Based on occasion-wear gap analysis: 22% of loyalty members purchase evening dresses from competitors. Emerald is SS26's breakout evening color."},
     hist:{},
-    reason:"New category entry targeting the occasion/evening gap. 22% of loyalty members purchased evening dresses from competitor brands in the last 12 months. 280 units, A+/A only, two high-impact colors.",
+    reason:"Satin Maxi Dress: new entry with no direct sales history. Nearest carryover matches suggest 238-280u demand range. Restricted to A+/A only with Rs 7L exposure cap.",
     trail:T([
-      {a:"Customer Intelligence",t:"0.6s",act:"Analysed loyalty data: 22% of loyalty members purchased occasion/evening dresses from competitor brands in the last 12 months. Average spend: comparable to upper price range. This represents a captured customer spending outside the brand's range; an addressable gap, not new customer acquisition."},
-      {a:"Price Sensitivity",t:"1.4s",act:"Highest dress price point. Checked resistance: Blazers sell at a comparable price with no price resistance. Satin fabric justifies the premium; satin items have 12% lower return rates than polyester at similar price points. Markdown risk: satin holds value better during end-of-season sales."},
-      {a:"Allocation Engine",t:"2.2s",act:"A+/A only for new high-price entry. Unit derivation: A+ = 12 stores × 12u = 144 (50%). A = 21 stores × 6.5u = 136 (50%). B/C excluded. Standard size curve; evening dresses don't show silhouette-based size skew. Total = 280."},
-      {a:"Synthesis",t:"2.9s",act:"280 units, 2 high-impact colors. Emerald is the hero (SS26 evening color of the season). Black is the safe anchor. This is a strategic category expansion; success here opens a significant annual opportunity in occasion wear. Confidence 62%.",conf:"62%"}
+      {a:"Demand Planner",t:"0.4s",act:"No sell-through history for Satin Maxi Dress. Queried the similarity model for nearest carryover matches. Top 3: Stripe Midi Dress (similarity: 0.82), Linen Wrap Dress (0.78), Chambray Shirt Dress (0.74). Weighted avg demand from matches: 322u at 78% projected 6-wk ST. Applying 28% new-style discount for unproven demand. Dresses category is growing 12% YoY which provides upward pressure on the forecast."},
+      {a:"Allocation Engine",t:"1.2s",act:"Restricted to A+/A only (no B/C history for this style type at this price point). A+ = 12 stores x 11.7u = 140 (50%). A = 21 stores x 6.7u = 140 (50%). Total = 280. Size curve: STD (standard); no silhouette-based size shift. OTB impact: Rs 7L against Dresses budget. Exposure cap applied: max Rs 8L downside if style achieves 0% ST."},
+      {a:"Synthesis",t:"1.8s",act:"280 units. New entry with no history; allocation is conservative and test-oriented. B/C excluded entirely; prove demand at A+/A before widening distribution. Flag: Entry into the evening/occasion maxi dress category at the highest dress price point. Re-buy trigger: if Week 4 projected ST exceeds 57% at A+, expand to release to B/C stores. This is a signal-gathering buy, not a volume play.",conf:"62%"}
     ]),qs:["Should we price lower to reduce risk?","What is the competitor price comparison?"]},
 
   {id:"S26-TP-108",name:"Relaxed Linen Shirt",sub:"Tops",units:1140,mrp:1890,cost:756,margin:60,src:"carryover",conf:89,
     colors:[{n:"White",p:.30,c:LSK},{n:"Sky Blue",p:.25,c:LSK},{n:"Sand",p:.225,c:LSK},{n:"Olive",p:.225,c:LSK}],ga:{"A+":.20,"A":.36,"B/C":.44},
     flag:{type:"deeper-buy",msg:"Relaxed linen shirts sit at the intersection of two strong trends: linen fabric (91% avg 6-wk ST in SS25) and relaxed fit (now 62% of tops sales). SS25 hit 88% 6-wk ST at 860 units. Scaling 33% to 1,140 units to approach the 90% target more closely."},
     hist:{SS24:{u:600,st:72,m:58,w:15,n:"First linen shirt season. Promising start."},SS25:{u:860,st:88,m:60,w:7,n:"Strong. All A+ sold through by Wk7."}},
-    reason:"Linen + relaxed fit = the strongest summer intersection. SS25 hit 88% 6-wk ST (just below the 90% target), meaning allocation was almost perfect. The 33% increase accounts for the 2-point gap plus organic category growth. Four-color assortment for maximum breadth.",
+    reason:"Relaxed Linen Shirt: 2-season carryover scaling 33% to 1140u. SS25: 860u at 88% 6-wk ST (approaching target). Relaxed linen shirts sit at the intersection of two strong trends: linen fabric (91% avg 6-wk ST in SS25) and relaxed fit (now 62% of tops sales).",
     trail:T([
-      {a:"Demand Planner",t:"0.3s",act:"SS25: 860u at 88% 6-wk ST. 2 points below the 90% target. Rate of sale: 1.4u/A+ store/wk, 0.9u/A store/wk. Relaxed fit now 62% of all tops sales (up from 45% two seasons ago). Linen avg 6-wk ST: 91% in SS25; the best-performing fabric."},
-      {a:"Allocation Engine",t:"1.1s",act:"Unit derivation at 90% 6-wk ST: A+ = 12 stores × 19u = 228 (20%). A = 21 stores × 19u = 399 (36%). B/C = ~280 stores × 1.8u (top 285) = 513 (44%). B/C gets 44%; relaxed linen shirts sell across all tiers. Total = 1,140."},
-      {a:"Color Analyst",t:"1.8s",act:"SS25 color data: White 92% ST, Sky Blue 88% ST, Sand 84% ST. All above 80%; no weak color. Adding Olive as 4th (replacing seasonal Coral which hit only 71% ST). Split: White 30%, Sky Blue 25%, Sand/Olive 22.5% each. Large-skew curve for relaxed fit."},
-      {a:"Synthesis",t:"2.4s",act:"1,140 units. Supply commitment shares the Jan 20 linen deadline with the Wrap Dress. Combined linen commitment: 1,900 units across 2 styles. Confidence 89%.",conf:"89%"}
+      {a:"Demand Planner",t:"0.3s",act:"Pulled 2-season sell-through history. SS24: 600u allocated, 432u sold, 72% 6-wk ST, cleared in 15 weeks. SS25: 860u allocated, 757u sold, 88% 6-wk ST, cleared in 7 weeks. Trajectory: +16pts per season on sell-through. ROS at A+ stores: 2.6u/store/wk in SS25. Tracking close to the 90% target. Modest scale-up should close the gap. Prophet forecast for SS26: 1140u at 90% projected 6-wk ST based on trend extrapolation + seasonal adjustment."},
+      {a:"Color Analyst",t:"1.0s",act:"Queried color-level performance from SS25. White: 30% of allocation, top performer. Sky Blue: 25% of allocation. Sand: 23% of allocation. Olive: 23% of allocation, weakest. Color assortment is 4 deep; White leads at 30%. Cross-referencing site search data confirms white demand is 42% above category average. Applying LSK (large-skew) size curve for this silhouette."},
+      {a:"Allocation Engine",t:"1.6s",act:"Queried store-style affinity model. A+ avg affinity: 0.77. A avg: 0.59. B/C: 0.36, with 602 stores clearing 0.20 threshold. Unit derivation at 90% ST target: A+ = 12 stores x 19u = 228 (20%). A = 21 stores x 19.5u = 410 (36%). B/C = 502 (44%). Total = 1140u. OTB impact: Rs 8.6L against Tops category budget. Larger-than-usual scale-up justified by under-allocation signal from prior season stockouts."},
+      {a:"Synthesis",t:"2.6s",act:"1140 units (+33% vs SS25's 860u). High-confidence allocation on a proven performer. Approaching the 90% target; this scale-up should close the gap. Re-buy trigger set at 90% projected ST by Week 4.",conf:"89%"}
     ]),qs:["Should we lock the linen supplier now?","Is there cannibalization with the cotton shirt?"]},
 
   {id:"S26-JM-109",name:"V-Neck Jumpsuit",sub:"Jumpsuits",units:320,mrp:3990,cost:1716,margin:57,src:"new-design",conf:78,
     colors:[{n:"Navy",p:.35,c:STD},{n:"Olive",p:.35,c:STD},{n:"Rust",p:.30,c:STD}],ga:{"A+":.30,"A":.45,"B/C":.25},
     flag:{type:"opportunity",msg:"AW25 test of a similar jumpsuit (120 units) achieved 91% 6-wk ST with 60+ customers waitlisted. This is a new silhouette for SS26 but the demand signal from the test is strong. Scaling 2.7x to 320 units. Addresses the work-to-evening transition gap."},
     hist:{AW25:{u:120,st:91,m:57,w:5,n:"Test exceeded 90% target. 60+ waitlisted."}},
-    reason:"AW25 test dramatically exceeded the 90% 6-wk ST target (hit 91% in 5 weeks). New SS26 design but same V-neck jumpsuit format. Three colors for occasion versatility. B/C gets limited 25%; jumpsuit is still a developing category.",
+    reason:"V-Neck Jumpsuit: Carryover scaling 167% to 320u. AW25: 120u at 91% 6-wk ST (exceeded target). AW25 test of a similar jumpsuit (120 units) achieved 91% 6-wk ST with 60+ customers waitlisted.",
     trail:T([
-      {a:"Demand Planner",t:"0.4s",act:"AW25 test: 120 units at 91% 6-wk ST, exceeding the 90% target. 60+ customers joined waitlist after stockout. Rate of sale: 2.0u/A+ store/wk; higher than any other new format test in the last 4 seasons."},
-      {a:"Customer Intelligence",t:"1.2s",act:"Waitlisted customers: 78% are repeat buyers with high avg basket. Strong overlap with blazer and co-ord buyer segments. Work-to-evening transition is an underserved occasion in the current range."},
-      {a:"Allocation Engine",t:"2.0s",act:"Scale factor: AW25 was A+ only (12 stores × 10u = 120). For SS26: A+ = 12 stores × 8u = 96 (30%). A = 21 stores × 7u = 147 (45%). B/C = ~280 stores × 0.28u (top 77 stores × 1u) = 77 (25%). Total = 320. Conservative B/C allocation; jumpsuit is unproven outside metros."},
-      {a:"Synthesis",t:"2.7s",act:"320 units. The AW25 test provides strong validation. Three colors: Navy (work), Olive (casual), Rust (evening). Re-buy trigger at 80% 6-wk ST for another 160-unit follow-on. Confidence 78%.",conf:"78%"}
+      {a:"Demand Planner",t:"0.3s",act:"Pulled 1-season sell-through history. AW25: 120u allocated, 109u sold, 91% 6-wk ST, cleared in 5 weeks.  ROS at A+ stores: 0.5u/store/wk in AW25. Style was supply-constrained; sold through faster than planned. Stockout likely at A+ stores around Week 5. Imputed lost demand: ~54u. Prophet forecast for SS26: 320u at 89% projected 6-wk ST based on trend extrapolation + seasonal adjustment."},
+      {a:"Color Analyst",t:"1.0s",act:"Queried color-level performance from AW25. Navy: 35% of allocation, top performer. Olive: 35% of allocation. Rust: 30% of allocation, weakest. Color assortment is 3 deep; Navy leads at 35%. Cross-referencing site search data confirms navy demand is 80% above category average. Standard size curve applied."},
+      {a:"Allocation Engine",t:"2.0s",act:"Queried store-style affinity model. A+ avg affinity: 0.84. A avg: 0.68. B/C: 0.25, with 180 stores clearing 0.20 threshold. Unit derivation at 90% ST target: A+ = 12 stores x 8u = 96 (30%). A = 21 stores x 6.9u = 144 (45%). B/C = 80 (25%). Total = 320u. OTB impact: Rs 5.5L against Jumpsuits category budget. Larger-than-usual scale-up justified by under-allocation signal from prior season stockouts."},
+      {a:"Synthesis",t:"2.9s",act:"320 units (+167% vs AW25's 120u). High-confidence allocation on a proven performer. Prior season exceeded the 90% target; scale-up captures previously unmet demand. Re-buy trigger set at 93% projected ST by Week 4.",conf:"78%"}
     ]),qs:["Can we get 160-unit re-buy in 3 weeks?","Should B/C be excluded entirely?"]},
 
   {id:"S26-TP-110",name:"Knit Polo",sub:"Tops",units:360,mrp:2290,cost:961,margin:58,src:"new-design",conf:74,
     colors:[{n:"Forest Green",p:.35,c:STD},{n:"Cream",p:.30,c:STD},{n:"Wine",p:.35,c:STD}],ga:{"A+":.28,"A":.42,"B/C":.30},
     flag:{type:"opportunity",msg:"Knit polo tested in AW25: 120 units at 86% 6-wk ST. New sub-category. Polo buyers show 2.1x lifetime value vs basic tee buyers. Scaling to 360 units with three rich colors for the premium knit positioning."},
     hist:{AW25:{u:120,st:86,m:58,w:8,n:"Test outperformed. 2.1x LTV buyers."}},
-    reason:"New sub-category. AW25 test hit 86% 6-wk ST (just below the 90% target) and identified a high-LTV buyer segment. 360 units is a 3x scale from the 120-unit test. Three colors that signal premium knit, not casual.",
+    reason:"Knit Polo: Carryover scaling 200% to 360u. AW25: 120u at 86% 6-wk ST (approaching target). Knit polo tested in AW25: 120 units at 86% 6-wk ST.",
     trail:T([
-      {a:"Demand Planner",t:"0.3s",act:"AW25 test: 120u at 86% 6-wk ST. Below the 90% target by 4 points, but this was a first-time format with zero awareness. Adjusted target for new sub-categories: 80% 6-wk ST. At 86%, the test exceeded the adjusted threshold."},
-      {a:"Customer Intelligence",t:"1.1s",act:"Polo buyers: 2.1x LTV vs basic tee buyers. 67% are new-to-brand customers who entered through the polo; this is an acquisition vehicle, not just a product."},
-      {a:"Allocation Engine",t:"1.8s",act:"Unit derivation: A+ = 12 stores × 8u = 96 (28%). A = 21 stores × 7u = 147 (42%). B/C = ~280 stores × 0.4u (top 108 × 1u) = 108 (30%). B/C gets 30%; polo has workwear crossover appeal. Total = 360."},
-      {a:"Synthesis",t:"2.4s",act:"360 units. This is less about the product and more about the customer segment it attracts. If successful, knit polo becomes a permanent sub-category for AW26+. Confidence 74%.",conf:"74%"}
+      {a:"Demand Planner",t:"0.3s",act:"Pulled 1-season sell-through history. AW25: 120u allocated, 103u sold, 86% 6-wk ST, cleared in 8 weeks.  ROS at A+ stores: 0.3u/store/wk in AW25. Tracking close to the 90% target. Modest scale-up should close the gap. Prophet forecast for SS26: 360u at 92% projected 6-wk ST based on trend extrapolation + seasonal adjustment."},
+      {a:"Color Analyst",t:"1.0s",act:"Queried color-level performance from AW25. Forest Green: 35% of allocation, top performer. Cream: 30% of allocation. Wine: 35% of allocation, weakest. Color assortment is 3 deep; Forest Green leads at 35%. Cross-referencing site search data confirms forest green demand is 75% above category average. Standard size curve applied."},
+      {a:"Allocation Engine",t:"1.8s",act:"Queried store-style affinity model. A+ avg affinity: 0.78. A avg: 0.65. B/C: 0.30, with 208 stores clearing 0.20 threshold. Unit derivation at 90% ST target: A+ = 12 stores x 8.4u = 101 (28%). A = 21 stores x 7.2u = 151 (42%). B/C = 108 (30%). Total = 360u. OTB impact: Rs 3.5L against Tops category budget. Larger-than-usual scale-up justified by under-allocation signal from prior season stockouts."},
+      {a:"Synthesis",t:"2.8s",act:"360 units (+200% vs AW25's 120u). High-confidence allocation on a proven performer. Approaching the 90% target; this scale-up should close the gap. Re-buy trigger set at 93% projected ST by Week 4.",conf:"74%"}
     ]),qs:["Is there a lower-price knit option to test alongside?"]},
 
   {id:"S26-DR-111",name:"Floral Midi Dress",sub:"Dresses",units:440,mrp:3490,cost:1466,margin:58,src:"new-design",conf:70,
     colors:[{n:"Botanical Print",p:.50,c:STD},{n:"Ditsy Floral",p:.50,c:STD}],ga:{"A+":.25,"A":.40,"B/C":.35},
     flag:{type:"low-confidence",msg:"Printed dresses are a new direction; the brand has historically focused on solid/stripe. Floral midi dresses are the #1 searched dress type on the brand site (4,200 searches/month, +45% YoY). However, zero sell-through history with florals, making this a design-risk buy."},
     hist:{},
-    reason:"First floral print dress. Search data shows strong demand (#1 dress search term on site) but the brand has never executed florals. 440 units with two distinct print scales (Botanical for large/bold, Ditsy for subtle) to test which resonates.",
+    reason:"Floral Midi Dress: new entry with no direct sales history. Nearest carryover matches suggest 374-440u demand range. Distributed across all grades with Rs 6.5L exposure cap.",
     trail:T([
-      {a:"Trend Intelligence",t:"0.5s",act:"Brand site search data: 'floral dress' = 4,200 searches/month, +45% YoY. Currently 0% conversion because there are no floral dresses in range. This is the single largest unaddressed search term on the site."},
-      {a:"Demand Planner",t:"1.3s",act:"No direct history. Proxy: solid midi dresses average 88% 6-wk ST. Applied 20% discount for unproven print category: 70% target 6-wk ST. At 70% target, 440 units is the allocation. Two print options to learn which scale works: Botanical (large-scale, statement) vs Ditsy (subtle, safer)."},
-      {a:"Allocation Engine",t:"2.1s",act:"A+ = 12 stores × 9u = 108 (25%). A = 21 stores × 8u = 168 (40%). B/C = ~280 stores × 0.6u (top 164 × 1u) = 164 (35%). B/C gets 35%; floral dresses have broad appeal if they work. Total = 440."},
-      {a:"Synthesis",t:"2.8s",act:"440 units. This is the most important design experiment in SS26. Success opens an entirely new aesthetic direction. Failure is contained at max exposure. Confidence 70%; the demand signal is clear but execution of florals is untested.",conf:"70%"}
+      {a:"Demand Planner",t:"0.4s",act:"No sell-through history for Floral Midi Dress. Queried the similarity model for nearest carryover matches. Top 3: Stripe Midi Dress (similarity: 0.82), Linen Wrap Dress (0.78), Chambray Shirt Dress (0.74). Weighted avg demand from matches: 506u at 67% projected 6-wk ST. Applying 27% new-style discount for unproven demand. Dresses category is growing 18% YoY which provides upward pressure on the forecast."},
+      {a:"Allocation Engine",t:"1.2s",act:"All grades allocated. A+ = 12 stores x 9.2u = 110 (25%). A = 21 stores x 8.4u = 176 (40%). B/C = 154 (35%). B/C allocation is conservative; 0.6u per store on avg. Size curve: STD (standard); no silhouette-based size shift. OTB impact: Rs 6.5L against Dresses budget. Exposure cap applied: max Rs 8L downside if style achieves 0% ST."},
+      {a:"Synthesis",t:"1.8s",act:"440 units. New entry with no history; allocation is conservative and test-oriented. B/C gets 35% but at low depth (0.6u/store) to limit downside. Flag: Printed dresses are a new direction; the brand has historically focused on solid/stripe. Re-buy trigger: if Week 4 projected ST exceeds 69% at A+, expand to increase B/C depth. This is a signal-gathering buy, not a volume play.",conf:"70%"}
     ]),qs:["Should we test at one print scale only?","What are competitor floral price points?"]},
 
   {id:"S26-SK-112",name:"Pleated Midi Skirt",sub:"Skirts",units:620,mrp:2290,cost:916,margin:60,src:"carryover",conf:91,
     colors:[{n:"Black",p:.35,c:STD},{n:"Navy",p:.25,c:STD},{n:"Beige",p:.20,c:STD},{n:"Dusty Rose",p:.20,c:STD}],ga:{"A+":.20,"A":.34,"B/C":.46},
     flag:{type:"deeper-buy",msg:"SS25 hit 85% 6-wk ST at 520 units. The best-performing skirt and the only skirt that consistently approaches the 90% target. System recommends 620u (+19%) to push closer to the 90% target."},
     hist:{SS24:{u:440,st:75,m:59,w:15,n:"Steady performer across all grades."},SS25:{u:520,st:85,m:60,w:8,n:"Best skirt. 5 points below 90% target."}},
-    reason:"Top skirt. SS25 was 5 points below the 90% 6-wk ST target. The 19% increase closes that gap. Four-color assortment well-balanced across all store tiers. Dusty Rose added to capture the non-neutral growth trend (replacing Sage which hit only 68% ST).",
+    reason:"Pleated Midi Skirt: 2-season carryover scaling 19% to 620u. SS25: 520u at 85% 6-wk ST (approaching target). SS25 hit 85% 6-wk ST at 520 units.",
     trail:T([
-      {a:"Demand Planner",t:"0.3s",act:"SS25: 520u at 85% 6-wk ST. Gap to 90% target = 5 points. At current ROS (0.9u/A+ store/wk), adding 100 units should yield 89-91% 6-wk ST. Pleated midi is the only skirt consistently above 80%."},
-      {a:"Color Analyst",t:"1.0s",act:"SS25 color data: Black 88%, Navy 84%, Beige 82%, Sage 68%. Replacing Sage with Dusty Rose (Dusty Rose tested at 78% ST in AW25 blazers). Split reflects ST performance ranking."},
-      {a:"Allocation Engine",t:"1.7s",act:"A+ = 12 stores × 10u = 120 (20%). A = 21 stores × 10u = 210 (34%). B/C = ~280 stores × 1u (top 290) = 290 (46%). Total = 620."},
-      {a:"Synthesis",t:"2.2s",act:"620 units. Straightforward scale-up of a proven performer. Low risk, high confidence. Confidence 91%.",conf:"91%"}
+      {a:"Demand Planner",t:"0.3s",act:"Pulled 2-season sell-through history. SS24: 440u allocated, 330u sold, 75% 6-wk ST, cleared in 15 weeks. SS25: 520u allocated, 442u sold, 85% 6-wk ST, cleared in 8 weeks. Trajectory: +10pts per season on sell-through. ROS at A+ stores: 1.4u/store/wk in SS25. Tracking close to the 90% target. Modest scale-up should close the gap. Prophet forecast for SS26: 620u at 85% projected 6-wk ST based on trend extrapolation + seasonal adjustment."},
+      {a:"Color Analyst",t:"1.0s",act:"Queried color-level performance from SS25. Black: 35% of allocation, top performer. Navy: 25% of allocation. Beige: 20% of allocation. Dusty Rose: 20% of allocation, weakest. Color assortment is 4 deep; Black leads at 35%. Cross-referencing site search data confirms black demand is 39% above category average. Standard size curve applied."},
+      {a:"Allocation Engine",t:"1.6s",act:"Queried store-style affinity model. A+ avg affinity: 0.88. A avg: 0.59. B/C: 0.38, with 385 stores clearing 0.20 threshold. Unit derivation at 90% ST target: A+ = 12 stores x 10.3u = 124 (20%). A = 21 stores x 10u = 211 (34%). B/C = 285 (46%). Total = 620u. OTB impact: Rs 5.7L against Skirts category budget. Scale reflects organic demand growth within existing store footprint."},
+      {a:"Synthesis",t:"2.1s",act:"620 units (+19% vs SS25's 520u). High-confidence allocation on a proven performer. Approaching the 90% target; this scale-up should close the gap. Re-buy trigger set at 92% projected ST by Week 4.",conf:"91%"}
     ]),qs:["Can Sage be kept as a 5th color?"]},
 
   {id:"S26-DR-113",name:"Bodycon Midi Dress",sub:"Dresses",units:160,mrp:2990,cost:1256,margin:58,src:"carryover",conf:72,
     colors:[{n:"Black",p:.60,c:SSK},{n:"Forest Green",p:.40,c:SSK}],ga:{"A+":.50,"A":.50},
     flag:{type:"risk",msg:"Three consecutive seasons of declining 6-wk ST: 61% (SS24), 52% (AW25), 44% (SS25). All below the 90% target and trending down. System has reduced the buy by 60% (from 400 to 160 units) and pulled out of B/C. Forest Green tests whether a color refresh can arrest the decline."},
     hist:{SS24:{u:500,st:61,m:52,w:20,n:"Significant markdown. Below target."},AW25:{u:400,st:52,m:50,w:18,n:"Reduced but still slow."},SS25:{u:400,st:44,m:48,w:20,n:"Worst dress. -8 pts vs prior season."}},
-    reason:"Declining style: 6-wk ST fell from 61% to 52% to 44% across three seasons, consistently below the 90% target. Reduced 60% from SS25. A+/A only. Forest Green is a diagnostic test; if 6-wk ST stays below 55%, recommend discontinuation for AW26.",
+    reason:"Bodycon Midi Dress: three consecutive seasons of decline (61% → 52% → 44% 6-wk ST), all well below 90% target. Slim-fit buyer base shrinking 18% YoY. This is a last-chance diagnostic buy at 160u with Forest Green as a test variable.",
     trail:T([
-      {a:"Demand Planner",t:"0.4s",act:"6-wk ST trajectory: SS24 61%, AW25 52%, SS25 44%. Each season declining by ~8 points. At this rate, AW26 would be ~36%; deep markdown territory."},
-      {a:"Customer Intelligence",t:"1.2s",act:"Customer preference shifting toward relaxed fits. Bodycon buyers shrinking 18% YoY. However, remaining buyers have high basket value. This is a small but valuable niche; worth one more test."},
-      {a:"Allocation Engine",t:"2.0s",act:"Reduced allocation: A+ = 12 stores × 7u = 84 (50%). A = 21 stores × 4u = 76 (50%). B/C excluded. Total = 160. Small-skew curve (SSK); bodycon buyers index smaller."},
-      {a:"Synthesis",t:"2.6s",act:"160 units. Last chance buy. If Forest Green lifts 6-wk ST above 55%, the silhouette survives in a reduced role. If not, discontinue for AW26. Confidence 72%.",conf:"72%"}
+      {a:"Demand Planner",t:"0.4s",act:"Pulled 3-season history. SS24: 500u allocated, 305u sold, 61% 6-wk ST, final clearance required 35% markdown. AW25: reduced to 400u, 208u sold, 52% ST, -9pts. SS25: held at 400u, 176u sold, 44% ST, -8pts again. The trajectory is consistent: ~8pt decline per season. ROS at A+ dropped from 0.6u/wk (SS24) to 0.3u/wk (SS25). At B/C stores, ROS is essentially zero (0.04u/wk). 224 of 400 SS25 units went to markdown at 40% off; that cost us Rs 3.6L in margin erosion. If I project forward at the same rate, AW26 would be ~36% 6-wk ST, which means over half the buy gets marked down."},
+      {a:"Customer Intelligence",t:"1.2s",act:"Queried customer segment data. Bodycon buyers: 842 unique customers in SS25 (down from 1,028 in SS24, -18% YoY). However, these remaining buyers have avg basket value of Rs 6,240 (vs category avg Rs 3,800) and 1.6x LTV. They're buying bodycon along with fitted blazers, heels, and evening accessories. This is an occasion-wear buyer, not a casual buyer. The segment is shrinking but it's valuable. Worth understanding if the silhouette is the problem or if the colorway has gone stale; Black has been the only strong performer for 3 seasons."},
+      {a:"Color Analyst",t:"1.8s",act:"SS25 color data: Black 132 of 200u sold (66% ST), Navy 44 of 200u sold (22% ST). Navy was the problem; it cannibalized Black without bringing new buyers. For SS26, replacing Navy with Forest Green. Rationale: forest green is indexing +140% in evening/occasion search, and the bodycon's high-value buyer segment over-indexes on non-neutral evening colors. If Forest Green ST exceeds Black, it confirms the color was stale, not the silhouette. This is a diagnostic test."},
+      {a:"Allocation Engine",t:"2.0s",act:"Cut allocation 60% from 400u to 160u. Pulled entirely out of B/C where ROS was 0.04u/wk (effectively zero sales). A+ = 12 stores x 7u = 84 (52.5%). A = 21 stores x 3.6u = 76 (47.5%). Using SSK (small-skew) size curve; bodycon buyers index XS-S at 62% vs 27% in standard dresses. OTB impact: Rs 2.0L, minor. This is the smallest dress allocation in the plan, which is appropriate for a declining style."},
+      {a:"Synthesis",t:"2.6s",act:"160 units. This is explicitly a last-chance buy, not a growth bet. Two outcomes are acceptable: (1) Forest Green lifts 6-wk ST above 55%, confirming the color was the issue and justifying a 200u AW26 buy with fresh colors. (2) 6-wk ST stays below 50% even with Forest Green, confirming the bodycon silhouette is in structural decline with this customer, and we discontinue for AW26. Either outcome gives us a clear signal. The one unacceptable outcome is not testing at all and losing the 842 high-LTV buyers without understanding why.",conf:"72%"}
     ]),qs:["Should we drop this entirely?","What if we repositioned as evening-only?"]},
 
   /* ──── REMAINING STYLES (all with full reasoning, no "core" designation) ──── */
   {id:"S26-TP-114",name:"Oversized Cotton Shirt",sub:"Tops",units:1200,mrp:1690,cost:676,margin:60,src:"carryover",conf:92,
     colors:[{n:"White",p:.30,c:LSK},{n:"Blue Stripe",p:.25,c:LSK},{n:"Pink",p:.20,c:STD},{n:"Sage",p:.25,c:STD}],ga:{"A+":.18,"A":.34,"B/C":.48},
     flag:null,hist:{SS24:{u:800,st:76,m:59,w:14},SS25:{u:1080,st:84,m:60,w:9}},
-    reason:"SS25 hit 84% 6-wk ST at 1,080 units. 6 points below the 90% target. Scaling 11% to 1,200u to close the gap. Relaxed fit now 62% of tops sales. White/Blue Stripe use large-skew curve for oversized silhouette. A+ = 12×18u, A = 21×19u, B/C = ~280×2u (top stores).",
-    trail:T([{a:"Demand Planner",t:"0.2s",act:"SS25: 1,080u at 84% 6-wk ST. Gap to 90% = 6pts. At ROS 1.1u/A+ store/wk, 1,200u yields ~89% 6-wk ST."},{a:"Allocation Engine",t:"0.8s",act:"A+=216(18%), A=399(34%), B/C=576(48%). 4 colors, mixed LSK/STD curves."},{a:"Synthesis",t:"1.2s",act:"1,200 units. Conservative scale-up of a proven performer.",conf:"92%"}]),qs:[]},
+    reason:"Oversized Cotton Shirt: 2-season carryover scaling 11% to 1200u. SS25: 1080u at 84% 6-wk ST (approaching target). ",
+    trail:T([
+      {a:"Demand Planner",t:"0.3s",act:"Pulled 2-season sell-through history. SS24: 800u allocated, 608u sold, 76% 6-wk ST, cleared in 14 weeks. SS25: 1080u allocated, 907u sold, 84% 6-wk ST, cleared in 9 weeks. Trajectory: +8pts per season on sell-through. ROS at A+ stores: 2.5u/store/wk in SS25. Tracking close to the 90% target. Modest scale-up should close the gap. Prophet forecast for SS26: 1200u at 87% projected 6-wk ST based on trend extrapolation + seasonal adjustment."},
+      {a:"Color Analyst",t:"1.0s",act:"Queried color-level performance from SS25. White: 30% of allocation, top performer. Blue Stripe: 25% of allocation. Pink: 20% of allocation. Sage: 25% of allocation, weakest. Color assortment is 4 deep; White leads at 30%. Cross-referencing site search data confirms white demand is 54% above category average. Applying LSK (large-skew) size curve for this silhouette."},
+      {a:"Allocation Engine",t:"2.0s",act:"Queried store-style affinity model. A+ avg affinity: 0.87. A avg: 0.69. B/C: 0.37, with 676 stores clearing 0.20 threshold. Unit derivation at 90% ST target: A+ = 12 stores x 18u = 216 (18%). A = 21 stores x 19.4u = 408 (34%). B/C = 576 (48%). Total = 1200u. OTB impact: Rs 8.1L against Tops category budget. Scale reflects organic demand growth within existing store footprint."},
+      {a:"Synthesis",t:"2.9s",act:"1200 units (+11% vs SS25's 1080u). Moderate-confidence allocation. 84% ST in SS25 leaves 6pts gap to target. Scale-up is incremental, not aggressive. Key variable: demand trajectory confirmation in first 4 weeks.",conf:"92%"}
+    ]),qs:[]},
 
   {id:"S26-CD-115",name:"Cotton Solid Co-ord",sub:"Co-ords",units:380,mrp:2990,cost:1256,margin:58,src:"carryover",conf:88,
     colors:[{n:"Beige",p:.35,c:STD},{n:"Black",p:.35,c:STD},{n:"Olive",p:.30,c:STD}],ga:{"A+":.22,"A":.38,"B/C":.40},
     flag:null,hist:{SS25:{u:320,st:78,m:57,w:10}},
-    reason:"Entry-price co-ord. SS25 hit 78% 6-wk ST at 320 units. 12 points below 90% target. However, co-ords are a growing category (+34% YoY). Scaling 19% to 380u. A+ = 12×7u, A = 21×7u, B/C = ~280×0.5u.",
-    trail:T([{a:"Demand Planner",t:"0.2s",act:"SS25: 320u at 78% 6-wk ST. Co-ord category growing 34% YoY."},{a:"Allocation Engine",t:"0.7s",act:"A+=84(22%), A=144(38%), B/C=152(40%). Total 380."},{a:"Synthesis",t:"1.0s",act:"380 units. Moderate scale-up for growing category.",conf:"88%"}]),qs:[]},
+    reason:"Cotton Solid Co-ord: Carryover scaling 19% to 380u. SS25: 320u at 78% 6-wk ST (below target). ",
+    trail:T([
+      {a:"Demand Planner",t:"0.3s",act:"Pulled 1-season sell-through history. SS25: 320u allocated, 250u sold, 78% 6-wk ST, cleared in 10 weeks.  ROS at A+ stores: 0.7u/store/wk in SS25. Below the 90% target by 12pts. May be addressable with color/size correction. Prophet forecast for SS26: 380u at 88% projected 6-wk ST based on trend extrapolation + seasonal adjustment."},
+      {a:"Color Analyst",t:"1.0s",act:"Queried color-level performance from SS25. Beige: 35% of allocation, top performer. Black: 35% of allocation. Olive: 30% of allocation, weakest. Color assortment is 3 deep; Beige leads at 35%. Cross-referencing site search data confirms beige demand is 57% above category average. Standard size curve applied."},
+      {a:"Allocation Engine",t:"1.6s",act:"Queried store-style affinity model. A+ avg affinity: 0.76. A avg: 0.68. B/C: 0.31, with 252 stores clearing 0.20 threshold. Unit derivation at 90% ST target: A+ = 12 stores x 7u = 84 (22%). A = 21 stores x 6.9u = 144 (38%). B/C = 152 (40%). Total = 380u. OTB impact: Rs 4.8L against Co-ords category budget. Scale reflects organic demand growth within existing store footprint."},
+      {a:"Synthesis",t:"3.0s",act:"380 units (+19% vs SS25's 320u). Moderate-confidence allocation. 78% ST in SS25 leaves 12pts gap to target. Scale-up is incremental, not aggressive. Key variable: demand trajectory confirmation in first 4 weeks.",conf:"88%"}
+    ]),qs:[]},
 
   {id:"S26-JM-116",name:"Sleeveless Cotton Jumpsuit",sub:"Jumpsuits",units:480,mrp:3490,cost:1466,margin:58,src:"carryover",conf:86,
     colors:[{n:"Black",p:.35,c:STD},{n:"Navy",p:.30,c:STD},{n:"Olive",p:.35,c:STD}],ga:{"A+":.22,"A":.38,"B/C":.40},
     flag:null,hist:{SS24:{u:380,st:71,m:57,w:15},SS25:{u:430,st:80,m:58,w:9}},
-    reason:"Cotton jumpsuit with steady growth. SS25 hit 80% 6-wk ST. 10 points below target. Lower return rate (18%) vs linen jumpsuits (28%). Scaling 12% to 480u.",
-    trail:T([{a:"Demand Planner",t:"0.2s",act:"SS25: 430u at 80% 6-wk ST. Cotton jumpsuits: 18% return rate vs 28% for linen."},{a:"Allocation Engine",t:"0.7s",act:"A+=108(22%), A=180(38%), B/C=192(40%). Total 480."},{a:"Synthesis",t:"1.0s",act:"480 units. Steady performer with room to grow toward 90% target.",conf:"86%"}]),qs:[]},
+    reason:"Sleeveless Cotton Jumpsuit: 2-season carryover scaling 12% to 480u. SS25: 430u at 80% 6-wk ST (approaching target). ",
+    trail:T([
+      {a:"Demand Planner",t:"0.3s",act:"Pulled 2-season sell-through history. SS24: 380u allocated, 270u sold, 71% 6-wk ST, cleared in 15 weeks. SS25: 430u allocated, 344u sold, 80% 6-wk ST, cleared in 9 weeks. Trajectory: +9pts per season on sell-through. ROS at A+ stores: 1u/store/wk in SS25. Tracking close to the 90% target. Modest scale-up should close the gap. Prophet forecast for SS26: 480u at 87% projected 6-wk ST based on trend extrapolation + seasonal adjustment."},
+      {a:"Color Analyst",t:"1.0s",act:"Queried color-level performance from SS25. Black: 35% of allocation, top performer. Navy: 30% of allocation. Olive: 35% of allocation, weakest. Color assortment is 3 deep; Black leads at 35%. Cross-referencing site search data confirms black demand is 33% above category average. Standard size curve applied."},
+      {a:"Allocation Engine",t:"2.2s",act:"Queried store-style affinity model. A+ avg affinity: 0.94. A avg: 0.57. B/C: 0.35, with 292 stores clearing 0.20 threshold. Unit derivation at 90% ST target: A+ = 12 stores x 8.8u = 106 (22%). A = 21 stores x 8.7u = 182 (38%). B/C = 192 (40%). Total = 480u. OTB impact: Rs 7L against Jumpsuits category budget. Scale reflects organic demand growth within existing store footprint."},
+      {a:"Synthesis",t:"2.2s",act:"480 units (+12% vs SS25's 430u). Moderate-confidence allocation. 80% ST in SS25 leaves 10pts gap to target. Scale-up is incremental, not aggressive. Key variable: demand trajectory confirmation in first 4 weeks.",conf:"86%"}
+    ]),qs:[]},
 
   {id:"S26-DR-117",name:"Button-Down Shirt Dress",sub:"Dresses",units:720,mrp:2690,cost:1103,margin:59,src:"carryover",conf:90,
     colors:[{n:"Chambray",p:.35,c:STD},{n:"White",p:.30,c:STD},{n:"Olive",p:.35,c:STD}],ga:{"A+":.20,"A":.36,"B/C":.44},
     flag:null,hist:{SS24:{u:520,st:74,m:58,w:14},SS25:{u:660,st:84,m:59,w:8}},
-    reason:"SS25 hit 84% 6-wk ST. Chambray was the standout color (89% ST vs 81% avg). Scaling 9% to 720u. Chambray at 35% lead; justified by its outperformance.",
-    trail:T([{a:"Demand Planner",t:"0.2s",act:"SS25: 660u at 84% 6-wk ST. Chambray: 89% vs White 81%. Gap to 90% = 6pts."},{a:"Allocation Engine",t:"0.8s",act:"A+=144(20%), A=252(36%), B/C=316(44%). Total 720."},{a:"Synthesis",t:"1.1s",act:"720 units. Chambray-led. Approaching 90% target trajectory.",conf:"90%"}]),qs:[]},
+    reason:"Button-Down Shirt Dress: 2-season carryover scaling 9% to 720u. SS25: 660u at 84% 6-wk ST (approaching target). ",
+    trail:T([
+      {a:"Demand Planner",t:"0.3s",act:"Pulled 2-season sell-through history. SS24: 520u allocated, 385u sold, 74% 6-wk ST, cleared in 14 weeks. SS25: 660u allocated, 554u sold, 84% 6-wk ST, cleared in 8 weeks. Trajectory: +10pts per season on sell-through. ROS at A+ stores: 1.7u/store/wk in SS25. Tracking close to the 90% target. Modest scale-up should close the gap. Prophet forecast for SS26: 720u at 86% projected 6-wk ST based on trend extrapolation + seasonal adjustment."},
+      {a:"Color Analyst",t:"1.0s",act:"Queried color-level performance from SS25. Chambray: 35% of allocation, top performer. White: 30% of allocation. Olive: 35% of allocation, weakest. Color assortment is 3 deep; Chambray leads at 35%. Cross-referencing site search data confirms chambray demand is 62% above category average. Standard size curve applied."},
+      {a:"Allocation Engine",t:"1.8s",act:"Queried store-style affinity model. A+ avg affinity: 0.90. A avg: 0.75. B/C: 0.30, with 417 stores clearing 0.20 threshold. Unit derivation at 90% ST target: A+ = 12 stores x 12u = 144 (20%). A = 21 stores x 12.3u = 259 (36%). B/C = 317 (44%). Total = 720u. OTB impact: Rs 7.9L against Dresses category budget. Scale reflects organic demand growth within existing store footprint."},
+      {a:"Synthesis",t:"2.6s",act:"720 units (+9% vs SS25's 660u). Moderate-confidence allocation. 84% ST in SS25 leaves 6pts gap to target. Scale-up is incremental, not aggressive. Key variable: demand trajectory confirmation in first 4 weeks.",conf:"90%"}
+    ]),qs:[]},
 
   {id:"S26-SK-118",name:"Floral Wrap Skirt",sub:"Skirts",units:340,mrp:2290,cost:938,margin:59,src:"new-design",conf:76,
     colors:[{n:"Botanical",p:.50,c:STD},{n:"Vintage Floral",p:.50,c:STD}],ga:{"A+":.25,"A":.40,"B/C":.35},
     flag:null,hist:{},
-    reason:"New print skirt to complement the Pleated Midi (solid). No direct history but wrap skirts averaged 73% 6-wk ST. With print trend (+45% search), targeting 75% 6-wk ST. Two prints to test: Botanical (bold) vs Vintage (subtle).",
-    trail:T([{a:"Demand Planner",t:"0.3s",act:"No history. Proxy: solid wrap skirts avg 73% 6-wk ST. Print adds novelty risk. Target: 75%."},{a:"Allocation Engine",t:"0.9s",act:"A+=84(25%), A=136(40%), B/C=119(35%). Total 340."},{a:"Synthesis",t:"1.3s",act:"340 units. New print + new wrap format. Two variables = lower confidence.",conf:"76%"}]),qs:[]},
+    reason:"Floral Wrap Skirt: new entry with no direct sales history. Nearest carryover matches suggest 289-340u demand range. Distributed across all grades with Rs 3.2L exposure cap.",
+    trail:T([
+      {a:"Demand Planner",t:"0.4s",act:"No sell-through history for Floral Wrap Skirt. Queried the similarity model for nearest carryover matches. Top 3: Cotton Jumpsuit (similarity: 0.80), V-Neck Jumpsuit (0.74). Weighted avg demand from matches: 391u at 69% projected 6-wk ST. Applying 18% new-style discount for unproven demand. Skirts category is growing 31% YoY which provides upward pressure on the forecast."},
+      {a:"Allocation Engine",t:"1.2s",act:"All grades allocated. A+ = 12 stores x 7.1u = 85 (25%). A = 21 stores x 6.5u = 136 (40%). B/C = 119 (35%). B/C allocation is conservative; 0.4u per store on avg. Size curve: STD (standard); no silhouette-based size shift. OTB impact: Rs 3.2L against Skirts budget. Exposure cap applied: max Rs 4L downside if style achieves 0% ST."},
+      {a:"Synthesis",t:"1.8s",act:"340 units. New entry with no history; allocation is conservative and test-oriented. B/C gets 35% but at low depth (0.4u/store) to limit downside.  Re-buy trigger: if Week 4 projected ST exceeds 58% at A+, expand to increase B/C depth. This is a signal-gathering buy, not a volume play.",conf:"76%"}
+    ]),qs:[]},
 
   {id:"S26-TP-119",name:"Rib Tank Top",sub:"Tops",units:1400,mrp:990,cost:396,margin:60,src:"carryover",conf:94,
     colors:[{n:"Black",p:.30,c:SSK},{n:"White",p:.30,c:SSK},{n:"Nude",p:.20,c:SSK},{n:"Grey",p:.20,c:SSK}],ga:{"A+":.14,"A":.30,"B/C":.56},
     flag:null,hist:{SS24:{u:1080,st:84,m:60,w:8},SS25:{u:1300,st:90,m:60,w:6}},
-    reason:"SS25 hit exactly the 90% 6-wk ST target at 1,300 units; the plan was perfectly calibrated. Scaling 8% to 1,400u to account for organic store growth. Lowest price point. Heavy B/C allocation (56%). Small-skew size curve.",
-    trail:T([{a:"Demand Planner",t:"0.2s",act:"SS25: 1,300u at 90% 6-wk ST. Perfect allocation. Scale 8% for organic growth."},{a:"Allocation Engine",t:"0.6s",act:"A+=196(14%), A=420(30%), B/C=784(56%). SSK curve. Total 1,400."},{a:"Synthesis",t:"0.9s",act:"1,400 units. Perfectly calibrated. Lowest risk in the plan.",conf:"94%"}]),qs:[]},
+    reason:"Rib Tank Top: 2-season carryover scaling 8% to 1400u. SS25: 1300u at 90% 6-wk ST (exceeded target). ",
+    trail:T([
+      {a:"Demand Planner",t:"0.3s",act:"Pulled 2-season sell-through history. SS24: 1080u allocated, 907u sold, 84% 6-wk ST, cleared in 8 weeks. SS25: 1300u allocated, 1170u sold, 90% 6-wk ST, cleared in 6 weeks. Trajectory: +6pts per season on sell-through. ROS at A+ stores: 4.5u/store/wk in SS25. Style was supply-constrained; sold through faster than planned. Stockout likely at A+ stores around Week 6. Imputed lost demand: ~432u. Prophet forecast for SS26: 1400u at 88% projected 6-wk ST based on trend extrapolation + seasonal adjustment."},
+      {a:"Color Analyst",t:"1.0s",act:"Queried color-level performance from SS25. Black: 30% of allocation, top performer. White: 30% of allocation. Nude: 20% of allocation. Grey: 20% of allocation, weakest. Color assortment is 4 deep; Black leads at 30%. Cross-referencing site search data confirms black demand is 61% above category average. Applying SSK (small-skew) size curve."},
+      {a:"Allocation Engine",t:"1.6s",act:"Queried store-style affinity model. A+ avg affinity: 0.76. A avg: 0.74. B/C: 0.29, with 884 stores clearing 0.20 threshold. Unit derivation at 90% ST target: A+ = 12 stores x 16.3u = 196 (14%). A = 21 stores x 20u = 420 (30%). B/C = 784 (56%). Total = 1400u. OTB impact: Rs 5.5L against Tops category budget. Scale reflects organic demand growth within existing store footprint."},
+      {a:"Synthesis",t:"2.7s",act:"1400 units (+8% vs SS25's 1300u). High-confidence allocation on a proven performer. Prior season exceeded the 90% target; scale-up captures previously unmet demand. Re-buy trigger set at 94% projected ST by Week 4.",conf:"94%"}
+    ]),qs:[]},
 
   {id:"S26-TR-120",name:"High-Waist Palazzo",sub:"Trousers",units:680,mrp:2290,cost:916,margin:60,src:"carryover",conf:89,
     colors:[{n:"Black",p:.35,c:LSK},{n:"Navy",p:.25,c:LSK},{n:"Olive",p:.20,c:LSK},{n:"Cream",p:.20,c:LSK}],ga:{"A+":.20,"A":.36,"B/C":.44},
     flag:null,hist:{SS24:{u:480,st:74,m:58,w:14},SS25:{u:620,st:83,m:59,w:9}},
-    reason:"Palazzo complements the Wide-Leg Trouser; different occasion profile (casual vs workwear). SS25 hit 83% 6-wk ST, 7 points below target. Scaling 10% to 680u. Large-skew curve for relaxed silhouette.",
-    trail:T([{a:"Demand Planner",t:"0.2s",act:"SS25: 620u at 83% 6-wk ST. No cannibalisation with Wide-Leg; palazzo is casual, wide-leg is workwear."},{a:"Allocation Engine",t:"0.7s",act:"A+=132(20%), A=252(36%), B/C=300(44%). LSK curve. Total 680."},{a:"Synthesis",t:"1.0s",act:"680 units. Steady growth. LSK curve.",conf:"89%"}]),qs:[]},
+    reason:"High-Waist Palazzo: 2-season carryover scaling 10% to 680u. SS25: 620u at 83% 6-wk ST (approaching target). ",
+    trail:T([
+      {a:"Demand Planner",t:"0.3s",act:"Pulled 2-season sell-through history. SS24: 480u allocated, 355u sold, 74% 6-wk ST, cleared in 14 weeks. SS25: 620u allocated, 515u sold, 83% 6-wk ST, cleared in 9 weeks. Trajectory: +9pts per season on sell-through. ROS at A+ stores: 1.4u/store/wk in SS25. Tracking close to the 90% target. Modest scale-up should close the gap. Prophet forecast for SS26: 680u at 89% projected 6-wk ST based on trend extrapolation + seasonal adjustment."},
+      {a:"Color Analyst",t:"1.0s",act:"Queried color-level performance from SS25. Black: 35% of allocation, top performer. Navy: 25% of allocation. Olive: 20% of allocation. Cream: 20% of allocation, weakest. Color assortment is 4 deep; Black leads at 35%. Cross-referencing site search data confirms black demand is 33% above category average. Applying LSK (large-skew) size curve for this silhouette."},
+      {a:"Allocation Engine",t:"1.8s",act:"Queried store-style affinity model. A+ avg affinity: 0.89. A avg: 0.66. B/C: 0.32, with 399 stores clearing 0.20 threshold. Unit derivation at 90% ST target: A+ = 12 stores x 11.3u = 136 (20%). A = 21 stores x 11.7u = 245 (36%). B/C = 299 (44%). Total = 680u. OTB impact: Rs 6.2L against Trousers category budget. Scale reflects organic demand growth within existing store footprint."},
+      {a:"Synthesis",t:"2.6s",act:"680 units (+10% vs SS25's 620u). Moderate-confidence allocation. 83% ST in SS25 leaves 7pts gap to target. Scale-up is incremental, not aggressive. Key variable: demand trajectory confirmation in first 4 weeks.",conf:"89%"}
+    ]),qs:[]},
 
   {id:"S26-TR-121",name:"Linen Shorts",sub:"Trousers",units:580,mrp:1890,cost:756,margin:60,src:"new-design",conf:82,
     colors:[{n:"White",p:.30,c:SSK},{n:"Beige",p:.30,c:SSK},{n:"Olive",p:.20,c:SSK},{n:"Black",p:.20,c:SSK}],ga:{"A+":.22,"A":.38,"B/C":.40},
     flag:null,hist:{SS25:{u:480,st:78,m:59,w:10}},
-    reason:"New design (updated cut from SS25). SS25 shorts hit 78% 6-wk ST. 12 points below target. Growing steadily as customers accept shorts in premium. Small-skew curve for fitted cut. Scaling 21% to 580u.",
-    trail:T([{a:"Demand Planner",t:"0.2s",act:"SS25: 480u at 78% 6-wk ST. Shorts gaining acceptance in premium segment."},{a:"Allocation Engine",t:"0.7s",act:"A+=132(22%), A=210(38%), B/C=232(40%). SSK curve. Total 580."},{a:"Synthesis",t:"1.0s",act:"580 units. New cut, growing category.",conf:"82%"}]),qs:[]},
+    reason:"Linen Shorts: Carryover scaling 21% to 580u. SS25: 480u at 78% 6-wk ST (below target). ",
+    trail:T([
+      {a:"Demand Planner",t:"0.3s",act:"Pulled 1-season sell-through history. SS25: 480u allocated, 374u sold, 78% 6-wk ST, cleared in 10 weeks.  ROS at A+ stores: 1u/store/wk in SS25. Below the 90% target by 12pts. May be addressable with color/size correction. Prophet forecast for SS26: 580u at 85% projected 6-wk ST based on trend extrapolation + seasonal adjustment."},
+      {a:"Color Analyst",t:"1.0s",act:"Queried color-level performance from SS25. White: 30% of allocation, top performer. Beige: 30% of allocation. Olive: 20% of allocation. Black: 20% of allocation, weakest. Color assortment is 4 deep; White leads at 30%. Cross-referencing site search data confirms white demand is 79% above category average. Applying SSK (small-skew) size curve."},
+      {a:"Allocation Engine",t:"2.0s",act:"Queried store-style affinity model. A+ avg affinity: 0.89. A avg: 0.70. B/C: 0.39, with 332 stores clearing 0.20 threshold. Unit derivation at 90% ST target: A+ = 12 stores x 10.7u = 128 (22%). A = 21 stores x 10.5u = 220 (38%). B/C = 232 (40%). Total = 580u. OTB impact: Rs 4.4L against Trousers category budget. Larger-than-usual scale-up justified by under-allocation signal from prior season stockouts."},
+      {a:"Synthesis",t:"2.8s",act:"580 units (+21% vs SS25's 480u). Moderate-confidence allocation. 78% ST in SS25 leaves 12pts gap to target. Scale-up is incremental, not aggressive. Key variable: demand trajectory confirmation in first 4 weeks.",conf:"82%"}
+    ]),qs:[]},
 
   {id:"S26-TP-122",name:"Utility Jacket",sub:"Tops",units:260,mrp:3990,cost:1676,margin:58,src:"new-design",conf:80,
     colors:[{n:"Olive",p:.40,c:STD},{n:"Sand",p:.35,c:STD},{n:"Black",p:.25,c:STD}],ga:{"A+":.28,"A":.42,"B/C":.30},
     flag:null,hist:{AW25:{u:220,st:76,m:57,w:12}},
-    reason:"New SS26 design based on AW25 utility jacket (76% 6-wk ST at 220u). Transitional layer for early/late summer weeks. Scaling 18% to 260u.",
-    trail:T([{a:"Demand Planner",t:"0.2s",act:"AW25: 220u at 76% 6-wk ST. Utility jackets sell in transitional Wk1-4 and Wk16-20."},{a:"Allocation Engine",t:"0.7s",act:"A+=72(28%), A=105(42%), B/C=78(30%). Total 260."},{a:"Synthesis",t:"1.0s",act:"260 units. Seasonal layer piece.",conf:"80%"}]),qs:[]},
+    reason:"Utility Jacket: Carryover scaling 18% to 260u. AW25: 220u at 76% 6-wk ST (below target). ",
+    trail:T([
+      {a:"Demand Planner",t:"0.3s",act:"Pulled 1-season sell-through history. AW25: 220u allocated, 167u sold, 76% 6-wk ST, cleared in 12 weeks.  ROS at A+ stores: 0.4u/store/wk in AW25. Below the 90% target by 14pts. May be addressable with color/size correction. Prophet forecast for SS26: 260u at 85% projected 6-wk ST based on trend extrapolation + seasonal adjustment."},
+      {a:"Color Analyst",t:"1.0s",act:"Queried color-level performance from AW25. Olive: 40% of allocation, top performer. Sand: 35% of allocation. Black: 25% of allocation, weakest. Color assortment is 3 deep; Olive leads at 40%. Cross-referencing site search data confirms olive demand is 71% above category average. Standard size curve applied."},
+      {a:"Allocation Engine",t:"2.0s",act:"Queried store-style affinity model. A+ avg affinity: 0.89. A avg: 0.61. B/C: 0.30, with 178 stores clearing 0.20 threshold. Unit derivation at 90% ST target: A+ = 12 stores x 6.1u = 73 (28%). A = 21 stores x 5.2u = 109 (42%). B/C = 78 (30%). Total = 260u. OTB impact: Rs 4.4L against Tops category budget. Scale reflects organic demand growth within existing store footprint."},
+      {a:"Synthesis",t:"2.3s",act:"260 units (+18% vs AW25's 220u). Moderate-confidence allocation. 76% ST in AW25 leaves 14pts gap to target. Scale-up is incremental, not aggressive. Key variable: demand trajectory confirmation in first 4 weeks.",conf:"80%"}
+    ]),qs:[]},
 
   {id:"S26-CD-123",name:"Printed Co-ord Set",sub:"Co-ords",units:280,mrp:3290,cost:1382,margin:58,src:"new-design",conf:73,
     colors:[{n:"Tropical",p:.50,c:STD},{n:"Geometric",p:.50,c:STD}],ga:{"A+":.28,"A":.42,"B/C":.30},
     flag:null,hist:{},
-    reason:"New printed co-ord. No history. Proxy: solid co-ords averaged 78% 6-wk ST, but print adds novelty risk. Target: 72% 6-wk ST. Two prints to test which resonates.",
-    trail:T([{a:"Demand Planner",t:"0.3s",act:"No history. Solid co-ords avg 78% 6-wk ST. Print discount: target 72%."},{a:"Allocation Engine",t:"0.8s",act:"A+=72(28%), A=126(42%), B/C=84(30%). Total 280."},{a:"Synthesis",t:"1.1s",act:"280 units. Print co-ord test.",conf:"73%"}]),qs:[]},
+    reason:"Printed Co-ord Set: new entry with no direct sales history. Nearest carryover matches suggest 238-280u demand range. Distributed across all grades with Rs 3.9L exposure cap.",
+    trail:T([
+      {a:"Demand Planner",t:"0.4s",act:"No sell-through history for Printed Co-ord Set. Queried the similarity model for nearest carryover matches. Top 3: Cotton Solid Co-ord (similarity: 0.84), Linen Co-ord Set (0.76). Weighted avg demand from matches: 322u at 70% projected 6-wk ST. Applying 27% new-style discount for unproven demand. Co-ords category is growing 28% YoY which provides upward pressure on the forecast."},
+      {a:"Allocation Engine",t:"1.2s",act:"All grades allocated. A+ = 12 stores x 6.5u = 78 (28%). A = 21 stores x 5.6u = 118 (42%). B/C = 84 (30%). B/C allocation is conservative; 0.3u per store on avg. Size curve: STD (standard); no silhouette-based size shift. OTB impact: Rs 3.9L against Co-ords budget. Exposure cap applied: max Rs 5L downside if style achieves 0% ST."},
+      {a:"Synthesis",t:"1.8s",act:"280 units. New entry with no history; allocation is conservative and test-oriented. B/C gets 30% but at low depth (0.3u/store) to limit downside.  Re-buy trigger: if Week 4 projected ST exceeds 59% at A+, expand to increase B/C depth. This is a signal-gathering buy, not a volume play.",conf:"73%"}
+    ]),qs:[]},
 
   {id:"S26-BZ-124",name:"Double-Breasted Blazer",sub:"Blazers",units:380,mrp:4490,cost:1886,margin:58,src:"carryover",conf:88,
     colors:[{n:"Black",p:.50,c:STD},{n:"Navy",p:.30,c:STD},{n:"Charcoal",p:.20,c:STD}],ga:{"A+":.24,"A":.38,"B/C":.38},
     flag:null,hist:{SS24:{u:420,st:76,m:58,w:14},SS25:{u:400,st:72,m:57,w:15}},
-    reason:"Foundation blazer losing share to single-button (outsold 3:1) but retaining loyal buyers. Reduced 5% from SS25 to 380u. Held rather than cut deeper; loyal DB buyers have 1.4x LTV.",
-    trail:T([{a:"Demand Planner",t:"0.2s",act:"SS25: 400u at 72% 6-wk ST. Declining share but distinct buyer segment. DB buyers: 1.4x LTV."},{a:"Allocation Engine",t:"0.7s",act:"A+=90(24%), A=144(38%), B/C=144(38%). Total 380."},{a:"Synthesis",t:"1.0s",act:"380 units. Maintain for loyal segment. Don't scale.",conf:"88%"}]),qs:[]},
+    reason:"Double-Breasted Blazer: 2-season carryover at 380u. SS25: 400u at 72% 6-wk ST (below target). ",
+    trail:T([
+      {a:"Demand Planner",t:"0.3s",act:"Pulled 2-season sell-through history. SS24: 420u allocated, 319u sold, 76% 6-wk ST, cleared in 14 weeks. SS25: 400u allocated, 288u sold, 72% 6-wk ST, cleared in 15 weeks. Trajectory: -4pts per season on sell-through. ROS at A+ stores: 0.6u/store/wk in SS25. Below the 90% target by 18pts. May be addressable with color/size correction. Prophet forecast for SS26: 380u at 89% projected 6-wk ST based on trend extrapolation + seasonal adjustment."},
+      {a:"Color Analyst",t:"1.0s",act:"Queried color-level performance from SS25. Black: 50% of allocation, top performer. Navy: 30% of allocation. Charcoal: 20% of allocation, weakest. Color assortment is 3 deep; Black leads at 50%. Cross-referencing site search data confirms black demand is 65% above category average. Standard size curve applied."},
+      {a:"Allocation Engine",t:"2.0s",act:"Queried store-style affinity model. A+ avg affinity: 0.77. A avg: 0.63. B/C: 0.30, with 245 stores clearing 0.20 threshold. Unit derivation at 90% ST target: A+ = 12 stores x 7.6u = 91 (24%). A = 21 stores x 6.9u = 144 (38%). B/C = 145 (38%). Total = 380u. OTB impact: Rs 7.2L against Blazers category budget. Scale reflects organic demand growth within existing store footprint."},
+      {a:"Synthesis",t:"2.5s",act:"380 units (-5% vs SS25's 400u). Moderate-confidence allocation. 72% ST in SS25 leaves 18pts gap to target. Holding volume steady until we see improvement. Key variable: demand trajectory confirmation in first 4 weeks.",conf:"88%"}
+    ]),qs:[]},
   {id:"S26-DR-125",name:"Shift Dress",sub:"Dresses",units:540,mrp:2490,cost:1021,margin:59,src:"carryover",conf:85,
     colors:[{n:"Black",p:.40,c:STD},{n:"Olive",p:.30,c:STD},{n:"Cream",p:.30,c:STD}],ga:{"A+":.22,"A":.36,"B/C":.42},
     flag:null,hist:{SS24:{u:380,st:71,m:57,w:16},SS25:{u:460,st:79,m:58,w:11}},
-    reason:"Workwear staple with steady growth. SS25 hit 79% 6-wk ST. Scaling 17% to close gap to 90% target.",
-    trail:T([{a:"Demand Planner",t:"0.2s",act:"SS25: 460u at 79% 6-wk ST. Gap to target = 11pts. Shift dress is workwear anchor; sells consistently across all grades."},{a:"Allocation Engine",t:"0.7s",act:"A+=119(22%), A=194(36%), B/C=227(42%). Total 540."},{a:"Synthesis",t:"1.0s",act:"540 units. Reliable mid-range performer.",conf:"85%"}]),qs:[]},
+    reason:"Shift Dress: 2-season carryover scaling 17% to 540u. SS25: 460u at 79% 6-wk ST (below target). ",
+    trail:T([
+      {a:"Demand Planner",t:"0.3s",act:"Pulled 2-season sell-through history. SS24: 380u allocated, 270u sold, 71% 6-wk ST, cleared in 16 weeks. SS25: 460u allocated, 363u sold, 79% 6-wk ST, cleared in 11 weeks. Trajectory: +8pts per season on sell-through. ROS at A+ stores: 0.9u/store/wk in SS25. Below the 90% target by 11pts. May be addressable with color/size correction. Prophet forecast for SS26: 540u at 91% projected 6-wk ST based on trend extrapolation + seasonal adjustment."},
+      {a:"Color Analyst",t:"1.0s",act:"Queried color-level performance from SS25. Black: 40% of allocation, top performer. Olive: 30% of allocation. Cream: 30% of allocation, weakest. Color assortment is 3 deep; Black leads at 40%. Cross-referencing site search data confirms black demand is 67% above category average. Standard size curve applied."},
+      {a:"Allocation Engine",t:"2.0s",act:"Queried store-style affinity model. A+ avg affinity: 0.81. A avg: 0.68. B/C: 0.37, with 327 stores clearing 0.20 threshold. Unit derivation at 90% ST target: A+ = 12 stores x 9.9u = 119 (22%). A = 21 stores x 9.2u = 194 (36%). B/C = 227 (42%). Total = 540u. OTB impact: Rs 5.5L against Dresses category budget. Scale reflects organic demand growth within existing store footprint."},
+      {a:"Synthesis",t:"2.2s",act:"540 units (+17% vs SS25's 460u). Moderate-confidence allocation. 79% ST in SS25 leaves 11pts gap to target. Scale-up is incremental, not aggressive. Key variable: demand trajectory confirmation in first 4 weeks.",conf:"85%"}
+    ]),qs:[]},
   {id:"S26-DR-126",name:"Wrap Maxi Dress",sub:"Dresses",units:220,mrp:4990,cost:2096,margin:58,src:"new-design",conf:64,
     colors:[{n:"Terracotta",p:.55,c:LSK},{n:"Sage",p:.45,c:LSK}],ga:{"A+":.40,"A":.60},
     flag:{type:"low-confidence",msg:"New maxi silhouette at a premium price point. Wrap midi sold well but maxi length is untested. A+/A only distribution to contain risk."},
     hist:{},
-    reason:"New maxi length extension of the successful wrap format. No direct history but wrap midi averaged 91% ST. Applied 30% discount for untested length. 220 units, A+/A only.",
-    trail:T([{a:"Demand Planner",t:"0.3s",act:"No history. Proxy: wrap midi averaged 91% 6-wk ST. Maxi length adds uncertainty; applied 30% discount. Target 64% 6-wk ST."},{a:"Allocation Engine",t:"0.8s",act:"A+=88(40%), A=132(60%). B/C excluded. Total 220."},{a:"Synthesis",t:"1.2s",act:"220 units. Conservative test of maxi length.",conf:"64%"}]),qs:[]},
+    reason:"Wrap Maxi Dress: new entry with no direct sales history. Nearest carryover matches suggest 187-220u demand range. Restricted to A+/A only with Rs 4.6L exposure cap.",
+    trail:T([
+      {a:"Demand Planner",t:"0.4s",act:"No sell-through history for Wrap Maxi Dress. Queried the similarity model for nearest carryover matches. Top 3: Stripe Midi Dress (similarity: 0.82), Linen Wrap Dress (0.78), Chambray Shirt Dress (0.74). Weighted avg demand from matches: 253u at 76% projected 6-wk ST. Applying 29% new-style discount for unproven demand. Dresses category is growing 18% YoY which provides upward pressure on the forecast."},
+      {a:"Allocation Engine",t:"1.2s",act:"Restricted to A+/A only (no B/C history for this style type at this price point). A+ = 12 stores x 7.3u = 88 (40%). A = 21 stores x 6.3u = 132 (60%). Total = 220. Size curve: LSK (large-skew); this silhouette sizes up, L/XL at 48% vs 39% standard. OTB impact: Rs 4.6L against Dresses budget. Exposure cap applied: max Rs 6L downside if style achieves 0% ST."},
+      {a:"Synthesis",t:"1.8s",act:"220 units. New entry with no history; allocation is conservative and test-oriented. B/C excluded entirely; prove demand at A+/A before widening distribution. Flag: New maxi silhouette at a premium price point. Re-buy trigger: if Week 4 projected ST exceeds 66% at A+, expand to release to B/C stores. This is a signal-gathering buy, not a volume play.",conf:"64%"}
+    ]),qs:[]},
   {id:"S26-TP-127",name:"Cropped Boxy Tee",sub:"Tops",units:1600,mrp:890,cost:356,margin:60,src:"carryover",conf:93,
     colors:[{n:"White",p:.25,c:SSK},{n:"Black",p:.25,c:SSK},{n:"Sage",p:.20,c:SSK},{n:"Blush",p:.15,c:SSK},{n:"Grey",p:.15,c:SSK}],ga:{"A+":.12,"A":.28,"B/C":.60},
     flag:null,hist:{SS24:{u:1200,st:82,m:60,w:10},SS25:{u:1450,st:88,m:60,w:7}},
-    reason:"Highest-volume basic. SS25 hit 88% 6-wk ST at 1,450u. 10% scale for organic growth. Heavy B/C weighting (60%). Lowest price point after Rib Tank.",
-    trail:T([{a:"Demand Planner",t:"0.1s",act:"SS25: 1,450u at 88% 6-wk ST. 2pts below target. Scale 10% to 1,600u."},{a:"Allocation Engine",t:"0.5s",act:"A+=192(12%), A=448(28%), B/C=960(60%). Total 1,600."},{a:"Synthesis",t:"0.7s",act:"1,600 units. Volume basic. Near-perfect calibration.",conf:"93%"}]),qs:[]},
+    reason:"Cropped Boxy Tee: 2-season carryover scaling 10% to 1600u. SS25: 1450u at 88% 6-wk ST (approaching target). ",
+    trail:T([
+      {a:"Demand Planner",t:"0.3s",act:"Pulled 2-season sell-through history. SS24: 1200u allocated, 984u sold, 82% 6-wk ST, cleared in 10 weeks. SS25: 1450u allocated, 1276u sold, 88% 6-wk ST, cleared in 7 weeks. Trajectory: +6pts per season on sell-through. ROS at A+ stores: 4.3u/store/wk in SS25. Tracking close to the 90% target. Modest scale-up should close the gap. Prophet forecast for SS26: 1600u at 93% projected 6-wk ST based on trend extrapolation + seasonal adjustment."},
+      {a:"Color Analyst",t:"1.0s",act:"Queried color-level performance from SS25. White: 25% of allocation, top performer. Black: 25% of allocation. Sage: 20% of allocation. Blush: 15% of allocation. Grey: 15% of allocation, weakest. Color assortment is 5 deep; White leads at 25%. Cross-referencing site search data confirms white demand is 37% above category average. Applying SSK (small-skew) size curve."},
+      {a:"Allocation Engine",t:"2.2s",act:"Queried store-style affinity model. A+ avg affinity: 0.83. A avg: 0.69. B/C: 0.27, with 1060 stores clearing 0.20 threshold. Unit derivation at 90% ST target: A+ = 12 stores x 16u = 192 (12%). A = 21 stores x 21.3u = 448 (28%). B/C = 960 (60%). Total = 1600u. OTB impact: Rs 5.7L against Tops category budget. Scale reflects organic demand growth within existing store footprint."},
+      {a:"Synthesis",t:"2.4s",act:"1600 units (+10% vs SS25's 1450u). High-confidence allocation on a proven performer. Approaching the 90% target; this scale-up should close the gap. Re-buy trigger set at 90% projected ST by Week 4.",conf:"93%"}
+    ]),qs:[]},
   {id:"S26-TP-128",name:"Crochet Knit Top",sub:"Tops",units:200,mrp:2490,cost:1046,margin:58,src:"new-design",conf:58,
     colors:[{n:"Cream",p:.55,c:SSK},{n:"Sand",p:.45,c:SSK}],ga:{"A+":.50,"A":.50},
     flag:{type:"low-confidence",msg:"Crochet is trending (+190% search YoY) but has never been in the brand range. 200-unit test buy. If 6-wk ST exceeds 55%, validates handcraft aesthetic for AW26."},
     hist:{},
-    reason:"Trend test: crochet/handcraft aesthetic. 200 units across A+/A. Success threshold: 55% 6-wk ST.",
-    trail:T([{a:"Trend Intelligence",t:"0.4s",act:"Crochet search volume up 190% YoY. 4 competitors launched crochet pieces in SS26. Trend is validated externally."},{a:"Demand Planner",t:"1.0s",act:"Test threshold: 200 units max. Target 55% 6-wk ST for trend validation."},{a:"Synthesis",t:"1.4s",act:"200 units. Design experiment. Low exposure, high signal value.",conf:"58%"}]),qs:[]},
+    reason:"Crochet Knit Top: new entry with no direct sales history. Nearest carryover matches suggest 170-200u demand range. Restricted to A+/A only with Rs 2.1L exposure cap.",
+    trail:T([
+      {a:"Demand Planner",t:"0.4s",act:"No sell-through history for Crochet Knit Top. Queried the similarity model for nearest carryover matches. Top 3: Rib Tank Top (similarity: 0.84), Oversized Cotton Shirt (0.79), Knit Polo (0.71). Weighted avg demand from matches: 230u at 75% projected 6-wk ST. Applying 22% new-style discount for unproven demand. Tops category is growing 19% YoY which provides upward pressure on the forecast."},
+      {a:"Allocation Engine",t:"1.2s",act:"Restricted to A+/A only (no B/C history for this style type at this price point). A+ = 12 stores x 8.3u = 100 (50%). A = 21 stores x 4.8u = 100 (50%). Total = 200. Size curve: SSK (small-skew); buyers index XS-S at 62% vs 25% standard. OTB impact: Rs 2.1L against Tops budget. Exposure cap applied: max Rs 3L downside if style achieves 0% ST."},
+      {a:"Synthesis",t:"1.8s",act:"200 units. New entry with no history; allocation is conservative and test-oriented. B/C excluded entirely; prove demand at A+/A before widening distribution. Flag: Crochet is trending (+190% search YoY) but has never been in the brand range. Re-buy trigger: if Week 4 projected ST exceeds 63% at A+, expand to release to B/C stores. This is a signal-gathering buy, not a volume play.",conf:"58%"}
+    ]),qs:[]},
   {id:"S26-TR-129",name:"Cigarette Trouser",sub:"Trousers",units:460,mrp:2290,cost:916,margin:60,src:"carryover",conf:83,
     colors:[{n:"Black",p:.40,c:STD},{n:"Navy",p:.30,c:STD},{n:"Charcoal",p:.30,c:STD}],ga:{"A+":.20,"A":.36,"B/C":.44},
     flag:{type:"risk",msg:"Slim-fit trouser silhouette losing share to wide-leg (down from 44% to 28% of trouser sales over 3 seasons). Holding at 460u rather than scaling but monitoring for further decline."},
     hist:{SS24:{u:520,st:74,m:58,w:14},SS25:{u:480,st:68,m:57,w:17}},
-    reason:"Declining silhouette but stable buyer segment. Reduced from 480 to 460. Slim-fit share: 44% (SS24) to 28% (SS25). Hold, don't scale.",
-    trail:T([{a:"Demand Planner",t:"0.2s",act:"SS25: 480u at 68% 6-wk ST. Slim-fit share declining 8pts/season. At this rate, AW26 would be 20% of trouser mix."},{a:"Customer Intelligence",t:"0.8s",act:"Slim-fit buyers: older demographic, higher AOV, 1.6x LTV. Small but loyal."},{a:"Synthesis",t:"1.1s",act:"460 units. Managed decline. Don't cut too deep; loyal segment.",conf:"83%"}]),qs:[]},
+    reason:"Cigarette Trouser: declining trajectory, SS25 at 68% 6-wk ST (-6pts vs prior). Reduced 4% to 460u. ",
+    trail:T([
+      {a:"Demand Planner",t:"0.3s",act:"Pulled 2-season sell-through history. SS24: 520u allocated, 385u sold, 74% 6-wk ST, cleared in 14 weeks. SS25: 480u allocated, 326u sold, 68% 6-wk ST, cleared in 17 weeks. Trajectory: -6pts per season on sell-through. ROS at A+ stores: 0.6u/store/wk in SS25. Below the 90% target by 22pts. Decline is consistent across seasons; not a single-season anomaly. Prophet model projects continued decline at current trajectory."},
+      {a:"Color Analyst",t:"1.0s",act:"Queried color-level performance from SS25. Black: 40% of allocation, top performer. Navy: 30% of allocation. Charcoal: 30% of allocation, weakest. Color assortment is 3 deep; Black leads at 40%. Cross-referencing site search data confirms black demand is 78% above category average. Standard size curve applied."},
+      {a:"Allocation Engine",t:"1.9s",act:"Queried store-style affinity model. A+ avg affinity: 0.80. A avg: 0.61. B/C: 0.36, with 302 stores clearing 0.20 threshold. Unit derivation at 90% ST target: A+ = 12 stores x 7.7u = 92 (20%). A = 21 stores x 7.9u = 166 (36%). B/C = 202 (44%). Total = 460u. OTB impact: Rs 4.2L against Trousers category budget. Reduced allocation reflects declining trajectory; not investing further until performance stabilizes."},
+      {a:"Synthesis",t:"2.6s",act:"460 units (-4% vs SS25's 480u). This is a managed decline, not an exit. Slim-fit trouser silhouette losing share to wide-leg (down from 44% to 28% of trouser sales over 3 seasons). Holding at 460u rather than scaling but monitoring for further decline. If SS26 6-wk ST drops below 58%, recommend discontinuation.",conf:"83%"}
+    ]),qs:[]},
   {id:"S26-TR-130",name:"Cargo Jogger",sub:"Trousers",units:320,mrp:2490,cost:1046,margin:58,src:"new-design",conf:72,
     colors:[{n:"Olive",p:.40,c:LSK},{n:"Black",p:.35,c:LSK},{n:"Sand",p:.25,c:LSK}],ga:{"A+":.28,"A":.42,"B/C":.30},
     flag:{type:"opportunity",msg:"Cargo/utility trouser trending +120% in search. AW25 utility jacket tested well (76% ST). This extends the utility aesthetic to bottoms. 320 units with relaxed fit (LSK curve)."},
     hist:{},
-    reason:"New sub-category. Extends the utility aesthetic from outerwear to bottoms. 320 units across all grades with conservative B/C (30%).",
-    trail:T([{a:"Trend Intelligence",t:"0.3s",act:"Cargo/utility trouser search volume up 120% YoY. AW25 utility jacket achieved 76% 6-wk ST, validating the aesthetic."},{a:"Allocation Engine",t:"0.8s",act:"A+=90(28%), A=134(42%), B/C=96(30%). Total 320. LSK curve for relaxed fit."},{a:"Synthesis",t:"1.1s",act:"320 units. Utility aesthetic extension. Moderate confidence.",conf:"72%"}]),qs:[]},
+    reason:"Cargo Jogger: new entry with no direct sales history. Nearest carryover matches suggest 272-320u demand range. Distributed across all grades with Rs 3.3L exposure cap.",
+    trail:T([
+      {a:"Demand Planner",t:"0.4s",act:"No sell-through history for Cargo Jogger. Queried the similarity model for nearest carryover matches. Top 3: Wide-Leg Pleated Trouser (similarity: 0.86), Linen Palazzo (0.78), Cotton Cargo Pant (0.72). Weighted avg demand from matches: 368u at 78% projected 6-wk ST. Applying 27% new-style discount for unproven demand. Trousers category is growing 29% YoY which provides upward pressure on the forecast."},
+      {a:"Allocation Engine",t:"1.2s",act:"All grades allocated. A+ = 12 stores x 7.5u = 90 (28%). A = 21 stores x 6.4u = 134 (42%). B/C = 96 (30%). B/C allocation is conservative; 0.3u per store on avg. Size curve: LSK (large-skew); this silhouette sizes up, L/XL at 48% vs 39% standard. OTB impact: Rs 3.3L against Trousers budget. Exposure cap applied: max Rs 4L downside if style achieves 0% ST."},
+      {a:"Synthesis",t:"1.8s",act:"320 units. New entry with no history; allocation is conservative and test-oriented. B/C gets 30% but at low depth (0.3u/store) to limit downside. Flag: Cargo/utility trouser trending +120% in search. Re-buy trigger: if Week 4 projected ST exceeds 58% at A+, expand to increase B/C depth. This is a signal-gathering buy, not a volume play.",conf:"72%"}
+    ]),qs:[]},
   {id:"S26-BZ-131",name:"Cropped Blazer",sub:"Blazers",units:280,mrp:4290,cost:1802,margin:58,src:"new-design",conf:70,
     colors:[{n:"Black",p:.50,c:SSK},{n:"Cream",p:.50,c:SSK}],ga:{"A+":.35,"A":.45,"B/C":.20},
     flag:null,hist:{},
-    reason:"New cropped silhouette. Positioned between single-button (workwear) and trend pieces. 280 units. Lighter B/C allocation (20%) since cropped blazers skew metro.",
-    trail:T([{a:"Demand Planner",t:"0.3s",act:"No history. Proxy: single-button blazer averaged 82% 6-wk ST. Cropped is more fashion-forward, applied 15% discount. Target 70%."},{a:"Allocation Engine",t:"0.8s",act:"A+=98(35%), A=126(45%), B/C=56(20%). Total 280."},{a:"Synthesis",t:"1.1s",act:"280 units. Fashion-forward silhouette test.",conf:"70%"}]),qs:[]},
+    reason:"Cropped Blazer: new entry with no direct sales history. Nearest carryover matches suggest 238-280u demand range. Distributed across all grades with Rs 5L exposure cap.",
+    trail:T([
+      {a:"Demand Planner",t:"0.4s",act:"No sell-through history for Cropped Blazer. Queried the similarity model for nearest carryover matches. Top 3: Single-Button Blazer (similarity: 0.88), Double-Breasted Blazer (0.72). Weighted avg demand from matches: 322u at 69% projected 6-wk ST. Applying 22% new-style discount for unproven demand. Blazers category is growing 24% YoY which provides upward pressure on the forecast."},
+      {a:"Allocation Engine",t:"1.2s",act:"All grades allocated. A+ = 12 stores x 8.2u = 98 (35%). A = 21 stores x 6u = 126 (45%). B/C = 56 (20%). B/C allocation is conservative; 0.2u per store on avg. Size curve: SSK (small-skew); buyers index XS-S at 62% vs 25% standard. OTB impact: Rs 5L against Blazers budget. Exposure cap applied: max Rs 6L downside if style achieves 0% ST."},
+      {a:"Synthesis",t:"1.8s",act:"280 units. New entry with no history; allocation is conservative and test-oriented. B/C gets 20% but at low depth (0.2u/store) to limit downside.  Re-buy trigger: if Week 4 projected ST exceeds 69% at A+, expand to increase B/C depth. This is a signal-gathering buy, not a volume play.",conf:"70%"}
+    ]),qs:[]},
   {id:"S26-SK-132",name:"A-Line Mini Skirt",sub:"Skirts",units:380,mrp:1690,cost:676,margin:60,src:"new-design",conf:77,
     colors:[{n:"Black",p:.35,c:SSK},{n:"Navy",p:.25,c:SSK},{n:"Olive",p:.20,c:SSK},{n:"Cream",p:.20,c:SSK}],ga:{"A+":.24,"A":.38,"B/C":.38},
     flag:null,hist:{AW25:{u:280,st:74,m:59,w:14}},
-    reason:"Shorter length option to complement the Pleated Midi. AW25 test hit 74% 6-wk ST. Scaling 36% for SS26 where mini skirts have seasonal advantage.",
-    trail:T([{a:"Demand Planner",t:"0.2s",act:"AW25: 280u at 74% 6-wk ST. Mini skirts are seasonal; SS should outperform AW by 8-12pts historically."},{a:"Allocation Engine",t:"0.7s",act:"A+=91(24%), A=144(38%), B/C=145(38%). Total 380."},{a:"Synthesis",t:"1.0s",act:"380 units. Seasonal upside on AW25 base.",conf:"77%"}]),qs:[]},
+    reason:"A-Line Mini Skirt: Carryover scaling 36% to 380u. AW25: 280u at 74% 6-wk ST (below target). ",
+    trail:T([
+      {a:"Demand Planner",t:"0.3s",act:"Pulled 1-season sell-through history. AW25: 280u allocated, 207u sold, 74% 6-wk ST, cleared in 14 weeks.  ROS at A+ stores: 0.4u/store/wk in AW25. Below the 90% target by 16pts. May be addressable with color/size correction. Prophet forecast for SS26: 380u at 88% projected 6-wk ST based on trend extrapolation + seasonal adjustment."},
+      {a:"Color Analyst",t:"1.0s",act:"Queried color-level performance from AW25. Black: 35% of allocation, top performer. Navy: 25% of allocation. Olive: 20% of allocation. Cream: 20% of allocation, weakest. Color assortment is 4 deep; Black leads at 35%. Cross-referencing site search data confirms black demand is 43% above category average. Applying SSK (small-skew) size curve."},
+      {a:"Allocation Engine",t:"2.1s",act:"Queried store-style affinity model. A+ avg affinity: 0.83. A avg: 0.71. B/C: 0.29, with 245 stores clearing 0.20 threshold. Unit derivation at 90% ST target: A+ = 12 stores x 7.6u = 91 (24%). A = 21 stores x 6.9u = 144 (38%). B/C = 145 (38%). Total = 380u. OTB impact: Rs 2.6L against Skirts category budget. Larger-than-usual scale-up justified by under-allocation signal from prior season stockouts."},
+      {a:"Synthesis",t:"2.8s",act:"380 units (+36% vs AW25's 280u). Moderate-confidence allocation. 74% ST in AW25 leaves 16pts gap to target. Scale-up is incremental, not aggressive. Key variable: demand trajectory confirmation in first 4 weeks.",conf:"77%"}
+    ]),qs:[]},
   {id:"S26-JM-133",name:"Wide-Leg Jumpsuit",sub:"Jumpsuits",units:260,mrp:3990,cost:1676,margin:58,src:"new-design",conf:69,
     colors:[{n:"Black",p:.50,c:LSK},{n:"Olive",p:.50,c:LSK}],ga:{"A+":.30,"A":.45,"B/C":.25},
     flag:null,hist:{},
-    reason:"New wide-leg silhouette. Extends the relaxed trouser trend into jumpsuits. 260 units with conservative B/C. Two core colors.",
-    trail:T([{a:"Demand Planner",t:"0.3s",act:"No history. Wide-leg trouser growing 8pts/season suggests relaxed jumpsuit should resonate. Proxy: cotton jumpsuit at 80% 6-wk ST, discounted 15% for new silhouette."},{a:"Allocation Engine",t:"0.8s",act:"A+=78(30%), A=117(45%), B/C=65(25%). Total 260."},{a:"Synthesis",t:"1.1s",act:"260 units. Relaxed jumpsuit test.",conf:"69%"}]),qs:[]},
+    reason:"Wide-Leg Jumpsuit: new entry with no direct sales history. Nearest carryover matches suggest 221-260u demand range. Distributed across all grades with Rs 4.4L exposure cap.",
+    trail:T([
+      {a:"Demand Planner",t:"0.4s",act:"No sell-through history for Wide-Leg Jumpsuit. Queried the similarity model for nearest carryover matches. Top 3: Cotton Jumpsuit (similarity: 0.80), V-Neck Jumpsuit (0.74). Weighted avg demand from matches: 299u at 77% projected 6-wk ST. Applying 27% new-style discount for unproven demand. Jumpsuits category is growing 16% YoY which provides upward pressure on the forecast."},
+      {a:"Allocation Engine",t:"1.2s",act:"All grades allocated. A+ = 12 stores x 6.5u = 78 (30%). A = 21 stores x 5.6u = 117 (45%). B/C = 65 (25%). B/C allocation is conservative; 0.2u per store on avg. Size curve: LSK (large-skew); this silhouette sizes up, L/XL at 48% vs 39% standard. OTB impact: Rs 4.4L against Jumpsuits budget. Exposure cap applied: max Rs 5L downside if style achieves 0% ST."},
+      {a:"Synthesis",t:"1.8s",act:"260 units. New entry with no history; allocation is conservative and test-oriented. B/C gets 25% but at low depth (0.2u/store) to limit downside.  Re-buy trigger: if Week 4 projected ST exceeds 59% at A+, expand to increase B/C depth. This is a signal-gathering buy, not a volume play.",conf:"69%"}
+    ]),qs:[]},
   {id:"S26-CD-134",name:"Knit Co-ord Set",sub:"Co-ords",units:240,mrp:3490,cost:1466,margin:58,src:"new-design",conf:66,
     colors:[{n:"Cream",p:.55,c:STD},{n:"Forest Green",p:.45,c:STD}],ga:{"A+":.35,"A":.45,"B/C":.20},
     flag:{type:"low-confidence",msg:"Knit fabric in co-ords is untested. Knit polo tested well (86% ST) but co-ord format adds complexity. 240 units, A+/A weighted."},
     hist:{},
-    reason:"Extends the knit aesthetic from polos to co-ords. 240 units with metro-heavy distribution. Success validates knit as a fabric platform.",
-    trail:T([{a:"Demand Planner",t:"0.3s",act:"No history. Knit polo hit 86% 6-wk ST. Co-ord format adds risk. Applied 20% discount. Target 68%."},{a:"Allocation Engine",t:"0.8s",act:"A+=84(35%), A=108(45%), B/C=48(20%). Total 240."},{a:"Synthesis",t:"1.1s",act:"240 units. Knit platform expansion.",conf:"66%"}]),qs:[]},
+    reason:"Knit Co-ord Set: new entry with no direct sales history. Nearest carryover matches suggest 204-240u demand range. Distributed across all grades with Rs 3.5L exposure cap.",
+    trail:T([
+      {a:"Demand Planner",t:"0.4s",act:"No sell-through history for Knit Co-ord Set. Queried the similarity model for nearest carryover matches. Top 3: Cotton Solid Co-ord (similarity: 0.84), Linen Co-ord Set (0.76). Weighted avg demand from matches: 276u at 76% projected 6-wk ST. Applying 27% new-style discount for unproven demand. Co-ords category is growing 34% YoY which provides upward pressure on the forecast."},
+      {a:"Allocation Engine",t:"1.2s",act:"All grades allocated. A+ = 12 stores x 7u = 84 (35%). A = 21 stores x 5.1u = 108 (45%). B/C = 48 (20%). B/C allocation is conservative; 0.2u per store on avg. Size curve: STD (standard); no silhouette-based size shift. OTB impact: Rs 3.5L against Co-ords budget. Exposure cap applied: max Rs 4L downside if style achieves 0% ST."},
+      {a:"Synthesis",t:"1.8s",act:"240 units. New entry with no history; allocation is conservative and test-oriented. B/C gets 20% but at low depth (0.2u/store) to limit downside. Flag: Knit fabric in co-ords is untested. Re-buy trigger: if Week 4 projected ST exceeds 67% at A+, expand to increase B/C depth. This is a signal-gathering buy, not a volume play.",conf:"66%"}
+    ]),qs:[]},
   {id:"S26-TP-135",name:"Linen Vest",sub:"Tops",units:180,mrp:2290,cost:961,margin:58,src:"new-design",conf:61,
     colors:[{n:"Sand",p:.50,c:STD},{n:"White",p:.50,c:STD}],ga:{"A+":.45,"A":.55},
     flag:{type:"low-confidence",msg:"Vest as a standalone piece (not layering) is untested in the brand. Linen fabric is proven but the silhouette is a category experiment. A+/A only."},
     hist:{},
-    reason:"Category experiment: standalone linen vest. 180 units, A+/A only. If 6-wk ST exceeds 50%, validates the vest silhouette for AW26 layering pieces.",
-    trail:T([{a:"Trend Intelligence",t:"0.4s",act:"Vest/waistcoat search volume up 85% YoY. Positioned as a layering-to-standalone transition piece."},{a:"Demand Planner",t:"1.0s",act:"Test threshold: 180 units. Target 50% 6-wk ST."},{a:"Synthesis",t:"1.4s",act:"180 units. Silhouette experiment.",conf:"61%"}]),qs:[]},
+    reason:"Linen Vest: new entry with no direct sales history. Nearest carryover matches suggest 153-180u demand range. Restricted to A+/A only with Rs 1.7L exposure cap.",
+    trail:T([
+      {a:"Demand Planner",t:"0.4s",act:"No sell-through history for Linen Vest. Queried the similarity model for nearest carryover matches. Top 3: Rib Tank Top (similarity: 0.84), Oversized Cotton Shirt (0.79), Knit Polo (0.71). Weighted avg demand from matches: 207u at 67% projected 6-wk ST. Applying 19% new-style discount for unproven demand. Tops category is growing 22% YoY which provides upward pressure on the forecast."},
+      {a:"Allocation Engine",t:"1.2s",act:"Restricted to A+/A only (no B/C history for this style type at this price point). A+ = 12 stores x 6.8u = 81 (45%). A = 21 stores x 4.7u = 99 (55%). Total = 180. Size curve: STD (standard); no silhouette-based size shift. OTB impact: Rs 1.7L against Tops budget. Exposure cap applied: max Rs 2L downside if style achieves 0% ST."},
+      {a:"Synthesis",t:"1.8s",act:"180 units. New entry with no history; allocation is conservative and test-oriented. B/C excluded entirely; prove demand at A+/A before widening distribution. Flag: Vest as a standalone piece (not layering) is untested in the brand. Re-buy trigger: if Week 4 projected ST exceeds 69% at A+, expand to release to B/C stores. This is a signal-gathering buy, not a volume play.",conf:"61%"}
+    ]),qs:[]},
+
+  /* ─── ADDITIONAL STYLES ─── */
+  {id:"S26-DR-136",name:"Smocked Midi Dress",sub:"Dresses",units:480,mrp:3990,cost:1676,margin:58,src:"new-design",conf:72,
+    colors:[{n:"White",p:.45,c:STD},{n:"Sage",p:.30,c:STD},{n:"Dusty Rose",p:.25,c:STD}],ga:{"A+":.28,"A":.44,"B/C":.28},
+    hist:{},reason:"Smocked Midi Dress: new entry. Smocking trending +94% in site search. 3-color launch.",qs:[]},
+  {id:"S26-DR-137",name:"Linen Shirt Dress",sub:"Dresses",units:560,mrp:4290,cost:1802,margin:58,src:"carryover",conf:83,
+    colors:[{n:"White",p:.50,c:STD},{n:"Blue Stripe",p:.30,c:STD},{n:"Khaki",p:.20,c:STD}],ga:{"A+":.24,"A":.42,"B/C":.34},
+    hist:{SS25:{u:440,st:86,m:57,w:8,n:"Strong performer. White dominant."}},reason:"Linen Shirt Dress: 2-season carryover scaling 27%.",qs:[]},
+  {id:"S26-DR-138",name:"Wrap Midi Dress",sub:"Dresses",units:500,mrp:3790,cost:1592,margin:58,src:"carryover",conf:80,
+    colors:[{n:"Floral Print",p:.45,c:STD},{n:"Black",p:.35,c:STD},{n:"Terracotta",p:.20,c:STD}],ga:{"A+":.26,"A":.42,"B/C":.32},
+    hist:{SS25:{u:400,st:82,m:58,w:9,n:"Solid performer. Print dominant."}},reason:"Wrap Midi Dress: carryover scaling 25%.",qs:[]},
+  {id:"S26-DR-139",name:"Broderie Maxi Dress",sub:"Dresses",units:200,mrp:5490,cost:2306,margin:58,src:"trend-test",conf:58,
+    colors:[{n:"White",p:.65,c:STD},{n:"Ecru",p:.35,c:STD}],ga:{"A+":.55,"A":.45},
+    flag:{type:"low-confidence",msg:"Broderie maxi at highest dress price point. Trend data +160% YoY but no in-brand history. Capped at A+/A, 200u max exposure."},
+    hist:{},reason:"Broderie Maxi Dress: high-ticket trend test. A+/A only.",qs:[]},
+  {id:"S26-DR-140",name:"Slip Midi Dress",sub:"Dresses",units:260,mrp:3290,cost:1382,margin:58,src:"new-design",conf:64,
+    colors:[{n:"Champagne",p:.50,c:STD},{n:"Black",p:.30,c:STD},{n:"Blush",p:.20,c:STD}],ga:{"A+":.45,"A":.55},
+    hist:{},reason:"Slip Midi Dress: occasion wear entry. Satin fabric validated in SS25.",qs:[]},
+  {id:"S26-TP-141",name:"Classic Linen Shirt",sub:"Tops",units:780,mrp:2990,cost:1256,margin:58,src:"carryover",conf:89,
+    colors:[{n:"White",p:.45,c:STD},{n:"Light Blue",p:.30,c:STD},{n:"Khaki",p:.15,c:STD},{n:"Black",p:.10,c:STD}],ga:{"A+":.22,"A":.40,"B/C":.38},
+    hist:{SS25:{u:620,st:88,m:58,w:7,n:"Core staple."},AW25:{u:580,st:85,m:57,w:8,n:"Consistent across seasons."}},reason:"Classic Linen Shirt: highest-confidence allocation. Top volume staple scaling 26%.",qs:[]},
+  {id:"S26-TP-142",name:"Smocked Crop Top",sub:"Tops",units:320,mrp:2290,cost:961,margin:58,src:"new-design",conf:68,
+    colors:[{n:"White",p:.40,c:SSK},{n:"Dusty Rose",p:.35,c:SSK},{n:"Sage",p:.25,c:SSK}],ga:{"A+":.35,"A":.45,"B/C":.20},
+    hist:{},reason:"Smocked Crop Top: new entry leveraging smocking trend. Pairs with wide-leg and skirt.",qs:[]},
+  {id:"S26-TP-143",name:"Square-Neck Bralette",sub:"Tops",units:160,mrp:1990,cost:836,margin:58,src:"trend-test",conf:54,
+    colors:[{n:"Black",p:.50,c:SSK},{n:"White",p:.30,c:SSK},{n:"Blush",p:.20,c:SSK}],ga:{"A+":.60,"A":.40},
+    flag:{type:"low-confidence",msg:"Bralette category new to brand. Editorial styling required for conversion. Capped at 160u, A+/A only."},
+    hist:{},reason:"Square-Neck Bralette: fashion-forward test. Category new to brand.",qs:[]},
+  {id:"S26-TP-144",name:"Peplum Blouse",sub:"Tops",units:280,mrp:2790,cost:1172,margin:58,src:"new-design",conf:66,
+    colors:[{n:"White",p:.45,c:STD},{n:"Blush",p:.35,c:STD},{n:"Black",p:.20,c:STD}],ga:{"A+":.38,"A":.45,"B/C":.17},
+    hist:{},reason:"Peplum Blouse: work-occasion crossover top. Silhouette returning.",qs:[]},
+  {id:"S26-TP-145",name:"Fine-Knit Cami",sub:"Tops",units:640,mrp:1990,cost:836,margin:58,src:"carryover",conf:86,
+    colors:[{n:"Black",p:.30,c:SSK},{n:"White",p:.25,c:SSK},{n:"Sage",p:.25,c:SSK},{n:"Camel",p:.20,c:SSK}],ga:{"A+":.22,"A":.40,"B/C":.38},
+    hist:{SS25:{u:520,st:87,m:58,w:7,n:"Core layering staple. High B/C velocity."}},reason:"Fine-Knit Cami: scaling 23%. 4-color range proven.",qs:[]},
+  {id:"S26-TR-146",name:"Linen Straight Trouser",sub:"Trousers",units:500,mrp:3490,cost:1466,margin:58,src:"carryover",conf:82,
+    colors:[{n:"Natural",p:.40,c:LSK},{n:"Black",p:.35,c:LSK},{n:"Sage",p:.25,c:LSK}],ga:{"A+":.26,"A":.42,"B/C":.32},
+    hist:{SS25:{u:400,st:84,m:57,w:8,n:"Steady across all grades."}},reason:"Linen Straight Trouser: carryover scaling 25%.",qs:[]},
+  {id:"S26-TR-147",name:"Barrel Leg Trouser",sub:"Trousers",units:220,mrp:3990,cost:1676,margin:58,src:"trend-test",conf:60,
+    colors:[{n:"Ecru",p:.50,c:LSK},{n:"Black",p:.50,c:LSK}],ga:{"A+":.55,"A":.45},
+    flag:{type:"low-confidence",msg:"Barrel leg emerging silhouette. Search +88% YoY but untested in brand. A+/A only, 220u max."},
+    hist:{},reason:"Barrel Leg Trouser: silhouette test ahead of mainstream adoption.",qs:[]},
+  {id:"S26-TR-148",name:"Crop Flare Trouser",sub:"Trousers",units:320,mrp:3290,cost:1382,margin:58,src:"new-design",conf:68,
+    colors:[{n:"Ecru",p:.45,c:LSK},{n:"Black",p:.35,c:LSK},{n:"Dusty Rose",p:.20,c:LSK}],ga:{"A+":.30,"A":.44,"B/C":.26},
+    hist:{},reason:"Crop Flare Trouser: bridges wide-leg trend with classic flare.",qs:[]},
+  {id:"S26-TR-149",name:"Cargo Short",sub:"Trousers",units:280,mrp:2790,cost:1172,margin:58,src:"new-design",conf:70,
+    colors:[{n:"Olive",p:.45,c:STD},{n:"Black",p:.35,c:STD},{n:"Khaki",p:.20,c:STD}],ga:{"A+":.28,"A":.42,"B/C":.30},
+    hist:{},reason:"Cargo Short: utility trend crossover. Premium shorts proven at 76% ST this season.",qs:[]},
+  {id:"S26-SK-150",name:"Tailored Mini Skirt",sub:"Skirts",units:200,mrp:2790,cost:1172,margin:58,src:"trend-test",conf:58,
+    colors:[{n:"Black",p:.50,c:SSK},{n:"Ivory",p:.30,c:SSK},{n:"Red",p:.20,c:SSK}],ga:{"A+":.60,"A":.40},
+    flag:{type:"low-confidence",msg:"Mini length polarising. Concentrated at A+/A for high foot traffic. 200u max."},
+    hist:{},reason:"Tailored Mini Skirt: bold fashion test.",qs:[]},
+  {id:"S26-SK-151",name:"Asymmetric Hem Skirt",sub:"Skirts",units:260,mrp:3290,cost:1382,margin:58,src:"new-design",conf:66,
+    colors:[{n:"Black",p:.45,c:STD},{n:"Ecru",p:.35,c:STD},{n:"Olive",p:.20,c:STD}],ga:{"A+":.35,"A":.45,"B/C":.20},
+    hist:{},reason:"Asymmetric Hem Skirt: editorial-led new entry.",qs:[]},
+  {id:"S26-SK-152",name:"Denim Midi Skirt",sub:"Skirts",units:420,mrp:3490,cost:1466,margin:58,src:"carryover",conf:81,
+    colors:[{n:"Indigo",p:.50,c:STD},{n:"Light Wash",p:.30,c:STD},{n:"Black",p:.20,c:STD}],ga:{"A+":.26,"A":.42,"B/C":.32},
+    hist:{AW25:{u:340,st:80,m:57,w:10,n:"Strong denim midi."}},reason:"Denim Midi Skirt: carryover scaling 24%.",qs:[]},
+  {id:"S26-SK-153",name:"Tiered Maxi Skirt",sub:"Skirts",units:300,mrp:3790,cost:1592,margin:58,src:"new-design",conf:67,
+    colors:[{n:"Floral",p:.45,c:STD},{n:"Sage",p:.35,c:STD},{n:"White",p:.20,c:STD}],ga:{"A+":.30,"A":.44,"B/C":.26},
+    hist:{},reason:"Tiered Maxi Skirt: new entry moving maxi dress buyer to separates.",qs:[]},
+  {id:"S26-CD-154",name:"Relaxed Cotton Co-ord",sub:"Co-ords",units:460,mrp:4490,cost:1887,margin:58,src:"carryover",conf:82,
+    colors:[{n:"White",p:.45,c:STD},{n:"Sage",p:.35,c:STD},{n:"Black",p:.20,c:STD}],ga:{"A+":.26,"A":.42,"B/C":.32},
+    hist:{SS25:{u:360,st:82,m:57,w:9,n:"Co-ord category growing strongly."}},reason:"Relaxed Cotton Co-ord: carryover scaling 28%.",qs:[]},
+  {id:"S26-CD-155",name:"Stripe Linen Co-ord",sub:"Co-ords",units:320,mrp:5290,cost:2222,margin:58,src:"new-design",conf:66,
+    colors:[{n:"Navy Stripe",p:.55,c:STD},{n:"Sage Stripe",p:.45,c:STD}],ga:{"A+":.38,"A":.48,"B/C":.14},
+    hist:{},reason:"Stripe Linen Co-ord: premium new entry. Stripe validated in dresses at 94% ST.",qs:[]},
+  {id:"S26-CD-156",name:"Abstract Print Co-ord",sub:"Co-ords",units:180,mrp:5490,cost:2306,margin:58,src:"trend-test",conf:56,
+    colors:[{n:"Geometric",p:.55,c:STD},{n:"Abstract",p:.45,c:STD}],ga:{"A+":.55,"A":.45},
+    flag:{type:"low-confidence",msg:"Print co-ord at highest co-ord price. Bold test capped at 180u, A+/A only."},
+    hist:{},reason:"Abstract Print Co-ord: trend test at premium price point.",qs:[]},
+  {id:"S26-BZ-157",name:"Oversized Blazer",sub:"Blazers",units:380,mrp:5490,cost:2416,margin:56,src:"new-design",conf:70,
+    colors:[{n:"Ecru",p:.50,c:STD},{n:"Black",p:.30,c:STD},{n:"Sage",p:.20,c:STD}],ga:{"A+":.30,"A":.42,"B/C":.28},
+    hist:{},reason:"Oversized Blazer: new silhouette. Oversized tailoring +78% search YoY.",qs:[]},
+  {id:"S26-BZ-158",name:"Linen Blazer",sub:"Blazers",units:320,mrp:4990,cost:2196,margin:56,src:"carryover",conf:79,
+    colors:[{n:"Natural",p:.55,c:STD},{n:"Navy",p:.45,c:STD}],ga:{"A+":.28,"A":.44,"B/C":.28},
+    hist:{SS25:{u:260,st:79,m:56,w:10,n:"Linen blazer performing steadily."}},reason:"Linen Blazer: carryover scaling 23%.",qs:[]},
+  {id:"S26-JM-159",name:"Halter Neck Jumpsuit",sub:"Jumpsuits",units:240,mrp:4490,cost:1887,margin:58,src:"new-design",conf:64,
+    colors:[{n:"Black",p:.50,c:STD},{n:"White",p:.30,c:STD},{n:"Terracotta",p:.20,c:STD}],ga:{"A+":.38,"A":.48,"B/C":.14},
+    hist:{},reason:"Halter Neck Jumpsuit: occasion-casual crossover. Halter neckline trending.",qs:[]},
+  {id:"S26-JM-160",name:"Wide-Leg Linen Jumpsuit",sub:"Jumpsuits",units:360,mrp:5290,cost:2222,margin:58,src:"carryover",conf:80,
+    colors:[{n:"White",p:.45,c:LSK},{n:"Sage",p:.35,c:LSK},{n:"Cream",p:.20,c:LSK}],ga:{"A+":.28,"A":.44,"B/C":.28},
+    hist:{SS25:{u:280,st:80,m:57,w:9,n:"Premium jumpsuit validated."}},reason:"Wide-Leg Linen Jumpsuit: carryover scaling 29%.",qs:[]},
+  {id:"S26-JK-161",name:"Classic Denim Jacket",sub:"Jackets",units:440,mrp:3990,cost:1676,margin:58,src:"carryover",conf:84,
+    colors:[{n:"Light Wash",p:.45,c:STD},{n:"Indigo",p:.35,c:STD},{n:"Black",p:.20,c:STD}],ga:{"A+":.24,"A":.42,"B/C":.34},
+    hist:{SS25:{u:360,st:83,m:57,w:8,n:"Denim jacket: consistent seasonal performer."}},reason:"Classic Denim Jacket: carryover scaling 22%. Broad grade appeal confirmed.",qs:[]},
+  {id:"S26-JK-162",name:"Summer Bomber Jacket",sub:"Jackets",units:260,mrp:4290,cost:1802,margin:58,src:"new-design",conf:67,
+    colors:[{n:"Olive",p:.45,c:STD},{n:"Ecru",p:.35,c:STD},{n:"Black",p:.20,c:STD}],ga:{"A+":.32,"A":.44,"B/C":.24},
+    hist:{},reason:"Summer Bomber Jacket: lightweight linen-cotton blend. Utility outerwear trend validates entry.",qs:[]},
+  {id:"S26-KN-163",name:"Longline Knit Cardigan",sub:"Knitwear",units:420,mrp:3490,cost:1466,margin:58,src:"carryover",conf:83,
+    colors:[{n:"Camel",p:.40,c:STD},{n:"Ecru",p:.30,c:STD},{n:"Black",p:.20,c:STD},{n:"Sage",p:.10,c:STD}],ga:{"A+":.24,"A":.42,"B/C":.34},
+    hist:{AW25:{u:340,st:82,m:57,w:9,n:"Strong in AW. Summer carry validated."}},reason:"Longline Knit Cardigan: carryover scaling 24%. Transitional layering proven.",qs:[]},
+  {id:"S26-KN-164",name:"Relaxed Knit Vest",sub:"Knitwear",units:180,mrp:2490,cost:1046,margin:58,src:"trend-test",conf:55,
+    colors:[{n:"Camel",p:.50,c:STD},{n:"Ecru",p:.30,c:STD},{n:"Black",p:.20,c:STD}],ga:{"A+":.55,"A":.45},
+    flag:{type:"low-confidence",msg:"Relaxed knit vest targets the wide-leg co-ord buyer. Layering trend growing. Restricted to A+/A."},
+    hist:{},reason:"Relaxed Knit Vest: layering trend test buy.",qs:[]},
+  {id:"S26-DR-165",name:"Midi Shirt Dress",sub:"Dresses",units:480,mrp:3790,cost:1592,margin:58,src:"carryover",conf:81,
+    colors:[{n:"Blue Stripe",p:.45,c:STD},{n:"White",p:.35,c:STD},{n:"Khaki",p:.20,c:STD}],ga:{"A+":.24,"A":.42,"B/C":.34},
+    hist:{SS25:{u:380,st:81,m:57,w:9,n:"Reliable carryover across grades."}},reason:"Midi Shirt Dress: carryover scaling 26%.",qs:[]},
+  {id:"S26-DR-166",name:"Ruched Occasion Dress",sub:"Dresses",units:180,mrp:5990,cost:2516,margin:58,src:"new-design",conf:60,
+    colors:[{n:"Champagne",p:.50,c:STD},{n:"Black",p:.30,c:STD},{n:"Red",p:.20,c:STD}],ga:{"A+":.55,"A":.45},
+    flag:{type:"low-confidence",msg:"Highest dress price point test. Occasion wear segment growing but considered purchase. A+/A only, 180u cap."},
+    hist:{},reason:"Ruched Occasion Dress: premium occasion test at highest dress price point.",qs:[]},
 ];
 
 /* ═══ FLAGS ═══ */
@@ -444,6 +643,57 @@ const LIVE={
   "S26-JM-133":{sold:86,bySz:{XS:6,S:18,M:30,L:22,XL:10},byGr:{"A+":28,"A":40,"B/C":18},ros:{"A+":0.5,"A":0.3,"B/C":0.1},proj6:68,status:"on-track",alerts:["Tracking just below 69% target for new silhouette"],actions:[]},
   "S26-CD-134":{sold:70,bySz:{XS:4,S:16,M:24,L:18,XL:8},byGr:{"A+":28,"A":32,"B/C":10},ros:{"A+":0.5,"A":0.2,"B/C":0.04},proj6:62,status:"watch",alerts:["Below 68% target; knit co-ord slower than expected","Forest Green underperforming Cream 38:62"],actions:[{type:"monitor",pri:"low",act:"Track through Week 6. Knit fabric has seasonal headwind in early summer. May accelerate in Wk 8-12 as evenings cool.",impact:"No action.",trail:"Demand Planner: Week 1-2 slow (24u), Week 3-4 accelerating (46u). Seasonal pattern consistent with knit polo AW25 which had 60% of sales in second half. Synthesis: Hold position."}]},
   "S26-TP-135":{sold:38,bySz:{XS:2,S:8,M:14,L:10,XL:4},byGr:{"A+":18,"A":20,"B/C":0},ros:{"A+":0.3,"A":0.1,"B/C":0},proj6:40,status:"watch",alerts:["Below 50% test threshold","Sand outselling White 68:32; earthy tones resonating"],actions:[{type:"monitor",pri:"low",act:"Hold. Vest silhouette has slow discovery curve. Social seeding planned for Week 5.",impact:"No action yet.",trail:"Trend Intelligence: Vest styling content planned for brand Instagram Wk5. Demand Planner: Current velocity low but returns are near-zero (3% vs category avg 18%). Synthesis: Low volume but high quality demand signal."}]},
+  "S26-DR-136":{sold:186,bySz:{XS:14,S:42,M:66,L:44,XL:20},byGr:{"A+":52,"A":86,"B/C":48},ros:{"A+":1.0,"A":0.5,"B/C":0.1},proj6:82,status:"on-track",alerts:["Smocking performing well; relaxed waist resonating in summer","B/C DoC dropping to 9 days; below 14-day target"],actions:[{type:"replenish",pri:"medium",act:"Replenish 80u to B/C stores. Warehouse has 120u reserve from safety stock.",impact:"Maintains B/C availability through Week 12. Prevents 1.4L lost sales.",trail:"Demand Planner: Smocked Midi ROS 0.1u/store/wk in B/C. DoC at 9 days vs 14-day target. 80 top B/C stores x 1u each. Synthesis: Standard replenishment."}]},
+  "S26-DR-137":{sold:224,bySz:{XS:16,S:48,M:80,L:54,XL:26},byGr:{"A+":60,"A":100,"B/C":64},ros:{"A+":1.1,"A":0.6,"B/C":0.2},proj6:85,status:"reorder",alerts:["White outselling Blue 58:42; lightweight linen driving reorders","A+ DoC at 8 days; re-buy trigger at 80% proj ST exceeded"],actions:[{type:"rebuy",pri:"high",act:"Place 180-unit follow-on order. White 100u, Blue Stripe 80u. Lead time 4 weeks, arrives Week 8.",impact:"Captures 7.7L incremental revenue at full price.",trail:"Demand Planner: 3-wk ROS 1.1u/A+ store/wk vs 0.8u plan; 38% above forecast. At current velocity, A+ depletes by Week 6.2. Allocation Engine: 180u - A+ 80u, A 100u. Synthesis: Place order by EOD Friday."}]},
+  "S26-DR-138":{sold:198,bySz:{XS:14,S:44,M:70,L:48,XL:22},byGr:{"A+":54,"A":90,"B/C":54},ros:{"A+":0.9,"A":0.5,"B/C":0.1},proj6:80,status:"on-track",alerts:["Wrap silhouette steady; Terracotta added as 3rd color performing at 78% ST","Terracotta DoC at A+: 6 days; consolidation recommended"],actions:[{type:"transfer",pri:"medium",act:"Transfer 18u Terracotta from bottom 18 A stores to 6 A+ stores (3u each).",impact:"Restores Terracotta DoC to 12 days at A+. Protects 1.1L at-risk revenue.",trail:"Color Analyst: Terracotta DoC at A+: 6 days. 18 A stores carry 1u Terracotta each with DoC 32+ days. Consolidation concentrates velocity where Terracotta is converting fastest. Synthesis: Transfer prevents Terracotta stockout at flagships."}]},
+  "S26-DR-139":{sold:54,bySz:{XS:4,S:12,M:20,L:12,XL:6},byGr:{"A+":32,"A":22,"B/C":0},ros:{"A+":0.6,"A":0.2,"B/C":0},proj6:58,status:"watch",alerts:["Broderie maxi below 65% test threshold; longer consideration cycle expected"],actions:[{type:"monitor",pri:"low",act:"Hold through Week 6. Maxi dresses have extended discovery. Reassess.",impact:"No action cost.",trail:"Demand Planner: Week 3-4 acceleration +28% WoW. Synthesis: Patience warranted."}]},
+  "S26-DR-140":{sold:72,bySz:{XS:8,S:18,M:26,L:14,XL:6},byGr:{"A+":40,"A":32,"B/C":0},ros:{"A+":0.7,"A":0.3,"B/C":0},proj6:64,status:"watch",alerts:["Satin slip tracking below 70% target; occasion wear curve expected","Champagne 72% ST vs Black 58%; colour preference clear"],actions:[{type:"transfer",pri:"low",act:"Consolidate 10u Black from 5 lowest-velocity A stores to 3 A+ stores.",impact:"Focuses Black units where occasion wear converts. Reduces A store markdown risk by 0.6L.",trail:"Customer Intelligence: Slip dress buyers browsing 4.1x before purchase. Champagne converting at higher rate. Black concentrated in stores with weaker occasion wear demographics. Synthesis: Selective consolidation; hold Champagne allocation unchanged."}]},
+  "S26-TP-141":{sold:342,bySz:{XS:42,S:92,M:116,L:62,XL:30},byGr:{"A+":74,"A":134,"B/C":134},ros:{"A+":1.4,"A":0.7,"B/C":0.4},proj6:88,status:"reorder",
+    alerts:["B/C DoC 8 days on White and Black - below 14-day threshold","White 91% ST; highest-velocity top in plan"],
+    actions:[{type:"replenish",pri:"high",act:"Replenish 200u to B/C: 120u White + 80u Black from warehouse reserve.",impact:"Restores 14-day DoC buffer. Protects Rs 2.1L B/C revenue.",trail:"Demand Planner: B/C ROS 0.4u/store/wk; White DoC 8 days. Warehouse confirmed 310u available. 200u to top 200 B/C stores x 1u. Standard carryover management - exactly how this should work."}]},
+  "S26-TP-142":{sold:128,bySz:{XS:14,S:30,M:46,L:28,XL:10},byGr:{"A+":36,"A":58,"B/C":34},ros:{"A+":0.7,"A":0.4,"B/C":0.1},proj6:76,status:"on-track",alerts:["Smocked top tracking to plan; Dusty Rose leading all colors","B/C velocity 0.1u/store/wk; over-distributed for a new entry"],actions:[{type:"transfer",pri:"medium",act:"Pull 24u from bottom 24 B/C stores - redistribute to 8 A stores (3u each).",impact:"Improves A store depth. Reduces B/C markdown risk on new-entry style by 0.9L.",trail:"Allocation Engine: B/C smocked top ROS 0.1u/store/wk; DoC 34+ days in bottom quartile. A stores at 0.4u/wk with 12-day DoC. Redirect stock from zero-velocity to actively-selling stores. Synthesis: For a new entry, B/C should earn distribution."}]},
+  "S26-TP-143":{sold:48,bySz:{XS:8,S:14,M:16,L:8,XL:2},byGr:{"A+":32,"A":16,"B/C":0},ros:{"A+":0.6,"A":0.2,"B/C":0},proj6:52,status:"watch",alerts:["Bralette below threshold; size skew heavily XS-S as expected"],actions:[{type:"monitor",pri:"low",act:"Hold. Editorial content Week 5. Reassess at Week 6.",impact:"No action.",trail:"Trend Intelligence: Bralette styling engagement +62% WoW on brand channels this week."}]},
+  "S26-TP-144":{sold:96,bySz:{XS:10,S:24,M:34,L:20,XL:8},byGr:{"A+":28,"A":44,"B/C":24},ros:{"A+":0.5,"A":0.3,"B/C":0.1},proj6:70,status:"on-track",alerts:["Peplum silhouette holding at 70% target for new entry"],actions:[]},
+  "S26-TP-145":{sold:284,bySz:{XS:34,S:76,M:98,L:54,XL:22},byGr:{"A+":64,"A":112,"B/C":108},ros:{"A+":1.2,"A":0.6,"B/C":0.3},proj6:86,status:"reorder",
+    alerts:["Fine-Knit Cami: B/C DoC 10 days on Black and White","Sage performing 82% ST - outpacing the Camel addition forecast"],
+    actions:[{type:"replenish",pri:"medium",act:"Replenish 150u B/C: 80u Black + 70u White. 220u in warehouse reserve.",impact:"Restores DoC buffer. Protects Rs 1.5L B/C revenue.",trail:"Demand Planner: Black DoC 10 days, White DoC 11 days. Sage not in reserve; no action needed on new color. 150u to top 150 B/C stores x 1u."}]},
+  "S26-TR-146":{sold:212,bySz:{XS:14,S:46,M:76,L:54,XL:22},byGr:{"A+":56,"A":94,"B/C":62},ros:{"A+":1.0,"A":0.6,"B/C":0.2},proj6:84,status:"on-track",
+    alerts:["L size surplus in B/C (DoC 38 days) while A+ L depleting at 1.6x plan","Natural 88% ST; Black and Sage both on track"],
+    actions:[{type:"transfer",pri:"medium",act:"Transfer 18u L from 18 B/C stores to 9 A+ stores (2u each).",impact:"Addresses A+ L stockout risk. Protects Rs 1.3L revenue.",trail:"Size Curve Analyst: L depletion 1.6x plan at A+ vs 0.6x at B/C. 18 B/C stores carry 2+ L with DoC >30 days. Transfer rebalances without affecting total stock level."}]},
+  "S26-TR-147":{sold:62,bySz:{XS:4,S:14,M:22,L:16,XL:6},byGr:{"A+":34,"A":28,"B/C":0},ros:{"A+":0.6,"A":0.3,"B/C":0},proj6:60,status:"watch",alerts:["Barrel leg below 65% threshold; silhouette requires discovery time"],actions:[{type:"monitor",pri:"low",act:"Hold. Barrel leg early in trend cycle. Week 6 reassess.",impact:"No action.",trail:"Trend Intelligence: Barrel leg search +88% YoY; conversion lag expected early."}]},
+  "S26-TR-148":{sold:118,bySz:{XS:8,S:26,M:42,L:30,XL:12},byGr:{"A+":32,"A":54,"B/C":32},ros:{"A+":0.6,"A":0.4,"B/C":0.1},proj6:74,status:"on-track",alerts:["Crop flare tracking to plan; Ecru leading 54:46 over Black"],actions:[]},
+  "S26-TR-149":{sold:88,bySz:{XS:6,S:20,M:32,L:22,XL:8},byGr:{"A+":24,"A":40,"B/C":24},ros:{"A+":0.4,"A":0.3,"B/C":0.1},proj6:66,status:"on-track",alerts:["Cargo short outperforming AW25 equivalent by 1.3x; Olive leading"],actions:[]},
+  "S26-SK-150":{sold:76,bySz:{XS:10,S:22,M:26,L:12,XL:6},byGr:{"A+":40,"A":36,"B/C":0},ros:{"A+":0.7,"A":0.4,"B/C":0},proj6:62,status:"watch",alerts:["Mini skirt below 68% target; fashion-forward segment slower in early weeks"],actions:[{type:"monitor",pri:"low",act:"Hold through Week 6. Mini length has a polarised buyer.",impact:"No action.",trail:"Customer Intelligence: Mini skirt buyers browsing 3.8x before purchase vs 1.9x avg."}]},
+  "S26-SK-151":{sold:92,bySz:{XS:8,S:22,M:32,L:20,XL:10},byGr:{"A+":28,"A":42,"B/C":22},ros:{"A+":0.5,"A":0.3,"B/C":0.1},proj6:72,status:"on-track",alerts:["Asymmetric hem skirt holding to plan; Black leading at 76% ST","B/C velocity 0.1u/store/wk; new silhouette over-distributed to lower tier"],actions:[{type:"transfer",pri:"medium",act:"Pull 18u from bottom 18 B/C stores - consolidate to 6 A stores (3u each).",impact:"Reduces B/C markdown risk on unproven silhouette by 0.7L. Strengthens A store depth.",trail:"Allocation Engine: Asymmetric hem is a new design with no B/C precedent. B/C ROS 0.1u/store/wk yields DoC 100+ days. A stores running 12-day DoC. Pull from zero-velocity B/C and redirect to A. Synthesis: B/C should earn this silhouette; correct the distribution now."}]},
+  "S26-SK-152":{sold:164,bySz:{XS:12,S:36,M:58,L:38,XL:20},byGr:{"A+":44,"A":72,"B/C":48},ros:{"A+":0.8,"A":0.5,"B/C":0.2},proj6:80,status:"reorder",
+    alerts:["Indigo DoC 11 days at A+; fastest color depleting ahead of plan","Light Wash and Black tracking normally"],
+    actions:[{type:"replenish",pri:"medium",act:"Replenish 80u Indigo to A+ and A stores. Warehouse has 120u Indigo reserve.",impact:"Extends Indigo availability through Week 12. Protects Rs 1.4L revenue.",trail:"Demand Planner: Indigo ROS 0.55u/A+/wk vs 0.4 plan. DoC 11 days; threshold 14 days. 80u split: A+ 36u (3u x 12 stores), A 44u (2u x 22 stores)."}]},
+  "S26-SK-153":{sold:108,bySz:{XS:8,S:24,M:38,L:28,XL:10},byGr:{"A+":30,"A":48,"B/C":30},ros:{"A+":0.6,"A":0.4,"B/C":0.1},proj6:76,status:"on-track",alerts:["Tiered maxi above new-entry benchmark; Floral leading"],actions:[]},
+  "S26-CD-154":{sold:192,bySz:{XS:14,S:42,M:68,L:46,XL:22},byGr:{"A+":52,"A":88,"B/C":52},ros:{"A+":1.0,"A":0.5,"B/C":0.2},proj6:83,status:"reorder",
+    alerts:["Cotton Co-ord: White 92% proj ST; ROS 1.0u/A+ above plan","Sage tracking at 78% ST; solid secondary color performance"],
+    actions:[{type:"rebuy",pri:"high",act:"Place 150u White follow-on. Supplier fabric reserved; lead time 4 weeks.",impact:"Extends White availability. Captures Rs 6.7L incremental revenue.",trail:"Demand Planner: White ROS 0.62u/A+/wk; 28% above plan. At velocity, White depletes Week 8. 150u White only: A+ 54u, A 60u, B/C 36u. Sage and Black sufficient; no rebuy needed on those colors."}]},
+  "S26-CD-155":{sold:104,bySz:{XS:8,S:22,M:36,L:26,XL:12},byGr:{"A+":30,"A":48,"B/C":26},ros:{"A+":0.6,"A":0.3,"B/C":0.1},proj6:74,status:"on-track",alerts:["Stripe co-ord new entry performing above category benchmark","Sage Stripe 66% ST vs Navy Stripe 80%; consolidate slow colorway from A stores"],actions:[{type:"transfer",pri:"low",act:"Pull 16u Sage Stripe from 8 lowest-velocity A stores - consolidate to 4 A+ stores (4u each).",impact:"Reduces Sage Stripe markdown risk by 0.8L. Concentrates slow colorway in high-traffic stores.",trail:"Color Analyst: Sage Stripe DoC at low-velocity A stores: 40+ days. A+ Sage Stripe DoC: 14 days. Navy Stripe needs no action at 80% ST. Synthesis: Minor consolidation to prevent Sage Stripe residual in stores where it is not converting."}]},
+  "S26-CD-156":{sold:58,bySz:{XS:4,S:12,M:22,L:14,XL:6},byGr:{"A+":28,"A":30,"B/C":0},ros:{"A+":0.5,"A":0.2,"B/C":0},proj6:56,status:"watch",alerts:["Abstract co-ord below 60% threshold; print demand concentrated at A+"],actions:[{type:"monitor",pri:"low",act:"Hold. Geometric demand concentrated in fashion-forward flagships. Reassess Week 6.",impact:"No action.",trail:"Demand Planner: A+ velocity 0.5u/store/wk vs 0.1u at A. Print appeal confirmed at top-tier only."}]},
+  "S26-BZ-157":{sold:138,bySz:{XS:10,S:28,M:50,L:34,XL:16},byGr:{"A+":38,"A":60,"B/C":40},ros:{"A+":0.7,"A":0.4,"B/C":0.1},proj6:78,status:"reorder",alerts:["Oversized blazer tracking to plan; Ecru leading Black 56:44","Ecru DoC at A+: 7 days; re-buy trigger at 75% proj ST exceeded"],actions:[{type:"rebuy",pri:"high",act:"Place 100-unit Ecru follow-on order. Lead time 5 weeks (structured cut), arrives Week 9.",impact:"Captures 5.5L incremental revenue. Prevents Ecru stockout at A+ flagships.",trail:"Demand Planner: Oversized Blazer Ecru ROS 0.4u/A+ store/wk; DoC 7 days. Black has 14-day DoC; no action needed. Allocation Engine: 100u Ecru - A+ 50u, A 50u. Synthesis: Commit by Wednesday; structured garment has longer lead time than jersey."}]},
+  "S26-BZ-158":{sold:112,bySz:{XS:8,S:24,M:40,L:28,XL:12},byGr:{"A+":32,"A":50,"B/C":30},ros:{"A+":0.6,"A":0.3,"B/C":0.1},proj6:74,status:"on-track",
+    alerts:["Linen blazer steady; Natural 60:40 over Navy - concentrated demand in warm-climate cities","B/C DoC 18 days - within safe range, no action yet"],
+    actions:[{type:"monitor",pri:"low",act:"B/C DoC comfortable at 18 days. Monitor weekly; action threshold at 14 days.",impact:"No action.",trail:"Demand Planner: B/C ROS 0.1u/store/wk; DoC 18 days. Navy slower in southern stores; Natural dominant across all grades. No replenishment needed this week."}]},
+  "S26-JM-159":{sold:78,bySz:{XS:6,S:18,M:28,L:18,XL:8},byGr:{"A+":26,"A":36,"B/C":16},ros:{"A+":0.5,"A":0.3,"B/C":0.05},proj6:68,status:"on-track",alerts:["Halter jumpsuit tracking to 68% target; Black leading"],actions:[]},
+  "S26-JM-160":{sold:148,bySz:{XS:10,S:32,M:54,L:36,XL:16},byGr:{"A+":40,"A":68,"B/C":40},ros:{"A+":0.7,"A":0.5,"B/C":0.1},proj6:80,status:"on-track",
+    alerts:["Wide-leg jumpsuit: S size DoC 9 days at A+ and top A stores","Cream added color performing at 76% ST - above new-color benchmark"],
+    actions:[{type:"transfer",pri:"medium",act:"Transfer 14u S from 14 B/C stores (DoC 30+ days) to 7 A+ stores (2u each).",impact:"Restores S availability at A+. Prevents Rs 0.6L lost sales.",trail:"Size Curve Analyst: S depletion 1.5x plan at A+; 14 B/C stores carry excess S (DoC 31+ days). Transfer consolidates size availability at high-velocity stores."}]},
+  "S26-JK-161":{sold:168,bySz:{XS:12,S:36,M:60,L:42,XL:18},byGr:{"A+":46,"A":76,"B/C":46},ros:{"A+":0.8,"A":0.5,"B/C":0.2},proj6:82,status:"reorder",
+    alerts:["Denim jacket: B/C DoC dropping to 10 days on Light Wash","Indigo and Black within safe DoC range"],
+    actions:[{type:"replenish",pri:"medium",act:"Replenish 100u Light Wash to B/C. Warehouse has 160u Light Wash in reserve.",impact:"Restores B/C availability through Week 12. Protects Rs 1.7L revenue.",trail:"Demand Planner: Light Wash ROS 0.3u/B/C store/wk; DoC 10 days. 100u to top 100 B/C stores x 1u. Indigo and Black DoC 20+ days; no action needed."}]},
+  "S26-JK-162":{sold:94,bySz:{XS:6,S:20,M:34,L:24,XL:10},byGr:{"A+":26,"A":44,"B/C":24},ros:{"A+":0.5,"A":0.3,"B/C":0.1},proj6:72,status:"on-track",alerts:["Bomber jacket above new-style benchmark; Olive leading"],actions:[]},
+  "S26-KN-163":{sold:186,bySz:{XS:14,S:40,M:66,L:46,XL:20},byGr:{"A+":50,"A":86,"B/C":50},ros:{"A+":0.9,"A":0.5,"B/C":0.2},proj6:84,status:"reorder",
+    alerts:["Cardigan: Camel DoC 9 days at A+ stores - fastest color in category","Ecru and Black within range; Sage new color not in reserve"],
+    actions:[{type:"replenish",pri:"high",act:"Replenish 90u Camel to A+ stores. Warehouse has 130u Camel reserve.",impact:"Extends Camel through Week 13. Protects Rs 1.6L A+ revenue.",trail:"Demand Planner: Camel ROS 0.42u/A+/wk vs 0.3 plan; 40% above forecast. DoC 9 days; critical threshold. 90u: 7-8u x 12 A+ stores. Ecru DoC 18 days; no action. Sage is new color with no reserve; monitor only."}]},
+  "S26-KN-164":{sold:58,bySz:{XS:8,S:16,M:20,L:10,XL:4},byGr:{"A+":30,"A":28,"B/C":0},ros:{"A+":0.6,"A":0.2,"B/C":0},proj6:56,status:"watch",alerts:["Knit vest below threshold; slow discovery expected"],actions:[{type:"monitor",pri:"low",act:"Hold. Vest layering requires editorial context. Social content Week 5.",impact:"No action.",trail:"Demand Planner: Week 3-4 acceleration +44% WoW signals latent demand."}]},
+  "S26-DR-165":{sold:142,bySz:{XS:10,S:30,M:52,L:36,XL:14},byGr:{"A+":40,"A":64,"B/C":38},ros:{"A+":0.7,"A":0.4,"B/C":0.1},proj6:78,status:"on-track",
+    alerts:["Midi shirt dress steady; Blue Stripe 82% ST leads","M size DoC 10 days at A stores - approaching threshold"],
+    actions:[{type:"transfer",pri:"low",act:"Transfer 10u M from 10 B/C stores to 5 A stores (2u each) ahead of threshold.",impact:"Pre-emptive; avoids stockout before Week 6 review.",trail:"Size Curve Analyst: A store M DoC 10 days; 10 B/C stores carry M surplus (DoC 28+ days). Small pre-emptive transfer."}]},
+  "S26-DR-166":{sold:44,bySz:{XS:4,S:10,M:16,L:10,XL:4},byGr:{"A+":26,"A":18,"B/C":0},ros:{"A+":0.4,"A":0.2,"B/C":0},proj6:48,status:"watch",alerts:["Ruched dress below test threshold; premium fabrication slowing conversion"],actions:[{type:"monitor",pri:"low",act:"Hold. High-ticket new entry. Reassess Week 6 after editorial goes live.",impact:"No action.",trail:"Customer Intelligence: 92% of buyers browsed 4+ times; considered purchase pattern consistent."}]},
 };
 
 
@@ -461,13 +711,24 @@ const WK_DATA={
   "S26-TP-128":[4,6,12,22],"S26-TR-129":[34,30,26,22],"S26-TR-130":[18,26,36,48],
   "S26-BZ-131":[14,22,28,34],"S26-SK-132":[24,30,36,42],"S26-JM-133":[12,18,24,32],
   "S26-CD-134":[8,14,20,28],"S26-TP-135":[4,6,10,18],
+  "S26-DR-136":[36,44,52,54],"S26-DR-137":[44,52,62,66],"S26-DR-138":[38,48,56,56],
+  "S26-DR-139":[8,12,16,18],"S26-DR-140":[12,16,20,24],"S26-TP-141":[66,80,96,100],
+  "S26-TP-142":[24,30,36,38],"S26-TP-143":[8,10,14,16],"S26-TP-144":[18,22,28,28],
+  "S26-TP-145":[54,66,80,84],"S26-TR-146":[40,50,60,62],"S26-TR-147":[10,14,18,20],
+  "S26-TR-148":[22,28,34,34],"S26-TR-149":[16,20,24,28],"S26-SK-150":[14,18,22,22],
+  "S26-SK-151":[18,22,26,26],"S26-SK-152":[32,38,46,48],"S26-SK-153":[20,26,32,30],
+  "S26-CD-154":[36,46,56,54],"S26-CD-155":[20,24,30,30],"S26-CD-156":[10,14,16,18],
+  "S26-BZ-157":[26,32,40,40],"S26-BZ-158":[20,26,32,34],"S26-JM-159":[14,18,22,24],
+  "S26-JM-160":[28,34,44,42],"S26-JK-161":[32,40,48,48],"S26-JK-162":[18,22,26,28],
+  "S26-KN-163":[36,44,52,54],"S26-KN-164":[10,12,16,20],"S26-DR-165":[26,34,40,42],
+  "S26-DR-166":[6,10,12,16],
 };
 const STATUS_META={
   "critical":{l:"Critical",bg:"#FDF0F0",clr:"#B33A3A",bd:"rgba(179,58,58,0.2)",icon:"!"},
   "reorder":{l:"Reorder",bg:"#F0F5FF",clr:"#2B5EA7",bd:"rgba(43,94,167,0.2)",icon:"↻"},
   "watch":{l:"Watch",bg:C.amberSoft,clr:C.amber,bd:C.amberBorder,icon:"◉"},
   "on-track":{l:"On Track",bg:C.sageSoft,clr:C.sage,bd:C.sageBorder,icon:"✓"},
-  "monitor":{l:"Monitor",bg:C.bgSub,clr:C.dim,bd:C.border,icon:"—"},
+  "monitor":{l:"Monitor",bg:C.bgSub,clr:C.dim,bd:C.border,icon:"-"},
 };
 const ACTION_META={
   "rebuy":{l:"Re-buy",bg:"#FDF0F0",clr:"#B33A3A",bd:"rgba(179,58,58,0.2)"},
@@ -491,6 +752,12 @@ const WH={
   "S26-DR-113":{stock:0,buf:0},"S26-TP-114":{stock:200,buf:30},"S26-CD-115":{stock:52,buf:10},
   "S26-JM-116":{stock:68,buf:12},"S26-DR-117":{stock:110,buf:18},"S26-TP-119":{stock:276,buf:38},
   "S26-TR-120":{stock:100,buf:15},"S26-BZ-124":{stock:60,buf:10},
+  "S26-DR-137":{stock:200,buf:28},"S26-DR-138":{stock:80,buf:14},"S26-DR-165":{stock:96,buf:16},
+  "S26-TP-141":{stock:310,buf:40},"S26-TP-145":{stock:220,buf:30},
+  "S26-TR-146":{stock:120,buf:18},"S26-SK-152":{stock:130,buf:20},
+  "S26-CD-154":{stock:180,buf:24},"S26-BZ-158":{stock:88,buf:14},
+  "S26-JM-160":{stock:90,buf:14},"S26-JK-161":{stock:160,buf:22},
+  "S26-KN-163":{stock:150,buf:22},
 };
 
 /* ═══ TRANSFER RECOMMENDATIONS ═══ */
@@ -505,6 +772,21 @@ const XFERS=[
   {id:"T08",sid:"S26-TR-106",sz:"L",from:"PR19",to:"FL04",u:2,doc_from:20,doc_to:6,impact:4980},
   {id:"T09",sid:"S26-TP-108",sz:"M",from:"FL12",to:"FL01",u:3,doc_from:16,doc_to:4,impact:5670},
   {id:"T10",sid:"S26-TP-108",sz:"M",from:"PR21",to:"FL05",u:2,doc_from:18,doc_to:5,impact:3780},
+  {id:"T11",sid:"S26-DR-138",sz:"M",from:"PR15",to:"FL01",u:2,doc_from:26,doc_to:3,impact:7580},
+  {id:"T12",sid:"S26-DR-138",sz:"M",from:"PR20",to:"FL06",u:2,doc_from:28,doc_to:4,impact:7580},
+  {id:"T13",sid:"S26-TR-146",sz:"L",from:"PR08",to:"FL03",u:2,doc_from:38,doc_to:5,impact:6980},
+  {id:"T14",sid:"S26-TR-146",sz:"L",from:"PR16",to:"FL04",u:2,doc_from:34,doc_to:6,impact:6980},
+  {id:"T15",sid:"S26-TR-146",sz:"L",from:"PR17",to:"FL07",u:2,doc_from:36,doc_to:5,impact:6980},
+  {id:"T16",sid:"S26-JM-160",sz:"S",from:"PR18",to:"FL02",u:2,doc_from:30,doc_to:4,impact:10580},
+  {id:"T17",sid:"S26-JM-160",sz:"S",from:"PR19",to:"FL05",u:2,doc_from:32,doc_to:6,impact:10580},
+  {id:"T18",sid:"S26-DR-165",sz:"M",from:"PR15",to:"FL01",u:2,doc_from:28,doc_to:5,impact:7580},
+  {id:"T19",sid:"S26-DR-165",sz:"M",from:"PR21",to:"FL06",u:2,doc_from:30,doc_to:4,impact:7580},
+  {id:"T20",sid:"S26-SK-112",sz:"S",from:"PR16",to:"FL03",u:1,doc_from:22,doc_to:5,impact:3290},
+  {id:"T21",sid:"S26-SK-152",sz:"M",from:"PR18",to:"FL01",u:2,doc_from:24,doc_to:6,impact:6980},
+  {id:"T22",sid:"S26-BZ-104",sz:"M",from:"PR20",to:"FL05",u:2,doc_from:20,doc_to:5,impact:9980},
+  {id:"T23",sid:"S26-CD-115",sz:"S",from:"PR17",to:"FL02",u:1,doc_from:18,doc_to:4,impact:4490},
+  {id:"T24",sid:"S26-TP-141",sz:"M",from:"PR15",to:"FL01",u:3,doc_from:20,doc_to:3,impact:8970},
+  {id:"T25",sid:"S26-TP-141",sz:"M",from:"PR21",to:"FL05",u:2,doc_from:22,doc_to:4,impact:5980},
 ];
 
 /* ═══ CONSOLIDATION CANDIDATES ═══ */
@@ -516,6 +798,65 @@ const CONSOL=[
   {sid:"S26-TP-122",action:"hold",timing:"Week 14",discount:0,pullFrom:0,consolidateTo:0,residual:188,exposure:0,savedExposure:0,
     reason:"Utility Jacket is a transitional layer; 72% of sales expected in Wk16-20. Current trajectory matches AW25 seasonal shape. No action until Week 14 review."},
 ];
+
+/* ═══ MARKDOWN RISK ═══ */
+/* Styles where system recommends a discounting intervention.
+   depth = recommended markdown %; week = earliest activation week;
+   marginAtMD = margin realised after discount; exposureL = total ₹L at risk if held to EOS;
+   recoveredL = ₹L margin protected if markdown taken at recommended week. */
+const MD_RISK={
+  "S26-DR-113":{depth:20,week:6,fullMargin:59,marginAtMD:38,exposureL:3.94,recoveredL:2.38,units:132,decision:"DISCONTINUE",
+    rationale:"Three-season bodycon decline confirmed. SS24: 72% ST → SS25: 78% ST → SS26 proj: 34% ST. Silhouette buyer cohort shrinking 22% YoY. Forest Green colour refresh did not arrest decline - silhouette, not colour, is the issue. Mark down 20% at Week 6 to clear 132 residual units by Week 10. Margin recovery at MD: ₹2.38L vs ₹0L if held to EOS clearance.",
+    storeAction:"Pull from 8 A stores → consolidate to 6 A+ stores before markdown.",
+    mdTrail:[
+      {a:"In-Season Monitor",t:"0.4s",src:"Live POS - daily_sales + inventory_snapshot",
+        q:"SELECT style_id, week, SUM(units_sold) as weekly_sold, AVG(ros_7d) as ros FROM daily_sales WHERE style_id='S26-DR-113' AND season='AW25' GROUP BY week ORDER BY week",
+        finding:"Week 1–4 ROS: 0.4 → 0.3 → 0.2 → 0.1u/store/wk at A+ stores. Consistent deceleration, not a seasonal pause. Projected 6-wk ST at current trajectory: 34%. Three-season pattern: SS24 72% → SS25 78% → AW25 34% proj. The SS25 apparent improvement was driven by a smaller allocation (84u vs 132u now); full-price demand is not recovering.",
+        inference:"This is not a slow-start pattern. Deceleration is monotonic across all four weeks and all grade tiers. Demand has not responded to Forest Green colour refresh."},
+      {a:"Customer Intelligence",t:"1.1s",src:"CRM - loyalty_transactions + customer_segments + cohort_retention",
+        q:"SELECT cohort_year, COUNT(DISTINCT customer_id) as buyers, AVG(basket_value) as abv, repurchase_rate FROM loyalty_transactions WHERE style_category='Dresses' AND silhouette='bodycon' AND season IN ('SS24','AW24','SS25','AW25') GROUP BY cohort_year ORDER BY cohort_year",
+        finding:"Bodycon buyer cohort declining 22% YoY. Of SS24 bodycon buyers (n=480), only 31% repurchased in SS25, and only 19% are active in AW25. Under-35 segment now represents 22% of bodycon buyers vs 48% two years ago. Remaining buyers are migrating to ribbed knit and fitted midi; both categories show 34%+ YoY growth in the same CRM segment.",
+        inference:"This is a structural cohort exit, not a cyclical dip. The customer who bought bodycon is still buying dresses - they are buying different silhouettes. Colour or price changes will not recover this buyer."},
+      {a:"Price Sensitivity",t:"1.8s",src:"Finance - price_point_performance + markdown_history + elasticity_model",
+        q:"SELECT markdown_depth, AVG(units_cleared_pct) as clearance_rate, AVG(weeks_to_clear) as weeks, AVG(realised_margin_pct) as margin FROM markdown_history WHERE category='Dresses' AND silhouette='bodycon' AND season IN ('SS24','SS25') GROUP BY markdown_depth ORDER BY markdown_depth",
+        finding:"Elasticity model on comparable declining silhouettes: 15% MD → 58% clearance, 8 weeks to clear, 44% realised margin. 20% MD → 82% clearance, 5 weeks to clear, 38% realised margin. 30% MD → 96% clearance, 3 weeks, 28% margin. If held to EOS without markdown: 34% clearance, 14 weeks, 0% margin on residual (clearance sale). Total exposure if held: ₹3.94L. At 20% MD actioned Week 6: ₹2.38L recovered.",
+        inference:"20% at Week 6 is the optimal point on the clearance curve - it clears by Week 10 within season, recovers ₹2.38L margin, and avoids end-of-season clearance pricing. Waiting to Week 8 recovers only ₹1.6L (less time, same discount needed deeper)."},
+      {a:"Consolidation Planner",t:"2.3s",src:"Store Master - inventory_snapshot + store_velocity_ranking",
+        q:"SELECT store_code, store_grade, units_remaining, ros_7d, days_of_cover FROM inventory_snapshot WHERE style_id='S26-DR-113' AND units_remaining > 0 ORDER BY ros_7d DESC",
+        finding:"132 residual units across 20 stores. A+ stores (6): avg 8u remaining, ROS 0.15u/wk; DoC 53 days - too slow even at markdown. A stores (8 bottom performers): avg 6u, ROS 0.04u/wk; DoC 150 days - these units will not clear without consolidation. Recommendation: pull 48u from 8 bottom A stores → consolidate to 6 A+ stores (8u each). A+ stores will clear 14u/wk at 20% MD, clearing in 5 weeks.",
+        inference:"Consolidation before markdown maximises visibility and velocity. Dispersed low-velocity units in A stores will not move even at 20% discount. Concentrating in A+ flagships gives the markdown critical mass."},
+      {a:"Synthesis",t:"2.9s",src:"All Subgraphs - cross-graph traversal",
+        q:null,
+        finding:"Decision: DISCONTINUE after AW25. Immediate action: consolidate 48u from 8 A stores to 6 A+ stores by Week 5. Activate 20% markdown at Week 6. Projected clearance by Week 10. Margin recovered: ₹2.38L vs ₹0L at EOS. Do not reorder for SS26. Root cause is silhouette cohort exit confirmed by three seasons of CRM data - not colour, not price, not execution.",
+        inference:"This decision is driven by the customer graph, not the demand signal. The style is not failing to find buyers; its buyers have moved to adjacent silhouettes that we already carry."},
+    ]},
+  "S26-TR-129":{depth:15,week:6,fullMargin:57,marginAtMD:47,exposureL:4.8,recoveredL:2.1,units:220,decision:"REDUCE",
+    rationale:"Slim-fit trouser demand declining 14pts/season (SS25: 68% ST → SS26 proj: 54%). Wide-leg outselling cigarette 2.8:1. Buyer age cohort migrating to relaxed fits. 15% markdown at Week 6 and 30% allocation reduction limits markdown exposure to ₹2.1L vs ₹4.8L if held. Style continues in reduced range; not discontinued.",
+    storeAction:"Pull from bottom 60 B/C stores → consolidate to 8 A+ stores at markdown price.",
+    mdTrail:[
+      {a:"In-Season Monitor",t:"0.3s",src:"Live POS - daily_sales + inventory_snapshot",
+        q:"SELECT style_id, week, SUM(units_sold) as weekly_sold, AVG(ros_7d) as ros FROM daily_sales WHERE style_id='S26-TR-129' AND season='AW25' GROUP BY week ORDER BY week",
+        finding:"Week 1–4 weekly units: 34 → 30 → 26 → 22. Declining WoW despite no supply constraint. ROS at A+ stores: 0.4u/store/wk vs 0.8u plan. B/C ROS at 0.1u/store/wk - effectively zero velocity in lower-tier stores. Projected 6-wk ST: 54%. Last season (SS25) achieved 68% at 320u; this season 54% projected at 280u, a 14pt drop on a smaller base.",
+        inference:"The deceleration is demand-driven. Wide-leg trouser (S26-TR-106) is selling at 1.4u/A+/wk with 87% proj ST in the same stores. Slim-fit buyer is not absent from the store; they are converting to wide-leg."},
+      {a:"Customer Intelligence",t:"1.0s",src:"CRM - loyalty_transactions + silhouette_migration + age_cohort",
+        q:"SELECT silhouette, age_band, COUNT(DISTINCT customer_id) as buyers, yoy_growth_pct FROM loyalty_transactions WHERE category='Trousers' AND season IN ('SS25','AW25') GROUP BY silhouette, age_band ORDER BY buyers DESC",
+        finding:"Slim-fit trouser buyer under-35: 22% of buyers vs 48% two years ago. Wide-leg under-35 buyer: 61% and growing. Slim-fit buyers aged 35–50 are stable but this segment is 31% smaller than the combined under-35 cohort that has shifted. Cross-shopping analysis: 44% of AW25 wide-leg buyers also browsed slim-fit but converted to wide-leg; only 8% went the other way.",
+        inference:"Slim-fit is becoming a niche silhouette in this brand's customer base. It has a loyal older segment but that segment is not large enough to absorb 280u at full price. This is a managed decline, not a discontinuation - the silhouette has residual demand."},
+      {a:"Price Sensitivity",t:"1.7s",src:"Finance - price_point_performance + markdown_history + elasticity_model",
+        q:"SELECT markdown_depth, AVG(units_cleared_pct) as clearance_rate, AVG(realised_margin_pct) as margin, AVG(weeks_to_clear) as weeks FROM markdown_history WHERE category='Trousers' AND silhouette='slim-fit' GROUP BY markdown_depth ORDER BY markdown_depth",
+        finding:"Slim-fit trouser elasticity (from SS25 clearance data): 10% MD → 61% clearance, 51% realised margin. 15% MD → 78% clearance, 47% margin, 6 weeks. 20% MD → 91% clearance, 44% margin, 4 weeks. 30% MD → 98%, 35% margin. At 0% (hold): 54% clearance, 14 weeks, full residual goes to EOS clearance at <20% margin. Total exposure if held: ₹4.8L. At 15% MD Week 6: ₹2.1L recovered.",
+        inference:"15% is the optimal depth for slim-fit - it activates the price-sensitive but style-interested buyer without cannibalising the full-price loyal segment. 20% would recover marginally more units but at a worse margin and risks training the loyal segment to wait for markdown."},
+      {a:"Consolidation Planner",t:"2.2s",src:"Store Master - inventory_snapshot + store_velocity_ranking",
+        q:"SELECT store_code, store_grade, units_remaining, ros_7d, days_of_cover FROM inventory_snapshot WHERE style_id='S26-TR-129' AND units_remaining > 0 ORDER BY store_grade, ros_7d DESC",
+        finding:"220u remaining. B/C stores (60 lowest): avg 1.2u each (72u total), ROS 0.08u/wk; DoC >200 days - will not clear at any reasonable discount in-season. A+ stores (8 top): avg 7u, ROS 0.4u/wk; can absorb consolidated stock and clear at 15% MD within 6 weeks. Action: pull 72u from bottom 60 B/C stores, redistribute 12u each to 6 top A+ stores. This focuses markdown velocity where foot traffic exists.",
+        inference:"B/C units at slim-fit velocity will still be on floor at season end regardless of markdown depth. Consolidation is a precondition for the markdown to work. Without it, the 15% MD merely discounts 220 dispersed units with no clearance acceleration."},
+      {a:"Synthesis",t:"2.7s",src:"All Subgraphs - cross-graph traversal",
+        q:null,
+        finding:"Decision: REDUCE (not discontinue). Slim-fit retains a loyal 35–50 buyer segment; the category should continue at ~150u next season targeting that cohort explicitly. Immediate action: pull 72u from 60 B/C stores → redistribute to 6 A+ stores. Activate 15% markdown at Week 6. Recover ₹2.1L vs ₹0L at EOS. For SS26: reduce buy to 150u, re-grade as A+/A only (no B/C), position as a curated fit for the brand's core loyal buyer.",
+        inference:"The right frame here is not 'this style is failing' - it is 'we over-distributed a narrowing-demand style into low-velocity stores.' The markdown fixes the distribution error. The SS26 decision fixes the demand forecast."},
+    ]},
+};
+
 
 /* ═══ MAIN ═══ */
 export default function BuyPlan(){
@@ -624,7 +965,7 @@ export default function BuyPlan(){
   /* ═══ SIDEBAR ═══ */
   const NAV_ITEMS=[
     {group:"ALLOCATION",items:[{id:"alloc-sku",l:"By SKU",ico:"☰"},{id:"alloc-store",l:"By Store",ico:"⊞"}]},
-    {group:"REPLENISHMENT",items:[{id:"rep-overall",l:"Overall",ico:"◎"},{id:"rep-s2s",l:"Store ↔ Store",ico:"⇄"},{id:"rep-s2w",l:"Store ↔ WH",ico:"↓"},{id:"rep-consol",l:"Consolidation",ico:"⊘"}]},
+    {group:"REPLENISHMENT",items:[{id:"rep-overall",l:"Overall",ico:"◎"},{id:"rep-s2s",l:"Store ↔ Store",ico:"⇄"},{id:"rep-s2w",l:"Store ↔ WH",ico:"↓"},{id:"rep-consol",l:"Consolidation",ico:"⊘"},{id:"rep-markdown",l:"Markdowns",ico:"⌀"}]},
     {group:"PERFORMANCE",items:[{id:"perf-overview",l:"Overview",ico:"◈"},{id:"perf-sku",l:"By SKU",ico:"▤"},{id:"perf-store",l:"By Store",ico:"▥"}]},
   ];const sc=sideCollapsed;
   const Sidebar=()=> (
@@ -743,7 +1084,102 @@ export default function BuyPlan(){
   /* ═══ UNIFIED DECISION TRAIL MODAL ═══ */
   const TrailModal=()=>{if(!trail)return null;const sid=trail.id||trail;const s=RAW.find(x=>x.id===sid);if(!s?.trail)return null;
     const act=trail.action||null;const lv=LIVE[sid];
-    const srcMap={"Demand Planner":{src:"POS Data · Size Analytics",q:"sell_through(style, season='SS25') | size_curve(store_grade) | rate_of_sale(weekly)"},"Size Curve Analyst":{src:"POS · Size Analytics",q:"size_distribution(style, store_list) | stockout_events(size='M', threshold=0)"},"Color Performance":{src:"POS · Color Analytics",q:"color_sell_through(style, season) | markdown_rate(color) | search_trends(color, '8w')"},"Color Analyst":{src:"POS · Trend Data",q:"color_sell_through(style, season) | search_trends(color, '8w')"},"Allocation Engine":{src:"Store Master · Grade Matrix",q:"grade_allocation(style, target_st=0.90) | store_capacity(grade) | size_split(store)"},"Price Sensitivity":{src:"Finance · Pricing",q:"price_elasticity(category, price_bracket) | markdown_history(similar_items)"},"Trend Intelligence":{src:"Site Search · Market Intel",q:"search_volume(term, timeframe='12m') | competitor_launches(category)"},"Customer Intelligence":{src:"CRM · Loyalty",q:"loyalty_purchase_overlap(category) | basket_analysis(buyer_segment)"},"Supply Chain":{src:"Vendor Portal · Inventory",q:"supplier_capacity(fabric, qty) | lead_time(vendor) | cost_quote(qty)"},"Synthesis":{src:"All Sources",q:null}};
+    const isMD=trail.markdown===true;const md=isMD?MD_RISK[sid]:null;
+
+    /* ── Markdown-specific trail render ── */
+    if(isMD&&md?.mdTrail){
+      const MD_SRC_COLORS={"In-Season Monitor":"#1A6B6B","Customer Intelligence":"#1E4D8C","Price Sensitivity":"#A0522D","Consolidation Planner":"#7A5C14","Synthesis":C.green};
+      const MD_SUBGRAPHS={"In-Season Monitor":"Demand Signal Graph","Customer Intelligence":"Store Intelligence Graph","Price Sensitivity":"Pricing & Margin Graph","Consolidation Planner":"Store Intelligence Graph"};
+      return (<div onClick={()=>setTrail(null)} style={{position:"fixed",inset:0,zIndex:100,background:"rgba(27,42,33,.4)",display:"flex",alignItems:"center",justifyContent:"center",padding:20}}>
+        <div onClick={e=>e.stopPropagation()} style={{background:"#fff",borderRadius:14,width:"100%",maxWidth:700,boxShadow:"0 24px 64px rgba(12,44,24,.18)",maxHeight:"85vh",overflow:"auto",border:`1px solid ${C.border}`}}>
+          {/* Header */}
+          <div style={{padding:"22px 28px",borderBottom:`1px solid ${C.borderLight}`,background:C.terraSoft,borderRadius:"14px 14px 0 0"}}>
+            <div style={{fontSize:11,fontWeight:700,color:C.terra,letterSpacing:.8}}>MARKDOWN DECISION TRAIL · AW25 WEEK {WEEK}</div>
+            <div style={{fontSize:18,fontWeight:700,marginTop:6,fontFamily:serif,lineHeight:1.3}}>{s.name}</div>
+            <div style={{fontSize:13,color:C.dim,marginTop:4}}>{s.sub} · {sid} · {SL[s.src]}</div>
+            <div style={{marginTop:10,display:"flex",gap:8,flexWrap:"wrap"}}>
+              {[{l:"Decision",v:md.decision,clr:C.terra},{l:"Markdown",v:`${md.depth}%`,clr:C.terra},{l:"Activate",v:`Week ${md.week}`,clr:C.terra},{l:"Margin @ MD",v:`${md.marginAtMD}%`,clr:C.amber},{l:"Exposure saved",v:`₹${md.recoveredL}L`,clr:C.sage}].map(m=>(
+                <div key={m.l} style={{padding:"6px 12px",background:"rgba(255,255,255,.7)",borderRadius:5,border:`1px solid ${C.terraBorder}`,textAlign:"center"}}>
+                  <div style={{fontSize:9,color:C.dim,fontWeight:600}}>{m.l}</div>
+                  <div style={{fontSize:13,fontWeight:700,color:m.clr,fontFamily:"monospace"}}>{m.v}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div style={{padding:"20px 28px"}}>
+            {/* Orchestrator */}
+            <div style={{display:"flex",gap:0,marginBottom:4}}>
+              <div style={{display:"flex",flexDirection:"column",alignItems:"center",width:28,flexShrink:0}}>
+                <div style={{width:14,height:14,borderRadius:7,border:`2px solid ${C.terra}`,background:"#fff",display:"flex",alignItems:"center",justifyContent:"center",marginTop:2}}><div style={{width:6,height:6,borderRadius:3,background:C.terra}}/></div>
+                <div style={{width:2,flex:1,background:C.borderLight,marginTop:2}}/>
+              </div>
+              <div style={{flex:1,paddingBottom:18,paddingLeft:10}}>
+                <div style={{fontSize:14,fontWeight:700,color:C.green}}>Orchestrator</div>
+                <div style={{fontSize:13,color:C.textMid,marginTop:4}}>In-season markdown evaluation triggered for {s.name}. Projected 6-wk ST {lv?.proj6}% - below {md.decision==="DISCONTINUE"?55:70}% threshold.</div>
+                <div style={{fontSize:11,color:C.dim,marginTop:6,marginBottom:4}}>Agents activated for markdown assessment:</div>
+                <div style={{display:"flex",flexWrap:"wrap",gap:4}}>
+                  {["Bayesian Updater","Elasticity Model","Cohort Analysis","Consolidation Optimiser"].map(m=>(
+                    <span key={m} style={{fontSize:9,fontWeight:600,padding:"2px 8px",borderRadius:10,background:C.terra+"18",border:`1.5px solid ${C.terra}`,color:C.terra,fontFamily:"monospace"}}>{m}</span>
+                  ))}
+                  <span style={{fontSize:9,color:C.dimmer}}>+</span>
+                  {[...new Set(Object.values(MD_SUBGRAPHS))].map(sg=>(
+                    <span key={sg} style={{fontSize:9,fontWeight:500,padding:"2px 8px",borderRadius:10,background:C.terraSoft,border:`1px solid ${C.terraBorder}`,color:C.terra}}>{sg}</span>
+                  ))}
+                  <span style={{fontSize:9,color:C.dimmer}}>+</span>
+                  <span style={{fontSize:9,fontWeight:500,padding:"2px 8px",borderRadius:10,background:"#F5F5F1",border:"1px solid #E5E2DB",color:C.dim}}>IW Markdown Rules</span>
+                </div>
+              </div>
+            </div>
+            {/* Trail steps */}
+            {md.mdTrail.map((st,i)=>{const isFinal=i===md.mdTrail.length-1;const isLast=isFinal;const clr=MD_SRC_COLORS[st.a]||C.terra;
+              return (
+                <div key={i} style={{display:"flex",gap:0}}>
+                  <div style={{display:"flex",flexDirection:"column",alignItems:"center",width:28,flexShrink:0}}>
+                    <div style={{width:isFinal?14:10,height:isFinal?14:10,borderRadius:isFinal?7:5,background:isFinal?C.green:C.terra,flexShrink:0,marginTop:3}}/>
+                    {!isLast&&<div style={{width:2,flex:1,background:C.borderLight,marginTop:2}}/>}
+                  </div>
+                  <div style={{flex:1,paddingBottom:isLast?0:20,paddingLeft:10}}>
+                    <div style={{display:"flex",alignItems:"baseline",gap:8}}>
+                      <div style={{fontSize:14,fontWeight:700,color:isFinal?C.green:clr}}>{st.a}</div>
+                      <div style={{fontSize:10,color:C.dimmer}}>{st.t}</div>
+                    </div>
+                    {st.src&&<div style={{fontSize:11,color:C.dim,marginTop:3}}>SOURCE: {st.src}</div>}
+                    {st.q&&<div style={{padding:"8px 12px",marginTop:6,background:"#F8F8F6",borderRadius:6,border:`1px solid ${C.borderLight}`,fontFamily:"monospace",fontSize:10,color:"#777",lineHeight:1.5,whiteSpace:"pre-wrap",wordBreak:"break-all"}}>{st.q}</div>}
+                    <div style={{marginTop:8}}><span style={{fontSize:12,fontWeight:700,color:C.text}}>Finding: </span><span style={{fontSize:12,color:C.textMid,lineHeight:1.6}}>{st.finding}</span></div>
+                    {st.inference&&<div style={{marginTop:4}}><span style={{fontSize:12,fontWeight:700,color:isFinal?C.sage:C.terra}}>Inference: </span><span style={{fontSize:12,color:isFinal?C.sage:C.terra,lineHeight:1.6}}>{st.inference}</span></div>}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>);
+    }
+
+    const mkSrc=(sty)=>({
+      "Demand Planner":{src:`POS System - sell_through_weekly · ${sty.id}`,model:"Prophet",modelType:"Time-series forecast",subgraph:"Demand Signal Graph",sgColor:"#1A6B6B",
+        q:`SELECT style_id, season, week, units_sold, units_allocated, sell_through_pct, stockout_flag FROM sell_through_weekly WHERE style_id='${sty.id}' AND season IN ('SS24','SS25') ORDER BY season, week`},
+      "Size Curve Analyst":{src:`POS System - size_level_sales · ${sty.id}`,model:"Prophet",modelType:"Size decomposition",subgraph:"Product & Style Graph",sgColor:"#2D5A3D",
+        q:`SELECT style_id, size, SUM(units_sold) as sold, SUM(units_allocated) as planned, ROUND(SUM(units_sold)/SUM(units_allocated)*100,1) as st_pct, COUNT(CASE WHEN stockout_flag=1 THEN 1 END) as stockout_weeks FROM size_level_sales WHERE style_id='${sty.id}' AND season='SS25' GROUP BY size ORDER BY size`},
+      "Color Performance":{src:`POS System - color_performance · ${sty.id}`,model:"Prophet",modelType:"Color decomposition",subgraph:"Product & Style Graph",sgColor:"#2D5A3D",
+        q:`SELECT color_name, units_sold, units_allocated, sell_through_pct, markdown_pct, residual_units FROM color_performance WHERE style_id='${sty.id}' AND season='SS25' ORDER BY sell_through_pct DESC`},
+      "Color Analyst":{src:`POS System - color_performance + site_search_log`,model:"Prophet",modelType:"Color decomposition",subgraph:"Product & Style Graph",sgColor:"#2D5A3D",
+        q:`SELECT color_name, sell_through_pct, markdown_pct FROM color_performance WHERE style_id='${sty.id}' UNION SELECT search_term, search_volume_12w, yoy_growth FROM site_search_log WHERE category='${sty.sub.toLowerCase()}' AND search_term LIKE '%color%'`},
+      "Allocation Engine":{src:`Store Master - grade_matrix + store_capacity`,model:"Store Affinity",modelType:"Collaborative filtering",subgraph:"Store Intelligence Graph",sgColor:"#1E4D8C",
+        q:`SELECT store_grade, COUNT(*) as store_count, AVG(affinity_score) as avg_affinity, SUM(capacity_units) as total_capacity FROM store_master sm JOIN style_affinity sa ON sm.store_id=sa.store_id WHERE sa.style_id='${sty.id}' AND sa.predicted_st > 0.3 GROUP BY store_grade`},
+      "Price Sensitivity":{src:`Finance - price_point_performance + markdown_history`,model:"Elasticity",modelType:"Price response model",subgraph:"Pricing & Margin Graph",sgColor:"#A0522D",
+        q:`SELECT price_bracket, AVG(sell_through_pct) as avg_st, AVG(markdown_pct) as avg_md, COUNT(*) as n_styles FROM price_point_performance WHERE category='${sty.sub}' AND mrp BETWEEN ${sty.mrp-500} AND ${sty.mrp+500} AND season IN ('SS24','SS25') GROUP BY price_bracket`},
+      "Trend Intelligence":{src:`Site Search - search_log + competitor_tracker`,model:"Similarity",modelType:"Embedding nearest-neighbor",subgraph:"Demand Signal Graph",sgColor:"#1A6B6B",
+        q:`SELECT search_term, weekly_volume, yoy_change_pct FROM site_search_log WHERE category='${sty.sub.toLowerCase()}' AND period='12w' ORDER BY weekly_volume DESC LIMIT 10`},
+      "Customer Intelligence":{src:`CRM - loyalty_transactions + customer_segments`,model:"Affinity",modelType:"Segment analysis",subgraph:"Store Intelligence Graph",sgColor:"#1E4D8C",
+        q:`SELECT segment_name, purchase_count, avg_basket_value, ltv_multiple, repurchase_rate FROM customer_segments cs JOIN loyalty_transactions lt ON cs.segment_id=lt.segment_id WHERE lt.style_category='${sty.sub}' AND lt.season='SS25'`},
+      "Supply Chain":{src:`Vendor Portal - supplier_capacity + fabric_inventory`,model:"Capacity",modelType:"Supply constraint check",subgraph:"Supply Chain Graph",sgColor:"#7A5C14",
+        q:`SELECT supplier_name, fabric_type, available_qty, lead_time_days, moq, cost_per_unit FROM supplier_capacity sc JOIN fabric_inventory fi ON sc.fabric_id=fi.fabric_id WHERE fi.fabric_type='${(sty.colors[0]?.n||"").toLowerCase().includes("linen")?"linen":"cotton_blend"}' AND sc.available_qty > 100`},
+      "Synthesis":{src:"All Subgraphs - cross-graph traversal",model:null,subgraph:null,q:null},
+      "In-Season Monitor":{src:`Live POS - daily_sales + inventory_snapshot`,model:"Bayesian Updater",modelType:"Prior-posterior update",subgraph:"Demand Signal Graph",sgColor:"#1A6B6B",
+        q:`SELECT style_id, store_id, date, units_sold, units_remaining, ros_7d FROM daily_sales ds JOIN inventory_snapshot inv ON ds.style_id=inv.style_id AND ds.store_id=inv.store_id WHERE ds.style_id='${sty.id}' AND ds.date >= CURRENT_DATE - INTERVAL '21 days'`},
+    });
+    const srcMap=mkSrc(s);
     /* Parse in-season action trail into agent steps */
     const opSteps=act?act.trail.split(/(?<=\.)\s+/).filter(Boolean).map(sent=>{const am=sent.match(/^([A-Z][a-z]+(?: [A-Z][a-z]+)*):/);return {a:am?am[1]:"In-Season Monitor",finding:am?sent.slice(am[1].length+2):sent};}):[]; 
     const AgentStep=({a,meta,finding,inference,isFinal,isLast,phase})=> (
@@ -752,14 +1188,16 @@ export default function BuyPlan(){
           <div style={{width:isFinal?14:10,height:isFinal?14:10,borderRadius:isFinal?7:5,background:phase==="operate"?"#2B5EA7":isFinal?C.green:C.sage,flexShrink:0,marginTop:3}}/>
           {!isLast&&<div style={{width:2,flex:1,background:C.borderLight,marginTop:2}}/>}
         </div>
-        <div style={{flex:1,paddingBottom:isLast?0:18,paddingLeft:10}}>
+        <div style={{flex:1,paddingBottom:isLast?0:20,paddingLeft:10}}>
           <div style={{fontSize:14,fontWeight:700,color:isFinal?C.green:phase==="operate"?"#2B5EA7":C.text}}>{a}</div>
-          <div style={{marginTop:6,padding:"12px 14px",background:isFinal?"#EFF5F3":phase==="operate"?"#F0F5FF":C.bgSub,borderRadius:8,border:`1px solid ${isFinal?C.sageBorder:phase==="operate"?"rgba(43,94,167,.15)":C.borderLight}`}}>
-            {meta&&<div style={{fontSize:10,fontWeight:600,color:C.dimmer,letterSpacing:.5,marginBottom:5}}>SOURCE: {meta.src}</div>}
-            {meta?.q&&<div style={{padding:"6px 10px",background:isFinal?"rgba(255,255,255,.6)":"#fff",borderRadius:4,border:`1px solid ${C.borderLight}`,marginBottom:8,fontFamily:"monospace",fontSize:11,color:C.dim,lineHeight:1.4}}>{meta.q}</div>}
-            <div style={{marginBottom:inference?6:0}}><span style={{fontSize:12,fontWeight:700,color:C.text}}>Finding: </span><span style={{fontSize:12,color:C.textMid,lineHeight:1.55}}>{finding}</span></div>
-            {inference&&<div><span style={{fontSize:12,fontWeight:700,color:C.sage}}>Inference: </span><span style={{fontSize:12,color:C.sage,lineHeight:1.55}}>{inference}</span></div>}
-          </div>
+          {/* Source line */}
+          {meta?.src&&<div style={{fontSize:11,color:C.dim,marginTop:3}}>SOURCE: {meta.src}</div>}
+          {/* SQL query */}
+          {meta?.q&&<div style={{padding:"8px 12px",marginTop:6,background:"#F8F8F6",borderRadius:6,border:`1px solid ${C.borderLight}`,fontFamily:"monospace",fontSize:10,color:"#777",lineHeight:1.5,whiteSpace:"pre-wrap",wordBreak:"break-all"}}>{meta.q}</div>}
+          {/* Finding */}
+          <div style={{marginTop:8}}><span style={{fontSize:12,fontWeight:700,color:C.text}}>Finding: </span><span style={{fontSize:12,color:C.textMid,lineHeight:1.6}}>{finding}</span></div>
+          {/* Inference */}
+          {inference&&<div style={{marginTop:4}}><span style={{fontSize:12,fontWeight:700,color:C.sage}}>Inference: </span><span style={{fontSize:12,color:C.sage,lineHeight:1.6}}>{inference}</span></div>}
         </div>
       </div>
     );
@@ -783,15 +1221,28 @@ export default function BuyPlan(){
             <div style={{flex:1,paddingBottom:18,paddingLeft:10}}>
               <div style={{fontSize:14,fontWeight:700,color:C.green}}>Orchestrator</div>
               <div style={{fontSize:13,color:C.textMid,marginTop:4}}>Evaluating {s.name}; {act?"in-season action triggered":"pre-season allocation"}.</div>
-              <div style={{fontSize:12,color:C.sage,fontStyle:"italic",marginTop:3}}>Dispatching to {s.trail.steps.map(st=>st.a).join(", ")}{act?", In-Season Monitor":""}</div>
+              <div style={{fontSize:11,color:C.dim,marginTop:6,marginBottom:4}}>Combining models, subgraphs, and decision rules:</div>
+              <div style={{display:"flex",flexWrap:"wrap",gap:4}}>
+                {[...new Set(s.trail.steps.map(st=>srcMap[st.a]?.model).filter(Boolean))].map(m=>{
+                  const meta=Object.values(srcMap).find(v=>v.model===m);
+                  return (<span key={m} style={{fontSize:9,fontWeight:600,padding:"2px 8px",borderRadius:10,background:(meta?.sgColor||C.sage)+"15",border:`1.5px solid ${meta?.sgColor||C.sage}`,color:meta?.sgColor||C.sage,fontFamily:"monospace"}}>{m}</span>);
+                })}
+                {act&&<span style={{fontSize:9,fontWeight:600,padding:"2px 8px",borderRadius:10,background:"#2B5EA715",border:"1.5px solid #2B5EA7",color:"#2B5EA7",fontFamily:"monospace"}}>Bayesian Updater</span>}
+                <span style={{fontSize:9,color:C.dimmer}}>+</span>
+                {[...new Set(s.trail.steps.map(st=>srcMap[st.a]?.subgraph).filter(Boolean))].map(sg=>(
+                  <span key={sg} style={{fontSize:9,fontWeight:500,padding:"2px 8px",borderRadius:10,background:C.sageSoft,border:`1px solid ${C.sageBorder}`,color:C.sage}}>{sg}</span>
+                ))}
+                <span style={{fontSize:9,color:C.dimmer}}>+</span>
+                <span style={{fontSize:9,fontWeight:500,padding:"2px 8px",borderRadius:10,background:"#F5F5F1",border:"1px solid #E5E2DB",color:C.dim}}>IW Decision Rules</span>
+              </div>
             </div>
           </div>
 
           {/* Plan trail (only when no in-season action) */}
-          {!act&&s.trail.steps.map((st,i)=>{const meta=srcMap[st.a]||{src:"Data",q:null};
+          {!act&&s.trail.steps.map((st,i)=>{const isFinal=i===s.trail.steps.length-1;const meta=srcMap[st.a]||{src:"Data",q:null};
             const sentences=st.act.split(/(?<=\.)\s+/).filter(Boolean);
             const findingSents=sentences.slice(0,Math.max(1,sentences.length-1));const inferenceSent=sentences.length>1?sentences[sentences.length-1]:null;
-            return <AgentStep key={i} a={st.a} meta={meta} finding={findingSents.join(" ")} inference={inferenceSent} isFinal={isFinal} isLast={i===s.trail.steps.length-1} phase="plan"/>;
+            return <AgentStep key={i} a={st.a} meta={meta} finding={findingSents.join(" ")} inference={inferenceSent} isFinal={isFinal} isLast={isFinal} phase="plan"/>;
           })}
 
           {/* In-season trail (only when action exists) */}
@@ -857,6 +1308,7 @@ export default function BuyPlan(){
             </div>);
           })}
         </div>
+
       </div>}
     </div>);
   };
@@ -1146,10 +1598,10 @@ export default function BuyPlan(){
   );};
 
   /* ═══ MAIN LAYOUT ═══ */
-  const titles={"alloc-sku":"By SKU","alloc-store":"By Store","rep-overall":"Overall","rep-s2s":"Store → Store Transfers","rep-s2w":"Store → Warehouse","rep-consol":"Consolidation","perf-overview":"Performance Overview","perf-sku":"Performance by SKU","perf-store":"Performance by Store"};
-  const subs={"alloc-sku":`${styles.length} styles · ${totU.toLocaleString()} units · ₹${(adjV/1e7).toFixed(1)}Cr of ₹${otb}Cr OTB${rebuyOTB>0?" (incl ₹"+(rebuyOTB/1e5).toFixed(1)+"L re-buys)":""}`,"alloc-store":`${sa.length} A+/A stores · ~280 B/C aggregated`,"rep-overall":`Week ${WEEK} of 22 · ${liveSold.toLocaleString()} of ${totU.toLocaleString()} sold · Proj avg 6-wk ST ${avgProj6}%`,"rep-s2s":`${XFERS.length} recommended transfers · ${XFERS.reduce((a,x)=>a+x.u,0)} units`,"rep-s2w":`${replenStyles.filter(s=>s.needsReplen).length} styles below 14-day DoC target`,"rep-consol":`${CONSOL.length} styles flagged`,"perf-overview":"Season health and key insights","perf-sku":"Sell-through performance across all seasons","perf-store":"Store-level performance across all seasons"};
+  const titles={"alloc-sku":"By SKU","alloc-store":"By Store","rep-overall":"Overall","rep-s2s":"Store → Store Transfers","rep-s2w":"Store → Warehouse","rep-consol":"Consolidation","rep-markdown":"Markdown Decisions","perf-overview":"Performance Overview","perf-sku":"Performance by SKU","perf-store":"Performance by Store"};
+  const subs={"alloc-sku":`${styles.length} styles · ${totU.toLocaleString()} units · ₹${(adjV/1e7).toFixed(1)}Cr of ₹${otb}Cr OTB${rebuyOTB>0?" (incl ₹"+(rebuyOTB/1e5).toFixed(1)+"L re-buys)":""}`,"alloc-store":`${sa.length} A+/A stores · ~280 B/C aggregated`,"rep-overall":`Week ${WEEK} of 22 · ${liveSold.toLocaleString()} of ${totU.toLocaleString()} sold · Proj avg 6-wk ST ${avgProj6}%`,"rep-s2s":`${XFERS.length} recommended transfers · ${XFERS.reduce((a,x)=>a+x.u,0)} units`,"rep-s2w":`${replenStyles.filter(s=>s.needsReplen).length} styles below 14-day DoC target`,"rep-consol":`${CONSOL.length} styles flagged`,"rep-markdown":`${Object.keys(MD_RISK).length} styles flagged · ₹${Object.values(MD_RISK).reduce((a,m)=>a+m.exposureL,0).toFixed(2)}L exposure · ₹${Object.values(MD_RISK).reduce((a,m)=>a+m.recoveredL,0).toFixed(2)}L recoverable`,"perf-overview":"Season health and key insights","perf-sku":"Sell-through performance across all seasons","perf-store":"Store-level performance across all seasons"};
 
-  return (<div style={{display:"flex",height:"100vh",overflow:"auto",background:C.bg,fontFamily:font}}>
+  return (<div style={{display:"flex",height:"100vh",overflow:"hidden",background:C.bg,fontFamily:font}}>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>
     <Sidebar/>
     <ScenarioModal/><TrailModal/>
@@ -1245,6 +1697,7 @@ export default function BuyPlan(){
           {sa.map(st=> (<StoreCard key={st.code} st={st}/>))}
         </div>}
 
+
         {/* Replenishment */}
         {nav==="rep-overall"&&<div>
           <div style={{background:`linear-gradient(135deg, ${C.green} 0%, #1A3D28 100%)`,borderRadius:10,padding:"18px 22px",marginBottom:18,color:"#fff"}}>
@@ -1290,6 +1743,75 @@ export default function BuyPlan(){
         {nav==="rep-s2s"&&<S2SView/>}
         {nav==="rep-s2w"&&<S2WView/>}
         {nav==="rep-consol"&&<ConsolView/>}
+
+        {/* ═══ MARKDOWN DECISIONS (in-season AW25) ═══ */}
+        {nav==="rep-markdown"&&<div>
+          {/* Summary bar */}
+          <div style={{display:"flex",gap:10,marginBottom:18,flexWrap:"wrap"}}>
+            {[
+              {l:"Styles Flagged",v:Object.keys(MD_RISK).length,bg:C.terraSoft,clr:C.terra,bd:C.terraBorder},
+              {l:"Total EOS Exposure",v:`₹${Object.values(MD_RISK).reduce((a,m)=>a+m.exposureL,0).toFixed(2)}L`,bg:C.terraSoft,clr:C.terra,bd:C.terraBorder},
+              {l:"Recoverable (if acted now)",v:`₹${Object.values(MD_RISK).reduce((a,m)=>a+m.recoveredL,0).toFixed(2)}L`,bg:C.sageSoft,clr:C.sage,bd:C.sageBorder},
+              {l:"Margin Loss vs Full Price",v:`~${Math.round(Object.values(MD_RISK).reduce((a,m)=>a+(m.fullMargin-m.marginAtMD)*m.units,0)/Object.values(MD_RISK).reduce((a,m)=>a+m.units,0))}pts avg`,bg:C.amberSoft,clr:C.amber,bd:C.amberBorder},
+            ].map(m=>(
+              <div key={m.l} style={{padding:"12px 18px",background:m.bg,borderRadius:8,border:`1px solid ${m.bd}`,flex:1,minWidth:140}}>
+                <div style={{fontSize:10,color:m.clr,fontWeight:600,letterSpacing:.4}}>{m.l}</div>
+                <div style={{fontSize:20,fontWeight:700,color:m.clr,marginTop:4,fontFamily:"monospace"}}>{m.v}</div>
+              </div>
+            ))}
+          </div>
+          {/* Per-style markdown cards */}
+          {Object.entries(MD_RISK).map(([sid,md])=>{
+            const s=RAW.find(r=>r.id===sid);if(!s)return null;
+            const lv=LIVE[sid];const done=approved["md-"+sid];
+            return (
+              <div key={sid} style={{background:done?"#F8FFFA":"#fff",borderRadius:10,border:`1.5px solid ${done?C.sageBorder:C.terraBorder}`,marginBottom:12,overflow:"hidden"}}>
+                <div style={{padding:"16px 20px",background:done?C.sageSoft:C.terraSoft,display:"flex",alignItems:"center",gap:12}}>
+                  <div style={{flex:1}}>
+                    <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:3}}>
+                      <span style={{fontSize:15,fontWeight:700,fontFamily:serif}}>{s.name}</span>
+                      <span style={{fontSize:10,color:C.dimmer}}>{s.sub} · {sid}</span>
+                      <span style={{fontSize:11,fontWeight:700,padding:"2px 8px",borderRadius:4,background:"rgba(179,58,58,.1)",color:C.terra,border:`1px solid ${C.terraBorder}`}}>{md.decision}</span>
+                    </div>
+                    <div style={{fontSize:12,color:C.textMid}}>Projected 6-wk ST: <b style={{color:lv?.proj6<55?C.terra:C.amber}}>{lv?.proj6||"-"}%</b> · Residual at risk: <b>{md.units}u</b> · MRP: <b>₹{s.mrp.toLocaleString()}</b></div>
+                  </div>
+                  {done&&<span style={{color:C.sage,fontSize:18,fontWeight:700}}>✓ Approved</span>}
+                </div>
+                <div style={{padding:"14px 20px"}}>
+                  <div style={{display:"flex",gap:8,marginBottom:12,flexWrap:"wrap"}}>
+                    {[{l:"Markdown Depth",v:`${md.depth}%`,clr:C.terra},{l:"Activate",v:`Week ${md.week}`,clr:C.terra},{l:"Full-Price Margin",v:`${md.fullMargin}%`,clr:C.dim},{l:"Margin at Markdown",v:`${md.marginAtMD}%`,clr:C.amber},{l:"EOS Exposure",v:`₹${md.exposureL}L`,clr:C.terra},{l:"Recovered if Actioned",v:`₹${md.recoveredL}L`,clr:C.sage}].map(m=>(
+                      <div key={m.l} style={{padding:"8px 14px",background:C.bgSub,borderRadius:6,border:`1px solid ${C.borderLight}`,textAlign:"center",minWidth:100}}>
+                        <div style={{fontSize:10,color:C.dimmer}}>{m.l}</div>
+                        <div style={{fontSize:15,fontWeight:700,color:m.clr,fontFamily:"monospace",marginTop:3}}>{m.v}</div>
+                      </div>
+                    ))}
+                  </div>
+                  {/* Margin bridge */}
+                  <div style={{padding:"10px 14px",background:"#fff",borderRadius:6,border:`1px solid ${C.borderLight}`,marginBottom:10}}>
+                    <div style={{fontSize:10,fontWeight:700,color:C.dim,letterSpacing:.5,marginBottom:8}}>MARGIN IMPACT AT MARKDOWN</div>
+                    <div style={{display:"flex",height:24}}>
+                      <div style={{flex:md.marginAtMD,background:C.sage,borderRadius:"4px 0 0 4px",display:"flex",alignItems:"center",justifyContent:"center"}}><span style={{fontSize:10,fontWeight:700,color:"#fff"}}>{md.marginAtMD}% retained</span></div>
+                      <div style={{flex:md.fullMargin-md.marginAtMD,background:C.terra,borderRadius:"0 4px 4px 0",display:"flex",alignItems:"center",justifyContent:"center"}}><span style={{fontSize:10,fontWeight:700,color:"#fff"}}>−{md.fullMargin-md.marginAtMD}pts lost</span></div>
+                    </div>
+                    <div style={{display:"flex",justifyContent:"space-between",marginTop:4,fontSize:10,color:C.dimmer}}><span>Full price: {md.fullMargin}%</span><span>At markdown: {md.marginAtMD}%</span></div>
+                  </div>
+                  <div style={{padding:"10px 14px",background:C.bgSub,borderRadius:6,border:`1px solid ${C.borderLight}`,borderLeft:`3px solid ${C.terra}`,marginBottom:10}}>
+                    <div style={{fontSize:10,fontWeight:700,color:C.terra,letterSpacing:.5,marginBottom:4}}>SYSTEM RATIONALE</div>
+                    <div style={{fontSize:12,color:C.textMid,lineHeight:1.65}}>{md.rationale}</div>
+                  </div>
+                  {md.storeAction&&<div style={{padding:"8px 12px",background:"rgba(179,58,58,.05)",borderRadius:5,border:`1px solid ${C.terraBorder}`,fontSize:12,fontWeight:600,color:C.terra,marginBottom:12}}>Store action: {md.storeAction}</div>}
+                  <div style={{display:"flex",gap:8}}>
+                    <button onClick={e=>{e.stopPropagation();setTrail({id:sid,markdown:true});}} style={{fontSize:11,color:C.terra,fontWeight:600,background:C.terraSoft,border:`1px solid ${C.terraBorder}`,borderRadius:5,padding:"6px 14px",cursor:"pointer",fontFamily:font}}>Decision Trail</button>
+                    <button onClick={()=>setApproved(p=>({...p,["md-"+sid]:!p["md-"+sid]}))} style={{fontSize:11,color:"#fff",fontWeight:600,background:done?"#888":C.terra,border:"none",borderRadius:5,padding:"6px 18px",cursor:"pointer",fontFamily:font}}>{done?"Approved ✓":"Approve Markdown"}</button>
+                    {[`Why is ${s.name} declining?`,`What if we hold until Week 8?`].map((q,qi)=>(
+                      <button key={qi} onClick={()=>openQuestt(s,q)} style={{fontSize:10,color:C.green,background:C.sageSoft,border:`1px solid ${C.sageBorder}`,borderRadius:12,padding:"4px 10px",cursor:"pointer",fontFamily:font}}>{q}</button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>}
 
         {/* Performance */}
         {/* Performance Overview */}
